@@ -64,4 +64,14 @@ com.android.location.provider.xml
 
 ######## 11. rc.wifi существует? ########
 
-######## 12. есть ли приложение, дающее геолокацию ########
+######## 12. Wi-Fi драйвер в ядре ########
+Traceback (most recent call last):
+  File "/home/runner/work/Lifan-X60/Lifan-X60/tools/probe_kernel_wifi.py", line 50, in <module>
+    main()
+  File "/home/runner/work/Lifan-X60/Lifan-X60/tools/probe_kernel_wifi.py", line 26, in main
+    blob = find_kernel_blob(path)
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/Lifan-X60/Lifan-X60/tools/probe_kernel_wifi.py", line 12, in find_kernel_blob
+    data = open(path, 'rb').read()
+           ^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'reports/deep2/kernel/zImage'
