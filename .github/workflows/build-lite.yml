@@ -25,6 +25,8 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
+      - name: "andrograph (имя пакета для APK)"
+        run: pip install --quiet androguard 2>&1 | tail -1
       - name: "Собрать APK переключателя"
         run: |
           bash switcher/build.sh 2>&1 | tail -20

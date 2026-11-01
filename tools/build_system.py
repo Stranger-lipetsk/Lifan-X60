@@ -173,10 +173,18 @@ def apply_actions(root, actions):
                 continue
             d = os.path.join(root, dest_dir.strip('/'))
             os.makedirs(d, exist_ok=True)
-            name = os.path.basename(src)
+            # имя пакета берём из манифеста, чтобы файл назывался осмысленно
+            try:
+                from androguard.core.apk import APK as _APK
+                pkg = _APK(src).get_package()
+                name = f'{pkg}.apk'
+            except Exception:
+                name = os.path.basename(src)
             dst = os.path.join(d, name)
             shutil.copyfile(src, dst)
+            # APK в /system должен быть 0644 и принадлежать root
             os.chmod(dst, 0o644)
+            os.chown(dst, 0, 0)
             log.append(f'добавлено APK: {dest_dir}/{name} ({os.path.getsize(src)} байт)')
 
         elif kind == 'add-file':
