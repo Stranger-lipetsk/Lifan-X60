@@ -1,0 +1,79 @@
+name: Проба Wi-Fi и GPS
+
+on:
+  push:
+    paths:
+      - 'autoanalysis/probewifi.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          sudo apt-get update -qq 2>/dev/null || true
+          sudo apt-get install -y -qq p7zip-full unrar-free e2fsprogs >/dev/null 2>&1 || true
+      - name: "Скачать прошивку"
+        run: |
+          mkdir -p out /tmp/rar
+          python3 - <<'PY'
+          import json, subprocess, urllib.parse, urllib.request
+          pk = 'https://disk.yandex.ru/d/qJdjjeB8Aiq3Lg'
+          url = ('https://cloud-api.yandex.net/v1/public/resources'
+                 '?public_key=' + urllib.parse.quote(pk, safe='') + '&limit=100')
+          url = ('https://cloud-api.yandex.net/v1/disk/public/resources'
+                 '?public_key=' + urllib.parse.quote(pk, safe='') + '&limit=100')
+          items = json.load(urllib.request.urlopen(url, timeout=60))['_embedded']['items']
+          it = [i for i in items if i['type']=='file' and '2016' in i['name']][0]
+          subprocess.run(['curl','-L','--fail','--retry','3','--max-time','2500',
+                          '-o','/tmp/fw.rar',it['file']], check=True)
+          PY
+          7z x -y -aos -o/tmp/rar /tmp/fw.rar >/dev/null 2>&1 || true
+          cp "$(find /tmp/rar -name system.img | head -1)" out/system.img
+      - name: "Проверка Wi-Fi и GPS по образу"
+        run: |
+          IMG=out/system.img
+          {
+            echo "######## 1. Модули ядра (/lib/modules) ########"
+            debugfs -R "ls -l /lib/modules" "$IMG" 2>/dev/null
+            echo
+            echo "######## 2. wpa_supplicant / dhcpcd / hostapd в /bin ########"
+            debugfs -R "ls /bin" "$IMG" 2>/dev/null | tr ' ' '\n' | grep -iE "wpa|dhcp|hostapd|dnsmasq" || echo "НЕ НАЙДЕНО"
+            echo
+            echo "######## 3. /etc/wifi ########"
+            debugfs -R "ls -l /etc/wifi" "$IMG" 2>/dev/null || echo "КАТАЛОГА /etc/wifi НЕТ"
+            echo
+            echo "######## 4. firmware для Wi-Fi (/etc/firmware, /vendor/firmware) ########"
+            debugfs -R "ls /etc/firmware" "$IMG" 2>/dev/null | tr ' ' '\n' | grep -iE "bcm|rtl|8723|fw|bin" | head -20 || echo "нет"
+            debugfs -R "ls /vendor/firmware" "$IMG" 2>/dev/null | head -5 || echo "нет /vendor/firmware"
+            echo
+            echo "######## 5. build.prop: Wi-Fi и GPS ########"
+            debugfs -R "dump /build.prop /tmp/bp" "$IMG" 2>/dev/null
+            grep -iE "wifi|wlan|gps|location|hardware" /tmp/bp 2>/dev/null
+            echo
+            echo "######## 6. GPS: библиотеки и конфиги ########"
+            debugfs -R "ls /bin" "$IMG" 2>/dev/null | tr ' ' '\n' | grep -iE "gps|glgps" || echo "GPS-бинарников нет"
+            debugfs -R "ls -l /etc" "$IMG" 2>/dev/null | grep -i gps || echo "gpsconfig.xml нет"
+            echo
+            echo "######## 7. permissions: объявлен ли GPS как hardware feature ########"
+            debugfs -R "ls /etc/permissions" "$IMG" 2>/dev/null | tr ' ' '\n' | grep -i "location\|gps"
+          } 2>&1 | tee reports/проба-wifi-gps.txt
+      - name: "Коммит"
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          printf 'firmware/\nout/\n' > .git/info/exclude
+          git add -A reports
+          if git diff --cached --quiet; then echo "нет изменений"; exit 0; fi
+          git commit -m "проба: Wi-Fi и GPS в образе"
+          for try in 1 2 3 4 5; do
+            if git pull --rebase --autostash origin "${{ github.ref_name }}" >/dev/null 2>&1 \
+               && git push origin HEAD:${{ github.ref_name }}; then exit 0; fi
+            sleep 10; git rebase --abort >/dev/null 2>&1 || true
+          done
