@@ -1,0 +1,86 @@
+name: Разбор оболочки Elead Home
+
+on:
+  push:
+    paths:
+      - 'autoanalysis/probehome.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - name: "Инструменты"
+        run: |
+          sudo apt-get update -qq 2>/dev/null || true
+          sudo apt-get install -y -qq p7zip-full unrar-free e2fsprogs >/dev/null 2>&1 || true
+      - name: "Скачать и распаковать"
+        run: |
+          mkdir -p out reports /tmp/rar
+          python3 - <<'PY'
+          import json, subprocess, urllib.parse, urllib.request
+          pk = 'https://disk.yandex.ru/d/qJdjjeB8Aiq3Lg'
+          url = ('https://cloud-api.yandex.net/v1/disk/public/resources'
+                 '?public_key=' + urllib.parse.quote(pk, safe='') + '&limit=100')
+          items = json.load(urllib.request.urlopen(url, timeout=60))['_embedded']['items']
+          it = [i for i in items if i['type']=='file' and '2016' in i['name']][0]
+          subprocess.run(['curl','-L','--fail','--retry','3','--max-time','2500',
+                          '-o','/tmp/fw.rar',it['file']], check=True)
+          PY
+          7z x -y -aos -o/tmp/rar /tmp/fw.rar >/dev/null 2>&1 || true
+          cp "$(find /tmp/rar -name system.img | head -1)" out/system.img
+      - name: "Конфигураторы приложений + разбор Home.apk"
+        run: |
+          IMG=out/system.img
+          mkdir -p /tmp/etc
+          for f in component_register core_register contentpipe_register; do
+            debugfs -R "dump /etc/$f /tmp/etc/$f" $IMG 2>/dev/null
+          done
+          {
+            echo "######## component_register ########"
+            cat /tmp/etc/component_register 2>/dev/null | head -120
+            echo
+            echo "######## core_register ########"
+            cat /tmp/etc/core_register 2>/dev/null | head -60
+            echo
+            echo "######## contentpipe_register ########"
+            cat /tmp/etc/contentpipe_register 2>/dev/null | head -60
+          } > reports/конфигураторы-приложений.txt
+          cat reports/конфигураторы-приложений.txt | head -150
+      - name: "Разбор EL830LF01_Home.apk"
+        run: |
+          IMG=out/system.img
+          debugfs -R "dump /priv-app/EL830LF01_Home.apk /tmp/Home.apk" $IMG 2>/dev/null
+          debugfs -R "dump /priv-app/ElSettings.apk /tmp/ElSettings.apk" $IMG 2>/dev/null
+          {
+            echo "######## Home.apk: строки о источниках списка приложений ########"
+            unzip -p /tmp/Home.apk classes.dex 2>/dev/null | strings -n 6 | \
+              grep -iE "component_register|queryIntentActivities|getInstalledApplications|getInstalledPackages|LAUNCHER|packageName|register" | sort -u | head -60
+            echo
+            echo "######## Home.apk: имена пакетов, которые он знает ########"
+            unzip -p /tmp/Home.apk classes.dex 2>/dev/null | strings -n 6 | \
+              grep -E "^(com|tw)\.[a-z0-9.]+$" | sort -u | head -60
+            echo
+            echo "######## ElSettings.apk: имена пакетов ########"
+            unzip -p /tmp/ElSettings.apk classes.dex 2>/dev/null | strings -n 6 | \
+              grep -E "^(com|tw)\.[a-z0-9.]+$" | sort -u | head -60
+          } 2>&1 | tee reports/разбор-home.txt | head -120
+      - name: "Проверка подписи APK переключателя"
+        run: |
+          unzip -l switcher/switcher.apk 2>/dev/null | grep -E "META-INF" || echo "нет META-INF"
+      - name: "Коммит"
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          printf 'firmware/\nout/\nswitcher/build/\n' > .git/info/exclude
+          git add -A reports
+          if git diff --cached --quiet; then echo "нет изменений"; else
+            git commit -m "разбор оболочки Elead Home: источники списка приложений"
+            git push origin HEAD:${{ github.ref_name }}
+          fi
