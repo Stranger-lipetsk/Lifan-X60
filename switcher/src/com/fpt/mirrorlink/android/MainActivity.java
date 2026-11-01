@@ -1,4 +1,4 @@
-package ru.lifan.switcher;
+package com.fpt.mirrorlink.android;
 
 import android.app.Activity;
 import android.content.ComponentName;
@@ -48,7 +48,7 @@ public class MainActivity extends Activity {
     private static final int AUTO_BACK_SECONDS = 6;
 
     private static final String PREFS = "switcher";
-    private static final String KEY_AUTOBACK = "autoback";
+    private static final String KEY_AUTOBACK = "autoback_v2";
 
     private static final int COL_BG = 0xFF0E1216;
     private static final int COL_CAR = 0xFF1E5FA8;
@@ -69,7 +69,7 @@ public class MainActivity extends Activity {
         handler = new Handler();
 
         SharedPreferences prefs = getSharedPreferences(PREFS, MODE_PRIVATE);
-        autoBackEnabled = prefs.getBoolean(KEY_AUTOBACK, true);
+        autoBackEnabled = prefs.getBoolean(KEY_AUTOBACK, false);
 
         ScrollView scroll = new ScrollView(this);
         scroll.setBackgroundColor(COL_BG);
@@ -81,14 +81,15 @@ public class MainActivity extends Activity {
         scroll.addView(root);
 
         TextView title = new TextView(this);
-        title.setText("Переключатель окружений");
+        title.setText("MirrorLink · Центр системы");
         title.setTextColor(COL_TEXT);
         title.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
         title.setGravity(Gravity.CENTER);
         root.addView(title);
 
         TextView sub = new TextView(this);
-        sub.setText("Lifan X60 FL · Elead EL-830C-LF01 · Android 4.4.2");
+        sub.setText("Lifan X60 FL · Elead EL-830C-LF01 · Android 4.4.2\n"
+                + "Заменяет неработающий MirrorLink — открывает Android");
         sub.setTextColor(COL_DIM);
         sub.setTextSize(TypedValue.COMPLEX_UNIT_SP, 11);
         sub.setGravity(Gravity.CENTER);
@@ -160,10 +161,10 @@ public class MainActivity extends Activity {
         root.addView(toggle);
 
         TextView hint = new TextView(this);
-        hint.setText("Если это приложение назначено лаунчером, кнопка «Домой» "
-                + "открывает эту панель. Чтобы вернуть магнитолу лаунчером "
-                + "по умолчанию: Настройки → Приложения → Переключатель → "
-                + "«Сбросить настройки» либо выбери магнитолу в списке лаунчеров.");
+        hint.setText("Открывается кнопкой MirrorLink на главном экране магнитолы. "
+                + "Вернуться в магнитолу — первая кнопка. "
+                + "Чтобы панель открывалась и по кнопке «Домой», включи HOME-режим "
+                + "(docs/08).");
         hint.setTextColor(COL_DIM);
         hint.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
         hint.setPadding(0, dp(12), 0, 0);

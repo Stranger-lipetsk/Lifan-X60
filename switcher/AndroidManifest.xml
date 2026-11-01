@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="ru.lifan.switcher"
+    package="com.fpt.mirrorlink.android"
     android:versionCode="1"
     android:versionName="1.0">
 
@@ -26,12 +26,27 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-            <!-- позволяет назначить приложение домашним экраном (лаунчером) -->
-            <intent-filter>
+            <!-- opt-in: только этот фильтр даёт назначить приложение лаунчером.
+                 По умолчанию выключен (android:enabled="false"),
+                 чтобы кнопка «Домой» не перехватывалась. -->
+            <intent-filter android:enabled="false">
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.HOME" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
+        <!-- Второе имя той же активности: некоторые оболочки ищут именно
+             com.fpt.mirrorlink.android.MirrorLinkActivity -->
+        <activity-alias
+            android:name="com.fpt.mirrorlink.android.MirrorLinkActivity"
+            android:targetActivity=".MainActivity"
+            android:exported="true"
+            android:label="Переключатель">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
     </application>
 </manifest>
