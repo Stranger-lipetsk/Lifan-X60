@@ -1,0 +1,150 @@
+	Dest IP addr: 0x%x
+	Src IP addr: 0x%x
+        scanned  %lu
+  DDR_BOOT_MODE:%x - %s
+  DMA address is constant, but state is changing:
+  DMA appears to be stuck at this address:
+  DMA is running; known addresses are:
+  addr = 0x%lx, size = %d bytes
+  baseAddress       = 0x%08lX
+  sl  local_address                         remote_address                        st tx_queue rx_queue tr tm->when retrnsmt   uid  timeout inode
+  sl  local_address                         remote_address                        st tx_queue rx_queue tr tm->when retrnsmt   uid  timeout inode ref pointer drops
+  sl  local_address rem_address   st tx_queue rx_queue tr tm->when retrnsmt   uid  timeout inode
+  sl  local_address rem_address   st tx_queue rx_queue tr tm->when retrnsmt   uid  timeout inode ref pointer drops
+!base_addr
+"dev=%s skbaddr=%p len=%u rc=%d", __get_str(name), REC->skbaddr, REC->len, REC->rc
+"dev=%s skbaddr=%p len=%u", __get_str(name), REC->skbaddr, REC->len
+"isolate_mode=%d order=%d nr_requested=%lu nr_scanned=%lu nr_taken=%lu contig_taken=%lu contig_dirty=%lu contig_failed=%lu", REC->isolate_mode, REC->order, REC->nr_requested, REC->nr_scanned, REC->nr_taken, REC->nr_lumpy_taken, REC->nr_lumpy_dirty, REC->nr_lumpy_failed
+"nid=%d zid=%d nr_scanned=%ld nr_reclaimed=%ld priority=%d flags=%s", REC->nid, REC->zid, REC->nr_scanned, REC->nr_reclaimed, REC->priority, (REC->reclaim_flags) ? __print_flags(REC->reclaim_flags, "|", {0x0001u, "RECLAIM_WB_ANON"}, {0x0002u, "RECLAIM_WB_FILE"}, {0x0010u, "RECLAIM_WB_MIXED"}, {0x0004u, "RECLAIM_WB_SYNC"}, {0x0008u, "RECLAIM_WB_ASYNC"} ) : "RECLAIM_WB_NONE"
+"nr_scanned=%lu nr_taken=%lu", REC->nr_scanned, REC->nr_taken
+"skbaddr=%p len=%d", REC->skbaddr, REC->len
+"skbaddr=%p protocol=%u location=%p", REC->skbaddr, REC->protocol, REC->location
+"skbaddr=%p", REC->skbaddr
+%p addr %d credits %d
+%s addr %s
+%s adv entry added: address %s type %u
+%s bdaddr %s conn %p
+%s bdaddr %s type 0x%x
+%s free:%lukB min:%lukB low:%lukB high:%lukB active_anon:%lukB inactive_anon:%lukB active_file:%lukB inactive_file:%lukB unevictable:%lukB isolated(anon):%lukB isolated(file):%lukB present:%lukB mlocked:%lukB dirty:%lukB writeback:%lukB mapped:%lukB shmem:%lukB slab_reclaimable:%lukB slab_unreclaimable:%lukB kernel_stack:%lukB pagetables:%lukB unstable:%lukB bounce:%lukB writeback_tmp:%lukB pages_scanned:%lu all_unreclaimable? %s
+%s version %s (chian@ELEAD-UBUNTU2) (gcc version 4.6.x-google 20120106 (prerelease) (GCC) ) %s
+%s/%p: can't bind, err %d
+%s: Can't find device in list
+%s: Can't parse I2C address
+%s: OID_802_3_CURRENT_ADDRESS
+%s: OID_802_3_PERMANENT_ADDRESS
+%s: can't Copy for key
+%s: can't Copy for keyblob
+%s: can't Copy for keymod
+%s: can't alloc for key
+%s: can't alloc for keylob
+%s: can't alloc for keymod
+%s: can't alloc for outbuf
+%s: can't bind, err %d
+%s: can't open; %d
+%s: can't tx_fixup skb
+%s: could not read from tuner at addr: 0x%02x
+(unsigned long)base_addr & ~PAGE_MASK
+, can sleep
+/ADATA_SSD_4/chian_data_4/el830_LF01_20160315_QB_Russia/android_4_4_2/kernel_imx/arch/arm/include/asm/tlb.h
+<%s> write slave address: addr=0x%x
+<1>Unable to handle kernel %s at virtual address %08lx
+<1>[F:%s,L:%d]-I2C read addr:0x%02x, value:0x%02x
+<1>[F:%s,L:%d]-OMG, it can't get SD_LOCK_Q or SD_UNLOCK_Q state !!
+<1>[L:%d]-%s chip found at I2C addr 0x%02X(%s)
+<1>[L:%d]-I2C write addr:0x%02x, value:0x%02x successfully
+<1>[L:%d]-mxc_stop_preview for lifan !!
+<1>addr:%p vm_flags:%08lx anon_vma:%p mapping:%p index:%lx
+<2>%s: Can't create request sock SLAB cache!
+<2>%s: Can't create sock SLAB cache!
+<2>%s: Cannot add UDP-Lite protocol.
+<2>%s: Cannot create unix_sock SLAB cache!
+<2>IPv6 Addrconf: cannot initialize default policy table: %d.
+<2>inet_init: Cannot add ICMP protocol
+<2>inet_init: Cannot add IGMP protocol
+<2>inet_init: Cannot add TCP protocol
+<2>inet_init: Cannot add UDP protocol
+<2>inet_init: Cannot init ipv4 mibs
+<3> clk_disable cannot be called in an interrupt context
+<3> clk_enable cannot be called in an interrupt context
+<3>%s: Can't allocate bhs for commit thread
+<3>%s: Cannot get buffer for journal superblock
+<3>%s: Cannot locate journal superblock
+<3>%s: Cannot register /proc!
+<3>%s: can not find output
+<3>%s: can not insert multiple heaps with id %d
+<3>%s: can only take %i arguments
+<3>%s: can't register hub driver
+<3>%s: can't start khubd
+<3>%s: cannot get dma buf size:0x%x
+<3>%s: cannot register, err %d
+<3>%s: could not write to tuner at addr: 0x%02x
+<3>(hci_tty): Can't write to ST, hhci_tty->st_write null ?
+<3>(stc): out of memory: dropping
+<3>(stk): can't allocate mem for new packet
+<3>ASRC core clock cann't support sample rate %d
+<3>CPU0 can't be disabled!
+<3>Can't find OTG driver!
+<3>Can't recover from RESET HBA!
+<3>Can't register ac97 bus
+<3>Can't set codec DAI configuration
+<3>Can't set codec pll clock, %d
+<3>Can't set codec system clock
+<3>Can't set cpu DAI configuration
+<3>Can't set soc clock
+<3>Cannot allocate PCM
+<3>Cannot allocate PCM substream
+<3>Cannot allocate control instance
+<3>Cannot allocate device
+<3>Cannot register USB bus sysfs attributes: %d
+<3>Cannot register tty device on line %d
+<3>EXT4-fs: can't allocate buddy mem
+<3>EXT4-fs: can't allocate buddy meta group
+<3>EXT4-fs: can't allocate mem for a buddy group
+<3>EXT4-fs: can't get new inode
+<3>EXT4-fs: can't read descriptor %u
+<3>GPIO-%d: module can't be gotten 
+<3>ICMPv6 RA: can't find inet6 device for %s.
+<3>JBD: error %d scanning journal
+<3>LDMSTM: PC = %08lx, instr = %08lx, addr = %08lx, eaddr = %08lx
+<3>MM: cannot create mapping for 0x%08llx at 0x%08lx invalid alignment
+<3>No I/O functions for %d bit address %d bit data
+<3>PM: Cannot find swap device, try swapon -a.
+<3>PM: Cannot get swap writer
+<3>PM: Cannot start CRC32 thread
+<3>PM: Cannot start compression threads
+<3>PM: Cannot start decompression threads
+<3>Trying to vfree() bad address (%p)
+<3>android_usb: Cannot enable '%s'
+<3>asoc: can't create pcm %s
+<3>asoc: can't create pcm for codec %s
+<3>asoc: can't create pcm ops for codec %s
+<3>asoc: can't create sound card for card %s
+<3>asoc: can't open codec %s
+<3>asoc: can't open interface %s
+<3>asoc: can't open platform %s
+<3>asoc: can't set codec %s hw params
+<3>binder: %d: binder_alloc_buf size %zd failed, no address space
+<3>can't add HID device %p
+<3>can't add hid device: %d
+<3>can't allocate buffer
+<3>can't find transceiver
+<3>can't get clko clock.
+<3>can't get clko2_clk clock.
+<3>can't online cpu %d because it is not configured as may-hotadd at boot time
+<3>can't set IMX_SSI_TX_DIV_PM clock divider
+<3>can't set TX_DIV_2 clock divider
+<3>can't set TX_DIV_PSR clock divider
+<3>cannot find the slot for index %d (range 0-%i), error: %d
+<3>cannot restore CPU clock rate
+<3>cannot set CPU clock rate
+<3>ctnetlink_init: cannot expect register notifier.
+<3>ctnetlink_init: cannot register exp with nfnetlink.
+<3>ctnetlink_init: cannot register notifier.
+<3>ctnetlink_init: cannot register with nfnetlink.
+<3>fatal error: can't gate/power off when VPU is busy
+<3>ff_core: cannot allocate device without any effects
+<3>hid: can't register hid bus
+<3>invalid frame buffer address.
+<3>kobject: can not set name properly!
+<3>nf_conntrack: can't register to sysctl.
+<3>nf_conntrack_acct: can't register to sysctl.

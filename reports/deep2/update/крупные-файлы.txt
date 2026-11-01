@@ -1,0 +1,12 @@
+82779392	reports/deep2/update/ramdisk.cpio
+45165045	reports/deep2/update/ramdisk.bin
+19032528	reports/deep2/update/system/usr/icu/icudt51l.dat
+8493004	reports/deep2/update/system/lib/libLLVM.so
+7649829	reports/deep2/update/system/framework/framework-res.apk
+3742691	reports/deep2/update/system/framework/framework.jar
+1953008	reports/deep2/update/system/bin/bin/busybox
+1831333	reports/deep2/update/system/bin/sbin/mke2fs
+1791492	reports/deep2/update/system/lib/libskia.so
+1424358	reports/deep2/update/system/framework/services.jar
+1275384	reports/deep2/update/system/lib/libicui18n.so
+1231515	reports/deep2/update/system/framework/core.jar

@@ -1,0 +1,2027 @@
+===== reports/deep2/update/init.rc =====
+# Copyright (C) 2015 The Android Open Source Project
+#
+# IMPORTANT: Do not create world writable files or directories.
+# This is a common source of Android security bugs.
+#
+
+import /init.environ.rc
+import /init.usb.rc
+import /init.${ro.hardware}.rc
+import /init.trace.rc
+
+on early-init
+    # Set init and its forked children's oom_adj.
+    write /proc/1/oom_adj -16
+
+    # Set the security context for the init process.
+    # This should occur before anything else (e.g. ueventd) is started.
+    setcon u:r:init:s0
+
+    start ueventd
+
+# create mountpoints
+    mkdir /mnt 0775 root system
+
+on init
+
+sysclktz 0
+
+loglevel 3
+
+# setup the global environment
+    export PRODUCT_MODEL EL-830C-LF01
+    export DEFAULT_TIMEZONE Asia/Taipei
+    export SHM_MOUNTPOINT /mnt/shm
+    export LIGHTSENSOR_PATH /sys/class/i2c-adapter/i2c-1/1-0044
+    export VPU_FW_PATH /system/lib/firmware/vpu
+    export CODEC_SHM_PATH /mnt/shm
+    export CORE_REGISTER_FILE /system/etc/core_register
+    export COMPONENT_REGISTER_FILE /system/etc/component_register
+    export CONTENTPIPE_REGISTER_FILE /system/etc/contentpipe_register
+
+# Backward compatibility
+    symlink /system/etc /etc
+    symlink /sys/kernel/debug /d
+
+# Right now vendor lives on the same filesystem as system,
+# but someday that may change.
+    symlink /system/vendor /vendor
+
+# Create cgroup mount point for cpu accounting
+    mkdir /acct
+    mount cgroup none /acct cpuacct
+    mkdir /acct/uid
+
+# Create cgroup mount point for memory
+    mount tmpfs none /sys/fs/cgroup mode=0750,uid=0,gid=1000
+    mkdir /sys/fs/cgroup/memory 0750 root system
+    mount cgroup none /sys/fs/cgroup/memory memory
+    write /sys/fs/cgroup/memory/memory.move_charge_at_immigrate 1
+    chown root system /sys/fs/cgroup/memory/tasks
+    chmod 0660 /sys/fs/cgroup/memory/tasks
+    mkdir /sys/fs/cgroup/memory/sw 0750 root system
+    write /sys/fs/cgroup/memory/sw/memory.swappiness 100
+    write /sys/fs/cgroup/memory/sw/memory.move_charge_at_immigrate 1
+    chown root system /sys/fs/cgroup/memory/sw/tasks
+    chmod 0660 /sys/fs/cgroup/memory/sw/tasks
+	
+    mkdir /fw_data 0777 system system
+
+    mkdir /system
+    mkdir /data 0771 system system
+    mkdir /cache 0770 system cache
+    mkdir /config 0500 root root
+
+    mkdir /device 0771 system system
+    # See storage config details at http://source.android.com/tech/storage/
+    mkdir /mnt/shell 0700 shell shell
+    mkdir /mnt/media_rw 0751 media_rw media_rw
+    mkdir /storage 0751 root sdcard_r
+
+    mkdir /mnt/media_rw/extsd 0755 system system
+    symlink /mnt/media_rw/extsd /storage/extsd
+
+    mkdir /mnt/media_rw/usb1 0755 system system
+    symlink /mnt/media_rw/usb1 /storage/usb1
+    mkdir /mnt/media_rw/usb2 0755 system system
+    symlink /mnt/media_rw/usb2 /storage/usb2
+    
+	mkdir /mnt/media_rw/emmc_data 0755 system system
+    symlink /mnt/media_rw/emmc_data /storage/emmc_data
+    
+    # Directory for putting things only root should see.
+    mkdir /mnt/secure 0700 root root
+    # Create private mountpoint so we can MS_MOVE from staging
+    mount tmpfs tmpfs /mnt/secure mode=0700,uid=0,gid=0
+
+    # Directory for staging bindmounts
+    mkdir /mnt/secure/staging 0700 root root
+
+    # Directory-target for where the secure container
+    # imagefile directory will be bind-mounted
+    mkdir /mnt/secure/asec  0700 root root
+
+    # Secure container public mount points.
+    mkdir /mnt/asec  0700 root system
+    mount tmpfs tmpfs /mnt/asec mode=0755,gid=1000
+
+    # Filesystem image public mount points.
+    mkdir /mnt/obb 0700 root system
+    mount tmpfs tmpfs /mnt/obb mode=0755,gid=1000
+
+    # shared memory used by middleware
+    mkdir /mnt/shm  0775 system graphics
+    mount tmpfs tmpfs /mnt/shm mode=0775,uid=1000,gid=1003,size=1m
+    write /proc/sys/kernel/panic_on_oops 1
+    write /proc/sys/kernel/hung_task_timeout_secs 0
+    write /proc/cpu/alignment 4
+    write /proc/sys/kernel/sched_latency_ns 10000000
+    write /proc/sys/kernel/sched_wakeup_granularity_ns 2000000
+    write /proc/sys/kernel/sched_compat_yield 1
+    write /proc/sys/kernel/sched_child_runs_first 0
+    write /proc/sys/kernel/randomize_va_space 2
+    write /proc/sys/kernel/kptr_restrict 2
+    write /proc/sys/kernel/dmesg_restrict 1
+    write /proc/sys/vm/mmap_min_addr 32768
+    write /proc/sys/net/ipv4/ping_group_range "0 2147483647"
+    write /proc/sys/kernel/sched_rt_runtime_us 950000
+    write /proc/sys/kernel/sched_rt_period_us 1000000
+
+# Create cgroup mount points for process groups
+    mkdir /dev/cpuctl
+    mount cgroup none /dev/cpuctl cpu
+    chown system system /dev/cpuctl
+    chown system system /dev/cpuctl/tasks
+    chmod 0660 /dev/cpuctl/tasks
+    write /dev/cpuctl/cpu.shares 1024
+    write /dev/cpuctl/cpu.rt_runtime_us 950000
+    write /dev/cpuctl/cpu.rt_period_us 1000000
+
+    mkdir /dev/cpuctl/apps
+    chown system system /dev/cpuctl/apps/tasks
+    chmod 0666 /dev/cpuctl/apps/tasks
+    write /dev/cpuctl/apps/cpu.shares 1024
+    write /dev/cpuctl/apps/cpu.rt_runtime_us 800000
+    write /dev/cpuctl/apps/cpu.rt_period_us 1000000
+
+    mkdir /dev/cpuctl/apps/bg_non_interactive
+    chown system system /dev/cpuctl/apps/bg_non_interactive/tasks
+    chmod 0666 /dev/cpuctl/apps/bg_non_interactive/tasks
+    # 5.0 %
+    write /dev/cpuctl/apps/bg_non_interactive/cpu.shares 52
+    write /dev/cpuctl/apps/bg_non_interactive/cpu.rt_runtime_us 700000
+    write /dev/cpuctl/apps/bg_non_interactive/cpu.rt_period_us 1000000
+
+# Create directory for upgrade
+    mkdir /dev/temp 0777 system system
+
+# qtaguid will limit access to specific data based on group memberships.
+#   net_bw_acct grants impersonation of socket owners.
+#   net_bw_stats grants access to other apps' detailed tagged-socket stats.
+    chown root net_bw_acct /proc/net/xt_qtaguid/ctrl
+    chown root net_bw_stats /proc/net/xt_qtaguid/stats
+
+# Allow everybody to read the xt_qtaguid resource tracking misc dev.
+# This is needed by any process that uses socket tagging.
+    chmod 0644 /dev/xt_qtaguid
+
+# Create location for fs_mgr to store abbreviated output from filesystem
+# checker programs.
+    mkdir /dev/fscklogs 0770 root system
+
+on post-fs
+    # once everything is setup, no need to modify /
+    # mount rootfs rootfs / ro remount
+    # mount shared so changes propagate into child namespaces
+    mount rootfs rootfs / shared rec
+    mount tmpfs tmpfs /mnt/secure private rec
+
+    # We chown/chmod /cache again so because mount is run as root + defaults
+    chown system cache /cache
+    chmod 0770 /cache
+    # We restorecon /cache in case the cache partition has been reset.
+    restorecon /cache
+
+    # This may have been created by the recovery system with odd permissions
+    chown system cache /cache/recovery
+    chmod 0770 /cache/recovery
+    # This may have been created by the recovery system with the wrong context.
+    restorecon /cache/recovery
+
+    #change permissions on vmallocinfo so we can grab it from bugreports
+    chown root log /proc/vmallocinfo
+    chmod 0440 /proc/vmallocinfo
+
+    chown root log /proc/slabinfo
+    chmod 0440 /proc/slabinfo
+
+    #change permissions on kmsg & sysrq-trigger so bugreports can grab kthread stacks
+    chown root system /proc/kmsg
+    chmod 0440 /proc/kmsg
+    chown root system /proc/sysrq-trigger
+    chmod 0220 /proc/sysrq-trigger
+    chown system log /proc/last_kmsg
+    chmod 0440 /proc/last_kmsg
+
+    # create the lost+found directories, so as to enforce our permissions
+    mkdir /cache/lost+found 0770 root root
+
+on post-fs-data
+    mount ext4 loop@/fw_data/sd_data.img /data
+    # We chown/chmod /data again so because mount is run as root + defaults
+    chown system system /data
+    chmod 0771 /data
+    # We restorecon /data in case the userdata partition has been reset.
+    restorecon /data
+
+    # Avoid predictable entropy pool. Carry over entropy from previous boot.
+    copy /data/system/entropy.dat /dev/urandom
+
+    # Create dump dir and collect dumps.
+    # Do this before we mount cache so eventually we can use cache for
+    # storing dumps on platforms which do not have a dedicated dump partition.
+    mkdir /data/dontpanic 0750 root log
+
+    # Collect apanic data, free resources and re-arm trigger
+    copy /proc/apanic_console /data/dontpanic/apanic_console
+    chown root log /data/dontpanic/apanic_console
+    chmod 0640 /data/dontpanic/apanic_console
+
+    copy /proc/apanic_threads /data/dontpanic/apanic_threads
+    chown root log /data/dontpanic/apanic_threads
+    chmod 0640 /data/dontpanic/apanic_threads
+
+    write /proc/apanic_console 1
+
+    mkdir /data/media 0770 media_rw media_rw
+
+    # create basic filesystem structure
+    mkdir /data/misc 01771 system misc
+    mkdir /data/misc/adb 02750 system shell
+    mkdir /data/misc/bluedroid 0770 bluetooth net_bt_stack
+    mkdir /data/misc/bluetooth 0770 system system
+    mkdir /data/misc/keystore 0700 keystore keystore
+    mkdir /data/misc/keychain 0771 system system
+    mkdir /data/misc/radio 0770 system radio
+    mkdir /data/misc/sms 0770 system radio
+    mkdir /data/misc/zoneinfo 0775 system system
+    mkdir /data/misc/vpn 0770 system vpn
+    mkdir /data/misc/systemkeys 0700 system system
+    # give system access to wpa_supplicant.conf for backup and restore
+    mkdir /data/misc/wifi 0770 wifi wifi
+    mkdir /data/misc/wifi/sockets 0770 wifi wifi
+    ## broadcom modify  mkdir /data/misc/wifi/wpa_supplicant 0770 wifi wifi
+    mkdir /data/misc/dhcp 0770 dhcp dhcp
+    chown dhcp system /data/misc/dhcp
+    chmod 0660 /data/misc/wifi/wpa_supplicant.conf
+    chmod 0775 /data/misc/wifi/ipconfig.txt
+    chmod 0775 /system/etc/dhcpcd/dhcpcd-run-hooks
+    mkdir /data/local 0751 root root
+    mkdir /data/misc/media 0700 media media
+
+    # For security reasons, /data/local/tmp should always be empty.
+    # Do not place files or directories in /data/local/tmp
+    mkdir /data/local/tmp 0771 shell shell
+    mkdir /data/data 0771 system system
+    mkdir /data/app-private 0771 system system
+    mkdir /data/app-asec 0700 root root
+    mkdir /data/app-lib 0771 system system
+    mkdir /data/app 0771 system system
+    mkdir /data/app/ing 0771 root root
+    mkdir /data/property 0700 root root
+    mkdir /data/ssh 0750 root shell
+    mkdir /data/ssh/empty 0700 root root
+
+    # create dalvik-cache, so as to enforce our permissions
+    mkdir /data/dalvik-cache 0771 system system
+
+    # create resource-cache and double-check the perms
+    mkdir /data/resource-cache 0771 system system
+    chown system system /data/resource-cache
+    chmod 0771 /data/resource-cache
+
+    # create the lost+found directories, so as to enforce our permissions
+    mkdir /data/lost+found 0770 root root
+
+    # create directory for DRM plug-ins - give drm the read/write access to
+    # the following directory.
+    mkdir /data/drm 0770 drm drm
+
+    # create directory for MediaDrm plug-ins - give drm the read/write access to
+    # the following directory.
+    mkdir /data/mediadrm 0770 mediadrm mediadrm
+
+    # symlink to bugreport storage location
+    symlink /data/data/com.android.shell/files/bugreports /data/bugreports
+
+    # Separate location for storing security policy files on data
+    mkdir /data/security 0711 system system
+
+    # If there is no fs-post-data action in the init.<device>.rc file, you
+    # must uncomment this line, otherwise encrypted filesystems
+    # won't work.
+    # Set indication (checked by vold) that we have finished this action
+    setprop vold.post_fs_data_done 1
+    
+	# for normal boot, flag set to 1
+    setprop rw.hb_boot_finished 1
+	
+    insmod /system/lib/modules/elead_gpio.ko
+    insmod /system/lib/modules/gt9xx.ko
+
+on early-boot
+    # set RLIMIT_MEMLOCK to 64MB
+    setrlimit 8 67108864 67108864
+
+on boot
+# basic network init
+    ifup lo
+    hostname localhost
+    domainname localdomain
+
+# set RLIMIT_NICE to allow priorities from 19 to -20
+    setrlimit 13 40 40
+
+# Memory management.  Basic kernel parameters, and allow the high
+# level system server to be able to adjust the kernel OOM driver
+# parameters to match how it is managing things.
+
+    write /proc/sys/vm/overcommit_memory 1
+    write /proc/sys/vm/min_free_order_shift 4
+    chown root system /sys/module/lowmemorykiller/parameters/adj
+    chmod 0664 /sys/module/lowmemorykiller/parameters/adj
+    chown root system /sys/module/lowmemorykiller/parameters/minfree
+    chmod 0664 /sys/module/lowmemorykiller/parameters/minfree
+
+    # Tweak background writeout
+    write /proc/sys/vm/dirty_expire_centisecs 50
+    write /proc/sys/vm/dirty_writeback_centisecs 100
+    write /proc/sys/vm/dirty_background_ratio  5
+
+    # Tweak the mmc device read ahead buffer size
+    write /sys/block/mmcblk0/queue/read_ahead_kb 2048
+    write /sys/block/mmcblk1/queue/read_ahead_kb 2048
+
+    # Permissions for System Server and daemons.
+    chown radio system /sys/android_power/state
+    chown radio system /sys/android_power/request_state
+    chown radio system /sys/android_power/acquire_full_wake_lock
+    chown radio system /sys/android_power/acquire_partial_wake_lock
+    chown radio system /sys/android_power/release_wake_lock
+    chown system system /sys/power/autosleep
+    chown system system /sys/power/state
+    chown system system /sys/power/wakeup_count
+    chown radio system /sys/power/wake_lock
+    chown radio system /sys/power/wake_unlock
+    chmod 0660 /sys/power/state
+    chmod 0660 /sys/power/wake_lock
+    chmod 0660 /sys/power/wake_unlock
+
+    # Assume SMP uses shared cpufreq policy for all CPUs
+    chown system system /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+    chmod 0660 /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+
+    chown system system /sys/class/timed_output/vibrator/enable
+    chown system system /sys/class/leds/keyboard-backlight/brightness
+    chown system system /sys/class/leds/lcd-backlight/brightness
+    chown system system /sys/class/leds/button-backlight/brightness
+    chown system system /sys/class/leds/jogball-backlight/brightness
+    chown system system /sys/class/leds/red/brightness
+    chown system system /sys/class/leds/green/brightness
+    chown system system /sys/class/leds/blue/brightness
+    chown system system /sys/class/leds/red/device/grpfreq
+    chown system system /sys/class/leds/red/device/grppwm
+    chown system system /sys/class/leds/red/device/blink
+    chown system system /sys/class/timed_output/vibrator/enable
+    chown system system /sys/module/sco/parameters/disable_esco
+    chown system system /sys/kernel/ipv4/tcp_wmem_min
+    chown system system /sys/kernel/ipv4/tcp_wmem_def
+    chown system system /sys/kernel/ipv4/tcp_wmem_max
+    chown system system /sys/kernel/ipv4/tcp_rmem_min
+    chown system system /sys/kernel/ipv4/tcp_rmem_def
+    chown system system /sys/kernel/ipv4/tcp_rmem_max
+    chown root radio /proc/cmdline
+
+# Set these so we can remotely update SELinux policy
+    chown system system /sys/fs/selinux/load
+    chown system system /sys/fs/selinux/enforce
+
+# Define TCP buffer sizes for various networks
+#   ReadMin, ReadInitial, ReadMax, WriteMin, WriteInitial, WriteMax,
+    setprop net.tcp.buffersize.default  4096,87380,110208,4096,16384,110208
+    setprop net.tcp.buffersize.wifi     524288,1048576,2097152,262144,524288,1048576
+    setprop net.tcp.buffersize.ethernet 524288,2097152,4194304,524288,2097152,4194304
+    setprop net.tcp.buffersize.lte      524288,1048576,2097152,262144,524288,1048576
+    setprop net.tcp.buffersize.umts     4094,87380,110208,4096,16384,110208
+    setprop net.tcp.buffersize.hspa     4094,87380,262144,4096,16384,262144
+    setprop net.tcp.buffersize.hsupa    4094,87380,262144,4096,16384,262144
+    setprop net.tcp.buffersize.hsdpa    4094,87380,262144,4096,16384,262144
+    setprop net.tcp.buffersize.hspap    4094,87380,1220608,4096,16384,1220608
+    setprop net.tcp.buffersize.edge     4093,26280,35040,4096,16384,35040
+    setprop net.tcp.buffersize.gprs     4092,8760,11680,4096,8760,11680
+    setprop net.tcp.buffersize.evdo    4094,87380,262144,4096,16384,262144
+
+# Define fsl avi/aac/asf/mkv/flv/flac format support
+    setprop ro.FSL_AVI_PARSER 1
+    setprop ro.FSL_AAC_PARSER 1
+    setprop ro.FSL_ASF_PARSER 0
+    setprop ro.FSL_FLV_PARSER 1
+    setprop ro.FSL_MKV_PARSER 1
+    setprop ro.FSL_FLAC_PARSER 1
+    setprop ro.FSL_MPG2_PARSER 1
+
+# don't preload OpenGL in Zygote, the Vivante drivers do not like it
+    setprop ro.zygote.disable_gl_preload true
+
+# ALSA mixer naming define
+    setprop alsa.mixer.playback.master Playback
+    setprop alsa.mixer.capture.master Capture
+    setprop alsa.mixer.playback.speaker Playback
+    setprop alsa.mixer.playback.headset Headphone
+    setprop alsa.mixer.capture.headset Capture
+
+# Prepare for wifi
+    setprop wifi.interface wlan0
+    setprop wifi.ap.interface wlan0
+# Prepare for bluetooth
+    chmod 665 /sys/class/rfkill/rfkill0/state
+    chown bluetooth bluetooth /sys/class/rfkill/rfkill0/state
+    write /sys/class/rfkill/rfkill0/state 0
+
+# Enable USB host1'remote wakeup event wakeup android system
+    write /sys/bus/platform/drivers/fsl-ehci/fsl-ehci.1/power/wakeup disabled
+
+# Prepare for RIL
+    setprop gsm.ril.delay 15
+    setprop ro.ril.wake_lock_timeout 300
+
+# Set this property so surfaceflinger is not started by system_init
+    setprop system_init.startsurfaceflinger 0
+
+#  Enable adb security for JB4.2.2
+    setprop ro.adb.secure 1
+
+#  Set GPU 3D minimum clock to 3/64
+   write /sys/module/galcore/parameters/gpu3DMinClock 3
+
+# set this to not let jni check crash, just warnning message.
+    setprop dalvik.vm.jniopts warnonly
+
+    class_start core
+    class_start main
+
+on property:sys.boot_completed=1
+# Set default CPU frequency governor
+# Set timer 40ms, min sample 60ms,hispeed at cpufreq MAX freq in freq_table at load 40%
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor performance
+    write /sys/devices/system/cpu/cpufreq/interactive/go_maxspeed_load 80
+    write /sys/devices/system/cpu/cpufreq/interactive/timer_rate 40000
+    write /sys/devices/system/cpu/cpufreq/interactive/min_sample_time 60000
+    write /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load 40
+    #write /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq 792000
+# change interactive atrrubuties permissions when interactive is actived
+on property:sys.interactive="active"
+    chown system root /sys/devices/system/cpu/cpufreq/interactive/timer_rate
+    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/timer_rate
+    chown system root /sys/devices/system/cpu/cpufreq/interactive/min_sample_time
+    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/min_sample_time
+    chown system root /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq
+    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq
+    chown system root /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load
+    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load
+    chown system root /sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay
+    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay
+    chown system root /sys/devices/system/cpu/cpufreq/interactive/boost
+    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/boost
+    chown system root /sys/devices/system/cpu/cpufreq/interactive/boostpulse
+    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/boostpulse
+    chown system root /sys/devices/system/cpu/cpufreq/interactive/input_boost
+    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/input_boost
+    chown system system /sys/devices/system/cpu/cpufreq/interactive/boostpulse_duration
+    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/boostpulse_duration
+    chown system system /sys/devices/system/cpu/cpufreq/interactive/io_is_busy
+    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/io_is_busy
+
+
+on nonencrypted
+    class_start late_start
+
+on charger
+    class_start charger
+
+on property:vold.decrypt=trigger_reset_main
+    class_reset main
+
+on property:vold.decrypt=trigger_load_persist_props
+    load_persist_props
+
+on property:vold.decrypt=trigger_post
+===== reports/deep2/update/system/bin/enable_adb.sh =====
+#/system/bin/sh
+setprop sys.usb.config none
+sleep 1
+echo r > /proc/el_ctr
+sleep 2
+setprop sys.usb.config mtp,adb
+
+===== reports/deep2/update/system/bin/swap2extsd.sh =====
+#!/system/bin/sh
+echo ***Save to extsd***
+cp /data/data.tar /mnt/media_rw/extsd/
+dd if=/dev/block/mmcblk0p2 of=/mnt/media_rw/extsd/swap.img
+sync
+#echo ***Save to /mnt/para_fw***
+#mkdir -p /mnt/para_fw/backup_image/
+#cp /data/data.tar /mnt/para_fw/backup_image/
+#dd if=/dev/block/mmcblk0p2 of=/mnt/para_fw/backup_image/swap.img
+#sync
+echo ***End***
+
+===== reports/deep2/update/system/bin/clean_uboot.sh =====
+#/system/bin/sh
+
+echo 0 > /sys/block/mmcblk0boot0/force_ro
+dd if=/dev/zero of=/dev/block/mmcblk0boot0 count=10
+echo 1 > /sys/block/mmcblk0boot0/force_ro
+sync
+
+
+===== reports/deep2/update/system/bin/build_emmc.sh =====
+#!/system/bin/sh
+
+EMMC_MOUNT_PATH=/mnt/inand
+EMMC_NODE=/dev/block/mmcblk0
+BUILD_OUT_PATH=/fw_data
+FILE_BACKUP_PATH=$BUILD_OUT_PATH/backup
+BOOTIMG_PATH=$BUILD_OUT_PATH/boot.img
+UBOOT_BIN=$BUILD_OUT_PATH/u-boot.bin
+SYSTEMIMG=$BUILD_OUT_PATH/system.img
+SWAPIMAGE=$BUILD_OUT_PATH/swap.img
+DATAIMAGE=$BUILD_OUT_PATH/data.tar
+
+
+# Upgrade statement
+FW_UPGRADE_STATUS="/dev/temp/fw_status.cfg"
+PROCESS_START="proc_start"
+PROCESS_UNZIP_ROOTFS="unzip_rootfs"
+PROCESS_UNZIP_ROOTFS_DONE="unzip_rootfs_done"
+PROCESS_UNZIP_MAPS="unzip_maps"
+PROCESS_UNZIP_MAPS_DONE="unzip_maps_done"
+PROCESS_END="proc_finished"
+PROCESS_ERROR="proc_error"
+PROCESS_FOMAT="format_partition"
+
+# Total size of files
+TOTAL_FILES_SIZE=0
+COPIED_FILES_SIZE=0
+VARMAP_SIZE=0
+
+# partition size in MB
+BOOTLOAD_RESERVE=8
+BOOT_ROM_SIZE=8
+SYSTEM_ROM_SIZE=512
+SWAP_SIZE=256
+DATA_SIZE=512
+EL_DATA=384
+SYSTEM_RESERVE=128
+
+# Files needs to backup
+UUID_CONFIG=config.ini
+
+# Files relate  Navi
+NAVI_MAP_ARCHIVE=$BUILD_OUT_PATH/Navngo.tgz
+
+function err_exit()
+{
+    ERRNO=$1
+    echo "ERROR CODE : $ERRNO, TERMINATE PROCESS!!"
+    echo "$PROCESS_ERROR $ERRNO" > $FW_UPGRADE_STATUS
+    exit
+}
+
+
+# Function continue check tar process running in backround
+# Pass partition keyword for grep.
+check_bg_process()
+{
+    PARTITION=$1
+    FLOW=$2
+
+    EMPTY_DISK_USED=$(df $MOUNT_PATH | grep $PARTITION | awk '{ print $3 }')
+    tmp=$COPIED_FILES_SIZE
+
+    ### echo "debug : EMPTY_DISK_USED = $EMPTY_DISK_USED"
+    ### echo "debug : BG_PID = $BG_PID"
+
+    while kill -0 $BG_PID
+    do
+        CUR_DISK_USED=$(df $MOUNT_PATH | grep $PARTITION | awk '{ print $3 }')
+
+        ### echo "debug : CUR_DISK_USED = $CUR_DISK_USED"
+
+        let "COPIED_FILES_SIZE = tmp + (CUR_DISK_USED - EMPTY_DISK_USED)"
+        echo "$FLOW $COPIED_FILES_SIZE/$TOTAL_FILES_SIZE" > $FW_UPGRADE_STATUS
+        sleep 1
+    done
+    
+    wait $BG_PID
+    BG_STATUS=$?
+
+    ### echo "debug : BG_STATUS = $BG_STATUS"
+}
+
+function fool_proofing_operation
+{
+    # check whether had root role
+    USERID=`id -u`
+    if [ "$USERID" -ne "0" ]; then
+        echo "need root permission !!"
+        err_exit 1001
+    fi
+    # check whether device node is exist
+    if [ ! -e "$EMMC_NODE" ]; then
+        echo "$EMMC_NODE not exist !!"
+        err_exit 1002
+    fi
+    # check invalid node
+    if [ "$EMMC_NODE" == /dev/ ]; then
+        echo "Not specify the emmc device node !"
+        err_exit 1003
+    fi
+
+}
+
+function check_essential_files
+{
+#    if [ ! -e "$UBOOT_BIN" ]; then
+#        echo "incorrect u-boot.bin location !"
+#        err_exit 1004
+#    fi
+
+    if [ ! -e "$BOOTIMG_PATH" ]; then
+        echo "incorrect boot.img location !"
+        err_exit 1005
+    fi
+
+    if [ ! -e "$SYSTEMIMG" ]; then
+        echo "incorrect system.img location !"
+        err_exit 1006
+    fi
+        
+}
+
+
+total_size=`sfdisk -s ${EMMC_NODE}`
+total_size=`expr ${total_size} / 1024`
+boot_rom_sizeb=`expr ${BOOT_ROM_SIZE} + ${BOOTLOAD_RESERVE}`
+extend_size=`expr ${total_size} - ${boot_rom_sizeb} - ${SWAP_SIZE} - ${SYSTEM_ROM_SIZE} - ${SYSTEM_RESERVE}`
+navi_size=`expr ${extend_size} - ${DATA_SIZE} - ${EL_DATA}`
+
+function partition_operation
+{
+
+    # unmount all emmc's partitions
+    umount ${EMMC_NODE}*
+
+sfdisk --force -uM ${EMMC_NODE} << EOF
+,${boot_rom_sizeb},83
+,${SWAP_SIZE},83
+,${SYSTEM_ROM_SIZE},83
+,${extend_size},5
+,${DATA_SIZE},83
+,${EL_DATA},83
+,${navi_size},0C
+EOF
+if [ ! $? -eq 0 ]; then err_exit 3001; fi
+
+sfdisk --force -uM ${EMMC_NODE} -N1 << EOF
+$BOOTLOAD_RESERVE,$BOOT_ROM_SIZE,83
+EOF
+if [ ! $? -eq 0 ]; then err_exit 3002; fi
+}
+
+function format_operation
+{
+    if ! /system/bin/mke2fs -t ext4 ${EMMC_NODE}p2; then err_exit 3003; fi
+    if ! /system/bin/mke2fs -t ext4 ${EMMC_NODE}p3; then err_exit 3004; fi
+    if ! /system/bin/mke2fs -t ext4 ${EMMC_NODE}p5; then err_exit 3005; fi
+    if ! /system/bin/mke2fs -t ext4 ${EMMC_NODE}p6; then err_exit 3006; fi
+    if ! /system/bin/newfs_msdos -F 32 ${EMMC_NODE}p7; then err_exit 3007; fi
+}
+
+function install_operation
+{
+    # enable inand boot partition 1
+    echo 8 > /sys/devices/platform/sdhci-esdhc-imx.2/mmc_host/mmc0/mmc0:0001/boot_config
+
+    # install u-boot.bin
+    if [ -e "$UBOOT_BIN" ]
+    then
+        echo 0 > /sys/block/mmcblk0boot0/force_ro
+        if ! dd if=$UBOOT_BIN of=/dev/block/mmcblk0boot0; then
+            echo "ERROR! write uboot fail!"
+            echo 1 > /sys/block/mmcblk0boot0/force_ro
+            err_exit 5001
+        fi
+        echo 1 > /sys/block/mmcblk0boot0/force_ro
+    fi
+
+    # install boot.img in partition 1
+    if ! dd if=$BOOTIMG_PATH of=${EMMC_NODE}p1; then
+        echo "ERROR! write boot.img fail!"
+        err_exit 5002
+    fi
+    sync
+
+    # install system.img in partition 3
+    if ! dd if=$SYSTEMIMG of=${EMMC_NODE}p3; then
+        echo "ERROR! write system.img fail!"
+        err_exit 5003
+    fi
+    sync
+	
+    if [ -e "$SWAPIMAGE" ] && [ -e "$DATAIMAGE" ] 
+    then
+		dd if=$SWAPIMAGE   of=${EMMC_NODE}p2
+		mount -t ext4 ${EMMC_NODE}p5 /mnt/media_rw/usb2/
+		tar -xvf $DATAIMAGE -C /mnt/media_rw/usb2
+		sync
+		umount  /mnt/media_rw/usb2
+		# Backup swap image to el_data partition
+		mount -t ext4 ${EMMC_NODE}p6 /mnt/media_rw/usb2/
+        mkdir /mnt/media_rw/usb2/backup_image
+		cp $SWAPIMAGE /mnt/media_rw/usb2/backup_image/
+		cp $DATAIMAGE /mnt/media_rw/usb2/backup_image/
+		sync
+		umount  /mnt/media_rw/usb2
+    fi
+	sync
+}
+
+function backup_operation
+{
+    rm -rf $FILE_BACKUP_PATH
+    mkdir -p $FILE_BACKUP_PATH
+    mkdir -p $EMMC_MOUNT_PATH
+
+    if mount -t ext4 ${EMMC_NODE}p6 $EMMC_MOUNT_PATH; then
+
+        if [ -e "$EMMC_MOUNT_PATH"/"$UUID_CONFIG" ]; then
+
+            if ! cp -f $EMMC_MOUNT_PATH/$UUID_CONFIG $FILE_BACKUP_PATH/; then
+                umount $EMMC_MOUNT_PATH
+                err_exit 2001
+            fi
+        else
+            echo "WARNING!! uuid config file not exist."
+        fi
+        umount $EMMC_MOUNT_PATH
+    else
+        echo "ERROR!! unable mount partition 6 ."
+        err_exit 2002
+    fi
+}
+
+function restore_operation
+{
+    if mount -t ext4 ${EMMC_NODE}p6 $EMMC_MOUNT_PATH; then
+
+        if [ -e "$FILE_BACKUP_PATH"/"$UUID_CONFIG" ]; then
+
+            if ! cp -f $FILE_BACKUP_PATH/$UUID_CONFIG $EMMC_MOUNT_PATH/; then
+                umount $EMMC_MOUNT_PATH
+                err_exit 4001
+            fi
+        fi
+        umount $EMMC_MOUNT_PATH
+    else
+        echo "ERROR!! unable mount partition 6 ."
+        err_exit 4002
+    fi
+}
+
+function install_navi_operation
+{
+    if [ -f "$NAVI_MAP_ARCHIVE"_aa ]; then
+        # start to extract navi map archive
+        if ! mount ${EMMC_NODE}p7 ${EMMC_MOUNT_PATH}; then err_exit 6001; fi
+            
+        mkdir -p $EMMC_MOUNT_PATH/Navngo
+        for file in "$NAVI_MAP_ARCHIVE"_*
+        do
+            VARMAP_SIZE=$(du -s $file | awk '{print $1}')
+            VARMAP_SIZE=`expr "$VARMAP_SIZE" + "$VARMAP_SIZE" / 2`
+            TOTAL_FILES_SIZE=`expr "$TOTAL_FILES_SIZE" + "$VARMAP_SIZE"`
+        done
+
+        cat "$NAVI_MAP_ARCHIVE"_* | tar -xzf - -C $EMMC_MOUNT_PATH/ &
+
+        BG_PID=$!
+        check_bg_process p7 $PROCESS_UNZIP_MAPS
+        if [ ! "$BG_STATUS" -eq 0 ]; then err_exit 6002; fi
+
+        echo "untar map files complete"
+        sync
+        echo "$PROCESS_UNZIP_MAPS_DONE $COPIED_FILES_SIZE/$TOTAL_FILES_SIZE" > $FW_UPGRADE_STATUS
+        
+        umount $EMMC_MOUNT_PATH
+    fi
+}
+
+rm -f $FW_UPGRADE_STATUS
+touch $FW_UPGRADE_STATUS
+chmod 666 $FW_UPGRADE_STATUS
+
+# main entry point
+fool_proofing_operation
+check_essential_files
+backup_operation
+touch $FW_UPGRADE_STATUS
+chmod 666 $FW_UPGRADE_STATUS
+echo "$PROCESS_FOMAT 5/0" > $FW_UPGRADE_STATUS
+partition_operation
+format_operation
+restore_operation
+install_operation
+install_navi_operation
+
+sync
+echo "$PROCESS_END $COPIED_FILES_SIZE/$TOTAL_FILES_SIZE" > $FW_UPGRADE_STATUS
+exit
+
+
+
+===== reports/deep2/update/system/bin/chk_file_install.sh =====
+#!/system/bin/bin/sh
+SRC_FILE=/system/etc/eGTouchA_v2.5.2112.A-a.ini
+DST_FILE=/data/eGTouchA.ini
+if [ -s $DST_FILE ];
+then
+	echo "$DST_FILE had installed ... ^_^"
+else
+	if [ -s $SRC_FILE ];
+	then
+		echo "prepare install eGTouchA.ini ... :)"
+		cp -f $SRC_FILE $DST_FILE
+	else
+		echo "No $SRC_FILE ... :("
+	fi
+fi
+
+
+===== reports/deep2/update/system/bin/clean_swap.sh =====
+#/system/bin/sh
+
+dd if=/dev/zero of=/dev/block/mmcblk0p2 bs=1M count=100
+
+===== reports/deep2/update/system/bin/sys_poweroff.sh =====
+#!/system/bin/sh
+stop zygote
+sync
+sync
+busybox poweroff -f
+
+===== reports/deep2/update/system/bin/restore_system.sh =====
+#!/system/bin/sh
+
+WAIT_COUNT=3
+
+echo "***START resume system***"
+
+DRIVER_LIST="gt9xx.ko
+scsi_mod.ko
+scsi_wait_scan.ko
+sd_mod.ko
+usb-storage.ko
+compat.ko
+cfg80211.ko
+mac80211.ko
+wlcore.ko
+wlcore_sdio.ko
+"
+
+
+function start_delayed_device
+{
+	COUNT=0
+	while true
+	do
+		COUNT=$(($COUNT+1))
+		BUSY_MODE=`cat /proc/el_ctr`
+		if [ "$BUSY_MODE" == "0" ] || [ $COUNT -gt $WAIT_COUNT ]
+		then
+			echo r > /proc/el_ctr
+			return
+		fi
+		echo "wait !!!"
+		sleep 1
+	done
+}
+
+function insmod_driver
+{
+	COUNT=0
+	while true
+	do
+		COUNT=$(($COUNT+1))
+		BUSY_MODE=`cat /proc/el_ctr`	
+		if [ "$BUSY_MODE" == "0" ] || [ $COUNT -gt $WAIT_COUNT ]
+		then
+			echo $1
+			insmod /system/lib/modules/$1
+			return
+		fi
+		echo "wait !!!"
+		sleep 1
+	done
+}
+
+function load_drivers
+{
+	for DRIVER in $DRIVER_LIST
+	do
+		insmod_driver $DRIVER
+	done
+}
+
+# 50M
+KEEP_DATA_SIZE=50
+
+function check_data_partition
+{
+	FREE_DATA_SIZE=$(df -m | grep mmcblk0p5 | tr -s ' ' | cut -d ' ' -f4)
+
+	if [ $FREE_DATA_SIZE -lt $KEEP_DATA_SIZE ]; then
+		rm -rf /data/data/com.android.browser/app_webview/*
+		sync
+	fi
+}
+
+# main entry point
+echo 1 > /proc/elead_gpio/enabled_det
+start_delayed_device
+load_drivers
+
+# enable adb
+setprop sys.usb.config mtp,adb
+
+# enable console message
+echo 7 > /proc/sys/kernel/printk
+
+# Setup wfd parameter 
+setprop sys.wifisink.latency 800
+setprop media.wfd.sink.max.width 1280
+setprop media.wfd.sink.max.height 720
+
+# Change file mode
+chmod 666 /mnt/para_fw/config.ini
+
+sleep 15
+
+# check data partition free space
+check_data_partition
+
+# disable system swap
+busybox swapoff /dev/block/mmcblk0p2
+
+echo "***exit restore_system.sh***"
+
+===== reports/deep2/update/system/bin/check_hub.sh =====
+#!/system/bin/sh
+
+USB_FAIL_COUNT=20
+REBOOT_COUNT=2
+
+function check_module
+{
+	if [ $PRODUCT_MODEL == "EL-831C-RAV1" ]; then
+		CHECK_STR="Vendor=10c4"
+		echo "EL-831C-RAV1"
+	else
+		echo "Not Support~"
+		exit 0
+	fi
+}
+
+function wait_boot
+{
+	#
+	# Wait Boot_mode == 1
+	#
+	while true
+	do
+		BOOT_MODE=`cat /proc/el_boot_mode`
+		if [ -f /proc/el_boot_mode ]; then
+			if [ $BOOT_MODE == "0" ]; then
+				sleep 10
+			else
+				break;
+			fi
+		else
+			echo "Not Support~"
+			exit 0
+		fi
+	done
+}
+
+function reset_hub
+{
+	echo "Reset HUB"
+	echo 0 > /proc/elead_gpio/usb_hub_rst
+	sleep 1
+	echo 1 > /proc/elead_gpio/usb_hub_rst
+}
+
+# 
+#  main entry point
+#
+sleep 15
+check_module
+wait_boot
+
+while true
+do
+	sleep 10
+	grep $CHECK_STR /sys/kernel/debug/usb/devices >> /dev/null
+	
+	if [ "$?" != "0" ]; then
+		if [ $COUNT -ge $REBOOT_COUNT ]; then
+			/system/bin/reboot
+		fi
+			reset_hub
+			COUNT=$(($COUNT+1))
+			sleep 5
+	else
+			##echo "Check OK"
+			COUNT=0
+	fi
+	
+	##### Check CP210X err count
+	if [ -f /proc/cp210x_err_count ]; then
+		CP210X_ERR_COUNT=`cat /proc/cp210x_err_count`
+		if [ $CP210X_ERR_COUNT -ge $USB_FAIL_COUNT ]; then
+			reset_hub
+			sleep 5
+		fi
+	fi
+done
+
+
+
+===== reports/deep2/update/system/bin/serve_usb_hid.sh =====
+#!/system/bin/sh
+
+USB_HID_KO=/system/lib/modules/usbhid.ko
+
+if [ ! -z "$1" ]; then
+
+    if [ $1 = "insert" ]; then
+        insmod $USB_HID_KO
+    elif [ $1 = "remove" ]; then
+        rmmod $USB_HID_KO
+    fi
+else
+    insmod $USB_HID_KO
+fi
+
+===== reports/deep2/update/system/bin/general_conf.sh =====
+#!/system/bin/sh
+# set date-time after 2015-07-30 00:01
+/system/bin/date -s 20150730.000000
+
+gt9xx_ver_path=/proc/gt9xx_ver
+base_path=/mnt/para_fw
+verinfo_file=tp_verinfo
+# main entry point
+echo "start check touch version"
+if [ -e $base_path/$verinfo_file ]; then
+	echo "found old $verinfo_file"
+	rm $base_path/$verinfo_file
+fi
+
+if [ -e $gt9xx_ver_path ]; then
+	echo "found $gt9xx_ver_path"
+	$(cat $gt9xx_ver_path > $base_path/$verinfo_file)
+fi
+chmod 444 $base_path/$verinfo_file
+sync
+echo "end check touch version"
+
+
+===== reports/deep2/update/system/bin/fs_sync.sh =====
+#!/system/bin/sh
+
+sync
+
+
+===== reports/deep2/update/system/bin/check_usb_iface.sh =====
+#!/system/bin/sh
+
+# This script periodically check for the existence of a USB network interface.
+# If the interface exists, this script will bring it up and try to assign it an
+# IP address using dhcpcd. This script assumes that the name of the network
+# interface is "usb0".
+#
+# Notifications will be broadcast when the USB network interface has been
+# assigned an IP address, or the interface has been taken down. The broadcast
+# is done using the "am" (Activity Manager) command.
+
+TRUE=1
+FALSE=0
+IFACE_IS_DOWN=$TRUE
+NOTIFICATION_USB_IFACE_READY=vn.com.fsoft.UsbIfaceReady
+NOTIFICATION_USB_IFACE_DOWN=vn.com.fsoft.UsbIfaceDown
+
+while true
+do
+    sleep 1
+    if [ -e /sys/class/net/usbH0 ];
+    then
+        if [ "$IFACE_IS_DOWN" -eq "$TRUE" ];
+        then
+            netcfg usbH0 up
+            if [ "$?" -eq 0 ];
+            then
+                IFACE_IS_DOWN=$FALSE
+                
+                # call the dhcpcd twice to avoid the "flock: Try again" error
+                dhcpcd usbH0
+                dhcpcd usbH0
+
+                # notify the registered applications that the USB network
+                # interface is ready
+                am broadcast -a $NOTIFICATION_USB_IFACE_READY
+            fi
+        fi
+    else
+        if [ "$IFACE_IS_DOWN" -eq "$FALSE" ];
+        then
+            # The USB network interface has just been taken down, notify the
+            # registered applications.
+            am broadcast -a $NOTIFICATION_USB_IFACE_DOWN
+            IFACE_IS_DOWN=$TRUE
+        fi
+    fi
+done
+
+===== reports/deep2/update/system/bin/boot_mode_check.sh =====
+#!/system/bin/sh
+
+SWAPIMAGE=/mnt/para_fw/backup_image/swap.img
+DATAIMAGE=/mnt/para_fw/backup_image/data.tar
+EMMC_NODE=/dev/block/mmcblk0
+
+check_boot_mode()
+{
+        echo "check_boot_mode"
+        if [ -f /proc/el_boot_mode ]; then
+                BOOT_MODE=`cat /proc/el_boot_mode`
+                if [ $BOOT_MODE == "0" ]; then
+                        echo "Lost SWAP image!!"
+                        return 1
+                fi
+        fi
+        return 0
+}
+
+recovery_swap()
+{
+    if [ -e $SWAPIMAGE ] && [ -e $DATAIMAGE ]
+    then
+        /system/bin/mke2fs -t ext4 ${EMMC_NODE}p5 
+        mount -t ext4 ${EMMC_NODE}p5 /mnt/media_rw/usb2/
+        cd /mnt/media_rw/usb2
+        tar -xvf $DATAIMAGE
+        dd if=$SWAPIMAGE   of=${EMMC_NODE}p2
+        reboot
+    fi
+    return 0
+}
+
+# STEP_1 check boot mode
+check_boot_mode
+if [ $? == "0" ]; then
+    echo "QuickBoot mode or normal boot!!"
+    exit
+fi
+
+#SETP_2 recovery swap image
+recovery_swap
+
+exit 0
+
+===== reports/deep2/update/system/etc/vosfPlay.cfg =====
+; Config stagefright plugin
+; for audio voDec = 1 means use VisualOn's
+; for Video voDec = 2 means use VisualOn's
+[Playback]
+AudioSinkBuffTime=163
+YUV420Buffer=1
+UseDecThread=1
+BufferCount=5
+
+[FileSource]
+Source_File_ASF=1
+Source_File_AVI=1
+Source_File_FLV=1
+Source_File_MPG=1
+Source_File_FLAC=1
+Source_File_WAV=1
+Source_File_MOV=1
+Source_File_MP3=1
+Source_File_AC3=1
+
+[Audio_Dec_MP3]
+voDec=1
+
+[Audio_Dec_AAC]
+voDec=0
+
+[Audio_Dec_AMRNB]
+voDec=0
+
+[Audio_Dec_AMRWB]
+voDec=0
+
+[Audio_Dec_AMRWBP]
+voDec=0
+
+[Audio_Dec_WMA]
+voDec=1
+
+[Audio_Dec_ADPCM]
+voDec=0
+
+[Audio_Dec_QCELP]
+voDec=0
+
+[Audio_Dec_EVRC]
+voDec=0
+
+[Audio_Dec_AC3]
+voDec=1
+
+[Audio_Dec_EAC3]
+voDec=0
+
+[Audio_Dec_FLAC]
+voDec=1
+
+[Audio_Dec_OGG]
+voDec=0
+
+[Audio_Dec_RA]
+voDec=0
+
+[Audio_Dec_MAC]
+voDec=0
+
+[Audio_Dec_ALAC]
+voDec=0
+
+[Audio_Dec_DTS]
+voDec=0
+
+[Video_Dec_MPEG4]
+voDec=0
+
+[Video_Dec_H263]
+voDec=0
+
+[Video_Dec_S263]
+voDec=0
+
+[Video_Dec_H264]
+voDec=0
+
+[Video_Dec_WMV]
+voDec=2
+
+[Video_Dec_VC1]
+voDec=2
+
+[Video_Dec_REAL]
+voDec=0
+
+[Video_Dec_MPEG2]
+voDec=2
+
+[Video_Dec_MJPEG]
+voDec=0
+
+[Video_Dec_DIVX]
+voDec=0
+
+[Video_Dec_VP6]
+voDec=0
+
+[Video_Dec_VP8]
+voDec=0
+
+
+
+
+===== reports/deep2/update/system/lib/egl/egl.cfg =====
+0 0 android
+0 1 VIVANTE
+
+===== reports/deep2/update/system/build.prop =====
+# begin build properties
+# autogenerated by buildinfo.sh
+ro.build.id=1.0.0-rc3
+ro.build.display.id=el_imx6_solo_v2-userdebug 4.4.2 1.0.0-rc3 20140630 dev-keys
+ro.build.version.incremental=20140630
+ro.build.version.sdk=19
+ro.build.version.codename=REL
+ro.build.version.release=4.4.2
+ro.build.date=Tue Jun 27 10:39:44 CST 2017
+ro.build.date.utc=1498531184
+ro.build.type=userdebug
+ro.build.user=chian
+ro.build.host=ELEAD-UBUNTU2
+ro.build.tags=dev-keys
+ro.product.model=EL_SOLO
+ro.product.brand=solo_v2
+ro.product.name=el_imx6_solo_v2
+ro.product.device=el_imx6_solo_v2
+ro.product.board=EL_SOLO
+ro.product.cpu.abi=armeabi-v7a
+ro.product.cpu.abi2=armeabi
+ro.product.manufacturer=e-lead
+ro.product.locale.language=zh
+ro.product.locale.region=CN
+ro.wifi.channels=
+ro.board.platform=imx6
+# ro.build.product is obsolete; use ro.product.device
+ro.build.product=el_imx6_solo_v2
+# Do not try to parse ro.build.description or .fingerprint
+ro.build.description=el_imx6_solo_v2-userdebug 4.4.2 1.0.0-rc3 20140630 dev-keys
+ro.build.fingerprint=solo_v2/el_imx6_solo_v2/el_imx6_solo_v2:4.4.2/1.0.0-rc3/20140630:userdebug/dev-keys
+ro.build.characteristics=tablet
+# end build properties
+
+#
+# ADDITIONAL_BUILD_PROPERTIES
+#
+ro.carrier=unknown
+ro.config.notification_sound=OnTheHunt.ogg
+ro.config.alarm_alert=Alarm_Classic.ogg
+dalvik.vm.heapstartsize=8m
+dalvik.vm.heapgrowthlimit=64m
+dalvik.vm.heapsize=384m
+dalvik.vm.heaptargetutilization=0.75
+dalvik.vm.heapminfree=512k
+dalvik.vm.heapmaxfree=8m
+wifi.interface=wlan0
+softap.interface=wlan0
+wifi.ap.interface
+wlan0
+persist.sys.dalvik.vm.lib=libdvm.so
+dalvik.vm.lockprof.threshold=500
+dalvik.vm.dexopt-flags=m=y
+net.bt.name=Android
+dalvik.vm.stack-trace-file=/data/anr/traces.txt
+qemu.hw.mainkeys=1
+
+===== reports/deep2/update/init.usb.rc =====
+# Copyright (C) 2012 The Android Open Source Project
+#
+# USB configuration common for all android devices
+#
+
+on post-fs-data
+    chown system system /sys/class/android_usb/android0/f_mass_storage/lun/file
+    chmod 0660 /sys/class/android_usb/android0/f_mass_storage/lun/file
+    chown system system /sys/class/android_usb/android0/f_rndis/ethaddr
+    chmod 0660 /sys/class/android_usb/android0/f_rndis/ethaddr
+
+# Used to disable USB when switching states
+on property:sys.usb.config=none
+    stop adbd
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/bDeviceClass 0
+    setprop sys.usb.state ${sys.usb.config}
+
+# adb only USB configuration
+# This should only be used during device bringup
+# and as a fallback if the USB manager fails to set a standard configuration
+on property:sys.usb.config=adb
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 18d1
+    write /sys/class/android_usb/android0/idProduct D002
+    write /sys/class/android_usb/android0/functions ${sys.usb.config}
+    write /sys/class/android_usb/android0/enable 1
+    start adbd
+    setprop sys.usb.state ${sys.usb.config}
+
+# USB accessory configuration
+on property:sys.usb.config=accessory
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 18d1
+    write /sys/class/android_usb/android0/idProduct 2d00
+    write /sys/class/android_usb/android0/functions ${sys.usb.config}
+    write /sys/class/android_usb/android0/enable 1
+    setprop sys.usb.state ${sys.usb.config}
+
+# USB accessory configuration, with adb
+on property:sys.usb.config=accessory,adb
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 18d1
+    write /sys/class/android_usb/android0/idProduct 2d01
+    write /sys/class/android_usb/android0/functions ${sys.usb.config}
+    write /sys/class/android_usb/android0/enable 1
+    start adbd
+    setprop sys.usb.state ${sys.usb.config}
+
+# audio accessory configuration
+on property:sys.usb.config=audio_source
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 18d1
+    write /sys/class/android_usb/android0/idProduct 2d02
+    write /sys/class/android_usb/android0/functions ${sys.usb.config}
+    write /sys/class/android_usb/android0/enable 1
+    setprop sys.usb.state ${sys.usb.config}
+
+# audio accessory configuration, with adb
+on property:sys.usb.config=audio_source,adb
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 18d1
+    write /sys/class/android_usb/android0/idProduct 2d03
+    write /sys/class/android_usb/android0/functions ${sys.usb.config}
+    write /sys/class/android_usb/android0/enable 1
+    start adbd
+    setprop sys.usb.state ${sys.usb.config}
+
+# USB and audio accessory configuration
+on property:sys.usb.config=accessory,audio_source
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 18d1
+    write /sys/class/android_usb/android0/idProduct 2d04
+    write /sys/class/android_usb/android0/functions ${sys.usb.config}
+    write /sys/class/android_usb/android0/enable 1
+    setprop sys.usb.state ${sys.usb.config}
+
+# USB and audio accessory configuration, with adb
+on property:sys.usb.config=accessory,audio_source,adb
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 18d1
+    write /sys/class/android_usb/android0/idProduct 2d05
+    write /sys/class/android_usb/android0/functions ${sys.usb.config}
+    write /sys/class/android_usb/android0/enable 1
+    start adbd
+    setprop sys.usb.state ${sys.usb.config}
+
+# Used to set USB configuration at boot and to switch the configuration
+# when changing the default configuration
+on property:persist.sys.usb.config=*
+    setprop sys.usb.config ${persist.sys.usb.config}
+
+===== reports/deep2/update/fstab.el_imx6_solo_v2 =====
+# Android fstab file.
+#<src>                                                  <mnt_point>         <type>    <mnt_flags and options>                       <fs_mgr_flags>
+# The filesystem that contains the filesystem checker binary (typically /system) cannot
+# specify MF_CHECK, and must come before any filesystems that do specify MF_CHECK
+
+#/devices/platform/sdhci-esdhc-imx.3/mmc_host/mmc1 /mnt/media_rw/extsd vfat defaults voldmanaged=extsd:auto
+/devices/platform/fsl-ehci.1/usb2/2-1/2-1.1 /mnt/media_rw/usb1 vfat defaults voldmanaged=usb1:auto
+/devices/platform/fsl-ehci.1/usb2/2-1/2-1.2 /mnt/media_rw/usb2 vfat defaults voldmanaged=usb2:auto
+
+#/dev/block/mmcblk1p3    /system      ext4    rw                                                                               wait
+#/dev/block/mmcblk1p4    /data        ext4    nosuid,nodev,nodiratime,noatime,nomblk_io_submit,noauto_da_alloc,errors=panic    wait,encryptable=footer
+/dev/block/mmcblk1p1    /fw_data     vfat    rw                                                                               wait
+===== reports/deep2/update/init.el_imx6_solo_v2.rc =====
+import init.el_imx6_solo_v2.usb.rc
+
+on init
+    start watchdogd
+
+    # See storage config details at http://source.android.com/tech/storage/
+    mkdir /mnt/shell/emulated 0700 shell shell
+    mkdir /storage/emulated 0555 root root
+
+    export EXTERNAL_STORAGE /storage/emulated/legacy
+    export EMULATED_STORAGE_SOURCE /mnt/shell/emulated
+    export EMULATED_STORAGE_TARGET /storage/emulated
+
+    export EXTERNAL_STORAGE_EXTSD /storage/extsd
+    export EXTERNAL_STORAGE_USB1 /storage/usb1
+    export EXTERNAL_STORAGE_USB2 /storage/usb2
+    export EXTERNAL_STORAGE_EMMC_DATA /storage/emmc_data
+
+    # Support legacy paths
+    symlink /storage/emulated/legacy /sdcard
+    symlink /storage/emulated/legacy /mnt/sdcard
+    symlink /storage/emulated/legacy /storage/sdcard0
+	
+    symlink /mnt/shell/emulated/0 /storage/emulated/legacy
+
+on boot
+
+    # Set permission for IIM node
+    symlink /dev/mxs_viim /dev/mxc_mem
+
+#    # Set GPS serial and reset GPIO pin
+#    setprop ro.kernel.android.gps /dev/athrnmea
+#    setprop persist.gps.oacmode @f
+#    symlink /dev/ttymxc2 /dev/gpsdevice
+#    write /sys/class/gpio/export 60
+#    write /sys/class/gpio/gpio60/direction "out"
+#    write /sys/class/gpio/gpio60/value 1
+
+    # Enable Tethering in the Settings
+    setprop ro.tether.denied false
+
+    # 3D acceleration property
+    setprop debug.sf.showfps    0
+    setprop debug.sf.enable_hgl 1
+    setprop debug.egl.hw	1
+
+    setprop hwc.stretch.filter  1
+    setprop hwc.enable_dither   1
+
+    # fsl omx graphic manager media framework property
+    setprop media.omxgm.enable-player 1
+    setprop media.omxgm.enable-record 1
+    setprop media.omxgm.enable-scan 1
+    setprop rw.VIDEO_RENDER_NAME video_render.surface
+
+    #Define the config for dual camera
+    setprop camera.disable_zsl_mode 1
+    #For landscape mode, orient is 0
+    #For portrait mode, orient is 90
+    #the android before honycomb are all in portrait mode
+    setprop front_camera_name uvc
+    setprop front_camera_orient 0
+
+    # Set OpenGLES version
+    setprop ro.opengles.version 131072
+
+    # Set rotation to 270 to cofigure as portrait mode
+    setprop ro.sf.hwrotation 0
+
+    # Set the density to 160dpi, default 128dpi is not good
+    setprop ro.sf.lcd_density 160
+
+    # Set extsd access permission
+    setprop persist.sampling_profiler 1
+
+# change for FSL specific service
+    chown root system /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+    chmod 0664 /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+    chown root system /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+    chmod 0664 /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+    chown root system /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+    chmod 0664 /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+    chown root system /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq
+    chmod 0440 /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq
+    chown root system /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies
+    chown root system /sys/devices/system/cpu/cpu0/online
+    chmod 0664 /sys/devices/system/cpu/cpu0/online
+    chown root system /sys/devices/system/cpu/cpu1/online
+    chmod 0664 /sys/devices/system/cpu/cpu1/online
+    chown root system /sys/devices/system/cpu/cpu2/online
+    chmod 0664 /sys/devices/system/cpu/cpu2/online
+    chown root system /sys/devices/system/cpu/cpu3/online
+    chmod 0664 /sys/devices/system/cpu/cpu3/online
+
+    # prepare for ril
+    setprop gsm.ril.delay 15
+    setprop ro.ril.wake_lock_timeout 300
+
+    # Default backlight device
+    setprop hw.backlight.dev "pwm-backlight.2"
+    # Chmod/chown FSL specific sys entry
+    chown system system /sys/class/backlight/pwm-backlight.2/brightness
+    chmod 0660 /sys/class/backlight/pwm-backlight.2/brightness
+
+    # Set light sensor sysfs path and light sensor threshold lux value
+    setprop ro.hardware.lightsensor "/sys/class/i2c-dev/i2c-2/device/2-0044/"
+    setprop ro.lightsensor.threshold  20
+
+    # No bluetooth hardware present
+    setprop hw.bluetooth 1
+    setprop wlan.interface wlan0
+	
+	#GPS
+	mkdir /data/gps 771 system system
+    chown gps system /data/gps
+
+# mount the debugfs
+    mount debugfs none /sys/kernel/debug/
+
+# Change ALSA DAPM delay time
+    write /sys/devices/platform/soc-audio.1/RT5625/pmdown_time 0
+    write /sys/devices/platform/soc-audio.1/RT5625BT/pmdown_time 0
+    write /sys/devices/platform/soc-audio.1/RT5670/pmdown_time 0
+    write /sys/devices/platform/soc-audio.1/RT5670BT/pmdown_time 0
+
+# AMPAK
+    #Power control for AP6251
+    write /sys/class/gpio/export 45
+    write /sys/class/gpio/gpio45/value 0
+    write /sys/class/gpio/gpio45/direction out
+    chown gps system /sys/class/gpio/gpio45/value
+	
+#load wifi/bt modules
+#service wifi_loader /system/bin/wifi/rc.wifi start
+#    class late_start
+#    oneshot
+
+## nFore Wi-Fi (station)
+
+service wpa_supplicant /system/bin/wpa_supplicant \
+    -iwlan0 -Dnl80211 -c/data/misc/wifi/wpa_supplicant.conf \
+    -I/system/etc/wifi/wpa_supplicant_overlay.conf \
+    -O/data/misc/wifi/sockets \
+    -e/data/misc/wifi/entropy.bin -g@android:wpa_wlan0
+#   we will start as root and wpa_supplicant will switch to user wifi
+#   after setting up the capabilities required for WEXT
+#   user wifi
+#   group wifi inet keystore
+    class main
+    socket wpa_wlan0 dgram 660 wifi wifi
+    disabled
+    oneshot
+
+service dhcpcd_wlan0 /system/bin/dhcpcd -ABKL
+    class main
+    disabled
+    oneshot     
+
+
+service iprenew_wlan0 /system/bin/dhcpcd -n
+    class main
+    disabled
+    oneshot
+
+## nFore Wi-Fi (p2p)
+
+service p2p_supplicant /system/bin/wpa_supplicant \
+    -iwlan0 -Dnl80211 -iwlan0 -c/data/misc/wifi/wpa_supplicant.conf \
+    -I/system/etc/wifi/wpa_supplicant_overlay.conf -N \
+    -ip2p0 -Dnl80211 -c/data/misc/wifi/p2p_supplicant.conf \
+    -I/system/etc/wifi/p2p_supplicant_overlay.conf \
+    -O/data/misc/wifi/sockets -puse_p2p_group_interface=1 \
+    -e/data/misc/wifi/entropy.bin -g@android:wpa_wlan0
+#   we will start as root and wpa_supplicant will switch to user wifi
+#   after setting up the capabilities required for WEXT
+#   user wifi
+#   group wifi inet keystore
+    class main
+    socket wpa_wlan0 dgram 660 wifi wifi
+    disabled
+    oneshot
+
+service hostapd_bin /system/bin/logwrapper /system/bin/hostapd -dd /data/misc/wifi/hostapd.conf 
+    socket hostapd_wlan0 dgram 0660 wifi wifi
+    class main
+    disabled
+    oneshot
+
+service dhcpcd_p2p /system/bin/dhcpcd -aABKL
+    class main
+    disabled
+    oneshot
+
+service iprenew_p2p /system/bin/dhcpcd -n
+    class main
+    disabled
+    oneshot
+
+
+#service dhcpcd_eth0 /system/bin/dhcpcd -ABKL
+#    class main
+#    disabled
+#    oneshot
+
+#service iprenew_eth0 /system/bin/dhcpcd -n
+#    class main
+#    disabled
+#    oneshot
+
+
+# magd daemon
+service magd /system/bin/magd
+    class main
+    user system
+    group input
+    oneshot
+
+service sys_poweroff /system/bin/sys_poweroff.sh
+    class main
+    disabled
+    oneshot
+
+service fs_sync /system/bin/fs_sync.sh
+    user root
+    group root
+    disabled
+    oneshot
+
+service el_wifi_enable /system/bin/el_wifi_enable.sh
+    class main
+    disabled
+    oneshot
+
+service clean_swap /system/bin/sh /system/bin/clean_swap.sh
+    class late_start
+    user root
+    group root
+    disabled
+    oneshot
+
+service usbnet_adb /system/bin/el_debug_tool
+    class late_start
+    user root
+    group root
+    disabled
+    oneshot
+
+on property:persist.sys.usbnet_adb_support=1
+    start usbnet_adb
+	
+
+# AP6251(BCM47511)
+#service gpsd /system/bin/glgps -c /system/etc/gpsconfig.xml
+#    class main
+#    user gps
+#    group system
+
+
+on fs
+# mount ext4 partitions
+    mount_all /fstab.el_imx6_solo_v2
+
+===== reports/deep2/update/список-скриптов.txt =====
+reports/deep2/update/init.rc
+reports/deep2/update/system/bin/enable_adb.sh
+reports/deep2/update/system/bin/swap2extsd.sh
+reports/deep2/update/system/bin/clean_uboot.sh
+reports/deep2/update/system/bin/build_emmc.sh
+reports/deep2/update/system/bin/chk_file_install.sh
+reports/deep2/update/system/bin/clean_swap.sh
+reports/deep2/update/system/bin/sys_poweroff.sh
+reports/deep2/update/system/bin/restore_system.sh
+reports/deep2/update/system/bin/check_hub.sh
+reports/deep2/update/system/bin/serve_usb_hid.sh
+reports/deep2/update/system/bin/general_conf.sh
+reports/deep2/update/system/bin/fs_sync.sh
+reports/deep2/update/system/bin/check_usb_iface.sh
+reports/deep2/update/system/bin/boot_mode_check.sh
+reports/deep2/update/system/etc/vosfPlay.cfg
+reports/deep2/update/system/lib/egl/egl.cfg
+reports/deep2/update/system/build.prop
+reports/deep2/update/init.usb.rc
+reports/deep2/update/fstab.el_imx6_solo_v2
+reports/deep2/update/init.el_imx6_solo_v2.rc
+reports/deep2/update/список-скриптов.txt
+reports/deep2/update/init.el_imx6_solo_v2.usb.rc
+reports/deep2/update/default.prop
+reports/deep2/update/ueventd.rc
+reports/deep2/update/init.trace.rc
+reports/deep2/update/ueventd.el_imx6_solo_v2.rc
+reports/deep2/update/init.environ.rc
+
+===== reports/deep2/update/init.el_imx6_solo_v2.usb.rc =====
+
+on boot
+    write /sys/class/android_usb/android0/iSerial $ro.serialno
+    write /sys/class/android_usb/android0/iManufacturer $ro.product.manufacturer
+    write /sys/class/android_usb/android0/iProduct $ro.product.model
+
+
+# USB rndis configuration
+on property:sys.usb.config=rndis
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 18d1
+    write /sys/class/android_usb/android0/idProduct 4e23
+    write /sys/class/android_usb/android0/functions ${sys.usb.config}
+    write /sys/class/android_usb/android0/bDeviceClass 224
+    write /sys/class/android_usb/android0/enable 1
+    setprop sys.usb.state ${sys.usb.config}
+
+on property:sys.usb.config=mtp
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 18d1
+    write /sys/class/android_usb/android0/idProduct 4e41
+    write /sys/class/android_usb/android0/functions ${sys.usb.config}
+    write /sys/class/android_usb/android0/enable 1
+    setprop sys.usb.state ${sys.usb.config}
+
+on property:sys.usb.config=mtp,adb
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 18d1
+    write /sys/class/android_usb/android0/idProduct 4e42
+    write /sys/class/android_usb/android0/functions ${sys.usb.config}
+    write /sys/class/android_usb/android0/enable 1
+    start adbd
+    setprop sys.usb.state ${sys.usb.config}
+
+on property:sys.usb.config=ptp
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 18d1
+    write /sys/class/android_usb/android0/idProduct 4e43
+    write /sys/class/android_usb/android0/functions ${sys.usb.config}
+    write /sys/class/android_usb/android0/enable 1
+    setprop sys.usb.state ${sys.usb.config}
+
+on property:sys.usb.config=ptp,adb
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 18d1
+    write /sys/class/android_usb/android0/idProduct 4e44
+    write /sys/class/android_usb/android0/functions ${sys.usb.config}
+    write /sys/class/android_usb/android0/enable 1
+    start adbd
+    setprop sys.usb.state ${sys.usb.config}
+
+
+===== reports/deep2/update/default.prop =====
+#
+# ADDITIONAL_DEFAULT_PROPERTIES
+#
+ro.secure=1
+ro.allow.mock.location=0
+ro.debuggable=1
+persist.sys.usb.config=adb
+
+===== reports/deep2/update/ueventd.rc =====
+/dev/null                 0666   root       root
+/dev/zero                 0666   root       root
+/dev/full                 0666   root       root
+/dev/ptmx                 0666   root       root
+/dev/tty                  0666   root       root
+/dev/random               0666   root       root
+/dev/urandom              0666   root       root
+/dev/ashmem               0666   root       root
+/dev/binder               0666   root       root
+
+# Anyone can read the logs, but if they're not in the "logs"
+# group, then they'll only see log entries for their UID.
+/dev/log/*                0666   root       log
+
+# the msm hw3d client device node is world writable/readable.
+/dev/msm_hw3dc            0666   root       root
+
+# gpu driver for adreno200 is globally accessible
+/dev/kgsl                 0666   root       root
+
+# kms driver for drm based gpu
+/dev/dri/*                0666   root       graphics
+
+# these should not be world writable
+/dev/diag                 0660   radio      radio
+/dev/diag_arm9            0660   radio      radio
+/dev/android_adb          0660   adb        adb
+/dev/android_adb_enable   0660   adb        adb
+/dev/ttyMSM0              0600   bluetooth  bluetooth
+/dev/uhid                 0660   system     net_bt_stack
+/dev/uinput               0660   system     net_bt_stack
+/dev/alarm                0664   system     radio
+/dev/tty0                 0660   root       system
+/dev/graphics/*           0660   root       graphics
+/dev/msm_hw3dm            0660   system     graphics
+/dev/input/*              0660   root       input
+/dev/eac                  0660   root       audio
+/dev/cam                  0660   root       camera
+/dev/pmem                 0660   system     graphics
+/dev/pmem_adsp*           0660   system     audio
+/dev/pmem_camera*         0660   system     camera
+/dev/oncrpc/*             0660   root       system
+/dev/adsp/*               0660   system     audio
+/dev/snd/*                0660   system     audio
+/dev/mt9t013              0660   system     system
+/dev/msm_camera/*         0660   system     system
+/dev/akm8976_daemon       0640   compass    system
+/dev/akm8976_aot          0640   compass    system
+/dev/akm8973_daemon       0640   compass    system
+/dev/akm8973_aot          0640   compass    system
+/dev/bma150               0640   compass    system
+/dev/cm3602               0640   compass    system
+/dev/akm8976_pffd         0640   compass    system
+/dev/lightsensor          0640   system     system
+/dev/msm_pcm_out*         0660   system     audio
+/dev/msm_pcm_in*          0660   system     audio
+/dev/msm_pcm_ctl*         0660   system     audio
+/dev/msm_snd*             0660   system     audio
+/dev/msm_mp3*             0660   system     audio
+/dev/audience_a1026*      0660   system     audio
+/dev/tpa2018d1*           0660   system     audio
+/dev/msm_audpre           0660   system     audio
+/dev/msm_audio_ctl        0660   system     audio
+/dev/htc-acoustic         0660   system     audio
+/dev/vdec                 0660   system     audio
+/dev/q6venc               0660   system     audio
+/dev/snd/dsp              0660   system     audio
+/dev/snd/dsp1             0660   system     audio
+/dev/snd/mixer            0660   system     audio
+/dev/smd0                 0640   radio      radio
+/dev/qmi                  0640   radio      radio
+/dev/qmi0                 0640   radio      radio
+/dev/qmi1                 0640   radio      radio
+/dev/qmi2                 0640   radio      radio
+/dev/bus/usb/*            0660   root       usb
+/dev/mtp_usb              0660   root       mtp
+/dev/usb_accessory        0660   root       usb
+/dev/tun                  0660   system     vpn
+
+# CDMA radio interface MUX
+/dev/ts0710mux*           0640   radio      radio
+/dev/ppp                  0660   radio      vpn
+
+# sysfs properties
+/sys/devices/virtual/input/input*   enable      0660  root   input
+/sys/devices/virtual/input/input*   poll_delay  0660  root   input
+/sys/devices/virtual/usb_composite/*   enable      0664  root   system
+
+===== reports/deep2/update/init.trace.rc =====
+## Permissions to allow system-wide tracing to the kernel trace buffer.
+##
+on boot
+
+# Allow writing to the kernel trace log.
+    chmod 0222 /sys/kernel/debug/tracing/trace_marker
+
+# Allow the shell group to enable (some) kernel tracing.
+    chown root shell /sys/kernel/debug/tracing/trace_clock
+    chown root shell /sys/kernel/debug/tracing/buffer_size_kb
+    chown root shell /sys/kernel/debug/tracing/options/overwrite
+    chown root shell /sys/kernel/debug/tracing/events/sched/sched_switch/enable
+    chown root shell /sys/kernel/debug/tracing/events/sched/sched_wakeup/enable
+    chown root shell /sys/kernel/debug/tracing/events/power/cpu_frequency/enable
+    chown root shell /sys/kernel/debug/tracing/events/power/cpu_idle/enable
+    chown root shell /sys/kernel/debug/tracing/events/power/clock_set_rate/enable
+    chown root shell /sys/kernel/debug/tracing/events/cpufreq_interactive/enable
+    chown root shell /sys/kernel/debug/tracing/tracing_on
+
+    chmod 0664 /sys/kernel/debug/tracing/trace_clock
+    chmod 0664 /sys/kernel/debug/tracing/buffer_size_kb
+    chmod 0664 /sys/kernel/debug/tracing/options/overwrite
+    chmod 0664 /sys/kernel/debug/tracing/events/sched/sched_switch/enable
+    chmod 0664 /sys/kernel/debug/tracing/events/sched/sched_wakeup/enable
+    chmod 0664 /sys/kernel/debug/tracing/events/power/cpu_frequency/enable
+    chmod 0664 /sys/kernel/debug/tracing/events/power/cpu_idle/enable
+    chmod 0664 /sys/kernel/debug/tracing/events/power/clock_set_rate/enable
+    chmod 0664 /sys/kernel/debug/tracing/events/cpufreq_interactive/enable
+    chmod 0664 /sys/kernel/debug/tracing/tracing_on
+
+# Allow only the shell group to read and truncate the kernel trace.
+    chown root shell /sys/kernel/debug/tracing/trace
+    chmod 0660 /sys/kernel/debug/tracing/trace
+
+===== reports/deep2/update/ueventd.el_imx6_solo_v2.rc =====
+# for TI Bluetooth user driver
+/dev/hci_tty              0666   bluetooth  bluetooth
+/dev/pmem_gpu             0660   system     graphics
+/dev/ttyUSB*              0666   system     system
+/dev/ttyACM*              0660   radio      radio
+/dev/video*               0660   system     camera
+/dev/video0               0660   system     camera
+/dev/video1               0660   system     camera
+/dev/video2               0660   system     camera
+/dev/video16              0660   system     graphics
+/dev/mxc_ipu              0660   media      system
+/dev/mxc_vpu              0660   media      system
+/dev/uinput               0660   system     bluetooth
+/dev/ttymxc1              0666   bluetooth  bluetooth
+/dev/ttymxc2              0666   system     gps
+/dev/ttymxc3              0666   system     system
+/dev/ttymxc4              0666   system     system
+/dev/ion                  0666   media      system
+/dev/graphics/galcore	  0666 	 system     graphics
+/dev/graphics/fb0         0660   system     graphics
+/dev/watchdog             0660   system     root
+/dev/ir                   0660   system     system
+/dev/mma8x5x              0640   compass     system
+/dev/input/event2         0666   root        input
+/dev/input/event0         0666   root        input
+/dev/i2c*                 0666   system     system
+/dev/snd/*                0666   system     audio
+/dev/elead_gpio           0660   system     system
+/dev/jdev                 0666   system     system
+/dev/tw9990               0660   system     system
+/dev/adv7283              0660   system     system
+/dev/tun                  0666   bluetooth  bluetooth
+/dev/el-ipod              0666   system     system
+# */
+
+# sysfs properties
+/sys/devices/virtual/input/input*   name        0660  root   input
+/sys/devices/virtual/input/input*   max         0660  root   input
+/sys/devices/virtual/input/input*   min         0660  root   input
+/sys/devices/virtual/input/input*   poll        0660  root   input
+/sys/devices/virtual/input/input*   enable      0660  root   input
+/sys/devices/virtual/input/input*   position    0660  root   input
+/sys/devices/virtual/input/input*   poll_delay  0660  root   input
+/sys/devices/virtual/input/input*   fifo        0660  root   input
+/sys/devices/virtual/thermal/thermal_zone* trip_point_0_temp 0660 system system
+/sys/devices/virtual/thermal/thermal_zone* trip_point_1_temp 0660 system system
+/sys/devices/virtual/thermal/thermal_zone* trip_point_2_temp 0660 system system
+
+/sys/devices/platform/mxsdhci.2/mmc_host/mmc0/mmc0:000* boot_bus_config 0660 root root
+/sys/devices/platform/mxsdhci.2/mmc_host/mmc0/mmc0:000* boot_config 0660 root root
+/sys/devices/platform/imx-i2c.2/i2c-2/2-0044 mode 0660 system system
+/sys/devices/platform/imx-i2c.2/i2c-2/2-0044 lux 0660 system system
+/sys/devices/platform/imx-i2c.2/i2c-2/2-0044 int_lt_lux 0660 system system
+/sys/devices/platform/imx-i2c.2/i2c-2/2-0044 int_ht_lux 0660 system system
+/sys/devices/platform/mxc_sdc_fb.0/graphics/fb*	fsl_disp_property 0660 system graphics
+/sys/devices/platform/mxc_sdc_fb.1/graphics/fb*	fsl_disp_property 0660 system graphics
+/sys/devices/platform/mxc_sdc_fb.0/graphics/fb*	mode 0660 system graphics
+/sys/devices/platform/mxc_sdc_fb.1/graphics/fb*	mode 0660 system graphics
+/sys/devices/platform/mxc_dvfs_core.0 enable 0660 system system
+/sys/devices/platform/busfreq.0 enable 0660 system system
+
+===== reports/deep2/update/init.environ.rc =====
+# set up the global environment
+on init
+    export PATH /system/bin/bin:/sbin:/vendor/bin:/system/sbin:/system/bin:/system/xbin
+    export LD_LIBRARY_PATH /vendor/lib:/system/lib
+    export ANDROID_BOOTLOGO 1
+    export ANDROID_ROOT /system
+    export ANDROID_ASSETS /system/app
+    export ANDROID_DATA /data
+    export ANDROID_STORAGE /storage
+    export ASEC_MOUNTPOINT /mnt/asec
+    export LOOP_MOUNTPOINT /mnt/obb
+    export BOOTCLASSPATH /system/framework/core.jar:/system/framework/conscrypt.jar:/system/framework/okhttp.jar:/system/framework/core-junit.jar:/system/framework/bouncycastle.jar:/system/framework/ext.jar:/system/framework/framework.jar:/system/framework/framework2.jar:/system/framework/telephony-common.jar:/system/framework/voip-common.jar:/system/framework/mms-common.jar:/system/framework/android.policy.jar:/system/framework/services.jar:/system/framework/apache-xml.jar
+
