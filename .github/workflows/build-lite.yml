@@ -52,7 +52,14 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           printf 'firmware/\nfw/\nreports/unpacked/\nout/\n' > .git/info/exclude
           git add -A reports
-          if git diff --cached --quiet; then echo "нет изменений"; else
-            git commit -m "сборка лайт-образа: аудит, сборка, проверка"
-            git push origin HEAD:${{ github.ref_name }}
-          fi
+          if git diff --cached --quiet; then echo "нет изменений"; exit 0; fi
+          git commit -m "сборка лайт-образа: аудит, сборка, проверка"
+          for try in 1 2 3 4 5; do
+            if git pull --rebase --autostash origin "${{ github.ref_name }}" >/dev/null 2>&1 \
+               && git push origin HEAD:${{ github.ref_name }}; then
+              echo "отчёты отправлены (попытка $try)"; exit 0
+            fi
+            echo "попытка $try не удалась, повтор через 10 с"; sleep 10
+            git rebase --abort >/dev/null 2>&1 || true
+          done
+          echo "не удалось отправить отчёты — не критично, образ собран"

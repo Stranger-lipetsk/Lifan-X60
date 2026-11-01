@@ -60,10 +60,17 @@ jobs:
           find reports/deep2 -type f -size +8M -exec sh -c 'head -c 8000000 "$1" > "$1.cut" && mv "$1.cut" "$1"' _ {} \; 2>/dev/null || true
           du -sh reports/deep2 2>/dev/null
           git add -A reports
-          if git diff --cached --quiet; then echo "нет изменений"; else
-            git commit -m "разбор прошивки: проход 2 (ядро, etc, механизм обновления)"
-            git push origin HEAD:${{ github.ref_name }}
-          fi
+          if git diff --cached --quiet; then echo "нет изменений"; exit 0; fi
+          git commit -m "разбор прошивки: проход 2 (ядро, etc, механизм обновления)"
+          for try in 1 2 3 4 5; do
+            if git pull --rebase --autostash origin "${{ github.ref_name }}" >/dev/null 2>&1 \
+               && git push origin HEAD:${{ github.ref_name }}; then
+              echo "отчёты отправлены (попытка $try)"; exit 0
+            fi
+            echo "попытка $try не удалась, повтор через 10 с"; sleep 10
+            git rebase --abort >/dev/null 2>&1 || true
+          done
+          echo "не удалось отправить отчёты — не критично, образ собран"
 
       - uses: actions/upload-artifact@v4
         if: always()

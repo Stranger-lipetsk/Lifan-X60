@@ -28,7 +28,7 @@
 | Navitel 11.11.1128 (официально для 4.4–5.1) | Android 4.4+ | ✅, тот же пакет `com.navitel` |
 
 Инструкция: **[docs/06-инструкция-модернизации.md](docs/06-инструкция-модернизации.md)**
-Доступ к Android, Wi-Fi и файлам: **[docs/07-переключатель-окружений.md](docs/07-переключатель-окружений.md)**
+Доступ к Android, Wi-Fi и файлам: **[docs/08-mirrorlink-vyhod-k-android.md](docs/08-mirrorlink-vyhod-k-android.md)**
 Сборка образа: `python3 tools/build_system.py --fw архив.rar --out out/system.img ...`
 
 ## Потолок версии Android
@@ -54,7 +54,7 @@ docs/
 reports/                        — отчёты автоматического анализа
   deep/                         — boot.img, ramdisk, build.prop, /system
   deep2/                        — ядро, /etc, recovery, скрипты прошивки
-switcher/                       — исходники APK «Переключатель окружений»
+switcher/                       — APK «Переключатель» (пакет com.fpt.mirrorlink.android)
   src/                          — Java (лаунчер/настройки/Wi-Fi/файлы)
   build.sh                      — сборка APK без Gradle
 tools/
