@@ -1,0 +1,73 @@
+name: Разбор прошивки — проход 2
+
+on:
+  push:
+    paths:
+      - 'autoanalysis/deep2.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  PUBLIC_KEY: https://disk.yandex.ru/d/qJdjjeB8Aiq3Lg
+
+jobs:
+  deep2:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Инструменты
+        run: |
+          sudo apt-get update -qq 2>/dev/null || true
+          sudo apt-get install -y -qq p7zip-full unrar-free e2fsprogs file cpio lz4 >/dev/null 2>&1 || true
+          for t in 7z debugfs cpio file strings; do printf '%-10s ' "$t"; command -v $t || echo НЕТ; done
+
+      - name: Скачать и распаковать архив
+        run: |
+          mkdir -p firmware/original reports/unpacked
+          python3 - <<'PY'
+          import json, os, subprocess, urllib.parse, urllib.request
+          pk = os.environ['PUBLIC_KEY']
+          url = ('https://cloud-api.yandex.net/v1/disk/public/resources'
+                 '?public_key=' + urllib.parse.quote(pk, safe='') + '&limit=100')
+          items = json.load(urllib.request.urlopen(url, timeout=60))['_embedded']['items']
+          files = [i for i in items if i['type'] == 'file' and '2016' in i['name']]
+          it = files[0]
+          dest = os.path.join('firmware/original', it['name'])
+          subprocess.run(['curl','-L','--fail','--retry','3','--connect-timeout','30',
+                          '--max-time','2500','-o',dest,it['file']], check=True)
+          print('OK', os.path.getsize(dest))
+          PY
+          for f in firmware/original/*; do
+            [ -f "$f" ] || continue
+            7z x -y -aos -o"reports/unpacked" "$f" >/dev/null 2>&1 || unrar x -o+ "$f" reports/unpacked/ >/dev/null 2>&1 || echo "!! $f"
+          done
+          find reports/unpacked -type f -printf '%s\t%p\n' | sort -rn | head
+
+      - name: Проход 2 — ядро, /system/etc, механизм обновления
+        run: |
+          bash tools/fw_deep2.sh reports/unpacked reports/deep2 2>&1 | tail -120
+
+      - name: Коммит
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          printf 'firmware/\nreports/unpacked/\nreports/deep2/dump*/\nreports/deep2/*.raw.img\n' > .git/info/exclude
+          find reports/deep2 -type f -size +8M -exec sh -c 'head -c 8000000 "$1" > "$1.cut" && mv "$1.cut" "$1"' _ {} \; 2>/dev/null || true
+          du -sh reports/deep2 2>/dev/null
+          git add -A reports
+          if git diff --cached --quiet; then echo "нет изменений"; else
+            git commit -m "разбор прошивки: проход 2 (ядро, etc, механизм обновления)"
+            git push origin HEAD:${{ github.ref_name }}
+          fi
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: deep2-reports
+          path: reports/deep2
+          retention-days: 7
