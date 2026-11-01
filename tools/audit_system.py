@@ -78,16 +78,34 @@ def main(root):
     print('\n=== ЛОКАЛИ (framework-res.apk) ===')
     if os.path.exists(fr):
         try:
+            import struct
             with zipfile.ZipFile(fr) as z:
                 names = z.namelist()
-            locales = sorted({m.group(1) for n in names
-                              if (m := re.search(r'res/values-([a-z]{2}(?:-r[A-Z]{2})?)/', n))})
-            print(f'  найдено локалей: {len(locales)}')
-            has_ru = any(l.startswith('ru') for l in locales)
-            print(f'  русская локаль: {"ЕСТЬ" if has_ru else "НЕТ!"}')
-            if has_ru:
-                print('  ru-варианты: ' + ', '.join(l for l in locales if l.startswith('ru')))
-            print('  первые 25: ' + ', '.join(locales[:25]))
+                arsc = z.read('resources.arsc') if 'resources.arsc' in names else b''
+            # каталоги res/values-xx (в старых сборках ресурсы бывают несжатыми)
+            dirs = sorted({n.split('/')[1] for n in names
+                           if n.startswith('res/') and n.count('/') > 1})
+            vals = [d for d in dirs if d.startswith('values')]
+            print(f'  каталогов значений в APK: {len(vals)}')
+            if vals:
+                print('  ' + ', '.join(vals[:40]))
+
+            # разбор бинарного resources.arsc: ищем коды языков в конфигурациях
+            langs = set()
+            if arsc:
+                # заголовок ResTable_config: language[2] по смещению 8 от начала конфигурации
+                for m in re.finditer(rb'[\x00-\x02][\x00-\x7f][a-z]{2}\x00', arsc):
+                    code = m.group(0)[2:4].decode('latin-1')
+                    if code.isalpha() and code.islower():
+                        langs.add(code)
+                # более надёжно: ищем пары букв в известных языках
+                for code in ('ru', 'zh', 'en', 'de', 'fr', 'es', 'it', 'pt', 'tr',
+                             'pl', 'uk', 'kk', 'ja', 'ko'):
+                    if arsc.find(code.encode() + b'\x00') >= 0:
+                        langs.add(code)
+            print(f'  языковые коды в resources.arsc: {sorted(langs) if langs else "не определены"}')
+            has_ru = 'ru' in langs or any('ru' in v for v in vals)
+            print(f'  русская локаль: {"ЕСТЬ" if has_ru else "НЕТ в ресурсах"}')
         except Exception as e:
             print(f'  ошибка чтения: {e}')
     else:
