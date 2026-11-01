@@ -1,10 +1,10 @@
-временная папка: /tmp/lifan_build_mkup12sr
+временная папка: /tmp/lifan_build_fo_9_7ev
 архив: fw/firmware.rar (220980636 байт)
 распаковано через 7z
-system.img: /tmp/lifan_build_mkup12sr/rar/system.img (377487360 байт, sha256 0f898f48ee910fe0…)
+system.img: /tmp/lifan_build_fo_9_7ev/rar/system.img (377487360 байт, sha256 0f898f48ee910fe0…)
 распаковка образа через debugfs...
-debugfs rdump: /tmp/lifan_build_mkup12sr/rar/system.img (377487360 байт)
-$ debugfs -R rdump / "/tmp/lifan_build_mkup12sr/root" /tmp/lifan_build_mkup12sr/rar/system.img
+debugfs rdump: /tmp/lifan_build_fo_9_7ev/rar/system.img (377487360 байт)
+$ debugfs -R rdump / "/tmp/lifan_build_fo_9_7ev/root" /tmp/lifan_build_fo_9_7ev/rar/system.img
 распаковано файлов: 1341
 распаковано файлов: 1341
 
@@ -15,14 +15,14 @@ $ debugfs -R rdump / "/tmp/lifan_build_mkup12sr/root" /tmp/lifan_build_mkup12sr/
   свойство: ro.product.locale.language=ru
   свойство: ro.product.locale.region=RU
 
---- сборка образа ---
-содержимое: 852 МиБ -> образ 1128 МиБ
-$ mke2fs -q -F -t ext4 -L system -d /tmp/lifan_build_mkup12sr/root /home/runner/work/Lifan-X60/Lifan-X60/out/system-test.img.tmp
-
-ГОТОВО: /home/runner/work/Lifan-X60/Lifan-X60/out/system-test.img
-  размер: 1182793728 байт (1128.0 МиБ)
-  sha256: bbbdd8cab0e487fcd1000abee211111db5d87e7cf590cce506cb0bd9035920bf
-
-Дальше: положить как system.img рядом с boot.img/sd_boot.img на SD-карту
-и прошить штатным способом (см. docs/06-инструкция-модернизации.md)
-рабочая папка сохранена: /tmp/lifan_build_mkup12sr
+--- владельцы файлов ---
+владельцы выставлены на root:root (sudo)
+рабочая папка сохранена: /tmp/lifan_build_fo_9_7ev
+Traceback (most recent call last):
+  File "/home/runner/work/Lifan-X60/Lifan-X60/tools/build_system.py", line 343, in <module>
+    main()
+  File "/home/runner/work/Lifan-X60/Lifan-X60/tools/build_system.py", line 325, in main
+    fix_ownership(root)
+  File "/home/runner/work/Lifan-X60/Lifan-X60/tools/build_system.py", line 193, in fix_ownership
+    os.chmod(r, 0o755)
+PermissionError: [Errno 1] Operation not permitted: '/tmp/lifan_build_fo_9_7ev/root'
