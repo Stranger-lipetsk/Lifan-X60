@@ -260,15 +260,39 @@ def build_image(root, out_img, size_mb=512):
     with open(tmp, 'wb') as f:
         f.truncate(size_mb * 1024 * 1024)
 
-    # mke2fs -d: собирает ФС из каталога; фичи — совместимые с 3.0.35
-    cmd = ['mke2fs', '-q', '-F', '-t', 'ext4', '-b', '4096', '-I', '256',
-           '-O', OK_FEATURES, '-L', 'system', '-E', 'nodiscard', '-d', root, tmp]
-    p = run(cmd, check=False)
-    if p.returncode != 0:
-        sys.stderr.write((p.stdout or '') + (p.stderr or ''))
-        os.remove(tmp)
+    # mke2fs -d: собирает ФС из каталога; фичи — совместимые с ядром 3.0.35.
+    # Перебираем варианты от «со всеми отключёнными новыми фичами» к минимуму.
+    variants = [
+        OK_FEATURES,
+        '^64bit,^metadata_csum,^orphan_file,^quota,^casefold',
+        '^64bit,^metadata_csum',
+        '^64bit',
+        None,
+    ]
+    last = ''
+    for feats in variants:
+        if os.path.exists(tmp):
+            os.remove(tmp)
+        with open(tmp, 'wb') as f:
+            f.truncate(size_mb * 1024 * 1024)
+        cmd = ['mke2fs', '-q', '-F', '-t', 'ext4', '-b', '4096', '-I', '256',
+               '-L', 'system', '-E', 'nodiscard']
+        if feats:
+            cmd += ['-O', feats]
+        cmd += ['-d', root, tmp]
+        p = run(cmd, check=False)
+        if p.returncode == 0:
+            print(f'собрано с фичами: {feats or "по умолчанию"}')
+            os.replace(tmp, out_img)
+            break
+        last = (p.stdout or '') + (p.stderr or '')
+        print(f'  вариант "{feats}" не сработал, пробуем следующий')
+    else:
+        print('--- последняя ошибка mke2fs ---')
+        print(last[-3000:])
+        if os.path.exists(tmp):
+            os.remove(tmp)
         raise SystemExit('не удалось собрать ext4 через mke2fs -d')
-    os.replace(tmp, out_img)
 
     # проверка совместимости
     h = run(['dumpe2fs', '-h', out_img], check=False).stdout
