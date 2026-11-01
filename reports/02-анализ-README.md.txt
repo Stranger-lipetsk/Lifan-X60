@@ -1,7 +1,7 @@
 === README.md ===
--rw-r--r-- 1 runner runner 1159 Nov  1 12:58 firmware/original/README.md
-3857aed79980283147aee16524ce0531e0ba1b2f6255b431fb0e63eb6813d7d8  firmware/original/README.md
-firmware/original/README.md: Unicode text, UTF-8 text
+-rw-r--r-- 1 runner runner 129 Nov  1 15:54 firmware/original/README.md
+b6a6f32d5a7808eda8878b9575a62384c8d581c7b153097d3f729f5449b4d1d9  firmware/original/README.md
+firmware/original/README.md: ASCII text
 
 --- 7z l ---
 
@@ -9,7 +9,7 @@ firmware/original/README.md: Unicode text, UTF-8 text
  64-bit locale=C.UTF-8 Threads:2 OPEN_MAX:65536
 
 Scanning the drive for archives:
-1 file, 1159 bytes (2 KiB)
+1 file, 129 bytes (1 KiB)
 
 Listing archive: firmware/original/README.md
 
