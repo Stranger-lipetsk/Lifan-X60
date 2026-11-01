@@ -84,6 +84,14 @@ REMOVE_ARGS=(
 
 # Скрипт автоподключения карт Navitel и второго USB-порта
 EXTRA_ARGS=()
+
+# Приложение-переключатель (лаунчер / настройки / Wi-Fi / файлы)
+if [ -f switcher/switcher.apk ]; then
+  EXTRA_ARGS+=(--add-apk "switcher/switcher.apk:/app")
+  echo "встраиваю Переключатель: switcher/switcher.apk ($(stat -c%s switcher/switcher.apk) байт)"
+else
+  echo "ВНИМАНИЕ: switcher/switcher.apk не найден — образ будет без переключателя"
+fi
 if [ -f tools/system-files/install-recovery.sh ]; then
   chmod 0755 tools/system-files/install-recovery.sh
   EXTRA_ARGS+=(--add-file "tools/system-files/install-recovery.sh:/etc/install-recovery.sh")

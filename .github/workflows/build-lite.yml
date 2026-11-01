@@ -20,6 +20,15 @@ jobs:
           sudo apt-get update -qq 2>/dev/null || true
           sudo apt-get install -y -qq p7zip-full unrar-free e2fsprogs file >/dev/null 2>&1 || true
           for t in 7z debugfs mke2fs dumpe2fs e2fsck sha256sum; do printf '%-10s ' "$t"; command -v $t || echo НЕТ; done
+      - name: "Java и Android SDK (для сборки APK)"
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: "Собрать APK переключателя"
+        run: |
+          bash switcher/build.sh 2>&1 | tail -20
+          ls -l switcher/switcher.apk
       - name: "Сборка лайт-образа"
         env:
           WORK: /tmp/lifanwork
