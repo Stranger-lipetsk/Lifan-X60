@@ -1,1 +1,39 @@
 === out ===
+total 235M
+-rw-r--r-- 1 runner runner 1.2G Nov  1 13:29 system-test.img
+=== file ===
+out/system-test.img: Linux rev 1.0 ext4 filesystem data, UUID=75e46e38-34db-4f2a-aec7-18b2a95a34a2, volume name "system" (extents) (64bit) (large files) (huge files)
+=== fsck (кратко) ===
+e2fsck 1.47.0 (5-Feb-2023)
+Pass 1: Checking inodes, blocks, and sizes
+Pass 2: Checking directory structure
+Pass 3: Checking directory connectivity
+Pass 4: Checking reference counts
+Pass 5: Checking group summary information
+system: 1395/72288 files (0.1% non-contiguous), 65046/288768 blocks
+=== содержимое корня ===
+      2   40755 (2)      0      0    4096  1-Nov-2026 13:29 .
+      2   40755 (2)      0      0    4096  1-Nov-2026 13:29 ..
+     11   40700 (2)   1001   1001   16384  1-Jan-1970 00:00 lost+found
+     12   40755 (2)   1001   1001    4096  1-Nov-2026 13:29 app
+     41   40755 (2)   1001   1001    4096 26-Apr-2026 17:05 bin
+    582  100644 (1)   1001   1001    1724  1-Nov-2026 13:29 build.prop
+    583   40755 (2)   1001   1001    4096 26-Apr-2026 17:05 etc
+    808   40755 (2)   1001   1001    4096 26-Apr-2026 17:05 fonts
+    883   40755 (2)   1001   1001    4096 26-Apr-2026 17:05 framework
+    975   40755 (2)   1001   1001    8192 26-Apr-2026 17:36 lib
+   1283   40755 (2)   1001   1001    4096 26-Apr-2026 17:05 media
+   1285   40777 (2)   1001   1001    4096  1-Nov-2026 13:29 priv-app
+   1306   40755 (2)   1001   1001    4096 26-Apr-2026 17:05 usr
+   1358   40755 (2)   1001   1001    4096 26-Apr-2026 17:05 vendor
+   1370   40755 (2)   1001   1001    4096 26-Apr-2026 17:05 xbin
+
+=== проверяем удалённое ===
+Navitel удалён — ОК
+IQQI/BSEDemo удалены — ОК
+=== build.prop ===
+ro.build.version.release=4.4.2
+ro.product.locale.language=ru
+ro.product.locale.region=RU
+=== объём ===
+235M	out/system-test.img
