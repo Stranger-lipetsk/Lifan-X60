@@ -67,12 +67,34 @@ com.android.location.provider.xml
 ######## 12. Wi-Fi драйвер в ядре ########
 boot.img: /tmp/rar/boot.img
 файл: /tmp/rar/boot.img (3926016 байт)
-Traceback (most recent call last):
-  File "/home/runner/work/Lifan-X60/Lifan-X60/tools/probe_kernel_wifi.py", line 91, in <module>
-    main()
-  File "/home/runner/work/Lifan-X60/Lifan-X60/tools/probe_kernel_wifi.py", line 54, in main
-    kernel, cmdline = kernel_from_bootimg(data)
-                      ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/Lifan-X60/Lifan-X60/tools/probe_kernel_wifi.py", line 24, in kernel_from_bootimg
-    (kernel_size, kernel_addr, ramdisk_size, ramdisk_addr,
-ValueError: too many values to unpack (expected 11)
+это boot.img, ядро: 3588296 байт
+cmdline: console=ttymxc0,115200 init=/init video=mxcfb0:dev=lcd,HANNSTAR-WVGA,if=RGB24,fbpix=RGB32,bpp=32 video=mxcfb1:off video=
+ядро распаковано: 7606468 байт
+
+=== вхождения драйверов Wi-Fi ===
+  bcmdhd         0
+  wl12xx         6   <-- ЕСТЬ
+  wlcore         0
+  wl1271         0
+  wl18xx         0
+  brcmfmac       0
+  dhd_bus        0
+  dhd_module     0
+  wl12xx_sdio    0
+
+=== контекст вокруг wl12xx ===
+  ... c t fl tbsdco pp_ p ppox ppo n ppo pp pp ns dc dc ubs t bn dc c Twl12xx pl f da t T hci_hc tg ake= s otg tudc uc ' p t t e t
+  ... tx_ t dc c rx ix dc cm>t dc cm e dc c b d dc c v dc c b d dc c d c n t dc cm be Twl12xx%pl f da T ifnu if T tnu t t pa T d d t s t _\aw t su t # t o$
+  ... t wak wak wak ? s w k>ckf w n l p h mt w n l p h m t w n l p h "l wi ss t wl12xx%pl f da w c h p w d u$ w od n w p e w eb o s b w eb o s i, w eb
+  ... t wak wak wak ? s w k>ckf w n l p h mt w n l p h m t w n l p h "l wi ss t wl12xx%pl f da w c h p w d u$ w od n w p e w eb o s b w eb o s i, w eb
+  ... pa e rxq bn um rx bn pa rx bn f:k t bn g mtu bn sk turn bn h n bn po wl12xx%pl f da }g_ ot d d cohe nt #he nt _ a_ scr t cur n f m numb =J f
+  ... bnet_defer_kevent usbnet_change_mtu usbnet_skb_return usbnet_get_ethernet_addr usbnet_get_endpoints wl12xx_get_platform_data usb_debug_root usb_disabled usb_free_coherent usb_alloc_coherent __usb_get_
+
+######## 13. NVS-калибровка Wi-Fi ########
+--- в образе (/etc/firmware) ---
+нет
+нет /vendor/firmware
+--- в заводском update/ ---
+(пусто = в system нет, значит создаётся при первом запуске)
+
+######## 14. есть ли приложение, дающее геолокацию ########
