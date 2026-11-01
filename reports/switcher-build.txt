@@ -1,0 +1,27 @@
+build-tools: /usr/local/lib/android/sdk/build-tools/37.0.0
+android.jar: /usr/local/lib/android/sdk/platforms/android-37.2/android.jar
+== 1. aapt: генерация R.java ==
+== 2. javac ==
+== 3. d8: dex ==
+== 4. aapt: пакет ресурсов ==
+== 5. добавляем classes.dex ==
+== 6. zipalign ==
+== 7. подпись (v1 — обязательна для Android 4.4) ==
+
+ГОТОВО: /home/runner/work/Lifan-X60/Lifan-X60/switcher/switcher.apk
+-rw-r--r-- 1 runner runner 16879 Nov  1 14:18 switcher.apk
+sha256: d62b8e85dd34f7fa94e02c3dd92604846927538441fe75d8eb11429f82f257f5
+
+Проверка содержимого:
+package: name='ru.lifan.switcher' versionCode='1' versionName='1.0' platformBuildVersionName='17' platformBuildVersionCode='37' compileSdkVersion='37' compileSdkVersionCodename='17'
+sdkVersion:'19'
+targetSdkVersion:'19'
+uses-permission: name='android.permission.REORDER_TASKS'
+uses-permission: name='android.permission.GET_TASKS'
+application-label:'Переключатель'
+application-icon-160:'res/drawable/ic_launcher.png'
+application: label='Переключатель' icon='res/drawable/ic_launcher.png'
+launchable-activity: name='ru.lifan.switcher.MainActivity'  label='Переключатель' icon=''
+feature-group: label=''
+  uses-feature: name='android.hardware.faketouch'
+  uses-implied-feature: name='android.hardware.faketouch' reason='default feature for all apps'

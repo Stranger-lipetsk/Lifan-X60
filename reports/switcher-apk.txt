@@ -1,0 +1,52 @@
+=== badging ===
+package: name='ru.lifan.switcher' versionCode='1' versionName='1.0' platformBuildVersionName='17' platformBuildVersionCode='37' compileSdkVersion='37' compileSdkVersionCodename='17'
+sdkVersion:'19'
+targetSdkVersion:'19'
+uses-permission: name='android.permission.REORDER_TASKS'
+uses-permission: name='android.permission.GET_TASKS'
+application-label:'Переключатель'
+application-icon-160:'res/drawable/ic_launcher.png'
+application: label='Переключатель' icon='res/drawable/ic_launcher.png'
+launchable-activity: name='ru.lifan.switcher.MainActivity'  label='Переключатель' icon=''
+feature-group: label=''
+  uses-feature: name='android.hardware.faketouch'
+  uses-implied-feature: name='android.hardware.faketouch' reason='default feature for all apps'
+  uses-feature: name='android.hardware.screen.landscape'
+  uses-implied-feature: name='android.hardware.screen.landscape' reason='one or more activities have specified a landscape orientation'
+main
+supports-screens: 'small' 'normal' 'large' 'xlarge'
+supports-any-density: 'true'
+locales: '--_--'
+densities: '160'
+=== активности и фильтры ===
+N: android=http://schemas.android.com/apk/res/android
+  E: manifest (line=2)
+    A: android:versionCode(0x0101021b)=(type 0x10)0x1
+    A: android:versionName(0x0101021c)="1.0" (Raw: "1.0")
+    A: android:compileSdkVersion(0x01010572)=(type 0x10)0x25
+    A: android:compileSdkVersionCodename(0x01010573)="17" (Raw: "17")
+    A: package="ru.lifan.switcher" (Raw: "ru.lifan.switcher")
+    A: platformBuildVersionCode=(type 0x10)0x25 (Raw: "37")
+    A: platformBuildVersionName=(type 0x10)0x11 (Raw: "17")
+    E: uses-sdk (line=7)
+      A: android:minSdkVersion(0x0101020c)=(type 0x10)0x13
+      A: android:targetSdkVersion(0x01010270)=(type 0x10)0x13
+    E: uses-permission (line=10)
+      A: android:name(0x01010003)="android.permission.REORDER_TASKS" (Raw: "android.permission.REORDER_TASKS")
+    E: uses-permission (line=11)
+      A: android:name(0x01010003)="android.permission.GET_TASKS" (Raw: "android.permission.GET_TASKS")
+    E: application (line=13)
+      A: android:label(0x01010001)="Переключатель" (Raw: "Переключатель")
+      A: android:icon(0x01010002)=@0x7f020000
+      A: android:allowBackup(0x01010280)=(type 0x12)0x0
+      E: activity (line=18)
+        A: android:label(0x01010001)="Переключатель" (Raw: "Переключатель")
+        A: android:name(0x01010003)=".MainActivity" (Raw: ".MainActivity")
+        A: android:exported(0x01010010)=(type 0x12)0xffffffff
+        A: android:screenOrientation(0x0101001e)=(type 0x10)0x0
+        A: android:configChanges(0x0101001f)=(type 0x11)0x4a0
+        E: intent-filter (line=24)
+          E: action (line=25)
+            A: android:name(0x01010003)="android.intent.action.MAIN" (Raw: "android.intent.action.MAIN")
+          E: category (line=26)
+            A: android:name(0x01010003)="android.intent.category.LAUNCHER" (Raw: "android.intent.category.LAUNCHER")
