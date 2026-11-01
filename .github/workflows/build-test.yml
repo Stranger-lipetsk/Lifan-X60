@@ -85,7 +85,7 @@ jobs:
             echo "=== содержит ли /system/bin/su и PackageInstaller ==="
             debugfs -R 'ls -l /bin' "$IMG" 2>/dev/null | grep -w su || echo "su не найден в /bin"
             debugfs -R 'ls -l /app' "$IMG" 2>/dev/null | grep -i PackageInstaller || echo "PackageInstaller отсутствует"
-          } 2>&1 | tee reports/build-test.txt
+          } 2>&1 | tee reports/build-strict.txt
       - name: "Проверка результата"
         if: always()
         run: |
@@ -106,7 +106,7 @@ jobs:
             else
               echo "ОБРАЗ НЕ СОБРАН"
             fi
-          } 2>&1 | tee reports/build-test.txt
+          } 2>&1 | tee reports/build-result.txt
       - name: "Коммит"
         if: always()
         run: |
