@@ -1,5 +1,5 @@
 использую sudo для chown и сборки образа
-временная папка: /tmp/lifan_build_gmosdwmh
+временная папка: /tmp/lifan_build_ltbu2d09
 system.img: out/system-original.img (377487360 байт)
   sha256 исходного: 0f898f48ee910fe0c125768b71f587fa…
 debugfs rdump: out/system-original.img (377487360 байт)
@@ -15,16 +15,17 @@ debugfs rdump: out/system-original.img (377487360 байт)
   удалено: /app/WfdSink.apk
   удалено: /app/FSLOta.apk
   удалено: /app/HTMLViewer.apk
+  добавлено APK: /app/switcher.apk (16879 байт)
   добавлен файл: /etc/install-recovery.sh (права 755)
   свойство: ro.product.locale.language=ru (заменено)
   свойство: ro.product.locale.region=RU (заменено)
   свойство: persist.sys.timezone=Europe/Moscow (добавлено)
 
 --- права ---
-права выставлены через sudo: файлов 1333; владелец root:root
+права выставлены через sudo: файлов 1334; владелец root:root
 
 --- сборка ---
-содержимое: 211.7 МиБ (раздел p3 = 512 МиБ)
+содержимое: 211.8 МиБ (раздел p3 = 512 МиБ)
   крупнейшие файлы:
         18.8 МиБ  /lib/libwebviewchromium.so
         18.2 МиБ  /usr/icu/icudt51l.dat
@@ -46,7 +47,7 @@ debugfs rdump: out/system-original.img (377487360 байт)
 
 ГОТОВО: /home/runner/work/Lifan-X60/Lifan-X60/out/system.img
   размер: 536870912 байт (512.0 МиБ)
-  sha256: 46e5938dbc18f6b6f2562bf505019d17d66641146b2ddc30a2f5e8cb8e749908
+  sha256: 915c0add6ec1d222faa8ad493a434791ab4f8c672287f4e89c3a471e0229cb7e
 
 Дальше: положить как system.img на SD рядом с boot.img, u-boot.bin,
 MCU_FW.hex и sd_boot.img (штатными!) и прошить штатным способом.
