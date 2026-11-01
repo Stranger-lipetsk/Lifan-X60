@@ -1,0 +1,219 @@
+образ: out/system-original.img (377487360 байт)
+
+=== 1. /app и /priv-app ===
+--- /app ---
+       12   40755 (2)      0      0    4096 26-Apr-2026 17:05 .
+        2   40755 (2)      0      0    4096  1-Jan-1970 00:00 ..
+       13  100644 (1)      0      0   197918 26-Apr-2026 17:05 BSEDemo.apk
+       14  100644 (1)      0      0   25910 26-Apr-2026 17:05 BasicDreams.apk
+       15  100644 (1)      0      0   294080 26-Apr-2026 17:05 Bluetooth.apk
+       16  100644 (1)      0      0   2400817 26-Apr-2026 17:05 Camera2.apk
+       17  100644 (1)      0      0   42883 26-Apr-2026 17:05 CertInstaller.apk
+       18  100644 (1)      0      0   19341 26-Apr-2026 17:05 CubeLiveWallpapers.apk
+       19  100644 (1)      0      0   318717 26-Apr-2026 17:05 DocumentsUI.apk
+       20  100644 (1)      0      0   141114 26-Apr-2026 17:05 DownloadProviderUi.apk
+       21  100644 (1)      0      0   21489 26-Apr-2026 17:05 EL830TAM1_GPIO_TEST_2015.01.01.01.apk
+       22  100644 (1)      0      0   1180203 26-Apr-2026 17:05 EL831CLF01_Avin_2016.06.21.01.apk
+       23  100644 (1)      0      0   1193599 26-Apr-2026 17:05 EL831CLF01_MediaPlayer_2017.01.11.01.apk
+       24  100644 (1)      0      0   796551 26-Apr-2026 17:05 EL831CLF01_Radio_2016.12.16.01.apk
+       25  100644 (1)      0      0   753892 26-Apr-2026 17:05 EL831CLF01_elBTService_2016.09.05.01.apk
+       26  100644 (1)      0      0   845792 26-Apr-2026 17:05 EL831CLF01_elBluetoothDial_2016.12.13.01.apk
+       27  100644 (1)      0      0   899003 26-Apr-2026 17:05 EL831CLF01_elBluetoothMusic_2016.12.13.01.apk
+       28  100644 (1)      0      0   1139049 26-Apr-2026 17:05 EL831CLF01_elBluetoothPhone_2016.12.13.01.apk
+       29  100644 (1)      0      0   912852 26-Apr-2026 17:05 EL831CLF01_elBluetoothSetup_2016.12.13.01.apk
+       30  100644 (1)      0      0   24303 26-Apr-2026 17:05 FSLOta.apk
+       31  100644 (1)      0      0    7674 26-Apr-2026 17:05 HTMLViewer.apk
+       32  100644 (1)      0      0   13353625 26-Apr-2026 17:05 IQQIService-Elead-International-20160105.1.apk
+       33  100644 (1)      0      0   27899 26-Apr-2026 17:05 KeyChain.apk
+       34  100644 (1)      0      0   559538 26-Apr-2026 17:05 Music.apk
+       35  100644 (1)      0      0    5648 26-Apr-2026 17:05 PacProcessor.apk
+       36  100644 (1)      0      0   124968 26-Apr-2026 17:05 PackageInstaller.apk
+       37  100644 (1)      0      0   15806 26-Apr-2026 17:05 PicoTts.apk
+       38  100644 (1)      0      0    3678 26-Apr-2026 17:05 Provision.apk
+       39  100644 (1)      0      0   83210 26-Apr-2026 17:05 TelephonyProvider.apk
+       40  100644 (1)      0      0   10907 26-Apr-2026 17:05 UserDictionaryProvider.apk
+       41  100644 (1)      0      0   163088 26-Apr-2026 17:05 VisualizationWallpapers.apk
+       42  100644 (1)      0      0   67623 26-Apr-2026 17:05 WfdSink.apk
+  
+  debugfs 1.47.0 (5-Feb-2023)
+--- /priv-app ---
+     1287   40777 (2)      0   2000    4096 26-Apr-2026 17:34 .
+        2   40755 (2)      0      0    4096  1-Jan-1970 00:00 ..
+     1288  100644 (1)      0      0   29576 26-Apr-2026 17:05 BackupRestoreConfirmation.apk
+     1289  100644 (1)      0      0   14317 26-Apr-2026 17:05 DefaultContainerService.apk
+     1290  100644 (1)      0      0   247033 26-Apr-2026 17:05 DownloadProvider.apk
+     1291  100644 (1)      0      0   4588177 26-Apr-2026 17:05 EL830LF01_Home.apk
+     1292  100644 (1)      0      0   4041923 26-Apr-2026 17:05 ElSettings.apk
+     1293  100644 (1)      0      0   16937 26-Apr-2026 17:05 ExternalStorageProvider.apk
+     1294  100644 (1)      0      0   10295 26-Apr-2026 17:05 FusedLocation.apk
+     1295  100644 (1)      0      0   66366 26-Apr-2026 17:05 InputDevices.apk
+     1296  100644 (1)      0      0   893170 26-Apr-2026 17:05 Keyguard.apk
+     1297  100644 (1)      0      0   12267776 26-Apr-2026 17:05 Launcher2
+     1298  100644 (1)      0      0   108229 26-Apr-2026 17:05 MediaProvider.apk
+     1299  100644 (1)      0      0   78200 26-Apr-2026 17:05 MusicFX.apk
+     1300  100644 (1)      0      0   111095055  6-Nov-2020 07:37 Navitel-9.13.73-large.apk
+     1301  100644 (1)      0      0    5691 26-Apr-2026 17:05 OneTimeInitializer.apk
+     1302  100644 (1)      0      0    8182 26-Apr-2026 17:05 ProxyHandler.apk
+     1303  100644 (1)      0      0   119100 26-Apr-2026 17:05 SettingsProvider.apk
+     1304  100644 (1)      0      0    6890 26-Apr-2026 17:05 SharedStorageBackup.apk
+     1305  100644 (1)      0      0   20810 26-Apr-2026 17:05 Shell.apk
+     1306  100644 (1)      0      0   1133036 26-Apr-2026 17:05 SystemUI.apk
+     1307  100644 (1)      0      0   17779 26-Apr-2026 17:05 VpnDialogs.apk
+     1308  100644 (1)      0      0   64390 26-Apr-2026 17:05 WallpaperCropper.apk
+  
+  debugfs 1.47.0 (5-Feb-2023)
+
+=== 2. /priv-app/Launcher2 — файл или каталог? ===
+Inode: 1297   Type: regular    Mode:  0644   Flags: 0x80080
+Generation: 0    Version: 0x00000000:00000000
+User:     0   Group:     0   Size: 12267776
+File ACL: 0
+Links: 1   Blockcount: 23968
+Fragment:  Address: 0    Number: 0    Size: 0
+ ctime: 0x69ee45d2:00000000 -- Sun Apr 26 17:05:22 2026
+ atime: 0x69ee45d2:00000000 -- Sun Apr 26 17:05:22 2026
+ mtime: 0x69ee45d2:00000000 -- Sun Apr 26 17:05:22 2026
+crtime: 0x00000000:00000000 -- Thu Jan  1 00:00:00 1970
+Size of extra inode fields: 28
+Extended attributes:
+  security.selinux (26) = "u:object_r:system_file:s0\000"
+EXTENTS:
+(0-2995):24547-27542
+debugfs 1.47.0 (5-Feb-2023)
+
+=== 3. Анализ APK (лаунчеры, настройки) ===
+извлечено APK: 51
+  пропуск большого файла Navitel-9.13.73-large.apk
+
+--- ЛАУНЧЕРЫ (категория HOME) ---
+  tw.com.elead.el830.home (EL830LF01_Home.apk)
+    активности: .Home
+  com.android.settings (ElSettings.apk)
+    активности: .CryptKeeper
+  com.android.launcher (Launcher2)
+    активности: com.android.launcher2.Launcher
+  com.android.provision (Provision.apk)
+    активности: DefaultActivity
+
+--- ПРИЛОЖЕНИЯ С ДЕЙСТВИЯМИ НАСТРОЕК ---
+  com.android.settings (ElSettings.apk)
+    android.settings.ACCESSIBILITY_SETTINGS
+    android.settings.ACCOUNT_SYNC_SETTINGS
+    android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS
+    android.settings.ACTION_PRINT_SETTINGS
+    android.settings.ADD_ACCOUNT_SETTINGS
+    android.settings.AIRPLANE_MODE_SETTINGS
+    android.settings.APN_SETTINGS
+    android.settings.APPLICATION_DETAILS_SETTINGS
+    android.settings.APPLICATION_DEVELOPMENT_SETTINGS
+    android.settings.APPLICATION_SETTINGS
+    android.settings.BACKUP_AND_RESET_SETTINGS
+    android.settings.BLUETOOTH_SETTINGS
+    android.settings.CAPTIONING_SETTINGS
+    android.settings.DATE_SETTINGS
+    android.settings.DEVICE_INFO_SETTINGS
+    android.settings.DISPLAY_SETTINGS
+    android.settings.DREAM_SETTINGS
+    android.settings.INPUT_METHOD_SETTINGS
+    android.settings.INPUT_METHOD_SUBTYPE_SETTINGS
+    android.settings.INTERNAL_STORAGE_SETTINGS
+    android.settings.LICENSE
+    android.settings.LOCALE_SETTINGS
+    android.settings.LOCATION_SOURCE_SETTINGS
+    android.settings.MANAGE_ALL_APPLICATIONS_SETTINGS
+    android.settings.MANAGE_APPLICATIONS_SETTINGS
+    android.settings.MEMORY_CARD_SETTINGS
+    android.settings.NFCSHARING_SETTINGS
+    android.settings.NFC_PAYMENT_SETTINGS
+    android.settings.NFC_SETTINGS
+    android.settings.PRIVACY_SETTINGS
+    android.settings.QUICK_LAUNCH_SETTINGS
+    android.settings.SAFETY
+    android.settings.SECURITY_SETTINGS
+    android.settings.SETTINGS
+    android.settings.SHOW_REGULATORY_INFO
+    android.settings.SOUND_SETTINGS
+    android.settings.STORAGE_USB_SETTINGS
+    android.settings.SYNC_SETTINGS
+    android.settings.USER_DICTIONARY_SETTINGS
+    android.settings.USER_SETTINGS
+    android.settings.WIFI_DISPLAY_SETTINGS
+    android.settings.WIFI_IP_SETTINGS
+    android.settings.WIFI_SETTINGS
+    android.settings.WIRELESS_SETTINGS
+
+--- ПОИСК com.android.settings / Settings.apk ---
+  НАЙДЕН: com.android.settings в ElSettings.apk
+
+--- ЕСТЬ ЛИ DocumentsUI / файловый менеджер ---
+  com.android.documentsui (DocumentsUI.apk)
+
+=== 4. Сводка: кто обрабатывает какие android.settings.* ===
+  android.settings.SETTINGS: ['com.android.settings']
+  android.settings.WIFI_SETTINGS: ['com.android.settings']
+  android.settings.WIRELESS_SETTINGS: ['com.android.settings']
+  android.settings.MANAGE_APPLICATIONS_SETTINGS: ['com.android.settings']
+  android.settings.APPLICATION_SETTINGS: ['com.android.settings']
+  android.settings.DISPLAY_SETTINGS: ['com.android.settings']
+  android.settings.SOUND_SETTINGS: ['com.android.settings']
+  android.settings.LOCATION_SOURCE_SETTINGS: ['com.android.settings']
+  android.settings.BLUETOOTH_SETTINGS: ['com.android.settings']
+  android.settings.DEVICE_INFO_SETTINGS: ['com.android.settings']
+  android.settings.INPUT_METHOD_SETTINGS: ['com.android.settings']
+  android.settings.ACCESSIBILITY_SETTINGS: ['com.android.settings']
+  android.settings.DATE_SETTINGS: ['com.android.settings']
+  android.settings.PRIVACY_SETTINGS: ['com.android.settings']
+  android.settings.SECURITY_SETTINGS: ['com.android.settings']
+  android.settings.APPLICATION_DEVELOPMENT_SETTINGS: ['com.android.settings']
+
+=== 5. Все пакеты в системе ===
+  com.android.backupconfirm                     BackupRestoreConfirmation.apk
+  com.android.bluetooth                         Bluetooth.apk
+  com.android.camera2                           Camera2.apk
+  com.android.certinstaller                     CertInstaller.apk
+  com.android.defcontainer                      DefaultContainerService.apk
+  com.android.documentsui                       DocumentsUI.apk
+  com.android.dreams.basic                      BasicDreams.apk
+  com.android.externalstorage                   ExternalStorageProvider.apk
+  com.android.htmlviewer                        HTMLViewer.apk
+  com.android.inputdevices                      InputDevices.apk
+  com.android.keychain                          KeyChain.apk
+  com.android.keyguard                          Keyguard.apk
+  com.android.launcher                          Launcher2
+  com.android.location.fused                    FusedLocation.apk
+  com.android.music                             Music.apk
+  com.android.musicfx                           MusicFX.apk
+  com.android.musicvis                          VisualizationWallpapers.apk
+  com.android.onetimeinitializer                OneTimeInitializer.apk
+  com.android.packageinstaller                  PackageInstaller.apk
+  com.android.pacprocessor                      PacProcessor.apk
+  com.android.providers.downloads               DownloadProvider.apk
+  com.android.providers.downloads.ui            DownloadProviderUi.apk
+  com.android.providers.media                   MediaProvider.apk
+  com.android.providers.settings                SettingsProvider.apk
+  com.android.providers.telephony               TelephonyProvider.apk
+  com.android.providers.userdictionary          UserDictionaryProvider.apk
+  com.android.provision                         Provision.apk
+  com.android.proxyhandler                      ProxyHandler.apk
+  com.android.settings                          ElSettings.apk
+  com.android.sharedstoragebackup               SharedStorageBackup.apk
+  com.android.shell                             Shell.apk
+  com.android.systemui                          SystemUI.apk
+  com.android.vpndialogs                        VpnDialogs.apk
+  com.android.wallpapercropper                  WallpaperCropper.apk
+  com.example.android.livecubes                 CubeLiveWallpapers.apk
+  com.freescale.wfdsink                         WfdSink.apk
+  com.fsl.android.ota                           FSLOta.apk
+  com.iqt.iqqijni.el.international              IQQIService-Elead-International-20160105.1.apk
+  com.ivt.vehiclesystemdemo                     BSEDemo.apk
+  com.svox.pico                                 PicoTts.apk
+  tw.com.elead.el830.avin                       EL831CLF01_Avin_2016.06.21.01.apk
+  tw.com.elead.el830.elbluetooth                EL831CLF01_elBTService_2016.09.05.01.apk
+  tw.com.elead.el830.elbluetooth.dial           EL831CLF01_elBluetoothDial_2016.12.13.01.apk
+  tw.com.elead.el830.elbluetooth.music          EL831CLF01_elBluetoothMusic_2016.12.13.01.apk
+  tw.com.elead.el830.elbluetooth.phone          EL831CLF01_elBluetoothPhone_2016.12.13.01.apk
+  tw.com.elead.el830.elbluetooth.setup          EL831CLF01_elBluetoothSetup_2016.12.13.01.apk
+  tw.com.elead.el830.gpio_test                  EL830TAM1_GPIO_TEST_2015.01.01.01.apk
+  tw.com.elead.el830.home                       EL830LF01_Home.apk
+  tw.com.elead.el830.mediaplayer                EL831CLF01_MediaPlayer_2017.01.11.01.apk
+  tw.com.elead.el830.radio                      EL831CLF01_Radio_2016.12.16.01.apk
