@@ -221,6 +221,21 @@ def fix_ownership(root):
                            capture_output=True, text=True)
         owner_ok = p.returncode == 0
 
+    if owner_ok and os.geteuid() != 0 and SUDO:
+        # файлы теперь принадлежат root — меняем права тоже через sudo
+        subprocess.run(SUDO + ['find', root, '-type', 'd', '-exec', 'chmod', '755', '{}', '+'],
+                       capture_output=True)
+        subprocess.run(SUDO + ['find', root, '-type', 'f', '!', '-name', 'su',
+                               '-exec', 'chmod', '644', '{}', '+'], capture_output=True)
+        subprocess.run(SUDO + ['find', root, '-type', 'f', '-perm', '-111',
+                               '!', '-name', 'su', '-exec', 'chmod', '755', '{}', '+'],
+                       capture_output=True)
+        subprocess.run(SUDO + ['find', root, '-type', 'f', '-name', 'su',
+                               '-exec', 'chmod', '6755', '{}', '+'], capture_output=True)
+        n = sum(len(f) for _, _, f in os.walk(root))
+        print(f'права выставлены через sudo: файлов {n}; владелец root:root')
+        return owner_ok
+
     files = dirs = 0
     for r, ds, fs in os.walk(root):
         for d in ds:
@@ -265,6 +280,7 @@ def build_image(root, out_img, size_mb=512):
             f'ОШИБКА: содержимое не влезает в {size_mb} МиБ '
             f'({total / 1024 / 1024:.0f} МиБ + служебные). Удали лишнее через --remove.')
 
+    os.makedirs(os.path.dirname(os.path.abspath(out_img)) or '.', exist_ok=True)
     if os.path.exists(out_img):
         os.remove(out_img)
     tmp = out_img + '.tmp'
