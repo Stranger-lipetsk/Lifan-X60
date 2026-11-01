@@ -65,6 +65,27 @@ jobs:
             --keep-work 2>&1 | tee reports/build-log.txt | tail -60
           echo "код выхода: $?"
           ls -lh out/ 2>/dev/null || echo "out пуст"
+      - name: "Строгая проверка: размер раздела и монтируемость"
+        if: always()
+        run: |
+          {
+            IMG=out/system-test.img
+            echo "=== размер ==="
+            ls -lh "$IMG" 2>/dev/null
+            SZ=$(stat -c%s "$IMG" 2>/dev/null || echo 0)
+            echo "байт: $SZ  (лимит раздела p3 = 536870912)"
+            if [ "$SZ" -gt 536870912 ]; then echo "!!! ПРЕВЫШЕН РАЗМЕР РАЗДЕЛА"; fi
+            echo "=== фичи ext4 (должно НЕ быть 64bit) ==="
+            dumpe2fs -h "$IMG" 2>/dev/null | grep -E "features|Block size|Inode size|Block count"
+            dumpe2fs -h "$IMG" 2>/dev/null | grep -q 64bit && echo "!!! 64bit — несовместимо" || echo "64bit отсутствует — OK"
+            echo "=== владельцы файлов ==="
+            debugfs -R 'ls -l /app' "$IMG" 2>/dev/null | head -5
+            echo "=== монтирование (проверка читаемости) ==="
+            sudo mkdir -p /mnt/chk && sudo mount -o loop,ro "$IMG" /mnt/chk 2>&1 && ls /mnt/chk | head -20 && du -sh /mnt/chk && sudo umount /mnt/chk
+            echo "=== содержит ли /system/bin/su и PackageInstaller ==="
+            debugfs -R 'ls -l /bin' "$IMG" 2>/dev/null | grep -w su || echo "su не найден в /bin"
+            debugfs -R 'ls -l /app' "$IMG" 2>/dev/null | grep -i PackageInstaller || echo "PackageInstaller отсутствует"
+          } 2>&1 | tee reports/build-test.txt
       - name: "Проверка результата"
         if: always()
         run: |

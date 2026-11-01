@@ -87,18 +87,45 @@ def extract_system_img_from_rar(rar, workdir):
 
 
 def dump_tree(img, dst):
-    """Распаковывает всё содержимое ext4-образа через debugfs rdump."""
+    """Распаковывает содержимое ext4-образа через debugfs rdump."""
     os.makedirs(dst, exist_ok=True)
     if not os.path.exists(img):
         raise SystemExit(f'образ не найден: {img}')
     print(f'debugfs rdump: {img} ({os.path.getsize(img)} байт)')
-    p = run(['debugfs', '-R', f'rdump / "{dst}"', img], check=False)
+    run(['debugfs', '-R', f'rdump / "{dst}"', img], check=False)
+    # rdump ругается на chown в непривилегированном режиме — это ожидаемо
+    lf = os.path.join(dst, 'lost+found')
+    if os.path.isdir(lf):
+        shutil.rmtree(lf, ignore_errors=True)
     n = sum(len(f) for _, _, f in os.walk(dst))
     print(f'распаковано файлов: {n}')
-    # пустой результат — тоже сигнал ошибки; при непустом rdump может «ругаться»
-    if n == 0 and not os.listdir(dst):
-        sys.stderr.write(p.stdout + p.stderr)
-        raise SystemExit('debugfs не смог распаковать образ')
+    if n == 0:
+        raise SystemExit('debugfs не смог распаковать образ (пустой результат)')
+
+
+def content_stats(root):
+    """Реальный объём содержимого и топ крупных файлов."""
+    total_apparent = 0
+    total_disk = 0
+    seen = set()
+    biggest = []
+    for r, _, fs in os.walk(root):
+        for fn in fs:
+            p = os.path.join(r, fn)
+            try:
+                st = os.lstat(p)
+            except OSError:
+                continue
+            # не считаем хардлинки дважды
+            key = (st.st_dev, st.st_ino)
+            if key in seen:
+                continue
+            seen.add(key)
+            total_apparent += st.st_size
+            total_disk += st.st_blocks * 512
+            biggest.append((st.st_size, os.path.relpath(p, root)))
+    biggest.sort(reverse=True)
+    return total_apparent, total_disk, biggest[:10]
 
 
 def apply_actions(root, actions):
@@ -146,46 +173,88 @@ def apply_actions(root, actions):
     return log
 
 
+# Фичи ext4, которые понимает ядро 3.0.35 (i.MX6, Android 4.4).
+# ВАЖНО: 64bit и metadata_csum в 3.0.35 отсутствуют — с ними раздел не смонтируется!
+OK_FEATURES = '^64bit,^metadata_csum,^metadata_csum_seed,^orphan_file,^quota,^casefold,^bigalloc'
+
+
+def fix_ownership(root):
+    """Пытается выставить root:root (uid/gid 0) — нужно для /system."""
+    # пробуем sudo без пароля (CI), иначе os.chown (если запущены от root)
+    for cmd in (['sudo', '-n', 'chown', '-R', '0:0', root],
+                ['chown', '-R', '0:0', root]):
+        if not shutil.which(cmd[0]):
+            continue
+        p = subprocess.run(cmd, capture_output=True, text=True)
+        if p.returncode == 0:
+            print(f'владельцы выставлены на root:root ({cmd[0]})')
+            # базовые права как в Android
+            for r, ds, fs in os.walk(root):
+                os.chmod(r, 0o755)
+                for fn in fs:
+                    fp = os.path.join(r, fn)
+                    if os.path.islink(fp):
+                        continue
+                    mode = os.stat(fp).st_mode & 0o777
+                    if fn.endswith(('.apk', '.jar', '.so', '.ttf', '.dat', '.conf',
+                                    '.xml', '.prop', '.txt', '.bin')):
+                        os.chmod(fp, 0o644)
+                    elif (mode & 0o111) == 0:
+                        os.chmod(fp, 0o644)
+                    else:
+                        os.chmod(fp, 0o755)
+            return True
+    print('ВНИМАНИЕ: не удалось выставить root:root (нужен sudo/root). '
+          'Файлы останутся с текущим владельцем — на устройстве это обычно приемлемо, '
+          'но правильнее пересобрать от root.')
+    return False
+
+
 def build_image(root, out_img, size_mb=512):
-    """Собирает ext4-образ. Сначала пробует make_ext4fs, иначе mke2fs -d."""
+    """Собирает ext4-образ, совместимый с ядром 3.0.35, строго заданного размера."""
     root = os.path.abspath(root)
-    need = 0
-    for r, d, fs in os.walk(root):
-        for fn in fs:
-            p = os.path.join(r, fn)
-            try:
-                need += os.path.getsize(p)
-            except OSError:
-                pass
-    need_mb = int(need / 1024 / 1024 * 1.25) + 64
-    size_mb = max(size_mb, need_mb)
-    print(f'содержимое: {need/1024/1024:.0f} МиБ -> образ {size_mb} МиБ')
+    apparent, disk, biggest = content_stats(root)
+    print(f'содержимое: {apparent/1024/1024:.1f} МиБ (фактически на диске {disk/1024/1024:.1f} МиБ)')
+    print('  крупнейшие файлы:')
+    for sz, rel in biggest:
+        print(f'    {sz/1024/1024:8.1f} МиБ  /{rel}')
+
+    limit = size_mb * 1024 * 1024
+    reserve = 24 * 1024 * 1024   # запас под inode-таблицы и служебные блоки
+    if apparent + reserve > limit:
+        raise SystemExit(
+            f'ОШИБКА: содержимое не влезает в раздел {size_mb} МиБ '
+            f'({apparent/1024/1024:.0f} МиБ + служебные). Удали лишнее (--remove) '
+            f'или увеличь --size-mb, но раздел p3 на устройстве = 512 МиБ!')
 
     if os.path.exists(out_img):
         os.remove(out_img)
 
-    if shutil.which('make_ext4fs'):
-        run(['make_ext4fs', '-l', f'{size_mb}M', '-a', 'system', '-S',
-             os.path.join(root, 'file_contexts'), out_img, root], check=False)
-        if os.path.exists(out_img) and os.path.getsize(out_img) > 0:
-            return out_img
-        # повтор без selinux-файла
-        run(['make_ext4fs', '-l', f'{size_mb}M', '-a', 'system', out_img, root], check=False)
-        if os.path.exists(out_img) and os.path.getsize(out_img) > 0:
-            return out_img
-
-    # fallback: mke2fs -d (e2fsprogs >= 1.43)
     tmp = out_img + '.tmp'
     if os.path.exists(tmp):
         os.remove(tmp)
     with open(tmp, 'wb') as f:
         f.truncate(size_mb * 1024 * 1024)
-    p = run(['mke2fs', '-q', '-F', '-t', 'ext4', '-L', 'system', '-d', root, tmp],
-            check=False)
+
+    # mke2fs -d: собирает ФС из каталога; фичи — совместимые с 3.0.35
+    cmd = ['mke2fs', '-q', '-F', '-t', 'ext4', '-b', '4096', '-I', '256',
+           '-O', OK_FEATURES, '-L', 'system', '-E', 'nodiscard', '-d', root, tmp]
+    p = run(cmd, check=False)
     if p.returncode != 0:
-        sys.stderr.write(p.stdout + p.stderr)
-        raise SystemExit('не удалось собрать ext4 (нужен make_ext4fs или mke2fs -d)')
+        sys.stderr.write((p.stdout or '') + (p.stderr or ''))
+        os.remove(tmp)
+        raise SystemExit('не удалось собрать ext4 через mke2fs -d')
     os.replace(tmp, out_img)
+
+    # проверка совместимости
+    h = run(['dumpe2fs', '-h', out_img], check=False).stdout
+    print('--- параметры собранной ФС ---')
+    for ln in h.splitlines():
+        if ln.startswith(('Filesystem features', 'Block size', 'Inode size',
+                          'Filesystem volume name', 'Block count')):
+            print('  ' + ln.strip())
+    if '64bit' in h:
+        raise SystemExit('ОШИБКА: образ содержит фичу 64bit — ядро 3.0.35 его не смонтирует')
     return out_img
 
 
@@ -252,6 +321,9 @@ def main():
             print('  ' + line)
 
         os.makedirs(os.path.dirname(os.path.abspath(args.out)) or '.', exist_ok=True)
+        print('\n--- владельцы файлов ---')
+        fix_ownership(root)
+
         print('\n--- сборка образа ---')
         out = build_image(root, os.path.abspath(args.out), args.size_mb)
         size = os.path.getsize(out)
