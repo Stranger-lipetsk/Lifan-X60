@@ -1,10 +1,10 @@
 использую sudo для chown и сборки образа
-временная папка: /tmp/lifan_build_szlu9pgh
+временная папка: /tmp/lifan_build_p_obi3b4
 архив: fw/firmware.rar (220980636 байт)
 распаковано через 7z
-system.img: /tmp/lifan_build_szlu9pgh/rar/system.img (377487360 байт)
+system.img: /tmp/lifan_build_p_obi3b4/rar/system.img (377487360 байт)
   sha256 исходного: 0f898f48ee910fe0c125768b71f587fa…
-debugfs rdump: /tmp/lifan_build_szlu9pgh/rar/system.img (377487360 байт)
+debugfs rdump: /tmp/lifan_build_p_obi3b4/rar/system.img (377487360 байт)
 распаковано файлов: 1341
 
 --- изменения ---
@@ -40,9 +40,9 @@ debugfs rdump: /tmp/lifan_build_szlu9pgh/rar/system.img (377487360 байт)
 
 ГОТОВО: /home/runner/work/Lifan-X60/Lifan-X60/out/system-test.img
   размер: 536870912 байт (512.0 МиБ)
-  sha256: dd5989446c44125aee72db36ef8208442d430ec9cb44583adbe0c8d3a78bd45a
+  sha256: 2e21aa4b1111096b54c65e1c7294e9848846f9e3951de93728954a62d57ee7aa
 
 Дальше: положить как system.img на SD рядом с boot.img, u-boot.bin,
 MCU_FW.hex и sd_boot.img (штатными!) и прошить штатным способом.
 Подробно: docs/06-инструкция-модернизации.md
-рабочая папка сохранена: /tmp/lifan_build_szlu9pgh
+рабочая папка сохранена: /tmp/lifan_build_p_obi3b4

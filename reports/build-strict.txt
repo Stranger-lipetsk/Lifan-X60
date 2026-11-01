@@ -1,0 +1,35 @@
+=== размер ===
+-rw-r--r-- 1 runner runner 512M Nov  1 13:42 out/system-test.img
+байт: 536870912  (лимит раздела p3 = 536870912)
+=== фичи ext4 (должно НЕ быть 64bit) ===
+Filesystem features:      has_journal ext_attr resize_inode dir_index filetype extent flex_bg sparse_super large_file huge_file dir_nlink extra_isize
+Block count:              131072
+Block size:               4096
+Inode size:	          256
+Journal features:         (none)
+64bit отсутствует — OK
+=== владельцы файлов ===
+     12   40755 (2)      0      0    4096  1-Nov-2026 13:42 .
+      2   40755 (2)      0      0    4096  1-Nov-2026 13:42 ..
+     13  100644 (1)      0      0   25910 26-Apr-2026 17:05 BasicDreams.apk
+     14  100644 (1)      0      0   294080 26-Apr-2026 17:05 Bluetooth.apk
+     15  100644 (1)      0      0   2400817 26-Apr-2026 17:05 Camera2.apk
+=== монтирование (проверка читаемости) ===
+app
+bin
+build.prop
+etc
+fonts
+framework
+lib
+lost+found
+media
+priv-app
+usr
+vendor
+xbin
+du: cannot read directory '/mnt/chk/lost+found': Permission denied
+202M	/mnt/chk
+=== содержит ли /system/bin/su и PackageInstaller ===
+su не найден в /bin
+     34  100644 (1)      0      0   124968 26-Apr-2026 17:05 PackageInstaller.apk
