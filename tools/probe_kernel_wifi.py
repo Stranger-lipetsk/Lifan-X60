@@ -21,9 +21,11 @@ def kernel_from_bootimg(data):
     """Возвращает (kernel_bytes, cmdline) из Android boot image v0."""
     if len(data) < 64 or data[:8] != MAGIC:
         return None, None
+    # заголовок v0: 8 байт магии + 10*4 (поля) + 16 (name) + 512 (cmdline) + 32 (id) + 1024 (extra)
+    fields = struct.unpack('<10I16s512s', data[8:8 + 40 + 16 + 512])
     (kernel_size, kernel_addr, ramdisk_size, ramdisk_addr,
-     second_size, second_addr, tags_addr, page_size, os_version,
-     name, cmdline) = struct.unpack('<10I16s512s', data[8:8 + 8 + 32 + 16 + 512])
+     second_size, second_addr, tags_addr, page_size, _unused, os_version,
+     name, cmdline) = fields
     if page_size < 512 or page_size > 65536:
         return None, None
     start = page_size
