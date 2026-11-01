@@ -82,7 +82,9 @@ jobs:
             debugfs -R "ls -l /bin/wifi" "$IMG" 2>/dev/null || echo "каталога /bin/wifi нет"
             echo
             echo "######## 12. Wi-Fi драйвер в ядре ########"
-            python3 tools/probe_kernel_wifi.py reports/deep2/kernel/zImage
+            BOOTIMG=$(find /tmp/rar -name "boot.img" | head -1)
+            echo "boot.img: $BOOTIMG"
+            python3 tools/probe_kernel_wifi.py "$BOOTIMG"
             echo
             echo "######## 13. NVS-калибровка Wi-Fi ########"
             echo "--- в образе (/etc/firmware) ---"
