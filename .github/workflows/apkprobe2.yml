@@ -1,0 +1,63 @@
+name: Совместимость APK — диагностика
+
+on:
+  push:
+    paths:
+      - 'autoanalysis/apkprobe2.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  probe2:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - name: "Диагностика загрузки Navitel"
+        run: |
+          mkdir -p reports/apkprobe2 && cd reports/apkprobe2
+          for u in "https://download.navitel.ru/Android/Navitel-v11.11.1128-Google-full.apk" \
+                   "https://download.navitel.ru/Android/Navitel-9.13.73-full-armeabi.apk"; do
+            n=$(basename "$u")
+            echo "=== $n"
+            curl -sSIL -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" --max-time 60 "$u" 2>&1 | grep -iE "^HTTP|content-length|content-type|location" | head -10
+            curl -sSL -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" --max-time 900 -o "$n" "$u" 2>&1 | tail -2
+            ls -l "$n" 2>/dev/null
+            file "$n" 2>/dev/null
+            head -c 120 "$n" | xxd | head -3
+            echo
+          done | tee диагностика.txt
+      - name: "Установить androguard и разобрать"
+        run: |
+          pip install --quiet androguard 2>&1 | tail -2
+          python3 - <<'PY' 2>&1 | tee reports/apkprobe2/манифесты.txt
+          import glob, os
+          from androguard.core.apk import APK
+          for p in sorted(glob.glob('reports/apkprobe2/*.apk')):
+              print(f'=== {os.path.basename(p)} ({os.path.getsize(p)} байт)')
+              try:
+                  a = APK(p)
+                  print('  package      :', a.get_package())
+                  print('  versionName  :', a.get_androidversion_name())
+                  print('  versionCode  :', a.get_androidversion_code())
+                  print('  minSdk       :', a.get_min_sdk_version())
+                  print('  targetSdk    :', a.get_target_sdk_version())
+                  print('  названия     :', a.get_app_name())
+                  print('  abi          :', a.get_libs() if hasattr(a,'get_libs') else '')
+                  print('  разрешения   :', ', '.join(sorted(a.get_permissions())[:25]))
+              except Exception as e:
+                  print('  ОШИБКА:', type(e).__name__, e)
+          PY
+      - name: "Коммит"
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          printf 'firmware/\nreports/unpacked/\nreports/apkprobe2/*.apk\n' > .git/info/exclude
+          git add -A reports
+          if git diff --cached --quiet; then echo "нет изменений"; else
+            git commit -m "совместимость APK: диагностика загрузки и манифесты (androguard)"
+            git push origin HEAD:${{ github.ref_name }}
+          fi
