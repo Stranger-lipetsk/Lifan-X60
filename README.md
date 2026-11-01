@@ -32,6 +32,7 @@
 Бэкап перед прошивкой: **[docs/10-бэкап-подробно.md](docs/10-бэкап-подробно.md)**
 Что делает прошивка (разбор заводского кода): **[docs/11-что-делает-прошивка.md](docs/11-что-делает-прошивка.md)**
 Яндекс Навигатор с пробками: **[docs/12-яндекс-навигатор.md](docs/12-яндекс-навигатор.md)**
+Wi-Fi точки доступа телефона: **[docs/13-wifi-точка-доступа.md](docs/13-wifi-точка-доступа.md)**
 Доступ к Android, Wi-Fi и файлам: **[docs/08-mirrorlink-vyhod-k-android.md](docs/08-mirrorlink-vyhod-k-android.md)**
 Сборка образа: `python3 tools/build_system.py --fw архив.rar --out out/system.img ...`
 
