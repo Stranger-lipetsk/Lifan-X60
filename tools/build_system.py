@@ -184,7 +184,7 @@ def apply_actions(root, actions):
             shutil.copyfile(src, dst)
             # APK в /system должен быть 0644 и принадлежать root
             os.chmod(dst, 0o644)
-            os.chown(dst, 0, 0)
+            # владелец выставляется позже общим chown'ом каталога (нужен root)
             log.append(f'добавлено APK: {dest_dir}/{name} ({os.path.getsize(src)} байт)')
 
         elif kind == 'add-file':

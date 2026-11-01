@@ -97,7 +97,7 @@ if [ -f tools/system-files/install-recovery.sh ]; then
   EXTRA_ARGS+=(--add-file "tools/system-files/install-recovery.sh:/etc/install-recovery.sh")
 fi
 
-python3 tools/build_system.py \
+if ! python3 tools/build_system.py \
   --system out/system-original.img \
   --out "$OUT" \
   --size-mb 512 \
@@ -107,6 +107,16 @@ python3 tools/build_system.py \
   --set-prop ro.product.locale.region=RU \
   --set-prop persist.sys.timezone=Europe/Moscow \
   2>&1 | tee reports/сборка-лайт.txt
+then
+  echo "СБОРКА ОБРАЗА ПРОВАЛЕНА — образ не создан, проверка не запускается"
+  exit 1
+fi
+
+# образ должен быть ровно размером с раздел, иначе проверка бессмысленна
+if [ ! -f "$OUT" ]; then
+  echo "СБОРКА ОБРАЗА ПРОВАЛЕНА: файл $OUT отсутствует"
+  exit 1
+fi
 
 echo
 echo "===================== ЭТАП 4: проверка ====================="
@@ -134,7 +144,11 @@ echo "===================== ЭТАП 4: проверка ====================="
   echo "=== удалённое ==="
   debugfs -R 'ls -l /priv-app' "$OUT" 2>/dev/null | grep -i navitel && echo "ПРОБЛЕМА: Navitel не удалён" || echo "Navitel удалён — OK"
 
-  echo "=== автоподключение карт (install-recovery.sh) ==="
+  echo "=== панель MirrorLink (com.fpt.mirrorlink.android) ==="
+debugfs -R "ls -l /app" "$OUT" 2>/dev/null | grep -i mirrorlink || echo "НЕ НАЙДЕНА В ОБРАЗЕ"
+debugfs -R "ls -l /priv-app" "$OUT" 2>/dev/null | grep -i mirrorlink || true
+
+echo "=== автоподключение карт (install-recovery.sh) ==="
   IR=$(debugfs -R 'ls -l /etc' "$OUT" 2>/dev/null | grep install-recovery)
   if [ -z "$IR" ]; then
     echo "ПРОБЛЕМА: скрипт отсутствует"
