@@ -1,5 +1,5 @@
 === файл ===
--rw-r--r-- 1 runner runner 536870912 Nov  1 13:50 out/system.img
+-rw-r--r-- 1 runner runner 536870912 Nov  1 14:01 out/system.img
 байт: 536870912 (эталон раздела p3: 536870912)
 РАЗМЕР: OK
 === ФС ===
@@ -14,11 +14,14 @@ Journal features:         (none)
 Pass 3: Checking directory connectivity
 Pass 4: Checking reference counts
 Pass 5: Checking group summary information
-system: 1389/32768 files (0.1% non-contiguous), 61037/131072 blocks
+system: 1390/32768 files (0.1% non-contiguous), 61038/131072 blocks
 === клавиатура на месте? ===
      26  100644 (1)      0      0   13353625 26-Apr-2026 17:05 IQQIService-Elead-International-20160105.1.apk
 === удалённое ===
 Navitel удалён — OK
+=== автоподключение карт (install-recovery.sh) ===
+    606  100644 (1)      0      0    3963  1-Nov-2026 14:01 install-recovery.sh
+скрипт на месте
 === build.prop ===
 ro.build.version.release=4.4.2
 ro.product.locale.language=ru
@@ -26,6 +29,6 @@ ro.product.locale.region=RU
 persist.sys.timezone=Europe/Moscow
 === свободное место ===
 Block count:              131072
-Free blocks:              70035
+Free blocks:              70034
 === sha256 ===
-5fcba6cd03f2467d21268d25119c10720400689e77631dcbac319e13f753a3db  out/system.img
+03b6977ac49166a071b644f18dbc1dd35c24c427898e69e194a6295adfda9d5f  out/system.img

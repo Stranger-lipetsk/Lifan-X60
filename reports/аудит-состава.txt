@@ -12,9 +12,9 @@
   /priv-app/SystemUI.apk (1133036 байт)
 
 === ЛОКАЛИ (framework-res.apk) ===
-  найдено локалей: 0
-  русская локаль: НЕТ!
-  первые 25: 
+  каталогов значений в APK: 0
+  языковые коды в resources.arsc: ['ar', 'ay', 'bi', 'cs', 'ct', 'cv', 'cy', 'cz', 'db', 'de', 'dk', 'dl', 'dn', 'dp', 'dr', 'ds', 'dv', 'dz', 'eb', 'ee', 'en', 'es', 'ez', 'fa', 'fd', 'fj', 'fr', 'gb', 'gc', 'gn', 'gq', 'ha', 'he', 'hr', 'ht', 'id', 'im', 'it', 'ja', 'ku', 'kw', 'la', 'll', 'lm', 'ln', 'lo', 'lp', 'lq', 'lr', 'ls', 'lt', 'lu', 'ly', 'me', 'mj', 'mm', 'nc', 'nf', 'ng', 'no', 'nr', 'ok', 'ox', 'pf', 'pi', 'pl', 'pp', 'pt', 'px', 'pz', 'rh', 'ru', 'sd', 'te', 'tg', 'tj', 'tk', 'tm', 'to', 'tr', 'tw', 'ud', 'uk', 'up', 'wk', 'wv', 'xa', 'xd', 'xh', 'xt', 'xu', 'yk', 'yq', 'yw', 'zq']
+  русская локаль: ЕСТЬ
 
 === УСТАНОВКА APK И ROOT ===
   /app/DocumentsUI.apk — на месте
