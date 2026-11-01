@@ -1,0 +1,52 @@
+использую sudo для chown и сборки образа
+временная папка: /tmp/lifan_build_l3c2iize
+system.img: out/system-original.img (377487360 байт)
+  sha256 исходного: 0f898f48ee910fe0c125768b71f587fa…
+debugfs rdump: out/system-original.img (377487360 байт)
+распаковано файлов: 1341
+
+--- изменения ---
+  удалено: /priv-app/Navitel-9.13.73-large.apk
+  удалено: /app/BSEDemo.apk
+  удалено: /app/EL830TAM1_GPIO_TEST_2015.01.01.01.apk
+  удалено: /app/CubeLiveWallpapers.apk
+  удалено: /app/VisualizationWallpapers.apk
+  удалено: /app/BasicDreams.apk
+  удалено: /app/WfdSink.apk
+  удалено: /app/FSLOta.apk
+  удалено: /app/HTMLViewer.apk
+  свойство: ro.product.locale.language=ru (заменено)
+  свойство: ro.product.locale.region=RU (заменено)
+  свойство: persist.sys.timezone=Europe/Moscow (добавлено)
+
+--- права ---
+права выставлены через sudo: файлов 1332; владелец root:root
+
+--- сборка ---
+содержимое: 211.7 МиБ (раздел p3 = 512 МиБ)
+  крупнейшие файлы:
+        18.8 МиБ  /lib/libwebviewchromium.so
+        18.2 МиБ  /usr/icu/icudt51l.dat
+        14.8 МиБ  /lib/libnavitel.so
+        12.7 МиБ  /app/IQQIService-Elead-International-20160105.1.apk
+        11.7 МиБ  /priv-app/Launcher2
+         8.1 МиБ  /lib/libLLVM.so
+         7.3 МиБ  /framework/framework-res.apk
+         4.4 МиБ  /priv-app/EL830LF01_Home.apk
+         4.3 МиБ  /fonts/DroidSansFallback.ttf
+         3.9 МиБ  /priv-app/ElSettings.apk
+собрано (фичи: ^64bit,^metadata_csum,^metadata_csum_seed,^orphan_file,^quota,^casefold,^bigalloc)
+--- параметры ФС ---
+  Filesystem volume name:   system
+  Filesystem features:      has_journal ext_attr resize_inode dir_index filetype extent flex_bg sparse_super large_file huge_file dir_nlink extra_isize
+  Block count:              131072
+  Block size:               4096
+  Inode size:	          256
+
+ГОТОВО: /home/runner/work/Lifan-X60/Lifan-X60/out/system.img
+  размер: 536870912 байт (512.0 МиБ)
+  sha256: 5fcba6cd03f2467d21268d25119c10720400689e77631dcbac319e13f753a3db
+
+Дальше: положить как system.img на SD рядом с boot.img, u-boot.bin,
+MCU_FW.hex и sd_boot.img (штатными!) и прошить штатным способом.
+Подробно: docs/06-инструкция-модернизации.md

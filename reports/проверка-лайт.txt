@@ -1,0 +1,31 @@
+=== файл ===
+-rw-r--r-- 1 runner runner 536870912 Nov  1 13:50 out/system.img
+байт: 536870912 (эталон раздела p3: 536870912)
+РАЗМЕР: OK
+=== ФС ===
+Filesystem volume name:   system
+Filesystem features:      has_journal ext_attr resize_inode dir_index filetype extent flex_bg sparse_super large_file huge_file dir_nlink extra_isize
+Block count:              131072
+Block size:               4096
+Inode size:	          256
+Journal features:         (none)
+СОВМЕСТИМОСТЬ ЯДРА 3.0.35: OK
+=== целостность ===
+Pass 3: Checking directory connectivity
+Pass 4: Checking reference counts
+Pass 5: Checking group summary information
+system: 1389/32768 files (0.1% non-contiguous), 61037/131072 blocks
+=== клавиатура на месте? ===
+     26  100644 (1)      0      0   13353625 26-Apr-2026 17:05 IQQIService-Elead-International-20160105.1.apk
+=== удалённое ===
+Navitel удалён — OK
+=== build.prop ===
+ro.build.version.release=4.4.2
+ro.product.locale.language=ru
+ro.product.locale.region=RU
+persist.sys.timezone=Europe/Moscow
+=== свободное место ===
+Block count:              131072
+Free blocks:              70035
+=== sha256 ===
+5fcba6cd03f2467d21268d25119c10720400689e77631dcbac319e13f753a3db  out/system.img

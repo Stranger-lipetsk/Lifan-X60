@@ -1,0 +1,59 @@
+Всего APK: 50
+
+=== КЛАВИАТУРЫ (InputMethodService) ===
+  /app/IQQIService-Elead-International-20160105.1.apk (13353625 байт)
+  /priv-app/ElSettings.apk (4041923 байт)
+
+=== ЛАУНЧЕРЫ (HOME) ===
+  /app/EL831CLF01_Avin_2016.06.21.01.apk (1180203 байт)
+  /app/EL831CLF01_elBluetoothPhone_2016.12.13.01.apk (1139049 байт)
+  /priv-app/EL830LF01_Home.apk (4588177 байт)
+  /priv-app/ElSettings.apk (4041923 байт)
+  /priv-app/SystemUI.apk (1133036 байт)
+
+=== ЛОКАЛИ (framework-res.apk) ===
+  найдено локалей: 0
+  русская локаль: НЕТ!
+  первые 25: 
+
+=== УСТАНОВКА APK И ROOT ===
+  /app/DocumentsUI.apk — на месте
+  /app/DownloadProviderUi.apk — на месте
+  /app/PackageInstaller.apk — на месте
+  /priv-app/DownloadProvider.apk — на месте
+  root: /bin/bin/su — есть
+  root: /xbin/su — есть
+
+=== ОБЪЁМ ===
+  занято: 970.6 МиБ
+  топ-12:
+       105.9 МиБ  /priv-app/Navitel-9.13.73-large.apk
+        18.8 МиБ  /lib/libwebviewchromium.so
+        18.2 МиБ  /usr/icu/icudt51l.dat
+        14.8 МиБ  /lib/libnavitel.so
+        12.7 МиБ  /app/IQQIService-Elead-International-20160105.1.apk
+        11.7 МиБ  /priv-app/Launcher2
+         8.1 МиБ  /lib/libLLVM.so
+         7.3 МиБ  /framework/framework-res.apk
+         4.4 МиБ  /priv-app/EL830LF01_Home.apk
+         4.3 МиБ  /fonts/DroidSansFallback.ttf
+         3.9 МиБ  /priv-app/ElSettings.apk
+         3.6 МиБ  /framework/framework.jar
+
+=== РЕКОМЕНДУЕТСЯ УДАЛИТЬ ===
+  /app/BSEDemo.apk — демо-приложение (0.2 МиБ)
+  /app/BasicDreams.apk — скринсейвер (0.0 МиБ)
+  /app/CubeLiveWallpapers.apk — живые обои (бесполезно в авто) (0.0 МиБ)
+  /app/EL830TAM1_GPIO_TEST_2015.01.01.01.apk — инженерный тест GPIO (0.0 МиБ)
+  /app/FSLOta.apk — OTA от Freescale (не используется) (0.0 МиБ)
+  /app/HTMLViewer.apk — просмотрщик HTML (0.0 МиБ)
+  /app/VisualizationWallpapers.apk — обои-визуализации (0.2 МиБ)
+  /app/WfdSink.apk — Miracast-приёмник (не используется) (0.1 МиБ)
+  /priv-app/Navitel-9.13.73-large.apk — старый навигатор, заменяем новым (105.9 МиБ)
+  экономия: 106.5 МиБ
+
+=== НЕ УДАЛЯТЬ ===
+  IQQIService — единственная клавиатура
+  EL830LF01_Home, ElSettings — оболочка
+  EL831CLF01_* — радио, Bluetooth, камера, плеер
+  SystemUI, Keyguard, SettingsProvider, MediaProvider — системные
