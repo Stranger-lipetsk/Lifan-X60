@@ -1,5 +1,5 @@
 использую sudo для chown и сборки образа
-временная папка: /tmp/lifan_build_b7tnafby
+временная папка: /tmp/lifan_build_gmosdwmh
 system.img: out/system-original.img (377487360 байт)
   sha256 исходного: 0f898f48ee910fe0c125768b71f587fa…
 debugfs rdump: out/system-original.img (377487360 байт)
@@ -46,7 +46,7 @@ debugfs rdump: out/system-original.img (377487360 байт)
 
 ГОТОВО: /home/runner/work/Lifan-X60/Lifan-X60/out/system.img
   размер: 536870912 байт (512.0 МиБ)
-  sha256: 0e8e56e7f5a4df4039ace3f74dd1e83b1093bdb54864eebbede1fb696929161a
+  sha256: 46e5938dbc18f6b6f2562bf505019d17d66641146b2ddc30a2f5e8cb8e749908
 
 Дальше: положить как system.img на SD рядом с boot.img, u-boot.bin,
 MCU_FW.hex и sd_boot.img (штатными!) и прошить штатным способом.
