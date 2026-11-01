@@ -1,0 +1,80 @@
+=== Firmware_lifan_X60_2016_Navi_9.13.73.rar ===
+-rw-r--r-- 1 runner runner 220980636 Nov  1 12:59 firmware/original/Firmware_lifan_X60_2016_Navi_9.13.73.rar
+5572d928c5309cce6603d3020079a440633a69843a55f4c03480101e9f8311af  firmware/original/Firmware_lifan_X60_2016_Navi_9.13.73.rar
+firmware/original/Firmware_lifan_X60_2016_Navi_9.13.73.rar: RAR archive data, v5
+
+--- 7z l ---
+
+7-Zip 23.01 (x64) : Copyright (c) 1999-2023 Igor Pavlov : 2023-06-20
+ 64-bit locale=C.UTF-8 Threads:2 OPEN_MAX:65536
+
+Scanning the drive for archives:
+1 file, 220980636 bytes (211 MiB)
+
+Listing archive: firmware/original/Firmware_lifan_X60_2016_Navi_9.13.73.rar
+
+--
+Path = firmware/original/Firmware_lifan_X60_2016_Navi_9.13.73.rar
+Type = Rar5
+Physical Size = 220980636
+Solid = -
+Blocks = 5
+Encrypted = -
+Multivolume = -
+Volumes = 1
+
+   Date      Time    Attr         Size   Compressed  Name
+------------------- ----- ------------ ------------  ------------------------
+2017-06-27 04:40:00 ....A      3926016      3903880  boot.img
+2017-06-27 04:40:02 ....A        75083        26521  MCU_FW.hex
+2017-06-27 04:40:08 ....A     48758784     48440145  sd_boot.img
+2026-04-26 17:48:11 ....A    377487360    168554784  system.img
+2017-06-27 04:40:02 ....A       110440        54716  u-boot.bin
+------------------- ----- ------------ ------------  ------------------------
+2026-04-26 17:48:11          430357683    220980046  5 files
+
+--- binwalk ---
+
+DECIMAL       HEXADECIMAL     DESCRIPTION
+--------------------------------------------------------------------------------
+0             0x0             RAR archive data, version 5.x
+51490613      0x311AF35       EBML file
+81074983      0x4D51B27       LZ4 compressed data, legacy
+111157418     0x6A020AA       IMG0 (VxWorks) header, size: 386678833
+137681162     0x834D90A       MySQL ISAM index file Version 6
+150030095     0x8F1470F       MySQL MISAM index file Version 7
+163501102     0x9BED42E       Uncompressed Adobe Flash SWF file, Version 54, File size (header included) 42853479
+212014943     0xCA3175F       MySQL ISAM index file Version 4
+219384856     0xD138C18       MySQL ISAM index file Version 5
+
+
+--- строки: маркеры платформы ---
+pX3T|M
+ayWPX4Y
+px6**O
+F^{CPx4
+px4r0t)jW
+>pX5x,V
+px4'+%
+qpX3#\
+2<Px3E
+*PX4TX
+iOPx32s
+fiPX3z
+Px4mGH
+	?6PX4
+8PX4~v?
+Kpx35&
+vFpx6t
+Pr	~PX4
+Px4IB0
+px4}QN
+nc	<px35FR
+CPx31W
+ybTPx6
+v7,px6d;&
+Vwpx5'}
+}Vqpx5
+yPx6~<
+Px3&mG
+,&	$px5

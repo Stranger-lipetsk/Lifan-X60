@@ -1,0 +1,11 @@
+=== Все .prop файлы ===
+
+=== Файлы крупнее 1 МБ ===
+377487360	reports/unpacked/прошивка офиц. 2016г/system.img
+377487360	reports/unpacked/system.img
+48758784	reports/unpacked/прошивка офиц. 2016г/sd_boot.img
+48758784	reports/unpacked/sd_boot.img
+3926016	reports/unpacked/прошивка офиц. 2016г/boot.img
+3926016	reports/unpacked/boot.img
+
+=== Сами build.prop (первые 200 строк) ===
