@@ -1,0 +1,637 @@
+Всего файлов: 1341
+
+=== Крупнейшие 300 ===
+   111095055 /priv-app/Navitel-9.13.73-large.apk
+    19674996 /lib/libwebviewchromium.so
+    19032528 /usr/icu/icudt51l.dat
+    15501520 /lib/libnavitel.so
+    13353625 /app/IQQIService-Elead-International-20160105.1.apk
+    12267776 /priv-app/Launcher2
+     8493004 /lib/libLLVM.so
+     7649829 /framework/framework-res.apk
+     4588177 /priv-app/EL830LF01_Home.apk
+     4529044 /fonts/DroidSansFallback.ttf
+     4041923 /priv-app/ElSettings.apk
+     3742691 /framework/framework.jar
+     3328320 /fonts/NotoColorEmoji.ttf
+     3232186 /lib/modules/cfg80211.ko
+     2878468 /fonts/MTLmr3m.ttf
+     2400817 /app/Camera2.apk
+     2189690 /lib/modules/scsi_mod.ko
+     2179276 /lib/libart.so
+     1953008 /bin/sbin/zcip
+     1953008 /bin/sbin/watchdog
+     1953008 /bin/sbin/vconfig
+     1953008 /bin/sbin/udhcpd
+     1953008 /bin/sbin/udhcpc
+     1953008 /bin/sbin/ubiupdatevol
+     1953008 /bin/sbin/ubirsvol
+     1953008 /bin/sbin/ubirmvol
+     1953008 /bin/sbin/ubimkvol
+     1953008 /bin/sbin/ubidetach
+     1953008 /bin/sbin/ubiattach
+     1953008 /bin/sbin/tunctl
+     1953008 /bin/sbin/telnetd
+     1953008 /bin/sbin/syslogd
+     1953008 /bin/sbin/sysctl
+     1953008 /bin/sbin/switch_root
+     1953008 /bin/sbin/swapon
+     1953008 /bin/sbin/swapoff
+     1953008 /bin/sbin/svlogd
+     1953008 /bin/sbin/sulogin
+     1953008 /bin/sbin/start-stop-daemon
+     1953008 /bin/sbin/slattach
+     1953008 /bin/sbin/setlogcons
+     1953008 /bin/sbin/setfont
+     1953008 /bin/sbin/setconsole
+     1953008 /bin/sbin/sendmail
+     1953008 /bin/sbin/runlevel
+     1953008 /bin/sbin/route
+     1953008 /bin/sbin/rmmod
+     1953008 /bin/sbin/readprofile
+     1953008 /bin/sbin/rdev
+     1953008 /bin/sbin/rdate
+     1953008 /bin/sbin/raidautorun
+     1953008 /bin/sbin/poweroff
+     1953008 /bin/sbin/popmaildir
+     1953008 /bin/sbin/pivot_root
+     1953008 /bin/sbin/ntpd
+     1953008 /bin/sbin/nbd-client
+     1953008 /bin/sbin/nameif
+     1953008 /bin/sbin/modprobe
+     1953008 /bin/sbin/modinfo
+     1953008 /bin/sbin/mkswap
+     1953008 /bin/sbin/mkfs.vfat
+     1953008 /bin/sbin/mkfs.minix
+     1953008 /bin/sbin/mkfs.ext2
+     1953008 /bin/sbin/mkdosfs
+     1953008 /bin/sbin/mdev
+     1953008 /bin/sbin/man
+     1953008 /bin/sbin/makedevs
+     1953008 /bin/sbin/lsmod
+     1953008 /bin/sbin/lpd
+     1953008 /bin/sbin/losetup
+     1953008 /bin/sbin/logread
+     1953008 /bin/sbin/loadkmap
+     1953008 /bin/sbin/loadfont
+     1953008 /bin/sbin/klogd
+     1953008 /bin/sbin/insmod
+     1953008 /bin/sbin/init
+     1953008 /bin/sbin/inetd
+     1953008 /bin/sbin/ifup
+     1953008 /bin/sbin/ifenslave
+     1953008 /bin/sbin/ifdown
+     1953008 /bin/sbin/ifconfig
+     1953008 /bin/sbin/hwclock
+     1953008 /bin/sbin/httpd
+     1953008 /bin/sbin/hdparm
+     1953008 /bin/sbin/halt
+     1953008 /bin/sbin/getty
+     1953008 /bin/sbin/ftpd
+     1953008 /bin/sbin/fsck.minix
+     1953008 /bin/sbin/fsck
+     1953008 /bin/sbin/freeramdisk
+     1953008 /bin/sbin/findfs
+     1953008 /bin/sbin/fdisk
+     1953008 /bin/sbin/fbsplash
+     1953008 /bin/sbin/fakeidentd
+     1953008 /bin/sbin/dnsd
+     1953008 /bin/sbin/dhcprelay
+     1953008 /bin/sbin/devmem
+     1953008 /bin/sbin/depmod
+     1953008 /bin/sbin/crond
+     1953008 /bin/sbin/chroot
+     1953008 /bin/sbin/chpasswd
+     1953008 /bin/sbin/brctl
+     1953008 /bin/sbin/bootchartd
+     1953008 /bin/sbin/blockdev
+     1953008 /bin/sbin/blkid
+     1953008 /bin/sbin/arp
+     1953008 /bin/sbin/adjtimex
+     1953008 /bin/sbin/acpid
+     1953008 /bin/linuxrc
+     1953008 /bin/bin/zcat
+     1953008 /bin/bin/yes
+     1953008 /bin/bin/xzcat
+     1953008 /bin/bin/xz
+     1953008 /bin/bin/xargs
+     1953008 /bin/bin/whois
+     1953008 /bin/bin/whoami
+     1953008 /bin/bin/who
+     1953008 /bin/bin/which
+     1953008 /bin/bin/wget
+     1953008 /bin/bin/wc
+     1953008 /bin/bin/watch
+     1953008 /bin/bin/wall
+     1953008 /bin/bin/volname
+     1953008 /bin/bin/vlock
+     1953008 /bin/bin/vi
+     1953008 /bin/bin/uuencode
+     1953008 /bin/bin/uudecode
+     1953008 /bin/bin/usleep
+     1953008 /bin/bin/users
+     1953008 /bin/bin/uptime
+     1953008 /bin/bin/unzip
+     1953008 /bin/bin/unxz
+     1953008 /bin/bin/unlzop
+     1953008 /bin/bin/unlzma
+     1953008 /bin/bin/unix2dos
+     1953008 /bin/bin/uniq
+     1953008 /bin/bin/unexpand
+     1953008 /bin/bin/uname
+     1953008 /bin/bin/umount
+     1953008 /bin/bin/udpsvd
+     1953008 /bin/bin/ttysize
+     1953008 /bin/bin/tty
+     1953008 /bin/bin/true
+     1953008 /bin/bin/traceroute6
+     1953008 /bin/bin/traceroute
+     1953008 /bin/bin/tr
+     1953008 /bin/bin/touch
+     1953008 /bin/bin/top
+     1953008 /bin/bin/timeout
+     1953008 /bin/bin/time
+     1953008 /bin/bin/tftpd
+     1953008 /bin/bin/tftp
+     1953008 /bin/bin/test
+     1953008 /bin/bin/telnet
+     1953008 /bin/bin/tee
+     1953008 /bin/bin/tcpsvd
+     1953008 /bin/bin/tar
+     1953008 /bin/bin/tail
+     1953008 /bin/bin/tac
+     1953008 /bin/bin/sync
+     1953008 /bin/bin/sv
+     1953008 /bin/bin/sum
+     1953008 /bin/bin/su
+     1953008 /bin/bin/stty
+     1953008 /bin/bin/strings
+     1953008 /bin/bin/stat
+     1953008 /bin/bin/split
+     1953008 /bin/bin/sort
+     1953008 /bin/bin/softlimit
+     1953008 /bin/bin/smemcap
+     1953008 /bin/bin/sleep
+     1953008 /bin/bin/showkey
+     1953008 /bin/bin/sha512sum
+     1953008 /bin/bin/sha256sum
+     1953008 /bin/bin/sha1sum
+     1953008 /bin/bin/sh
+     1953008 /bin/bin/setuidgid
+     1953008 /bin/bin/setsid
+     1953008 /bin/bin/setserial
+     1953008 /bin/bin/setkeycodes
+     1953008 /bin/bin/setarch
+     1953008 /bin/bin/seq
+     1953008 /bin/bin/sed
+     1953008 /bin/bin/scriptreplay
+     1953008 /bin/bin/script
+     1953008 /bin/bin/rx
+     1953008 /bin/bin/runsvdir
+     1953008 /bin/bin/runsv
+     1953008 /bin/bin/run-parts
+     1953008 /bin/bin/rtcwake
+     1953008 /bin/bin/rpm2cpio
+     1953008 /bin/bin/rpm
+     1953008 /bin/bin/rmdir
+     1953008 /bin/bin/rm
+     1953008 /bin/bin/rev
+     1953008 /bin/bin/resize
+     1953008 /bin/bin/reset
+     1953008 /bin/bin/renice
+     1953008 /bin/bin/remove-shell
+     1953008 /bin/bin/reformime
+     1953008 /bin/bin/realpath
+     1953008 /bin/bin/readlink
+     1953008 /bin/bin/readahead
+     1953008 /bin/bin/pwdx
+     1953008 /bin/bin/pwd
+     1953008 /bin/bin/pstree
+     1953008 /bin/bin/pscan
+     1953008 /bin/bin/ps
+     1953008 /bin/bin/printf
+     1953008 /bin/bin/printenv
+     1953008 /bin/bin/powertop
+     1953008 /bin/bin/pmap
+     1953008 /bin/bin/pkill
+     1953008 /bin/bin/pipe_progress
+     1953008 /bin/bin/ping6
+     1953008 /bin/bin/ping
+     1953008 /bin/bin/pidof
+     1953008 /bin/bin/pgrep
+     1953008 /bin/bin/patch
+     1953008 /bin/bin/passwd
+     1953008 /bin/bin/openvt
+     1953008 /bin/bin/od
+     1953008 /bin/bin/nslookup
+     1953008 /bin/bin/nohup
+     1953008 /bin/bin/nmeter
+     1953008 /bin/bin/nice
+     1953008 /bin/bin/netstat
+     1953008 /bin/bin/nc
+     1953008 /bin/bin/mv
+     1953008 /bin/bin/mt
+     1953008 /bin/bin/mpstat
+     1953008 /bin/bin/mountpoint
+     1953008 /bin/bin/mount
+     1953008 /bin/bin/more
+     1953008 /bin/bin/mktemp
+     1953008 /bin/bin/mkpasswd
+     1953008 /bin/bin/mknod
+     1953008 /bin/bin/mkfifo
+     1953008 /bin/bin/mkdir
+     1953008 /bin/bin/microcom
+     1953008 /bin/bin/mesg
+     1953008 /bin/bin/md5sum
+     1953008 /bin/bin/makemime
+     1953008 /bin/bin/lzopcat
+     1953008 /bin/bin/lzop
+     1953008 /bin/bin/lzma
+     1953008 /bin/bin/lzcat
+     1953008 /bin/bin/lsusb
+     1953008 /bin/bin/lspci
+     1953008 /bin/bin/lsattr
+     1953008 /bin/bin/ls
+     1953008 /bin/bin/lpr
+     1953008 /bin/bin/lpq
+     1953008 /bin/bin/logname
+     1953008 /bin/bin/login
+     1953008 /bin/bin/logger
+     1953008 /bin/bin/ln
+     1953008 /bin/bin/linux64
+     1953008 /bin/bin/linux32
+     1953008 /bin/bin/less
+     1953008 /bin/bin/last
+     1953008 /bin/bin/killall5
+     1953008 /bin/bin/killall
+     1953008 /bin/bin/kill
+     1953008 /bin/bin/kbd_mode
+     1953008 /bin/bin/iptunnel
+     1953008 /bin/bin/iprule
+     1953008 /bin/bin/iproute
+     1953008 /bin/bin/iplink
+     1953008 /bin/bin/ipcs
+     1953008 /bin/bin/ipcrm
+     1953008 /bin/bin/ipcalc
+     1953008 /bin/bin/ipaddr
+     1953008 /bin/bin/ip
+     1953008 /bin/bin/iostat
+     1953008 /bin/bin/ionice
+     1953008 /bin/bin/install
+     1953008 /bin/bin/ifplugd
+     1953008 /bin/bin/id
+     1953008 /bin/bin/hush
+     1953008 /bin/bin/hostname
+     1953008 /bin/bin/hostid
+     1953008 /bin/bin/hexdump
+     1953008 /bin/bin/head
+     1953008 /bin/bin/hd
+     1953008 /bin/bin/gzip
+     1953008 /bin/bin/gunzip
+     1953008 /bin/bin/groups
+     1953008 /bin/bin/grep
+     1953008 /bin/bin/getopt
+     1953008 /bin/bin/fuser
+     1953008 /bin/bin/ftpput
+     1953008 /bin/bin/ftpget
+     1953008 /bin/bin/fsync
+     1953008 /bin/bin/free
+     1953008 /bin/bin/fold
+     1953008 /bin/bin/flock
+     1953008 /bin/bin/find
+     1953008 /bin/bin/fgrep
+     1953008 /bin/bin/fgconsole
+
+=== APK (51) ===
+        3678 /app/Provision.apk
+        5648 /app/PacProcessor.apk
+        5691 /priv-app/OneTimeInitializer.apk
+        6890 /priv-app/SharedStorageBackup.apk
+        7674 /app/HTMLViewer.apk
+        8182 /priv-app/ProxyHandler.apk
+       10295 /priv-app/FusedLocation.apk
+       10907 /app/UserDictionaryProvider.apk
+       14317 /priv-app/DefaultContainerService.apk
+       15806 /app/PicoTts.apk
+       16937 /priv-app/ExternalStorageProvider.apk
+       17779 /priv-app/VpnDialogs.apk
+       19341 /app/CubeLiveWallpapers.apk
+       20810 /priv-app/Shell.apk
+       21489 /app/EL830TAM1_GPIO_TEST_2015.01.01.01.apk
+       24303 /app/FSLOta.apk
+       25910 /app/BasicDreams.apk
+       27899 /app/KeyChain.apk
+       29576 /priv-app/BackupRestoreConfirmation.apk
+       42883 /app/CertInstaller.apk
+       64390 /priv-app/WallpaperCropper.apk
+       66366 /priv-app/InputDevices.apk
+       67623 /app/WfdSink.apk
+       78200 /priv-app/MusicFX.apk
+       83210 /app/TelephonyProvider.apk
+      108229 /priv-app/MediaProvider.apk
+      119100 /priv-app/SettingsProvider.apk
+      124968 /app/PackageInstaller.apk
+      141114 /app/DownloadProviderUi.apk
+      163088 /app/VisualizationWallpapers.apk
+      197918 /app/BSEDemo.apk
+      247033 /priv-app/DownloadProvider.apk
+      294080 /app/Bluetooth.apk
+      318717 /app/DocumentsUI.apk
+      559538 /app/Music.apk
+      753892 /app/EL831CLF01_elBTService_2016.09.05.01.apk
+      796551 /app/EL831CLF01_Radio_2016.12.16.01.apk
+      845792 /app/EL831CLF01_elBluetoothDial_2016.12.13.01.apk
+      893170 /priv-app/Keyguard.apk
+      899003 /app/EL831CLF01_elBluetoothMusic_2016.12.13.01.apk
+      912852 /app/EL831CLF01_elBluetoothSetup_2016.12.13.01.apk
+     1133036 /priv-app/SystemUI.apk
+     1139049 /app/EL831CLF01_elBluetoothPhone_2016.12.13.01.apk
+     1180203 /app/EL831CLF01_Avin_2016.06.21.01.apk
+     1193599 /app/EL831CLF01_MediaPlayer_2017.01.11.01.apk
+     2400817 /app/Camera2.apk
+     4041923 /priv-app/ElSettings.apk
+     4588177 /priv-app/EL830LF01_Home.apk
+     7649829 /framework/framework-res.apk
+    13353625 /app/IQQIService-Elead-International-20160105.1.apk
+   111095055 /priv-app/Navitel-9.13.73-large.apk
+
+=== SO (279) ===
+/lib/drm/libfwdlockengine.so
+/lib/egl/libEGL_VIVANTE.so
+/lib/egl/libGLES_android.so
+/lib/egl/libGLESv1_CM_VIVANTE.so
+/lib/egl/libGLESv2_VIVANTE.so
+/lib/hw/a2dp_sink.default.so
+/lib/hw/audio.a2dp.default.so
+/lib/hw/audio.primary.default.so
+/lib/hw/audio.primary.imx6.so
+/lib/hw/audio.r_submix.default.so
+/lib/hw/audio.spdif.imx6.so
+/lib/hw/audio.usb.default.so
+/lib/hw/audio_policy.default.so
+/lib/hw/camera.imx6.so
+/lib/hw/elead_gpio.default.so
+/lib/hw/elead_video.default.so
+/lib/hw/gps.default.so
+/lib/hw/gralloc.default.so
+/lib/hw/gralloc.imx6.so
+/lib/hw/gralloc_viv.imx6.so
+/lib/hw/hwcomposer.imx6.so
+/lib/hw/hwcomposer_fsl.imx6.so
+/lib/hw/hwcomposer_viv.imx6.so
+/lib/hw/keystore.default.so
+/lib/hw/lights.imx6.so
+/lib/hw/local_time.default.so
+/lib/hw/power.default.so
+/lib/hw/power.imx6.so
+/lib/libEGL.so
+/lib/libETC1.so
+/lib/libEnglishD.so
+/lib/libEnglishH.so
+/lib/libFFTEm.so
+/lib/libGAL.so
+/lib/libGLES_trace.so
+/lib/libGLESv1_CM.so
+/lib/libGLESv2.so
+/lib/libGLESv3.so
+/lib/libGLSLC.so
+/lib/libIQQI-jni-Resource.so
+/lib/libIdiomSD.so
+/lib/libIdiomSH.so
+/lib/libLLVM.so
+/lib/libOpenMAXAL.so
+/lib/libOpenSLES.so
+/lib/libPinyinD1.so
+/lib/libPinyinD2.so
+/lib/libPinyinD3.so
+/lib/libPinyinD4.so
+/lib/libPinyinH1.so
+/lib/libPinyinH2.so
+/lib/libPinyinH3.so
+/lib/libPinyinH4.so
+/lib/libRS.so
+/lib/libRSCpuRef.so
+/lib/libRSDriver.so
+/lib/libRScpp.so
+/lib/libSR_AudioIn.so
+/lib/libTranslateDCT2CS.so
+/lib/libTranslateHCT2CS.so
+/lib/libWebLinkServerLib.so
+/lib/lib_id3_parser_arm11_elinux.so
+/lib/lib_omx_common_v2_arm11_elinux.so
+/lib/lib_omx_core_v2_arm11_elinux.so
+/lib/lib_omx_osal_v2_arm11_elinux.so
+/lib/lib_omx_res_mgr_v2_arm11_elinux.so
+/lib/lib_omx_utils_v2_arm11_elinux.so
+/lib/lib_omx_vpu_dec_v2_arm11_elinux.so
+/lib/lib_omx_vpu_enc_v2_arm11_elinux.so
+/lib/lib_vpu_wrapper.so
+/lib/libandroid.so
+/lib/libandroid_runtime.so
+/lib/libandroid_servers.so
+/lib/libandroidfw.so
+/lib/libart-compiler.so
+/lib/libart.so
+/lib/libaudiobtpcm.so
+/lib/libaudioeffect_jni.so
+/lib/libaudioflinger.so
+/lib/libaudioutils.so
+/lib/libbcc.sha1.so
+/lib/libbcc.so
+/lib/libbcinfo.so
+/lib/libbinder.so
+/lib/libbluelet.so
+/lib/libbt_platform.so
+/lib/libc.so
+/lib/libc_malloc_debug_leak.so
+/lib/libc_malloc_debug_qemu.so
+/lib/libcamera_client.so
+/lib/libcamera_metadata.so
+/lib/libcameraservice.so
+/lib/libchromium_net.so
+/lib/libcommon_time_client.so
+/lib/libcompiler_rt.so
+/lib/libconnectivitymanager.so
+/lib/libcorkscrew.so
+/lib/libcrypto.so
+/lib/libctest.so
+/lib/libcutils.so
+/lib/libdefcontainer_jni.so
+/lib/libdiskconfig.so
+/lib/libdl.so
+/lib/libdrmframework.so
+/lib/libdrmframework_jni.so
+/lib/libdrmpassthruplugin.so
+/lib/libdvm.so
+/lib/libeffects.so
+/lib/libelead_gpio_runtime.so
+/lib/libelead_video_runtime.so
+/lib/libexif.so
+/lib/libexif_jni.so
+/lib/libexpat.so
+/lib/libext2_blkid.so
+/lib/libext2_com_err.so
+/lib/libext2_e2p.so
+/lib/libext2_profile.so
+/lib/libext2_uuid.so
+/lib/libext2fs.so
+/lib/libext4_utils.so
+/lib/libfilterfw.so
+/lib/libfilterpack_imageproc.so
+/lib/libfsl_wfd.so
+/lib/libft2.so
+/lib/libg2d.so
+/lib/libgabi++.so
+/lib/libgccdemangle.so
+/lib/libgui.so
+/lib/libhardware.so
+/lib/libhardware_legacy.so
+/lib/libharfbuzz_ng.so
+/lib/libhwui.so
+/lib/libicui18n.so
+/lib/libicuuc.so
+/lib/libimx6-btaudioctl.so
+/lib/libimx6-i2c2.so
+/lib/libimx6-sys.so
+/lib/libimx6-tinyplayer.so
+/lib/libimx6-uart.so
+/lib/libinput.so
+/lib/libinputservice.so
+/lib/libion.so
+/lib/libiprouteutil.so
+/lib/libjavacore.so
+/lib/libjavacrypto.so
+/lib/libjni_latinime.so
+/lib/libjni_mosaic.so
+/lib/libjni_pacprocessor.so
+/lib/libjni_pinyinime.so
+/lib/libjni_tinyplanet.so
+/lib/libjnigraphics.so
+/lib/libjpeg.so
+/lib/libkeystore_binder.so
+/lib/liblog.so
+/lib/liblogwrap.so
+/lib/libm.so
+/lib/libmad.so
+/lib/libmdnssd.so
+/lib/libmedia.so
+/lib/libmedia_jni.so
+/lib/libmedialogservice.so
+/lib/libmediaplayerservice.so
+/lib/libmemtrack.so
+/lib/libmtp.so
+/lib/libnativehelper.so
+/lib/libnavitel.so
+/lib/libnbaio.so
+/lib/libnetlink.so
+/lib/libnetutils.so
+/lib/libnfc_ndef.so
+/lib/libpac.so
+/lib/libpagemap.so
+/lib/libpixelflinger.so
+/lib/libpng.so
+/lib/libportable.so
+/lib/libpower.so
+/lib/libpowermanager.so
+/lib/libreference-ril-zte.so
+/lib/libreference-ril.so
+/lib/libril.so
+/lib/librilutils.so
+/lib/librs_jni.so
+/lib/librtp_jni.so
+/lib/libruntime-ril-port.so
+/lib/libselinux.so
+/lib/libsensorservice.so
+/lib/libskia.so
+/lib/libsoftkeymaster.so
+/lib/libsonivox.so
+/lib/libsoundpool.so
+/lib/libsparse.so
+/lib/libspeexresampler.so
+/lib/libsqlite.so
+/lib/libsqlite_jni.so
+/lib/libsrec_jni.so
+/lib/libssl.so
+/lib/libstagefright.so
+/lib/libstagefright_amrnb_common.so
+/lib/libstagefright_avc_common.so
+/lib/libstagefright_chromium_http.so
+/lib/libstagefright_enc_common.so
+/lib/libstagefright_foundation.so
+/lib/libstagefright_httplive.so
+/lib/libstagefright_omx.so
+/lib/libstagefright_soft_aacdec.so
+/lib/libstagefright_soft_aacenc.so
+/lib/libstagefright_soft_amrdec.so
+/lib/libstagefright_soft_amrnbenc.so
+/lib/libstagefright_soft_amrwbenc.so
+/lib/libstagefright_soft_flacenc.so
+/lib/libstagefright_soft_g711dec.so
+/lib/libstagefright_soft_gsmdec.so
+/lib/libstagefright_soft_h264dec.so
+/lib/libstagefright_soft_h264enc.so
+/lib/libstagefright_soft_mp3dec.so
+/lib/libstagefright_soft_mpeg4dec.so
+/lib/libstagefright_soft_mpeg4enc.so
+/lib/libstagefright_soft_rawdec.so
+/lib/libstagefright_soft_vorbisdec.so
+/lib/libstagefright_soft_vpxdec.so
+/lib/libstagefright_soft_vpxenc.so
+/lib/libstagefright_wfd.so
+/lib/libstagefright_yuv.so
+/lib/libstagefrighthw.so
+/lib/libstdc++.so
+/lib/libstlport.so
+/lib/libsurfaceflinger.so
+/lib/libsurfaceflinger_ddmconnection.so
+/lib/libsuspend.so
+/lib/libsync.so
+/lib/libsysutils.so
+/lib/libthread_db.so
+/lib/libtinyalsa.so
+/lib/libtinyalsaplay.so
+/lib/libttscompat.so
+/lib/libttspico.so
+/lib/libui.so
+/lib/libusbhost.so
+/lib/libutils.so
+/lib/libvariablespeed.so
+/lib/libvideoeditor_core.so
+/lib/libvideoeditor_jni.so
+/lib/libvideoeditor_osal.so
+/lib/libvideoeditor_videofilters.so
+/lib/libvideoeditorplayer.so
+/lib/libvoAC3Dec.so
+/lib/libvoASFFR.so
+/lib/libvoAVIFR.so
+/lib/libvoAudioFR.so
+/lib/libvoFLACDec.so
+/lib/libvoFLVFR.so
+/lib/libvoMMPlay.so
+/lib/libvoMP3Dec.so
+/lib/libvoMP4FR.so
+/lib/libvoMPEG2Dec.so
+/lib/libvoMPGFR.so
+/lib/libvoVC1Dec.so
+/lib/libvoVidDec.so
+/lib/libvoWMADec.so
+/lib/libvoWMVDec.so
+/lib/libvodl.so
+/lib/libvorbisidec.so
+/lib/libvosfEngn.so
+/lib/libvpu.so
+/lib/libwebrtc_audio_preprocessing.so
+/lib/libwebviewchromium.so
+/lib/libwebviewchromium_plat_support.so
+/lib/libwilhelm.so
+/lib/libwpa_client.so
+/lib/libz.so
+/lib/soundfx/libaudiopreprocessing.so
+/lib/soundfx/libbundlewrapper.so
+/lib/soundfx/libdownmix.so
+/lib/soundfx/libeffectproxy.so
+/lib/soundfx/libldnhncr.so
+/lib/soundfx/libreverbwrapper.so
+/lib/soundfx/libvisualizer.so
+/lib/ssl/engines/libkeystore.so
+/vendor/lib/libbt-vendor.so

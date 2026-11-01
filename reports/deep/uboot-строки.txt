@@ -1,0 +1,77 @@
+/ADATA_SSD_4/chian_data_4/el830_LF01_20160315_QB_Russia/android_4_4_2/bootable/bootloader/uboot-imx/cpu/arm_cortexa8
+i2c_addr
+U-Boot 2009.08-dirty (Jun 27 2017 - 10:39:44) el_ver :1.4
+Board: %s-ELEAD  0x%x [
+ONE NAND
+DRAM:  
+### ERROR ### Please RESET the board ###
+loadaddr
+scr addr is 0x%p, switch_status addr is 0x%p 
+ddr clock     : %dHz
+DDR Clock: %dHz
+DDR clock should be less than%d MHz, assuming max value
+U-Boot
+%s:chip address cycle fail(%x)
+%s:device address cycle fail(%x)
+i2c_addr failed
+%s:Send 2th chip address fail(%x)
+ERROR: invalid address.
+start application at address 'addr'
+addr [arg ...]
+    - start application at address 'addr'
+ck_ug_img: cannot find '%d' mmc device
+ck_ug_img: device don't have such partition boot
+ck_ug_img: bad boot image magic
+%s uboot_ver=%s board_type=%s %c
+## Transferring control to RTEMS (at address %08lx) ...
+## Transferring control to NetBSD stage-2 loader (at address %08lx) ...
+GUNZIP: uncompress, out-of-mem or overwrite error - must RESET board to recover
+ERROR: new format image overwritten - must RESET the board to recover
+sd_bootimg: bad boot image magic
+sd_bootimg: bad board name
+sd_bootimg: bad cmdline
+ck_ug_img
+ck_ug_img - check SD image
+booti   - boot android bootimg from memory
+[<addr> | mmc0 | mmc1 | mmc2 | mmcX] [<partition>] 
+	'addr' should be the address of boot image which is zImage+ramdisk.img
+	'mmcX' is the mmc device you store your boot.img, which will read the boot.img from 1M offset('/boot' partition)
+[addr [arg ...]]
+	'arg' can be the address of an initrd image
+	start [addr [arg ...]]
+Setup/Display clock
+clk - Display all clocks
+clk core <core clock in MHz> - Setup/Display core clock
+clk periph <peripheral clock in MHz> -Setup/Display peripheral clock
+clk ddr <DDR clock in MHz> - Setup/Display DDR clock
+clk nfc <NFC clk in MHz> - Setup/Display NFC clock
+clk ddr 166 - Set DDR clock to 166MHz
+usage: fatload <interface> <dev[:part]> <addr> <filename> [bytes]
+<interface> <dev[:part]>  <addr> <filename> [bytes]
+      to address 'addr' from dos filesystem
+Valid chip addresses:
+i2c md chip address[.0, .1, .2] [# of objects] - read from I2C device
+i2c mm chip address[.0, .1, .2] - write to I2C device (auto-incrementing)
+i2c mw chip address[.0, .1, .2] value [count] - write to I2C device (fill)
+i2c nm chip address[.0, .1, .2] - write to I2C device (constant address)
+i2c crc32 chip address[.0, .1, .2] count - compute CRC32 checksum
+i2c loop chip address[.0, .1, .2] [# of objects] - looping read of device
+'addr' to 'index':
+convert 'index' from 'address'
+index = (addr - otp_base) / 0x10
+eg, addr is 0x021bc410, otp_base is 0x021bc400, the index = 1
+read addr blk# cnt
+mmc write addr blk# cnt
+display MMC info
+ethaddr
+ipaddr
+regul show all - Display all regulators' voltage
+ELEAD_BOARD SOLO U-Boot > 
+%sLoad Address: %08x
+u-boot
+ck_ug_img %s%c
+fatload mmc 3 0x20000000 sd_boot.img
+uboot
+loadaddr=0x10800000
+rd_loadaddr=(0x10800000 + 0x300000)
+bootcmd=booti mmc2

@@ -1,0 +1,38 @@
+Рабочая папка: /tmp/fw_2ea4935s
+Исходники: reports/unpacked
+
+=== Найденные образы ===
+  reports/unpacked/boot.img  3926016 байт
+  reports/unpacked/MCU_FW.hex  75083 байт
+  reports/unpacked/sd_boot.img  48758784 байт
+  reports/unpacked/system.img  377487360 байт
+  reports/unpacked/u-boot.bin  110440 байт
+
+=== boot.img ===
+  page_size=2048 kernel=3588296 ramdisk=332703 second=0 header_ver=0 os=0.0.0 name=""
+  ramdisk распакован: 332703 -> 618240 байт
+  в ramdisk 25 записей
+
+=== sd_boot.img ===
+  первые байты: 414e44524f494421c8c0360000808010f529b102000080110000000000007011
+  file: reports/unpacked/sd_boot.img: Android bootimg, kernel (0x10808000), ramdisk (0x11800000), page size: 2048, cmdline (boot.dev=sd console=ttymxc0,115200 init=/init fbmem=28M vmalloc=400M androidboot.console=ttymxc0 lpj=7905280 androidboot.selinu)
+  page_size=2048 kernel=3588296 ramdisk=45165045 second=0 header_ver=0 os=0.0.0 name="el830_solo"
+
+=== u-boot.bin ===
+  file: reports/unpacked/u-boot.bin: data
+  интересных строк: 77
+
+=== MCU_FW.hex ===
+  Intel HEX, типы записей: ['00', '01']
+
+=== system.img ===
+  file: reports/unpacked/system.img: Linux rev 1.0 ext4 filesystem data, UUID=da594c53-9beb-f85c-85c5-cedf76546f7a, volume name "system" (extents) (large files)
+  debugfs rc=0
+  rdump rc=0: debugfs 1.47.0 (5-Feb-2023)
+rdump: Operation not permitted while changing ownership of /tmp/fw_2ea4935s/sysroot//lost+found
+dump_file: Operation not permitted while changing ownership of /tmp/fw_2ea4935s/sysroot//app/BSEDemo.apk
+dump_file: Operation not permitted while changing ownership of /tmp/fw_
+  найдено .prop/rc файлов: 2
+
+=== ИТОГ ===
+готово
