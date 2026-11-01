@@ -13,6 +13,7 @@ feature-group: label=''
   uses-implied-feature: name='android.hardware.faketouch' reason='default feature for all apps'
   uses-feature: name='android.hardware.screen.landscape'
   uses-implied-feature: name='android.hardware.screen.landscape' reason='one or more activities have specified a landscape orientation'
+provides-component:'launcher'
 main
 supports-screens: 'small' 'normal' 'large' 'xlarge'
 supports-any-density: 'true'
@@ -50,3 +51,10 @@ N: android=http://schemas.android.com/apk/res/android
             A: android:name(0x01010003)="android.intent.action.MAIN" (Raw: "android.intent.action.MAIN")
           E: category (line=26)
             A: android:name(0x01010003)="android.intent.category.LAUNCHER" (Raw: "android.intent.category.LAUNCHER")
+        E: intent-filter (line=30)
+          E: action (line=31)
+            A: android:name(0x01010003)="android.intent.action.MAIN" (Raw: "android.intent.action.MAIN")
+          E: category (line=32)
+            A: android:name(0x01010003)="android.intent.category.HOME" (Raw: "android.intent.category.HOME")
+          E: category (line=33)
+            A: android:name(0x01010003)="android.intent.category.DEFAULT" (Raw: "android.intent.category.DEFAULT")

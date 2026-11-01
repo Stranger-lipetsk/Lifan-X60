@@ -2,6 +2,8 @@ build-tools: /usr/local/lib/android/sdk/build-tools/37.0.0
 android.jar: /usr/local/lib/android/sdk/platforms/android-37.2/android.jar
 == 1. aapt: генерация R.java ==
 == 2. javac ==
+Note: src/ru/lifan/switcher/MainActivity.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
 == 3. d8: dex ==
 == 4. aapt: пакет ресурсов ==
 == 5. добавляем classes.dex ==
@@ -9,8 +11,8 @@ android.jar: /usr/local/lib/android/sdk/platforms/android-37.2/android.jar
 == 7. подпись (v1 — обязательна для Android 4.4) ==
 
 ГОТОВО: /home/runner/work/Lifan-X60/Lifan-X60/switcher/switcher.apk
--rw-r--r-- 1 runner runner 16879 Nov  1 14:18 switcher.apk
-sha256: d62b8e85dd34f7fa94e02c3dd92604846927538441fe75d8eb11429f82f257f5
+-rw-r--r-- 1 runner runner 16879 Nov  1 14:22 switcher.apk
+sha256: ddd5b343781646182213e2d5ce0487c6d66ccf93ff9fd3f400087986bf5f15bb
 
 Проверка содержимого:
 package: name='ru.lifan.switcher' versionCode='1' versionName='1.0' platformBuildVersionName='17' platformBuildVersionCode='37' compileSdkVersion='37' compileSdkVersionCodename='17'
