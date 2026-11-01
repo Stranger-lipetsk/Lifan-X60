@@ -29,6 +29,7 @@
 
 Инструкция: **[docs/06-инструкция-модернизации.md](docs/06-инструкция-модернизации.md)**
 Как скачать готовый образ: **[docs/09-как-скачать-образ.md](docs/09-как-скачать-образ.md)**
+Бэкап перед прошивкой: **[docs/10-бэкап-подробно.md](docs/10-бэкап-подробно.md)**
 Доступ к Android, Wi-Fi и файлам: **[docs/08-mirrorlink-vyhod-k-android.md](docs/08-mirrorlink-vyhod-k-android.md)**
 Сборка образа: `python3 tools/build_system.py --fw архив.rar --out out/system.img ...`
 
