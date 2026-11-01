@@ -40,6 +40,13 @@ jobs:
           print('OK', os.path.getsize(dest))
           PY
           ls -lh firmware/original/
+      - name: "Нормализовать имя архива (латиница)"
+        run: |
+          mkdir -p fw
+          SRC=$(ls firmware/original/*.rar 2>/dev/null | head -1)
+          echo "исходный: $SRC"
+          cp "$SRC" fw/firmware.rar
+          ls -lh fw/
       - name: "Тест сборки (лайт-набор)"
         run: |
           set -o pipefail
@@ -48,13 +55,14 @@ jobs:
           for t in make_ext4fs mke2fs debugfs 7z unrar unrar-free; do printf '%-14s ' "$t"; command -v $t || echo НЕТ; done
           echo "== запуск =="
           python3 tools/build_system.py \
-            --fw "firmware/original/прошивка офиц. 2016г.rar" \
+            --fw fw/firmware.rar \
             --out out/system-test.img \
             --remove /priv-app/Navitel-9.13.73-large.apk \
             --remove "/app/IQQIService-Elead-International-20160105.1.apk" \
             --remove /app/BSEDemo.apk \
             --set-prop ro.product.locale.language=ru \
-            --set-prop ro.product.locale.region=RU 2>&1 | tee reports/build-log.txt | tail -50
+            --set-prop ro.product.locale.region=RU \
+            --keep-work 2>&1 | tee reports/build-log.txt | tail -60
           echo "код выхода: $?"
           ls -lh out/ 2>/dev/null || echo "out пуст"
       - name: "Проверка результата"
@@ -83,7 +91,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          printf 'firmware/\nreports/unpacked/\nout/\n' > .git/info/exclude
+          printf 'firmware/\nfw/\nreports/unpacked/\nout/\n' > .git/info/exclude
           git add -A reports
           if git diff --cached --quiet; then echo "нет изменений"; else
             git commit -m "тест сборки system.img: результат и проверка"

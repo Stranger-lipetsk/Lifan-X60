@@ -51,28 +51,52 @@ def run(cmd, check=True, quiet=False):
 
 
 def extract_system_img_from_rar(rar, workdir):
-    """Распаковывает system.img из RAR (7z/unrar)."""
+    """Распаковывает system.img из RAR (7z / unrar / bsdtar), с диагностикой."""
+    if not os.path.exists(rar):
+        raise SystemExit(f'файл прошивки не найден: {rar}')
+    print(f'архив: {rar} ({os.path.getsize(rar)} байт)')
     outdir = os.path.join(workdir, 'rar')
     os.makedirs(outdir, exist_ok=True)
-    if shutil.which('7z'):
-        run(['7z', 'x', '-y', '-aos', f'-o{outdir}', rar], quiet=True)
-    elif shutil.which('unrar'):
-        run(['unrar', 'x', '-o+', rar, outdir + '/'], quiet=True)
-    else:
-        raise SystemExit('нужен 7z или unrar')
-    for root, _, files in os.walk(outdir):
-        for fn in files:
-            if fn.lower() == 'system.img':
-                return os.path.join(root, fn)
-    raise SystemExit('system.img не найден в архиве')
+    attempts = [
+        (['7z', 'x', '-y', '-aos', f'-o{outdir}', rar], '7z'),
+        (['7zz', 'x', '-y', f'-o{outdir}', rar], '7zz'),
+        (['unrar', 'x', '-o+', rar, outdir + '/'], 'unrar'),
+        (['unrar-free', '-x', rar, outdir], 'unrar-free'),
+        (['bsdtar', '-xf', rar, '-C', outdir], 'bsdtar'),
+    ]
+    errors = []
+    for cmd, name in attempts:
+        if not shutil.which(cmd[0]):
+            errors.append(f'{name}: не установлен')
+            continue
+        r = subprocess.run(cmd, capture_output=True, text=True)
+        found = None
+        for root, _, files in os.walk(outdir):
+            for fn in files:
+                if fn.lower() == 'system.img':
+                    found = os.path.join(root, fn)
+        if found:
+            print(f'распаковано через {name}')
+            return found
+        errors.append(f'{name}: код {r.returncode} {(r.stderr or r.stdout or "").strip()[:200]}')
+    # последний шанс: system.img может лежать без архива рядом
+    alt = os.path.join(os.path.dirname(os.path.abspath(rar)), 'system.img')
+    if os.path.exists(alt):
+        return alt
+    raise SystemExit('system.img не найден. Попытки:\n  ' + '\n  '.join(errors))
 
 
 def dump_tree(img, dst):
     """Распаковывает всё содержимое ext4-образа через debugfs rdump."""
     os.makedirs(dst, exist_ok=True)
+    if not os.path.exists(img):
+        raise SystemExit(f'образ не найден: {img}')
+    print(f'debugfs rdump: {img} ({os.path.getsize(img)} байт)')
     p = run(['debugfs', '-R', f'rdump / "{dst}"', img], check=False)
-    # rdump ругается на chown в непривилегированном режиме — это нормально
-    if not os.listdir(dst):
+    n = sum(len(f) for _, _, f in os.walk(dst))
+    print(f'распаковано файлов: {n}')
+    # пустой результат — тоже сигнал ошибки; при непустом rdump может «ругаться»
+    if n == 0 and not os.listdir(dst):
         sys.stderr.write(p.stdout + p.stderr)
         raise SystemExit('debugfs не смог распаковать образ')
 
