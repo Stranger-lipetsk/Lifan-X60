@@ -1,25 +1,24 @@
-временная папка: /tmp/lifan_build_uz42glle
+использую sudo для chown и сборки образа
+временная папка: /tmp/lifan_build_jujfd46p
 архив: fw/firmware.rar (220980636 байт)
 распаковано через 7z
-system.img: /tmp/lifan_build_uz42glle/rar/system.img (377487360 байт, sha256 0f898f48ee910fe0…)
-распаковка образа через debugfs...
-debugfs rdump: /tmp/lifan_build_uz42glle/rar/system.img (377487360 байт)
-$ debugfs -R rdump / "/tmp/lifan_build_uz42glle/root" /tmp/lifan_build_uz42glle/rar/system.img
-распаковано файлов: 1341
+system.img: /tmp/lifan_build_jujfd46p/rar/system.img (377487360 байт)
+  sha256 исходного: 0f898f48ee910fe0c125768b71f587fa…
+debugfs rdump: /tmp/lifan_build_jujfd46p/rar/system.img (377487360 байт)
 распаковано файлов: 1341
 
---- применение изменений ---
+--- изменения ---
   удалено: /priv-app/Navitel-9.13.73-large.apk
   удалено: /app/IQQIService-Elead-International-20160105.1.apk
   удалено: /app/BSEDemo.apk
-  свойство: ro.product.locale.language=ru
-  свойство: ro.product.locale.region=RU
+  свойство: ro.product.locale.language=ru (заменено)
+  свойство: ro.product.locale.region=RU (заменено)
 
---- владельцы файлов ---
-обработано файлов: 0
+--- права ---
+права: файлов 0, каталогов 0; владелец root:root
 
---- сборка образа ---
-содержимое: 199.3 МиБ (фактически на диске 201.5 МиБ)
+--- сборка ---
+содержимое: 199.3 МиБ (раздел p3 = 512 МиБ)
   крупнейшие файлы:
         18.8 МиБ  /lib/libwebviewchromium.so
         18.2 МиБ  /usr/icu/icudt51l.dat
@@ -31,20 +30,14 @@ $ debugfs -R rdump / "/tmp/lifan_build_uz42glle/root" /tmp/lifan_build_uz42glle/
          4.3 МиБ  /fonts/DroidSansFallback.ttf
          3.9 МиБ  /priv-app/ElSettings.apk
          3.6 МиБ  /framework/framework.jar
-$ mke2fs -q -F -t ext4 -b 4096 -I 256 -L system -E nodiscard -O ^64bit,^metadata_csum,^metadata_csum_seed,^orphan_file,^quota,^casefold,^bigalloc -d /tmp/lifan_build_uz42glle/root /home/runner/work/Lifan-X60/Lifan-X60/out/system-test.img.tmp
-  вариант "^64bit,^metadata_csum,^metadata_csum_seed,^orphan_file,^quota,^casefold,^bigalloc" не сработал, пробуем следующий
-$ mke2fs -q -F -t ext4 -b 4096 -I 256 -L system -E nodiscard -O ^64bit,^metadata_csum,^orphan_file,^quota,^casefold -d /tmp/lifan_build_uz42glle/root /home/runner/work/Lifan-X60/Lifan-X60/out/system-test.img.tmp
-  вариант "^64bit,^metadata_csum,^orphan_file,^quota,^casefold" не сработал, пробуем следующий
-$ mke2fs -q -F -t ext4 -b 4096 -I 256 -L system -E nodiscard -O ^64bit,^metadata_csum -d /tmp/lifan_build_uz42glle/root /home/runner/work/Lifan-X60/Lifan-X60/out/system-test.img.tmp
-  вариант "^64bit,^metadata_csum" не сработал, пробуем следующий
-$ mke2fs -q -F -t ext4 -b 4096 -I 256 -L system -E nodiscard -O ^64bit -d /tmp/lifan_build_uz42glle/root /home/runner/work/Lifan-X60/Lifan-X60/out/system-test.img.tmp
-  вариант "^64bit" не сработал, пробуем следующий
-$ mke2fs -q -F -t ext4 -b 4096 -I 256 -L system -E nodiscard -d /tmp/lifan_build_uz42glle/root /home/runner/work/Lifan-X60/Lifan-X60/out/system-test.img.tmp
-  вариант "None" не сработал, пробуем следующий
---- последняя ошибка mke2fs ---
-do_write_internal: Permission denied while opening "netcfg" to copy
-__populate_fs: Permission denied while writing file "netcfg"
-mke2fs: Permission denied while populating file system
-
-рабочая папка сохранена: /tmp/lifan_build_uz42glle
-не удалось собрать ext4 через mke2fs -d
+рабочая папка сохранена: /tmp/lifan_build_jujfd46p
+Traceback (most recent call last):
+  File "/home/runner/work/Lifan-X60/Lifan-X60/tools/build_system.py", line 398, in <module>
+    main()
+  File "/home/runner/work/Lifan-X60/Lifan-X60/tools/build_system.py", line 381, in main
+    out = build_image(root, os.path.abspath(args.out), args.size_mb)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/Lifan-X60/Lifan-X60/tools/build_system.py", line 276, in build_image
+    with open(tmp, 'wb') as f:
+         ^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/home/runner/work/Lifan-X60/Lifan-X60/out/system-test.img.tmp'
