@@ -82,11 +82,19 @@ REMOVE_ARGS=(
   --remove /app/HTMLViewer.apk
 )
 
+# Скрипт автоподключения карт Navitel и второго USB-порта
+EXTRA_ARGS=()
+if [ -f tools/system-files/install-recovery.sh ]; then
+  chmod 0755 tools/system-files/install-recovery.sh
+  EXTRA_ARGS+=(--add-file "tools/system-files/install-recovery.sh:/etc/install-recovery.sh")
+fi
+
 python3 tools/build_system.py \
   --system out/system-original.img \
   --out "$OUT" \
   --size-mb 512 \
   "${REMOVE_ARGS[@]}" \
+  "${EXTRA_ARGS[@]}" \
   --set-prop ro.product.locale.language=ru \
   --set-prop ro.product.locale.region=RU \
   --set-prop persist.sys.timezone=Europe/Moscow \
@@ -117,6 +125,10 @@ echo "===================== ЭТАП 4: проверка ====================="
 
   echo "=== удалённое ==="
   debugfs -R 'ls -l /priv-app' "$OUT" 2>/dev/null | grep -i navitel && echo "ПРОБЛЕМА: Navitel не удалён" || echo "Navitel удалён — OK"
+
+  echo "=== автоподключение карт (install-recovery.sh) ==="
+  debugfs -R 'ls -l /etc' "$OUT" 2>/dev/null | grep install-recovery \
+    && echo "скрипт на месте" || echo "ПРОБЛЕМА: скрипт отсутствует"
 
   echo "=== build.prop ==="
   debugfs -R 'cat /build.prop' "$OUT" 2>/dev/null | grep -E "locale|timezone|version.release"
