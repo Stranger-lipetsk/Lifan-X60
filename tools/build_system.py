@@ -184,7 +184,14 @@ def apply_actions(root, actions):
             target = os.path.join(root, dest.lstrip('/'))
             os.makedirs(os.path.dirname(target), exist_ok=True)
             shutil.copyfile(src, target)
-            log.append(f'добавлен файл: {dest}')
+            # .sh и бинарники должны быть исполняемыми (init запускает их напрямую)
+            mode = 0o755 if (dest.endswith('.sh') or dest.startswith('/bin/')
+                             or dest.startswith('/xbin/')) else 0o644
+            try:
+                os.chmod(target, mode)
+            except OSError:
+                pass
+            log.append(f'добавлен файл: {dest} (права {oct(mode)[2:]})')
 
         elif kind == 'set-prop':
             key, val = act[1], act[2]
@@ -230,6 +237,10 @@ def fix_ownership(root):
         subprocess.run(SUDO + ['find', root, '-type', 'f', '-perm', '-111',
                                '!', '-name', 'su', '-exec', 'chmod', '755', '{}', '+'],
                        capture_output=True)
+        # скрипты запускаются init напрямую — им нужен бит исполнения
+        subprocess.run(SUDO + ['find', root, '-type', 'f', '-name', '*.sh',
+                               '-exec', 'chmod', '755', '{}', '+'],
+                       capture_output=True)
         subprocess.run(SUDO + ['find', root, '-type', 'f', '-name', 'su',
                                '-exec', 'chmod', '6755', '{}', '+'], capture_output=True)
         n = sum(len(f) for _, _, f in os.walk(root))
@@ -250,6 +261,8 @@ def fix_ownership(root):
                 continue
             try:
                 mode = 0o755 if (os.stat(fp).st_mode & 0o111) else 0o644
+                if fn.endswith('.sh'):
+                    mode = 0o755
                 if fn == 'su':
                     mode = 0o6755
                 os.chmod(fp, mode)

@@ -127,8 +127,14 @@ echo "===================== ЭТАП 4: проверка ====================="
   debugfs -R 'ls -l /priv-app' "$OUT" 2>/dev/null | grep -i navitel && echo "ПРОБЛЕМА: Navitel не удалён" || echo "Navitel удалён — OK"
 
   echo "=== автоподключение карт (install-recovery.sh) ==="
-  debugfs -R 'ls -l /etc' "$OUT" 2>/dev/null | grep install-recovery \
-    && echo "скрипт на месте" || echo "ПРОБЛЕМА: скрипт отсутствует"
+  IR=$(debugfs -R 'ls -l /etc' "$OUT" 2>/dev/null | grep install-recovery)
+  if [ -z "$IR" ]; then
+    echo "ПРОБЛЕМА: скрипт отсутствует"
+  else
+    echo "  $IR"
+    echo "$IR" | grep -q '^.*755' && echo "права на исполнение: OK" \
+      || echo "ПРОБЛЕМА: скрипт НЕ исполняемый (нужен 755)"
+  fi
 
   echo "=== build.prop ==="
   debugfs -R 'cat /build.prop' "$OUT" 2>/dev/null | grep -E "locale|timezone|version.release"
