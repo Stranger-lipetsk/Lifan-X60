@@ -1,0 +1,97 @@
+образ: out/system-original.img (377487360 байт)
+=== 1. ЛОКАЛИ в framework-res.apk ===
+  всего каталогов ресурсов: 56
+  варианты values*: 0
+  
+  >>> русские варианты: НЕ НАЙДЕНЫ
+  resources.arsc: есть (1926164 байт)
+  языковые коды в resources.arsc: ['de', 'en', 'es', 'fr', 'it', 'pt', 'ru', 'tr', 'zh']
+=== Navitel APK: стоковый 9.13.73 из прошивки ===
+  размер: 111095055 байт
+  файлов: 926
+  нативные библиотеки: ['lib/armeabi-v7a/libnavitel.so', 'lib/armeabi-v7a/libWebLinkServerLib.so']
+  упоминания путей (в dex/arsc): {'/sdcard': 1, 'NavitelContent': 2, 'navitel': 340, 'NaviTel': 340, 'Maps': 2, 'maps': 2}
+  найденные пути (875):
+    //Base.Widget.AppCompat.Toolbar.Button.Navigation
+    //com.facebook.orca.provider.MessengerPlatformProvider/versio
+    //com_facebook_loginview_logged_in_using_facebook
+    //download.navitel.cz/Android/obb/9.13.73-GOOGLE_PLAY/2011030
+    //download.navitel.cz/Android/obb/9.13.73-NAVITEL/201103030.l
+    //jams.navitel.cz/check_in
+    //res/drawable-hdpi/common_full_open_on_phone.png
+    //res/drawable-hdpi/googleg_disabled_color_18.png
+    //res/drawable-hdpi/googleg_standard_color_18.png
+    //res/drawable-hdpi/widget_home_wp_foreground.png
+    //res/drawable-hdpi/widget_work_wp_foreground.png
+    //res/drawable-ldpi/widget_home_wp_foreground.png
+    //res/drawable-ldpi/widget_work_wp_foreground.png
+    //res/drawable-mdpi/googleg_disabled_color_18.png
+    //res/drawable-mdpi/googleg_standard_color_18.png
+    //res/drawable-mdpi/widget_home_wp_foreground.png
+    //res/drawable-mdpi/widget_work_wp_foreground.png
+    //res/drawable-xhdpi/com_facebook_button_icon.png
+    //res/drawable-xhdpi/notification_bg_normal.9.png
+    //res/drawable-xxhdpi/abc_list_focused_holo.9.png
+    //res/drawable-xxxhdpi/abc_ic_star_black_16dp.png
+    //res/drawable-xxxhdpi/abc_ic_star_black_36dp.png
+    //res/drawable-xxxhdpi/abc_ic_star_black_48dp.png
+    //res/drawable-xxxhdpi/ic_launcher_background.png
+    //res/drawable-xxxhdpi/ic_launcher_foreground.png
+    //res/drawable/messenger_button_blue_bg_round.xml
+    //res/layout/messenger_button_send_blue_large.xml
+    //res/layout/messenger_button_send_blue_round.xml
+    //res/layout/messenger_button_send_blue_small.xml
+    //vk.com/images/m_noalbum.png
+    //vk.com/images/s_noalbum.png
+    //vk.com/images/x_noalbum.png
+    /Base_Widget_AppCompat_Toolbar_Button_Navigation
+    /CBC/PKCS5Padding
+    /ECB/NoPadding
+    /ECB/PKCS1Padding
+    /Fetching
+    /Lcom/facebook/messenger/ShareToMessengerParams
+    /Lcom/facebook/share/model/ShareOpenGraphAction
+    /Lcom/facebook/share/model/ShareOpenGraphObject
+=== 2. Точки монтирования и симлинки в системе ===
+=== 3. /etc: настройки навигации и хранилищ ===
+      585   40755 (2)      0      0    4096 26-Apr-2026 17:05 .
+        2   40755 (2)      0      0    4096  1-Jan-1970 00:00 ..
+      586  100644 (1)      0      0   224792 26-Apr-2026 17:05 NOTICE.html.gz
+      587  100644 (1)      0      0    7283 26-Apr-2026 17:05 apns-conf.xml
+      588  100644 (1)      0      0    5491 26-Apr-2026 17:05 audio_effects.conf
+      589  100644 (1)      0      0    3153 26-Apr-2026 17:05 audio_policy.conf
+      590   40755 (2)      0      0    4096 26-Apr-2026 17:05 bluesoleil
+      593   40755 (2)      0      0    4096 26-Apr-2026 17:05 bluetooth
+      595  100644 (1)      0      0     563 26-Apr-2026 17:05 clatd.conf
+      596  100644 (1)      0      0   14834 26-Apr-2026 17:05 component_register
+      597  100644 (1)      0      0    1150 26-Apr-2026 17:05 contentpipe_register
+      598  100644 (1)      0      0     585 26-Apr-2026 17:05 core_register
+      599   40755 (2)      0      0    4096 26-Apr-2026 17:05 dhcpcd
+      605  100644 (1)      0      0      77 26-Apr-2026 17:05 display_mode_fb0.conf
+      606  100644 (1)      0      0     105 26-Apr-2026 17:05 display_mode_fb2.conf
+      607  100644 (1)      0      0     105 26-Apr-2026 17:05 display_mode_fb4.conf
+      608  100644 (1)      0      0    2506 26-Apr-2026 17:05 eGTouchA_v2.5.2112.A-a.ini
+      609  100644 (1)      0      0   14958 26-Apr-2026 17:05 event-log-tags
+      610  100644 (1)      0      0    7497 26-Apr-2026 17:05 fallback_fonts.xml
+      611   40755 (2)      0      0    4096 26-Apr-2026 17:05 firmware
+      613  100644 (1)      0      0      25 26-Apr-2026 17:05 hosts
+      614  100644 (1)      0      0     348 26-Apr-2026 17:05 ip-down
+      615  100644 (1)      0      0    2900 26-Apr-2026 17:05 ip-up
+      616  100644 (1)      0      0    6043 26-Apr-2026 17:05 media_codecs.xml
+      617  100644 (1)      0      0    7998 26-Apr-2026 17:05 media_profiles.xml
+      618  100644 (1)      0      0    1308 26-Apr-2026 17:05 mkshrc
+      619  100644 (1)      0      0      32 26-Apr-2026 17:05 ota.conf
+      620   40755 (2)      0      0    4096 26-Apr-2026 17:05 permissions
+      639   40755 (2)      0      0    4096 26-Apr-2026 17:05 ppp
+      644  100644 (1)      0      0   294638 26-Apr-2026 17:05 recovery-resource.dat
+      645   40755 (2)      0      0    4096 26-Apr-2026 17:05 security
+      799  100644 (1)      0      0    3418 26-Apr-2026 17:05 system_fonts.xml
+      800  100644 (1)      0      0   32768 26-Apr-2026 17:05 voVidDec.dat
+     
+=== 4. Доступные официальные сборки Navitel ===
+  Navitel-v12.6.1552-Google-full.apk: ОШИБКА 404 HTTP Error 404: Not Found
+  Navitel-v11.11.1128-Google-full.apk: ОШИБКА 404 HTTP Error 404: Not Found
+  Navitel-v11.11.1110-Google-full.apk: 200 | 99241823 байт | application/octet-stream
+  Navitel-11.11.1128-full-armeabi.apk: ОШИБКА 404 HTTP Error 404: Not Found
+  Navitel-v11.11.659-Google-full.apk: 200 | 91708059 байт | application/octet-stream
+  Navitel-9.13.73-full-armeabi.apk: 200 | 188381209 байт | application/octet-stream
