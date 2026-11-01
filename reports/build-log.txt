@@ -1,13 +1,10 @@
-do_write_internal: Permission denied while opening "netcfg" to copy
-__populate_fs: Permission denied while writing file "netcfg"
-mke2fs: Permission denied while populating file system
-временная папка: /tmp/lifan_build_o7ht_hh8
+временная папка: /tmp/lifan_build_uz42glle
 архив: fw/firmware.rar (220980636 байт)
 распаковано через 7z
-system.img: /tmp/lifan_build_o7ht_hh8/rar/system.img (377487360 байт, sha256 0f898f48ee910fe0…)
+system.img: /tmp/lifan_build_uz42glle/rar/system.img (377487360 байт, sha256 0f898f48ee910fe0…)
 распаковка образа через debugfs...
-debugfs rdump: /tmp/lifan_build_o7ht_hh8/rar/system.img (377487360 байт)
-$ debugfs -R rdump / "/tmp/lifan_build_o7ht_hh8/root" /tmp/lifan_build_o7ht_hh8/rar/system.img
+debugfs rdump: /tmp/lifan_build_uz42glle/rar/system.img (377487360 байт)
+$ debugfs -R rdump / "/tmp/lifan_build_uz42glle/root" /tmp/lifan_build_uz42glle/rar/system.img
 распаковано файлов: 1341
 распаковано файлов: 1341
 
@@ -34,6 +31,20 @@ $ debugfs -R rdump / "/tmp/lifan_build_o7ht_hh8/root" /tmp/lifan_build_o7ht_hh8/
          4.3 МиБ  /fonts/DroidSansFallback.ttf
          3.9 МиБ  /priv-app/ElSettings.apk
          3.6 МиБ  /framework/framework.jar
-$ mke2fs -q -F -t ext4 -b 4096 -I 256 -O ^64bit,^metadata_csum,^metadata_csum_seed,^orphan_file,^quota,^casefold,^bigalloc -L system -E nodiscard -d /tmp/lifan_build_o7ht_hh8/root /home/runner/work/Lifan-X60/Lifan-X60/out/system-test.img.tmp
-рабочая папка сохранена: /tmp/lifan_build_o7ht_hh8
+$ mke2fs -q -F -t ext4 -b 4096 -I 256 -L system -E nodiscard -O ^64bit,^metadata_csum,^metadata_csum_seed,^orphan_file,^quota,^casefold,^bigalloc -d /tmp/lifan_build_uz42glle/root /home/runner/work/Lifan-X60/Lifan-X60/out/system-test.img.tmp
+  вариант "^64bit,^metadata_csum,^metadata_csum_seed,^orphan_file,^quota,^casefold,^bigalloc" не сработал, пробуем следующий
+$ mke2fs -q -F -t ext4 -b 4096 -I 256 -L system -E nodiscard -O ^64bit,^metadata_csum,^orphan_file,^quota,^casefold -d /tmp/lifan_build_uz42glle/root /home/runner/work/Lifan-X60/Lifan-X60/out/system-test.img.tmp
+  вариант "^64bit,^metadata_csum,^orphan_file,^quota,^casefold" не сработал, пробуем следующий
+$ mke2fs -q -F -t ext4 -b 4096 -I 256 -L system -E nodiscard -O ^64bit,^metadata_csum -d /tmp/lifan_build_uz42glle/root /home/runner/work/Lifan-X60/Lifan-X60/out/system-test.img.tmp
+  вариант "^64bit,^metadata_csum" не сработал, пробуем следующий
+$ mke2fs -q -F -t ext4 -b 4096 -I 256 -L system -E nodiscard -O ^64bit -d /tmp/lifan_build_uz42glle/root /home/runner/work/Lifan-X60/Lifan-X60/out/system-test.img.tmp
+  вариант "^64bit" не сработал, пробуем следующий
+$ mke2fs -q -F -t ext4 -b 4096 -I 256 -L system -E nodiscard -d /tmp/lifan_build_uz42glle/root /home/runner/work/Lifan-X60/Lifan-X60/out/system-test.img.tmp
+  вариант "None" не сработал, пробуем следующий
+--- последняя ошибка mke2fs ---
+do_write_internal: Permission denied while opening "netcfg" to copy
+__populate_fs: Permission denied while writing file "netcfg"
+mke2fs: Permission denied while populating file system
+
+рабочая папка сохранена: /tmp/lifan_build_uz42glle
 не удалось собрать ext4 через mke2fs -d
