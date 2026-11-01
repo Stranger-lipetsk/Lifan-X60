@@ -1,0 +1,192 @@
+######## component_register ########
+# Register component to core. The component role priority is [1, 5]. 1 is the lowest
+# priority, 5 is the highest priority. 3 is the default priority if the component role 
+# priority hasn't set. The component role priority should be set immediately after the 
+# component role.
+#
+# Usage:
+# @ means the begin of one component.
+# # means comments.
+# $ means the end of one component.
+# ; means finish of one tag value.
+# envirenment value should be set: COMPONENT_REGISTER_FILE=../registry/component_register 
+
+@
+component_name=OMX.Freescale.std.template.sw-based;
+library_path=lib_omx_template_arm11_elinux.so;
+component_entry_function=TemplateInit;
+component_role=component.template;
+role_priority=3;
+$
+
+@
+component_name=OMX.Freescale.std.component.file_write.sw-based;
+library_path=lib_omx_file_write_arm11_elinux.so;
+component_entry_function=FileWriteInit;
+component_role=component.file_write;
+role_priority=3;
+$
+
+@
+component_name=OMX.Freescale.std.audio_decoder.mp3.sw-based;
+library_path=lib_omx_mp3_dec_v2_arm11_elinux.so;
+component_entry_function=Mp3DecInit;
+component_role=audio_decoder.mp3;
+role_priority=3;
+$
+
+@
+component_name=OMX.Freescale.std.audio_decoder.vorbis.sw-based;
+library_path=lib_omx_vorbis_dec_v2_arm11_elinux.so;
+component_entry_function=VorbisDecInit;
+component_role=audio_decoder.vorbis;
+role_priority=3;
+$
+
+@
+component_name=OMX.Freescale.std.audio_encoder.amr.sw-based;
+library_path=lib_omx_amr_enc_v2_arm11_elinux.so;
+component_entry_function=AmrEncInit;
+component_role=audio_encoder.amr;
+role_priority=3;
+$
+
+@
+component_name=OMX.Freescale.std.audio_decoder.amr.sw-based;
+library_path=lib_omx_amr_dec_v2_arm11_elinux.so;
+component_entry_function=AmrDecInit;
+component_role=audio_decoder.amr;
+role_priority=3;
+$
+
+@
+component_name=OMX.Freescale.std.parser.fsl.sw-based;
+library_path=lib_omx_fsl_parser_v2_arm11_elinux.so;
+component_entry_function=FslParserInit;
+component_role=parser.mp3;
+
+role_priority=3;
+$
+
+@
+component_name=OMX.Freescale.std.parser.ac3.sw-based;
+library_path=lib_omx_ac3_parser_v2_arm11_elinux.so;
+component_entry_function=Ac3ParserInit;
+component_role=parser.ac3;
+role_priority=3;
+$
+
+@
+component_name=OMX.Freescale.std.parser.fsl.sw-based;
+library_path=lib_omx_fsl_parser_v2_arm11_elinux.so;
+component_entry_function=FslParserInit;
+component_role=parser.wav;
+role_priority=3;
+$
+
+@
+component_name=OMX.Freescale.std.audio_processor.volume.sw-based;
+library_path=lib_omx_audio_processor_v2_arm11_elinux.so;
+component_entry_function=AudioProcessorInit;
+component_role=audio_processor.volume;
+role_priority=3;
+$
+
+@
+component_name=OMX.Freescale.std.video.processor.hw-based;
+library_path=lib_omx_video_processor_arm11_elinux.so;
+component_entry_function=VideoProcessor_ComponentInit;
+component_role=video.processor;
+role_priority=3;
+$
+
+@
+component_name=OMX.Freescale.std.video_render.fb.sw-based;
+library_path=lib_omx_render_fb_arm11_elinux.so;
+component_entry_function=FBRenderInit;
+component_role=video_render.fb;
+role_priority=3;
+$
+
+@
+component_name=OMX.Freescale.std.audio_source.android.sw-based;
+library_path=lib_omx_android_audio_source_arm11_elinux.so;
+component_entry_function=AndroidAudioSourceInit;
+component_role=audio_source.android;
+role_priority=3;
+$
+
+@
+component_name=OMX.Freescale.std.audio_source.alsa.sw-based;
+library_path=lib_omx_alsa_source_arm11_elinux.so;
+
+######## core_register ########
+# Register core to core manager. The core priority is [1, 5]. 1 is the lowest
+# priority, 5 is the highest priority. 3 is the default priority if the core 
+# priority hasn't set.  
+#
+# Usage:
+# @ means the begin of one core.
+# # means comments.
+# $ means the end of one core.
+# ; means finish of one tag value.
+# envirenment value should be set: CORE_REGISTER_FILE=../registry/core_register 
+
+@
+core_name=FSL_CORE;
+core_library_path=lib_omx_core_v2_arm11_elinux.so;
+core_priority=3;
+$
+
+#@
+#core_name=FSL_CORE_OLD;
+#core_library_path=lib_omx_core_arm11_elinux.so;
+#core_priority=3;
+#$
+
+
+######## contentpipe_register ########
+# Register content pipe to core. 
+#
+# Usage:
+# @ means the begin of one content pipe.
+# # means comments.
+# $ means the end of one content pipe.
+# ; means finish of one tag value.
+# envirenment value should be set: CONTENTPIPE_REGISTER_FILE=../registry/contentpipe_register 
+
+@
+content_pipe_name=LOCAL_FILE_PIPE_NEW;
+content_pipe_library_path=lib_omx_local_file_pipe_v2_arm11_elinux.so;
+content_pipe_entry_function=LocalFilePipe_Init;
+$
+
+@
+content_pipe_name=SHAREDFD_PIPE;
+content_pipe_library_path=lib_omx_shared_fd_pipe_arm11_elinux.so;
+content_pipe_entry_function=SharedFdPipe_Init;
+$
+
+@
+content_pipe_name=HTTPS_PIPE;
+content_pipe_library_path=lib_omx_https_pipe_v3_arm11_elinux.so;
+content_pipe_entry_function=HttpsPipe_Init;
+$
+
+@
+content_pipe_name=MMS_PIPE;
+content_pipe_library_path=lib_omx_https_pipe_v3_arm11_elinux.so;
+content_pipe_entry_function=HttpsPipe_Init;
+$
+
+@
+content_pipe_name=RTPS_PIPE;
+content_pipe_library_path=lib_omx_rtps_pipe_arm11_elinux.so;
+content_pipe_entry_function=RtpsPipe_Init;
+$
+
+@
+content_pipe_name=UDPS_PIPE;
+content_pipe_library_path=lib_omx_udps_pipe_arm11_elinux.so;
+content_pipe_entry_function=UdpsPipe_Init;
+$

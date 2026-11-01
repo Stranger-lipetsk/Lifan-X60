@@ -1,0 +1,117 @@
+######## Home.apk: строки о источниках списка приложений ########
+ , currAudioPackageName = 
+ , packageName = 
+ , strNewPackageName = 
+ TRANSACTION_registerHomeCallback
+ TRANSACTION_registerelBTCallback
+ android.intent.category.LAUNCHER
+ elBTreqAvrcpRegisterEventWatcher
+ elBTreqMapUnregisterNotification
+ mListenerRegistered=
+ registerMediaButtonEventReceiver
+"TRANSACTION_unregisterHomeCallback
+"TRANSACTION_unregisterelBTCallback
+"elBTreqAvrcpUnregisterEventWatcher
+"unregisterMediaButtonEventReceiver
+#REQ_AVRCP_CT_REGISTER_EVENT_WATCHER
+#TRANSACTION_elBTgetMapRegisterState
+$HomeApp.java lastAudioPackageName = 
+$HomeService.java  currPackageName = 
+%HomeService.java strCurPackageName = 
+%REQ_AVRCP_CT_UNREGISTER_EVENT_WATCHER
+%Utils.java Come in setDefaultLauncher
+&HomeService.java strNextPackageName = 
+&There is already a listener registered
+'HomeService.java , strCurPackageName = 
+(TRANSACTION_registerHostListenerCallback
+*TRANSACTION_elBTreqMapRegisterNotification
+*TRANSACTION_unregisterHostListenerCallback
++Attempting to unregister the wrong listener
++TRANSACTION_elBTisMapNotificationRegistered
+, strCurDispPackageName = 
+, strTargetAudioPackageName:
+,TRANSACTION_elBTreqAvrcpRegisterEventWatcher
+,TRANSACTION_elBTreqMapUnregisterNotification
+.TRANSACTION_elBTreqAvrcpUnregisterEventWatcher
+/HomeNaviService.java registerCallback() ...... 
+0HomeService.java setActiveMode(), packageName = 
+1HomeNaviService.java unregisterCallback() ...... 
+3HomeService.java  setActiveMode() , packageName =  
+4HomeService.java  playOldModeApp() , packageName =  
+4HomeService.java  saveOldModeApp() , packageName =  
+5Home.java  loadApplications()... strSubPackageName = 
+5HomeService.java  getAppPlayState() , packageName =  
+5HomeService.java  pauseOldModeApp() , packageName =  
+6Home.java  loadApplications()... strMainPackageName = 
+8HomeService.java  setHomeCurrentMode() , packageName =  
+8HomeService.java setActiveMode(), oldAudioPackageName = 
+9HomeService.java  switchWifiMode()..... strPackageName = 
+:HomeService.java  isCurrentActivity()... strPackageName = 
+:HomeService.java  switchPowerMode()..... strPackageName = 
+; packageName: 
+;HomeApp.java  updateLastPackage().. currAudioPackageName = 
+;HomeApp.java  updateLastPackage().. lastAudioPackageName = 
+;HomeService.java setActiveMode(), lastDisplayPackageName = 
+<HomeApp.java loadEleadApplications()... strSubPackageName = 
+<HomeService.java  setActiveMode() , currAudioPackageName =  
+=HomeApp.java  updateLastPackage().. currDisplayPackageName = 
+=HomeApp.java  updateLastPackage().. lastDisplayPackageName = 
+=HomeApp.java loadEleadApplications()... strMainPackageName = 
+=HomeService.java  switchAudioChannel()..... strPackageName = 
+=HomeService.java  switchVideoChannel()..... strPackageName = 
+
+######## Home.apk: имена пакетов, которые он знает ########
+com.android.browser
+com.android.camera2
+com.android.launcher
+com.android.music
+com.android.musicfx
+com.android.onetimeinitializer
+com.android.providers.settings
+com.android.provision
+com.android.soundrecorder
+com.fpt.mirrorlink.android
+com.mansiontech.mxnavi
+com.mxnavi.mxmlinkclient
+com.navitel
+com.nuro.r1.main
+com.polstar.polnav6
+tw.com.elead.el817tmc1.eztts
+tw.com.elead.el830.
+tw.com.elead.el830.avin
+tw.com.elead.el830.avin2
+tw.com.elead.el830.ccd
+tw.com.elead.el830.dlna
+tw.com.elead.el830.dtv
+tw.com.elead.el830.dvd
+tw.com.elead.el830.dvr
+tw.com.elead.el830.elbluetooth
+tw.com.elead.el830.ewhere
+tw.com.elead.el830.ezdealer
+tw.com.elead.el830.ezlife
+tw.com.elead.el830.ezservice
+tw.com.elead.el830.eztalk
+tw.com.elead.el830.hdmi
+tw.com.elead.el830.home
+tw.com.elead.el830.ipod
+tw.com.elead.el830.mediaplayer
+tw.com.elead.el830.radio
+tw.com.elead.el830.setup
+tw.com.elead.el830.update
+tw.com.elead.el830.wfdsink
+tw.com.elead.el830.wifi
+
+######## ElSettings.apk: имена пакетов ########
+com.android.certinstaller
+com.android.defcontainer
+com.android.facelock
+com.android.keyguard
+com.android.phone
+com.android.settings
+com.android.settings.files
+com.android.settings.icon
+com.android.settings.summary
+com.android.settings.title
+com.android.systemui
+com.android.terminal
+com.google.settings
