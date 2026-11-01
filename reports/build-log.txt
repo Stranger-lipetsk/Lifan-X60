@@ -1,10 +1,13 @@
-временная папка: /tmp/lifan_build_fo_9_7ev
+do_write_internal: Permission denied while opening "netcfg" to copy
+__populate_fs: Permission denied while writing file "netcfg"
+mke2fs: Permission denied while populating file system
+временная папка: /tmp/lifan_build_o7ht_hh8
 архив: fw/firmware.rar (220980636 байт)
 распаковано через 7z
-system.img: /tmp/lifan_build_fo_9_7ev/rar/system.img (377487360 байт, sha256 0f898f48ee910fe0…)
+system.img: /tmp/lifan_build_o7ht_hh8/rar/system.img (377487360 байт, sha256 0f898f48ee910fe0…)
 распаковка образа через debugfs...
-debugfs rdump: /tmp/lifan_build_fo_9_7ev/rar/system.img (377487360 байт)
-$ debugfs -R rdump / "/tmp/lifan_build_fo_9_7ev/root" /tmp/lifan_build_fo_9_7ev/rar/system.img
+debugfs rdump: /tmp/lifan_build_o7ht_hh8/rar/system.img (377487360 байт)
+$ debugfs -R rdump / "/tmp/lifan_build_o7ht_hh8/root" /tmp/lifan_build_o7ht_hh8/rar/system.img
 распаковано файлов: 1341
 распаковано файлов: 1341
 
@@ -16,13 +19,21 @@ $ debugfs -R rdump / "/tmp/lifan_build_fo_9_7ev/root" /tmp/lifan_build_fo_9_7ev/
   свойство: ro.product.locale.region=RU
 
 --- владельцы файлов ---
-владельцы выставлены на root:root (sudo)
-рабочая папка сохранена: /tmp/lifan_build_fo_9_7ev
-Traceback (most recent call last):
-  File "/home/runner/work/Lifan-X60/Lifan-X60/tools/build_system.py", line 343, in <module>
-    main()
-  File "/home/runner/work/Lifan-X60/Lifan-X60/tools/build_system.py", line 325, in main
-    fix_ownership(root)
-  File "/home/runner/work/Lifan-X60/Lifan-X60/tools/build_system.py", line 193, in fix_ownership
-    os.chmod(r, 0o755)
-PermissionError: [Errno 1] Operation not permitted: '/tmp/lifan_build_fo_9_7ev/root'
+обработано файлов: 0
+
+--- сборка образа ---
+содержимое: 199.3 МиБ (фактически на диске 201.5 МиБ)
+  крупнейшие файлы:
+        18.8 МиБ  /lib/libwebviewchromium.so
+        18.2 МиБ  /usr/icu/icudt51l.dat
+        14.8 МиБ  /lib/libnavitel.so
+        11.7 МиБ  /priv-app/Launcher2
+         8.1 МиБ  /lib/libLLVM.so
+         7.3 МиБ  /framework/framework-res.apk
+         4.4 МиБ  /priv-app/EL830LF01_Home.apk
+         4.3 МиБ  /fonts/DroidSansFallback.ttf
+         3.9 МиБ  /priv-app/ElSettings.apk
+         3.6 МиБ  /framework/framework.jar
+$ mke2fs -q -F -t ext4 -b 4096 -I 256 -O ^64bit,^metadata_csum,^metadata_csum_seed,^orphan_file,^quota,^casefold,^bigalloc -L system -E nodiscard -d /tmp/lifan_build_o7ht_hh8/root /home/runner/work/Lifan-X60/Lifan-X60/out/system-test.img.tmp
+рабочая папка сохранена: /tmp/lifan_build_o7ht_hh8
+не удалось собрать ext4 через mke2fs -d
