@@ -2,34 +2,29 @@
 """
 Сборка модифицированного system.img для ГУ Elead EL-830C-LF01 (Lifan X60 FL).
 
-Что делает (Стратегия A — сохраняем штатный Android 4.4.2 и весь функционал):
+Стратегия A: остаёмся на штатном Android 4.4.2 и сохраняем ВЕСЬ заводской
+функционал (камера заднего вида, радио, Bluetooth, климат, кнопки руля).
+Меняем только содержимое /system.
 
-  1. Достаёт system.img из архива прошивки (RAR) или берёт готовый.
-  2. (опционально) монтирует/распаковывает содержимое через debugfs во временную папку.
-  3. Применяет действия:
-       --remove <путь-в-системе>      удалить файл (например, тяжёлый Navitel)
-       --add-apk <файл.apk>[:имя]     добавить APK в /system/app (или /priv-app через /)
-       --add-file <локальный>:<путь>  добавить произвольный файл
-       --set-prop k=v                изменить/добавить свойство в /system/build.prop
-  4. Пересобирает ext4-образ через make_ext4fs и (опционально) обрезает до нужного
-     размера (по умолчанию 512 МиБ — как раздел p3).
-  5. Считает sha256 и пишет отчёт.
+Что делает:
+  1. Берёт system.img из архива прошивки (RAR/ZIP) либо готовый файл.
+  2. Распаковывает его через debugfs во временный каталог.
+  3. Применяет правки: --remove, --add-apk, --add-file, --set-prop.
+  4. Выставляет права и владельца root:root как в Android.
+  5. Собирает ext4 ровно на 512 МиБ (размер раздела p3) с фичами,
+     совместимыми с ядром 3.0.35 (без 64bit / metadata_csum!).
+  6. Проверяет результат и печатает sha256.
 
-Требуется: e2fsprogs с make_ext4fs и debugfs (в Ubuntu: apt install e2fsprogs
-+e2fsprogs-extra), либо mke2fs + debugfs (fallback, всегда есть).
+Требуется: mke2fs (e2fsprogs), debugfs, 7z или unrar.
 
 Примеры:
 
-  # Просто пересобрать образ после удаления тяжёлого Navitel и замены шрифтов
-  python3 tools/build_system.py --fw архив.rar --out out/system.img \
-      --remove /priv-app/Navitel-9.13.73-large.apk \
-      --set-prop ro.product.locale.language=ru
+  python3 tools/build_system.py --fw firmware.rar --out out/system.img \\
+      --remove /priv-app/Navitel-9.13.73-large.apk \\
+      --set-prop ro.product.locale.language=ru --set-prop ro.product.locale.region=RU
 
-  # Добавить свои APK (Torque и обновлённый Navitel ставим уже после прошивки,
-  # но можно и сразу вшить)
-  python3 tools/build_system.py --system system.img --out out/system.img \
-      --add-apk TorquePro.apk:/app \
-      --add-apk Navitel-11.11.1128.apk:/app
+  python3 tools/build_system.py --system system.img --out out/system.img \\
+      --add-apk TorquePro.apk:/app --add-apk Navitel-11.11.1128.apk:/app
 """
 import argparse
 import hashlib
@@ -39,24 +34,47 @@ import subprocess
 import sys
 import tempfile
 
+# заполняется в main(): ['sudo', '-n'] — чтобы chown/сборка работали от root
+SUDO = []
 
-def run(cmd, check=True, quiet=False):
-    p = subprocess.run(cmd, capture_output=True, text=True)
+# Фичи ext4, совместимые с ядром 3.0.35 (i.MX6, Android 4.4).
+# 64bit и metadata_csum появились позже — с ними ядро раздел НЕ смонтирует!
+FEATURE_VARIANTS = [
+    '^64bit,^metadata_csum,^metadata_csum_seed,^orphan_file,^quota,^casefold,^bigalloc',
+    '^64bit,^metadata_csum,^orphan_file,^quota,^casefold',
+    '^64bit,^metadata_csum',
+    '^64bit',
+    None,          # по умолчанию
+]
+
+
+def _sudo(cmd):
+    return SUDO + list(cmd) if SUDO else list(cmd)
+
+
+def run(cmd, check=True, quiet=True):
     if not quiet:
         print(f'$ {" ".join(cmd)}')
+    try:
+        p = subprocess.run(cmd, capture_output=True, text=True)
+    except FileNotFoundError:
+        raise SystemExit(f'команда не найдена: {cmd[0]}')
     if p.returncode != 0 and check:
         sys.stderr.write((p.stdout or '') + (p.stderr or ''))
-        raise SystemExit(f'команда завершилась с кодом {p.returncode}: {cmd[0]}')
+        raise SystemExit(f'ошибка выполнения: {cmd[0]} (код {p.returncode})')
     return p
 
 
-def extract_system_img_from_rar(rar, workdir):
-    """Распаковывает system.img из RAR (7z / unrar / bsdtar), с диагностикой."""
+# --------------------------------------------------------------------------
+# 1. Достать system.img
+# --------------------------------------------------------------------------
+def extract_system_img(rar, workdir):
     if not os.path.exists(rar):
         raise SystemExit(f'файл прошивки не найден: {rar}')
     print(f'архив: {rar} ({os.path.getsize(rar)} байт)')
     outdir = os.path.join(workdir, 'rar')
     os.makedirs(outdir, exist_ok=True)
+
     attempts = [
         (['7z', 'x', '-y', '-aos', f'-o{outdir}', rar], '7z'),
         (['7zz', 'x', '-y', f'-o{outdir}', rar], '7zz'),
@@ -75,38 +93,42 @@ def extract_system_img_from_rar(rar, workdir):
             for fn in files:
                 if fn.lower() == 'system.img':
                     found = os.path.join(root, fn)
+                    break
+            if found:
+                break
         if found:
             print(f'распаковано через {name}')
             return found
-        errors.append(f'{name}: код {r.returncode} {(r.stderr or r.stdout or "").strip()[:200]}')
-    # последний шанс: system.img может лежать без архива рядом
+        errors.append(f'{name}: код {r.returncode} '
+                      f'{((r.stderr or r.stdout) or "").strip()[:160]}')
+
     alt = os.path.join(os.path.dirname(os.path.abspath(rar)), 'system.img')
     if os.path.exists(alt):
+        print(f'использую готовый {alt}')
         return alt
     raise SystemExit('system.img не найден. Попытки:\n  ' + '\n  '.join(errors))
 
 
+# --------------------------------------------------------------------------
+# 2. Распаковать образ
+# --------------------------------------------------------------------------
 def dump_tree(img, dst):
-    """Распаковывает содержимое ext4-образа через debugfs rdump."""
     os.makedirs(dst, exist_ok=True)
     if not os.path.exists(img):
         raise SystemExit(f'образ не найден: {img}')
     print(f'debugfs rdump: {img} ({os.path.getsize(img)} байт)')
     run(['debugfs', '-R', f'rdump / "{dst}"', img], check=False)
-    # rdump ругается на chown в непривилегированном режиме — это ожидаемо
     lf = os.path.join(dst, 'lost+found')
     if os.path.isdir(lf):
         shutil.rmtree(lf, ignore_errors=True)
     n = sum(len(f) for _, _, f in os.walk(dst))
     print(f'распаковано файлов: {n}')
     if n == 0:
-        raise SystemExit('debugfs не смог распаковать образ (пустой результат)')
+        raise SystemExit('debugfs не смог распаковать образ')
 
 
 def content_stats(root):
-    """Реальный объём содержимого и топ крупных файлов."""
-    total_apparent = 0
-    total_disk = 0
+    total = 0
     seen = set()
     biggest = []
     for r, _, fs in os.walk(root):
@@ -116,18 +138,19 @@ def content_stats(root):
                 st = os.lstat(p)
             except OSError:
                 continue
-            # не считаем хардлинки дважды
             key = (st.st_dev, st.st_ino)
             if key in seen:
                 continue
             seen.add(key)
-            total_apparent += st.st_size
-            total_disk += st.st_blocks * 512
+            total += st.st_size
             biggest.append((st.st_size, os.path.relpath(p, root)))
     biggest.sort(reverse=True)
-    return total_apparent, total_disk, biggest[:10]
+    return total, biggest[:10]
 
 
+# --------------------------------------------------------------------------
+# 3. Правки
+# --------------------------------------------------------------------------
 def apply_actions(root, actions):
     log = []
     for act in actions:
@@ -135,24 +158,34 @@ def apply_actions(root, actions):
         if kind == 'remove':
             target = os.path.join(root, act[1].lstrip('/'))
             if os.path.exists(target):
-                shutil.rmtree(target) if os.path.isdir(target) else os.remove(target)
+                if os.path.isdir(target):
+                    shutil.rmtree(target)
+                else:
+                    os.remove(target)
                 log.append(f'удалено: {act[1]}')
             else:
                 log.append(f'НЕ НАЙДЕНО (пропуск): {act[1]}')
+
         elif kind == 'add-apk':
             src, dest_dir = act[1], act[2]
+            if not os.path.exists(src):
+                log.append(f'НЕТ ФАЙЛА: {src}')
+                continue
             d = os.path.join(root, dest_dir.strip('/'))
             os.makedirs(d, exist_ok=True)
             name = os.path.basename(src)
-            shutil.copy2(src, os.path.join(d, name))
-            os.chmod(os.path.join(d, name), 0o644)
+            dst = os.path.join(d, name)
+            shutil.copyfile(src, dst)
+            os.chmod(dst, 0o644)
             log.append(f'добавлено APK: {dest_dir}/{name} ({os.path.getsize(src)} байт)')
+
         elif kind == 'add-file':
             src, dest = act[1], act[2]
             target = os.path.join(root, dest.lstrip('/'))
             os.makedirs(os.path.dirname(target), exist_ok=True)
-            shutil.copy2(src, target)
+            shutil.copyfile(src, target)
             log.append(f'добавлен файл: {dest}')
+
         elif kind == 'set-prop':
             key, val = act[1], act[2]
             bp = os.path.join(root, 'build.prop')
@@ -160,117 +193,84 @@ def apply_actions(root, actions):
             if os.path.exists(bp):
                 with open(bp, 'r', errors='replace') as f:
                     lines = f.read().splitlines()
-            done = False
+            replaced = False
             for i, ln in enumerate(lines):
                 if ln.strip().startswith(key + '='):
                     lines[i] = f'{key}={val}'
-                    done = True
-            if not done:
+                    replaced = True
+            if not replaced:
                 lines.append(f'{key}={val}')
             with open(bp, 'w') as f:
                 f.write('\n'.join(lines) + '\n')
-            log.append(f'свойство: {key}={val}')
+            log.append(f'свойство: {key}={val} '
+                       f'({"заменено" if replaced else "добавлено"})')
     return log
 
 
-# Фичи ext4, которые понимает ядро 3.0.35 (i.MX6, Android 4.4).
-# ВАЖНО: 64bit и metadata_csum в 3.0.35 отсутствуют — с ними раздел не смонтируется!
-OK_FEATURES = '^64bit,^metadata_csum,^metadata_csum_seed,^orphan_file,^quota,^casefold,^bigalloc'
-
-
+# --------------------------------------------------------------------------
+# 4. Права и владельцы
+# --------------------------------------------------------------------------
 def fix_ownership(root):
-    """Выставляет root:root и права как в Android.
+    """root:root + права как в Android. Без прав — просто корректные mode."""
+    owner_ok = False
+    if os.geteuid() == 0:
+        subprocess.run(['chown', '-R', '0:0', root], capture_output=True)
+        owner_ok = True
+    elif SUDO:
+        p = subprocess.run(SUDO + ['chown', '-R', '0:0', root],
+                           capture_output=True, text=True)
+        owner_ok = p.returncode == 0
 
-    В CI / при запуске от обычного пользователя chown не удаётся: файлы просто
-    остаются с текущим владельцем. Это НЕ ломает работу — Android всё равно
-    перемаркирует права при монтировании по fstab, а на 4.4 без SELinux
-    uid/gid файлов системы не критичны. Поэтому ошибки тут не фатальны.
-    """
-    is_root = (os.geteuid() == 0)
-    if is_root:
-        ok = True
-    else:
-        ok = False
-        for cmd in (['sudo', '-n', 'chown', '-R', '0:0', root],
-                    ['sudo', '-n', 'chmod', '-R', 'u+rwX', root]):
-            if not shutil.which(cmd[0]):
-                continue
-            p = subprocess.run(cmd, capture_output=True, text=True)
-            if p.returncode == 0 and cmd[2] == 'chown':
-                ok = True
-        # даём себе права на запись независимо от владельца
-        subprocess.run(['sudo', '-n', 'chmod', '-R', 'u+rwX', root],
-                       capture_output=True, text=True)
-
-    fixed = 0
+    files = dirs = 0
     for r, ds, fs in os.walk(root):
-        try:
-            if is_root or ok:
-                os.chmod(r, 0o755)
-                os.chown(r, 0, 0)
-        except (OSError, PermissionError):
-            pass
+        for d in ds:
+            try:
+                os.chmod(os.path.join(r, d), 0o755)
+                dirs += 1
+            except OSError:
+                pass
         for fn in fs:
             fp = os.path.join(r, fn)
             if os.path.islink(fp):
                 continue
             try:
-                if fn.endswith(('.apk', '.jar', '.so', '.ttf', '.dat', '.conf',
-                                '.xml', '.prop', '.txt', '.bin', '.cfg', '.ini')):
-                    os.chmod(fp, 0o644)
-                else:
-                    mode = os.stat(fp).st_mode & 0o777
-                    os.chmod(fp, 0o755 if mode & 0o111 else 0o644)
-                # su/busybox должны быть setuid-подобными
-                if fn in ('su',):
-                    os.chmod(fp, 0o6755)
-                if is_root:
-                    os.chown(fp, 0, 0)
-                fixed += 1
-            except (OSError, PermissionError):
+                mode = 0o755 if (os.stat(fp).st_mode & 0o111) else 0o644
+                if fn == 'su':
+                    mode = 0o6755
+                os.chmod(fp, mode)
+                files += 1
+            except OSError:
                 pass
-    print(f'обработано файлов: {fixed}'
-          + ('' if (is_root or ok) else ' (владелец не изменён — нет прав, это допустимо)'))
-    return is_root or ok
+    print(f'права: файлов {files}, каталогов {dirs}; '
+          f'владелец {"root:root" if owner_ok else "не изменён (нет прав — допустимо)"}')
+    # после chown на root сам пользователь может потерять доступ — вернём чтение
+    subprocess.run(_sudo(['chmod', '-R', 'a+rX', root]), capture_output=True)
+    return owner_ok
 
 
+# --------------------------------------------------------------------------
+# 5. Сборка образа
+# --------------------------------------------------------------------------
 def build_image(root, out_img, size_mb=512):
-    """Собирает ext4-образ, совместимый с ядром 3.0.35, строго заданного размера."""
-    root = os.path.abspath(root)
-    apparent, disk, biggest = content_stats(root)
-    print(f'содержимое: {apparent/1024/1024:.1f} МиБ (фактически на диске {disk/1024/1024:.1f} МиБ)')
+    total, biggest = content_stats(root)
+    print(f'содержимое: {total / 1024 / 1024:.1f} МиБ '
+          f'(раздел p3 = {size_mb} МиБ)')
     print('  крупнейшие файлы:')
     for sz, rel in biggest:
-        print(f'    {sz/1024/1024:8.1f} МиБ  /{rel}')
+        print(f'    {sz / 1024 / 1024:8.1f} МиБ  /{rel}')
 
     limit = size_mb * 1024 * 1024
-    reserve = 24 * 1024 * 1024   # запас под inode-таблицы и служебные блоки
-    if apparent + reserve > limit:
+    if total + 20 * 1024 * 1024 > limit:
         raise SystemExit(
-            f'ОШИБКА: содержимое не влезает в раздел {size_mb} МиБ '
-            f'({apparent/1024/1024:.0f} МиБ + служебные). Удали лишнее (--remove) '
-            f'или увеличь --size-mb, но раздел p3 на устройстве = 512 МиБ!')
+            f'ОШИБКА: содержимое не влезает в {size_mb} МиБ '
+            f'({total / 1024 / 1024:.0f} МиБ + служебные). Удали лишнее через --remove.')
 
     if os.path.exists(out_img):
         os.remove(out_img)
-
     tmp = out_img + '.tmp'
-    if os.path.exists(tmp):
-        os.remove(tmp)
-    with open(tmp, 'wb') as f:
-        f.truncate(size_mb * 1024 * 1024)
 
-    # mke2fs -d: собирает ФС из каталога; фичи — совместимые с ядром 3.0.35.
-    # Перебираем варианты от «со всеми отключёнными новыми фичами» к минимуму.
-    variants = [
-        OK_FEATURES,
-        '^64bit,^metadata_csum,^orphan_file,^quota,^casefold',
-        '^64bit,^metadata_csum',
-        '^64bit',
-        None,
-    ]
     last = ''
-    for feats in variants:
+    for feats in FEATURE_VARIANTS:
         if os.path.exists(tmp):
             os.remove(tmp)
         with open(tmp, 'wb') as f:
@@ -280,29 +280,34 @@ def build_image(root, out_img, size_mb=512):
         if feats:
             cmd += ['-O', feats]
         cmd += ['-d', root, tmp]
-        p = run(cmd, check=False)
+        p = subprocess.run(_sudo(cmd), capture_output=True, text=True)
         if p.returncode == 0:
-            print(f'собрано с фичами: {feats or "по умолчанию"}')
+            print(f'собрано (фичи: {feats or "по умолчанию"})')
             os.replace(tmp, out_img)
             break
         last = (p.stdout or '') + (p.stderr or '')
-        print(f'  вариант "{feats}" не сработал, пробуем следующий')
+        print(f'  вариант "{feats}" не подошёл, пробую следующий')
     else:
         print('--- последняя ошибка mke2fs ---')
-        print(last[-3000:])
+        print(last[-2000:])
         if os.path.exists(tmp):
             os.remove(tmp)
-        raise SystemExit('не удалось собрать ext4 через mke2fs -d')
+        raise SystemExit('не удалось собрать ext4')
 
-    # проверка совместимости
-    h = run(['dumpe2fs', '-h', out_img], check=False).stdout
-    print('--- параметры собранной ФС ---')
+    try:
+        os.chmod(out_img, 0o644)
+    except OSError:
+        pass
+
+    h = subprocess.run(_sudo(['dumpe2fs', '-h', out_img]),
+                       capture_output=True, text=True).stdout
+    print('--- параметры ФС ---')
     for ln in h.splitlines():
         if ln.startswith(('Filesystem features', 'Block size', 'Inode size',
                           'Filesystem volume name', 'Block count')):
             print('  ' + ln.strip())
-    if '64bit' in h:
-        raise SystemExit('ОШИБКА: образ содержит фичу 64bit — ядро 3.0.35 его не смонтирует')
+    if '64bit' in h or 'metadata_csum' in h:
+        raise SystemExit('ОШИБКА: в ФС остались фичи, несовместимые с ядром 3.0.35')
     return out_img
 
 
@@ -314,18 +319,20 @@ def sha256(path):
     return h.hexdigest()
 
 
+# --------------------------------------------------------------------------
 def main():
-    ap = argparse.ArgumentParser(description=__doc__,
-                                 formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument('--fw', help='архив прошивки (rar/zip) — извлечь system.img')
+    ap = argparse.ArgumentParser(
+        description=__doc__,
+        formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument('--fw', help='архив прошивки (rar/zip) — взять system.img оттуда')
     ap.add_argument('--system', help='готовый system.img')
-    ap.add_argument('--out', default='out/system.img', help='куда сохранить результат')
+    ap.add_argument('--out', default='out/system.img', help='результат')
     ap.add_argument('--size-mb', type=int, default=512,
-                    help='размер образа (по умолчанию 512 МиБ = раздел p3)')
-    ap.add_argument('--remove', action='append', default=[],
-                    help='удалить путь из системы (можно много раз)')
-    ap.add_argument('--add-apk', action='append', default=[], metavar='APK[:/dir]',
-                    help='добавить APK в /app (по умолчанию) или указанный каталог')
+                    help='размер образа в МиБ (раздел p3 = 512)')
+    ap.add_argument('--remove', action='append', default=[], metavar='ПУТЬ',
+                    help='удалить путь из системы (можно несколько раз)')
+    ap.add_argument('--add-apk', action='append', default=[], metavar='APK[:/каталог]',
+                    help='добавить APK (по умолчанию в /app)')
     ap.add_argument('--add-file', action='append', default=[], metavar='ЛОКАЛ:ПУТЬ',
                     help='добавить произвольный файл')
     ap.add_argument('--set-prop', action='append', default=[], metavar='k=v',
@@ -336,26 +343,25 @@ def main():
     if not args.fw and not args.system:
         ap.error('нужен --fw или --system')
 
+    global SUDO
+    if os.geteuid() != 0 and shutil.which('sudo'):
+        if subprocess.run(['sudo', '-n', 'true'], capture_output=True).returncode == 0:
+            SUDO = ['sudo', '-n']
+            print('использую sudo для chown и сборки образа')
+
     work = tempfile.mkdtemp(prefix='lifan_build_')
     print(f'временная папка: {work}')
     try:
-        img = args.system or extract_system_img_from_rar(args.fw, work)
-        print(f'system.img: {img} ({os.path.getsize(img)} байт, sha256 {sha256(img)[:16]}…)')
+        img = args.system or extract_system_img(args.fw, work)
+        print(f'system.img: {img} ({os.path.getsize(img)} байт)')
+        print(f'  sha256 исходного: {sha256(img)[:32]}…')
 
         root = os.path.join(work, 'root')
-        print('распаковка образа через debugfs...')
         dump_tree(img, root)
-        n = sum(len(f) for _, _, f in os.walk(root))
-        print(f'распаковано файлов: {n}')
 
-        actions = []
-        for p in args.remove:
-            actions.append(('remove', p))
+        actions = [('remove', p) for p in args.remove]
         for a in args.add_apk:
-            if ':' in a:
-                src, dest = a.rsplit(':', 1)
-            else:
-                src, dest = a, '/app'
+            src, dest = (a.rsplit(':', 1) if ':' in a else (a, '/app'))
             actions.append(('add-apk', src, dest))
         for a in args.add_file:
             src, dest = a.split(':', 1)
@@ -364,26 +370,27 @@ def main():
             k, v = a.split('=', 1)
             actions.append(('set-prop', k, v))
 
-        print('\n--- применение изменений ---')
+        print('\n--- изменения ---')
         for line in apply_actions(root, actions):
             print('  ' + line)
 
-        os.makedirs(os.path.dirname(os.path.abspath(args.out)) or '.', exist_ok=True)
-        print('\n--- владельцы файлов ---')
+        print('\n--- права ---')
         fix_ownership(root)
 
-        print('\n--- сборка образа ---')
+        print('\n--- сборка ---')
         out = build_image(root, os.path.abspath(args.out), args.size_mb)
         size = os.path.getsize(out)
         print(f'\nГОТОВО: {out}')
-        print(f'  размер: {size} байт ({size/1024/1024:.1f} МиБ)')
+        print(f'  размер: {size} байт ({size / 1024 / 1024:.1f} МиБ)')
         print(f'  sha256: {sha256(out)}')
-        print('\nДальше: положить как system.img рядом с boot.img/sd_boot.img на SD-карту')
-        print('и прошить штатным способом (см. docs/06-инструкция-модернизации.md)')
+        print('\nДальше: положить как system.img на SD рядом с boot.img, u-boot.bin,')
+        print('MCU_FW.hex и sd_boot.img (штатными!) и прошить штатным способом.')
+        print('Подробно: docs/06-инструкция-модернизации.md')
     finally:
         if args.keep_work:
             print(f'рабочая папка сохранена: {work}')
         else:
+            subprocess.run(_sudo(['rm', '-rf', work]), capture_output=True)
             shutil.rmtree(work, ignore_errors=True)
 
 
