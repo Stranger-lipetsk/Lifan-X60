@@ -2,7 +2,7 @@ build-tools: /usr/local/lib/android/sdk/build-tools/37.0.0
 android.jar: /usr/local/lib/android/sdk/platforms/android-37.2/android.jar
 == 1. aapt: генерация R.java ==
 == 2. javac ==
-Note: src/ru/lifan/switcher/MainActivity.java uses or overrides a deprecated API.
+Note: src/com/fpt/mirrorlink/android/MainActivity.java uses or overrides a deprecated API.
 Note: Recompile with -Xlint:deprecation for details.
 == 3. d8: dex ==
 == 4. aapt: пакет ресурсов ==
@@ -11,11 +11,11 @@ Note: Recompile with -Xlint:deprecation for details.
 == 7. подпись (v1 — обязательна для Android 4.4) ==
 
 ГОТОВО: /home/runner/work/Lifan-X60/Lifan-X60/switcher/switcher.apk
--rw-r--r-- 1 runner runner 16879 Nov  1 14:22 switcher.apk
-sha256: ddd5b343781646182213e2d5ce0487c6d66ccf93ff9fd3f400087986bf5f15bb
+-rw-r--r-- 1 runner runner 16879 Nov  1 14:36 switcher.apk
+sha256: 958a1d7d16608d6bcd8d3de755dd3138c8a259b98c69e8b0a499d8b03c5db7bc
 
 Проверка содержимого:
-package: name='ru.lifan.switcher' versionCode='1' versionName='1.0' platformBuildVersionName='17' platformBuildVersionCode='37' compileSdkVersion='37' compileSdkVersionCodename='17'
+package: name='com.fpt.mirrorlink.android' versionCode='1' versionName='1.0' platformBuildVersionName='17' platformBuildVersionCode='37' compileSdkVersion='37' compileSdkVersionCodename='17'
 sdkVersion:'19'
 targetSdkVersion:'19'
 uses-permission: name='android.permission.REORDER_TASKS'
@@ -23,7 +23,7 @@ uses-permission: name='android.permission.GET_TASKS'
 application-label:'Переключатель'
 application-icon-160:'res/drawable/ic_launcher.png'
 application: label='Переключатель' icon='res/drawable/ic_launcher.png'
-launchable-activity: name='ru.lifan.switcher.MainActivity'  label='Переключатель' icon=''
+launchable-activity: name='com.fpt.mirrorlink.android.MainActivity'  label='Переключатель' icon=''
 feature-group: label=''
   uses-feature: name='android.hardware.faketouch'
   uses-implied-feature: name='android.hardware.faketouch' reason='default feature for all apps'

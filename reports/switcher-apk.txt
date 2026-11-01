@@ -1,5 +1,5 @@
 === badging ===
-package: name='ru.lifan.switcher' versionCode='1' versionName='1.0' platformBuildVersionName='17' platformBuildVersionCode='37' compileSdkVersion='37' compileSdkVersionCodename='17'
+package: name='com.fpt.mirrorlink.android' versionCode='1' versionName='1.0' platformBuildVersionName='17' platformBuildVersionCode='37' compileSdkVersion='37' compileSdkVersionCodename='17'
 sdkVersion:'19'
 targetSdkVersion:'19'
 uses-permission: name='android.permission.REORDER_TASKS'
@@ -7,7 +7,7 @@ uses-permission: name='android.permission.GET_TASKS'
 application-label:'Переключатель'
 application-icon-160:'res/drawable/ic_launcher.png'
 application: label='Переключатель' icon='res/drawable/ic_launcher.png'
-launchable-activity: name='ru.lifan.switcher.MainActivity'  label='Переключатель' icon=''
+launchable-activity: name='com.fpt.mirrorlink.android.MainActivity'  label='Переключатель' icon=''
 feature-group: label=''
   uses-feature: name='android.hardware.faketouch'
   uses-implied-feature: name='android.hardware.faketouch' reason='default feature for all apps'
@@ -26,7 +26,7 @@ N: android=http://schemas.android.com/apk/res/android
     A: android:versionName(0x0101021c)="1.0" (Raw: "1.0")
     A: android:compileSdkVersion(0x01010572)=(type 0x10)0x25
     A: android:compileSdkVersionCodename(0x01010573)="17" (Raw: "17")
-    A: package="ru.lifan.switcher" (Raw: "ru.lifan.switcher")
+    A: package="com.fpt.mirrorlink.android" (Raw: "com.fpt.mirrorlink.android")
     A: platformBuildVersionCode=(type 0x10)0x25 (Raw: "37")
     A: platformBuildVersionName=(type 0x10)0x11 (Raw: "17")
     E: uses-sdk (line=7)
@@ -51,10 +51,21 @@ N: android=http://schemas.android.com/apk/res/android
             A: android:name(0x01010003)="android.intent.action.MAIN" (Raw: "android.intent.action.MAIN")
           E: category (line=26)
             A: android:name(0x01010003)="android.intent.category.LAUNCHER" (Raw: "android.intent.category.LAUNCHER")
-        E: intent-filter (line=30)
-          E: action (line=31)
+        E: intent-filter (line=32)
+          A: android:enabled(0x0101000e)=(type 0x12)0x0
+          E: action (line=33)
             A: android:name(0x01010003)="android.intent.action.MAIN" (Raw: "android.intent.action.MAIN")
-          E: category (line=32)
+          E: category (line=34)
             A: android:name(0x01010003)="android.intent.category.HOME" (Raw: "android.intent.category.HOME")
-          E: category (line=33)
+          E: category (line=35)
             A: android:name(0x01010003)="android.intent.category.DEFAULT" (Raw: "android.intent.category.DEFAULT")
+      E: activity-alias (line=41)
+        A: android:label(0x01010001)="Переключатель" (Raw: "Переключатель")
+        A: android:name(0x01010003)="com.fpt.mirrorlink.android.MirrorLinkActivity" (Raw: "com.fpt.mirrorlink.android.MirrorLinkActivity")
+        A: android:exported(0x01010010)=(type 0x12)0xffffffff
+        A: android:targetActivity(0x01010202)=".MainActivity" (Raw: ".MainActivity")
+        E: intent-filter (line=46)
+          E: action (line=47)
+            A: android:name(0x01010003)="android.intent.action.MAIN" (Raw: "android.intent.action.MAIN")
+          E: category (line=48)
+            A: android:name(0x01010003)="android.intent.category.LAUNCHER" (Raw: "android.intent.category.LAUNCHER")
