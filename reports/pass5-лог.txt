@@ -1,0 +1,472 @@
+=== содержимое архива ===
+reports/unpacked
+reports/unpacked/boot.img
+reports/unpacked/system.img
+reports/unpacked/sd_boot.img
+reports/unpacked/MCU_FW.hex
+reports/unpacked/u-boot.bin
+
+=== config.ini (backup) ===
+
+system=reports/unpacked/system.img
+reports/unpacked/system.img: Linux rev 1.0 ext4 filesystem data, UUID=da594c53-9beb-f85c-85c5-cedf76546f7a, volume name "system" (extents) (large files)
+321M	/tmp/sysroot
+=== каталоги ===
+app
+bin
+build.prop
+etc
+fonts
+framework
+lib
+lost+found
+media
+priv-app
+usr
+vendor
+xbin
+
+=== APK-манифесты ===
+### /app/BSEDemo.apk (197918 байт)
+  пакет: []
+  права: []
+  actions: []
+
+### /app/BasicDreams.apk (25910 байт)
+  пакет: []
+  права: []
+  actions: []
+
+### /app/Bluetooth.apk (294080 байт)
+  пакет: []
+  права: []
+  actions: []
+
+### /app/Camera2.apk (2400817 байт)
+  пакет: []
+  права: []
+  actions: []
+
+### /app/CertInstaller.apk (42883 байт)
+  пакет: []
+  права: []
+  actions: []
+
+### /app/CubeLiveWallpapers.apk (19341 байт)
+  пакет: []
+  права: []
+  actions: []
+
+### /app/DocumentsUI.apk (318717 байт)
+  пакет: []
+  права: []
+  actions: []
+
+### /app/DownloadProviderUi.apk (141114 байт)
+  пакет: []
+  права: []
+  actions: []
+
+### /app/EL830TAM1_GPIO_TEST_2015.01.01.01.apk (21489 байт)
+  пакет: []
+  права: []
+  actions: []
+
+### /app/EL831CLF01_Avin_2016.06.21.01.apk (1180203 байт)
+  пакет: []
+  права: []
+  actions: []
+
+### /app/EL831CLF01_MediaPlayer_2017.01.11.01.apk (1193599 байт)
+  пакет: []
+  права: []
+  actions: []
+
+### /app/EL831CLF01_Radio_2016.12.16.01.apk (796551 байт)
+  пакет: []
+  права: []
+  actions: []
+
+### /app/EL831CLF01_elBTService_2016.09.05.01.apk (753892 байт)
+  пакет: []
+  права: []
+  actions: []
+
+### /app/EL831CLF01_elBluetoothDial_2016.12.13.01.apk (845792 байт)
+  пакет: []
+  права: []
+  actions: []
+
+### /app/EL831CLF01_elBluetoothMusic_2016.12.13.01.apk (899003 байт)
+  пакет: []
+  права: []
+  actions: []
+
+### /app/EL831CLF01_elBluetoothPhone_2016.12.13.01.apk (1139049 байт)
+  пакет: []
+  права: []
+  actions: []
+
+### /app/EL831CLF01_elBluetoothSetup_2016.12.13.01.apk (912852 байт)
+  пакет: []
+  права: []
+  actions: []
+
+### /app/FSLOta.apk (24303 байт)
+  пакет: []
+  права: []
+  actions: []
+
+### /app/HTMLViewer.apk (7674 байт)
+  пакет: []
+  права: []
+  actions: []
+
+### /app/IQQIService-Elead-International-20160105.1.apk (13353625 байт)
+  пакет: []
+  права: []
+  actions: []
+
+### /app/KeyChain.apk (27899 байт)
+  пакет: []
+  права: []
+  actions: []
+
+### /app/Music.apk (559538 байт)
+  пакет: []
+  права: []
+  actions: []
+
+### /app/PacProcessor.apk (5648 байт)
+  пакет: []
+  права: []
+  actions: []
+
+### /app/PackageInstaller.apk (124968 байт)
+  пакет: []
+  права: []
+  actions: []
+
+### /app/PicoTts.apk (15806 байт)
+  пакет: []
+  права: []
+  actions: []
+
+### /app/Provision.apk (3678 байт)
+  пакет: []
+  права: []
+  actions: []
+
+### /app/TelephonyProvider.apk (83210 байт)
+  пакет: []
+  права: []
+  actions: []
+
+### /app/UserDictionaryProvider.apk (10907 байт)
+  пакет: []
+  права: []
+  actions: []
+
+### /app/VisualizationWallpapers.apk (163088 байт)
+  пакет: []
+  права: []
+  actions: []
+
+### /app/WfdSink.apk (67623 байт)
+  пакет: []
+  права: []
+  actions: []
+
+### /priv-app/BackupRestoreConfirmation.apk (29576 байт)
+  пакет: []
+  права: []
+  actions: []
+
+### /priv-app/DefaultContainerService.apk (14317 байт)
+  пакет: []
+  права: []
+  actions: []
+
+### /priv-app/DownloadProvider.apk (247033 байт)
+  пакет: []
+  права: []
+  actions: []
+
+### /priv-app/EL830LF01_Home.apk (4588177 байт)
+  пакет: []
+  права: []
+  actions: []
+
+### /priv-app/ElSettings.apk (4041923 байт)
+  пакет: []
+  права: []
+  actions: []
+
+### /priv-app/ExternalStorageProvider.apk (16937 байт)
+  пакет: []
+  права: []
+  actions: []
+
+### /priv-app/FusedLocation.apk (10295 байт)
+  пакет: []
+  права: []
+  actions: []
+
+### /priv-app/InputDevices.apk (66366 байт)
+  пакет: []
+  права: []
+  actions: []
+
+### /priv-app/Keyguard.apk (893170 байт)
+  пакет: []
+  права: []
+  actions: []
+
+### /priv-app/Launcher2 (12267776 байт)
+
+### /priv-app/MediaProvider.apk (108229 байт)
+  пакет: []
+  права: []
+  actions: []
+
+### /priv-app/MusicFX.apk (78200 байт)
+  пакет: []
+  права: []
+  actions: []
+
+### /priv-app/Navitel-9.13.73-large.apk (111095055 байт)
+  пакет: []
+  права: []
+  actions: []
+
+### /priv-app/OneTimeInitializer.apk (5691 байт)
+  пакет: []
+  права: []
+  actions: []
+
+### /priv-app/ProxyHandler.apk (8182 байт)
+  пакет: []
+  права: []
+  actions: []
+
+### /priv-app/SettingsProvider.apk (119100 байт)
+  пакет: []
+  права: []
+  actions: []
+
+### /priv-app/SharedStorageBackup.apk (6890 байт)
+  пакет: []
+  права: []
+  actions: []
+
+### /priv-app/Shell.apk (20810 байт)
+  пакет: []
+  права: []
+  actions: []
+
+### /priv-app/SystemUI.apk (1133036 байт)
+  пакет: []
+  права: []
+  actions: []
+
+### /priv-app/VpnDialogs.apk (17779 байт)
+  пакет: []
+  права: []
+  actions: []
+
+### /priv-app/WallpaperCropper.apk (64390 байт)
+  пакет: []
+  права: []
+  actions: []
+
+=== Ключевые файлы /etc ===
+--- /etc/ota.conf ---
+server=10.192.224.88
+port=10888
+
+--- /etc/hosts ---
+127.0.0.1		    localhost
+
+--- /etc/core_register ---
+# Register core to core manager. The core priority is [1, 5]. 1 is the lowest
+# priority, 5 is the highest priority. 3 is the default priority if the core 
+# priority hasn't set.  
+#
+# Usage:
+# @ means the begin of one core.
+# # means comments.
+# $ means the end of one core.
+# ; means finish of one tag value.
+# envirenment value should be set: CORE_REGISTER_FILE=../registry/core_register 
+
+@
+core_name=FSL_CORE;
+core_library_path=lib_omx_core_v2_arm11_elinux.so;
+core_priority=3;
+$
+
+#@
+#core_name=FSL_CORE_OLD;
+#core_library_path=lib_omx_core_arm11_elinux.so;
+#core_priority=3;
+#$
+
+
+--- /etc/component_register ---
+# Register component to core. The component role priority is [1, 5]. 1 is the lowest
+# priority, 5 is the highest priority. 3 is the default priority if the component role 
+# priority hasn't set. The component role priority should be set immediately after the 
+# component role.
+#
+# Usage:
+# @ means the begin of one component.
+# # means comments.
+# $ means the end of one component.
+# ; means finish of one tag value.
+# envirenment value should be set: COMPONENT_REGISTER_FILE=../registry/component_register 
+
+@
+component_name=OMX.Freescale.std.template.sw-based;
+library_path=lib_omx_template_arm11_elinux.so;
+component_entry_function=TemplateInit;
+component_role=component.template;
+role_priority=3;
+$
+
+@
+component_name=OMX.Freescale.std.component.file_write.sw-based;
+library_path=lib_omx_file_write_arm11_elinux.so;
+component_entry_function=FileWriteInit;
+component_role=component.file_write;
+role_priority=3;
+$
+
+@
+component_name=OMX.Freescale.std.audio_decoder.mp3.sw-based;
+library_path=lib_omx_mp3_dec_v2_arm11_elinux.so;
+component_entry_function=Mp3DecInit;
+component_role=audio_decoder.mp3;
+role_priority=3;
+$
+
+@
+component_name=OMX.Freescale.std.audio_decoder.vorbis.sw-based;
+library_path=lib_omx_vorbis_dec_v2_arm11_elinux.so;
+component_entry_function=VorbisDecInit;
+
+--- /etc/contentpipe_register ---
+# Register content pipe to core. 
+#
+# Usage:
+# @ means the begin of one content pipe.
+# # means comments.
+# $ means the end of one content pipe.
+# ; means finish of one tag value.
+# envirenment value should be set: CONTENTPIPE_REGISTER_FILE=../registry/contentpipe_register 
+
+@
+content_pipe_name=LOCAL_FILE_PIPE_NEW;
+content_pipe_library_path=lib_omx_local_file_pipe_v2_arm11_elinux.so;
+content_pipe_entry_function=LocalFilePipe_Init;
+$
+
+@
+content_pipe_name=SHAREDFD_PIPE;
+content_pipe_library_path=lib_omx_shared_fd_pipe_arm11_elinux.so;
+content_pipe_entry_function=SharedFdPipe_Init;
+$
+
+@
+content_pipe_name=HTTPS_PIPE;
+content_pipe_library_path=lib_omx_https_pipe_v3_arm11_elinux.so;
+content_pipe_entry_function=HttpsPipe_Init;
+$
+
+@
+content_pipe_name=MMS_PIPE;
+content_pipe_library_path=lib_omx_https_pipe_v3_arm11_elinux.so;
+content_pipe_entry_function=HttpsPipe_Init;
+$
+
+@
+content_pipe_name=RTPS_PIPE;
+content_pipe_library_path=lib_omx_rtps_pipe_arm11_elinux.so;
+content_pipe_entry_function=RtpsPipe_Init;
+$
+
+@
+
+--- /etc/display_mode_fb0.conf ---
+S:1920x1080p-60
+U:1920x1080p-60
+S:1280x720p-60
+U:1280x720p-60
+D:1024x768p-60
+
+=== /etc полностью ===
+NOTICE.html.gz
+apns-conf.xml
+audio_effects.conf
+audio_policy.conf
+bluesoleil
+bluetooth
+clatd.conf
+component_register
+contentpipe_register
+core_register
+dhcpcd
+display_mode_fb0.conf
+display_mode_fb2.conf
+display_mode_fb4.conf
+eGTouchA_v2.5.2112.A-a.ini
+event-log-tags
+fallback_fonts.xml
+firmware
+hosts
+ip-down
+ip-up
+media_codecs.xml
+media_profiles.xml
+mkshrc
+ota.conf
+permissions
+ppp
+recovery-resource.dat
+security
+system_fonts.xml
+voVidDec.dat
+vosfPlay.cfg
+wifi
+
+=== init.*.rc сервисы (Elead) ===
+
+=== ищем упоминания RAM в u-boot и ядре ===
+--- reports/unpacked/boot.img
+console=ttymxc0,115200 init=/init video=mxcfb0:dev=lcd,HANNSTAR-WVGA,if=RGB24,fbpix=RGB32,bpp=32 video=mxcfb1:off video=mxcfb2:off fbmem=28M vmalloc=400M androidboot.console=ttymxc0 androidboot.hardware=el_imx6_solo_v2 lpj=7905280 resume=179:2 androidboot.selinux=disable panic=3 el_module=LIFAN_LF01
+--- reports/unpacked/u-boot.bin
+	'addr' should be the address of boot image which is zImage+ramdisk.img
+	'arg' can be the address of an initrd image
+	start [addr [arg ...]]
+      to address 'addr' from dos filesystem
+    - start application at address 'addr'
+## Transferring control to NetBSD stage-2 loader (at address %08lx) ...
+## Transferring control to RTEMS (at address %08lx) ...
+%s:Send 2th chip address fail(%x)
+%s:chip address cycle fail(%x)
+%s:device address cycle fail(%x)
+%sLoad Address: %08x
+'addr' to 'index':
+<interface> <dev[:part]>  <addr> <filename> [bytes]
+Can't find pll parameters
+DDR Clock: %dHz
+DDR clock should be less than%d MHz, assuming max value
+DRAM:  
+ERROR: blow preparation failed
+ERROR: invalid address.
+ERROR: read preparation failed
+Too many or less parameters!
+Too much parameters.
+Valid chip addresses:
+[<addr> | mmc0 | mmc1 | mmc2 | mmcX] [<partition>] 
+[addr [arg ...]]
+=== размеры разделов из build_emmc.sh ===
