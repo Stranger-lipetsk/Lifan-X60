@@ -1,0 +1,83 @@
+dex-файлов: 1 -> ['classes.dex']
+строк извлечено: 22685
+
+=== 1. Всё, что похоже на MirrorLink / FPT ===
+  *TRANSACTION_elBTreqHfpTerminateCurrentCall
+  ; handleMessage(), MSG_UPDATE_MIRRORLINK_STATE...bEnanble = 
+  MSG_UPDATE_MIRRORLINK_STATE
+  MirrorLink
+  MirrorLinkReceiver
+  PACKAGE_MIRRORLINK
+  com.fpt.mirrorlink.android
+  elBTreqHfpTerminateCurrentCall
+  enableMirrorLinkIcon
+  isAutoMirrored
+  mHasMirroring
+  main_btn_mirrorlink_click
+  main_btn_mirrorlink_disable
+  main_btn_mirrorlink_normal
+  mirrored
+  mirrorlink
+  mirrorlinkfilter
+  setAutoMirrored
+
+=== 2. Строки APK/пути, которые оболочка пытается открыть ===
+  "/data/misc/bluedroid/bt_config.xml
+  "/mnt/media_rw/extsd/NavitelContent
+  "/mnt/sdcard/Polnav6/EL817/NeverGPS
+  "Landroid/os/storage/IMountService;
+  $/mnt/sdcard/Polnav6/User/Reserve.ini
+  %/mnt/sdcard/Polnav6/EL817/Reserve.ini
+  'Landroid/os/storage/IMountService$Stub;
+  /mnt/para_fw/config.ini
+  /mnt/para_fw/tp_verinfo
+  /mnt/para_fw/wifimac.tmp
+  /mnt/sdcard/Polnav6/NeverGPS
+
+=== 3. Пакеты, которые оболочка знает (полный список) ===
+  com.android.browser
+  com.android.camera2
+  com.android.launcher
+  com.android.music
+  com.android.musicfx
+  com.android.onetimeinitializer
+  com.android.providers.settings
+  com.android.provision
+  com.android.soundrecorder
+  com.fpt.mirrorlink.android
+  com.mansiontech.mxnavi
+  com.mxnavi.mxmlinkclient
+  com.nuro.r1.main
+  com.polstar.polnav6
+  tw.com.elead.el817tmc1.eztts
+  tw.com.elead.el830.avin
+  tw.com.elead.el830.avin2
+  tw.com.elead.el830.ccd
+  tw.com.elead.el830.dlna
+  tw.com.elead.el830.dtv
+  tw.com.elead.el830.dvd
+  tw.com.elead.el830.dvr
+  tw.com.elead.el830.elbluetooth
+  tw.com.elead.el830.ewhere
+  tw.com.elead.el830.ezdealer
+  tw.com.elead.el830.ezlife
+  tw.com.elead.el830.ezservice
+  tw.com.elead.el830.eztalk
+  tw.com.elead.el830.hdmi
+  tw.com.elead.el830.home
+  tw.com.elead.el830.ipod
+  tw.com.elead.el830.mediaplayer
+  tw.com.elead.el830.radio
+  tw.com.elead.el830.setup
+  tw.com.elead.el830.update
+  tw.com.elead.el830.wfdsink
+  tw.com.elead.el830.wifi
+
+=== 4. Строки с Manifest.permission / action запуска ===
+  android.intent.action.MAIN
+  android.intent.action.SCREEN_ON
+  android.intent.action.SEND
+  android.intent.action.TIME_SET
+  android.intent.action.TIME_TICK
+  android.intent.category.DEFAULT
+  android.intent.category.HOME
