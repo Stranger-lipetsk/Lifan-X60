@@ -1,0 +1,17 @@
+# Временные файлы распаковки
+firmware/unpacked/
+firmware/tmp/
+*.tmp
+*.log
+
+# Большие оригиналы можно игнорить если льёшь через облако (раскомментируй если нужно)
+# firmware/original/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Инструменты
+tools/bin/
+tools/output/
