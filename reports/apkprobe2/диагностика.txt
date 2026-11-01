@@ -1,0 +1,28 @@
+=== Navitel-v11.11.1128-Google-full.apk
+HTTP/2 301 
+content-type: text/html
+content-length: 162
+location: https://dl3.navitel.com/Android/Navitel-v11.11.1128-Google-full.apk
+HTTP/2 404 
+content-type: text/html
+content-length: 146
+-rw-r--r-- 1 runner runner 146 Nov  1 13:23 Navitel-v11.11.1128-Google-full.apk
+Navitel-v11.11.1128-Google-full.apk: HTML document, ASCII text, with CRLF line terminators
+00000000: 3c68 746d 6c3e 0d0a 3c68 6561 643e 3c74  <html>..<head><t
+00000010: 6974 6c65 3e34 3034 204e 6f74 2046 6f75  itle>404 Not Fou
+00000020: 6e64 3c2f 7469 746c 653e 3c2f 6865 6164  nd</title></head
+
+=== Navitel-9.13.73-full-armeabi.apk
+HTTP/2 301 
+content-type: text/html
+content-length: 162
+location: https://dl3.navitel.com/Android/Navitel-9.13.73-full-armeabi.apk
+HTTP/2 200 
+content-type: application/octet-stream
+content-length: 188381209
+-rw-r--r-- 1 runner runner 188381209 Nov  1 13:23 Navitel-9.13.73-full-armeabi.apk
+Navitel-9.13.73-full-armeabi.apk: Android package (APK), with AndroidManifest.xml
+00000000: 504b 0304 0000 0000 0800 0000 0000 e10e  PK..............
+00000010: 1224 f013 0000 245d 0000 1300 0000 416e  .$....$]......An
+00000020: 6472 6f69 644d 616e 6966 6573 742e 786d  droidManifest.xm
+
