@@ -1,0 +1,55 @@
+name: Разбор прошивки — проход 5
+
+on:
+  push:
+    paths:
+      - 'autoanalysis/pass5.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  PUBLIC_KEY: https://disk.yandex.ru/d/qJdjjeB8Aiq3Lg
+
+jobs:
+  pass5:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - name: "Инструменты"
+        run: |
+          sudo apt-get update -qq 2>/dev/null || true
+          sudo apt-get install -y -qq p7zip-full unrar-free e2fsprogs file >/dev/null 2>&1 || true
+      - name: "Скачать и распаковать"
+        run: |
+          mkdir -p firmware/original reports/unpacked
+          python3 - <<'PY'
+          import json, os, subprocess, urllib.parse, urllib.request
+          pk = os.environ['PUBLIC_KEY']
+          url = ('https://cloud-api.yandex.net/v1/disk/public/resources'
+                 '?public_key=' + urllib.parse.quote(pk, safe='') + '&limit=100')
+          items = json.load(urllib.request.urlopen(url, timeout=60))['_embedded']['items']
+          it = [i for i in items if i['type']=='file' and '2016' in i['name']][0]
+          dest = os.path.join('firmware/original', it['name'])
+          subprocess.run(['curl','-L','--fail','--retry','3','--connect-timeout','30',
+                          '--max-time','2500','-o',dest,it['file']], check=True)
+          PY
+          for f in firmware/original/*; do
+            [ -f "$f" ] || continue
+            7z x -y -aos -o"reports/unpacked" "$f" >/dev/null 2>&1 || true
+          done
+      - name: "Проход 5"
+        run: bash tools/fw_pass5.sh reports/unpacked reports/pass5 2>&1 | tee reports/pass5-лог.txt | tail -160
+      - name: "Коммит"
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          printf 'firmware/\nreports/unpacked/\n' > .git/info/exclude
+          git add -A reports
+          if git diff --cached --quiet; then echo "нет изменений"; else
+            git commit -m "разбор прошивки: проход 5 (полный дамп system, APK, /etc)"
+            git push origin HEAD:${{ github.ref_name }}
+          fi
