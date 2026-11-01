@@ -52,3 +52,16 @@ gpsconfig.xml нет
 ######## 7. permissions: объявлен ли GPS как hardware feature ########
 android.hardware.location.gps.xml
 com.android.location.provider.xml
+
+######## 8. GPS: что внутри gps.default.so ########
+/dev/ttymxc2
+/system/bin/linker
+--- интерфейс HAL (версии) ---
+
+######## 9. ueventd: устройства GPS ########
+
+######## 10. init rc: все строки про gps (включая закомментированные) ########
+
+######## 11. rc.wifi существует? ########
+
+######## 12. есть ли приложение, дающее геолокацию ########
