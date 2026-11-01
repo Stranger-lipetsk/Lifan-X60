@@ -1,0 +1,66 @@
+name: Сборка APK «Переключатель»
+
+on:
+  push:
+    paths:
+      - 'switcher/**'
+      - 'autoanalysis/switcher.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - name: "Java 17 и Android SDK"
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: "Установить build-tools и platform"
+        run: |
+          export ANDROID_HOME=${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          ls "$ANDROID_HOME" 2>/dev/null || true
+          sudo "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --install \
+            "build-tools;34.0.0" "platforms;android-34" 2>&1 | tail -5 || \
+          yes | sudo "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" \
+            "build-tools;34.0.0" "platforms;android-34" 2>&1 | tail -5
+          ls "$ANDROID_HOME/build-tools/" || true
+          ls "$ANDROID_HOME/platforms/" || true
+      - name: "Сборка APK"
+        run: |
+          bash switcher/build.sh 2>&1 | tee reports/switcher-build.txt | tail -40
+      - name: "Разбор собранного APK"
+        if: always()
+        run: |
+          export ANDROID_HOME=${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}
+          BT=$(ls -d "$ANDROID_HOME"/build-tools/* 2>/dev/null | sort -V | tail -1)
+          {
+            echo "=== badging ==="
+            "$BT/aapt" dump badging switcher/switcher.apk 2>&1 | head -20
+            echo "=== активности и фильтры ==="
+            "$BT/aapt" dump xmltree switcher/switcher.apk AndroidManifest.xml 2>&1 | head -60
+          } 2>&1 | tee reports/switcher-apk.txt
+      - name: "Артефакт"
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: switcher-apk
+          path: switcher/switcher.apk
+          retention-days: 30
+      - name: "Коммит отчётов"
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          printf 'switcher/build/\nswitcher/switcher.apk\n' > .git/info/exclude
+          git add -A reports
+          if git diff --cached --quiet; then echo "нет изменений"; else
+            git commit -m "сборка APK Переключатель: лог и разбор"
+            git push origin HEAD:${{ github.ref_name }}
+          fi
