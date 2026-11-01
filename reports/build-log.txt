@@ -1,10 +1,10 @@
 использую sudo для chown и сборки образа
-временная папка: /tmp/lifan_build_jujfd46p
+временная папка: /tmp/lifan_build_szlu9pgh
 архив: fw/firmware.rar (220980636 байт)
 распаковано через 7z
-system.img: /tmp/lifan_build_jujfd46p/rar/system.img (377487360 байт)
+system.img: /tmp/lifan_build_szlu9pgh/rar/system.img (377487360 байт)
   sha256 исходного: 0f898f48ee910fe0c125768b71f587fa…
-debugfs rdump: /tmp/lifan_build_jujfd46p/rar/system.img (377487360 байт)
+debugfs rdump: /tmp/lifan_build_szlu9pgh/rar/system.img (377487360 байт)
 распаковано файлов: 1341
 
 --- изменения ---
@@ -15,7 +15,7 @@ debugfs rdump: /tmp/lifan_build_jujfd46p/rar/system.img (377487360 байт)
   свойство: ro.product.locale.region=RU (заменено)
 
 --- права ---
-права: файлов 0, каталогов 0; владелец root:root
+права выставлены через sudo: файлов 1338; владелец root:root
 
 --- сборка ---
 содержимое: 199.3 МиБ (раздел p3 = 512 МиБ)
@@ -30,14 +30,19 @@ debugfs rdump: /tmp/lifan_build_jujfd46p/rar/system.img (377487360 байт)
          4.3 МиБ  /fonts/DroidSansFallback.ttf
          3.9 МиБ  /priv-app/ElSettings.apk
          3.6 МиБ  /framework/framework.jar
-рабочая папка сохранена: /tmp/lifan_build_jujfd46p
-Traceback (most recent call last):
-  File "/home/runner/work/Lifan-X60/Lifan-X60/tools/build_system.py", line 398, in <module>
-    main()
-  File "/home/runner/work/Lifan-X60/Lifan-X60/tools/build_system.py", line 381, in main
-    out = build_image(root, os.path.abspath(args.out), args.size_mb)
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/Lifan-X60/Lifan-X60/tools/build_system.py", line 276, in build_image
-    with open(tmp, 'wb') as f:
-         ^^^^^^^^^^^^^^^
-FileNotFoundError: [Errno 2] No such file or directory: '/home/runner/work/Lifan-X60/Lifan-X60/out/system-test.img.tmp'
+собрано (фичи: ^64bit,^metadata_csum,^metadata_csum_seed,^orphan_file,^quota,^casefold,^bigalloc)
+--- параметры ФС ---
+  Filesystem volume name:   system
+  Filesystem features:      has_journal ext_attr resize_inode dir_index filetype extent flex_bg sparse_super large_file huge_file dir_nlink extra_isize
+  Block count:              131072
+  Block size:               4096
+  Inode size:	          256
+
+ГОТОВО: /home/runner/work/Lifan-X60/Lifan-X60/out/system-test.img
+  размер: 536870912 байт (512.0 МиБ)
+  sha256: dd5989446c44125aee72db36ef8208442d430ec9cb44583adbe0c8d3a78bd45a
+
+Дальше: положить как system.img на SD рядом с boot.img, u-boot.bin,
+MCU_FW.hex и sd_boot.img (штатными!) и прошить штатным способом.
+Подробно: docs/06-инструкция-модернизации.md
+рабочая папка сохранена: /tmp/lifan_build_szlu9pgh
