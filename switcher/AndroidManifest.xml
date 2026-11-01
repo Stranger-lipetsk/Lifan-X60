@@ -26,15 +26,25 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-            <!-- opt-in: только этот фильтр даёт назначить приложение лаунчером.
-                 По умолчанию выключен (android:enabled="false"),
-                 чтобы кнопка «Домой» не перехватывалась. -->
-            <intent-filter android:enabled="false">
+        </activity>
+
+        <!-- HOME-режим (необязательно). Пока выключен, кнопка «Домой»
+             работает как обычно. Включается командой:
+               adb shell pm enable com.fpt.mirrorlink.android/.HomeAlias
+             Выключается:
+               adb shell pm disable com.fpt.mirrorlink.android/.HomeAlias -->
+        <activity-alias
+            android:name=".HomeAlias"
+            android:targetActivity=".MainActivity"
+            android:exported="true"
+            android:enabled="false"
+            android:label="Переключатель (Домой)">
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.HOME" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-        </activity>
+        </activity-alias>
 
         <!-- Второе имя той же активности: некоторые оболочки ищут именно
              com.fpt.mirrorlink.android.MirrorLinkActivity -->
