@@ -62,6 +62,27 @@ jobs:
             echo
             echo "######## 7. permissions: объявлен ли GPS как hardware feature ########"
             debugfs -R "ls /etc/permissions" "$IMG" 2>/dev/null | tr ' ' '\n' | grep -i "location\|gps"
+            echo
+            echo "######## 8. GPS: что внутри gps.default.so ########"
+            debugfs -R "dump /lib/hw/gps.default.so /tmp/gps.so" "$IMG" 2>/dev/null
+            strings /tmp/gps.so 2>/dev/null | grep -E "^/dev/|^/data/|^/system/|ttymxc|serial|baud" | sort -u | head -25
+            echo "--- интерфейс HAL (версии) ---"
+            strings /tmp/gps.so 2>/dev/null | grep -iE "GpsInterface|gps_device_t|hardware_module|HAL_MODULE" | head -10
+            echo
+            echo "######## 9. ueventd: устройства GPS ########"
+            debugfs -R "dump /ueventd.el_imx6_solo_v2.rc /tmp/uev" "$IMG" 2>/dev/null
+            grep -iE "gps|mpu|ttymxc" /tmp/uev 2>/dev/null | head -10
+            echo
+            echo "######## 10. init rc: все строки про gps (включая закомментированные) ########"
+            grep -inE "gps|glgps" /tmp/init_rc 2>/dev/null | head -20
+            debugfs -R "dump /init.rc /tmp/init_rc2" "$IMG" 2>/dev/null
+            grep -inE "gps|glgps" /tmp/init_rc2 2>/dev/null | head -20
+            echo
+            echo "######## 11. rc.wifi существует? ########"
+            debugfs -R "ls -l /bin/wifi" "$IMG" 2>/dev/null || echo "каталога /bin/wifi нет"
+            echo
+            echo "######## 12. есть ли приложение, дающее геолокацию ########"
+            debugfs -R "ls /app" "$IMG" 2>/dev/null | tr ' ' '\n' | grep -iE "gps|location|navi" | head
           } > reports/wifi-gps.txt 2>&1
           echo "--- размер отчёта ---"
           ls -l reports/wifi-gps.txt
