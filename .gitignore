@@ -15,3 +15,11 @@ desktop.ini
 # Инструменты
 tools/bin/
 tools/output/
+
+# Бинарные выгрузки из прошивки (не нужны в git — воспроизводятся из архива)
+reports/deep2/update/system/
+reports/deep2/update/sbin/
+reports/deep2/kernel/zImage
+reports/deep2/update/ramdisk.*
+reports/deep2/*.raw.img
+reports/unpacked/
