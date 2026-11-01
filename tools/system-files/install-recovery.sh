@@ -1,92 +1,142 @@
 #!/system/bin/sh
 # ============================================================================
-#  Автоподключение накопителей для ГУ Lifan X60 FL (Elead EL-830C-LF01)
+#  Накопители и карты Navitel для ГУ Lifan X60 FL (Elead EL-830C-LF01)
 #
-#  Зачем: раздел с картами Navitel (p7, FAT32 "Navngo") помечен в fstab как
-#  закомментированный (voldmanaged=emmc_data:7), поэтому Android его сам
-#  не монтирует. Из-за этого Navitel видит карты только с SD-карты.
-#  Второй USB-порт (usb2) в рабочем fstab вообще отсутствует.
+#  Запускается сервисом из init.rc:
+#      service flash_recovery /system/etc/install-recovery.sh
+#  то есть от root на каждой загрузке. Штатного файла в прошивке не было,
+#  поэтому вызов ничего не делал.
 #
-#  Этот скрипт запускается сервисом flash_recovery из init.rc
-#  (service flash_recovery /system/etc/install-recovery.sh) от root
-#  на каждой загрузке — штатный хук Android, boot.img менять не нужно.
+#  Что решает:
+#   1. Внутренний раздел с картами (p7, FAT32) помечен в fstab как
+#      закомментированный (voldmanaged=emmc_data:7) — Android его не монтирует,
+#      поэтому карты видны только с SD-карты. Монтируем сами.
+#   2. Navitel ищет NavitelContent на «основном» хранилище (/sdcard).
+#      Делаем bind-mount найденного тома с картами в /data/media/NavitelContent,
+#      чтобы карты подхватывались с любого носителя (SD, p7, USB).
 #
-#  Откат: удалить файл /system/etc/install-recovery.sh.
+#  USB-порты (музыка/видео) НЕ трогаем: они уже обслуживаются системой
+#  (/storage/usb1, /storage/usb2 создаются в init.rc). Используем их только
+#  как кандидатов на источник карт.
+#
+#  Скрипт ничего не форматирует и не удаляет. Откат — удалить этот файл.
+#  Ручной запуск для диагностики:  sh /system/etc/install-recovery.sh
+#  Лог: /data/local/tmp/mount_storage.log
 # ============================================================================
 
 LOG=/data/local/tmp/mount_storage.log
-mkdir -p /data/local/tmp 2>/dev/null
-echo "=== $(date) загрузка ===" > $LOG
+TARGET=/storage/emmc_data
+P7=/dev/block/mmcblk0p7
+INTERNAL=/data/media
+NAV_DIR=NavitelContent
+MAP_DIR=NavitelContent/Maps
 
-# --- 1. Ждём готовности vold и появления раздела p7 (карты Navitel) ---------
+mkdir -p /data/local/tmp 2>/dev/null
+{
+  echo "=============== $(date) ==============="
+  echo "--- блочные устройства ---"
+  ls -l /dev/block/mmcblk0p* 2>/dev/null
+  ls -l /dev/block/sd* 2>/dev/null
+  echo "--- смонтировано ---"
+  mount | grep -E "mmcblk|sd[a-z]|storage|media_rw"
+} >> $LOG 2>&1
+
+# --------------------------------------------------------------------------
+# 1. Внутренний раздел с картами (p7)
+# --------------------------------------------------------------------------
 i=0
-while [ $i -lt 40 ]; do
-    [ -b /dev/block/mmcblk0p7 ] && break
+while [ $i -lt 30 ]; do
+    [ -b $P7 ] && break
     i=$((i + 1))
     sleep 1
 done
-echo "ожидание p7: $i с" >> $LOG
+echo "ожидание $P7: ${i} с" >> $LOG
 
-# --- 2. Монтируем раздел с картами в /storage/emmc_data --------------------
-#  Именно этот путь Navitel ищет по умолчанию (симлинк создаётся в init.rc).
-TARGET=/storage/emmc_data
 mkdir -p $TARGET 2>/dev/null
-
 if mount | grep -q " $TARGET "; then
     echo "emmc_data уже смонтирован" >> $LOG
+elif [ -b $P7 ]; then
+    mount -t vfat -o rw,utf8,uid=1000,gid=1000,fmask=0000,dmask=0000,shortname=mixed \
+          $P7 $TARGET >> $LOG 2>&1
+    if [ $? -eq 0 ]; then
+        echo "OK: p7 -> $TARGET" >> $LOG
+        chown -R media_rw:media_rw $TARGET 2>/dev/null
+        chmod -R 0777 $TARGET 2>/dev/null
+    else
+        echo "НЕ УДАЛОСЬ смонтировать p7 (возможно, не FAT32)" >> $LOG
+    fi
 else
-    if [ -b /dev/block/mmcblk0p7 ]; then
-        mount -t vfat -o rw,uid=1000,gid=1000,fmask=0000,dmask=0000,shortname=mixed \
-              /dev/block/mmcblk0p7 $TARGET >> $LOG 2>&1
-        if [ $? -eq 0 ]; then
-            echo "OK: p7 -> $TARGET" >> $LOG
-            # права на запись для медиа-службы
-            chown -R media_rw:media_rw $TARGET 2>/dev/null
-            chmod -R 0777 $TARGET 2>/dev/null
-        else
-            # иногда помогает вариант без опций (autodetect)
-            mount -t vfat -o rw /dev/block/mmcblk0p7 $TARGET >> $LOG 2>&1
-            echo "повтор без опций: $?" >> $LOG
-        fi
-    else
-        echo "p7 не найден — карты недоступны" >> $LOG
-    fi
+    echo "p7 отсутствует" >> $LOG
 fi
 
-# --- 3. Проверяем структуру каталогов Navitel ------------------------------
-#  Navitel 9.x/11.x ищет карты в NavitelContent/Maps, старые — в Navngo.
-if mount | grep -q " $TARGET "; then
-    for d in NavitelContent NavitelContent/Maps Navngo; do
-        mkdir -p "$TARGET/$d" 2>/dev/null
-    done
-    ls -l $TARGET >> $LOG 2>&1
-fi
-
-# --- 4. Второй USB-порт как обычное хранилище ------------------------------
-#  В рабочем fstab есть только usb1 (fsl-ehci.0), а usb2 (fsl-ehci.1)
-#  отсутствует — поэтому флешка во втором порту не видна.
-USBDIR=/storage/usb2
-mkdir -p $USBDIR 2>/dev/null
-j=0
-while [ $j -lt 15 ]; do
-    DEV=""
-    for c in /dev/block/sda1 /dev/block/sdb1 /dev/block/sda /dev/block/sdb; do
-        [ -b "$c" ] && DEV=$c && break
-    done
-    [ -n "$DEV" ] && break
-    j=$((j + 1))
-    sleep 1
+# --------------------------------------------------------------------------
+# 2. Готовим каталоги Navitel на всех доступных носителях
+# --------------------------------------------------------------------------
+for v in $TARGET /storage/extsd /storage/usb1 /storage/usb2; do
+    [ -d "$v" ] || continue
+    mkdir -p "$v/$NAV_DIR" "$v/$MAP_DIR" 2>/dev/null
+    echo "каталоги Navitel: $v — $?" >> $LOG
 done
-echo "USB-устройство: ${DEV:-нет}" >> $LOG
-if [ -n "$DEV" ]; then
-    if mount | grep -q " $USBDIR "; then
-        echo "usb2 уже смонтирован" >> $LOG
+
+# --------------------------------------------------------------------------
+# 3. Ищем том, где реально лежат карты (*.nm7)
+# --------------------------------------------------------------------------
+FOUND=""
+for v in $TARGET /storage/extsd /storage/usb1 /storage/usb2; do
+    [ -d "$v" ] || continue
+    HIT=$(find "$v" -maxdepth 3 -name '*.nm7' -print 2>/dev/null | head -1)
+    if [ -n "$HIT" ]; then
+        FOUND=$v
+        echo "карты найдены: $HIT" >> $LOG
+        break
+    fi
+done
+
+if [ -z "$FOUND" ]; then
+    echo "карты *.nm7 не найдены ни на одном носителе" >> $LOG
+    echo "=== готово (без карт) ===" >> $LOG
+    exit 0
+fi
+
+# --------------------------------------------------------------------------
+# 4. Делаем карты видимыми для Navitel через основное хранилище
+#    /data/media -> /sdcard (emulated), ровно там Navitel ищет NavitelContent
+# --------------------------------------------------------------------------
+SRC="$FOUND/$NAV_DIR"
+[ -d "$SRC" ] || SRC="$FOUND"
+
+mkdir -p "$INTERNAL" 2>/dev/null
+
+# если внутри уже есть свои карты — ничего не перекрываем
+INTERNAL_HAS=$(find "$INTERNAL" -maxdepth 3 -name '*.nm7' -print 2>/dev/null | head -1)
+
+if mount | grep -q " $INTERNAL/$NAV_DIR "; then
+    echo "bind-mount для NavitelContent уже активен" >> $LOG
+elif [ -n "$INTERNAL_HAS" ]; then
+    echo "в $INTERNAL уже есть карты ($INTERNAL_HAS) — перекрытие не нужно" >> $LOG
+else
+    mkdir -p "$INTERNAL/$NAV_DIR" 2>/dev/null
+    mount --bind "$SRC" "$INTERNAL/$NAV_DIR" >> $LOG 2>&1
+    if [ $? -eq 0 ]; then
+        echo "OK: bind $SRC -> $INTERNAL/$NAV_DIR" >> $LOG
     else
-        mount -t vfat -o rw,utf8,uid=1000,gid=1000,fmask=0000,dmask=0000 \
-              $DEV $USBDIR >> $LOG 2>&1
-        echo "mount $DEV -> $USBDIR: $?" >> $LOG
+        echo "bind-mount не удался — карты останутся доступны по прямому пути $SRC" >> $LOG
     fi
 fi
 
-echo "=== готово ===" >> $LOG
+# --------------------------------------------------------------------------
+# 5. Итоговая картина — по логу видно, что получилось
+# --------------------------------------------------------------------------
+{
+  echo "--- итог ---"
+  mount | grep -E "emmc_data|NavitelContent|extsd|usb"
+  echo "--- содержимое томов ---"
+  for v in $TARGET /storage/extsd /storage/usb1 /storage/usb2; do
+      [ -d "$v" ] || continue
+      echo "[$v]"
+      ls "$v" 2>/dev/null | head -10
+  done
+  echo "=== готово ==="
+} >> $LOG 2>&1
+
 exit 0
