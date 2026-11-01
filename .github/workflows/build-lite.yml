@@ -1,0 +1,47 @@
+name: Сборка лайт-образа (итоговая)
+
+on:
+  push:
+    paths:
+      - 'autoanalysis/buildlite.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  lite:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+      - name: "Инструменты"
+        run: |
+          sudo apt-get update -qq 2>/dev/null || true
+          sudo apt-get install -y -qq p7zip-full unrar-free e2fsprogs file >/dev/null 2>&1 || true
+          for t in 7z debugfs mke2fs dumpe2fs e2fsck sha256sum; do printf '%-10s ' "$t"; command -v $t || echo НЕТ; done
+      - name: "Сборка лайт-образа"
+        env:
+          WORK: /tmp/lifanwork
+          OUT: out/system.img
+        run: |
+          mkdir -p /tmp/lifanwork
+          bash tools/build_lite.sh 2>&1 | tail -120
+      - name: "Артефакт"
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: system-img-lite
+          path: out/system.img
+          retention-days: 30
+      - name: "Коммит отчётов"
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          printf 'firmware/\nfw/\nreports/unpacked/\nout/\n' > .git/info/exclude
+          git add -A reports
+          if git diff --cached --quiet; then echo "нет изменений"; else
+            git commit -m "сборка лайт-образа: аудит, сборка, проверка"
+            git push origin HEAD:${{ github.ref_name }}
+          fi
