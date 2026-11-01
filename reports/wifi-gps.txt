@@ -1,0 +1,54 @@
+######## 1. Модули ядра (/lib/modules) ########
+   1262   40755 (2)      0      0    4096 26-Apr-2026 17:05 .
+    977   40755 (2)      0      0    8192 26-Apr-2026 17:36 ..
+   1263  100644 (1)      0      0   244646 26-Apr-2026 17:05 asix.ko
+   1264  100644 (1)      0      0   3232186 26-Apr-2026 17:05 cfg80211.ko
+   1265  100644 (1)      0      0   354594 26-Apr-2026 17:05 elead_gpio.ko
+   1266  100644 (1)      0      0   166452 26-Apr-2026 17:05 gt9xx.ko
+   1267  100644 (1)      0      0   1439307 26-Apr-2026 17:05 ipod_dev.ko
+   1268  100644 (1)      0      0   159050 26-Apr-2026 17:05 max9768.ko
+   1269  100644 (1)      0      0   2189690 26-Apr-2026 17:05 scsi_mod.ko
+   1270  100644 (1)      0      0   39855 26-Apr-2026 17:05 scsi_wait_scan.ko
+   1271  100644 (1)      0      0   286684 26-Apr-2026 17:05 sd_mod.ko
+   1272  100644 (1)      0      0   1126913 26-Apr-2026 17:05 usb-storage.ko
+   1273  100644 (1)      0      0   262446 26-Apr-2026 17:05 usbhid.ko
+
+
+######## 2. wpa_supplicant / dhcpcd / hostapd в /bin ########
+dhcpcd
+dnsmasq
+hostapd
+hostapd_cli
+wpa_cli
+wpa_supplicant
+
+######## 3. /etc/wifi ########
+    802   40755 (2)      0      0    4096 26-Apr-2026 17:05 .
+    585   40755 (2)      0      0    4096 26-Apr-2026 17:05 ..
+    803  100644 (1)      0      0    1203 26-Apr-2026 17:05 nvram.txt
+    804  100644 (1)      0      0      24 26-Apr-2026 17:05 p2p_supplicant_overlay.conf
+    805   40755 (2)      0      0    4096 26-Apr-2026 17:05 wlconf
+    808  100644 (1)      0      0     271 26-Apr-2026 17:05 wpa_supplicant.conf
+    809  100644 (1)      0      0      31 26-Apr-2026 17:05 wpa_supplicant_overlay.conf
+
+
+######## 4. firmware для Wi-Fi (/etc/firmware, /vendor/firmware) ########
+bcm20710a1.hcd
+ 1364  (12) .    1361  (12) ..    1365  (28) fw_bcm40181a2.bin   
+ 1366  (32) fw_bcm40181a2_apsta.bin    1367  (32) fw_bcm40181a2_p2p.bin   
+ 1368  (3980) ti-connectivity   
+
+######## 5. build.prop: Wi-Fi и GPS ########
+ro.wifi.channels=
+wifi.interface=wlan0
+softap.interface=wlan0
+wifi.ap.interface
+wlan0
+
+######## 6. GPS: библиотеки и конфиги ########
+GPS-бинарников нет
+gpsconfig.xml нет
+
+######## 7. permissions: объявлен ли GPS как hardware feature ########
+android.hardware.location.gps.xml
+com.android.location.provider.xml
