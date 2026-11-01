@@ -42,7 +42,11 @@ jobs:
           ls -lh firmware/original/
       - name: "Тест сборки (лайт-набор)"
         run: |
-          set -x
+          set -o pipefail
+          echo "== окружение =="
+          python3 --version
+          for t in make_ext4fs mke2fs debugfs 7z unrar unrar-free; do printf '%-14s ' "$t"; command -v $t || echo НЕТ; done
+          echo "== запуск =="
           python3 tools/build_system.py \
             --fw "firmware/original/прошивка офиц. 2016г.rar" \
             --out out/system-test.img \
@@ -50,9 +54,9 @@ jobs:
             --remove "/app/IQQIService-Elead-International-20160105.1.apk" \
             --remove /app/BSEDemo.apk \
             --set-prop ro.product.locale.language=ru \
-            --set-prop ro.product.locale.region=RU \
-            --keep-work 2>&1 | tail -40
-          ls -lh out/ || true
+            --set-prop ro.product.locale.region=RU 2>&1 | tee reports/build-log.txt | tail -50
+          echo "код выхода: $?"
+          ls -lh out/ 2>/dev/null || echo "out пуст"
       - name: "Проверка результата"
         if: always()
         run: |
