@@ -1,5 +1,5 @@
 === файл ===
--rw-r--r-- 1 runner runner 536870912 Nov  1 14:01 out/system.img
+-rw-r--r-- 1 runner runner 536870912 Nov  1 14:04 out/system.img
 байт: 536870912 (эталон раздела p3: 536870912)
 РАЗМЕР: OK
 === ФС ===
@@ -20,8 +20,8 @@ system: 1390/32768 files (0.1% non-contiguous), 61038/131072 blocks
 === удалённое ===
 Navitel удалён — OK
 === автоподключение карт (install-recovery.sh) ===
-    606  100644 (1)      0      0    3963  1-Nov-2026 14:01 install-recovery.sh
-скрипт на месте
+      606  100755 (1)      0      0    3963  1-Nov-2026 14:04 install-recovery.sh
+права на исполнение: OK
 === build.prop ===
 ro.build.version.release=4.4.2
 ro.product.locale.language=ru
@@ -31,4 +31,4 @@ persist.sys.timezone=Europe/Moscow
 Block count:              131072
 Free blocks:              70034
 === sha256 ===
-03b6977ac49166a071b644f18dbc1dd35c24c427898e69e194a6295adfda9d5f  out/system.img
+0e8e56e7f5a4df4039ace3f74dd1e83b1093bdb54864eebbede1fb696929161a  out/system.img

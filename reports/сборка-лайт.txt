@@ -1,5 +1,5 @@
 использую sudo для chown и сборки образа
-временная папка: /tmp/lifan_build_1cvp__et
+временная папка: /tmp/lifan_build_b7tnafby
 system.img: out/system-original.img (377487360 байт)
   sha256 исходного: 0f898f48ee910fe0c125768b71f587fa…
 debugfs rdump: out/system-original.img (377487360 байт)
@@ -15,7 +15,7 @@ debugfs rdump: out/system-original.img (377487360 байт)
   удалено: /app/WfdSink.apk
   удалено: /app/FSLOta.apk
   удалено: /app/HTMLViewer.apk
-  добавлен файл: /etc/install-recovery.sh
+  добавлен файл: /etc/install-recovery.sh (права 755)
   свойство: ro.product.locale.language=ru (заменено)
   свойство: ro.product.locale.region=RU (заменено)
   свойство: persist.sys.timezone=Europe/Moscow (добавлено)
@@ -46,7 +46,7 @@ debugfs rdump: out/system-original.img (377487360 байт)
 
 ГОТОВО: /home/runner/work/Lifan-X60/Lifan-X60/out/system.img
   размер: 536870912 байт (512.0 МиБ)
-  sha256: 03b6977ac49166a071b644f18dbc1dd35c24c427898e69e194a6295adfda9d5f
+  sha256: 0e8e56e7f5a4df4039ace3f74dd1e83b1093bdb54864eebbede1fb696929161a
 
 Дальше: положить как system.img на SD рядом с boot.img, u-boot.bin,
 MCU_FW.hex и sd_boot.img (штатными!) и прошить штатным способом.
