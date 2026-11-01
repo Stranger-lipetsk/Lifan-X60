@@ -1,162 +1,134 @@
-name: Облачный анализ прошивки
+name: Анализ прошивки (облако)
+
+# Запускается автоматически при пуше, а также вручную.
+# Скачивает архивы прошивки с Яндекс.Диска, распаковывает и кладёт
+# текстовые отчёты обратно в репозиторий (папка reports/).
 
 on:
+  push:
+    paths:
+      - 'autoanalysis/**'
   workflow_dispatch:
-    inputs:
-      public_key:
-        description: 'Публичная ссылка Яндекс.Диска'
-        required: true
-        default: 'https://disk.yandex.ru/d/qJdjjeB8Aiq3Lg'
-      extract_limit_mb:
-        description: 'Лимит размера файла для распаковки (МБ, 0 = не ограничивать)'
-        required: false
-        default: '900'
 
 permissions:
   contents: write
 
+env:
+  PUBLIC_KEY: https://disk.yandex.ru/d/qJdjjeB8Aiq3Lg
+  # распаковываем только то, что укладывается в лимит (МБ) — git-диффы не раздуваем
+  EXTRACT_LIMIT_MB: '700'
+
 jobs:
   analyze:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
 
-      - name: Установка инструментов анализа
+      - name: Инструменты
         run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq binwalk unrar-free p7zip-full file cpio gzip xz-utils lz4 python3-pip liblzma-dev >/dev/null 2>&1 || \
-          sudo apt-get install -y -qq binwalk unrar p7zip-full file cpio gzip xz-utils | tail -5
-          echo "--- tools ---"
-          for t in binwalk 7z 7za unrar unrar-free unzip file cpio; do
-            printf '%-12s ' "$t"; command -v $t || echo "НЕТ"
-          done
+          sudo apt-get update -qq 2>/dev/null
+          sudo apt-get install -y -qq binwalk p7zip-full unrar-free file cpio 2>/dev/null || \
+            sudo apt-get install -y -qq binwalk p7zip-full unrar file cpio
+          for t in binwalk 7z unrar unrar-free; do printf '%-12s ' "$t"; command -v $t || echo НЕТ; done
 
-      - name: Получение метаданных Яндекс.Диска
-        env:
-          PUBLIC_KEY: ${{ github.event.inputs.public_key }}
+      - name: Метаданные Яндекс.Диска
         run: |
-          mkdir -p reports
+          mkdir -p reports firmware/original
           python3 - <<'PY'
           import json, os, urllib.parse, urllib.request
           pk = os.environ['PUBLIC_KEY']
-          url = 'https://cloud-api.yandex.net/v1/disk/public/resources' \
-                '?public_key=' + urllib.parse.quote(pk, safe='') + '&limit=100'
+          url = ('https://cloud-api.yandex.net/v1/disk/public/resources'
+                 '?public_key=' + urllib.parse.quote(pk, safe='') + '&limit=100')
           with urllib.request.urlopen(url, timeout=60) as r:
               data = json.load(r)
           items = data.get('_embedded', {}).get('items', [])
-          manifest = []
+          out = []
           for it in items:
-              manifest.append({
-                  'name': it.get('name'),
-                  'size': it.get('size'),
-                  'sha256': it.get('sha256'),
-                  'md5': it.get('md5'),
-                  'type': it.get('type'),
-                  'download': (it.get('file') or ''),
-              })
-          with open('reports/01-yandex-manifest.json', 'w') as f:
-              json.dump({'items': manifest}, f, indent=2, ensure_ascii=False)
-          # сохраняем только ссылки на скачивание в отдельный файл для шага загрузки
-          with open('/tmp/dl.json', 'w') as f:
-              json.dump([{'name': m['name'], 'size': m['size'], 'download': m['download']}
-                         for m in manifest if m['type'] == 'file'], f, ensure_ascii=False)
-          for m in manifest:
-              print(f"{m['name']} | {m['size']} | {m['sha256']}")
+              out.append({k: it.get(k) for k in ('name', 'size', 'sha256', 'md5', 'type')} | {'download': it.get('file', '')})
+          json.dump(out, open('/tmp/dl.json', 'w'), ensure_ascii=False)
+          json.dump([{k: v for k, v in i.items() if k != 'download'} for i in out],
+                    open('reports/01-манифест-яндекс-диск.json', 'w'), indent=2, ensure_ascii=False)
+          for i in out:
+              print(i['name'], i['size'], i['sha256'])
           PY
 
-      - name: Скачивание и анализ каждого архива
-        env:
-          LIMIT_MB: ${{ github.event.inputs.extract_limit_mb }}
-        run: |
-          set -o pipefail
-          mkdir -p firmware/original
-          python3 - <<'PY'
-          import json
-          items = json.load(open('/tmp/dl.json'))
-          print(len(items), 'файлов к загрузке')
-          PY
-
-      - name: Загрузка файлов по прямым ссылкам
+      - name: Скачивание архивов
         run: |
           python3 - <<'PY'
-          import json, os, subprocess, sys
-          items = json.load(open('/tmp/dl.json'))
-          for it in items:
+          import json, os, subprocess
+          for it in json.load(open('/tmp/dl.json')):
               dest = os.path.join('firmware/original', it['name'])
-              print(f"=== Скачивание {it['name']} ({it['size']} байт) ===", flush=True)
-              cmd = ['curl', '-L', '--fail', '--retry', '3', '--retry-delay', '5',
-                     '--connect-timeout', '30', '--max-time', '3000',
-                     '-o', dest, it['download']]
-              r = subprocess.run(cmd)
-              if r.returncode != 0:
-                  print(f"!! не удалось скачать {it['name']} (код {r.returncode})", flush=True)
-                  continue
-              sz = os.path.getsize(dest)
-              print(f"OK: {dest} = {sz} байт", flush=True)
+              print(f"=== {it['name']} ({it['size']} Б) ===", flush=True)
+              r = subprocess.run(['curl', '-L', '--fail', '--retry', '3', '--retry-delay', '5',
+                                  '--connect-timeout', '30', '--max-time', '2500',
+                                  '-o', dest, it['download']])
+              if r.returncode:
+                  print('!! ошибка скачивания', r.returncode, flush=True)
+              else:
+                  print('OK', os.path.getsize(dest), 'байт', flush=True)
           PY
           ls -lh firmware/original/
 
-      - name: Анализ архивов (binwalk, 7z, strings, build.prop)
+      - name: Быстрый анализ архивов
         run: |
-          set -x
-          mkdir -p reports/unpacked
+          mkdir -p reports
           for f in firmware/original/*; do
             [ -f "$f" ] || continue
             base=$(basename "$f")
-            rep="reports/анализ-$base.txt"
+            rep="reports/02-анализ-$base.txt"
             {
-              echo "=== $base ==="
-              ls -l "$f"
-              sha256sum "$f"
-              file "$f"
-              echo "--- 7z l ---"
-              7z l "$f" 2>&1 | head -300
-              echo "--- binwalk ---"
-              binwalk "$f" 2>&1 | head -200
-              echo "--- строки (маркеры SoC/Android) ---"
-              strings -n 6 "$f" | grep -i -E 'android|rk3[0-9]|px[3-6]|allwinner|sunxi|mt65|mt67|mt8|mediatek|msm8|board|linux version|build\.prop|sdk=|ro\.product' | head -200
+              echo "=== $base ==="; ls -l "$f"; sha256sum "$f"; file "$f"
+              echo; echo "--- 7z l ---"; 7z l "$f" 2>&1 | head -400
+              echo; echo "--- binwalk ---"; binwalk "$f" 2>&1 | head -200
+              echo; echo "--- строки: маркеры платформы ---"
+              strings -n 6 "$f" | grep -i -E 'android|rk3[0-9]|px[3-6]|allwinner|sunxi|mt[0-9]{4}|mediatek|msm[0-9]|linux version|build\.prop|ro\.product|sdk=' | head -300
             } > "$rep" 2>&1
-            echo "готово: $rep"
+            echo "готов $rep"
           done
-          ls -la reports/
 
-      - name: Распаковка архивов
+      - name: Распаковка (с лимитом на файл)
         run: |
+          set -x
+          mkdir -p reports/unpacked
           cd reports/unpacked
           for f in ../../firmware/original/*; do
             [ -f "$f" ] || continue
             case "$f" in
-              *.rar|*.zip|*.7z) 7z x -y "$f" >/dev/null 2>&1 || echo "не удалось распаковать $f" ;;
+              *.rar|*.zip|*.7z) 7z x -y -aos "$f" >/dev/null 2>&1 || echo "!! распаковка не удалась: $f" ;;
             esac
           done
-          find . -maxdepth 4 | head -300
+          # убираем слишком большие образы, чтобы не тащить их в git
+          find . -type f -size +${EXTRACT_LIMIT_MB}M -print -delete | head -50
           du -sh .
+          find . -maxdepth 3 | head -200
 
-      - name: Разбор Android-образов (build.prop, boot.img)
+      - name: Разбор образов Android
         run: |
-          echo "=== Поиск build.prop ==="
-          find reports/unpacked -name 'build.prop' -o -name 'default.prop' -o -name '*.prop' | head -50
-          mkdir -p reports/props
-          find reports/unpacked -name '*.prop' | while read p; do
-            out="reports/props/$(echo "$p" | tr '/' '_')"
-            cp "$p" "$out"
-          done
-          echo "=== Крупные файлы ==="
-          find reports/unpacked -type f -size +1M -exec ls -lh {} \; | head -50
+          {
+            echo "=== Все .prop файлы ==="
+            find reports/unpacked -name '*.prop' -printf '%s\t%p\n' | sort -rn | head -50
+            echo; echo "=== Файлы крупнее 1 МБ ==="
+            find reports/unpacked -type f -size +1M -printf '%s\t%p\n' | sort -rn | head -80
+            echo; echo "=== Сами build.prop (первые 200 строк) ==="
+            find reports/unpacked -name 'build.prop' | while read p; do
+              echo "----- $p -----"; head -200 "$p"
+            done
+          } > reports/03-разбор-образов.txt 2>&1
+          cat reports/03-разбор-образов.txt | head -100
 
-      - name: Публикация отчётов в репозиторий
+      - name: Коммит результатов
         run: |
-          git config user.name "arena-firmware-bot"
-          git config user.email "bot@users.noreply.github.com"
-          # большие образы не коммитим
-          printf 'reports/unpacked/\nfirmware/\n' > .git/info/exclude
-          git add -f reports .github 2>/dev/null || true
-          git add -A reports 2>/dev/null || true
-          git commit -m "отчёты облачного анализа прошивки" || echo "нечего коммитить"
-          git push origin HEAD:${{ github.ref_name }} || echo "push не удался"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          printf 'firmware/\nreports/unpacked/\n' > .git/info/exclude
+          git add -A reports
+          if git diff --cached --quiet; then echo "нет изменений"; else
+            git commit -m "отчёты анализа прошивки (облако)"
+            git push origin HEAD:${{ github.ref_name }}
+          fi
 
-      - name: Сохранить артефакт (если push не сработал)
+      - name: Артефакт
         if: always()
         uses: actions/upload-artifact@v4
         with:
