@@ -11,8 +11,8 @@ Note: Recompile with -Xlint:deprecation for details.
 == 7. подпись (v1 — обязательна для Android 4.4) ==
 
 ГОТОВО: /home/runner/work/Lifan-X60/Lifan-X60/switcher/switcher.apk
--rw-r--r-- 1 runner runner 16879 Nov  1 14:36 switcher.apk
-sha256: 958a1d7d16608d6bcd8d3de755dd3138c8a259b98c69e8b0a499d8b03c5db7bc
+-rw-r--r-- 1 runner runner 16879 Nov  1 14:43 switcher.apk
+sha256: 28954d696281229f6cd48dc204a908271384e429e5111ec355eeb58c373e1233
 
 Проверка содержимого:
 package: name='com.fpt.mirrorlink.android' versionCode='1' versionName='1.0' platformBuildVersionName='17' platformBuildVersionCode='37' compileSdkVersion='37' compileSdkVersionCodename='17'

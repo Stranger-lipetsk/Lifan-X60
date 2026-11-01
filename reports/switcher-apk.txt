@@ -13,7 +13,6 @@ feature-group: label=''
   uses-implied-feature: name='android.hardware.faketouch' reason='default feature for all apps'
   uses-feature: name='android.hardware.screen.landscape'
   uses-implied-feature: name='android.hardware.screen.landscape' reason='one or more activities have specified a landscape orientation'
-provides-component:'launcher'
 main
 supports-screens: 'small' 'normal' 'large' 'xlarge'
 supports-any-density: 'true'
@@ -51,21 +50,26 @@ N: android=http://schemas.android.com/apk/res/android
             A: android:name(0x01010003)="android.intent.action.MAIN" (Raw: "android.intent.action.MAIN")
           E: category (line=26)
             A: android:name(0x01010003)="android.intent.category.LAUNCHER" (Raw: "android.intent.category.LAUNCHER")
-        E: intent-filter (line=32)
-          A: android:enabled(0x0101000e)=(type 0x12)0x0
-          E: action (line=33)
+      E: activity-alias (line=36)
+        A: android:label(0x01010001)="Переключатель (Домой)" (Raw: "Переключатель (Домой)")
+        A: android:name(0x01010003)=".HomeAlias" (Raw: ".HomeAlias")
+        A: android:enabled(0x0101000e)=(type 0x12)0x0
+        A: android:exported(0x01010010)=(type 0x12)0xffffffff
+        A: android:targetActivity(0x01010202)=".MainActivity" (Raw: ".MainActivity")
+        E: intent-filter (line=42)
+          E: action (line=43)
             A: android:name(0x01010003)="android.intent.action.MAIN" (Raw: "android.intent.action.MAIN")
-          E: category (line=34)
+          E: category (line=44)
             A: android:name(0x01010003)="android.intent.category.HOME" (Raw: "android.intent.category.HOME")
-          E: category (line=35)
+          E: category (line=45)
             A: android:name(0x01010003)="android.intent.category.DEFAULT" (Raw: "android.intent.category.DEFAULT")
-      E: activity-alias (line=41)
+      E: activity-alias (line=51)
         A: android:label(0x01010001)="Переключатель" (Raw: "Переключатель")
         A: android:name(0x01010003)="com.fpt.mirrorlink.android.MirrorLinkActivity" (Raw: "com.fpt.mirrorlink.android.MirrorLinkActivity")
         A: android:exported(0x01010010)=(type 0x12)0xffffffff
         A: android:targetActivity(0x01010202)=".MainActivity" (Raw: ".MainActivity")
-        E: intent-filter (line=46)
-          E: action (line=47)
+        E: intent-filter (line=56)
+          E: action (line=57)
             A: android:name(0x01010003)="android.intent.action.MAIN" (Raw: "android.intent.action.MAIN")
-          E: category (line=48)
+          E: category (line=58)
             A: android:name(0x01010003)="android.intent.category.LAUNCHER" (Raw: "android.intent.category.LAUNCHER")
