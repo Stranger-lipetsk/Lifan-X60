@@ -81,7 +81,18 @@ jobs:
             echo "######## 11. rc.wifi существует? ########"
             debugfs -R "ls -l /bin/wifi" "$IMG" 2>/dev/null || echo "каталога /bin/wifi нет"
             echo
-            echo "######## 12. есть ли приложение, дающее геолокацию ########"
+            echo "######## 12. Wi-Fi драйвер в ядре ########"
+            python3 tools/probe_kernel_wifi.py reports/deep2/kernel/zImage
+            echo
+            echo "######## 13. NVS-калибровка Wi-Fi ########"
+            echo "--- в образе (/etc/firmware) ---"
+            debugfs -R "ls /etc/firmware" "$IMG" 2>/dev/null | tr ' ' '\n' | grep -iE "wl1271|nvs|wl12" || echo "нет"
+            debugfs -R "ls /vendor/firmware" "$IMG" 2>/dev/null | tr ' ' '\n' | grep -iE "wl1271|nvs" || echo "нет /vendor/firmware"
+            echo "--- в заводском update/ ---"
+            find reports/deep2/update -name "*nvs*" -o -name "*wl1271*" 2>/dev/null | head -5
+            echo "(пусто = в system нет, значит создаётся при первом запуске)"
+            echo
+            echo "######## 14. есть ли приложение, дающее геолокацию ########"
             debugfs -R "ls /app" "$IMG" 2>/dev/null | tr ' ' '\n' | grep -iE "gps|location|navi" | head
           } > reports/wifi-gps.txt 2>&1
           echo "--- размер отчёта ---"
