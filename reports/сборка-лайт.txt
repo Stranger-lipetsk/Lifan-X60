@@ -1,391 +1,428 @@
-[32m2026-11-01 14:38:38.780[0m | [1mINFO    [0m | [36mandroguard.core.apk[0m:[36m_apk_analysis[0m:[36m420[0m - [1mStarting analysis on AndroidManifest.xml[0m
-[32m2026-11-01 14:38:38.780[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1136[0m - [34m[1mAXMLPrinter[0m
-[32m2026-11-01 14:38:38.780[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m449[0m - [34m[1mAXMLParser[0m
-[32m2026-11-01 14:38:38.780[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m482[0m - [34m[1mFIRST HEADER <ARSCHeader idx='0x00000000' type='3' header_size='8' size='3440'>[0m
-[32m2026-11-01 14:38:38.780[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m540[0m - [34m[1mSTRING_POOL <ARSCHeader idx='0x00000008' type='1' header_size='28' size='1676'>[0m
-[32m2026-11-01 14:38:38.780[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
-[32m2026-11-01 14:38:38.780[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT -1[0m
-[32m2026-11-01 14:38:38.780[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000694' type='384' header_size='8' size='68'>[0m
-[32m2026-11-01 14:38:38.780[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m617[0m - [34m[1mAXML contains a RESOURCE MAP[0m
-[32m2026-11-01 14:38:38.780[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x000006d8' type='256' header_size='16' size='24'>[0m
-[32m2026-11-01 14:38:38.780[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m685[0m - [34m[1mStart of Namespace mapping: prefix 15: 'android' --> uri 16: 'http://schemas.android.com/apk/res/android'[0m
-[32m2026-11-01 14:38:38.780[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x000006f0' type='258' header_size='16' size='176'>[0m
-[32m2026-11-01 14:38:38.780[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 2[0m
-[32m2026-11-01 14:38:38.780[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1167[0m - [34m[1mSTART_TAG: manifest (line=2)[0m
-[32m2026-11-01 14:38:38.780[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.780[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.780[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.780[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.781[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.785[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}versionCode='b'1''[0m
-[32m2026-11-01 14:38:38.785[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m1[0m
-[32m2026-11-01 14:38:38.785[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m1[0m
-[32m2026-11-01 14:38:38.785[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m1[0m
-[32m2026-11-01 14:38:38.785[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m1[0m
-[32m2026-11-01 14:38:38.785[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m1[0m
-[32m2026-11-01 14:38:38.785[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValue[0m:[36m1052[0m - [34m[1m1[0m
-[32m2026-11-01 14:38:38.785[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}versionName='b'1.0''[0m
-[32m2026-11-01 14:38:38.785[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m2[0m
-[32m2026-11-01 14:38:38.785[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m2[0m
-[32m2026-11-01 14:38:38.785[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m2[0m
-[32m2026-11-01 14:38:38.785[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m2[0m
-[32m2026-11-01 14:38:38.785[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m2[0m
-[32m2026-11-01 14:38:38.785[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}compileSdkVersion='b'37''[0m
-[32m2026-11-01 14:38:38.785[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m3[0m
-[32m2026-11-01 14:38:38.785[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m3[0m
-[32m2026-11-01 14:38:38.785[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m3[0m
-[32m2026-11-01 14:38:38.785[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m3[0m
-[32m2026-11-01 14:38:38.785[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m3[0m
-[32m2026-11-01 14:38:38.785[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValue[0m:[36m1052[0m - [34m[1m3[0m
-[32m2026-11-01 14:38:38.785[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}compileSdkVersionCodename='b'17''[0m
-[32m2026-11-01 14:38:38.785[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m4[0m
-[32m2026-11-01 14:38:38.785[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m4[0m
-[32m2026-11-01 14:38:38.785[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m4[0m
-[32m2026-11-01 14:38:38.785[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m4[0m
-[32m2026-11-01 14:38:38.785[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m4[0m
-[32m2026-11-01 14:38:38.785[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValue[0m:[36m1052[0m - [34m[1m4[0m
-[32m2026-11-01 14:38:38.785[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: package='b'com.fpt.mirrorlink.android''[0m
-[32m2026-11-01 14:38:38.785[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m5[0m
-[32m2026-11-01 14:38:38.785[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m5[0m
-[32m2026-11-01 14:38:38.785[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m5[0m
-[32m2026-11-01 14:38:38.785[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m5[0m
-[32m2026-11-01 14:38:38.785[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m5[0m
-[32m2026-11-01 14:38:38.785[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: platformBuildVersionCode='b'37''[0m
-[32m2026-11-01 14:38:38.785[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m6[0m
-[32m2026-11-01 14:38:38.785[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m6[0m
-[32m2026-11-01 14:38:38.786[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m6[0m
-[32m2026-11-01 14:38:38.786[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m6[0m
-[32m2026-11-01 14:38:38.786[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m6[0m
-[32m2026-11-01 14:38:38.786[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: platformBuildVersionName='b'17''[0m
-[32m2026-11-01 14:38:38.786[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
-[32m2026-11-01 14:38:38.786[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 2[0m
-[32m2026-11-01 14:38:38.786[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x000007a0' type='258' header_size='16' size='76'>[0m
-[32m2026-11-01 14:38:38.786[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 2[0m
-[32m2026-11-01 14:38:38.786[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1167[0m - [34m[1mSTART_TAG: uses-sdk (line=7)[0m
-[32m2026-11-01 14:38:38.786[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.786[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.786[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.786[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.786[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.786[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}minSdkVersion='b'19''[0m
-[32m2026-11-01 14:38:38.786[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m1[0m
-[32m2026-11-01 14:38:38.786[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m1[0m
-[32m2026-11-01 14:38:38.786[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m1[0m
-[32m2026-11-01 14:38:38.786[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m1[0m
-[32m2026-11-01 14:38:38.786[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m1[0m
-[32m2026-11-01 14:38:38.786[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}targetSdkVersion='b'19''[0m
-[32m2026-11-01 14:38:38.786[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
-[32m2026-11-01 14:38:38.786[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 2[0m
-[32m2026-11-01 14:38:38.786[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x000007ec' type='259' header_size='16' size='24'>[0m
-[32m2026-11-01 14:38:38.786[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 3[0m
-[32m2026-11-01 14:38:38.786[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
-[32m2026-11-01 14:38:38.786[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 3[0m
-[32m2026-11-01 14:38:38.786[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000804' type='258' header_size='16' size='56'>[0m
-[32m2026-11-01 14:38:38.786[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 2[0m
-[32m2026-11-01 14:38:38.786[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1167[0m - [34m[1mSTART_TAG: uses-permission (line=10)[0m
-[32m2026-11-01 14:38:38.786[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.786[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.786[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.786[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.786[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.786[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValue[0m:[36m1052[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.786[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}name='b'android.permission.REORDER_TASKS''[0m
-[32m2026-11-01 14:38:38.787[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
-[32m2026-11-01 14:38:38.787[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 2[0m
-[32m2026-11-01 14:38:38.787[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x0000083c' type='259' header_size='16' size='24'>[0m
-[32m2026-11-01 14:38:38.787[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 3[0m
-[32m2026-11-01 14:38:38.787[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
-[32m2026-11-01 14:38:38.787[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 3[0m
-[32m2026-11-01 14:38:38.787[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000854' type='258' header_size='16' size='56'>[0m
-[32m2026-11-01 14:38:38.787[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 2[0m
-[32m2026-11-01 14:38:38.787[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1167[0m - [34m[1mSTART_TAG: uses-permission (line=11)[0m
-[32m2026-11-01 14:38:38.787[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.787[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.787[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.787[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.787[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.787[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValue[0m:[36m1052[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.787[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}name='b'android.permission.GET_TASKS''[0m
-[32m2026-11-01 14:38:38.787[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
-[32m2026-11-01 14:38:38.787[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 2[0m
-[32m2026-11-01 14:38:38.787[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x0000088c' type='259' header_size='16' size='24'>[0m
-[32m2026-11-01 14:38:38.787[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 3[0m
-[32m2026-11-01 14:38:38.787[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
-[32m2026-11-01 14:38:38.787[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 3[0m
-[32m2026-11-01 14:38:38.787[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x000008a4' type='258' header_size='16' size='96'>[0m
-[32m2026-11-01 14:38:38.787[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 2[0m
-[32m2026-11-01 14:38:38.787[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1167[0m - [34m[1mSTART_TAG: application (line=13)[0m
-[32m2026-11-01 14:38:38.787[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.787[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.787[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.787[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.787[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.787[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValue[0m:[36m1052[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.787[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}label='b'\xd0\x9f\xd0\xb5\xd1\x80\xd0\xb5\xd0\xba\xd0\xbb\xd1\x8e\xd1\x87\xd0\xb0\xd1\x82\xd0\xb5\xd0\xbb\xd1\x8c''[0m
-[32m2026-11-01 14:38:38.787[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m1[0m
-[32m2026-11-01 14:38:38.787[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m1[0m
-[32m2026-11-01 14:38:38.787[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m1[0m
-[32m2026-11-01 14:38:38.787[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m1[0m
-[32m2026-11-01 14:38:38.787[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m1[0m
-[32m2026-11-01 14:38:38.787[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}icon='b'@7F020000''[0m
-[32m2026-11-01 14:38:38.787[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m2[0m
-[32m2026-11-01 14:38:38.788[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m2[0m
-[32m2026-11-01 14:38:38.788[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m2[0m
-[32m2026-11-01 14:38:38.788[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m2[0m
-[32m2026-11-01 14:38:38.788[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m2[0m
-[32m2026-11-01 14:38:38.788[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}allowBackup='b'false''[0m
-[32m2026-11-01 14:38:38.788[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
-[32m2026-11-01 14:38:38.788[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 2[0m
-[32m2026-11-01 14:38:38.788[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000904' type='258' header_size='16' size='136'>[0m
-[32m2026-11-01 14:38:38.788[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 2[0m
-[32m2026-11-01 14:38:38.788[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1167[0m - [34m[1mSTART_TAG: activity (line=18)[0m
-[32m2026-11-01 14:38:38.788[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.788[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.788[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.788[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.788[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.788[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValue[0m:[36m1052[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.788[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}label='b'\xd0\x9f\xd0\xb5\xd1\x80\xd0\xb5\xd0\xba\xd0\xbb\xd1\x8e\xd1\x87\xd0\xb0\xd1\x82\xd0\xb5\xd0\xbb\xd1\x8c''[0m
-[32m2026-11-01 14:38:38.788[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m1[0m
-[32m2026-11-01 14:38:38.788[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m1[0m
-[32m2026-11-01 14:38:38.788[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m1[0m
-[32m2026-11-01 14:38:38.788[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m1[0m
-[32m2026-11-01 14:38:38.788[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m1[0m
-[32m2026-11-01 14:38:38.788[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValue[0m:[36m1052[0m - [34m[1m1[0m
-[32m2026-11-01 14:38:38.788[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}name='b'.MainActivity''[0m
-[32m2026-11-01 14:38:38.788[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m2[0m
-[32m2026-11-01 14:38:38.788[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m2[0m
-[32m2026-11-01 14:38:38.788[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m2[0m
-[32m2026-11-01 14:38:38.788[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m2[0m
-[32m2026-11-01 14:38:38.788[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m2[0m
-[32m2026-11-01 14:38:38.788[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}exported='b'true''[0m
-[32m2026-11-01 14:38:38.788[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m3[0m
-[32m2026-11-01 14:38:38.788[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m3[0m
-[32m2026-11-01 14:38:38.788[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m3[0m
-[32m2026-11-01 14:38:38.788[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m3[0m
-[32m2026-11-01 14:38:38.788[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m3[0m
-[32m2026-11-01 14:38:38.788[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}screenOrientation='b'0''[0m
-[32m2026-11-01 14:38:38.788[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m4[0m
-[32m2026-11-01 14:38:38.788[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m4[0m
-[32m2026-11-01 14:38:38.788[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m4[0m
-[32m2026-11-01 14:38:38.788[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m4[0m
-[32m2026-11-01 14:38:38.789[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m4[0m
-[32m2026-11-01 14:38:38.789[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}configChanges='b'0x000004A0''[0m
-[32m2026-11-01 14:38:38.789[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
-[32m2026-11-01 14:38:38.789[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 2[0m
-[32m2026-11-01 14:38:38.789[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x0000098c' type='258' header_size='16' size='36'>[0m
-[32m2026-11-01 14:38:38.789[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 2[0m
-[32m2026-11-01 14:38:38.789[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1167[0m - [34m[1mSTART_TAG: intent-filter (line=24)[0m
-[32m2026-11-01 14:38:38.789[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
-[32m2026-11-01 14:38:38.789[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 2[0m
-[32m2026-11-01 14:38:38.789[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x000009b0' type='258' header_size='16' size='56'>[0m
-[32m2026-11-01 14:38:38.789[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 2[0m
-[32m2026-11-01 14:38:38.789[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1167[0m - [34m[1mSTART_TAG: action (line=25)[0m
-[32m2026-11-01 14:38:38.789[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.789[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.789[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.789[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.789[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.789[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValue[0m:[36m1052[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.789[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}name='b'android.intent.action.MAIN''[0m
-[32m2026-11-01 14:38:38.789[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
-[32m2026-11-01 14:38:38.789[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 2[0m
-[32m2026-11-01 14:38:38.789[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x000009e8' type='259' header_size='16' size='24'>[0m
-[32m2026-11-01 14:38:38.789[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 3[0m
-[32m2026-11-01 14:38:38.789[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
-[32m2026-11-01 14:38:38.789[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 3[0m
-[32m2026-11-01 14:38:38.789[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000a00' type='258' header_size='16' size='56'>[0m
-[32m2026-11-01 14:38:38.789[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 2[0m
-[32m2026-11-01 14:38:38.789[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1167[0m - [34m[1mSTART_TAG: category (line=26)[0m
-[32m2026-11-01 14:38:38.789[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.789[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.789[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.789[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.789[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.789[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValue[0m:[36m1052[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.789[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}name='b'android.intent.category.LAUNCHER''[0m
-[32m2026-11-01 14:38:38.789[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
-[32m2026-11-01 14:38:38.789[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 2[0m
-[32m2026-11-01 14:38:38.789[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000a38' type='259' header_size='16' size='24'>[0m
-[32m2026-11-01 14:38:38.789[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 3[0m
-[32m2026-11-01 14:38:38.790[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
-[32m2026-11-01 14:38:38.790[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 3[0m
-[32m2026-11-01 14:38:38.790[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000a50' type='259' header_size='16' size='24'>[0m
-[32m2026-11-01 14:38:38.790[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 3[0m
-[32m2026-11-01 14:38:38.790[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
-[32m2026-11-01 14:38:38.790[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 3[0m
-[32m2026-11-01 14:38:38.790[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000a68' type='258' header_size='16' size='56'>[0m
-[32m2026-11-01 14:38:38.790[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 2[0m
-[32m2026-11-01 14:38:38.790[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1167[0m - [34m[1mSTART_TAG: intent-filter (line=32)[0m
-[32m2026-11-01 14:38:38.790[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.790[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.790[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.790[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.790[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.790[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}enabled='b'false''[0m
-[32m2026-11-01 14:38:38.790[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
-[32m2026-11-01 14:38:38.790[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 2[0m
-[32m2026-11-01 14:38:38.790[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000aa0' type='258' header_size='16' size='56'>[0m
-[32m2026-11-01 14:38:38.790[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 2[0m
-[32m2026-11-01 14:38:38.790[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1167[0m - [34m[1mSTART_TAG: action (line=33)[0m
-[32m2026-11-01 14:38:38.790[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.790[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.790[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.790[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.790[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.790[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValue[0m:[36m1052[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.790[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}name='b'android.intent.action.MAIN''[0m
-[32m2026-11-01 14:38:38.790[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
-[32m2026-11-01 14:38:38.790[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 2[0m
-[32m2026-11-01 14:38:38.790[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000ad8' type='259' header_size='16' size='24'>[0m
-[32m2026-11-01 14:38:38.790[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 3[0m
-[32m2026-11-01 14:38:38.790[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
-[32m2026-11-01 14:38:38.790[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 3[0m
-[32m2026-11-01 14:38:38.790[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000af0' type='258' header_size='16' size='56'>[0m
-[32m2026-11-01 14:38:38.790[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 2[0m
-[32m2026-11-01 14:38:38.790[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1167[0m - [34m[1mSTART_TAG: category (line=34)[0m
-[32m2026-11-01 14:38:38.790[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.790[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.790[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.790[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.791[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.791[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValue[0m:[36m1052[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.791[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}name='b'android.intent.category.HOME''[0m
-[32m2026-11-01 14:38:38.791[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
-[32m2026-11-01 14:38:38.791[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 2[0m
-[32m2026-11-01 14:38:38.791[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000b28' type='259' header_size='16' size='24'>[0m
-[32m2026-11-01 14:38:38.791[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 3[0m
-[32m2026-11-01 14:38:38.791[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
-[32m2026-11-01 14:38:38.791[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 3[0m
-[32m2026-11-01 14:38:38.791[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000b40' type='258' header_size='16' size='56'>[0m
-[32m2026-11-01 14:38:38.791[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 2[0m
-[32m2026-11-01 14:38:38.791[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1167[0m - [34m[1mSTART_TAG: category (line=35)[0m
-[32m2026-11-01 14:38:38.791[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.791[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.791[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.791[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.791[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.791[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValue[0m:[36m1052[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.791[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}name='b'android.intent.category.DEFAULT''[0m
-[32m2026-11-01 14:38:38.791[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
-[32m2026-11-01 14:38:38.791[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 2[0m
-[32m2026-11-01 14:38:38.791[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000b78' type='259' header_size='16' size='24'>[0m
-[32m2026-11-01 14:38:38.791[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 3[0m
-[32m2026-11-01 14:38:38.791[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
-[32m2026-11-01 14:38:38.791[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 3[0m
-[32m2026-11-01 14:38:38.791[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000b90' type='259' header_size='16' size='24'>[0m
-[32m2026-11-01 14:38:38.791[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 3[0m
-[32m2026-11-01 14:38:38.791[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
-[32m2026-11-01 14:38:38.791[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 3[0m
-[32m2026-11-01 14:38:38.791[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000ba8' type='259' header_size='16' size='24'>[0m
-[32m2026-11-01 14:38:38.791[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 3[0m
-[32m2026-11-01 14:38:38.791[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
-[32m2026-11-01 14:38:38.791[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 3[0m
-[32m2026-11-01 14:38:38.791[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000bc0' type='258' header_size='16' size='116'>[0m
-[32m2026-11-01 14:38:38.791[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 2[0m
-[32m2026-11-01 14:38:38.791[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1167[0m - [34m[1mSTART_TAG: activity-alias (line=41)[0m
-[32m2026-11-01 14:38:38.791[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.791[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.791[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.791[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.791[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.792[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValue[0m:[36m1052[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.792[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}label='b'\xd0\x9f\xd0\xb5\xd1\x80\xd0\xb5\xd0\xba\xd0\xbb\xd1\x8e\xd1\x87\xd0\xb0\xd1\x82\xd0\xb5\xd0\xbb\xd1\x8c''[0m
-[32m2026-11-01 14:38:38.792[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m1[0m
-[32m2026-11-01 14:38:38.792[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m1[0m
-[32m2026-11-01 14:38:38.792[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m1[0m
-[32m2026-11-01 14:38:38.792[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m1[0m
-[32m2026-11-01 14:38:38.792[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m1[0m
-[32m2026-11-01 14:38:38.792[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValue[0m:[36m1052[0m - [34m[1m1[0m
-[32m2026-11-01 14:38:38.792[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}name='b'com.fpt.mirrorlink.android.MirrorLinkActivity''[0m
-[32m2026-11-01 14:38:38.792[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m2[0m
-[32m2026-11-01 14:38:38.792[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m2[0m
-[32m2026-11-01 14:38:38.792[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m2[0m
-[32m2026-11-01 14:38:38.792[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m2[0m
-[32m2026-11-01 14:38:38.792[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m2[0m
-[32m2026-11-01 14:38:38.792[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}exported='b'true''[0m
-[32m2026-11-01 14:38:38.792[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m3[0m
-[32m2026-11-01 14:38:38.792[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m3[0m
-[32m2026-11-01 14:38:38.792[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m3[0m
-[32m2026-11-01 14:38:38.792[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m3[0m
-[32m2026-11-01 14:38:38.792[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m3[0m
-[32m2026-11-01 14:38:38.792[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValue[0m:[36m1052[0m - [34m[1m3[0m
-[32m2026-11-01 14:38:38.792[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}targetActivity='b'.MainActivity''[0m
-[32m2026-11-01 14:38:38.792[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
-[32m2026-11-01 14:38:38.792[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 2[0m
-[32m2026-11-01 14:38:38.792[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000c34' type='258' header_size='16' size='36'>[0m
-[32m2026-11-01 14:38:38.792[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 2[0m
-[32m2026-11-01 14:38:38.792[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1167[0m - [34m[1mSTART_TAG: intent-filter (line=46)[0m
-[32m2026-11-01 14:38:38.792[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
-[32m2026-11-01 14:38:38.792[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 2[0m
-[32m2026-11-01 14:38:38.792[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000c58' type='258' header_size='16' size='56'>[0m
-[32m2026-11-01 14:38:38.792[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 2[0m
-[32m2026-11-01 14:38:38.792[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1167[0m - [34m[1mSTART_TAG: action (line=47)[0m
-[32m2026-11-01 14:38:38.792[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.792[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.792[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.792[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.792[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.792[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValue[0m:[36m1052[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.792[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}name='b'android.intent.action.MAIN''[0m
-[32m2026-11-01 14:38:38.792[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
-[32m2026-11-01 14:38:38.792[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 2[0m
-[32m2026-11-01 14:38:38.793[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000c90' type='259' header_size='16' size='24'>[0m
-[32m2026-11-01 14:38:38.793[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 3[0m
-[32m2026-11-01 14:38:38.793[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
-[32m2026-11-01 14:38:38.793[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 3[0m
-[32m2026-11-01 14:38:38.793[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000ca8' type='258' header_size='16' size='56'>[0m
-[32m2026-11-01 14:38:38.793[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 2[0m
-[32m2026-11-01 14:38:38.793[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1167[0m - [34m[1mSTART_TAG: category (line=48)[0m
-[32m2026-11-01 14:38:38.793[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.793[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.793[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.793[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.793[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.793[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValue[0m:[36m1052[0m - [34m[1m0[0m
-[32m2026-11-01 14:38:38.793[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}name='b'android.intent.category.LAUNCHER''[0m
-[32m2026-11-01 14:38:38.793[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
-[32m2026-11-01 14:38:38.793[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 2[0m
-[32m2026-11-01 14:38:38.793[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000ce0' type='259' header_size='16' size='24'>[0m
-[32m2026-11-01 14:38:38.793[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 3[0m
-[32m2026-11-01 14:38:38.793[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
-[32m2026-11-01 14:38:38.793[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 3[0m
-[32m2026-11-01 14:38:38.793[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000cf8' type='259' header_size='16' size='24'>[0m
-[32m2026-11-01 14:38:38.793[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 3[0m
-[32m2026-11-01 14:38:38.793[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
-[32m2026-11-01 14:38:38.793[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 3[0m
-[32m2026-11-01 14:38:38.793[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000d10' type='259' header_size='16' size='24'>[0m
-[32m2026-11-01 14:38:38.793[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 3[0m
-[32m2026-11-01 14:38:38.793[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
-[32m2026-11-01 14:38:38.793[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 3[0m
-[32m2026-11-01 14:38:38.793[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000d28' type='259' header_size='16' size='24'>[0m
-[32m2026-11-01 14:38:38.793[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 3[0m
-[32m2026-11-01 14:38:38.793[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
-[32m2026-11-01 14:38:38.793[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 3[0m
-[32m2026-11-01 14:38:38.793[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000d40' type='259' header_size='16' size='24'>[0m
-[32m2026-11-01 14:38:38.793[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 3[0m
-[32m2026-11-01 14:38:38.793[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
-[32m2026-11-01 14:38:38.793[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 3[0m
-[32m2026-11-01 14:38:38.793[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000d58' type='257' header_size='16' size='24'>[0m
-[32m2026-11-01 14:38:38.793[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 1[0m
-[32m2026-11-01 14:38:38.793[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
-[32m2026-11-01 14:38:38.794[0m | [1mINFO    [0m | [36mandroguard.core.apk[0m:[36m_apk_analysis[0m:[36m506[0m - [1mAPK file was successfully validated![0m
-[32m2026-11-01 14:38:38.794[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.api_specific_resources[0m:[36mload_permissions[0m:[36m56[0m - [34m[1mAvailable API levels: 4, 5, 6, 7, 8, 9, 10, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36[0m
-[32m2026-11-01 14:38:38.795[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.api_specific_resources[0m:[36mload_permissions[0m:[36m56[0m - [34m[1mAvailable API levels: 4, 5, 6, 7, 8, 9, 10, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36[0m
+[32m2026-11-01 14:41:53.985[0m | [1mINFO    [0m | [36mandroguard.core.apk[0m:[36m_apk_analysis[0m:[36m420[0m - [1mStarting analysis on AndroidManifest.xml[0m
+[32m2026-11-01 14:41:53.985[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1136[0m - [34m[1mAXMLPrinter[0m
+[32m2026-11-01 14:41:53.985[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m449[0m - [34m[1mAXMLParser[0m
+[32m2026-11-01 14:41:53.985[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m482[0m - [34m[1mFIRST HEADER <ARSCHeader idx='0x00000000' type='3' header_size='8' size='3440'>[0m
+[32m2026-11-01 14:41:53.985[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m540[0m - [34m[1mSTRING_POOL <ARSCHeader idx='0x00000008' type='1' header_size='28' size='1676'>[0m
+[32m2026-11-01 14:41:53.986[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
+[32m2026-11-01 14:41:53.986[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT -1[0m
+[32m2026-11-01 14:41:53.986[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000694' type='384' header_size='8' size='68'>[0m
+[32m2026-11-01 14:41:53.986[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m617[0m - [34m[1mAXML contains a RESOURCE MAP[0m
+[32m2026-11-01 14:41:53.986[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x000006d8' type='256' header_size='16' size='24'>[0m
+[32m2026-11-01 14:41:53.986[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m685[0m - [34m[1mStart of Namespace mapping: prefix 15: 'android' --> uri 16: 'http://schemas.android.com/apk/res/android'[0m
+[32m2026-11-01 14:41:53.986[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x000006f0' type='258' header_size='16' size='176'>[0m
+[32m2026-11-01 14:41:53.986[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 2[0m
+[32m2026-11-01 14:41:53.986[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1167[0m - [34m[1mSTART_TAG: manifest (line=2)[0m
+[32m2026-11-01 14:41:53.986[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.986[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.986[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.986[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.986[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.992[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}versionCode='b'1''[0m
+[32m2026-11-01 14:41:53.992[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m1[0m
+[32m2026-11-01 14:41:53.992[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m1[0m
+[32m2026-11-01 14:41:53.992[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m1[0m
+[32m2026-11-01 14:41:53.992[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m1[0m
+[32m2026-11-01 14:41:53.992[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m1[0m
+[32m2026-11-01 14:41:53.992[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValue[0m:[36m1052[0m - [34m[1m1[0m
+[32m2026-11-01 14:41:53.992[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}versionName='b'1.0''[0m
+[32m2026-11-01 14:41:53.992[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m2[0m
+[32m2026-11-01 14:41:53.992[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m2[0m
+[32m2026-11-01 14:41:53.992[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m2[0m
+[32m2026-11-01 14:41:53.992[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m2[0m
+[32m2026-11-01 14:41:53.992[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m2[0m
+[32m2026-11-01 14:41:53.992[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}compileSdkVersion='b'37''[0m
+[32m2026-11-01 14:41:53.992[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m3[0m
+[32m2026-11-01 14:41:53.992[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m3[0m
+[32m2026-11-01 14:41:53.992[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m3[0m
+[32m2026-11-01 14:41:53.992[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m3[0m
+[32m2026-11-01 14:41:53.993[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m3[0m
+[32m2026-11-01 14:41:53.993[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValue[0m:[36m1052[0m - [34m[1m3[0m
+[32m2026-11-01 14:41:53.993[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}compileSdkVersionCodename='b'17''[0m
+[32m2026-11-01 14:41:53.993[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m4[0m
+[32m2026-11-01 14:41:53.993[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m4[0m
+[32m2026-11-01 14:41:53.993[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m4[0m
+[32m2026-11-01 14:41:53.993[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m4[0m
+[32m2026-11-01 14:41:53.993[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m4[0m
+[32m2026-11-01 14:41:53.993[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValue[0m:[36m1052[0m - [34m[1m4[0m
+[32m2026-11-01 14:41:53.993[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: package='b'com.fpt.mirrorlink.android''[0m
+[32m2026-11-01 14:41:53.993[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m5[0m
+[32m2026-11-01 14:41:53.993[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m5[0m
+[32m2026-11-01 14:41:53.993[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m5[0m
+[32m2026-11-01 14:41:53.993[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m5[0m
+[32m2026-11-01 14:41:53.993[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m5[0m
+[32m2026-11-01 14:41:53.993[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: platformBuildVersionCode='b'37''[0m
+[32m2026-11-01 14:41:53.993[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m6[0m
+[32m2026-11-01 14:41:53.993[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m6[0m
+[32m2026-11-01 14:41:53.993[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m6[0m
+[32m2026-11-01 14:41:53.993[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m6[0m
+[32m2026-11-01 14:41:53.993[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m6[0m
+[32m2026-11-01 14:41:53.993[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: platformBuildVersionName='b'17''[0m
+[32m2026-11-01 14:41:53.993[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
+[32m2026-11-01 14:41:53.993[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 2[0m
+[32m2026-11-01 14:41:53.993[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x000007a0' type='258' header_size='16' size='76'>[0m
+[32m2026-11-01 14:41:53.993[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 2[0m
+[32m2026-11-01 14:41:53.993[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1167[0m - [34m[1mSTART_TAG: uses-sdk (line=7)[0m
+[32m2026-11-01 14:41:53.993[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.993[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.993[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.993[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.993[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.993[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}minSdkVersion='b'19''[0m
+[32m2026-11-01 14:41:53.994[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m1[0m
+[32m2026-11-01 14:41:53.994[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m1[0m
+[32m2026-11-01 14:41:53.994[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m1[0m
+[32m2026-11-01 14:41:53.994[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m1[0m
+[32m2026-11-01 14:41:53.994[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m1[0m
+[32m2026-11-01 14:41:53.994[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}targetSdkVersion='b'19''[0m
+[32m2026-11-01 14:41:53.994[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
+[32m2026-11-01 14:41:53.994[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 2[0m
+[32m2026-11-01 14:41:53.994[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x000007ec' type='259' header_size='16' size='24'>[0m
+[32m2026-11-01 14:41:53.994[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 3[0m
+[32m2026-11-01 14:41:53.994[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
+[32m2026-11-01 14:41:53.994[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 3[0m
+[32m2026-11-01 14:41:53.994[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000804' type='258' header_size='16' size='56'>[0m
+[32m2026-11-01 14:41:53.994[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 2[0m
+[32m2026-11-01 14:41:53.994[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1167[0m - [34m[1mSTART_TAG: uses-permission (line=10)[0m
+[32m2026-11-01 14:41:53.994[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.994[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.994[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.994[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.994[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.994[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValue[0m:[36m1052[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.994[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}name='b'android.permission.REORDER_TASKS''[0m
+[32m2026-11-01 14:41:53.994[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
+[32m2026-11-01 14:41:53.994[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 2[0m
+[32m2026-11-01 14:41:53.994[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x0000083c' type='259' header_size='16' size='24'>[0m
+[32m2026-11-01 14:41:53.994[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 3[0m
+[32m2026-11-01 14:41:53.994[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
+[32m2026-11-01 14:41:53.994[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 3[0m
+[32m2026-11-01 14:41:53.994[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000854' type='258' header_size='16' size='56'>[0m
+[32m2026-11-01 14:41:53.994[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 2[0m
+[32m2026-11-01 14:41:53.994[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1167[0m - [34m[1mSTART_TAG: uses-permission (line=11)[0m
+[32m2026-11-01 14:41:53.994[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.994[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.994[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.995[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.995[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.995[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValue[0m:[36m1052[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.995[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}name='b'android.permission.GET_TASKS''[0m
+[32m2026-11-01 14:41:53.995[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
+[32m2026-11-01 14:41:53.995[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 2[0m
+[32m2026-11-01 14:41:53.995[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x0000088c' type='259' header_size='16' size='24'>[0m
+[32m2026-11-01 14:41:53.995[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 3[0m
+[32m2026-11-01 14:41:53.995[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
+[32m2026-11-01 14:41:53.995[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 3[0m
+[32m2026-11-01 14:41:53.995[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x000008a4' type='258' header_size='16' size='96'>[0m
+[32m2026-11-01 14:41:53.995[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 2[0m
+[32m2026-11-01 14:41:53.995[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1167[0m - [34m[1mSTART_TAG: application (line=13)[0m
+[32m2026-11-01 14:41:53.995[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.995[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.995[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.995[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.995[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.995[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValue[0m:[36m1052[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.995[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}label='b'\xd0\x9f\xd0\xb5\xd1\x80\xd0\xb5\xd0\xba\xd0\xbb\xd1\x8e\xd1\x87\xd0\xb0\xd1\x82\xd0\xb5\xd0\xbb\xd1\x8c''[0m
+[32m2026-11-01 14:41:53.995[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m1[0m
+[32m2026-11-01 14:41:53.995[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m1[0m
+[32m2026-11-01 14:41:53.995[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m1[0m
+[32m2026-11-01 14:41:53.995[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m1[0m
+[32m2026-11-01 14:41:53.995[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m1[0m
+[32m2026-11-01 14:41:53.995[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}icon='b'@7F020000''[0m
+[32m2026-11-01 14:41:53.995[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m2[0m
+[32m2026-11-01 14:41:53.995[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m2[0m
+[32m2026-11-01 14:41:53.995[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m2[0m
+[32m2026-11-01 14:41:53.995[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m2[0m
+[32m2026-11-01 14:41:53.995[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m2[0m
+[32m2026-11-01 14:41:53.995[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}allowBackup='b'false''[0m
+[32m2026-11-01 14:41:53.995[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
+[32m2026-11-01 14:41:53.995[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 2[0m
+[32m2026-11-01 14:41:53.996[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000904' type='258' header_size='16' size='136'>[0m
+[32m2026-11-01 14:41:53.996[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 2[0m
+[32m2026-11-01 14:41:53.996[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1167[0m - [34m[1mSTART_TAG: activity (line=18)[0m
+[32m2026-11-01 14:41:53.996[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.996[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.996[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.996[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.996[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.996[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValue[0m:[36m1052[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.996[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}label='b'\xd0\x9f\xd0\xb5\xd1\x80\xd0\xb5\xd0\xba\xd0\xbb\xd1\x8e\xd1\x87\xd0\xb0\xd1\x82\xd0\xb5\xd0\xbb\xd1\x8c''[0m
+[32m2026-11-01 14:41:53.996[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m1[0m
+[32m2026-11-01 14:41:53.996[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m1[0m
+[32m2026-11-01 14:41:53.996[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m1[0m
+[32m2026-11-01 14:41:53.996[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m1[0m
+[32m2026-11-01 14:41:53.996[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m1[0m
+[32m2026-11-01 14:41:53.996[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValue[0m:[36m1052[0m - [34m[1m1[0m
+[32m2026-11-01 14:41:53.996[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}name='b'.MainActivity''[0m
+[32m2026-11-01 14:41:53.996[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m2[0m
+[32m2026-11-01 14:41:53.996[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m2[0m
+[32m2026-11-01 14:41:53.996[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m2[0m
+[32m2026-11-01 14:41:53.996[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m2[0m
+[32m2026-11-01 14:41:53.996[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m2[0m
+[32m2026-11-01 14:41:53.996[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}exported='b'true''[0m
+[32m2026-11-01 14:41:53.996[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m3[0m
+[32m2026-11-01 14:41:53.996[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m3[0m
+[32m2026-11-01 14:41:53.996[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m3[0m
+[32m2026-11-01 14:41:53.996[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m3[0m
+[32m2026-11-01 14:41:53.996[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m3[0m
+[32m2026-11-01 14:41:53.996[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}screenOrientation='b'0''[0m
+[32m2026-11-01 14:41:53.996[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m4[0m
+[32m2026-11-01 14:41:53.996[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m4[0m
+[32m2026-11-01 14:41:53.996[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m4[0m
+[32m2026-11-01 14:41:53.996[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m4[0m
+[32m2026-11-01 14:41:53.996[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m4[0m
+[32m2026-11-01 14:41:53.996[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}configChanges='b'0x000004A0''[0m
+[32m2026-11-01 14:41:53.996[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
+[32m2026-11-01 14:41:53.997[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 2[0m
+[32m2026-11-01 14:41:53.997[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x0000098c' type='258' header_size='16' size='36'>[0m
+[32m2026-11-01 14:41:53.997[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 2[0m
+[32m2026-11-01 14:41:53.997[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1167[0m - [34m[1mSTART_TAG: intent-filter (line=24)[0m
+[32m2026-11-01 14:41:53.997[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
+[32m2026-11-01 14:41:53.997[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 2[0m
+[32m2026-11-01 14:41:53.997[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x000009b0' type='258' header_size='16' size='56'>[0m
+[32m2026-11-01 14:41:53.997[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 2[0m
+[32m2026-11-01 14:41:53.997[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1167[0m - [34m[1mSTART_TAG: action (line=25)[0m
+[32m2026-11-01 14:41:53.997[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.997[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.997[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.997[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.997[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.997[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValue[0m:[36m1052[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.997[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}name='b'android.intent.action.MAIN''[0m
+[32m2026-11-01 14:41:53.997[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
+[32m2026-11-01 14:41:53.997[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 2[0m
+[32m2026-11-01 14:41:53.997[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x000009e8' type='259' header_size='16' size='24'>[0m
+[32m2026-11-01 14:41:53.997[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 3[0m
+[32m2026-11-01 14:41:53.997[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
+[32m2026-11-01 14:41:53.997[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 3[0m
+[32m2026-11-01 14:41:53.997[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000a00' type='258' header_size='16' size='56'>[0m
+[32m2026-11-01 14:41:53.997[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 2[0m
+[32m2026-11-01 14:41:53.997[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1167[0m - [34m[1mSTART_TAG: category (line=26)[0m
+[32m2026-11-01 14:41:53.997[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.997[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.997[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.997[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.997[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.997[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValue[0m:[36m1052[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.997[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}name='b'android.intent.category.LAUNCHER''[0m
+[32m2026-11-01 14:41:53.997[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
+[32m2026-11-01 14:41:53.997[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 2[0m
+[32m2026-11-01 14:41:53.998[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000a38' type='259' header_size='16' size='24'>[0m
+[32m2026-11-01 14:41:53.998[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 3[0m
+[32m2026-11-01 14:41:53.998[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
+[32m2026-11-01 14:41:53.998[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 3[0m
+[32m2026-11-01 14:41:53.998[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000a50' type='259' header_size='16' size='24'>[0m
+[32m2026-11-01 14:41:53.998[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 3[0m
+[32m2026-11-01 14:41:53.998[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
+[32m2026-11-01 14:41:53.998[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 3[0m
+[32m2026-11-01 14:41:53.998[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000a68' type='258' header_size='16' size='56'>[0m
+[32m2026-11-01 14:41:53.998[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 2[0m
+[32m2026-11-01 14:41:53.998[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1167[0m - [34m[1mSTART_TAG: intent-filter (line=32)[0m
+[32m2026-11-01 14:41:53.998[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.998[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.998[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.998[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.998[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.998[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}enabled='b'false''[0m
+[32m2026-11-01 14:41:53.998[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
+[32m2026-11-01 14:41:53.998[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 2[0m
+[32m2026-11-01 14:41:53.998[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000aa0' type='258' header_size='16' size='56'>[0m
+[32m2026-11-01 14:41:53.998[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 2[0m
+[32m2026-11-01 14:41:53.998[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1167[0m - [34m[1mSTART_TAG: action (line=33)[0m
+[32m2026-11-01 14:41:53.998[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.998[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.998[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.998[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.998[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.998[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValue[0m:[36m1052[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.998[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}name='b'android.intent.action.MAIN''[0m
+[32m2026-11-01 14:41:53.998[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
+[32m2026-11-01 14:41:53.998[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 2[0m
+[32m2026-11-01 14:41:53.998[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000ad8' type='259' header_size='16' size='24'>[0m
+[32m2026-11-01 14:41:53.998[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 3[0m
+[32m2026-11-01 14:41:53.998[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
+[32m2026-11-01 14:41:53.998[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 3[0m
+[32m2026-11-01 14:41:53.998[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000af0' type='258' header_size='16' size='56'>[0m
+[32m2026-11-01 14:41:53.999[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 2[0m
+[32m2026-11-01 14:41:53.999[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1167[0m - [34m[1mSTART_TAG: category (line=34)[0m
+[32m2026-11-01 14:41:53.999[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.999[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.999[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.999[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.999[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.999[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValue[0m:[36m1052[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.999[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}name='b'android.intent.category.HOME''[0m
+[32m2026-11-01 14:41:53.999[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
+[32m2026-11-01 14:41:53.999[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 2[0m
+[32m2026-11-01 14:41:53.999[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000b28' type='259' header_size='16' size='24'>[0m
+[32m2026-11-01 14:41:53.999[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 3[0m
+[32m2026-11-01 14:41:53.999[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
+[32m2026-11-01 14:41:53.999[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 3[0m
+[32m2026-11-01 14:41:53.999[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000b40' type='258' header_size='16' size='56'>[0m
+[32m2026-11-01 14:41:53.999[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 2[0m
+[32m2026-11-01 14:41:53.999[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1167[0m - [34m[1mSTART_TAG: category (line=35)[0m
+[32m2026-11-01 14:41:53.999[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.999[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.999[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.999[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.999[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.999[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValue[0m:[36m1052[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:53.999[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}name='b'android.intent.category.DEFAULT''[0m
+[32m2026-11-01 14:41:53.999[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
+[32m2026-11-01 14:41:53.999[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 2[0m
+[32m2026-11-01 14:41:53.999[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000b78' type='259' header_size='16' size='24'>[0m
+[32m2026-11-01 14:41:53.999[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 3[0m
+[32m2026-11-01 14:41:53.999[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
+[32m2026-11-01 14:41:53.999[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 3[0m
+[32m2026-11-01 14:41:53.999[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000b90' type='259' header_size='16' size='24'>[0m
+[32m2026-11-01 14:41:53.999[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 3[0m
+[32m2026-11-01 14:41:53.999[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
+[32m2026-11-01 14:41:53.999[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 3[0m
+[32m2026-11-01 14:41:54.000[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000ba8' type='259' header_size='16' size='24'>[0m
+[32m2026-11-01 14:41:54.000[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 3[0m
+[32m2026-11-01 14:41:54.000[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
+[32m2026-11-01 14:41:54.000[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 3[0m
+[32m2026-11-01 14:41:54.000[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000bc0' type='258' header_size='16' size='116'>[0m
+[32m2026-11-01 14:41:54.000[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 2[0m
+[32m2026-11-01 14:41:54.000[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1167[0m - [34m[1mSTART_TAG: activity-alias (line=41)[0m
+[32m2026-11-01 14:41:54.000[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:54.000[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:54.000[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:54.000[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:54.000[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:54.000[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValue[0m:[36m1052[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:54.000[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}label='b'\xd0\x9f\xd0\xb5\xd1\x80\xd0\xb5\xd0\xba\xd0\xbb\xd1\x8e\xd1\x87\xd0\xb0\xd1\x82\xd0\xb5\xd0\xbb\xd1\x8c''[0m
+[32m2026-11-01 14:41:54.000[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m1[0m
+[32m2026-11-01 14:41:54.000[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m1[0m
+[32m2026-11-01 14:41:54.000[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m1[0m
+[32m2026-11-01 14:41:54.000[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m1[0m
+[32m2026-11-01 14:41:54.000[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m1[0m
+[32m2026-11-01 14:41:54.000[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValue[0m:[36m1052[0m - [34m[1m1[0m
+[32m2026-11-01 14:41:54.000[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}name='b'com.fpt.mirrorlink.android.MirrorLinkActivity''[0m
+[32m2026-11-01 14:41:54.000[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m2[0m
+[32m2026-11-01 14:41:54.000[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m2[0m
+[32m2026-11-01 14:41:54.000[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m2[0m
+[32m2026-11-01 14:41:54.000[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m2[0m
+[32m2026-11-01 14:41:54.000[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m2[0m
+[32m2026-11-01 14:41:54.000[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}exported='b'true''[0m
+[32m2026-11-01 14:41:54.000[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m3[0m
+[32m2026-11-01 14:41:54.000[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m3[0m
+[32m2026-11-01 14:41:54.000[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m3[0m
+[32m2026-11-01 14:41:54.000[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m3[0m
+[32m2026-11-01 14:41:54.000[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m3[0m
+[32m2026-11-01 14:41:54.000[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValue[0m:[36m1052[0m - [34m[1m3[0m
+[32m2026-11-01 14:41:54.000[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}targetActivity='b'.MainActivity''[0m
+[32m2026-11-01 14:41:54.000[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
+[32m2026-11-01 14:41:54.000[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 2[0m
+[32m2026-11-01 14:41:54.001[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000c34' type='258' header_size='16' size='36'>[0m
+[32m2026-11-01 14:41:54.001[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 2[0m
+[32m2026-11-01 14:41:54.001[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1167[0m - [34m[1mSTART_TAG: intent-filter (line=46)[0m
+[32m2026-11-01 14:41:54.001[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
+[32m2026-11-01 14:41:54.001[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 2[0m
+[32m2026-11-01 14:41:54.001[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000c58' type='258' header_size='16' size='56'>[0m
+[32m2026-11-01 14:41:54.001[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 2[0m
+[32m2026-11-01 14:41:54.001[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1167[0m - [34m[1mSTART_TAG: action (line=47)[0m
+[32m2026-11-01 14:41:54.001[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:54.001[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:54.001[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:54.001[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:54.001[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:54.001[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValue[0m:[36m1052[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:54.001[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}name='b'android.intent.action.MAIN''[0m
+[32m2026-11-01 14:41:54.001[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
+[32m2026-11-01 14:41:54.001[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 2[0m
+[32m2026-11-01 14:41:54.001[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000c90' type='259' header_size='16' size='24'>[0m
+[32m2026-11-01 14:41:54.001[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 3[0m
+[32m2026-11-01 14:41:54.001[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
+[32m2026-11-01 14:41:54.001[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 3[0m
+[32m2026-11-01 14:41:54.001[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000ca8' type='258' header_size='16' size='56'>[0m
+[32m2026-11-01 14:41:54.001[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 2[0m
+[32m2026-11-01 14:41:54.001[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1167[0m - [34m[1mSTART_TAG: category (line=48)[0m
+[32m2026-11-01 14:41:54.001[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeNamespace[0m:[36m981[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:54.001[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeUri[0m:[36m968[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:54.001[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeName[0m:[36m997[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:54.001[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueType[0m:[36m1027[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:54.001[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValueData[0m:[36m1038[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:54.001[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mgetAttributeValue[0m:[36m1052[0m - [34m[1m0[0m
+[32m2026-11-01 14:41:54.001[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1195[0m - [34m[1mfound an attribute: {http://schemas.android.com/apk/res/android}name='b'android.intent.category.LAUNCHER''[0m
+[32m2026-11-01 14:41:54.001[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
+[32m2026-11-01 14:41:54.001[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 2[0m
+[32m2026-11-01 14:41:54.001[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000ce0' type='259' header_size='16' size='24'>[0m
+[32m2026-11-01 14:41:54.002[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 3[0m
+[32m2026-11-01 14:41:54.002[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
+[32m2026-11-01 14:41:54.002[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 3[0m
+[32m2026-11-01 14:41:54.002[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000cf8' type='259' header_size='16' size='24'>[0m
+[32m2026-11-01 14:41:54.002[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 3[0m
+[32m2026-11-01 14:41:54.002[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
+[32m2026-11-01 14:41:54.002[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 3[0m
+[32m2026-11-01 14:41:54.002[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000d10' type='259' header_size='16' size='24'>[0m
+[32m2026-11-01 14:41:54.002[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 3[0m
+[32m2026-11-01 14:41:54.002[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
+[32m2026-11-01 14:41:54.002[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 3[0m
+[32m2026-11-01 14:41:54.002[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000d28' type='259' header_size='16' size='24'>[0m
+[32m2026-11-01 14:41:54.002[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 3[0m
+[32m2026-11-01 14:41:54.002[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
+[32m2026-11-01 14:41:54.002[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 3[0m
+[32m2026-11-01 14:41:54.002[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000d40' type='259' header_size='16' size='24'>[0m
+[32m2026-11-01 14:41:54.002[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 3[0m
+[32m2026-11-01 14:41:54.002[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
+[32m2026-11-01 14:41:54.002[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m593[0m - [34m[1mM_EVENT 3[0m
+[32m2026-11-01 14:41:54.002[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m_do_next[0m:[36m608[0m - [34m[1mNEXT HEADER <ARSCHeader idx='0x00000d58' type='257' header_size='16' size='24'>[0m
+[32m2026-11-01 14:41:54.002[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36m__init__[0m:[36m1146[0m - [34m[1mDEBUG ARSC TYPE 1[0m
+[32m2026-11-01 14:41:54.002[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.axml[0m:[36mis_valid[0m:[36m575[0m - [34m[1mTrue[0m
+[32m2026-11-01 14:41:54.002[0m | [1mINFO    [0m | [36mandroguard.core.apk[0m:[36m_apk_analysis[0m:[36m506[0m - [1mAPK file was successfully validated![0m
+[32m2026-11-01 14:41:54.003[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.api_specific_resources[0m:[36mload_permissions[0m:[36m56[0m - [34m[1mAvailable API levels: 4, 5, 6, 7, 8, 9, 10, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36[0m
+[32m2026-11-01 14:41:54.003[0m | [34m[1mDEBUG   [0m | [36mandroguard.core.api_specific_resources[0m:[36mload_permissions[0m:[36m56[0m - [34m[1mAvailable API levels: 4, 5, 6, 7, 8, 9, 10, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36[0m
 использую sudo для chown и сборки образа
-временная папка: /tmp/lifan_build_3xnib748
+временная папка: /tmp/lifan_build_n009nc4s
 system.img: out/system-original.img (377487360 байт)
   sha256 исходного: 0f898f48ee910fe0c125768b71f587fa…
 debugfs rdump: out/system-original.img (377487360 байт)
 распаковано файлов: 1341
 
 --- изменения ---
-Traceback (most recent call last):
-  File "/home/runner/work/Lifan-X60/Lifan-X60/tools/build_system.py", line 435, in <module>
-    main()
-  File "/home/runner/work/Lifan-X60/Lifan-X60/tools/build_system.py", line 411, in main
-    for line in apply_actions(root, actions):
-                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/Lifan-X60/Lifan-X60/tools/build_system.py", line 187, in apply_actions
-    os.chown(dst, 0, 0)
-PermissionError: [Errno 1] Operation not permitted: '/tmp/lifan_build_3xnib748/root/app/com.fpt.mirrorlink.android.apk'
+  удалено: /priv-app/Navitel-9.13.73-large.apk
+  удалено: /app/BSEDemo.apk
+  удалено: /app/EL830TAM1_GPIO_TEST_2015.01.01.01.apk
+  удалено: /app/CubeLiveWallpapers.apk
+  удалено: /app/VisualizationWallpapers.apk
+  удалено: /app/BasicDreams.apk
+  удалено: /app/WfdSink.apk
+  удалено: /app/FSLOta.apk
+  удалено: /app/HTMLViewer.apk
+  добавлено APK: /app/com.fpt.mirrorlink.android.apk (16879 байт)
+  добавлен файл: /etc/install-recovery.sh (права 755)
+  свойство: ro.product.locale.language=ru (заменено)
+  свойство: ro.product.locale.region=RU (заменено)
+  свойство: persist.sys.timezone=Europe/Moscow (добавлено)
+
+--- права ---
+права выставлены через sudo: файлов 1334; владелец root:root
+
+--- сборка ---
+содержимое: 211.8 МиБ (раздел p3 = 512 МиБ)
+  крупнейшие файлы:
+        18.8 МиБ  /lib/libwebviewchromium.so
+        18.2 МиБ  /usr/icu/icudt51l.dat
+        14.8 МиБ  /lib/libnavitel.so
+        12.7 МиБ  /app/IQQIService-Elead-International-20160105.1.apk
+        11.7 МиБ  /priv-app/Launcher2
+         8.1 МиБ  /lib/libLLVM.so
+         7.3 МиБ  /framework/framework-res.apk
+         4.4 МиБ  /priv-app/EL830LF01_Home.apk
+         4.3 МиБ  /fonts/DroidSansFallback.ttf
+         3.9 МиБ  /priv-app/ElSettings.apk
+собрано (фичи: ^64bit,^metadata_csum,^metadata_csum_seed,^orphan_file,^quota,^casefold,^bigalloc)
+--- параметры ФС ---
+  Filesystem volume name:   system
+  Filesystem features:      has_journal ext_attr resize_inode dir_index filetype extent flex_bg sparse_super large_file huge_file dir_nlink extra_isize
+  Block count:              131072
+  Block size:               4096
+  Inode size:	          256
+
+ГОТОВО: /home/runner/work/Lifan-X60/Lifan-X60/out/system.img
+  размер: 536870912 байт (512.0 МиБ)
+  sha256: b333fa8a4e9c8ad941b3b8bfec71240b9b460fdddc96b7fe9e1688f54d86f651
+
+Дальше: положить как system.img на SD рядом с boot.img, u-boot.bin,
+MCU_FW.hex и sd_boot.img (штатными!) и прошить штатным способом.
+Подробно: docs/06-инструкция-модернизации.md
