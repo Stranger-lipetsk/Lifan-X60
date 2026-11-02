@@ -121,15 +121,20 @@ def add_set_activity(text):
         raise SystemExit('не найден loadEleadApplications')
     method = m.group(0)
 
-    label = '    :cond_23e\n'
-    if label not in method:
+    # метка может быть склеена с :goto_23e
+    m_label = re.search(r'^\s*:cond_23e\s*$', method, re.M)
+    if not m_label:
+        m_label = re.search(r'^\s*:cond_23e', method, re.M)
+    if not m_label:
         raise SystemExit('не найдена ветка cond_23e')
-    if 'ApplicationInfo;->setActivity' in method.split(label)[1][:2000]:
+    at = method.index(m_label.group(0)) + len(m_label.group(0))
+    tail = method[at:]
+    if 'ApplicationInfo;->setActivity' in tail[:2500]:
         print('  setActivity в ветке по умолчанию уже есть')
         return text
 
-    at = method.index(label) + len(label)
-    new_method = method[:at] + SET_ACTIVITY + method[at:]
+    # вставляем в самом начале ветки, до заполнения полей
+    new_method = method[:at] + '\n' + SET_ACTIVITY + tail
     print('  в ветку «незнакомый пакет» добавлен setActivity')
     return text[:m.start()] + new_method + text[m.end():]
 
