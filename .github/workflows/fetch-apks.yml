@@ -83,6 +83,9 @@ jobs:
                   continue
               # бывает zip-архив с APK внутри
               head = open(src, 'rb').read(4)
+              if head[:2] != b'PK':
+                  print('%s: это не APK (вероятно, страница входа Google) — пропуск' % key)
+                  continue
               apk = src
               if head[:2] == b'PK':
                   r = subprocess.run(['unzip', '-o', '-q', src, '-d', '/tmp/unz%d' % i],
