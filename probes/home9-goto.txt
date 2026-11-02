@@ -1,0 +1,581 @@
+# gotoEleadApplication: как реально стартует приложение
+
+.method public gotoEleadApplication(Ljava/lang/String;)Z
+    .registers 10
+    .param p1, "strPackageName"    # Ljava/lang/String;
+
+    .prologue
+    .line 1019
+    const/4 v0, 0x0
+
+    .line 1022
+    .local v0, "bSuccess":Z
+    sget-object v6, Ltw/com/elead/el830/home/HomeApp;->mEleadApplications:Ljava/util/HashMap;
+
+    invoke-virtual {v6}, Ljava/util/HashMap;->isEmpty()Z
+
+    move-result v6
+
+    if-eqz v6, :cond_b
+
+    move v1, v0
+
+    .line 1083
+    .end local v0    # "bSuccess":Z
+    .local v1, "bSuccess":I
+    :goto_a
+    return v1
+
+    .line 1026
+    .end local v1    # "bSuccess":I
+    .restart local v0    # "bSuccess":Z
+    :cond_b
+    sget-object v6, Ltw/com/elead/el830/home/HomeApp;->mEleadApplications:Ljava/util/HashMap;
+
+    invoke-virtual {v6, p1}, Ljava/util/HashMap;->containsKey(Ljava/lang/Object;)Z
+
+    move-result v6
+
+    if-nez v6, :cond_15
+
+    move v1, v0
+
+    .line 1027
+    .restart local v1    # "bSuccess":I
+    goto :goto_a
+
+    .line 1029
+    .end local v1    # "bSuccess":I
+    :cond_15
+    sget-object v6, Ltw/com/elead/el830/home/HomeApp;->mEleadApplications:Ljava/util/HashMap;
+
+    invoke-virtual {v6, p1}, Ljava/util/HashMap;->get(Ljava/lang/Object;)Ljava/lang/Object;
+
+    move-result-object v5
+
+    check-cast v5, Ltw/com/elead/el830/home/ApplicationInfo;
+
+    .line 1031
+    .local v5, "mApp":Ltw/com/elead/el830/home/ApplicationInfo;
+    iget-boolean v6, v5, Ltw/com/elead/el830/home/ApplicationInfo;->enable:Z
+
+    if-nez v6, :cond_23
+
+    move v1, v0
+
+    .line 1032
+    .restart local v1    # "bSuccess":I
+    goto :goto_a
+
+    .line 1034
+    .end local v1    # "bSuccess":I
+    :cond_23
+    const-string v6, "tw.com.elead.el830.home"
+
+    invoke-virtual {p1, v6}, Ljava/lang/String;->equalsIgnoreCase(Ljava/lang/String;)Z
+
+    move-result v6
+
+    if-nez v6, :cond_33
+
+    const-string v6, "tw.com.elead.el830.home.HomeAudioOff"
+
+    invoke-virtual {p1, v6}, Ljava/lang/String;->equalsIgnoreCase(Ljava/lang/String;)Z
+
+    move-result v6
+
+    if-eqz v6, :cond_4c
+
+    .line 1037
+    :cond_33
+    new-instance v4, Landroid/content/Intent;
+
+    const-string v6, "android.intent.action.MAIN"
+
+    invoke-direct {v4, v6}, Landroid/content/Intent;-><init>(Ljava/lang/String;)V
+
+    .line 1038
+    .local v4, "intentHome":Landroid/content/Intent;
+    const/high16 v6, 0x10000000
+
+    invoke-virtual {v4, v6}, Landroid/content/Intent;->setFlags(I)Landroid/content/Intent;
+
+    .line 1039
+    const-string v6, "android.intent.category.HOME"
+
+    invoke-virtual {v4, v6}, Landroid/content/Intent;->addCategory(Ljava/lang/String;)Landroid/content/Intent;
+
+    .line 1040
+    sget-object v6, Landroid/os/UserHandle;->CURRENT:Landroid/os/UserHandle;
+
+    invoke-virtual {p0, v4, v6}, Ltw/com/elead/el830/home/HomeApp;->startActivityAsUser(Landroid/content/Intent;Landroid/os/UserHandle;)V
+
+    .line 1042
+    const/4 v0, 0x1
+
+    .end local v4    # "intentHome":Landroid/content/Intent;
+    :goto_4a
+    move v1, v0
+
+    .line 1083
+    .restart local v1    # "bSuccess":I
+    goto :goto_a
+
+    .line 1047
+    .end local v1    # "bSuccess":I
+    :cond_4c
+    iget-object v6, v5, Ltw/com/elead/el830/home/ApplicationInfo;->subFunc:Ljava/lang/String;
+
+    if-eqz v6, :cond_a8
+
+    .line 1049
+    new-instance v3, Landroid/content/Intent;
+
+    invoke-direct {v3}, Landroid/content/Intent;-><init>()V
+
+    .line 1050
+    .local v3, "intent":Landroid/content/Intent;
+    new-instance v2, Landroid/os/Bundle;
+
+    invoke-direct {v2}, Landroid/os/Bundle;-><init>()V
+
+    .line 1052
+    .local v2, "bundle":Landroid/os/Bundle;
+    iget-object v6, v5, Ltw/com/elead/el830/home/ApplicationInfo;->subFunc:Ljava/lang/String;
+
+    const-string v7, "tw.com.elead.el830.mediaplayer:SD"
+
+    invoke-virtual {v6, v7}, Ljava/lang/String;->equalsIgnoreCase(Ljava/lang/String;)Z
+
+    move-result v6
+
+    if-eqz v6, :cond_81
+
+    .line 1054
+    const-string v6, "mediaType"
+
+    const-string v7, "SD"
+
+    invoke-virtual {v2, v6, v7}, Landroid/os/Bundle;->putString(Ljava/lang/String;Ljava/lang/String;)V
+
+    .line 1068
+    :goto_6b
+    invoke-virtual {v3, v2}, Landroid/content/Intent;->putExtras(Landroid/os/Bundle;)Landroid/content/Intent;
+
+    .line 1069
+    const/high16 v6, 0x10020000
+
+    invoke-virtual {v3, v6}, Landroid/content/Intent;->setFlags(I)Landroid/content/Intent;
+
+    .line 1071
+    const-string v6, "tw.com.elead.el830.mediaplayer"
+
+    const-string v7, "tw.com.elead.el830.mediaplayer.MediaActivity"
+
+    invoke-virtual {v3, v6, v7}, Landroid/content/Intent;->setClassName(Ljava/lang/String;Ljava/lang/String;)Landroid/content/Intent;
+
+    .line 1072
+    sget-object v6, Landroid/os/UserHandle;->CURRENT:Landroid/os/UserHandle;
+
+    invoke-virtual {p0, v3, v6}, Ltw/com/elead/el830/home/HomeApp;->startActivityAsUser(Landroid/content/Intent;Landroid/os/UserHandle;)V
+
+    .line 1074
+    const/4 v0, 0x1
+
+    .line 1075
+    goto :goto_4a
+
+    .line 1056
+    :cond_81
+    iget-object v6, v5, Ltw/com/elead/el830/home/ApplicationInfo;->subFunc:Ljava/lang/String;
+
+    const-string v7, "tw.com.elead.el830.mediaplayer:USB"
+
+    invoke-virtual {v6, v7}, Ljava/lang/String;->equalsIgnoreCase(Ljava/lang/String;)Z
+
+    move-result v6
+
+    if-eqz v6, :cond_93
+
+    .line 1058
+    const-string v6, "mediaType"
+
+    const-string v7, "USB1"
+
+    invoke-virtual {v2, v6, v7}, Landroid/os/Bundle;->putString(Ljava/lang/String;Ljava/lang/String;)V
+
+    goto :goto_6b
+
+    .line 1060
+    :cond_93
+    iget-object v6, v5, Ltw/com/elead/el830/home/ApplicationInfo;->subFunc:Ljava/lang/String;
+
+    const-string v7, "tw.com.elead.el830.mediaplayer:USB2"
+
+    invoke-virtual {v6, v7}, Ljava/lang/String;->equalsIgnoreCase(Ljava/lang/String;)Z
+
+    move-result v6
+
+    if-eqz v6, :cond_a5
+
+    .line 1062
+    const-string v6, "mediaType"
+
+    const-string v7, "USB2"
+
+    invoke-virtual {v2, v6, v7}, Landroid/os/Bundle;->putString(Ljava/lang/String;Ljava/lang/String;)V
+
+    goto :goto_6b
+
+    :cond_a5
+    move v1, v0
+
+    .line 1065
+    .restart local v1    # "bSuccess":I
+    goto/16 :goto_a
+
+    .line 1078
+    .end local v1    # "bSuccess":I
+    .end local v2    # "bundle":Landroid/os/Bundle;
+    .end local v3    # "intent":Landroid/content/Intent;
+    :cond_a8
+    iget-object v6, v5, Ltw/com/elead/el830/home/ApplicationInfo;->intent:Landroid/content/Intent;
+
+    sget-object v7, Landroid/os/UserHandle;->CURRENT:Landroid/os/UserHandle;
+
+    invoke-virtual {p0, v6, v7}, Ltw/com/elead/el830/home/HomeApp;->startActivityAsUser(Landroid/content/Intent;Landroid/os/UserHandle;)V
+
+    .line 1079
+    const/4 v0, 0x1
+
+    goto :goto_4a
+.end method
+
+== getEleadApplication ==
+.method public getEleadApplication(Ljava/lang/String;)Ltw/com/elead/el830/home/ApplicationInfo;
+    .registers 4
+    .param p1, "strPackageName"    # Ljava/lang/String;
+
+    .prologue
+    const/4 v0, 0x0
+
+    .line 935
+    sget-object v1, Ltw/com/elead/el830/home/HomeApp;->mEleadApplications:Ljava/util/HashMap;
+
+    invoke-virtual {v1}, Ljava/util/HashMap;->isEmpty()Z
+
+    move-result v1
+
+    if-eqz v1, :cond_a
+
+    .line 944
+    :cond_9
+    :goto_9
+    return-object v0
+
+    .line 939
+    :cond_a
+    sget-object v1, Ltw/com/elead/el830/home/HomeApp;->mEleadApplications:Ljava/util/HashMap;
+
+    invoke-virtual {v1, p1}, Ljava/util/HashMap;->containsKey(Ljava/lang/Object;)Z
+
+    move-result v1
+
+    if-eqz v1, :cond_9
+
+    .line 942
+    sget-object v1, Ltw/com/elead/el830/home/HomeApp;->mEleadApplications:Ljava/util/HashMap;
+
+    invoke-virtual {v1, p1}, Ljava/util/HashMap;->get(Ljava/lang/Object;)Ljava/lang/Object;
+
+    move-result-object v0
+
+    check-cast v0, Ltw/com/elead/el830/home/ApplicationInfo;
+
+    .line 944
+    .local v0, "mApp":Ltw/com/elead/el830/home/ApplicationInfo;
+    goto :goto_9
+.end method
+.method public getEleadApplicationsKey()Ljava/util/Set;
+    .registers 2
+
+    .prologue
+    .line 1089
+    sget-object v0, Ltw/com/elead/el830/home/HomeApp;->mEleadApplications:Ljava/util/HashMap;
+
+    invoke-virtual {v0}, Ljava/util/HashMap;->keySet()Ljava/util/Set;
+
+    move-result-object v0
+
+    return-object v0
+.end method
+
+== NaviIsExist и enableNaviIcon (как включается кнопка навигатора) ==
+.method public NaviIsExist()Z
+    .registers 3
+
+    .prologue
+    .line 13355
+    new-instance v0, Ljava/io/File;
+
+    const-string v1, "/mnt/media_rw/extsd/NavitelContent"
+
+    invoke-direct {v0, v1}, Ljava/io/File;-><init>(Ljava/lang/String;)V
+
+    .line 13356
+    .local v0, "file":Ljava/io/File;
+    invoke-virtual {v0}, Ljava/io/File;->exists()Z
+
+    move-result v1
+
+    if-eqz v1, :cond_f
+
+    .line 13357
+    const/4 v1, 0x1
+
+    .line 13359
+    :goto_e
+    return v1
+
+    :cond_f
+    const/4 v1, 0x0
+
+    goto :goto_e
+.end method
+.method private enableNaviIcon(Z)V
+    .registers 9
+    .param p1, "bEnable"    # Z
+
+    .prologue
+    .line 8116
+    sget-object v5, Ltw/com/elead/el830/home/HomeService;->homeApp:Ltw/com/elead/el830/home/HomeApp;
+
+    invoke-virtual {v5}, Ltw/com/elead/el830/home/HomeApp;->getDisplayPackageName()Ljava/lang/String;
+
+    move-result-object v5
+
+    const-string v6, "com.navitel"
+
+    invoke-virtual {v5, v6}, Ljava/lang/String;->equalsIgnoreCase(Ljava/lang/String;)Z
+
+    move-result v0
+
+    .line 8119
+    .local v0, "bCurrMode":Z
+    sget-object v5, Ltw/com/elead/el830/home/HomeService;->homeApp:Ltw/com/elead/el830/home/HomeApp;
+
+    const-string v6, "com.navitel"
+
+    invoke-virtual {v5, v6, p1}, Ltw/com/elead/el830/home/HomeApp;->enableEleadApplication(Ljava/lang/String;Z)Z
+
+    .line 8122
+    sget-object v5, Ltw/com/elead/el830/home/HomeService;->homeApp:Ltw/com/elead/el830/home/HomeApp;
+
+    invoke-virtual {v5}, Ltw/com/elead/el830/home/HomeApp;->getHomeHandler()Landroid/os/Handler;
+
+    move-result-object v2
+
+    .line 8123
+    .local v2, "mHomeHandler":Landroid/os/Handler;
+    if-eqz v2, :cond_2b
+
+    .line 8124
+    invoke-virtual {v2}, Landroid/os/Handler;->obtainMessage()Landroid/os/Message;
+
+    move-result-object v4
+
+    .line 8125
+    .local v4, "msgIcon":Landroid/os/Message;
+    const/16 v5, 0x3f6
+
+    iput v5, v4, Landroid/os/Message;->what:I
+
+    .line 8126
+    if-eqz p1, :cond_3d
+
+    const/4 v5, 0x1
+
+    :goto_26
+    iput v5, v4, Landroid/os/Message;->arg1:I
+
+    .line 8127
+    invoke-virtual {v2, v4}, Landroid/os/Handler;->sendMessage(Landroid/os/Message;)Z
+
+    .line 8131
+    .end local v4    # "msgIcon":Landroid/os/Message;
+    :cond_2b
+    if-nez p1, :cond_34
+
+    .line 8132
+    sget-object v5, Ltw/com/elead/el830/home/HomeService;->homeApp:Ltw/com/elead/el830/home/HomeApp;
+
+    const-string v6, "com.navitel"
+
+    invoke-virtual {v5, v6}, Ltw/com/elead/el830/home/HomeApp;->removeFromAppStack(Ljava/lang/String;)Z
+
+    .line 8135
+    :cond_34
+    sget-object v5, Ltw/com/elead/el830/home/HomeService;->homeApp:Ltw/com/elead/el830/home/HomeApp;
+
+    invoke-virtual {v5}, Ltw/com/elead/el830/home/HomeApp;->getDisclaimer()Z
+
+    move-result v5
+
+    if-eqz v5, :cond_3f
+
+    .line 8150
+    :cond_3c
+    :goto_3c
+    return-void
+
+    .line 8126
+    .restart local v4    # "msgIcon":Landroid/os/Message;
+    :cond_3d
+    const/4 v5, 0x0
+
+    goto :goto_26
+
+    .line 8139
+    .end local v4    # "msgIcon":Landroid/os/Message;
+    :cond_3f
+    if-nez p1, :cond_60
+
+    if-eqz v0, :cond_60
+
+    .line 8140
+    new-instance v1, Landroid/os/Bundle;
+
+    invoke-direct {v1}, Landroid/os/Bundle;-><init>()V
+
+    .line 8141
+    .local v1, "bundle":Landroid/os/Bundle;
+    const-string v5, "PACKAGE_NAME"
+
+    const-string v6, "tw.com.elead.el830.home"
+
+    invoke-virtual {v1, v5, v6}, Landroid/os/Bundle;->putString(Ljava/lang/String;Ljava/lang/String;)V
+
+    .line 8142
+    iget-object v5, p0, Ltw/com/elead/el830/home/HomeService;->mHandlerService:Landroid/os/Handler;
+
+    invoke-virtual {v5}, Landroid/os/Handler;->obtainMessage()Landroid/os/Message;
+
+    move-result-object v3
+
+    .line 8143
+    .local v3, "msg":Landroid/os/Message;
+    const/4 v5, 0x4
+
+    iput v5, v3, Landroid/os/Message;->what:I
+
+    .line 8144
+    invoke-virtual {v3, v1}, Landroid/os/Message;->setData(Landroid/os/Bundle;)V
+
+    .line 8145
+    iget-object v5, p0, Ltw/com/elead/el830/home/HomeService;->mHandlerService:Landroid/os/Handler;
+
+    invoke-virtual {v5, v3}, Landroid/os/Handler;->sendMessage(Landroid/os/Message;)Z
+
+    .line 8148
+    .end local v1    # "bundle":Landroid/os/Bundle;
+    .end local v3    # "msg":Landroid/os/Message;
+    :cond_60
+    if-nez p1, :cond_3c
+
+    .line 8149
+    sget-object v5, Ltw/com/elead/el830/home/HomeService;->homeApp:Ltw/com/elead/el830/home/HomeApp;
+
+    const-string v6, "com.mansiontech.mxnavi"
+
+    invoke-static {v5, v6}, Ltw/com/elead/el830/home/Utils;->killProcess(Landroid/content/Context;Ljava/lang/String;)V
+
+    goto :goto_3c
+.end method
+
+== как запускается навигатор (com.navitel) ==
+smali/tw/com/elead/el830/home/Home$5.smali:1190:    const-string v8, "com.navitel"
+smali/tw/com/elead/el830/home/Home$5.smali:1203:    const-string v8, "com.navitel"
+smali/tw/com/elead/el830/home/Home.smali:3136:    const-string v11, "com.navitel"
+smali/tw/com/elead/el830/home/HomeApp.smali:121:.field public static final PACKAGE_NAVI:Ljava/lang/String; = "com.navitel"
+smali/tw/com/elead/el830/home/HomeApp.smali:1435:    const-string v1, "com.navitel"
+smali/tw/com/elead/el830/home/HomeApp.smali:1620:    const-string v1, "com.navitel"
+smali/tw/com/elead/el830/home/HomeApp.smali:3068:    const-string v9, "com.navitel"
+smali/tw/com/elead/el830/home/HomeApp.smali:7958:    const-string v3, "com.navitel"
+smali/tw/com/elead/el830/home/HomeService$31.smali:188:    const-string v2, "com.navitel"
+smali/tw/com/elead/el830/home/HomeService.smali:13278:    const-string v6, "com.navitel"
+smali/tw/com/elead/el830/home/HomeService.smali:13288:    const-string v6, "com.navitel"
+smali/tw/com/elead/el830/home/HomeService.smali:13333:    const-string v6, "com.navitel"
+smali/tw/com/elead/el830/home/HomeService.smali:14322:    const-string v2, "com.navitel"
+smali/tw/com/elead/el830/home/HomeService.smali:21346:    const-string v7, "com.navitel"
+smali/tw/com/elead/el830/home/HomeService.smali:21575:    const-string v7, "com.navitel"
+smali/tw/com/elead/el830/home/HomeService.smali:26032:    const-string v10, "com.navitel"
+smali/tw/com/elead/el830/home/HomeService.smali:26098:    const-string v10, "com.navitel"
+smali/tw/com/elead/el830/home/HomeService.smali:26107:    const-string v8, "com.navitel"
+smali/tw/com/elead/el830/home/HomeService.smali:26790:    const-string v4, "com.navitel"
+smali/tw/com/elead/el830/home/HomeService.smali:27184:    const-string v4, "com.navitel"
+
+== findMainActivityForPackage ==
+.method private findMainActivityForPackage(Landroid/content/Context;Ljava/lang/String;)Landroid/content/pm/ResolveInfo;
+    .registers 10
+    .param p1, "context"    # Landroid/content/Context;
+    .param p2, "packageName"    # Ljava/lang/String;
+
+    .prologue
+    const/4 v6, 0x0
+
+    .line 915
+    const/4 v1, 0x0
+
+    .line 917
+    .local v1, "info":Landroid/content/pm/ResolveInfo;
+    invoke-virtual {p1}, Landroid/content/Context;->getPackageManager()Landroid/content/pm/PackageManager;
+
+    move-result-object v3
+
+    .line 919
+    .local v3, "packageManager":Landroid/content/pm/PackageManager;
+    new-instance v2, Landroid/content/Intent;
+
+    const-string v4, "android.intent.action.MAIN"
+
+    const/4 v5, 0x0
+
+    invoke-direct {v2, v4, v5}, Landroid/content/Intent;-><init>(Ljava/lang/String;Landroid/net/Uri;)V
+
+    .line 920
+    .local v2, "mainIntent":Landroid/content/Intent;
+    const-string v4, "android.intent.category.LAUNCHER"
+
+    invoke-virtual {v2, v4}, Landroid/content/Intent;->addCategory(Ljava/lang/String;)Landroid/content/Intent;
+
+    .line 921
+    invoke-virtual {v2, p2}, Landroid/content/Intent;->setPackage(Ljava/lang/String;)Landroid/content/Intent;
+
+    .line 923
+    invoke-virtual {v3, v2, v6}, Landroid/content/pm/PackageManager;->queryIntentActivities(Landroid/content/Intent;I)Ljava/util/List;
+
+    move-result-object v0
+
+    .line 925
+    .local v0, "apps":Ljava/util/List;, "Ljava/util/List<Landroid/content/pm/ResolveInfo;>;"
+    if-eqz v0, :cond_28
+
+    invoke-interface {v0}, Ljava/util/List;->size()I
+
+    move-result v4
+
+    if-lez v4, :cond_28
+
+    .line 926
+    invoke-interface {v0, v6}, Ljava/util/List;->get(I)Ljava/lang/Object;
+
+    move-result-object v1
+
+    .end local v1    # "info":Landroid/content/pm/ResolveInfo;
+    check-cast v1, Landroid/content/pm/ResolveInfo;
+
+    .line 928
+    .restart local v1    # "info":Landroid/content/pm/ResolveInfo;
+    :cond_28
+    return-object v1
+.end method
