@@ -1,0 +1,118 @@
+name: Скачать APK с Google Drive
+
+on:
+  push:
+    paths:
+      - 'autoanalysis/fetch-apks.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - name: "Инструменты"
+        run: |
+          sudo apt-get update -qq 2>/dev/null || true
+          sudo apt-get install -y -qq unzip file >/dev/null 2>&1 || true
+          mkdir -p firmware/apks reports
+
+      - name: "Скачать по ссылкам"
+        run: |
+          python3 - <<'PY'
+          import re, subprocess, urllib.request, urllib.parse, os
+
+          IDS = [
+            '1jTNGNN8k4RcEhCjB96kK7IbDx3bbGrYc',
+            '17wFrJMb-WxTPDuu9ueA3zhilBuaMnC5Y',
+            '1DfSHCeNT7yCQZBslzalYYU3Ajp9Y8HKW',
+          ]
+
+          def curlm(url, out):
+              r = subprocess.run(['curl', '-L', '--max-time', '600', '-c', '/tmp/ck.txt',
+                                  '-b', '/tmp/ck.txt', '-A', 'Mozilla/5.0',
+                                  '-o', out, '-w', '%{http_code}', url],
+                                 capture_output=True, text=True)
+              return r.stdout.strip()
+
+          for i, fid in enumerate(IDS, 1):
+              base = 'https://drive.google.com/uc?export=download&id=' + fid
+              out = '/tmp/dl%d.bin' % i
+              code = curlm(base, out)
+              size = os.path.getsize(out) if os.path.exists(out) else 0
+              print('id=%s код=%s размер=%s' % (fid, code, size))
+
+              # большие файлы Google отдаёт через страницу подтверждения
+              if size < 100000:
+                  html = open(out, 'rb').read().decode('utf-8', 'ignore')
+                  m = re.search(r'confirm=([0-9A-Za-z_\-]+)', html) or \
+                      re.search(r'name="confirm" value="([^"]+)"', html)
+                  uuid = re.search(r'name="uuid" value="([^"]+)"', html)
+                  if m:
+                      url = ('https://drive.usercontent.google.com/download?id=%s'
+                             '&export=download&confirm=%s' % (fid, m.group(1)))
+                      if uuid:
+                          url += '&uuid=' + uuid.group(1)
+                      out = '/tmp/dl%d.bin' % i
+                      code = curlm(url, out)
+                      print('  после подтверждения: код=%s размер=%s'
+                            % (code, os.path.getsize(out) if os.path.exists(out) else 0))
+              print('  тип:', subprocess.run(['file', out], capture_output=True, text=True).stdout.strip())
+              print()
+          PY
+          ls -l /tmp/dl*.bin
+
+      - name: "Разложить APK"
+        run: |
+          SDK=/usr/local/lib/android/sdk
+          BT=$(ls -d "$SDK"/build-tools/* 2>/dev/null | sort -V | tail -1)
+          echo "build-tools: $BT"
+          python3 - <<'PY'
+          import subprocess, os, shutil, glob
+          BT = subprocess.run(['bash','-lc','ls -d /usr/local/lib/android/sdk/build-tools/* | sort -V | tail -1'],
+                              capture_output=True, text=True).stdout.strip()
+          names = {1: 'navitel', 2: 'yandex-navigator', 3: 'torque'}
+          for i, key in names.items():
+              src = '/tmp/dl%d.bin' % i
+              if not os.path.exists(src) or os.path.getsize(src) < 10000:
+                  print('%s: файла нет или слишком мал' % key)
+                  continue
+              # бывает zip-архив с APK внутри
+              head = open(src, 'rb').read(4)
+              apk = src
+              if head[:2] == b'PK':
+                  r = subprocess.run(['unzip', '-o', '-q', src, '-d', '/tmp/unz%d' % i],
+                                     capture_output=True, text=True)
+                  inner = glob.glob('/tmp/unz%d/**/*.apk' % i, recursive=True)
+                  if inner:
+                      apk = inner[0]
+              dest = 'firmware/apks/%s.apk' % key
+              shutil.copyfile(apk, dest)
+              size = os.path.getsize(dest)
+              print('%s -> %d байт' % (dest, size))
+              if BT:
+                  b = subprocess.run([BT + '/aapt', 'dump', 'badging', dest],
+                                     capture_output=True, text=True).stdout
+                  for ln in b.splitlines()[:4]:
+                      print('   ', ln)
+          PY
+          ls -l firmware/apks/
+
+      - name: "Коммит APK"
+        if: always()
+        run: |
+          ls -l firmware/apks/ || true
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A firmware/apks reports
+          git diff --cached --quiet && exit 0
+          git commit -m "получены APK для образа"
+          for try in 1 2 3 4 5; do
+            if git pull --rebase --autostash origin "${{ github.ref_name }}" >/dev/null 2>&1 \
+               && git push origin HEAD:${{ github.ref_name }}; then exit 0; fi
+            sleep 10; git rebase --abort >/dev/null 2>&1 || true
+          done
