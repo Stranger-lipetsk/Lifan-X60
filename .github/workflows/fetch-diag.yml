@@ -1,0 +1,53 @@
+name: Диагностика архивов APK
+
+on:
+  push:
+    paths:
+      - 'autoanalysis/fetch-diag.txt'
+  workflow_dispatch:
+
+permissions: { contents: write }
+
+jobs:
+  diag:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: "Смотреть страницы"
+        run: |
+          mkdir -p reports
+          UA="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/121.0 Safari/537.36"
+          {
+            echo "# Диагностика"
+            for u in \
+              "https://yandex-navigator.ru.uptodown.com/android" \
+              "https://yandex-navigator.ru.uptodown.com/android/versions" \
+              "https://navitel.ru.uptodown.com/android/versions" ; do
+              echo
+              echo "## $u"
+              curl -s -A "$UA" -L --max-time 60 "$u" -o /tmp/p.html
+              echo "размер: $(stat -c%s /tmp/p.html)"
+              echo "ссылки вида /android/…:"
+              grep -oE 'href="[^"]*uptodown\.com/android/[^"]*"' /tmp/p.html | sort -u | head -12
+              echo "ссылки /download:"
+              grep -oE 'href="[^"]*download[^"]*"' /tmp/p.html | sort -u | head -6
+              echo "data-url:"
+              grep -oE 'data-url="[^"]{10,120}"' /tmp/p.html | head -4
+            done
+          } > reports/diag.txt 2>&1
+          head -60 reports/diag.txt
+
+      - name: "Коммит"
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A reports
+          git diff --cached --quiet && exit 0
+          git commit -m "диагностика архивов"
+          for try in 1 2 3 4 5; do
+            if git pull --rebase --autostash origin "${{ github.ref_name }}" >/dev/null 2>&1 \
+               && git push origin HEAD:${{ github.ref_name }}; then exit 0; fi
+            sleep 10; git rebase --abort >/dev/null 2>&1 || true
+          done
