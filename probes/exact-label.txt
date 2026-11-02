@@ -1,0 +1,67 @@
+# Точный вид меток в loadEleadApplications
+
+## все строки с 23e (с номерами, cat -A для пробелов)
+2420:    :cond_23e
+2421:    :goto_23e
+2533:    goto :goto_23e
+2640:    goto/16 :goto_23e
+2747:    goto/16 :goto_23e
+2854:    goto/16 :goto_23e
+2961:    goto/16 :goto_23e
+3064:    goto/16 :goto_23e
+3171:    goto/16 :goto_23e
+3278:    goto/16 :goto_23e
+3288:    if-eqz v9, :cond_23e
+3385:    goto/16 :goto_23e
+
+## как выглядят эти строки байт-в-байт
+    :cond_23e$
+    :goto_23e$
+    goto :goto_23e$
+    goto/16 :goto_23e$
+    goto/16 :goto_23e$
+
+## конец метода loadEleadApplications (последние 40 строк)
+    const/4 v9, 0x2
+
+    iput v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->audioChannel:I
+
+    .line 890
+    const/4 v9, 0x1
+
+    iput v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->videoChannel:I
+
+    .line 891
+    const/4 v9, 0x0
+
+    iput v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->wifiMode:I
+
+    .line 892
+    const/4 v9, 0x1
+
+    iput-boolean v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->beforeAccOff:Z
+
+    .line 893
+    const v9, 0x7f0c0117
+
+    invoke-virtual {p0, v9}, Ltw/com/elead/el830/home/HomeApp;->getString(I)Ljava/lang/String;
+
+    move-result-object v9
+
+    iput-object v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->vrCmd:Ljava/lang/String;
+
+    goto/16 :goto_23e
+
+    .line 908
+    .end local v0    # "appInfo":Ltw/com/elead/el830/home/ApplicationInfo;
+    .end local v3    # "iSub":I
+    .end local v4    # "info":Landroid/content/pm/ResolveInfo;
+    .end local v6    # "strMainPackageName":Ljava/lang/String;
+    .end local v7    # "strPackageName":Ljava/lang/String;
+    .end local v8    # "strSubPackageName":Ljava/lang/String;
+    :cond_533
+    return-void
+.end method
+
+## есть ли вообще put в HashMap для незнакомых пакетов
+5
