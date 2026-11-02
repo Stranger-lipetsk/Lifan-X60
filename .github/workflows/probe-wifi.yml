@@ -1,118 +1,74 @@
-name: Проба Wi-Fi и GPS
+name: WiFi — прошивка и калибровка
 
 on:
   push:
     paths:
-      - 'autoanalysis/probewifi.txt'
+      - 'autoanalysis/probe-wifi.txt'
   workflow_dispatch:
 
-permissions:
-  contents: write
+permissions: { contents: write }
 
 jobs:
   probe:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 50
     steps:
       - uses: actions/checkout@v4
-      - run: |
+      - name: "Инструменты"
+        run: |
           sudo apt-get update -qq 2>/dev/null || true
-          sudo apt-get install -y -qq p7zip-full unrar-free e2fsprogs >/dev/null 2>&1 || true
+          sudo apt-get install -y -qq p7zip-full unzip curl binutils >/dev/null 2>&1 || true
+          mkdir -p reports
       - name: "Скачать прошивку"
         run: |
-          mkdir -p out /tmp/rar
+          mkdir -p /tmp/rar
           python3 - <<'PY'
           import json, subprocess, urllib.parse, urllib.request
           pk = 'https://disk.yandex.ru/d/qJdjjeB8Aiq3Lg'
-          url = ('https://cloud-api.yandex.net/v1/public/resources'
-                 '?public_key=' + urllib.parse.quote(pk, safe='') + '&limit=100')
           url = ('https://cloud-api.yandex.net/v1/disk/public/resources'
                  '?public_key=' + urllib.parse.quote(pk, safe='') + '&limit=100')
           items = json.load(urllib.request.urlopen(url, timeout=60))['_embedded']['items']
-          it = [i for i in items if i['type']=='file' and '2016' in i['name']][0]
+          it = [i for i in items if i['type'] == 'file' and '2016' in i['name']][0]
           subprocess.run(['curl','-L','--fail','--retry','3','--max-time','2500',
-                          '-o','/tmp/fw.rar',it['file']], check=True)
+                          '-o','/tmp/fw.rar', it['file']], check=True)
           PY
           7z x -y -aos -o/tmp/rar /tmp/fw.rar >/dev/null 2>&1 || true
-          cp "$(find /tmp/rar -name system.img | head -1)" out/system.img
-      - name: "Проверка Wi-Fi и GPS по образу"
+          cp "$(find /tmp/rar -name system.img | head -1)" /tmp/system.img
+      - name: "Проверки"
         run: |
-          IMG=out/system.img
-          {
-            echo "######## 1. Модули ядра (/lib/modules) ########"
-            debugfs -R "ls -l /lib/modules" "$IMG" 2>/dev/null
-            echo
-            echo "######## 2. wpa_supplicant / dhcpcd / hostapd в /bin ########"
-            debugfs -R "ls /bin" "$IMG" 2>/dev/null | tr ' ' '\n' | grep -iE "wpa|dhcp|hostapd|dnsmasq" || echo "НЕ НАЙДЕНО"
-            echo
-            echo "######## 3. /etc/wifi ########"
-            debugfs -R "ls -l /etc/wifi" "$IMG" 2>/dev/null || echo "КАТАЛОГА /etc/wifi НЕТ"
-            echo
-            echo "######## 4. firmware для Wi-Fi (/etc/firmware, /vendor/firmware) ########"
-            debugfs -R "ls /etc/firmware" "$IMG" 2>/dev/null | tr ' ' '\n' | grep -iE "bcm|rtl|8723|fw|bin" | head -20 || echo "нет"
-            debugfs -R "ls /vendor/firmware" "$IMG" 2>/dev/null | head -5 || echo "нет /vendor/firmware"
-            echo
-            echo "######## 5. build.prop: Wi-Fi и GPS ########"
-            debugfs -R "dump /build.prop /tmp/bp" "$IMG" 2>/dev/null
-            grep -iE "wifi|wlan|gps|location|hardware" /tmp/bp 2>/dev/null
-            echo
-            echo "######## 6. GPS: библиотеки и конфиги ########"
-            debugfs -R "ls /bin" "$IMG" 2>/dev/null | tr ' ' '\n' | grep -iE "gps|glgps" || echo "GPS-бинарников нет"
-            debugfs -R "ls -l /etc" "$IMG" 2>/dev/null | grep -i gps || echo "gpsconfig.xml нет"
-            echo
-            echo "######## 7. permissions: объявлен ли GPS как hardware feature ########"
-            debugfs -R "ls /etc/permissions" "$IMG" 2>/dev/null | tr ' ' '\n' | grep -i "location\|gps"
-            echo
-            echo "######## 8. GPS: что внутри gps.default.so ########"
-            debugfs -R "dump /lib/hw/gps.default.so /tmp/gps.so" "$IMG" 2>/dev/null
-            strings /tmp/gps.so 2>/dev/null | grep -E "^/dev/|^/data/|^/system/|ttymxc|serial|baud" | sort -u | head -25
-            echo "--- интерфейс HAL (версии) ---"
-            strings /tmp/gps.so 2>/dev/null | grep -iE "GpsInterface|gps_device_t|hardware_module|HAL_MODULE" | head -10
-            echo
-            echo "######## 9. ueventd: устройства GPS ########"
-            debugfs -R "dump /ueventd.el_imx6_solo_v2.rc /tmp/uev" "$IMG" 2>/dev/null
-            grep -iE "gps|mpu|ttymxc" /tmp/uev 2>/dev/null | head -10
-            echo
-            echo "######## 10. init rc: все строки про gps (включая закомментированные) ########"
-            grep -inE "gps|glgps" /tmp/init_rc 2>/dev/null | head -20
-            debugfs -R "dump /init.rc /tmp/init_rc2" "$IMG" 2>/dev/null
-            grep -inE "gps|glgps" /tmp/init_rc2 2>/dev/null | head -20
-            echo
-            echo "######## 11. rc.wifi существует? ########"
-            debugfs -R "ls -l /bin/wifi" "$IMG" 2>/dev/null || echo "каталога /bin/wifi нет"
-            echo
-            echo "######## 12. Wi-Fi драйвер в ядре ########"
-            BOOTIMG=$(find /tmp/rar -name "boot.img" | head -1)
-            echo "boot.img: $BOOTIMG"
-            python3 tools/probe_kernel_wifi.py "$BOOTIMG"
-            echo
-            echo "######## 13. NVS-калибровка Wi-Fi ########"
-            echo "--- в образе (/etc/firmware) ---"
-            debugfs -R "ls /etc/firmware" "$IMG" 2>/dev/null | tr ' ' '\n' | grep -iE "wl1271|nvs|wl12" || echo "нет"
-            debugfs -R "ls /vendor/firmware" "$IMG" 2>/dev/null | tr ' ' '\n' | grep -iE "wl1271|nvs" || echo "нет /vendor/firmware"
-            echo "--- в заводском update/ ---"
-            find reports/deep2/update -name "*nvs*" -o -name "*wl1271*" 2>/dev/null | head -5
-            echo "(пусто = в system нет, значит создаётся при первом запуске)"
-            echo
-            echo "######## 14. есть ли приложение, дающее геолокацию ########"
-            debugfs -R "ls /app" "$IMG" 2>/dev/null | tr ' ' '\n' | grep -iE "gps|location|navi" | head
-          } > reports/wifi-gps.txt 2>&1
-          echo "--- размер отчёта ---"
-          ls -l reports/wifi-gps.txt
-          wc -l reports/wifi-gps.txt
-          head -20 reports/wifi-gps.txt
+          OUT="$GITHUB_WORKSPACE/reports/wifi-файлы.txt"
+          exec > "$OUT" 2>&1 || true
+          set +e
+          echo "# WiFi: файлы, прошивка, калибровка"
+          echo
+          echo "## /etc/wifi/wlconf"
+          debugfs -R "ls -l /etc/wifi/wlconf" /tmp/system.img 2>&1 | tail -10
+          echo
+          echo "## прошивки радио (*.bin) во всём /etc"
+          debugfs -R "rdump /etc /tmp/etc" /tmp/system.img 2>/dev/null | tail -1
+          find /tmp/etc -name "*.bin" -o -name "*.hcd" -o -name "*nvs*" 2>/dev/null | head -20
+          echo
+          echo "## wpa_supplicant.conf"
+          cat /tmp/etc/wifi/wpa_supplicant.conf 2>/dev/null
+          echo
+          echo "## wl1271-nvs.bin где-нибудь"
+          find /tmp/etc -iname "*nvs*" 2>/dev/null
+          echo
+          echo "## каталог /system/bin/wifi"
+          debugfs -R "ls -l /bin/wifi" /tmp/system.img 2>&1 | tail -8
+          echo
+          echo "## rc.wifi (если есть)"
+          debugfs -R "dump /bin/wifi/rc.wifi /tmp/rcwifi" /tmp/system.img 2>/dev/null
+          cat /tmp/rcwifi 2>/dev/null | head -20
+
       - name: "Коммит"
         if: always()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          printf 'firmware/\nout/\n' > .git/info/exclude
-          echo "--- состояние репозитория ---"
-          ls -la reports/ | tail -5
-          git status --short | head -10
-          git add -A
-          if git diff --cached --quiet; then echo "нет изменений"; exit 0; fi
-          git commit -m "проба: Wi-Fi и GPS в образе"
+          git add -A reports
+          git diff --cached --quiet && exit 0
+          git commit -m "проба: файлы WiFi"
           for try in 1 2 3 4 5; do
             if git pull --rebase --autostash origin "${{ github.ref_name }}" >/dev/null 2>&1 \
                && git push origin HEAD:${{ github.ref_name }}; then exit 0; fi
