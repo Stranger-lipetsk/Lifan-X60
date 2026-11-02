@@ -106,11 +106,11 @@ jobs:
         run: |
           pub() {
             if [ ! -f "$1" ]; then echo "нет $1"; return 0; fi
-            cp "$1" out/upload.img
+            cp "$1" out/system.img
             if gh release view "$2" >/dev/null 2>&1; then
-              gh release upload "$2" out/upload.img --clobber
+              gh release upload "$2" out/system.img --clobber
             else
-              gh release create "$2" out/upload.img --title "$3" --notes "$4"
+              gh release create "$2" out/system.img --title "$3" --notes "$4"
             fi
           }
           pub out/stage3-full.img lite-full \
