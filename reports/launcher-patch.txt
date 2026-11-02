@@ -7,6 +7,6 @@
 
 ## проверка результата
 ### пакеты в списке главного экрана
-8a4ff2752bf973cd4706f49a4bf1524eccd2c832e14bbbd165d4aebe3a2728d1  out/Home-patched.apk
+e9f8f695785e2ec98c44ba2ead3bdec3ae2901e86cbb39bc01b6ccd4f22d8f84  out/Home-patched.apk
 КЛЮЧА НЕТ: секрет LAUNCHER_KEY_B64 не задан.
 Оболочка подписана системным testkey — нужен именно он.
