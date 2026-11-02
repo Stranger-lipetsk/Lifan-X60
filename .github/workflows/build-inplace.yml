@@ -1,0 +1,133 @@
+name: Сборка in-place (без пересборки ФС)
+
+on:
+  push:
+    paths:
+      - 'autoanalysis/buildinplace.txt'
+  workflow_dispatch:
+    inputs:
+      stage:
+        description: '1 = контрольная (только удаление)  2 = + панель  3 = + скрипт'
+        required: false
+        default: '1'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: "Инструменты"
+        run: |
+          sudo apt-get update -qq 2>/dev/null || true
+          sudo apt-get install -y -qq p7zip-full unrar-free e2fsprogs >/dev/null 2>&1 || true
+
+      - name: "Java и Android SDK"
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: "Скачать заводскую прошивку"
+        run: |
+          mkdir -p out /tmp/rar
+          python3 - <<'PY'
+          import json, subprocess, urllib.parse, urllib.request
+          pk = 'https://disk.yandex.ru/d/qJdjjeB8Aiq3Lg'
+          url = ('https://cloud-api.yandex.net/v1/disk/public/resources'
+                 '?public_key=' + urllib.parse.quote(pk, safe='') + '&limit=100')
+          items = json.load(urllib.request.urlopen(url, timeout=60))['_embedded']['items']
+          it = [i for i in items if i['type']=='file' and '2016' in i['name']][0]
+          subprocess.run(['curl','-L','--fail','--retry','3','--max-time','2500',
+                          '-o','/tmp/fw.rar',it['file']], check=True)
+          PY
+          7z x -y -aos -o/tmp/rar /tmp/fw.rar >/dev/null 2>&1 || true
+          cp "$(find /tmp/rar -name system.img | head -1)" out/system-org.img
+          ls -l out/
+
+      - name: "Собрать APK панели"
+        run: |
+          bash switcher/build.sh 2>&1 | tail -6
+          ls -l switcher/switcher.apk
+
+      - name: "Контрольная сборка: заводской образ без правок"
+        run: |
+          cp out/system-org.img out/stage0-control.img
+          sha256sum out/stage0-control.img
+
+      - name: "Стадия 1: только удаление лишнего"
+        run: |
+          python3 tools/inplace_patch.py \
+            --system out/system-org.img \
+            --out out/stage1-clean.img \
+            --remove /priv-app/Navitel-9.13.73-large.apk \
+            --remove /app/BSEDemo.apk \
+            --remove /app/EL830TAM1_GPIO_TEST_2015.01.01.01.apk \
+            --remove /app/CubeLiveWallpapers.apk \
+            --remove /app/VisualizationWallpapers.apk \
+            --remove /app/BasicDreams.apk \
+            --remove /app/WfdSink.apk \
+            --remove /app/FSLOta.apk \
+            --remove /app/HTMLViewer.apk 2>&1 | tee reports/inplace-stage1.txt
+
+      - name: "Стадия 2: + панель MirrorLink"
+        run: |
+          python3 tools/inplace_patch.py \
+            --system out/stage1-clean.img \
+            --out out/stage2-panel.img \
+            --add-apk switcher/switcher.apk:/app 2>&1 | tee reports/inplace-stage2.txt
+
+      - name: "Стадия 3: + скрипт автоподключения карт"
+        run: |
+          python3 tools/inplace_patch.py \
+            --system out/stage2-panel.img \
+            --out out/stage3-full.img \
+            --add-file tools/system-files/install-recovery.sh:/etc/install-recovery.sh \
+            2>&1 | tee reports/inplace-stage3.txt
+
+      - name: "Сводка"
+        if: always()
+        run: |
+          {
+            echo "# Сборки in-place"
+            echo
+            echo "Заводской образ не пересобирается: файлы меняются через debugfs,"
+            echo "суперблок и журнал остаются заводскими."
+            echo
+            for f in out/stage0-control.img out/stage1-clean.img out/stage2-panel.img out/stage3-full.img; do
+              if [ -f "$f" ]; then
+                sz=$(stat -c%s "$f")
+                echo "| $(basename $f) | $sz байт | $(sha256sum "$f" | cut -c1-16)… |"
+              fi
+            done
+          } | tee reports/inplace-сводка.md
+
+      - name: "Артефакты"
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: inplace-stages
+          path: |
+            out/stage1-clean.img
+            out/stage2-panel.img
+            out/stage3-full.img
+          retention-days: 14
+
+      - name: "Коммит отчётов"
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          printf 'firmware/\nout/\nswitcher/build/\n' > .git/info/exclude
+          git add -A reports
+          if git diff --cached --quiet; then echo "нет изменений"; exit 0; fi
+          git commit -m "сборка in-place: отчёты стадий"
+          for try in 1 2 3 4 5; do
+            if git pull --rebase --autostash origin "${{ github.ref_name }}" >/dev/null 2>&1 \
+               && git push origin HEAD:${{ github.ref_name }}; then exit 0; fi
+            sleep 10; git rebase --abort >/dev/null 2>&1 || true
+          done
