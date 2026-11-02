@@ -1,0 +1,121 @@
+# Разбор MirrorLink в заводской оболочке
+
+system.img: /tmp/rar/system.img
+
+## 1. Достаём EL830LF01_Home.apk
+debugfs 1.47.0 (5-Feb-2023)
+-rw-r--r-- 1 runner runner 4588177 Nov  2 11:19 /tmp/Home.apk
+AndroidManifest.xml
+META-INF
+classes.dex
+lib
+res
+resources.arsc
+
+## 2. Строки о MirrorLink (с контекстом)
+4830:; handleMessage(), MSG_UPDATE_MIRRORLINK_STATE...bEnanble = 
+5307:ACCOFF_PACKAGE_NAME
+5991:CURRENT_PACKAGE_NAME
+6211:DISPLAY_PACKAGE_NAME
+6419:EXTRA_CHANGED_PACKAGE_LIST
+6603:"Found! HomeApp.PACKAGE_BT_DIAL in 
+6772:6Home.java  loadApplications()... HomeApp.PACKAGE_SETUP
+6826:;HomeApp.java loadEleadApplications()... HomeApp.PACKAGE_CCD
+6827:<HomeApp.java loadEleadApplications()... HomeApp.PACKAGE_HOME
+6828:<HomeApp.java loadEleadApplications()... HomeApp.PACKAGE_NONE
+6829:=HomeApp.java loadEleadApplications()... HomeApp.PACKAGE_SETUP
+6935:>HomeService.java  MSG_GOTO_APPLICATION, -> NEW_PACKAGE_NAME = 
+6944:5HomeService.java  MSG_SWITCH_MODE, -> PACKAGE_NAME = 
+7082:<HomeService.java  startNewActivity() ....... package_name = 
+7208:!HomeService.java PACKAGE_DVR ... 
+7291:HHomeService.java onAppNotified , PACKAGE_EZ_TALK currAudioPackageName = 
+7292:MHomeService.java onAppNotified , PACKAGE_EZ_TALK currentDisplayPackageName = 
+7695:LAST_AUDIO_OFF_PACKAGE_NAME
+9908:MSG_UPDATE_MIRRORLINK_STATE
+9957:MirrorLink
+9958:MirrorLinkReceiver
+10013:NEW_PACKAGE_NAME
+10147:PACKAGE_AVIN
+10148:PACKAGE_AVIN2
+10149:PACKAGE_BROWSER
+10150:PACKAGE_BT
+10151:PACKAGE_BT_DIAL
+10152:PACKAGE_BT_MUSIC
+10153:PACKAGE_BT_PHONE
+10154:PACKAGE_BT_RINGTONE
+10155:PACKAGE_BT_SETUP
+10156:PACKAGE_CCD
+10157:PACKAGE_DLNA
+10158:PACKAGE_DTV
+10159:PACKAGE_DVD
+10160:PACKAGE_DVR
+10161:PACKAGE_ELEADRIVE
+10162:PACKAGE_ELEADTTS
+10163:PACKAGE_EWHERE
+10164:PACKAGE_EZLIFE
+10165:PACKAGE_EZ_DEALER
+10166:PACKAGE_EZ_LIFE
+10167:PACKAGE_EZ_TALK
+10168:PACKAGE_HDMI
+10169:PACKAGE_HOME
+10170:PACKAGE_INTERNET_RADIO
+10171:PACKAGE_IPOD
+10172:PACKAGE_IQQI
+10173:PACKAGE_MIRACAST
+10174:PACKAGE_MIRRORLINK
+10175:PACKAGE_MPLAYER
+10176:PACKAGE_MPLAYER_2_SD
+10177:PACKAGE_MPLAYER_2_USB
+10178:PACKAGE_MPLAYER_2_USB2
+10179:PACKAGE_MPLAYER_3_SD
+10180:PACKAGE_MPLAYER_3_USB
+10181:PACKAGE_MPLAYER_3_USB2
+10182:PACKAGE_MPLAYER_SD
+10183:PACKAGE_MPLAYER_USB
+10184:PACKAGE_MPLAYER_USB2
+
+## 3. Строки о подписи и правах
+Ldalvik/annotation/Signature;
+PLATFORM_DEFAULT_ENCODING
+-Platform does not support required encoding: 
+#Provider must grant uri permissions
+grantUriPermissions
+
+## 4. Есть ли appeal к системной подписи в оболочке
+
+## 5. Явные имена активностей, которые оболочка запускает
+;Bad ComponentName while traversing activity parent metadata
+Landroid/content/ComponentName;
+ [Landroid/content/ComponentName;
+"android.intent.action.DATE_CHANGED
+5android.intent.action.EXTERNAL_APPLICATIONS_AVAILABLE
+7android.intent.action.EXTERNAL_APPLICATIONS_UNAVAILABLE
+android.intent.action.MAIN
+!android.intent.action.MEDIA_EJECT
+#android.intent.action.MEDIA_MOUNTED
+%android.intent.action.MEDIA_UNMOUNTED
+ android.intent.action.SCREEN_OFF
+android.intent.action.SCREEN_ON
+android.intent.action.SEND
+#android.intent.action.SEND_MULTIPLE
+&android.intent.action.TIMEZONE_CHANGED
+android.intent.action.TIME_SET
+android.intent.action.TIME_TICK
+#android.intent.action.TOUCH_GESTURE
+getComponentName
+setClassName
+
+## 6. Ресурсы кнопки mirrorlink
+anim
+color
+drawable
+drawable-hdpi
+drawable-mdpi
+layout
+layout-ar
+layout-fa
+menu
+raw
+./res/drawable-mdpi/main_btn_mirrorlink_disable.png
+./res/drawable-mdpi/main_btn_mirrorlink_click.png
+./res/drawable-mdpi/main_btn_mirrorlink_normal.png
