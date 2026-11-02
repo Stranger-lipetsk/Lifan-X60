@@ -198,8 +198,9 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           cp out/system-full.img out/system.img
-          NOTE="Приложения в образе: Navitel, Яндекс Навигатор, Torque Pro.
-          Лаунчер патчен (кнопки на главном экране), подпись файла заводская."
+          NOTE="Приложения в образе: Navitel 11.11.1110 и Torque Pro 1.8.205.
+          Кнопки для них — на родном экране магнитолы.
+          Файловая система заводская, лаунчер с родной подписью."
           if gh release view lite-apps >/dev/null 2>&1; then
             gh release upload lite-apps out/system.img --clobber
           else
