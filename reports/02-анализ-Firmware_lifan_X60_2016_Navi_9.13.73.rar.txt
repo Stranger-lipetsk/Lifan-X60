@@ -1,5 +1,5 @@
 === Firmware_lifan_X60_2016_Navi_9.13.73.rar ===
--rw-r--r-- 1 runner runner 220980636 Nov  2 17:49 firmware/original/Firmware_lifan_X60_2016_Navi_9.13.73.rar
+-rw-r--r-- 1 runner runner 220980636 Nov  2 17:54 firmware/original/Firmware_lifan_X60_2016_Navi_9.13.73.rar
 5572d928c5309cce6603d3020079a440633a69843a55f4c03480101e9f8311af  firmware/original/Firmware_lifan_X60_2016_Navi_9.13.73.rar
 firmware/original/Firmware_lifan_X60_2016_Navi_9.13.73.rar: RAR archive data, v5
 
