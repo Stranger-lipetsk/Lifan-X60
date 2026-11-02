@@ -135,8 +135,8 @@ public class MainActivity extends Activity {
         countdownView.setPadding(0, 0, 0, dp(12));
         root.addView(countdownView);
 
-        addButton(root, "Магнитола (штатная оболочка)", COL_CAR, new Runnable() {
-            public void run() { launchHome(PKG_CAR_HOME); }
+        addButton(root, "Магнитола (родной лаунчер)", COL_CAR, new Runnable() {
+            public void run() { launchCarHome(); }
         });
         addButton(root, "Стандартный Android (рабочий стол)", COL_ANDROID, new Runnable() {
             public void run() { launchHome(PKG_AOSP_HOME); }
@@ -164,6 +164,9 @@ public class MainActivity extends Activity {
             public void run() {
                 startAction("android.settings.APPLICATION_DEVELOPMENT_SETTINGS");
             }
+        });
+        addButton(root, "Вернуть «Домой» родному лаунчеру", COL_NEUTRAL, new Runnable() {
+            public void run() { disableHomeAlias(); }
         });
 
         final Button toggle = new Button(this);
@@ -193,10 +196,10 @@ public class MainActivity extends Activity {
         root.addView(toggle);
 
         TextView hint = new TextView(this);
-        hint.setText("Открывается кнопкой MirrorLink на главном экране магнитолы. "
-                + "Вернуться в магнитолу — первая кнопка. "
-                + "Чтобы панель открывалась и по кнопке «Домой», включи HOME-режим "
-                + "(docs/08).");
+        hint.setText("Вернуться в магнитолу: первая кнопка или «Домой» (родной лаунчер). "
+                + "Чтобы «Домой» снова открывал магнитолу, а не эту панель, нажми "
+                + "«Вернуть «Домой» родному лаунчеру» — или в настройках Android: "
+                + "Приложения → Домой. Подробная инструкция — docs/17.");
         hint.setTextColor(COL_DIM);
         hint.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
         hint.setPadding(0, dp(12), 0, 0);
@@ -305,6 +308,46 @@ public class MainActivity extends Activity {
      * Запускает лаунчер нужного пакета. Ищем среди приложений с CATEGORY_HOME —
      * это надёжнее, чем жёстко заданное имя активности.
      */
+    /**
+     * Прямой запуск родного лаунчера магнитолы.
+     *
+     * Оболочка Elead объявляет себя домашним экраном активностью
+     * tw.com.elead.el830.home/.Home (категория HOME в манифесте), поэтому
+     * запускаем её явно по компоненту — так не зависит от того, какой
+     * лаунчер выбран по умолчанию, и не показывает диалог выбора.
+     */
+    private void launchCarHome() {
+        Intent i = new Intent(Intent.ACTION_MAIN);
+        i.addCategory(Intent.CATEGORY_HOME);
+        i.setComponent(new ComponentName(PKG_CAR_HOME, PKG_CAR_HOME + ".Home"));
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        try {
+            startActivity(i);
+            finish();
+            return;
+        } catch (Throwable t) {
+            // если активность называется иначе — ищем её через PackageManager
+        }
+        launchHome(PKG_CAR_HOME);
+    }
+
+    /**
+     * Снимает панель с роли домашнего экрана: после этого «Домой» снова
+     * открывает родной лаунчер магнитолы без диалога выбора.
+     * Панель при этом остаётся установленной.
+     */
+    private void disableHomeAlias() {
+        try {
+            getPackageManager().setComponentEnabledSetting(
+                    new ComponentName(getPackageName(),
+                            getPackageName() + ".HomeAlias"),
+                    android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                    android.content.pm.PackageManager.DONT_KILL_APP);
+        } catch (Throwable ignored) {
+        }
+        launchCarHome();
+    }
+
     private void launchHome(String pkg) {
         Intent q = new Intent(Intent.ACTION_MAIN);
         q.addCategory(Intent.CATEGORY_HOME);
