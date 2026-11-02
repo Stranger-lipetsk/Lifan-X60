@@ -5,11 +5,6 @@ on:
     paths:
       - 'autoanalysis/buildinplace.txt'
   workflow_dispatch:
-    inputs:
-      stage:
-        description: '1 = контрольная (только удаление)  2 = + панель  3 = + скрипт'
-        required: false
-        default: '1'
 
 permissions:
   contents: write
@@ -24,7 +19,7 @@ jobs:
       - name: "Инструменты"
         run: |
           sudo apt-get update -qq 2>/dev/null || true
-          sudo apt-get install -y -qq p7zip-full unrar-free e2fsprogs >/dev/null 2>&1 || true
+          sudo apt-get install -y -qq p7zip-full e2fsprogs >/dev/null 2>&1 || true
 
       - name: "Java и Android SDK"
         uses: actions/setup-java@v4
@@ -41,9 +36,9 @@ jobs:
           url = ('https://cloud-api.yandex.net/v1/disk/public/resources'
                  '?public_key=' + urllib.parse.quote(pk, safe='') + '&limit=100')
           items = json.load(urllib.request.urlopen(url, timeout=60))['_embedded']['items']
-          it = [i for i in items if i['type']=='file' and '2016' in i['name']][0]
-          subprocess.run(['curl','-L','--fail','--retry','3','--max-time','2500',
-                          '-o','/tmp/fw.rar',it['file']], check=True)
+          it = [i for i in items if i['type'] == 'file' and '2016' in i['name']][0]
+          subprocess.run(['curl', '-L', '--fail', '--retry', '3', '--max-time', '2500',
+                          '-o', '/tmp/fw.rar', it['file']], check=True)
           PY
           7z x -y -aos -o/tmp/rar /tmp/fw.rar >/dev/null 2>&1 || true
           cp "$(find /tmp/rar -name system.img | head -1)" out/system-org.img
@@ -53,11 +48,6 @@ jobs:
         run: |
           bash switcher/build.sh 2>&1 | tail -6
           ls -l switcher/switcher.apk
-
-      - name: "Контрольная сборка: заводской образ без правок"
-        run: |
-          cp out/system-org.img out/stage0-control.img
-          sha256sum out/stage0-control.img
 
       - name: "Стадия 1: только удаление лишнего"
         run: |
@@ -98,41 +88,24 @@ jobs:
             echo "Заводской образ не пересобирается: файлы меняются через debugfs,"
             echo "суперблок и журнал остаются заводскими."
             echo
-            for f in out/stage0-control.img out/stage1-clean.img out/stage2-panel.img out/stage3-full.img; do
+            echo "| файл | размер | sha256 |"
+            echo "|---|---|---|"
+            for f in out/stage1-clean.img out/stage2-panel.img out/stage3-full.img; do
               if [ -f "$f" ]; then
                 sz=$(stat -c%s "$f")
-                echo "| $(basename $f) | $sz байт | $(sha256sum "$f" | cut -c1-16)… |"
+                echo "| $(basename $f) | $sz байт | $(sha256sum "$f" | cut -c1-16) |"
               fi
             done
-          } | tee reports/inplace-сводка.md
+          } | tee "reports/inplace-summary.md"
 
-<<<<<<< HEAD
-      - name: "Публикация стадии 1 в релиз"
-        # релиз не расходует квоту хранилища Actions и не истекает через 90 дней
-=======
       - name: "Публикация образов в релизы"
         # релизы не расходуют квоту хранилища Actions и не истекают через 90 дней
->>>>>>> 930ae51 (feat(ci): публиковать полный образ (стадия 3) и запасной (стадия 2))
         if: always()
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-<<<<<<< HEAD
-          if [ ! -f out/stage1-clean.img ]; then echo "нет образа"; exit 0; fi
-          cp out/stage1-clean.img out/system.img
-          NOTE="Стадия 1: заводской system.img, из которого удалены только лишние
-          приложения. Файловая система НЕ пересоздавалась — суперблок, журнал и
-          размещение inode заводские. Размер: $(stat -c%s out/system.img) байт."
-          if gh release view lite-stage1 >/dev/null 2>&1; then
-            gh release upload lite-stage1 out/system.img --clobber
-          else
-            gh release create lite-stage1 out/system.img \
-              --title "Lite-образ, стадия 1 (проверка)" \
-              --notes "$NOTE"
-          fi
-=======
-          pub() {   # $1 = файл, $2 = тег, $3 = заголовок, $4 = описание
-            [ -f "$1" ] || { echo "нет $1"; return 0; }
+          pub() {
+            if [ ! -f "$1" ]; then echo "нет $1"; return 0; fi
             cp "$1" out/upload.img
             if gh release view "$2" >/dev/null 2>&1; then
               gh release upload "$2" out/upload.img --clobber
@@ -142,11 +115,10 @@ jobs:
           }
           pub out/stage3-full.img lite-full \
             "Lite-образ (полный)" \
-            "Заводской system.img, изменённый без пересборки файловой системы: удалены 9 лишних приложений, добавлена панель выхода в Android, добавлен скрипт автоподключения карт. Суперблок, журнал и размещение inode заводские."
+            "Заводской system.img, изменённый без пересборки файловой системы. Удалены 9 лишних приложений, добавлена панель выхода в Android, добавлен скрипт автоподключения карт. Суперблок, журнал и размещение inode заводские."
           pub out/stage2-panel.img lite-panel \
             "Lite-образ (без скрипта карт)" \
-            "То же, что lite-full, но без install-recovery.sh — запасной вариант, если полный образ не загрузится."
->>>>>>> 930ae51 (feat(ci): публиковать полный образ (стадия 3) и запасной (стадия 2))
+            "То же, что lite-full, но без install-recovery.sh. Запасной вариант."
 
       - name: "Коммит отчётов"
         if: always()
