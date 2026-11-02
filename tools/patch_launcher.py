@@ -126,10 +126,6 @@ def add_set_activity(text):
         raise SystemExit('не найден loadEleadApplications')
     method = m.group(0)
 
-    if 'ApplicationInfo;->setActivity' in method:
-        print('  setActivity уже есть в методе — пропуск')
-        return text
-
     puts = list(re.finditer(
         r'invoke-virtual \{[^}]*\}, Ljava/util/HashMap;->put', method))
     if not puts:
@@ -140,6 +136,11 @@ def add_set_activity(text):
     head = method.rfind('sget-object', 0, put.start())
     if head < 0:
         raise SystemExit('не найден sget-object перед последним put()')
+
+    # уже пропатчено? смотрим только окрестность последнего put()
+    if 'ApplicationInfo;->setActivity' in method[head:put.start()]:
+        print('  setActivity в ветке по умолчанию уже есть')
+        return text
 
     line_start = method.rfind('\n', 0, head) + 1
     new_method = method[:line_start] + SET_ACTIVITY + method[line_start:]
