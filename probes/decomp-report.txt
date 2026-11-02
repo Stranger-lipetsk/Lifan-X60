@@ -1,0 +1,52 @@
+# Можно ли пересобрать EL830LF01_Home.apk
+
+debugfs 1.47.0 (5-Feb-2023)
+-rw-r--r-- 1 runner runner 4588177 Nov  2 16:31 /tmp/Home.apk
+
+## подпись оригинала
+Signer #1:
+
+Certificate #1:
+Owner: EMAILADDRESS=android@freescale.com, CN=Android, OU=Android, O=Android, L=Mountain View, ST=California, C=US
+Issuer: EMAILADDRESS=android@freescale.com, CN=Android, OU=Android, O=Android, L=Mountain View, ST=California, C=US
+Serial number: d2cba57296ebebe2
+Valid from: Thu Jul 14 17:28:51 UTC 2011 until: Mon Nov 29 17:28:51 UTC 2038
+Certificate fingerprints:
+	 SHA1: 3E:0C:AF:3D:79:9F:BA:EC:56:6F:AC:BE:1A:67:FB:25:0B:DE:FD:93
+	 SHA256: 7F:BA:E8:17:B7:DB:24:64:2D:89:59:C3:47:B5:61:C0:03:C6:CF:DE:2C:B1:0F:90:9C:93:2F:21:A4:D6:D8:04
+Signature algorithm name: SHA1withRSA (weak)
+Subject Public Key Algorithm: 2048-bit RSA key
+
+## apktool: распаковка
+I: Loading resource table from file: /home/runner/.local/share/apktool/framework/1.apk
+I: Decoding values */* XMLs...
+I: Decoding AndroidManifest.xml with resources...
+I: Regular manifest package...
+I: Baksmaling classes.dex...
+I: Copying assets and libs...
+I: Copying unknown files...
+I: Copying original files...
+
+## что внутри после распаковки
+AndroidManifest.xml
+apktool.yml
+lib
+original
+res
+smali
+
+## apktool: сборка обратно (без изменений)
+I: Using Apktool 2.9.3
+I: Checking whether sources has changed...
+I: Smaling smali folder into classes.dex...
+I: Checking whether resources has changed...
+I: Building resources...
+I: Copying libs... (/lib)
+I: Building apk file...
+I: Copying unknown files/dir...
+I: Built apk into: /tmp/HomeRebuilt.apk
+-rw-r--r-- 1 runner runner 4540380 Nov  2 16:31 /tmp/HomeRebuilt.apk
+
+## размеры: оригинал / пересобранный
+/tmp/Home.apk 4588177
+/tmp/HomeRebuilt.apk 4540380
