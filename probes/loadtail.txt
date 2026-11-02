@@ -1,0 +1,166 @@
+# Хвост loadEleadApplications и выбор initDefault
+
+== кто вызывает initDefault_EL830CLF01 / initDefault ==
+smali/tw/com/elead/el830/home/VolumeTable.smali:849:.method public initDefault()V
+smali/tw/com/elead/el830/home/HomeApp.smali:1409:.method private initDefault()V
+smali/tw/com/elead/el830/home/HomeApp.smali:1416:    const-string v1, "HomeApp.java initDefault().............. "
+smali/tw/com/elead/el830/home/HomeApp.smali:1545:.method private initDefault_EL830CLF01()V
+smali/tw/com/elead/el830/home/HomeApp.smali:1552:    const-string v1, "HomeApp.java initDefault_EL830CLF01().............. "
+smali/tw/com/elead/el830/home/HomeApp.smali:7809:    invoke-direct {p0}, Ltw/com/elead/el830/home/HomeApp;->initDefault_EL830CLF01()V
+smali/tw/com/elead/el830/home/HomeApp.smali:7943:    invoke-direct {p0}, Ltw/com/elead/el830/home/HomeApp;->initDefault()V
+smali/tw/com/elead/el830/home/HomeApp.smali:8360:    const-string v1, "HomeApp.java initDefault().............. "
+smali/tw/com/elead/el830/home/HomeService$3.smali:4145:    invoke-virtual {v3}, Ltw/com/elead/el830/home/VolumeTable;->initDefault()V
+smali/tw/com/elead/el830/home/DisplayTable.smali:693:.method public initDefault()V
+
+== конец метода loadEleadApplications (последние 120 строк) ==
+1723 /tmp/load.txt
+
+    goto/16 :goto_23e
+
+    .line 877
+    :cond_4df
+    const-string v9, "com.fpt.mirrorlink.android"
+
+    invoke-virtual {v7, v9}, Ljava/lang/String;->equalsIgnoreCase(Ljava/lang/String;)Z
+
+    move-result v9
+
+    if-eqz v9, :cond_23e
+
+    .line 879
+    const v9, 0x7f0c002e
+
+    invoke-virtual {p0, v9}, Ltw/com/elead/el830/home/HomeApp;->getString(I)Ljava/lang/String;
+
+    move-result-object v9
+
+    iput-object v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->title:Ljava/lang/CharSequence;
+
+    .line 880
+    new-instance v9, Landroid/content/ComponentName;
+
+    iget-object v10, v4, Landroid/content/pm/ResolveInfo;->activityInfo:Landroid/content/pm/ActivityInfo;
+
+    iget-object v10, v10, Landroid/content/pm/ActivityInfo;->applicationInfo:Landroid/content/pm/ApplicationInfo;
+
+    iget-object v10, v10, Landroid/content/pm/ApplicationInfo;->packageName:Ljava/lang/String;
+
+    iget-object v11, v4, Landroid/content/pm/ResolveInfo;->activityInfo:Landroid/content/pm/ActivityInfo;
+
+    iget-object v11, v11, Landroid/content/pm/ActivityInfo;->name:Ljava/lang/String;
+
+    invoke-direct {v9, v10, v11}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    const/high16 v10, 0x10200000
+
+    invoke-virtual {v0, v9, v10}, Ltw/com/elead/el830/home/ApplicationInfo;->setActivity(Landroid/content/ComponentName;I)V
+
+    .line 881
+    const-string v9, "tw.com.elead.el830.home"
+
+    iput-object v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->menu:Ljava/lang/String;
+
+    .line 882
+    iput-object v8, v0, Ltw/com/elead/el830/home/ApplicationInfo;->subFunc:Ljava/lang/String;
+
+    .line 883
+    const/4 v9, 0x1
+
+    iput v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->funcType:I
+
+    .line 884
+    const/4 v9, 0x1
+
+    iput-boolean v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->bMenuItem:Z
+
+    .line 885
+    const/4 v9, 0x0
+
+    iput-boolean v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->enable:Z
+
+    .line 886
+    const/4 v9, 0x0
+
+    iput-boolean v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->selected:Z
+
+    .line 887
+    const/4 v9, 0x0
+
+    iput v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->displayTable:I
+
+    .line 888
+    const/4 v9, 0x1
+
+    iput v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->volumeTable:I
+
+    .line 889
+    const/4 v9, 0x2
+
+    iput v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->audioChannel:I
+
+    .line 890
+    const/4 v9, 0x1
+
+    iput v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->videoChannel:I
+
+    .line 891
+    const/4 v9, 0x0
+
+    iput v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->wifiMode:I
+
+    .line 892
+    const/4 v9, 0x1
+
+    iput-boolean v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->beforeAccOff:Z
+
+    .line 893
+    const v9, 0x7f0c0117
+
+    invoke-virtual {p0, v9}, Ltw/com/elead/el830/home/HomeApp;->getString(I)Ljava/lang/String;
+
+    move-result-object v9
+
+    iput-object v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->vrCmd:Ljava/lang/String;
+
+    goto/16 :goto_23e
+
+    .line 908
+    .end local v0    # "appInfo":Ltw/com/elead/el830/home/ApplicationInfo;
+    .end local v3    # "iSub":I
+    .end local v4    # "info":Landroid/content/pm/ResolveInfo;
+    .end local v6    # "strMainPackageName":Ljava/lang/String;
+    .end local v7    # "strPackageName":Ljava/lang/String;
+    .end local v8    # "strSubPackageName":Ljava/lang/String;
+    :cond_533
+    return-void
+.end method
+
+== есть ли ветка по умолчанию, где пакет всё равно попадает в таблицу ==
+747:    :cond_23e
+748:    :goto_23e
+860:    goto :goto_23e
+967:    goto/16 :goto_23e
+1074:    goto/16 :goto_23e
+1181:    goto/16 :goto_23e
+1288:    goto/16 :goto_23e
+1391:    goto/16 :goto_23e
+1498:    goto/16 :goto_23e
+1605:    goto/16 :goto_23e
+1615:    if-eqz v9, :cond_23e
+1712:    goto/16 :goto_23e
+
+== где ставится enable:Z = 1 в этом методе ==
+180:    iput-boolean v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->enable:Z
+299:    iput-boolean v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->enable:Z
+407:    iput-boolean v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->enable:Z
+528:    iput-boolean v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->enable:Z
+700:    iput-boolean v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->enable:Z
+814:    iput-boolean v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->enable:Z
+921:    iput-boolean v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->enable:Z
+1028:    iput-boolean v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->enable:Z
+1135:    iput-boolean v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->enable:Z
+1242:    iput-boolean v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->enable:Z
+1345:    iput-boolean v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->enable:Z
+1452:    iput-boolean v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->enable:Z
+1559:    iput-boolean v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->enable:Z
+1666:    iput-boolean v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->enable:Z
