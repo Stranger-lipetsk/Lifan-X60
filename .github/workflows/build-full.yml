@@ -51,8 +51,20 @@ jobs:
         run: |
           debugfs -R "dump /priv-app/EL830LF01_Home.apk /tmp/Home.apk" out/system-org.img 2>&1 | tail -1
           java -jar /tmp/apktool.jar d -f /tmp/Home.apk -o /tmp/HomeDec 2>&1 | tail -2
-          python3 tools/patch_launcher.py --dir /tmp/HomeDec \
-            --add ru.yandex.yandexnavi --add org.prowl.torque 2>&1 | tee -a reports/full-build.txt
+
+          # имена пакетов берём из самих APK, а не из догадок
+          ADDS="--add ru.yandex.yandexnavi --add org.prowl.torque"
+          for f in firmware/apks/*.apk; do
+            [ -f "$f" ] || continue
+            PKG=$("$BT/aapt" dump badging "$f" 2>/dev/null | sed -n "s/^package: name='\([^']*\)'.*/\1/p" | head -1)
+            if [ -n "$PKG" ]; then
+              echo "APK $f -> пакет $PKG" | tee -a reports/full-build.txt
+              ADDS="$ADDS --add $PKG"
+            else
+              echo "APK $f: не удалось прочитать пакет (битый файл?)" | tee -a reports/full-build.txt
+            fi
+          done
+          python3 tools/patch_launcher.py --dir /tmp/HomeDec $ADDS 2>&1 | tee -a reports/full-build.txt
           java -jar /tmp/apktool.jar b /tmp/HomeDec -o out/Home-patched.apk 2>&1 | tail -4
 
           # новый dex обязан грузиться: сверяем, что все ссылки разрешаются
@@ -116,9 +128,12 @@ jobs:
           ADD="$ADD --add-file out/Home-new.apk:/priv-app/EL830LF01_Home.apk"
           for f in firmware/apks/*.apk; do
             [ -f "$f" ] || continue
-            case "$(basename "$f")" in
-              *avitel*) ADD="$ADD --add-apk $f:/priv-app" ;;
-              *)        ADD="$ADD --add-apk $f:/app" ;;
+            PKG=$("$BT/aapt" dump badging "$f" 2>/dev/null | sed -n "s/^package: name='\([^']*\)'.*/\1/p" | head -1)
+            [ -n "$PKG" ] || { echo "пропуск $f: не APK" | tee -a reports/full-build.txt; continue; }
+            # Navitel требует системных прав на чтение лицензии -> /priv-app
+            case "$PKG" in
+              com.navitel*) ADD="$ADD --add-apk $f:/priv-app" ;;
+              *)            ADD="$ADD --add-apk $f:/app" ;;
             esac
           done
           echo "добавляем:$ADD" | tee -a reports/full-build.txt
