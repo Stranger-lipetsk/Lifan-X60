@@ -1,0 +1,72 @@
+name: Кнопки главного экрана
+
+on:
+  push:
+    paths:
+      - 'autoanalysis/probe-buttons.txt'
+  workflow_dispatch:
+
+permissions: { contents: write }
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: "Инструменты"
+        run: |
+          sudo apt-get update -qq 2>/dev/null || true
+          sudo apt-get install -y -qq p7zip-full unzip curl >/dev/null 2>&1 || true
+          mkdir -p docs/mockup/btns probes
+      - name: "Скачать прошивку и распаковать"
+        run: |
+          mkdir -p /tmp/rar
+          python3 - <<'PY'
+          import json, subprocess, urllib.parse, urllib.request
+          pk = 'https://disk.yandex.ru/d/qJdjjeB8Aiq3Lg'
+          url = ('https://cloud-api.yandex.net/v1/disk/public/resources'
+                 '?public_key=' + urllib.parse.quote(pk, safe='') + '&limit=100')
+          items = json.load(urllib.request.urlopen(url, timeout=60))['_embedded']['items']
+          it = [i for i in items if i['type'] == 'file' and '2016' in i['name']][0]
+          subprocess.run(['curl','-L','--fail','--retry','3','--max-time','2500',
+                          '-o','/tmp/fw.rar', it['file']], check=True)
+          PY
+          7z x -y -aos -o/tmp/rar /tmp/fw.rar >/dev/null 2>&1 || true
+          SYSIMG="$(find /tmp/rar -name system.img | head -1)"
+          debugfs -R "dump /priv-app/EL830LF01_Home.apk /tmp/Home.apk" "$SYSIMG" 2>&1 | tail -1
+          mkdir -p /tmp/HomeX && cd /tmp/HomeX && unzip -o -q /tmp/Home.apk && ls res | head -3
+      - name: "Список кнопок и layout"
+        run: |
+          OUT="$GITHUB_WORKSPACE/probes/home-buttons.txt"
+          {
+            echo "# Кнопки главного экрана"
+            echo
+            echo "## все main_btn_*"
+            ls /tmp/HomeX/res/drawable-mdpi-v4/ 2>/dev/null | grep -E "^main_btn|^ver_ico" | sort
+            echo
+            echo "## home.xml"
+            cat /tmp/HomeX/res/layout/home.xml 2>/dev/null | head -120
+          } > "$OUT" 2>&1
+          sed -n '1,40p' "$OUT"
+      - name: "Скопировать картинки"
+        run: |
+          D=/tmp/HomeX/res/drawable-mdpi-v4
+          cp "$D"/main_btn_*_normal.png "$GITHUB_WORKSPACE/docs/mockup/btns/" 2>/dev/null
+          cp "$D"/main_btn_*_click.png  "$GITHUB_WORKSPACE/docs/mockup/btns/" 2>/dev/null
+          cp /tmp/HomeX/res/layout/home.xml "$GITHUB_WORKSPACE/docs/mockup/home.xml" 2>/dev/null
+          cp /tmp/HomeX/res/layout/app_item.xml "$GITHUB_WORKSPACE/docs/mockup/app_item.xml" 2>/dev/null
+          ls -l "$GITHUB_WORKSPACE/docs/mockup/btns/" | head -20
+      - name: "Коммит"
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A probes docs/mockup
+          git diff --cached --quiet && exit 0
+          git commit -m "проба: кнопки главного экрана"
+          for try in 1 2 3 4 5; do
+            if git pull --rebase --autostash origin "${{ github.ref_name }}" >/dev/null 2>&1 \
+               && git push origin HEAD:${{ github.ref_name }}; then exit 0; fi
+            sleep 10; git rebase --abort >/dev/null 2>&1 || true
+          done
