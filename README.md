@@ -39,6 +39,7 @@ Wi-Fi точки доступа телефона: **[docs/13-wifi-точка-д�
 ⚠️ **Не загружается после прошивки?** → **[docs/15-восстановление-циклическая-загрузка.md](docs/15-восстановление-циклическая-загрузка.md)**
 ✅ **Рабочий образ (проверен на устройстве):** релиз **[lite-full](https://github.com/Stranger-lipetsk/Lifan-X60/releases/tag/lite-full)** — см. **[docs/16-рабочий-образ-из-релиза.md](docs/16-рабочий-образ-из-релиза.md)**
 🔑 **Как попасть в Android (кнопка MirrorLink ненадёжна):** **[docs/17-вход-в-android.md](docs/17-вход-в-android.md)**
+📦 **Приложения в образе и кнопки на экране:** **[docs/18-приложения-и-кнопки.md](docs/18-приложения-и-кнопки.md)**
 Доступ к Android, Wi-Fi и файлам: **[docs/08-mirrorlink-vyhod-k-android.md](docs/08-mirrorlink-vyhod-k-android.md)**
 Сборка образа: `python3 tools/inplace_patch.py --system system.img --out out/system.img ...`
 (правит заводской образ **без пересборки ФС**; прежний `tools/build_system.py` давал нерабочий образ)
