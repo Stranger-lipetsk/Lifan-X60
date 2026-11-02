@@ -1,0 +1,104 @@
+# Bluetooth: как устроен
+
+## HAL стандартного стека Android
+    993  100644 (1)      0      0    5436 26-Apr-2026 17:05 a2dp_sink.default.so
+    994  100644 (1)      0      0    9532 26-Apr-2026 17:05 audio.a2dp.default.so
+    995  100644 (1)      0      0    5392 26-Apr-2026 17:05 audio.primary.default.so
+    996  100644 (1)      0      0   37024 26-Apr-2026 17:05 audio.primary.imx6.so
+    997  100644 (1)      0      0   17796 26-Apr-2026 17:05 audio.r_submix.default.so
+    998  100644 (1)      0      0   26268 26-Apr-2026 17:05 audio.spdif.imx6.so
+    999  100644 (1)      0      0    5424 26-Apr-2026 17:05 audio.usb.default.so
+   1000  100644 (1)      0      0   75336 26-Apr-2026 17:05 audio_policy.default.so
+   1001  100644 (1)      0      0   104020 26-Apr-2026 17:05 camera.imx6.so
+   1002  100644 (1)      0      0    9532 26-Apr-2026 17:05 elead_gpio.default.so
+   1003  100644 (1)      0      0    9588 26-Apr-2026 17:05 elead_video.default.so
+   1004  100644 (1)      0      0    9580 26-Apr-2026 17:05 gps.default.so
+   1005  100644 (1)      0      0    9812 26-Apr-2026 17:05 gralloc.default.so
+   1006  100644 (1)      0      0   13976 26-Apr-2026 17:05 gralloc.imx6.so
+   1007  100644 (1)      0      0   18040 26-Apr-2026 17:05 gralloc_viv.imx6.so
+   1008  100644 (1)      0      0   17728 26-Apr-2026 17:05 hwcomposer.imx6.so
+   1009  100644 (1)      0      0   13576 26-Apr-2026 17:05 hwcomposer_fsl.imx6.so
+   1010  100644 (1)      0      0   30012 26-Apr-2026 17:05 hwcomposer_viv.imx6.so
+   1011  100644 (1)      0      0    5388 26-Apr-2026 17:05 keystore.default.so
+   1012  100644 (1)      0      0    5428 26-Apr-2026 17:05 lights.imx6.so
+
+## профили внутри libbluelet.so
+  SPP: 1
+  HFP: 20
+  A2DP: 2
+  AVRCP: 5
+  PBAP: 3
+  MAP: 8
+  OPP: 6
+  HID: 6
+  GATT: 7
+  SPP_SERVER: 0
+
+## строки про профили и порт
+BTOSDepInit
+porting_hci_dump_data
+HCI_Init
+SDPInit
+BNEPInit
+RFCOMM_Init
+RFCOMM_Done
+HCI_Done
+HCI_TL_RecvData
+HCIC_TL_RecvSCOData
+HCIC_TL_RecvEvent
+HCIC_TL_RecvACLData
+HCI_CodingLen
+HCI_DBG_Command_Req
+HCI_TL_SendData
+HCI_Coding
+HCI_DT_GetSupCMDBitIndex
+HCI_DBG_Command_CheckSupport2
+HCI_Remote_FindByBD
+HCI_CheckCmdCount
+HCIC_Init
+HCI_Internal_Cbk_Reg
+HCIC_Done
+HCI_Link_RemoveAll
+HCI_Local_Remove
+grep: write error: Broken pipe
+
+## manifest elBluetoothSetup
+I: Copying unknown files...
+I: Copying original files...
+
+## Bluetooth.apk (стандартный стек?)
+   477004  2011-07-15 02:28   classes.dex
+
+## скрипты запуска BT
+    590   40755 (2)      0      0    4096 26-Apr-2026 17:05 bluesoleil
+    593   40755 (2)      0      0    4096 26-Apr-2026 17:05 bluetooth
+--- setup_btmac.sh ---
+#!/system/bin/sh
+
+BT_ADDR_STR="bt_addr"
+CONFIG_FILE="/mnt/para_fw/config.ini"
+
+while read -r LINE; do
+	LINE_ARRY=(${LINE//=/ })
+	if [ ${LINE_ARRY[0]} == $BT_ADDR_STR ]; then
+		#MAC_STR=${LINE_ARRY[1]}
+		MAC_STR=${LINE_ARRY[1]:0:2}":"${LINE_ARRY[1]:2:2}":"${LINE_ARRY[1]:4:2}":"${LINE_ARRY[1]:6:2}":"${LINE_ARRY[1]:8:2}":"${LINE_ARRY[1]:10:2}
+		mkdir -p /data/bluesoleil/
+		chmod 777 /data/bluesoleil/
+		echo $MAC_STR > /data/bluesoleil/BD_ADDR.INI
+		chmod 666 /data/bluesoleil/BD_ADDR.INI
+		cp /system/etc/bluesoleil/TL_BASE.INI /data/bluesoleil/TL.INI
+		echo "bd_addr="$MAC_STR >> /data/bluesoleil/TL.INI
+		chmod 666 /data/bluesoleil/TL.INI
+		setprop ro.bt.bdaddr_path $MAC_STR
+		sync
+		sync
+		setprop rw.set_btmac_finished 1
+		exit 0
+	fi	
+done<$CONFIG_FILE
+
+setprop rw.set_btmac_finished 1
+exit 0
+
+## init: как поднимается UART-порт
