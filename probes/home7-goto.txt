@@ -1,0 +1,78 @@
+# goToApplication: что делает нажатие на иконку
+
+== goToApplication целиком ==
+.method private goToApplication(Ljava/lang/String;)V
+    .registers 5
+    .param p1, "strNewPackageName"    # Ljava/lang/String;
+
+    .prologue
+    .line 11404
+    new-instance v0, Landroid/os/Bundle;
+
+    invoke-direct {v0}, Landroid/os/Bundle;-><init>()V
+
+    .line 11405
+    .local v0, "bundle":Landroid/os/Bundle;
+    const-string v2, "NEW_PACKAGE_NAME"
+
+    invoke-virtual {v0, v2, p1}, Landroid/os/Bundle;->putString(Ljava/lang/String;Ljava/lang/String;)V
+
+    .line 11406
+    iget-object v2, p0, Ltw/com/elead/el830/home/HomeService;->mHandlerService:Landroid/os/Handler;
+
+    invoke-virtual {v2}, Landroid/os/Handler;->obtainMessage()Landroid/os/Message;
+
+    move-result-object v1
+
+    .line 11407
+    .local v1, "msg":Landroid/os/Message;
+    const/16 v2, 0x192
+
+    iput v2, v1, Landroid/os/Message;->what:I
+
+    .line 11408
+    invoke-virtual {v1, v0}, Landroid/os/Message;->setData(Landroid/os/Bundle;)V
+
+    .line 11409
+    iget-object v2, p0, Ltw/com/elead/el830/home/HomeService;->mHandlerService:Landroid/os/Handler;
+
+    invoke-virtual {v2, v1}, Landroid/os/Handler;->sendMessage(Landroid/os/Message;)Z
+
+    .line 11410
+    return-void
+.end method
+
+== поле intent в ApplicationInfo ==
+33:.field intent:Landroid/content/Intent;
+111:    iget-object v3, p0, Ltw/com/elead/el830/home/ApplicationInfo;->intent:Landroid/content/Intent;
+121:    iget-object v4, v0, Ltw/com/elead/el830/home/ApplicationInfo;->intent:Landroid/content/Intent;
+163:    iget-object v3, p0, Ltw/com/elead/el830/home/ApplicationInfo;->intent:Landroid/content/Intent;
+207:    const-string v1, "android.intent.action.MAIN"
+211:    iput-object v0, p0, Ltw/com/elead/el830/home/ApplicationInfo;->intent:Landroid/content/Intent;
+214:    iget-object v0, p0, Ltw/com/elead/el830/home/ApplicationInfo;->intent:Landroid/content/Intent;
+216:    const-string v1, "android.intent.category.LAUNCHER"
+221:    iget-object v0, p0, Ltw/com/elead/el830/home/ApplicationInfo;->intent:Landroid/content/Intent;
+226:    iget-object v0, p0, Ltw/com/elead/el830/home/ApplicationInfo;->intent:Landroid/content/Intent;
+
+== настройка интента в loadEleadApplications (ResolveInfo) ==
+1085:.method private findMainActivityForPackage(Landroid/content/Context;Ljava/lang/String;)Landroid/content/pm/ResolveInfo;
+1097:    .local v1, "info":Landroid/content/pm/ResolveInfo;
+1122:    invoke-virtual {v3, v2, v6}, Landroid/content/pm/PackageManager;->queryIntentActivities(Landroid/content/Intent;I)Ljava/util/List;
+1127:    .local v0, "apps":Ljava/util/List;, "Ljava/util/List<Landroid/content/pm/ResolveInfo;>;"
+1141:    .end local v1    # "info":Landroid/content/pm/ResolveInfo;
+1142:    check-cast v1, Landroid/content/pm/ResolveInfo;
+1145:    .restart local v1    # "info":Landroid/content/pm/ResolveInfo;
+2178:    invoke-virtual {v0, v9, v10}, Ltw/com/elead/el830/home/ApplicationInfo;->setActivity(Landroid/content/ComponentName;I)V
+2256:    invoke-direct {p0, p0, v6}, Ltw/com/elead/el830/home/HomeApp;->findMainActivityForPackage(Landroid/content/Context;Ljava/lang/String;)Landroid/content/pm/ResolveInfo;
+2261:    .local v4, "info":Landroid/content/pm/ResolveInfo;
+2277:    iget-object v11, v4, Landroid/content/pm/ResolveInfo;->activityInfo:Landroid/content/pm/ActivityInfo;
+2293:    iget-object v11, v4, Landroid/content/pm/ResolveInfo;->activityInfo:Landroid/content/pm/ActivityInfo;
+2336:    iget-object v10, v4, Landroid/content/pm/ResolveInfo;->activityInfo:Landroid/content/pm/ActivityInfo;
+2342:    iget-object v11, v4, Landroid/content/pm/ResolveInfo;->activityInfo:Landroid/content/pm/ActivityInfo;
+2350:    invoke-virtual {v0, v9, v10}, Ltw/com/elead/el830/home/ApplicationInfo;->setActivity(Landroid/content/ComponentName;I)V
+2450:    iget-object v10, v4, Landroid/content/pm/ResolveInfo;->activityInfo:Landroid/content/pm/ActivityInfo;
+2456:    iget-object v11, v4, Landroid/content/pm/ResolveInfo;->activityInfo:Landroid/content/pm/ActivityInfo;
+2464:    invoke-virtual {v0, v9, v10}, Ltw/com/elead/el830/home/ApplicationInfo;->setActivity(Landroid/content/ComponentName;I)V
+2557:    iget-object v10, v4, Landroid/content/pm/ResolveInfo;->activityInfo:Landroid/content/pm/ActivityInfo;
+2563:    iget-object v11, v4, Landroid/content/pm/ResolveInfo;->activityInfo:Landroid/content/pm/ActivityInfo;
+grep: write error: Broken pipe
