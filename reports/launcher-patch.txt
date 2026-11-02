@@ -3,7 +3,7 @@
   добавлен в список экрана: org.prowl.torque
   уже есть: com.navitel
   проверка enable снята (1 место)
-  setActivity уже есть в методе — пропуск
+  в ветку по умолчанию добавлен setActivity (перед put, строка 748)
 готово
 
 ## проверка результата
@@ -16,7 +16,7 @@
 59-
 60-    goto :cond_2
 ### setActivity в ветке cond_23e
-11
-ad2e076a39ed462b714710281f86d7a9595699f1303a8f2196e0cf8c6b608fc9  out/Home-patched.apk
+12
+70a45a5fb6570e1231465eec2fe520901add8d0d7b0c03e65ed20e86a52b0bd9  out/Home-patched.apk
 КЛЮЧА НЕТ: секрет LAUNCHER_KEY_B64 не задан.
 Оболочка подписана системным testkey — нужен именно он.
