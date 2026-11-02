@@ -1,0 +1,8 @@
+# Собранные APK
+4786ecfe1e55601de56d6f3c8e002fd8bb23e8c0e0267285e5baa405ec82e13c  switcher/switcher.apk
+74a483c8a3e84bcc355ff819761d6ee6c32a126db442b60fd67f2db943a741cb  switcher/navi.apk
+
+package: name='com.navitel' versionCode='3' versionName='2.1' platformBuildVersionName='17' platformBuildVersionCode='37' compileSdkVersion='37' compileSdkVersionCodename='17'
+sdkVersion:'19'
+targetSdkVersion:'19'
+uses-permission: name='android.permission.REORDER_TASKS'

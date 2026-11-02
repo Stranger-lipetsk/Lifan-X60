@@ -1,12 +1,16 @@
 # Проверка стадии 3
 
 ## APK, собранный сейчас
-546b6d623cf5de7eb185bd6a276e45fc63e30220afa4c9b69e5622fc6707fcc9  switcher/switcher.apk
+4786ecfe1e55601de56d6f3c8e002fd8bb23e8c0e0267285e5baa405ec82e13c  switcher/switcher.apk
 
 ## APK, вытащенный из готового образа
 debugfs 1.47.0 (5-Feb-2023)
-546b6d623cf5de7eb185bd6a276e45fc63e30220afa4c9b69e5622fc6707fcc9  /tmp/from-image.apk
+4786ecfe1e55601de56d6f3c8e002fd8bb23e8c0e0267285e5baa405ec82e13c  /tmp/from-image.apk
 
+## панель под именем com.navitel (кнопка навигатора)
+debugfs 1.47.0 (5-Feb-2023)
+74a483c8a3e84bcc355ff819761d6ee6c32a126db442b60fd67f2db943a741cb  /tmp/navi-image.apk
+74a483c8a3e84bcc355ff819761d6ee6c32a126db442b60fd67f2db943a741cb  switcher/navi.apk
 ## сигнал оболочке внутри образа
 ДА — кнопка MirrorLink будет активной
 

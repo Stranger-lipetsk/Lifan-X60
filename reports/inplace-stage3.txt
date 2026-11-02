@@ -7,7 +7,7 @@
 e2fsck: чисто
   Pass 1: Checking inodes, blocks, and sizes
   Pass 5: Checking group summary information
-  system: 1391/23040 files (0.0% non-contiguous), 60407/92160 blocks
+  system: 1392/23040 files (0.0% non-contiguous), 60412/92160 blocks
 
 ГОТОВО: out/stage3-full.img
 размер: 377487360 байт

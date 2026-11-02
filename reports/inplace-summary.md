@@ -5,6 +5,6 @@
 
 | файл | размер | sha256 |
 |---|---|---|
-| stage1-clean.img | 377487360 байт | d0436384cd5f1d20 |
-| stage2-panel.img | 377487360 байт | 0cfb14bd207f2f4b |
-| stage3-full.img | 377487360 байт | 01d645bcccb0e7e1 |
+| stage1-clean.img | 377487360 байт | e3a53ceb6dfb2940 |
+| stage2-panel.img | 377487360 байт | cbf0e32667c08074 |
+| stage3-full.img | 377487360 байт | 641b76f3189e064d |

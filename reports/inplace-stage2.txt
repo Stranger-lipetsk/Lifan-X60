@@ -2,12 +2,13 @@
 копия: out/stage1-clean.img -> out/stage2-panel.img (377487360 байт)
 свободно в образе до правок: 124.1 МиБ
   добавлено: /app/switcher.apk (16879 байт)
+  добавлено: /app/navi.apk (16879 байт)
 свободно в образе после правок: 124.0 МиБ
 --- проверка ФС ---
 e2fsck: чисто
   Pass 1: Checking inodes, blocks, and sizes
   Pass 5: Checking group summary information
-  system: 1390/23040 files (0.0% non-contiguous), 60404/92160 blocks
+  system: 1391/23040 files (0.0% non-contiguous), 60409/92160 blocks
 
 ГОТОВО: out/stage2-panel.img
 размер: 377487360 байт
