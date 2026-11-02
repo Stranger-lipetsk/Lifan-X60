@@ -79,6 +79,32 @@ jobs:
             --add-file tools/system-files/install-recovery.sh:/etc/install-recovery.sh \
             2>&1 | tee reports/inplace-stage3.txt
 
+      - name: "Проверка: в образе именно новая панель"
+        run: |
+          {
+            echo "# Проверка стадии 3"
+            echo
+            echo "## APK, собранный сейчас"
+            sha256sum switcher/switcher.apk
+            echo
+            echo "## APK, вытащенный из готового образа"
+            debugfs -R "dump /app/switcher.apk /tmp/from-image.apk" out/stage3-full.img 2>&1 | tail -1
+            sha256sum /tmp/from-image.apk
+            echo
+            echo "## сигнал оболочке внутри образа"
+            mkdir -p /tmp/chk && cd /tmp/chk && rm -rf ./* && unzip -o -q /tmp/from-image.apk
+            if strings -a classes.dex | grep -q "vn.com.fsoft.UsbIfaceReady"; then
+              echo "ДА — кнопка MirrorLink будет активной"
+            else
+              echo "НЕТ — в образ попал старый APK!"
+              exit 1
+            fi
+            echo
+            echo "## скрипт карт внутри образа"
+            debugfs -R "dump /etc/install-recovery.sh /tmp/from-image.sh" out/stage3-full.img 2>&1 | tail -1
+            grep -c "UsbIfaceReady" /tmp/from-image.sh || true
+          } 2>&1 | tee reports/inplace-verify.txt
+
       - name: "Сводка"
         if: always()
         run: |
