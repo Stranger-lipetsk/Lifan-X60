@@ -1,0 +1,66 @@
+# Размеры главного экрана
+## dimens
+    <dimen name="applications_layout_x">605.0px</dimen>
+    <dimen name="applications_layout_y">0.0px</dimen>
+    <dimen name="applications_layout_width">195.0px</dimen>
+    <dimen name="applications_layout_width_shrink">0.0px</dimen>
+    <dimen name="applications_layout_height">456.0px</dimen>
+    <dimen name="btn_show_allapps_layout_x">750.0px</dimen>
+    <dimen name="btn_show_allapps_layout_y_1">183.0px</dimen>
+    <dimen name="btn_show_allapps_layout_y_2">240.0px</dimen>
+    <dimen name="btn_hide_allapps_layout_x">630.0px</dimen>
+    <dimen name="btn_hide_allapps_layout_y">160.0px</dimen>
+    <dimen name="table_layout_x">60.0dip</dimen>
+    <dimen name="table_layout_x_shrink">185.0dip</dimen>
+    <dimen name="table_layout_y">38.0dip</dimen>
+    <dimen name="table_layout_width">680.0dip</dimen>
+    <dimen name="table_layout_padding">0.0dip</dimen>
+    <dimen name="table_layout_padding_shrink">0.0dip</dimen>
+    <dimen name="table_layout_width_shrink">550.0dip</dimen>
+    <dimen name="setup_btn_show_allapps_layout_x">760.0px</dimen>
+    <dimen name="setup_btn_show_allapps_layout_y">160.0px</dimen>
+    <dimen name="setup_btn_hide_allapps_layout_x">646.0px</dimen>
+    <dimen name="setup_btn_hide_allapps_layout_y">160.0px</dimen>
+
+## стили кнопок
+    <style name="ListTheme" parent="@style/LauncherTheme">
+        <item name="android:scrollbars">none</item>
+        <item name="android:clipChildren">false</item>
+        <item name="android:listSelector">@android:color/transparent</item>
+        <item name="android:divider">@null</item>
+        <item name="android:overScrollMode">never</item>
+    </style>
+--
+    <style name="FlipShowButtonClick">
+        <item name="android:background">@drawable/flip_show_btn_click</item>
+    </style>
+</resources>
+
+## app_item.xml
+<?xml version="1.0" encoding="utf-8"?>
+<AbsoluteLayout android:orientation="vertical" android:layout_width="wrap_content" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <ImageView android:gravity="center_horizontal" android:layout_gravity="center_horizontal" android:id="@id/icon" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/audio_off_mute" />
+    <TextView android:textSize="20.0dip" android:textColor="@color/bright_text_dark_focused" android:gravity="center_horizontal" android:layout_gravity="center_horizontal" android:id="@id/app_name" android:paddingLeft="5.0dip" android:paddingRight="5.0dip" android:layout_width="120.0dip" android:layout_height="wrap_content" android:layout_x="0.0dip" android:layout_y="125.0dip" />
+</AbsoluteLayout>
+## цвета
+    <color name="darkgray">#ff808080</color>
+    <color name="white">#ffffffff</color>
+    <color name="black">#ff000000</color>
+    <color name="red">#ffff0000</color>
+    <color name="green">#ff00ff00</color>
+    <color name="blue">#ff0000ff</color>
+    <color name="drop_target_color1">#00993311</color>
+    <color name="drop_target_color2">#00a99033</color>
+    <color name="drop_target_color3">#00a91166</color>
+    <color name="drop_target_color4">#00a92299</color>
+    <color name="drop_target_enabled">#00009933</color>
+    <color name="drop_target_disabled">#00dddddd</color>
+    <color name="transparent">#ffff00ff</color>
+    <color name="darker_yellow">#ffbbbb00</color>
+    <color name="lightblue">#ff3596e6</color>
+    <color name="disable_gray">#ff484848</color>
+    <color name="lightgreen">#ff80ff00</color>
+    <color name="dateblue">#ff009999</color>
+    <color name="style_color">#ff01cbcd</color>
+    <color name="text_color">#ff00ffff</color>
