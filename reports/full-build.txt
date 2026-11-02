@@ -44,3 +44,10 @@ Size of extra inode fields: 28
 Pass 4: Checking reference counts
 Pass 5: Checking group summary information
 system: 1391/23040 files (0.0% non-contiguous), 60407/92160 blocks
+патч /tmp/HomeDec/smali/tw/com/elead/el830/home/HomeApp.smali
+  добавлен в список экрана: ru.yandex.yandexnavi
+  добавлен в список экрана: org.prowl.torque
+  проверка enable снята (1 место)
+  в ветку по умолчанию добавлен setActivity (перед put, строка 748)
+готово
+DEX БИТЫЙ
