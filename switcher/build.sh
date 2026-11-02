@@ -18,10 +18,28 @@ OUT=build
 rm -rf "$OUT"
 mkdir -p "$OUT/gen" "$OUT/obj" "$OUT/dex"
 
+# Имя пакета можно переопределить: PACKAGE=com.navitel bash switcher/build.sh
+# Нужно, чтобы подставить панель на место кнопки навигатора: оболочка Elead
+# ищет приложение строго по имени пакета из своего списка (com.navitel).
+PKG="${PACKAGE:-com.fpt.mirrorlink.android}"
+APKNAME="${APK_NAME:-switcher.apk}"
+
+if [ "$PKG" != "com.fpt.mirrorlink.android" ]; then
+  echo "== вариант сборки: пакет $PKG =="
+  cp AndroidManifest.xml "$OUT/AndroidManifest.xml"
+  sed -i "s|package=\"com.fpt.mirrorlink.android\"|package=\"$PKG\"|" "$OUT/AndroidManifest.xml"
+  # домашний экран подменять не должен: оставляем HomeAlias выключенным
+  sed -i 's|android:enabled="true"|android:enabled="false"|g' "$OUT/AndroidManifest.xml"
+  MANIFEST="$OUT/AndroidManifest.xml"
+else
+  MANIFEST=AndroidManifest.xml
+fi
+
 echo "== 1. aapt: генерация R.java =="
 "$BT/aapt" package -f -m \
+  --custom-package com.fpt.mirrorlink.android \
   -J "$OUT/gen" \
-  -M AndroidManifest.xml \
+  -M "$MANIFEST" \
   -S res \
   -I "$API_JAR"
 
@@ -38,7 +56,7 @@ find "$OUT/obj" -name '*.class' > "$OUT/classes.txt"
 
 echo "== 4. aapt: пакет ресурсов =="
 "$BT/aapt" package -f \
-  -M AndroidManifest.xml \
+  -M "$MANIFEST" \
   -S res \
   -I "$API_JAR" \
   -F "$OUT/app-unsigned.apk"
@@ -60,14 +78,14 @@ fi
 "$BT/apksigner" sign \
   --ks "$KS" --ks-pass pass:lifan123 --key-pass pass:lifan123 \
   --min-sdk-version 19 --v1-signing-enabled true \
-  --out switcher.apk "$OUT/app-aligned.apk"
+  --out "$APKNAME" "$OUT/app-aligned.apk"
 
-"$BT/apksigner" verify --min-sdk-version 19 switcher.apk || true
+"$BT/apksigner" verify --min-sdk-version 19 "$APKNAME" || true
 
 echo
-echo "ГОТОВО: $(pwd)/switcher.apk"
-ls -l switcher.apk
-echo "sha256: $(sha256sum switcher.apk | cut -d' ' -f1)"
+echo "ГОТОВО: $(pwd)/$APKNAME (пакет $PKG)"
+ls -l "$APKNAME"
+echo "sha256: $(sha256sum "$APKNAME" | cut -d' ' -f1)"
 echo
 echo "Проверка содержимого:"
-"$BT/aapt" dump badging switcher.apk 2>/dev/null | head -12
+"$BT/aapt" dump badging "$APKNAME" 2>/dev/null | head -12

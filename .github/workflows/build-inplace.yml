@@ -48,6 +48,18 @@ jobs:
         run: |
           bash switcher/build.sh 2>&1 | tail -6
           ls -l switcher/switcher.apk
+          # второй экземпляр под именем пакета navitel: оболочка Elead ищет
+          # приложение кнопки навигатора строго по имени com.navitel
+          PACKAGE=com.navitel APK_NAME=navi.apk bash switcher/build.sh 2>&1 | tail -4
+          ls -l switcher/navi.apk
+          mkdir -p reports
+          {
+            echo "# Собранные APK"
+            sha256sum switcher/switcher.apk switcher/navi.apk
+            echo
+            "$(ls -d /usr/local/lib/android/sdk/build-tools/* | sort -V | tail -1)/aapt" \
+              dump badging switcher/navi.apk 2>/dev/null | head -4
+          } | tee reports/apk-build.txt
 
       - name: "Стадия 1: только удаление лишнего"
         run: |
@@ -69,7 +81,8 @@ jobs:
           python3 tools/inplace_patch.py \
             --system out/stage1-clean.img \
             --out out/stage2-panel.img \
-            --add-apk switcher/switcher.apk:/app 2>&1 | tee reports/inplace-stage2.txt
+            --add-apk switcher/switcher.apk:/app \
+            --add-apk switcher/navi.apk:/app 2>&1 | tee reports/inplace-stage2.txt
 
       - name: "Стадия 3: + скрипт автоподключения карт"
         run: |
@@ -91,6 +104,9 @@ jobs:
             debugfs -R "dump /app/switcher.apk /tmp/from-image.apk" out/stage3-full.img 2>&1 | tail -1
             sha256sum /tmp/from-image.apk
             echo
+            echo "## панель под именем com.navitel (кнопка навигатора)"
+            debugfs -R "dump /app/navi.apk /tmp/navi-image.apk" out/stage3-full.img 2>&1 | tail -1
+            sha256sum /tmp/navi-image.apk switcher/navi.apk
             echo "## сигнал оболочке внутри образа"
             mkdir -p /tmp/chk && cd /tmp/chk && rm -rf ./* && unzip -o -q /tmp/from-image.apk
             if strings -a classes.dex | grep -q "vn.com.fsoft.UsbIfaceReady"; then
