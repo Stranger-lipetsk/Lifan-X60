@@ -1,0 +1,112 @@
+# Кто и с какими аргументами вызывает startNewActivity
+
+== HomeService.smali 7900-7990 ==
+    if-ne v0, v1, :cond_7a3
+
+    .line 2120
+    const/16 v30, 0x4
+
+    aget-byte v30, p1, v30
+
+    packed-switch v30, :pswitch_data_bd2
+
+    .line 2188
+    const-string v30, "Home"
+
+    new-instance v31, Ljava/lang/StringBuilder;
+
+    invoke-direct/range {v31 .. v31}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v32, "HomeService.java Unknow iPod test item. pBuf[4] = "
+
+    invoke-virtual/range {v31 .. v32}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v31
+
+    const/16 v32, 0x4
+
+    aget-byte v32, p1, v32
+
+    invoke-virtual/range {v31 .. v32}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+
+    move-result-object v31
+
+    invoke-virtual/range {v31 .. v31}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v31
+
+    invoke-static/range {v30 .. v31}, Landroid/util/Log;->v(Ljava/lang/String;Ljava/lang/String;)I
+
+    goto/16 :goto_62
+
+    .line 2123
+    :pswitch_68f
+    const-string v30, "tw.com.elead.el830.setup"
+
+    move-object/from16 v0, p0
+
+    move-object/from16 v1, v30
+
+    invoke-direct {v0, v1}, Ltw/com/elead/el830/home/HomeService;->goToApplication(Ljava/lang/String;)V
+
+    .line 2124
+    const/16 v30, 0x3
+
+    aget-byte v30, p1, v30
+
+    const/16 v31, 0x4
+
+    aget-byte v31, p1, v31
+
+    const/16 v32, 0x0
+
+    invoke-static/range {v30 .. v32}, Ltw/com/elead/el830/home/MCU;->EngSendCmd(BB[B)V
+
+    goto/16 :goto_62
+
+    .line 2128
+    :pswitch_6a7
+    const-string v30, "tw.com.elead.el830.setup"
+
+    const-string v31, "Audio"
+
+    move-object/from16 v0, p0
+
+    move-object/from16 v1, v30
+
+    move-object/from16 v2, v31
+
+    invoke-direct {v0, v1, v2}, Ltw/com/elead/el830/home/HomeService;->startNewActivity(Ljava/lang/String;Ljava/lang/String;)V
+
+    .line 2129
+    const/16 v30, 0x3
+
+    aget-byte v30, p1, v30
+
+    const/16 v31, 0x4
+
+    aget-byte v31, p1, v31
+
+    const/16 v32, 0x0
+
+    invoke-static/range {v30 .. v32}, Ltw/com/elead/el830/home/MCU;->EngSendCmd(BB[B)V
+
+    goto/16 :goto_62
+
+== метод getPackageName/getActivity в ApplicationInfo ==
+53:.method constructor <init>()V
+65:.method public equals(Ljava/lang/Object;)Z
+143:.method public hashCode()I
+198:.method final setActivity(Landroid/content/ComponentName;I)V
+
+== методы HomeService рядом с getApplicationInfo ==
+1117:    invoke-virtual {v4, p2}, Ltw/com/elead/el830/home/HomeApp;->getEleadApplication(Ljava/lang/String;)Ltw/com/elead/el830/home/ApplicationInfo;
+1122:    .local v1, "info":Ltw/com/elead/el830/home/ApplicationInfo;
+1126:    iget-object v4, v1, Ltw/com/elead/el830/home/ApplicationInfo;->title:Ljava/lang/CharSequence;
+11429:    invoke-virtual {v2, p2}, Ltw/com/elead/el830/home/HomeApp;->getEleadApplication(Ljava/lang/String;)Ltw/com/elead/el830/home/ApplicationInfo;
+11434:    .local v0, "info":Ltw/com/elead/el830/home/ApplicationInfo;
+11438:    iget-object v2, v0, Ltw/com/elead/el830/home/ApplicationInfo;->title:Ljava/lang/CharSequence;
+11451:    .end local v0    # "info":Ltw/com/elead/el830/home/ApplicationInfo;
+14873:    invoke-virtual {v2, v3}, Ltw/com/elead/el830/home/HomeApp;->getEleadApplication(Ljava/lang/String;)Ltw/com/elead/el830/home/ApplicationInfo;
+15973:    invoke-virtual {v1, v2}, Ltw/com/elead/el830/home/HomeApp;->getEleadApplication(Ljava/lang/String;)Ltw/com/elead/el830/home/ApplicationInfo;
+23071:    invoke-virtual {v4, p1}, Ltw/com/elead/el830/home/HomeApp;->getEleadApplication(Ljava/lang/String;)Ltw/com/elead/el830/home/ApplicationInfo;

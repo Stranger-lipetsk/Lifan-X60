@@ -1,0 +1,256 @@
+# Список приложений главного экрана (жёстко в коде) и класс Config
+
+== метод со списком (HomeApp.smali 1380-1620) ==
+    const-string v2, "EL-830C-NSZ1"
+
+    invoke-virtual {v1, v2}, Ljava/lang/String;->equalsIgnoreCase(Ljava/lang/String;)Z
+
+    move-result v2
+
+    if-eqz v2, :cond_56
+
+    .line 400
+    const/4 v0, 0x2
+
+    goto :goto_1d
+
+    .line 401
+    :cond_56
+    const-string v2, "EL-830C-LF01"
+
+    invoke-virtual {v1, v2}, Ljava/lang/String;->equalsIgnoreCase(Ljava/lang/String;)Z
+
+    move-result v2
+
+    if-eqz v2, :cond_1d
+
+    .line 402
+    const/4 v0, 0x3
+
+    goto :goto_1d
+.end method
+
+.method private initDefault()V
+    .registers 3
+
+    .prologue
+    .line 1742
+    const-string v0, "Home"
+
+    const-string v1, "HomeApp.java initDefault().............. "
+
+    invoke-static {v0, v1}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+
+    .line 1744
+    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+
+    invoke-virtual {v0}, Ljava/util/ArrayList;->clear()V
+
+    .line 1746
+    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+
+    const-string v1, "tw.com.elead.el830.radio"
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    .line 1747
+    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+
+    const-string v1, "com.navitel"
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    .line 1748
+    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+
+    const-string v1, "tw.com.elead.el830.dvd"
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    .line 1749
+    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+
+    const-string v1, "tw.com.elead.el830.mediaplayer:SD"
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    .line 1750
+    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+
+    const-string v1, "tw.com.elead.el830.setup"
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    .line 1752
+    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+
+    const-string v1, "tw.com.elead.el830.mediaplayer:USB"
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    .line 1754
+    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+
+    const-string v1, "tw.com.elead.el830.elbluetooth.music"
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    .line 1755
+    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+
+    const-string v1, "tw.com.elead.el830.elbluetooth.phone"
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    .line 1756
+    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+
+    const-string v1, "tw.com.elead.el830.avin"
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    .line 1764
+    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+
+    const-string v1, "com.fpt.mirrorlink.android"
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    .line 1766
+    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+
+    const-string v1, "tw.com.elead.el830.ccd"
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    .line 1767
+    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+
+    const-string v1, "tw.com.elead.el830.elbluetooth.dial"
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    .line 1769
+    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+
+    const-string v1, "tw.com.elead.el830.home"
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    .line 1770
+    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+
+    const-string v1, "tw.com.elead.el830.home.HomeAudioOff"
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    .line 1772
+    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+
+    const-string v1, "tw.com.elead.el830.elbluetooth.setup"
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    .line 1776
+    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+
+    invoke-virtual {v0}, Ljava/util/ArrayList;->clone()Ljava/lang/Object;
+
+    move-result-object v0
+
+    check-cast v0, Ljava/util/ArrayList;
+
+    iput-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps_default:Ljava/util/ArrayList;
+
+    .line 1777
+    return-void
+.end method
+
+.method private initDefault_EL830CLF01()V
+    .registers 3
+
+    .prologue
+    .line 1709
+    const-string v0, "Home"
+
+    const-string v1, "HomeApp.java initDefault_EL830CLF01().............. "
+
+    invoke-static {v0, v1}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+
+    .line 1711
+    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+
+    invoke-virtual {v0}, Ljava/util/ArrayList;->clear()V
+
+    .line 1713
+    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+
+    const-string v1, "tw.com.elead.el830.radio"
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    .line 1714
+    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+
+    const-string v1, "tw.com.elead.el830.elbluetooth.phone"
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    .line 1715
+    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+
+    const-string v1, "tw.com.elead.el830.setup"
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    .line 1716
+    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+
+    const-string v1, "tw.com.elead.el830.mediaplayer:SD"
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    .line 1719
+    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+
+    const-string v1, "tw.com.elead.el830.mediaplayer:USB"
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    .line 1721
+    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+
+    const-string v1, "tw.com.elead.el830.elbluetooth.music"
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    .line 1722
+    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+
+    const-string v1, "com.fpt.mirrorlink.android"
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    .line 1723
+    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+
+    const-string v1, "tw.com.elead.el830.avin"
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    .line 1724
+    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+
+    const-string v1, "com.navitel"
+
+== класс Config: откуда читает настройки ==
+smali/tw/com/elead/el830/Config.smali
+--- smali/tw/com/elead/el830/Config.smali
+13:.method public constructor <init>()V
+21:    const-string v0, "/mnt/para_fw/config.ini"
+38:.method public get(Ljava/lang/String;)Ljava/lang/String;
+53:.method public load()Z
+94:    const-string v4, "Configuration error: "
+117:.method public set(Ljava/lang/String;Ljava/lang/String;)V
+132:.method public store()Z
+175:    const-string v4, "Configuration error: "
