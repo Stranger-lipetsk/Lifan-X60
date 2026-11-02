@@ -1,0 +1,104 @@
+name: Проверка MirrorLink
+
+on:
+  push:
+    paths:
+      - 'autoanalysis/probe-mirrorlink.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: "Инструменты"
+        run: |
+          sudo apt-get update -qq 2>/dev/null || true
+          sudo apt-get install -y -qq p7zip-full >/dev/null 2>&1 || true
+          mkdir -p probes
+
+      - name: "Скачать заводскую прошивку и вытащить оболочку"
+        run: |
+          mkdir -p /tmp/rar
+          python3 - <<'PY'
+          import json, subprocess, urllib.parse, urllib.request
+          pk = 'https://disk.yandex.ru/d/qJdjjeB8Aiq3Lg'
+          url = ('https://cloud-api.yandex.net/v1/disk/public/resources'
+                 '?public_key=' + urllib.parse.quote(pk, safe='') + '&limit=100')
+          items = json.load(urllib.request.urlopen(url, timeout=60))['_embedded']['items']
+          it = [i for i in items if i['type'] == 'file' and '2016' in i['name']][0]
+          subprocess.run(['curl', '-L', '--fail', '--retry', '3', '--max-time', '2500',
+                          '-o', '/tmp/fw.rar', it['file']], check=True)
+          PY
+          7z x -y -aos -o/tmp/rar /tmp/fw.rar >/dev/null 2>&1 || true
+          SYSIMG="$(find /tmp/rar -name system.img | head -1)"
+          echo "system.img: $SYSIMG"
+          debugfs -R "dump /priv-app/EL830LF01_Home.apk /tmp/Home.apk" "$SYSIMG" 2>&1 || true
+          ls -l /tmp/Home.apk
+
+      - name: "Разбор оболочки: вызовы MirrorLink и системная подпись"
+        run: |
+          mkdir -p /tmp/home && cd /tmp/home
+          unzip -o -q /tmp/Home.apk 2>/dev/null || true
+          ls
+          echo "=== подписи внутри APK (system/opensource/platform) ==="
+          strings -a classes.dex | grep -iE "^(system|opensource|platform|shared|media)$" | sort | uniq -c | head
+          echo
+          echo "=== соседние строки с PACKAGE_MIRRORLINK ==="
+          strings -a classes.dex | grep -n -iE "PACKAGE_|mirrorlink" | head -40
+          echo
+          echo "=== системные ключи подписи в заводском образе ==="
+          SYSIMG="$(find /tmp/rar -name system.img | head -1)"
+          for p in /etc/security/otacerts.zip /etc/security/ /etc/permissions/platform.xml; do
+            echo "--- $p"
+            debugfs -R "ls -l $p" "$SYSIMG" 2>&1 | head -5
+          done
+          debugfs -R "dump /etc/permissions/platform.xml /tmp/platform.xml" "$SYSIMG" 2>/dev/null || true
+          if [ -f /tmp/platform.xml ]; then
+            echo "=== записи о подписи system в platform.xml ==="
+            grep -A3 -iE "system|shared" /tmp/platform.xml | head -40
+          fi
+          debugfs -R "dump /etc/security/otacerts.zip /tmp/otacerts.zip" "$SYSIMG" 2>/dev/null || true
+          if [ -f /tmp/otacerts.zip ]; then
+            echo "=== сертификаты платформы ==="
+            unzip -o -q /tmp/otacerts.zip -d /tmp/otacerts && ls /tmp/otacerts
+            for f in /tmp/otacerts/*; do
+              echo "--- $f"
+              openssl x509 -in "$f" -inform DER -subject -issuer 2>/dev/null \
+                || openssl x509 -in "$f" -subject -issuer 2>/dev/null
+              openssl x509 -in "$f" -inform DER -pubkey -noout 2>/dev/null \
+                | openssl pkey -pubin -outform DER 2>/dev/null | sha256sum
+            done
+          fi
+          echo
+          echo "=== наш текущий APK: чем подписан ==="
+          cp /home/user/Lifan-X60/switcher/AndroidManifest.xml /tmp/ 2>/dev/null || true
+          echo "(наш APK подписан самодельным ключом CN=Lifan X60 — см. switcher/build.sh)"
+
+      - name: "Сохранить отчёт"
+        run: |
+          {
+            echo "# Разбор MirrorLink"
+            echo
+            cd /tmp/home && strings -a classes.dex | grep -iE "mirrorlink|PACKAGE_" | head -60
+          } > "probes/mirrorlink-report.txt" 2>/dev/null || true
+          ls -l probes/
+
+      - name: "Коммит отчёта"
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A probes
+          if git diff --cached --quiet; then echo "нет изменений"; exit 0; fi
+          git commit -m "проба: разбор MirrorLink в заводской оболочке"
+          for try in 1 2 3 4 5; do
+            if git pull --rebase --autostash origin "${{ github.ref_name }}" >/dev/null 2>&1 \
+               && git push origin HEAD:${{ github.ref_name }}; then exit 0; fi
+            sleep 10; git rebase --abort >/dev/null 2>&1 || true
+          done
