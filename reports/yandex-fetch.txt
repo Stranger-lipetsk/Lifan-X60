@@ -1,0 +1,16 @@
+=== страница: https://www.apkmirror.com/apk/yandex/yandex-navigator/yandex-navigator-6-40-release/
+размер страницы: 359116
+href="#downloads"
+href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fwww.apkmirror.com%2Fapk%2Fdirect-cursus-computer-systems-trading-llc%2Fyandex-navigator%2Fyandex-navigator-6-40-release%2F&amp;text=Just+downloaded+the+Yandex+Navigator+6.40+APK+from+%40APKMirror"
+href="https://www.reddit.com/submit?url=https%3A%2F%2Fwww.apkmirror.com%2Fapk%2Fdirect-cursus-computer-systems-trading-llc%2Fyandex-navigator%2Fyandex-navigator-6-40-release%2F&amp;title=Just+downloaded+the+Yandex+Navigator+6.40+APK+from+%40APKMirror"
+href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fwww.apkmirror.com%2Fapk%2Fdirect-cursus-computer-systems-trading-llc%2Fyandex-navigator%2Fyandex-navigator-6-40-release%2F&amp;title=Just+downloaded+the+Yandex+Navigator+6.40+APK+from+%40APKMirror"
+href="https://telegram.me/share/url?url=https%3A%2F%2Fwww.apkmirror.com%2Fapk%2Fdirect-cursus-computer-systems-trading-llc%2Fyandex-navigator%2Fyandex-navigator-6-40-release%2F&amp;text=Just+downloaded+the+Yandex+Navigator+6.40+APK+from+%40APKMirror"
+ссылка на вариант: 
+=== https://yandex-navigator.ru.uptodown.com/android/download
+  код 200, размер 191177
+=== https://yandex-navigator.en.uptodown.com/android/versions
+  код 200, размер 101540
+
+## что получилось
+total 4
+-rw-r--r-- 1 runner runner 895 Nov  2 17:34 README.md
