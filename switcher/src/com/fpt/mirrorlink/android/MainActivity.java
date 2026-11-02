@@ -36,6 +36,14 @@ import java.util.List;
  *
  * Все запуски идут через PackageManager (поиск реальных активностей), поэтому
  * приложение не ломается, если имена активностей отличаются.
+ *
+ * ВАЖНО: кнопка MirrorLink на главном экране магнитолы активна только тогда,
+ * когда оболочка получит широковещательное сообщение "vn.com.fsoft.UsbIfaceReady"
+ * от этого приложения (разобрано по коду EL830LF01_Home.apk: HomeService
+ * регистрирует приёмник на этот action и по нему вызывает
+ * enableMirrorLinkIcon(true) -> enableEleadApplication(..., true)).
+ * Поэтому при старте и при возврате на экран приложение отправляет этот
+ * сигнал — иначе штатная иконка остаётся серой.
  */
 public class MainActivity extends Activity {
 
@@ -46,6 +54,12 @@ public class MainActivity extends Activity {
 
     /** Сколько секунд панель ждёт, прежде чем сама уйти в оболочку магнитолы. */
     private static final int AUTO_BACK_SECONDS = 6;
+
+    /**
+     * Сигнал штатной оболочке: «интерфейс MirrorLink готов».
+     * Строго из кода Elead Home — не переименовывать.
+     */
+    private static final String ACTION_IFACE_READY = "vn.com.fsoft.UsbIfaceReady";
 
     private static final String PREFS = "switcher";
     private static final String KEY_AUTOBACK = "autoback_v2";
@@ -171,13 +185,29 @@ public class MainActivity extends Activity {
         root.addView(hint);
 
         setContentView(scroll);
+        announceReady();
         startAutoBack();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        announceReady();
         startAutoBack();
+    }
+
+    /**
+     * Сообщает штатной оболочке, что интерфейс MirrorLink доступен.
+     * Без этого сигнала иконка MirrorLink на главном экране остаётся серой
+     * и не реагирует на нажатие: оболочка держит её выключенной
+     * (ApplicationInfo.enable = false) до получения этого сообщения.
+     */
+    private void announceReady() {
+        try {
+            sendBroadcast(new Intent(ACTION_IFACE_READY));
+        } catch (Throwable t) {
+            // сигнал необязателен для работы самой панели
+        }
     }
 
     @Override

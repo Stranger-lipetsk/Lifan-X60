@@ -11,7 +11,12 @@
 #   1. Внутренний раздел с картами (p7, FAT32) помечен в fstab как
 #      закомментированный (voldmanaged=emmc_data:7) — Android его не монтирует,
 #      поэтому карты видны только с SD-карты. Монтируем сами.
-#   2. Navitel ищет NavitelContent на «основном» хранилище (/sdcard).
+#   2. Кнопка MirrorLink на главном экране активна только пока оболочка
+#      считает интерфейс доступным: она ждёт broadcast
+#      "vn.com.fsoft.UsbIfaceReady" (HomeService$24 в EL830LF01_Home.apk)
+#      и по нему включает иконку. Шлём сигнал после загрузки, чтобы кнопка
+#      не была серой.
+#   3. Navitel ищет NavitelContent на «основном» хранилище (/sdcard).
 #      Делаем bind-mount найденного тома с картами в /data/media/NavitelContent,
 #      чтобы карты подхватывались с любого носителя (SD, p7, USB).
 #
@@ -30,6 +35,24 @@ P7=/dev/block/mmcblk0p7
 INTERNAL=/data/media
 NAV_DIR=NavitelContent
 MAP_DIR=NavitelContent/Maps
+
+# --------------------------------------------------------------------------
+#  Сигнал штатной оболочке «MirrorLink готов».
+#  Оболочка может стартовать позже скрипта, поэтому шлём несколько раз
+#  с интервалом — потерянный сигнал не страшен, лишний тоже.
+# --------------------------------------------------------------------------
+announce_ready() {
+    i=0
+    while [ $i -lt 6 ]; do
+        if [ -x /system/bin/am ]; then
+            /system/bin/am broadcast -a vn.com.fsoft.UsbIfaceReady \
+                >> $LOG 2>&1
+        fi
+        i=$((i + 1))
+        sleep 5
+    done
+    echo "сигнал MirrorLink отправлен ($i раз)" >> $LOG
+}
 
 mkdir -p /data/local/tmp 2>/dev/null
 {
@@ -94,6 +117,7 @@ done
 
 if [ -z "$FOUND" ]; then
     echo "карты *.nm7 не найдены ни на одном носителе" >> $LOG
+    announce_ready
     echo "=== готово (без карт) ===" >> $LOG
     exit 0
 fi
@@ -139,4 +163,5 @@ fi
   echo "=== готово ==="
 } >> $LOG 2>&1
 
+announce_ready
 exit 0
