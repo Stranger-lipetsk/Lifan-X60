@@ -1,0 +1,116 @@
+name: Разбор оболочки Home 3
+
+on:
+  push:
+    paths:
+      - 'autoanalysis/probe-home3.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: "Инструменты"
+        run: |
+          sudo apt-get update -qq 2>/dev/null || true
+          sudo apt-get install -y -qq p7zip-full unzip curl >/dev/null 2>&1 || true
+          mkdir -p probes
+          SDK=/usr/local/lib/android/sdk
+          BT=$(ls -d "$SDK"/build-tools/* 2>/dev/null | sort -V | tail -1)
+          echo "BT=$BT" >> "$GITHUB_ENV"
+          curl -sSL --retry 3 --max-time 300 -o /tmp/baksmali.jar \
+            https://github.com/baksmali/smali/releases/download/v2.5.2/baksmali-2.5.2.jar
+
+      - name: "Скачать прошивку и распаковать оболочку"
+        run: |
+          mkdir -p /tmp/rar
+          python3 - <<'PY'
+          import json, subprocess, urllib.parse, urllib.request
+          pk = 'https://disk.yandex.ru/d/qJdjjeB8Aiq3Lg'
+          url = ('https://cloud-api.yandex.net/v1/disk/public/resources'
+                 '?public_key=' + urllib.parse.quote(pk, safe='') + '&limit=100')
+          items = json.load(urllib.request.urlopen(url, timeout=60))['_embedded']['items']
+          it = [i for i in items if i['type'] == 'file' and '2016' in i['name']][0]
+          subprocess.run(['curl', '-L', '--fail', '--retry', '3', '--max-time', '2500',
+                          '-o', '/tmp/fw.rar', it['file']], check=True)
+          PY
+          7z x -y -aos -o/tmp/rar /tmp/fw.rar >/dev/null 2>&1 || true
+          SYSIMG="$(find /tmp/rar -name system.img | head -1)"
+          debugfs -R "dump /priv-app/EL830LF01_Home.apk /tmp/Home.apk" "$SYSIMG" 2>&1 | tail -1
+          mkdir -p /tmp/home && cd /tmp/home && unzip -o -q /tmp/Home.apk
+          java -jar /tmp/baksmali.jar d classes.dex -o smali 2>&1 | tail -2
+          echo "smali-файлов: $(find smali -name '*.smali' | wc -l)"
+
+      - name: "Полный метод loadEleadApplications"
+        run: |
+          OUT="${GITHUB_WORKSPACE}/probes/home3-load.txt"
+          cd /tmp/home
+          {
+            echo "# loadEleadApplications: как решается, что пакет «свой»"
+            echo
+            awk '/^\.method private loadEleadApplications/,/^\.end method/' \
+              smali/tw/com/elead/el830/home/HomeApp.smali
+          } > "$OUT" 2>&1 || true
+          wc -l "$OUT"
+
+      - name: "Регистрация приёмника и отправка UsbIfaceReady"
+        run: |
+          OUT="${GITHUB_WORKSPACE}/probes/home3-filter.txt"
+          cd /tmp/home
+          {
+            echo "# Приёмник vn.com.fsoft.* и включение иконки"
+            echo
+            echo "== HomeService$24 целиком =="
+            cat 'smali/tw/com/elead/el830/home/HomeService$24.smali'
+            echo
+            echo "== регистрация mirrorlinkfilter (HomeService.smali 39960-40040) =="
+            sed -n '39960,40060p' smali/tw/com/elead/el830/home/HomeService.smali
+            echo
+            echo "== где ещё упоминается UsbIfaceReady =="
+            grep -rn "UsbIfaceReady" smali | head
+            echo
+            echo "== ресурсы mirrorlink =="
+            "$BT/aapt" dump --values resources /tmp/Home.apk 2>/dev/null | grep -i -B2 -A2 "mirrorlink" | head -30
+          } > "$OUT" 2>&1 || true
+          wc -l "$OUT"
+
+      - name: "Проверки установки пакета"
+        run: |
+          OUT="${GITHUB_WORKSPACE}/probes/home3-checks.txt"
+          cd /tmp/home
+          {
+            echo "# Проверки, которые Home делает перед показом кнопки"
+            echo
+            echo "== методы HomeApp, связанные с установкой =="
+            grep -n "^\.method" smali/tw/com/elead/el830/home/HomeApp.smali | grep -iE "install|check|load|enable|update"
+            echo
+            echo "== getPackageInfo / getApplicationInfo во всей оболочке =="
+            grep -rn "getPackageInfo\|getApplicationInfo\|ApplicationInfo;->enabled" smali/tw/com/elead/el830/home/*.smali | head -20
+            echo
+            echo "== контекст HomeApp.smali:3282 (mirrorlink) =="
+            sed -n '3240,3300p' smali/tw/com/elead/el830/home/HomeApp.smali
+            echo
+            echo "== контекст Home.smali:3243 =="
+            sed -n '3220,3270p' smali/tw/com/elead/el830/home/Home.smali
+          } > "$OUT" 2>&1 || true
+          wc -l "$OUT"
+
+      - name: "Коммит отчётов"
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A probes
+          if git diff --cached --quiet; then echo "нет изменений"; exit 0; fi
+          git commit -m "проба: проверки установки пакета MirrorLink в оболочке"
+          for try in 1 2 3 4 5; do
+            if git pull --rebase --autostash origin "${{ github.ref_name }}" >/dev/null 2>&1 \
+               && git push origin HEAD:${{ github.ref_name }}; then exit 0; fi
+            sleep 10; git rebase --abort >/dev/null 2>&1 || true
+          done
