@@ -1,0 +1,76 @@
+name: Разбор MSG_GOTO_APPLICATION
+
+on:
+  push:
+    paths:
+      - 'autoanalysis/probe-msg.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: "Инструменты"
+        run: |
+          sudo apt-get update -qq 2>/dev/null || true
+          sudo apt-get install -y -qq p7zip-full unzip curl >/dev/null 2>&1 || true
+          mkdir -p probes
+          curl -sSL --retry 3 --max-time 300 -o /tmp/baksmali.jar \
+            https://github.com/baksmali/smali/releases/download/v2.5.2/baksmali-2.5.2.jar
+
+      - name: "Скачать и распаковать"
+        run: |
+          mkdir -p /tmp/rar
+          python3 - <<'PY'
+          import json, subprocess, urllib.parse, urllib.request
+          pk = 'https://disk.yandex.ru/d/qJdjjeB8Aiq3Lg'
+          url = ('https://cloud-api.yandex.net/v1/disk/public/resources'
+                 '?public_key=' + urllib.parse.quote(pk, safe='') + '&limit=100')
+          items = json.load(urllib.request.urlopen(url, timeout=60))['_embedded']['items']
+          it = [i for i in items if i['type'] == 'file' and '2016' in i['name']][0]
+          subprocess.run(['curl', '-L', '--fail', '--retry', '3', '--max-time', '2500',
+                          '-o', '/tmp/fw.rar', it['file']], check=True)
+          PY
+          7z x -y -aos -o/tmp/rar /tmp/fw.rar >/dev/null 2>&1 || true
+          SYSIMG="$(find /tmp/rar -name system.img | head -1)"
+          debugfs -R "dump /priv-app/EL830LF01_Home.apk /tmp/Home.apk" "$SYSIMG" 2>&1 | tail -1
+          mkdir -p /tmp/home && cd /tmp/home && unzip -o -q /tmp/Home.apk
+          java -jar /tmp/baksmali.jar d classes.dex -o smali 2>&1 | tail -2
+
+      - name: "Обработчик сообщения 0x192"
+        run: |
+          OUT="${GITHUB_WORKSPACE}/probes/home8-msg.txt"
+          cd /tmp/home
+          {
+            echo "# Обработка MSG_GOTO_APPLICATION (0x192)"
+            echo
+            echo "== фрагмент HomeService\$3 вокруг 'MSG_GOTO_APPLICATION, -> NEW_PACKAGE_NAME' =="
+            F='smali/tw/com/elead/el830/home/HomeService$3.smali'
+            L=$(grep -n "MSG_GOTO_APPLICATION, -> NEW_PACKAGE_NAME" "$F" | head -1 | cut -d: -f1)
+            echo "строка: $L"
+            sed -n "$((L-40)),$((L+220))p" "$F"
+            echo
+            echo "== ищем startActivity / intent в этом обработчике =="
+            grep -n "startActivity\|ComponentName\|getEleadApplication\|NEW_PACKAGE_NAME" "$F" | head -30
+          } > "$OUT" 2>&1 || true
+          wc -l "$OUT"
+
+      - name: "Коммит"
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A probes
+          if git diff --cached --quiet; then echo "нет изменений"; exit 0; fi
+          git commit -m "проба: обработчик MSG_GOTO_APPLICATION"
+          for try in 1 2 3 4 5; do
+            if git pull --rebase --autostash origin "${{ github.ref_name }}" >/dev/null 2>&1 \
+               && git push origin HEAD:${{ github.ref_name }}; then exit 0; fi
+            sleep 10; git rebase --abort >/dev/null 2>&1 || true
+          done
