@@ -144,7 +144,11 @@ jobs:
             echo "## содержимое образа"
             debugfs -R "ls -l /app" out/system-full.img 2>/dev/null | grep -iE "navitel|yandex|torque|switcher"
             debugfs -R "ls -l /priv-app" out/system-full.img 2>/dev/null | grep -iE "navitel|yandex|torque|Home"
-            debugfs -R "stat /priv-app/EL830LF01_Home.apk" out/system-full.img 2>/dev/null | grep -i size
+            echo "размер лаунчера в образе:"
+            debugfs -R "stat /priv-app/EL830LF01_Home.apk" out/system-full.img 2>/dev/null | grep -i "Size:"
+            echo "в APK внутри образа: маркер патча (yandexnavi/torque)"
+            debugfs -R "dump /priv-app/EL830LF01_Home.apk /tmp/in-img.apk" out/system-full.img 2>&1 | tail -1
+            unzip -p /tmp/in-img.apk classes.dex | strings | grep -cE "yandexnavi|prowl.torque"
             sha256sum out/system-full.img
             e2fsck -fn out/system-full.img 2>&1 | tail -3
           } 2>&1 | tee -a reports/full-build.txt
