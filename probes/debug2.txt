@@ -1,0 +1,22 @@
+# Отладка патча
+
+файл: 285098 символов
+объявления метода: ['.method private loadEleadApplications()V']
+regex нашёл: True
+длина: 47658
+cond_23e: 20159
+put после метки: 114
+--- после метки 400 символов ---
+
+    :goto_23e
+    sget-object v9, Ltw/com/elead/el830/home/HomeApp;->mEleadApplications:Ljava/util/HashMap;
+
+    invoke-virtual {v9, v7, v0}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+
+    goto/16 :goto_af
+
+    .line 733
+    :cond_245
+    const-string v9, "tw.com.elead.el830.elbluetooth.phone"
+
+    invoke-virtual {v7, v9}, Ljava/lang/String;->equalsIgnoreCas
