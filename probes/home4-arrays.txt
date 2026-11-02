@@ -1,0 +1,22 @@
+# Ресурсы-массивы оболочки (список приложений главного экрана)
+
+
+== все строки, похожие на пакеты ==
+
+== содержимое /mnt/para_fw в образе (если есть) ==
+debugfs 1.47.0 (5-Feb-2023)
+/mnt: File not found by ext2_lookup 
+
+== есть ли в образе файлы настроек оболочки ==
+--- /data
+debugfs 1.47.0 (5-Feb-2023)
+/data: File not found by ext2_lookup 
+--- /etc/config.ini
+debugfs 1.47.0 (5-Feb-2023)
+/etc/config.ini: File not found by ext2_lookup 
+--- /etc/el830
+debugfs 1.47.0 (5-Feb-2023)
+/etc/el830: File not found by ext2_lookup 
+--- /system/etc/config.ini
+debugfs 1.47.0 (5-Feb-2023)
+/system/etc/config.ini: File not found by ext2_lookup 

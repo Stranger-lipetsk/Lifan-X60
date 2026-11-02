@@ -1,0 +1,236 @@
+# Как Home запускает выбранное приложение
+
+== startNewActivity ==
+.method private startNewActivity(Ljava/lang/String;Ljava/lang/String;)V
+    .registers 7
+    .param p1, "package_name"    # Ljava/lang/String;
+    .param p2, "activity_name"    # Ljava/lang/String;
+
+    .prologue
+    .line 11730
+    invoke-virtual {p2}, Ljava/lang/String;->length()I
+
+    move-result v1
+
+    if-nez v1, :cond_7
+
+    .line 11743
+    :cond_6
+    :goto_6
+    return-void
+
+    .line 11733
+    :cond_7
+    invoke-virtual {p2}, Ljava/lang/String;->length()I
+
+    move-result v1
+
+    if-eqz v1, :cond_6
+
+    .line 11736
+    const-string v1, "Home"
+
+    new-instance v2, Ljava/lang/StringBuilder;
+
+    invoke-direct {v2}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v3, "HomeService.java  startNewActivity() ....... package_name = "
+
+    invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v2
+
+    invoke-virtual {v2, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v2
+
+    const-string v3, ", activity_name = "
+
+    invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v2
+
+    invoke-virtual {v2, p2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v2
+
+    invoke-virtual {v2}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v2
+
+    invoke-static {v1, v2}, Landroid/util/Log;->v(Ljava/lang/String;Ljava/lang/String;)I
+
+    .line 11737
+    new-instance v0, Landroid/content/Intent;
+
+    const-string v1, "android.intent.action.MAIN"
+
+    invoke-direct {v0, v1}, Landroid/content/Intent;-><init>(Ljava/lang/String;)V
+
+    .line 11738
+    .local v0, "intent":Landroid/content/Intent;
+    const-string v1, "android.intent.category.LAUNCHER"
+
+    invoke-virtual {v0, v1}, Landroid/content/Intent;->addCategory(Ljava/lang/String;)Landroid/content/Intent;
+
+    .line 11739
+    new-instance v1, Landroid/content/ComponentName;
+
+    new-instance v2, Ljava/lang/StringBuilder;
+
+    invoke-direct {v2}, Ljava/lang/StringBuilder;-><init>()V
+
+    invoke-virtual {v2, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v2
+
+    const-string v3, "."
+
+    invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v2
+
+    invoke-virtual {v2, p2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v2
+
+    invoke-virtual {v2}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v2
+
+    invoke-direct {v1, p1, v2}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v0, v1}, Landroid/content/Intent;->setComponent(Landroid/content/ComponentName;)Landroid/content/Intent;
+
+    .line 11740
+    const/high16 v1, 0x10020000
+
+    invoke-virtual {v0, v1}, Landroid/content/Intent;->setFlags(I)Landroid/content/Intent;
+
+    .line 11742
+    sget-object v1, Landroid/os/UserHandle;->CURRENT:Landroid/os/UserHandle;
+
+    invoke-virtual {p0, v0, v1}, Ltw/com/elead/el830/home/HomeService;->startActivityAsUser(Landroid/content/Intent;Landroid/os/UserHandle;)V
+
+    goto :goto_6
+.end method
+
+== MSG_GOTO_APPLICATION / startActivity по ApplicationInfo ==
+
+== ApplicationInfo.setActivity / getActivity ==
+.method final setActivity(Landroid/content/ComponentName;I)V
+    .registers 6
+    .param p1, "className"    # Landroid/content/ComponentName;
+    .param p2, "launchFlags"    # I
+
+    .prologue
+    .line 121
+    new-instance v0, Landroid/content/Intent;
+
+    const-string v1, "android.intent.action.MAIN"
+
+    invoke-direct {v0, v1}, Landroid/content/Intent;-><init>(Ljava/lang/String;)V
+
+    iput-object v0, p0, Ltw/com/elead/el830/home/ApplicationInfo;->intent:Landroid/content/Intent;
+
+    .line 122
+    iget-object v0, p0, Ltw/com/elead/el830/home/ApplicationInfo;->intent:Landroid/content/Intent;
+
+    const-string v1, "android.intent.category.LAUNCHER"
+
+    invoke-virtual {v0, v1}, Landroid/content/Intent;->addCategory(Ljava/lang/String;)Landroid/content/Intent;
+
+    .line 123
+    iget-object v0, p0, Ltw/com/elead/el830/home/ApplicationInfo;->intent:Landroid/content/Intent;
+
+    invoke-virtual {v0, p1}, Landroid/content/Intent;->setComponent(Landroid/content/ComponentName;)Landroid/content/Intent;
+
+    .line 124
+    iget-object v0, p0, Ltw/com/elead/el830/home/ApplicationInfo;->intent:Landroid/content/Intent;
+
+    invoke-virtual {v0, p2}, Landroid/content/Intent;->setFlags(I)Landroid/content/Intent;
+
+    .line 125
+    iget-object v0, p0, Ltw/com/elead/el830/home/ApplicationInfo;->subFunc:Ljava/lang/String;
+
+    if-eqz v0, :cond_27
+
+    .line 126
+    iget-object v0, p0, Ltw/com/elead/el830/home/ApplicationInfo;->intent:Landroid/content/Intent;
+
+    const-string v1, "SUB_FUNCTION"
+
+    iget-object v2, p0, Ltw/com/elead/el830/home/ApplicationInfo;->subFunc:Ljava/lang/String;
+
+    invoke-virtual {v0, v1, v2}, Landroid/content/Intent;->putExtra(Ljava/lang/String;Ljava/lang/String;)Landroid/content/Intent;
+
+    .line 127
+    :cond_27
+    return-void
+.end method
+
+== loadApplications: откуда берётся список mEleadApps ==
+482:.field private mEleadApps:Ljava/util/ArrayList;
+493:.field private mEleadApps_default:Ljava/util/ArrayList;
+630:    iput-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+637:    iput-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps_default:Ljava/util/ArrayList;
+1421:    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+1426:    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+1433:    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+1440:    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+1447:    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+1454:    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+1461:    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+1468:    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+1475:    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+1482:    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+1489:    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+1496:    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+1503:    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+1510:    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+1517:    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+1524:    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+grep: write error: Broken pipe
+
+== R.array из resources (список приложений экрана) ==
+Package Group 0 id=0x7f packageCount=1 name=tw.com.elead.el830.home
+  Package 0 id=0x7f name=tw.com.elead.el830.home
+      spec resource 0x7f010000 tw.com.elead.el830.home:attr/stackOrientation: flags=0x00000000
+      spec resource 0x7f010001 tw.com.elead.el830.home:attr/marginLeft: flags=0x00000000
+      spec resource 0x7f010002 tw.com.elead.el830.home:attr/marginTop: flags=0x00000000
+      spec resource 0x7f010003 tw.com.elead.el830.home:attr/marginRight: flags=0x00000000
+      spec resource 0x7f010004 tw.com.elead.el830.home:attr/marginBottom: flags=0x00000000
+        resource 0x7f010000 tw.com.elead.el830.home:attr/stackOrientation: <bag>
+        resource 0x7f010001 tw.com.elead.el830.home:attr/marginLeft: <bag>
+        resource 0x7f010002 tw.com.elead.el830.home:attr/marginTop: <bag>
+        resource 0x7f010003 tw.com.elead.el830.home:attr/marginRight: <bag>
+        resource 0x7f010004 tw.com.elead.el830.home:attr/marginBottom: <bag>
+      spec resource 0x7f020000 tw.com.elead.el830.home:drawable/action_bg: flags=0x00000000
+      spec resource 0x7f020001 tw.com.elead.el830.home:drawable/action_bg_gray: flags=0x00000000
+      spec resource 0x7f020002 tw.com.elead.el830.home:drawable/action_tab_selcet: flags=0x00000000
+      spec resource 0x7f020003 tw.com.elead.el830.home:drawable/audio_off_mute: flags=0x00000000
+      spec resource 0x7f020004 tw.com.elead.el830.home:drawable/back_button_click: flags=0x00000000
+      spec resource 0x7f020005 tw.com.elead.el830.home:drawable/back_click: flags=0x00000000
+      spec resource 0x7f020006 tw.com.elead.el830.home:drawable/back_normal: flags=0x00000000
+      spec resource 0x7f020007 tw.com.elead.el830.home:drawable/bg_bottom: flags=0x00000000
+      spec resource 0x7f020008 tw.com.elead.el830.home:drawable/bg_bottom_eq: flags=0x00000000
+      spec resource 0x7f020009 tw.com.elead.el830.home:drawable/bootanimation_bg_000: flags=0x00000000
+      spec resource 0x7f02000a tw.com.elead.el830.home:drawable/bottom_background: flags=0x00000000
+      spec resource 0x7f02000b tw.com.elead.el830.home:drawable/brightness_bar_bg: flags=0x00000000
+      spec resource 0x7f02000c tw.com.elead.el830.home:drawable/brightness_bg: flags=0x00000000
+      spec resource 0x7f02000d tw.com.elead.el830.home:drawable/button_click: flags=0x00000000
+      spec resource 0x7f02000e tw.com.elead.el830.home:drawable/button_color: flags=0x00000000
+      spec resource 0x7f02000f tw.com.elead.el830.home:drawable/button_left_pressed: flags=0x00000000
+      spec resource 0x7f020010 tw.com.elead.el830.home:drawable/button_normal: flags=0x00000000
+      spec resource 0x7f020011 tw.com.elead.el830.home:drawable/button_right_pressed: flags=0x00000000
+      spec resource 0x7f020012 tw.com.elead.el830.home:drawable/ccd_marking_line: flags=0x00000000
+      spec resource 0x7f020013 tw.com.elead.el830.home:drawable/circle_list_item_text_background: flags=0x00000000
+      spec resource 0x7f020014 tw.com.elead.el830.home:drawable/classic_normal: flags=0x00000000
+      spec resource 0x7f020015 tw.com.elead.el830.home:drawable/devide_line: flags=0x00000000
+      spec resource 0x7f020016 tw.com.elead.el830.home:drawable/dialog_bg1: flags=0x00000000
+      spec resource 0x7f020017 tw.com.elead.el830.home:drawable/dialog_bg2: flags=0x00000000
+      spec resource 0x7f020018 tw.com.elead.el830.home:drawable/drawer_button: flags=0x00000000
+      spec resource 0x7f020019 tw.com.elead.el830.home:drawable/eq_bar_bg_left: flags=0x00000000
+      spec resource 0x7f02001a tw.com.elead.el830.home:drawable/eq_bar_bg_right: flags=0x00000000
+      spec resource 0x7f02001b tw.com.elead.el830.home:drawable/fastscroll: flags=0x00000000
+grep: write error: Broken pipe
