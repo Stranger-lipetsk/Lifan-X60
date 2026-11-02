@@ -40,51 +40,78 @@ jobs:
       - name: "Что есть для Bluetooth"
         run: |
           OUT="$GITHUB_WORKSPACE/reports/bt-wifi.txt"
-          {
-            echo "# Bluetooth и WiFi в прошивке"
-            echo
-            echo "## файлы Bluetooth в /system"
-            debugfs -R "ls -l /etc/bluetooth" /tmp/system.img 2>/dev/null
-            debugfs -R "ls -l /lib" /tmp/system.img 2>/dev/null | grep -i blue
-            debugfs -R "ls -l /bin" /tmp/system.img 2>/dev/null | grep -iE "hci|bluetooth|bt"
-            echo "## APK с Bluetooth"
-            debugfs -R "ls -l /app" /tmp/system.img 2>/dev/null | grep -i blue
-            debugfs -R "ls -l /priv-app" /tmp/system.img 2>/dev/null | grep -i blue
-            echo
-            echo "## firmware для WiFi"
-            debugfs -R "ls -l /etc/firmware" /tmp/system.img 2>/dev/null | head -20
-            echo
-            echo "## настройки wifi"
-            debugfs -R "ls -l /etc/wifi" /tmp/system.img 2>/dev/null
-            echo
-            echo "## есть ли wpa_supplicant"
-            debugfs -R "ls -l /bin/wpa_supplicant" /tmp/system.img 2>/dev/null
-            debugfs -R "ls -l /bin/hostapd" /tmp/system.img 2>/dev/null
-            echo
-            echo "## что говорит build.prop про bluetooth/wifi"
-            debugfs -R "dump /build.prop /tmp/bp.txt" /tmp/system.img 2>/dev/null
-            grep -iE "bluetooth|wifi|wlan|bt" /tmp/bp.txt
-          } > "$OUT" 2>&1
-          cat "$OUT"
+          exec > "$OUT" 2>&1 || true
+          set +e
+          echo "# Bluetooth и WiFi в прошивке"
+          echo
+          echo "## /etc/bluetooth"
+          debugfs -R "ls -l /etc/bluetooth" /tmp/system.img 2>&1
+          debugfs -R "dump /etc/bluetooth/bt_vendor.conf /tmp/btv.txt" /tmp/system.img 2>&1 | tail -1
+          echo "--- содержимое bt_vendor.conf ---"
+          cat /tmp/btv.txt 2>/dev/null
+          echo
+          echo "## библиотеки Bluetooth"
+          debugfs -R "ls -l /lib" /tmp/system.img 2>/dev/null | grep -i blue
+          echo "## исполняемые файлы BT"
+          debugfs -R "ls -l /bin" /tmp/system.img 2>/dev/null | grep -iE "hci|bluetooth|bt_|brcm|patchram"
+          echo "## APK Bluetooth"
+          debugfs -R "ls -l /app" /tmp/system.img 2>/dev/null | grep -i blue
+          debugfs -R "ls -l /priv-app" /tmp/system.img 2>/dev/null | grep -i blue
+          echo
+          echo "## WiFi: /etc/firmware"
+          debugfs -R "ls -l /etc/firmware" /tmp/system.img 2>&1 | head -20
+          echo "## WiFi: /etc/wifi"
+          debugfs -R "ls -l /etc/wifi" /tmp/system.img 2>&1
+          echo "## WiFi: бинарники"
+          for f in /bin/wpa_supplicant /bin/hostapd /bin/dhcpcd /bin/ping; do
+            echo -n "$f: "
+            debugfs -R "stat $f" /tmp/system.img 2>/dev/null | grep -c "Inode:" 
+          done
+          echo
+          echo "## build.prop про bluetooth/wifi/wlan"
+          debugfs -R "dump /build.prop /tmp/bp.txt" /tmp/system.img 2>/dev/null
+          grep -iE "bluetooth|wifi|wlan|hw\." /tmp/bp.txt || echo "(нет строк)"
 
       - name: "Драйверы в ядре"
         run: |
           OUT="$GITHUB_WORKSPACE/reports/bt-wifi.txt"
-          {
-            echo
-            echo "## драйверы в ядре (строки)"
-            for d in hci_uart bluetooth ftdi_sio ch341 pl2303 cp210x wl12xx wlcore; do
-              n=$(grep -ci "$d" /tmp/kernel.img 2>/dev/null || echo 0)
-              echo "  $d: $n"
-            done
-            echo
-            echo "## USB-серийные устройства (контекст)"
-            grep -aoE "(ftdi|ch341|pl2303|cp210x)[a-z_]*" /tmp/kernel.img 2>/dev/null | sort | uniq -c | head -10
-            echo
-            echo "## bluetooth стек"
-            grep -aoE "hci_[a-z_]+|btusb|bluez" /tmp/kernel.img 2>/dev/null | sort | uniq -c | head -10
-          } >> "$OUT" 2>&1
-          tail -30 "$OUT"
+          exec >> "$OUT" 2>&1 || true
+          set +e
+          echo
+          echo "## распаковать ядро"
+          K=/tmp/kernel.img
+          [ -f "$K" ] || K="$(ls /tmp/rar/*kernel* 2>/dev/null | head -1)"
+          echo "файл: $K"
+          # ядро лежит сжатым (gzip) — ищем поток и распаковываем
+          python3 - <<'PY'
+          import gzip, io, re
+          data = open([p for p in ['/tmp/kernel.img'] if __import__('os').path.exists(p)][0], 'rb').read() if __import__('os').path.exists('/tmp/kernel.img') else b''
+          if not data:
+              import glob
+              g = glob.glob('/tmp/rar/*kernel*')
+              data = open(g[0], 'rb').read() if g else b''
+          out = b''
+          for m in re.finditer(b'\x1f\x8b\x08', data):
+              try:
+                  out = gzip.GzipFile(fileobj=io.BytesIO(data[m.start():])).read()
+                  break
+              except Exception:
+                  continue
+          print('распаковано:', len(out), 'байт')
+          open('/tmp/kernel.bin','wb').write(out)
+          PY
+          echo
+          echo "## драйверы (вхождения в ядре)"
+          for d in hci_uart hci_vhci bluetooth btusb wl12xx wlcore wl1271 ftdi_sio ch341 pl2303 cp210x usbserial; do
+            n=$(grep -ac "$d" /tmp/kernel.bin 2>/dev/null)
+            echo "  $d: ${n:-0}"
+          done
+          echo
+          echo "## контекст USB-серийных"
+          grep -aoE "(ftdi_sio|ch341|pl2303|cp210x|usb_serial)[a-z_]*" /tmp/kernel.bin 2>/dev/null | sort | uniq -c | head
+          echo
+          echo "## контекст bluetooth"
+          grep -aoE "hci_[a-z_]+|bt_[a-z_]+|blue[a-z_]*" /tmp/kernel.bin 2>/dev/null | sort | uniq -c | head -12
 
       - name: "Коммит"
         if: always()
