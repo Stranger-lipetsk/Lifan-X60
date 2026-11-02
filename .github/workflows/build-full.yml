@@ -16,22 +16,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: "Что лежит в firmware/apks"
-        run: |
-          mkdir -p out reports
-          echo "=== файлы в firmware/apks ===" | tee reports/full-build.txt
-          ls -l firmware/apks/ 2>/dev/null | tee -a reports/full-build.txt || echo "папка пуста" | tee -a reports/full-build.txt
-
       - name: "Инструменты"
         run: |
           sudo apt-get update -qq 2>/dev/null || true
-          sudo apt-get install -y -qq p7zip-full unzip curl openssl >/dev/null 2>&1 || true
+          sudo apt-get install -y -qq p7zip-full unzip curl >/dev/null 2>&1 || true
           curl -sSL --retry 3 --max-time 300 -o /tmp/apktool.jar \
             https://github.com/iBotPeaches/Apktool/releases/download/v2.9.3/apktool_2.9.3.jar
-          SDK=/usr/local/lib/android/sdk
-          echo "BT=$(ls -d "$SDK"/build-tools/* 2>/dev/null | sort -V | tail -1)" >> "$GITHUB_ENV"
+          mkdir -p out reports
+          echo "BT=$(ls -d /usr/local/lib/android/sdk/build-tools/* | sort -V | tail -1)" >> "$GITHUB_ENV"
 
-      - name: "Java и SDK"
+      - name: "Java"
         uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -52,12 +46,6 @@ jobs:
           PY
           7z x -y -aos -o/tmp/rar /tmp/fw.rar >/dev/null 2>&1 || true
           cp "$(find /tmp/rar -name system.img | head -1)" out/system-org.img
-          ls -l out/
-
-      - name: "Собрать панель"
-        run: |
-          bash switcher/build.sh 2>&1 | tail -4
-          ls -l switcher/switcher.apk
 
       - name: "Патч лаунчера"
         run: |
@@ -66,26 +54,34 @@ jobs:
           python3 tools/patch_launcher.py --dir /tmp/HomeDec \
             --add ru.yandex.yandexnavi --add org.prowl.torque 2>&1 | tee -a reports/full-build.txt
           java -jar /tmp/apktool.jar b /tmp/HomeDec -o out/Home-patched.apk 2>&1 | tail -4
-          ls -l out/Home-patched.apk 2>/dev/null || { echo "СБОРКА ЛАУНЧЕРА НЕ УДАЛАСЬ" | tee -a reports/full-build.txt; exit 1; }
 
-      - name: "Подпись лаунчера"
-        env:
-          LAUNCHER_KEY_B64: ${{ secrets.LAUNCHER_KEY_B64 }}
-          LAUNCHER_CERT_B64: ${{ secrets.LAUNCHER_CERT_B64 }}
+      - name: "Dex в штатный APK (подпись не меняется)"
         run: |
-          if [ -z "$LAUNCHER_KEY_B64" ]; then
-            echo "НЕТ КЛЮЧА: лаунчер не подписан, в образ не пойдёт" | tee -a reports/full-build.txt
-            echo "нужен системный testkey (SHA1 3E:0C:AF:3D:79:9F:...)" | tee -a reports/full-build.txt
-            exit 0
-          fi
-          echo "$LAUNCHER_KEY_B64" | base64 -d > /tmp/testkey.pk8
-          echo "$LAUNCHER_CERT_B64" | base64 -d > /tmp/testkey.x509.pem
-          "$BT/apksigner" sign --key /tmp/testkey.pk8 --cert /tmp/testkey.x509.pem \
-            --min-sdk-version 19 --v1-signing-enabled true \
-            --out out/Home-signed.apk out/Home-patched.apk 2>&1 | tail -3
-          keytool -printcert -jarfile out/Home-signed.apk 2>/dev/null | grep -E "SHA1|Owner" \
-            | tee -a reports/full-build.txt
-          echo "HOME_READY=1" >> "$GITHUB_ENV"
+          # Пересобранный apktool-ом APK подписан чужим ключом — система такой
+          # не примет. Берём из него только classes.dex и вставляем в заводской
+          # APK: подпись, манифест и ресурсы остаются родными, меняется лишь
+          # код. Dalvik на 4.4 подпись самого dex не проверяет.
+          mkdir -p /tmp/ndex && cd /tmp/ndex && rm -rf ./*
+          unzip -o -q "${GITHUB_WORKSPACE}/out/Home-patched.apk" classes.dex
+          ls -l classes.dex
+          cp /tmp/Home.apk "${GITHUB_WORKSPACE}/out/Home-new.apk"
+          zip -q -0 "${GITHUB_WORKSPACE}/out/Home-new.apk" classes.dex
+          cd "${GITHUB_WORKSPACE}"
+          "$BT/zipalign" -f 4 out/Home-new.apk out/Home-aligned.apk 2>&1 | tail -2
+          mv -f out/Home-aligned.apk out/Home-new.apk
+          {
+            echo
+            echo "## лаунчер"
+            ls -l out/Home.apk out/Home-new.apk
+            echo "dex внутри (метод должен быть STORED):"
+            unzip -lv out/Home-new.apk | grep classes.dex
+            echo "подпись нового файла:"
+            keytool -printcert -jarfile out/Home-new.apk 2>&1 | grep -E "SHA1|Owner"
+            echo "подпись заводского:"
+            keytool -printcert -jarfile /tmp/Home.apk 2>&1 | grep -E "SHA1|Owner"
+            echo "патч в dex:"
+            unzip -p out/Home-new.apk classes.dex | strings | grep -c "yandexnavi" || true
+          } 2>&1 | tee -a reports/full-build.txt
 
       - name: "Собрать образ"
         run: |
@@ -98,7 +94,7 @@ jobs:
 
           ADD=""
           ADD="$ADD --add-apk switcher/switcher.apk:/app"
-          # настоящие приложения — из папки firmware/apks
+          ADD="$ADD --add-file out/Home-new.apk:/priv-app/EL830LF01_Home.apk"
           for f in firmware/apks/*.apk; do
             [ -f "$f" ] || continue
             case "$(basename "$f")" in
@@ -106,16 +102,11 @@ jobs:
               *)        ADD="$ADD --add-apk $f:/app" ;;
             esac
           done
-          echo "добавляем: $ADD" | tee -a reports/full-build.txt
-
-          EXTRA=""
-          if [ -f out/Home-signed.apk ]; then
-            EXTRA="--add-file out/Home-signed.apk:/priv-app/EL830LF01_Home.apk"
-          fi
+          echo "добавляем:$ADD" | tee -a reports/full-build.txt
 
           python3 tools/inplace_patch.py \
             --system out/system-org.img --out out/system-full.img \
-            $REMOVE $ADD $EXTRA \
+            $REMOVE $ADD \
             --add-file tools/system-files/install-recovery.sh:/etc/install-recovery.sh \
             2>&1 | tee -a reports/full-build.txt
 
@@ -124,13 +115,11 @@ jobs:
           {
             echo
             echo "## содержимое образа"
-            for p in /app /priv-app; do
-              echo "### $p"
-              debugfs -R "ls -l $p" out/system-full.img 2>/dev/null | \
-                grep -iE "navitel|yandex|torque|switcher|Home" 
-            done
-            echo
+            debugfs -R "ls -l /app" out/system-full.img 2>/dev/null | grep -iE "navitel|yandex|torque|switcher"
+            debugfs -R "ls -l /priv-app" out/system-full.img 2>/dev/null | grep -iE "navitel|yandex|torque|Home"
+            debugfs -R "stat /priv-app/EL830LF01_Home.apk" out/system-full.img 2>/dev/null | grep -i size
             sha256sum out/system-full.img
+            e2fsck -fn out/system-full.img 2>&1 | tail -3
           } 2>&1 | tee -a reports/full-build.txt
 
       - name: "Публикация"
@@ -138,8 +127,8 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           cp out/system-full.img out/system.img
-          NOTE="Полный образ: Navitel 11.11.1110, Яндекс Навигатор 6.40, Torque Pro.
-          Файловая система заводская (без пересборки)."
+          NOTE="Приложения в образе: Navitel, Яндекс Навигатор, Torque Pro.
+          Лаунчер патчен (кнопки на главном экране), подпись файла заводская."
           if gh release view lite-apps >/dev/null 2>&1; then
             gh release upload lite-apps out/system.img --clobber
           else
