@@ -116,3 +116,71 @@ Size of extra inode fields: 32
 Pass 4: Checking reference counts
 Pass 5: Checking group summary information
 system: 1391/23040 files (0.1% non-contiguous), 60680/92160 blocks
+патч /tmp/HomeDec/smali/tw/com/elead/el830/home/HomeApp.smali
+  добавлен в список экрана: ru.yandex.yandexnavi
+  добавлен в список экрана: org.prowl.torque
+  проверка enable снята (1 место)
+  в ветку по умолчанию добавлен setActivity (перед put, строка 748)
+готово
+DEX РАЗБИРАЕТСЯ БЕЗ ОШИБОК
+
+## лаунчер
+-rw-r--r-- 1 runner runner 4588177 Nov  2 17:53 /tmp/Home.apk
+-rw-r--r-- 1 runner runner 5708737 Nov  2 17:54 out/Home-new.apk
+dex внутри (метод должен быть STORED):
+ 1852652  Stored  1852652   0% 2026-11-02 17:53 57d2cde4  classes.dex
+подпись нового файла:
+keytool error: java.lang.SecurityException: SHA1 digest error for classes.dex
+подпись заводского:
+Owner: EMAILADDRESS=android@freescale.com, CN=Android, OU=Android, O=Android, L=Mountain View, ST=California, C=US
+	 SHA1: 3E:0C:AF:3D:79:9F:BA:EC:56:6F:AC:BE:1A:67:FB:25:0B:DE:FD:93
+Signature algorithm name: SHA1withRSA (weak)
+The certificate uses the SHA1withRSA signature algorithm which is considered a security risk. This algorithm will be disabled in a future update.
+патч в dex:
+1
+добавляем: --add-apk switcher/switcher.apk:/app --add-file out/Home-new.apk:/priv-app/EL830LF01_Home.apk
+использую sudo для записи в образ
+копия: out/system-org.img -> out/system-full.img (377487360 байт)
+свободно в образе до правок: 17.6 МиБ
+  удалено: /priv-app/Navitel-9.13.73-large.apk (105.9 МиБ)
+  удалено: /app/BSEDemo.apk (0.2 МиБ)
+  удалено: /app/EL830TAM1_GPIO_TEST_2015.01.01.01.apk (0.0 МиБ)
+  удалено: /app/CubeLiveWallpapers.apk (0.0 МиБ)
+  удалено: /app/VisualizationWallpapers.apk (0.2 МиБ)
+  удалено: /app/BasicDreams.apk (0.0 МиБ)
+  удалено: /app/WfdSink.apk (0.1 МиБ)
+  удалено: /app/FSLOta.apk (0.0 МиБ)
+  удалено: /app/HTMLViewer.apk (0.0 МиБ)
+  добавлено: /app/switcher.apk (16879 байт)
+  заменяю: /priv-app/EL830LF01_Home.apk
+  добавлено: /priv-app/EL830LF01_Home.apk (режим 0100644)
+  добавлено: /etc/install-recovery.sh (режим 0100755)
+свободно в образе после правок: 123.0 МиБ
+--- проверка ФС ---
+e2fsck: чисто
+  Pass 1: Checking inodes, blocks, and sizes
+  Pass 5: Checking group summary information
+  system: 1391/23040 files (0.1% non-contiguous), 60680/92160 blocks
+
+ГОТОВО: out/system-full.img
+размер: 377487360 байт
+
+## сверка лаунчера с собранным
+debugfs 1.47.0 (5-Feb-2023)
+1c523f29ae32aa168d058baa92c932832d2052f54382cd37e6513c1190bcc566  /tmp/chk-home.apk
+1c523f29ae32aa168d058baa92c932832d2052f54382cd37e6513c1190bcc566  out/Home-new.apk
+лаунчер в образе: наш
+
+## содержимое образа
+     13  100644 (1)      0      0   16879  2-Nov-2026 17:54 switcher.apk
+     14  100644 (1)      0      0   5708737  2-Nov-2026 17:54 EL830LF01_Home.apk
+размер лаунчера в образе:
+User:     0   Group:     0   Project:     0   Size: 5708737
+Fragment:  Address: 0    Number: 0    Size: 0
+в APK внутри образа: маркер патча (yandexnavi/torque)
+debugfs 1.47.0 (5-Feb-2023)
+2
+eee7fb3c30b571964dcb5ef1f11c87298c6781fd41b53a1b6913fb222bab35fa  out/system-full.img
+Pass 4: Checking reference counts
+Pass 5: Checking group summary information
+system: 1391/23040 files (0.1% non-contiguous), 60680/92160 blocks
