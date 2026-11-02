@@ -1,0 +1,53 @@
+name: Проба скачивания APK
+
+on:
+  push:
+    paths:
+      - 'autoanalysis/probe-download.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: "Проверка источников"
+        run: |
+          OUT="${GITHUB_WORKSPACE}/probes/download-probe.txt"
+          UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36"
+          {
+            echo "# Доступность источников APK из CI"
+            echo
+            for url in \
+              "https://4pda.to/forum/index.php?act=attach&id=20327129" \
+              "https://4pda.to/forum/index.php?showtopic=193183" \
+              "https://apkpure.com/ru/yandex-navigator/ru.yandex.yandexnavi" \
+              "https://www.apkmirror.com/apk/yandex/" \
+              "https://trashbox.ru/" ; do
+              echo "=== $url"
+              code=$(curl -s -o /tmp/page.bin -w '%{http_code} %{size_download}' \
+                     -A "$UA" -L --max-time 60 "$url" 2>&1)
+              echo "  ответ: $code"
+              file /tmp/page.bin | head -2
+              head -c 120 /tmp/page.bin | tr -d '\0' | head -2
+              echo
+            done
+          } > "$OUT" 2>&1 || true
+          cat "$OUT"
+      - name: "Коммит"
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A probes
+          git diff --cached --quiet && exit 0
+          git commit -m "проба: доступность источников APK"
+          for try in 1 2 3 4 5; do
+            if git pull --rebase --autostash origin "${{ github.ref_name }}" >/dev/null 2>&1 \
+               && git push origin HEAD:${{ github.ref_name }}; then exit 0; fi
+            sleep 10; git rebase --abort >/dev/null 2>&1 || true
+          done
