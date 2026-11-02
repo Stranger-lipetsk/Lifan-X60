@@ -1,0 +1,161 @@
+name: Полный образ (Navitel, Яндекс, Torque)
+
+on:
+  push:
+    paths:
+      - 'autoanalysis/build-full.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: "Что лежит в firmware/apks"
+        run: |
+          mkdir -p out reports
+          echo "=== файлы в firmware/apks ===" | tee reports/full-build.txt
+          ls -l firmware/apks/ 2>/dev/null | tee -a reports/full-build.txt || echo "папка пуста" | tee -a reports/full-build.txt
+
+      - name: "Инструменты"
+        run: |
+          sudo apt-get update -qq 2>/dev/null || true
+          sudo apt-get install -y -qq p7zip-full unzip curl openssl >/dev/null 2>&1 || true
+          curl -sSL --retry 3 --max-time 300 -o /tmp/apktool.jar \
+            https://github.com/iBotPeaches/Apktool/releases/download/v2.9.3/apktool_2.9.3.jar
+          SDK=/usr/local/lib/android/sdk
+          echo "BT=$(ls -d "$SDK"/build-tools/* 2>/dev/null | sort -V | tail -1)" >> "$GITHUB_ENV"
+
+      - name: "Java и SDK"
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: "Скачать прошивку"
+        run: |
+          mkdir -p /tmp/rar
+          python3 - <<'PY'
+          import json, subprocess, urllib.parse, urllib.request
+          pk = 'https://disk.yandex.ru/d/qJdjjeB8Aiq3Lg'
+          url = ('https://cloud-api.yandex.net/v1/disk/public/resources'
+                 '?public_key=' + urllib.parse.quote(pk, safe='') + '&limit=100')
+          items = json.load(urllib.request.urlopen(url, timeout=60))['_embedded']['items']
+          it = [i for i in items if i['type'] == 'file' and '2016' in i['name']][0]
+          subprocess.run(['curl', '-L', '--fail', '--retry', '3', '--max-time', '2500',
+                          '-o', '/tmp/fw.rar', it['file']], check=True)
+          PY
+          7z x -y -aos -o/tmp/rar /tmp/fw.rar >/dev/null 2>&1 || true
+          cp "$(find /tmp/rar -name system.img | head -1)" out/system-org.img
+          ls -l out/
+
+      - name: "Собрать панель"
+        run: |
+          bash switcher/build.sh 2>&1 | tail -4
+          ls -l switcher/switcher.apk
+
+      - name: "Патч лаунчера"
+        run: |
+          debugfs -R "dump /priv-app/EL830LF01_Home.apk /tmp/Home.apk" out/system-org.img 2>&1 | tail -1
+          java -jar /tmp/apktool.jar d -f /tmp/Home.apk -o /tmp/HomeDec 2>&1 | tail -2
+          python3 tools/patch_launcher.py --dir /tmp/HomeDec \
+            --add ru.yandex.yandexnavi --add org.prowl.torque 2>&1 | tee -a reports/full-build.txt
+          java -jar /tmp/apktool.jar b /tmp/HomeDec -o out/Home-patched.apk 2>&1 | tail -4
+          ls -l out/Home-patched.apk 2>/dev/null || { echo "СБОРКА ЛАУНЧЕРА НЕ УДАЛАСЬ" | tee -a reports/full-build.txt; exit 1; }
+
+      - name: "Подпись лаунчера"
+        env:
+          LAUNCHER_KEY_B64: ${{ secrets.LAUNCHER_KEY_B64 }}
+          LAUNCHER_CERT_B64: ${{ secrets.LAUNCHER_CERT_B64 }}
+        run: |
+          if [ -z "$LAUNCHER_KEY_B64" ]; then
+            echo "НЕТ КЛЮЧА: лаунчер не подписан, в образ не пойдёт" | tee -a reports/full-build.txt
+            echo "нужен системный testkey (SHA1 3E:0C:AF:3D:79:9F:...)" | tee -a reports/full-build.txt
+            exit 0
+          fi
+          echo "$LAUNCHER_KEY_B64" | base64 -d > /tmp/testkey.pk8
+          echo "$LAUNCHER_CERT_B64" | base64 -d > /tmp/testkey.x509.pem
+          "$BT/apksigner" sign --key /tmp/testkey.pk8 --cert /tmp/testkey.x509.pem \
+            --min-sdk-version 19 --v1-signing-enabled true \
+            --out out/Home-signed.apk out/Home-patched.apk 2>&1 | tail -3
+          keytool -printcert -jarfile out/Home-signed.apk 2>/dev/null | grep -E "SHA1|Owner" \
+            | tee -a reports/full-build.txt
+          echo "HOME_READY=1" >> "$GITHUB_ENV"
+
+      - name: "Собрать образ"
+        run: |
+          REMOVE=""
+          for p in Navitel-9.13.73-large.apk; do REMOVE="$REMOVE --remove /priv-app/$p"; done
+          for p in BSEDemo EL830TAM1_GPIO_TEST_2015.01.01.01 CubeLiveWallpapers \
+                   VisualizationWallpapers BasicDreams WfdSink FSLOta HTMLViewer; do
+            REMOVE="$REMOVE --remove /app/$p.apk"
+          done
+
+          ADD=""
+          ADD="$ADD --add-apk switcher/switcher.apk:/app"
+          # настоящие приложения — из папки firmware/apks
+          for f in firmware/apks/*.apk; do
+            [ -f "$f" ] || continue
+            case "$(basename "$f")" in
+              *avitel*) ADD="$ADD --add-apk $f:/priv-app" ;;
+              *)        ADD="$ADD --add-apk $f:/app" ;;
+            esac
+          done
+          echo "добавляем: $ADD" | tee -a reports/full-build.txt
+
+          EXTRA=""
+          if [ -f out/Home-signed.apk ]; then
+            EXTRA="--add-file out/Home-signed.apk:/priv-app/EL830LF01_Home.apk"
+          fi
+
+          python3 tools/inplace_patch.py \
+            --system out/system-org.img --out out/system-full.img \
+            $REMOVE $ADD $EXTRA \
+            --add-file tools/system-files/install-recovery.sh:/etc/install-recovery.sh \
+            2>&1 | tee -a reports/full-build.txt
+
+      - name: "Проверка образа"
+        run: |
+          {
+            echo
+            echo "## содержимое образа"
+            for p in /app /priv-app; do
+              echo "### $p"
+              debugfs -R "ls -l $p" out/system-full.img 2>/dev/null | \
+                grep -iE "navitel|yandex|torque|switcher|Home" 
+            done
+            echo
+            sha256sum out/system-full.img
+          } 2>&1 | tee -a reports/full-build.txt
+
+      - name: "Публикация"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cp out/system-full.img out/system.img
+          NOTE="Полный образ: Navitel 11.11.1110, Яндекс Навигатор 6.40, Torque Pro.
+          Файловая система заводская (без пересборки)."
+          if gh release view lite-apps >/dev/null 2>&1; then
+            gh release upload lite-apps out/system.img --clobber
+          else
+            gh release create lite-apps out/system.img --title "Образ с приложениями" --notes "$NOTE"
+          fi
+
+      - name: "Коммит отчёта"
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A reports
+          git diff --cached --quiet && exit 0
+          git commit -m "полная сборка: отчёт"
+          for try in 1 2 3 4 5; do
+            if git pull --rebase --autostash origin "${{ github.ref_name }}" >/dev/null 2>&1 \
+               && git push origin HEAD:${{ github.ref_name }}; then exit 0; fi
+            sleep 10; git rebase --abort >/dev/null 2>&1 || true
+          done
