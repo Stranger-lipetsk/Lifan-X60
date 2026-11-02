@@ -1,0 +1,21 @@
+использую sudo для записи в образ
+копия: out/system-org.img -> out/stage1-clean.img (377487360 байт)
+свободно в образе до правок: 17.6 МиБ
+  удалено: /priv-app/Navitel-9.13.73-large.apk (105.9 МиБ)
+  удалено: /app/BSEDemo.apk (0.2 МиБ)
+  удалено: /app/EL830TAM1_GPIO_TEST_2015.01.01.01.apk (0.0 МиБ)
+  удалено: /app/CubeLiveWallpapers.apk (0.0 МиБ)
+  удалено: /app/VisualizationWallpapers.apk (0.2 МиБ)
+  удалено: /app/BasicDreams.apk (0.0 МиБ)
+  удалено: /app/WfdSink.apk (0.1 МиБ)
+  удалено: /app/FSLOta.apk (0.0 МиБ)
+  удалено: /app/HTMLViewer.apk (0.0 МиБ)
+свободно в образе после правок: 124.1 МиБ
+--- проверка ФС ---
+e2fsck: чисто
+  Pass 1: Checking inodes, blocks, and sizes
+  Pass 5: Checking group summary information
+  system: 1389/23040 files (0.0% non-contiguous), 60399/92160 blocks
+
+ГОТОВО: out/stage1-clean.img
+размер: 377487360 байт

@@ -1,0 +1,13 @@
+использую sudo для записи в образ
+копия: out/stage2-panel.img -> out/stage3-full.img (377487360 байт)
+свободно в образе до правок: 124.0 МиБ
+  добавлено: /etc/install-recovery.sh (режим 0100755)
+свободно в образе после правок: 124.0 МиБ
+--- проверка ФС ---
+e2fsck: чисто
+  Pass 1: Checking inodes, blocks, and sizes
+  Pass 5: Checking group summary information
+  system: 1391/23040 files (0.0% non-contiguous), 60406/92160 blocks
+
+ГОТОВО: out/stage3-full.img
+размер: 377487360 байт
