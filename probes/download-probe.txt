@@ -1,0 +1,30 @@
+# Доступность источников APK из CI
+
+=== https://4pda.to/forum/index.php?act=attach&id=20327129
+  ответ: 403 10423
+/tmp/page.bin: HTML document, Unicode text, UTF-8 text, with very long lines (3470)
+<!DOCTYPE html>
+<html>
+
+=== https://4pda.to/forum/index.php?showtopic=193183
+  ответ: 403 10369
+/tmp/page.bin: HTML document, Unicode text, UTF-8 text, with very long lines (3416)
+<!DOCTYPE html>
+<html>
+
+=== https://apkpure.com/ru/yandex-navigator/ru.yandex.yandexnavi
+  ответ: 403 5749
+/tmp/page.bin: HTML document, ASCII text, with very long lines (5749), with no line terminators
+<!DOCTYPE html><html lang="en-US"><head><title>Just a moment...</title><meta http-equiv="Content-Type" content="text/htm
+=== https://www.apkmirror.com/apk/yandex/
+  ответ: 404 236414
+/tmp/page.bin: HTML document, Unicode text, UTF-8 text, with very long lines (14277), with CRLF, LF line terminators
+<!DOCTYPE html>
+<html lang="en-US" class="auto-theme">
+
+=== https://trashbox.ru/
+  ответ: 200 408681
+/tmp/page.bin: HTML document, Unicode text, UTF-8 text, with very long lines (58340)
+<!DOCTYPE html>
+<html id='id_html' lang='ru' prefix='og: http://ogp.me/ns#' class=''>
+
