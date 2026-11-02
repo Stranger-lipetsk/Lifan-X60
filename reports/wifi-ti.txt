@@ -1,0 +1,23 @@
+# /vendor/firmware/ti-connectivity
+   1368   40755 (2)      0   2000    4096 26-Apr-2026 17:05 .
+   1364   40755 (2)      0   2000    4096 26-Apr-2026 17:05 ..
+   1369  100644 (1)      0      0    1226 26-Apr-2026 17:05 wl18xx-conf.bin
+   1370  100644 (1)      0      0   681704 26-Apr-2026 17:05 wl18xx-fw-4.bin
+
+
+## /lib/firmware/vpu
+    989   40755 (2)      0      0    4096 26-Apr-2026 17:05 .
+    988   40755 (2)      0      0    4096 26-Apr-2026 17:05 ..
+    990  100644 (1)      0      0   253968 26-Apr-2026 17:05 vpu_fw_imx6d.bin
+    991  100644 (1)      0      0   253968 26-Apr-2026 17:05 vpu_fw_imx6q.bin
+
+
+## nvram.txt (что за чип Broadcom)
+#AP6251_NVRAM_V1.0_08022013.txt
+manfid=0x2d0
+prodid=0x492
+vendid=0x14e4
+devid=0x4343
+boardtype=0x0598
+
+## монтируется ли /vendor отдельно
