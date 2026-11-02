@@ -83,6 +83,11 @@ jobs:
             unzip -p out/Home-new.apk classes.dex | strings | grep -c "yandexnavi" || true
           } 2>&1 | tee -a reports/full-build.txt
 
+      - name: "Собрать панель"
+        run: |
+          bash switcher/build.sh 2>&1 | tail -4
+          ls -l switcher/switcher.apk
+
       - name: "Собрать образ"
         run: |
           REMOVE=""
