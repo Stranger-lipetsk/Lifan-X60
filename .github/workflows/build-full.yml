@@ -166,6 +166,7 @@ jobs:
           python3 tools/inplace_patch.py \
             --system out/system-org.img --out out/system-full.img \
             $REMOVE $ADD \
+            --set-prop persist.sys.timezone=Europe/Moscow \
             --add-file tools/system-files/install-recovery.sh:/etc/install-recovery.sh \
             2>&1 | tee -a reports/full-build.txt
 
@@ -184,6 +185,9 @@ jobs:
             echo "## содержимое образа"
             debugfs -R "ls -l /app" out/system-full.img 2>/dev/null | grep -iE "navitel|yandex|torque|switcher"
             debugfs -R "ls -l /priv-app" out/system-full.img 2>/dev/null | grep -iE "navitel|yandex|torque|Home"
+            echo "часовой пояс:"
+            debugfs -R "dump /build.prop /tmp/bp.txt" out/system-full.img 2>/dev/null
+            grep -E "timezone|locale" /tmp/bp.txt
             echo "размер лаунчера в образе:"
             debugfs -R "stat /priv-app/EL830LF01_Home.apk" out/system-full.img 2>/dev/null | grep -i "Size:"
             echo "в APK внутри образа: маркер патча (yandexnavi/torque)"

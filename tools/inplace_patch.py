@@ -59,6 +59,62 @@ def free_blocks(img, sudo):
     return None
 
 
+def read_file(img, path, sudo, dest):
+    out, _ = debugfs(img, f'dump {path} {dest}', sudo)
+    return os.path.exists(dest)
+
+
+def apply_props(img, pairs, sudo):
+    """Правит /build.prop: заменяет существующий ключ или добавляет новый.
+
+    Почему в build.prop: это единственное место, которое читается до
+    запуска Android. Часовой пояс лежит в persist.sys.timezone — если его
+    там нет, система берёт пояс из настроек, а они сбрасываются при
+    перепрошивке (раздел data форматируется).
+    """
+    tmp = '/tmp/build.prop.patch'
+    if not read_file(img, '/build.prop', sudo, tmp):
+        print('  ВНИМАНИЕ: /build.prop не найден, свойства не заданы')
+        return
+    with open(tmp, 'r', encoding='utf-8', errors='replace') as f:
+        lines = f.read().splitlines()
+
+    changed, added = [], []
+    for pair in pairs:
+        if '=' not in pair:
+            print(f'  пропуск (нет =): {pair}')
+            continue
+        key, val = pair.split('=', 1)
+        found = False
+        for i, ln in enumerate(lines):
+            if ln.strip().startswith(key + '='):
+                old = ln.split('=', 1)[1]
+                if old == val:
+                    print(f'  свойство уже такое: {key}={val}')
+                else:
+                    lines[i] = f'{key}={val}'
+                    changed.append(f'{key}: {old} -> {val}')
+                found = True
+                break
+        if not found:
+            lines.append(f'{key}={val}')
+            added.append(f'{key}={val}')
+
+    if changed or added:
+        with open(tmp, 'w', encoding='utf-8') as f:
+            f.write('\n'.join(lines) + '\n')
+        debugfs(img, 'rm /build.prop', sudo)
+        out, rc = debugfs(img, f'write "{tmp}" /build.prop', sudo)
+        debugfs(img, 'sif /build.prop mode 0100644', sudo)
+        debugfs(img, 'sif /build.prop uid 0', sudo)
+        debugfs(img, 'sif /build.prop gid 0', sudo)
+        print(f'  build.prop: строк {len(lines)}')
+        for c in changed:
+            print(f'  свойство заменено: {c}')
+        for a in added:
+            print(f'  свойство добавлено: {a}')
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--system', required=True, help='исходный system.img')
@@ -69,6 +125,9 @@ def main():
                     metavar='ФАЙЛ:/КАТАЛОГ', help='добавить APK')
     ap.add_argument('--add-file', action='append', default=[],
                     metavar='ФАЙЛ:/ПУТЬ', help='добавить файл')
+    ap.add_argument('--set-prop', action='append', default=[],
+                    metavar='КЛЮЧ=ЗНАЧЕНИЕ',
+                    help='задать свойство в /build.prop (заменяет или добавляет)')
     args = ap.parse_args()
 
     sudo = has_sudo()
@@ -133,6 +192,10 @@ def main():
         mode = '0100755' if src.endswith('.sh') else '0100644'
         debugfs(args.out, f'sif {dest} mode {mode}', sudo)
         print(f'  добавлено: {dest} (режим {mode})')
+
+    # ---- свойства в /build.prop ----
+    if args.set_prop:
+        apply_props(args.out, args.set_prop, sudo)
 
     freed = free_blocks(args.out, sudo)
     if freed:
