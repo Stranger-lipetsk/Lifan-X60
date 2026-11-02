@@ -42,7 +42,7 @@ jobs:
           repo = os.environ['REPO']
           keep_days = int(os.environ.get('KEEP_DAYS', '7'))
           keep_image = os.environ.get('KEEP_IMAGE', '1') == '1'
-      keep_names = os.environ.get('KEEP_NAMES', '')
+          keep_names = os.environ.get('KEEP_NAMES', '')
           token = os.environ['GH_TOKEN']
 
           def api(path, method='GET'):
