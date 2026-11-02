@@ -106,16 +106,15 @@ jobs:
             done
           } | tee reports/inplace-сводка.md
 
-      - name: "Артефакты"
+      - name: "Артефакт: стадия 1 (только чистка)"
+        # заливаем ТОЛЬКО стадию 1: квота хранилища 500 МБ, каждый образ ~130 МБ
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: inplace-stages
-          path: |
-            out/stage1-clean.img
-            out/stage2-panel.img
-            out/stage3-full.img
+          name: stage1-clean
+          path: out/stage1-clean.img
           retention-days: 14
+          compression-level: 9
 
       - name: "Коммит отчётов"
         if: always()
