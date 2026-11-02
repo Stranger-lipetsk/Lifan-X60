@@ -1,11 +1,11 @@
 # Проверка стадии 3
 
 ## APK, собранный сейчас
-30f5cbd9f34fe7a39d9a633ce0fc6b35ee329e7660351fcf7fb9a6b39fd510bf  switcher/switcher.apk
+546b6d623cf5de7eb185bd6a276e45fc63e30220afa4c9b69e5622fc6707fcc9  switcher/switcher.apk
 
 ## APK, вытащенный из готового образа
 debugfs 1.47.0 (5-Feb-2023)
-30f5cbd9f34fe7a39d9a633ce0fc6b35ee329e7660351fcf7fb9a6b39fd510bf  /tmp/from-image.apk
+546b6d623cf5de7eb185bd6a276e45fc63e30220afa4c9b69e5622fc6707fcc9  /tmp/from-image.apk
 
 ## сигнал оболочке внутри образа
 ДА — кнопка MirrorLink будет активной
