@@ -1,0 +1,135 @@
+# Проверки, которые Home делает перед показом кнопки
+
+== методы HomeApp, связанные с установкой ==
+1077:.method private enableExternalStorage()V
+1674:.method private loadEleadApplications()V
+3671:.method public enableEleadApplication(Ljava/lang/String;Z)Z
+4255:.method public getBeepEnable()Z
+4732:.method public getEnableEleadApplication(Ljava/lang/String;)Z
+5215:.method public getPackageEnabled(Ljava/lang/String;)Z
+6346:.method public loadBTMacAddress()Ljava/lang/String;
+6367:.method public loadPreferences(Landroid/content/Context;)V
+7670:.method public loadSysDevID()Ljava/lang/String;
+7691:.method public loadSysWifiMACAddress()Ljava/lang/String;
+9498:.method public setBeepEnable(Z)V
+10381:.method public setWifiApEnabled(Landroid/net/wifi/WifiConfiguration;Z)Z
+10573:.method public updateLastAudioDevicePackage()V
+10744:.method public updateLastPackage()V
+
+== getPackageInfo / getApplicationInfo во всей оболочке ==
+
+== контекст HomeApp.smali:3282 (mirrorlink) ==
+    const/4 v9, 0x0
+
+    iput v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->displayTable:I
+
+    .line 870
+    const/4 v9, 0x3
+
+    iput v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->volumeTable:I
+
+    .line 871
+    const/4 v9, 0x7
+
+    iput v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->audioChannel:I
+
+    .line 872
+    const/4 v9, 0x1
+
+    iput v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->videoChannel:I
+
+    .line 873
+    const/4 v9, 0x0
+
+    iput v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->wifiMode:I
+
+    .line 874
+    const/4 v9, 0x0
+
+    iput-boolean v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->beforeAccOff:Z
+
+    .line 875
+    const v9, 0x7f0c0117
+
+    invoke-virtual {p0, v9}, Ltw/com/elead/el830/home/HomeApp;->getString(I)Ljava/lang/String;
+
+    move-result-object v9
+
+    iput-object v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->vrCmd:Ljava/lang/String;
+
+    goto/16 :goto_23e
+
+    .line 877
+    :cond_4df
+    const-string v9, "com.fpt.mirrorlink.android"
+
+    invoke-virtual {v7, v9}, Ljava/lang/String;->equalsIgnoreCase(Ljava/lang/String;)Z
+
+    move-result v9
+
+    if-eqz v9, :cond_23e
+
+    .line 879
+    const v9, 0x7f0c002e
+
+    invoke-virtual {p0, v9}, Ltw/com/elead/el830/home/HomeApp;->getString(I)Ljava/lang/String;
+
+    move-result-object v9
+
+    iput-object v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->title:Ljava/lang/CharSequence;
+
+    .line 880
+    new-instance v9, Landroid/content/ComponentName;
+
+== контекст Home.smali:3243 ==
+    const/4 v12, 0x2
+
+    invoke-virtual {p0}, Ltw/com/elead/el830/home/Home;->getResources()Landroid/content/res/Resources;
+
+    move-result-object v13
+
+    const v14, 0x7f020057
+
+    invoke-virtual {v13, v14}, Landroid/content/res/Resources;->getDrawable(I)Landroid/graphics/drawable/Drawable;
+
+    move-result-object v13
+
+    aput-object v13, v11, v12
+
+    .line 520
+    sget-object v11, Ltw/com/elead/el830/home/Home;->mApplications:Ljava/util/ArrayList;
+
+    invoke-virtual {v11, v0}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    goto/16 :goto_ae
+
+    .line 521
+    :cond_3ef
+    const-string v11, "com.fpt.mirrorlink.android"
+
+    invoke-virtual {v9, v11}, Ljava/lang/String;->equalsIgnoreCase(Ljava/lang/String;)Z
+
+    move-result v11
+
+    if-eqz v11, :cond_ae
+
+    .line 522
+    iput-object v9, v0, Ltw/com/elead/el830/home/AppInfo;->Package:Ljava/lang/String;
+
+    .line 523
+    const v11, 0x7f0c002e
+
+    invoke-virtual {p0, v11}, Ltw/com/elead/el830/home/Home;->getString(I)Ljava/lang/String;
+
+    move-result-object v11
+
+    iput-object v11, v0, Ltw/com/elead/el830/home/AppInfo;->title:Ljava/lang/CharSequence;
+
+    .line 524
+    iget-object v11, v4, Landroid/content/pm/ResolveInfo;->activityInfo:Landroid/content/pm/ActivityInfo;
+
+    invoke-virtual {v11, v7}, Landroid/content/pm/ActivityInfo;->loadIcon(Landroid/content/pm/PackageManager;)Landroid/graphics/drawable/Drawable;
+
+    move-result-object v11
+
+    iput-object v11, v0, Ltw/com/elead/el830/home/AppInfo;->icon:Landroid/graphics/drawable/Drawable;
