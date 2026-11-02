@@ -114,32 +114,37 @@ SET_ACTIVITY = (
 
 
 def add_set_activity(text):
-    """В ветке «незнакомый пакет» задаёт интент для запуска."""
+    """В ветке «незнакомый пакет» задаёт интент для запуска.
+
+    Не привязываемся к именам меток: apktool и baksmali называют их
+    по-разному. Ориентир — последний put() в HashMap внутри метода: это и
+    есть ветка, куда попадают пакеты без специальной обработки.
+    """
     m = re.search(r'\.method private loadEleadApplications\(\)V.*?\n\.end method',
                   text, re.S)
     if not m:
         raise SystemExit('не найден loadEleadApplications')
     method = m.group(0)
 
-    # в baksmali метки склеены: строка ":cond_23e", следующая ":goto_23e"
-    m_label = re.search(r'^\s*:cond_23e\s*$', method, re.M)
-    if not m_label:
-        raise SystemExit('не найдена ветка cond_23e')
-
-    tail = method[m_label.end():]
-    # сразу после меток идёт put() в HashMap — интент задаём перед ним
-    m_put = re.search(r'^\s*invoke-virtual \{[^}]*\}, Ljava/util/HashMap;->put',
-                      tail, re.M)
-    if not m_put:
-        raise SystemExit('не найден put() после :cond_23e')
-    if 'ApplicationInfo;->setActivity' in tail[:m_put.start()]:
-        print('  setActivity в ветке по умолчанию уже есть')
+    if 'ApplicationInfo;->setActivity' in method:
+        print('  setActivity уже есть в методе — пропуск')
         return text
 
-    at = m_label.end() + m_put.start()
-    # перед вставкой нужен перенос строки после метки :goto_23e
-    new_method = method[:at] + SET_ACTIVITY + method[at:]
-    print('  в ветку «незнакомый пакет» добавлен setActivity')
+    puts = list(re.finditer(
+        r'invoke-virtual \{[^}]*\}, Ljava/util/HashMap;->put', method))
+    if not puts:
+        raise SystemExit('в loadEleadApplications нет put() в HashMap')
+    put = puts[-1]
+
+    # перед put() идёт sget-object с HashMap — от него и вставляем
+    head = method.rfind('sget-object', 0, put.start())
+    if head < 0:
+        raise SystemExit('не найден sget-object перед последним put()')
+
+    line_start = method.rfind('\n', 0, head) + 1
+    new_method = method[:line_start] + SET_ACTIVITY + method[line_start:]
+    print('  в ветку по умолчанию добавлен setActivity (перед put, строка %d)'
+          % method[:line_start].count('\n'))
     return text[:m.start()] + new_method + text[m.end():]
 
 

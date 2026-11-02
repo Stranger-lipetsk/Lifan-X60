@@ -77,7 +77,12 @@ jobs:
 
       - name: "Сборка APK"
         run: |
-          java -jar /tmp/apktool.jar b /tmp/HomeDec -o out/Home-patched.apk 2>&1 | tail -5
+          # smali обязан собраться без висячих ссылок — иначе APK не запустится
+          java -jar /tmp/apktool.jar b /tmp/HomeDec -o out/Home-patched.apk 2>&1 | tail -8
+          if [ ! -f out/Home-patched.apk ]; then
+            echo "СБОРКА НЕ УДАЛАСЬ" | tee -a reports/launcher-patch.txt
+            exit 1
+          fi
           ls -l out/Home-patched.apk /tmp/Home.apk
           sha256sum out/Home-patched.apk | tee -a reports/launcher-patch.txt
 
