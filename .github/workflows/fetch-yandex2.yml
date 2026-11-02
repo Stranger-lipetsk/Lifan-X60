@@ -1,0 +1,82 @@
+name: Яндекс Навигатор — попытка 2
+
+on:
+  push:
+    paths:
+      - 'autoanalysis/fetch-yandex2.txt'
+  workflow_dispatch:
+
+permissions: { contents: write }
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - name: "Инструменты"
+        run: |
+          sudo apt-get update -qq 2>/dev/null || true
+          sudo apt-get install -y -qq unzip >/dev/null 2>&1 || true
+          mkdir -p firmware/apks reports
+          echo "BT=$(ls -d /usr/local/lib/android/sdk/build-tools/* 2>/dev/null | sort -V | tail -1)" >> "$GITHUB_ENV"
+
+      - name: "apkmirror: получить ссылку на вариант"
+        continue-on-error: true
+        run: |
+          UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"
+          BASE="https://www.apkmirror.com"
+          P="$BASE/apk/direct-cursus-computer-systems-trading-llc/yandex-navigator/yandex-navigator-6-40-release/"
+          curl -s -A "$UA" -H "Accept-Language: en-US,en;q=0.9" -L --max-time 90 "$P" -o /tmp/v.html
+          echo "страница версии: $(stat -c%s /tmp/v.html) байт" | tee -a reports/yandex2.txt
+          # ссылки на конкретные варианты (arm-v7a / API 19)
+          grep -oE 'href="[^"]*/yandex-navigator-6-40[^"]*"' /tmp/v.html | sort -u | head -10 | tee -a reports/yandex2.txt
+          VAR=$(grep -oE 'href="[^"]*yandex-navigator-6-40-android-[^"]*"' /tmp/v.html | head -1 | sed 's/href="//;s/"$//')
+          if [ -z "$VAR" ]; then
+            VAR=$(grep -oE 'href="[^"]*yandex-navigator-6-40[^"]*"' /tmp/v.html | grep -v 'release/$' | head -1 | sed 's/href="//;s/"$//')
+          fi
+          echo "вариант: $VAR" | tee -a reports/yandex2.txt
+          if [ -n "$VAR" ]; then
+            curl -s -A "$UA" -L --max-time 90 "$BASE$VAR" -o /tmp/var.html
+            POST=$(grep -oE 'data-post="[0-9]+"' /tmp/var.html | head -1 | grep -oE '[0-9]+')
+            echo "data-post: $POST" | tee -a reports/yandex2.txt
+            if [ -n "$POST" ]; then
+              curl -s -A "$UA" -X POST --max-time 90 \
+                --data "action=post_download&data-post=$POST" \
+                -H "X-Requested-With: XMLHttpRequest" \
+                -H "Referer: $BASE$VAR" \
+                "$BASE/wp-admin/admin-ajax.php" -o /tmp/ajax.html
+              echo "ответ ajax: $(stat -c%s /tmp/ajax.html) байт" | tee -a reports/yandex2.txt
+              DL=$(grep -oE 'href="[^"]*(key=|download)[^"]*"' /tmp/ajax.html | head -3 | tee -a reports/yandex2.txt)
+              echo "ссылки: $DL" | tee -a reports/yandex2.txt
+            fi
+          fi
+
+      - name: "uptodown: взять файл"
+        continue-on-error: true
+        run: |
+          UA="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/121.0 Safari/537.36"
+          curl -s -A "$UA" -L --max-time 90 "https://yandex-navigator.ru.uptodown.com/android/versions" -o /tmp/u.html
+          echo "uptodown versions: $(stat -c%s /tmp/u.html)" | tee -a reports/yandex2.txt
+          grep -oE 'https://yandex-navigator.ru.uptodown.com/android/download/[0-9]+' /tmp/u.html | head -5 | tee -a reports/yandex2.txt
+          ID=$(grep -oE 'https://yandex-navigator.ru.uptodown.com/android/download/[0-9]+' /tmp/u.html | head -1)
+          if [ -n "$ID" ]; then
+            curl -s -A "$UA" -L --max-time 90 "$ID" -o /tmp/u2.html
+            echo "страница загрузки: $(stat -c%s /tmp/u2.html)" | tee -a reports/yandex2.txt
+            DATA=$(grep -oE 'data-url="[^"]*"' /tmp/u2.html | head -1 | sed 's/data-url="//;s/"$//')
+            echo "data-url: $DATA" | tee -a reports/yandex2.txt
+          fi
+
+      - name: "Итог"
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A reports firmware/apks
+          git diff --cached --quiet && exit 0
+          git commit -m "яндекс: попытка 2"
+          for try in 1 2 3 4 5; do
+            if git pull --rebase --autostash origin "${{ github.ref_name }}" >/dev/null 2>&1 \
+               && git push origin HEAD:${{ github.ref_name }}; then exit 0; fi
+            sleep 10; git rebase --abort >/dev/null 2>&1 || true
+          done
