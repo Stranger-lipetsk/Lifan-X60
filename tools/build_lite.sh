@@ -100,7 +100,7 @@ fi
 if ! python3 tools/build_system.py \
   --system out/system-original.img \
   --out "$OUT" \
-  --size-mb 512 \
+  --size-mb auto \
   "${REMOVE_ARGS[@]}" \
   "${EXTRA_ARGS[@]}" \
   --set-prop ro.product.locale.language=ru \
@@ -124,8 +124,14 @@ echo "===================== ЭТАП 4: проверка ====================="
   echo "=== файл ==="
   ls -l "$OUT"
   SZ=$(stat -c%s "$OUT")
-  echo "байт: $SZ (эталон раздела p3: 536870912)"
-  [ "$SZ" -eq 536870912 ] && echo "РАЗМЕР: OK" || echo "РАЗМЕР: НЕ СОВПАДАЕТ"
+  echo "байт: $SZ (раздел p3: 536870912 = 512 МиБ, образ должен быть НЕ БОЛЬШЕ)"
+  if [ "$SZ" -gt 536870912 ]; then
+    echo "РАЗМЕР: ОШИБКА — образ больше раздела, не влезет"
+  elif [ "$SZ" -lt 209715200 ]; then
+    echo "РАЗМЕР: ОШИБКА — образ подозрительно мал (< 200 МиБ)"
+  else
+    echo "РАЗМЕР: OK ($((SZ / 1024 / 1024)) МиБ, влезает в 512 МиБ)"
+  fi
 
   echo "=== ФС ==="
   dumpe2fs -h "$OUT" 2>/dev/null | grep -E "features|Block (size|count)|Inode size|volume name"
@@ -161,7 +167,7 @@ echo "=== автоподключение карт (install-recovery.sh) ==="
   echo "=== build.prop ==="
   debugfs -R 'cat /build.prop' "$OUT" 2>/dev/null | grep -E "locale|timezone|version.release"
 
-  echo "=== свободное место ==="
+  echo "=== свободное место внутри образа ==="
   dumpe2fs -h "$OUT" 2>/dev/null | grep -E "Block count|Free blocks"
   echo "=== sha256 ==="
   sha256sum "$OUT"

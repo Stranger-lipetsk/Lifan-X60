@@ -38,6 +38,19 @@ jobs:
         run: |
           mkdir -p /tmp/lifanwork
           bash tools/build_lite.sh 2>&1 | tail -120
+      - name: "Сводка размера"
+        if: always()
+        run: |
+          python3 - <<'PYEOF'
+          import os
+          p = 'out/system.img'
+          if os.path.exists(p):
+              sz = os.path.getsize(p)
+              print(f'образ: {sz} байт = {sz/1024/1024:.1f} МиБ')
+              print(f'раздел p3: 512 МиБ — образ {"ВЛЕЗАЕТ" if sz <= 536870912 else "НЕ ВЛЕЗАЕТ"}')
+          else:
+              print('образ не создан')
+          PYEOF
       - name: "Артефакт"
         if: always()
         uses: actions/upload-artifact@v4

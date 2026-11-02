@@ -287,10 +287,33 @@ def fix_ownership(root):
 # --------------------------------------------------------------------------
 # 5. Сборка образа
 # --------------------------------------------------------------------------
-def build_image(root, out_img, size_mb=512):
+PARTITION_MB = 512          # физический размер раздела p3
+SIZE_HEADROOM_MB = 40       # запас на метаданные ext4 и свободное место
+
+
+def auto_size_mb(total_bytes):
+    """Размер образа по содержимому: содержимое + запас, кратно 4 МиБ."""
+    need = total_bytes / 1024 / 1024 + SIZE_HEADROOM_MB
+    mb = int(need) + 1
+    mb = (mb + 3) // 4 * 4
+    return mb
+
+
+def build_image(root, out_img, size_mb='auto'):
     total, biggest = content_stats(root)
-    print(f'содержимое: {total / 1024 / 1024:.1f} МиБ '
-          f'(раздел p3 = {size_mb} МиБ)')
+    if size_mb == 'auto':
+        size_mb = auto_size_mb(total)
+        print(f'содержимое: {total / 1024 / 1024:.1f} МиБ → '
+              f'размер образа {size_mb} МиБ (раздел p3 = {PARTITION_MB} МиБ)')
+    else:
+        size_mb = int(size_mb)
+        print(f'содержимое: {total / 1024 / 1024:.1f} МиБ '
+              f'(образ {size_mb} МиБ, раздел p3 = {PARTITION_MB} МиБ)')
+
+    if size_mb > PARTITION_MB:
+        raise SystemExit(
+            f'ОШИБКА: образ {size_mb} МиБ больше раздела p3 ({PARTITION_MB} МиБ) — '
+            f'такой образ не влезет на устройство.')
     print('  крупнейшие файлы:')
     for sz, rel in biggest:
         print(f'    {sz / 1024 / 1024:8.1f} МиБ  /{rel}')
@@ -364,8 +387,9 @@ def main():
     ap.add_argument('--fw', help='архив прошивки (rar/zip) — взять system.img оттуда')
     ap.add_argument('--system', help='готовый system.img')
     ap.add_argument('--out', default='out/system.img', help='результат')
-    ap.add_argument('--size-mb', type=int, default=512,
-                    help='размер образа в МиБ (раздел p3 = 512)')
+    ap.add_argument('--size-mb', default='auto',
+                    help='размер образа в МиБ или "auto" (по содержимому, '
+                         'не больше раздела p3 = 512). По умолчанию auto')
     ap.add_argument('--remove', action='append', default=[], metavar='ПУТЬ',
                     help='удалить путь из системы (можно несколько раз)')
     ap.add_argument('--add-apk', action='append', default=[], metavar='APK[:/каталог]',
