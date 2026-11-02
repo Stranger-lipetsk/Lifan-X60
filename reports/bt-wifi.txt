@@ -1,0 +1,17 @@
+# Bluetooth и WiFi в прошивке
+
+## файлы Bluetooth в /system
+    593   40755 (2)      0      0    4096 26-Apr-2026 17:05 .
+    585   40755 (2)      0      0    4096 26-Apr-2026 17:05 ..
+    594  100644 (1)      0      0      91 26-Apr-2026 17:05 bt_vendor.conf
+
+   1072  100644 (1)      0      0   1633676 26-Apr-2026 17:05 libbluelet.so
+    312  100755 (1)      0   2000    5404 26-Apr-2026 17:05 bt_test
+    313  100755 (1)      0   2000    5356 26-Apr-2026 17:05 btpcmtest
+    547  100755 (1)      0   2000     799 26-Apr-2026 17:05 setup_btmac.sh
+## APK с Bluetooth
+     15  100644 (1)      0      0   294080 26-Apr-2026 17:05 Bluetooth.apk
+     26  100644 (1)      0      0   845792 26-Apr-2026 17:05 EL831CLF01_elBluetoothDial_2016.12.13.01.apk
+     27  100644 (1)      0      0   899003 26-Apr-2026 17:05 EL831CLF01_elBluetoothMusic_2016.12.13.01.apk
+     28  100644 (1)      0      0   1139049 26-Apr-2026 17:05 EL831CLF01_elBluetoothPhone_2016.12.13.01.apk
+     29  100644 (1)      0      0   912852 26-Apr-2026 17:05 EL831CLF01_elBluetoothSetup_2016.12.13.01.apk
