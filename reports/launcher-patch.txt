@@ -1,0 +1,12 @@
+патч /tmp/HomeDec/smali/tw/com/elead/el830/home/HomeApp.smali
+  добавлен в список экрана: ru.yandex.yandexnavi
+  добавлен в список экрана: org.prowl.torque
+  уже есть: com.navitel
+  проверка enable снята (1 место)
+не найдена ветка cond_23e
+
+## проверка результата
+### пакеты в списке главного экрана
+c998cfc2c77b9eed3d8ac0bb5b4d74f7589b2f152a47b0aa5861759a0a5e8394  out/Home-patched.apk
+КЛЮЧА НЕТ: секрет LAUNCHER_KEY_B64 не задан.
+Оболочка подписана системным testkey — нужен именно он.
