@@ -1,0 +1,89 @@
+name: Ресурсы экрана 2
+
+on:
+  push:
+    paths:
+      - 'autoanalysis/probe-assets2.txt'
+  workflow_dispatch:
+
+permissions: { contents: write }
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: "Инструменты"
+        run: |
+          sudo apt-get update -qq 2>/dev/null || true
+          sudo apt-get install -y -qq p7zip-full unzip curl >/dev/null 2>&1 || true
+          mkdir -p docs/mockup/parts probes
+      - name: "Java"
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: "Распаковать"
+        run: |
+          curl -sSL --retry 3 --max-time 300 -o /tmp/apktool.jar \
+            https://github.com/iBotPeaches/Apktool/releases/download/v2.9.3/apktool_2.9.3.jar
+          mkdir -p /tmp/rar
+          python3 - <<'PY'
+          import json, subprocess, urllib.parse, urllib.request
+          pk = 'https://disk.yandex.ru/d/qJdjjeB8Aiq3Lg'
+          url = ('https://cloud-api.yandex.net/v1/disk/public/resources'
+                 '?public_key=' + urllib.parse.quote(pk, safe='') + '&limit=100')
+          items = json.load(urllib.request.urlopen(url, timeout=60))['_embedded']['items']
+          it = [i for i in items if i['type'] == 'file' and '2016' in i['name']][0]
+          subprocess.run(['curl','-L','--fail','--retry','3','--max-time','2500',
+                          '-o','/tmp/fw.rar', it['file']], check=True)
+          PY
+          7z x -y -aos -o/tmp/rar /tmp/fw.rar >/dev/null 2>&1 || true
+          SYSIMG="$(find /tmp/rar -name system.img | head -1)"
+          debugfs -R "dump /priv-app/EL830LF01_Home.apk /tmp/Home.apk" "$SYSIMG" 2>&1 | tail -1
+          java -jar /tmp/apktool.jar d -f /tmp/Home.apk -o /tmp/HomeX 2>&1 | tail -2
+      - name: "Размеры и стили"
+        run: |
+          OUT="$GITHUB_WORKSPACE/probes/home-dimens.txt"
+          {
+            echo "# Размеры главного экрана"
+            echo "## dimens"
+            grep -E "table_layout|applications_layout|btn_show|btn_hide|app_item" /tmp/HomeX/res/values/dimens.xml 2>/dev/null
+            echo
+            echo "## стили кнопок"
+            grep -A6 "ListTheme\|FlipShowButtonClick" /tmp/HomeX/res/values/styles.xml 2>/dev/null | head -30
+            echo
+            echo "## app_item.xml"
+            cat /tmp/HomeX/res/layout/app_item.xml 2>/dev/null
+            echo
+            echo "## цвета"
+            grep -E "color|background" /tmp/HomeX/res/values/colors.xml 2>/dev/null | head -20
+          } > "$OUT" 2>&1
+          cat "$OUT"
+      - name: "Скопировать картинки"
+        run: |
+          D=/tmp/HomeX/res/drawable-mdpi-v4
+          for n in mainmenu_bg main_ico_clock_0 main_ico_clock_1 main_ico_clock_2 main_ico_clock_3 \
+                   main_ico_clock_4 main_ico_clock_5 main_ico_clock_6 main_ico_clock_7 \
+                   main_ico_clock_8 main_ico_clock_9 main_ico_clock_colon \
+                   main_bg_circle_list window_bg_full favorite_bg app_item_bg; do
+            [ -f "$D/$n.png" ] && cp "$D/$n.png" "$GITHUB_WORKSPACE/docs/mockup/parts/"
+          done
+          find /tmp/HomeX/res -name "favorite*" -o -name "*app_item*" | head -6 | while read f; do
+            cp "$f" "$GITHUB_WORKSPACE/docs/mockup/parts/f_$(basename $f)" 2>/dev/null
+          done
+          ls -l "$GITHUB_WORKSPACE/docs/mockup/parts/"
+      - name: "Коммит"
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A probes docs/mockup
+          git diff --cached --quiet && exit 0
+          git commit -m "проба: ресурсы экрана 2"
+          for try in 1 2 3 4 5; do
+            if git pull --rebase --autostash origin "${{ github.ref_name }}" >/dev/null 2>&1 \
+               && git push origin HEAD:${{ github.ref_name }}; then exit 0; fi
+            sleep 10; git rebase --abort >/dev/null 2>&1 || true
+          done
