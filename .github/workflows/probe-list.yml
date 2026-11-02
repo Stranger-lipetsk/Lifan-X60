@@ -1,0 +1,96 @@
+name: Разбор списка приложений
+
+on:
+  push:
+    paths:
+      - 'autoanalysis/probe-list.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: "Инструменты"
+        run: |
+          sudo apt-get update -qq 2>/dev/null || true
+          sudo apt-get install -y -qq p7zip-full unzip curl >/dev/null 2>&1 || true
+          mkdir -p probes
+          curl -sSL --retry 3 --max-time 300 -o /tmp/baksmali.jar \
+            https://github.com/baksmali/smali/releases/download/v2.5.2/baksmali-2.5.2.jar
+
+      - name: "Скачать и распаковать"
+        run: |
+          mkdir -p /tmp/rar
+          python3 - <<'PY'
+          import json, subprocess, urllib.parse, urllib.request
+          pk = 'https://disk.yandex.ru/d/qJdjjeB8Aiq3Lg'
+          url = ('https://cloud-api.yandex.net/v1/disk/public/resources'
+                 '?public_key=' + urllib.parse.quote(pk, safe='') + '&limit=100')
+          items = json.load(urllib.request.urlopen(url, timeout=60))['_embedded']['items']
+          it = [i for i in items if i['type'] == 'file' and '2016' in i['name']][0]
+          subprocess.run(['curl', '-L', '--fail', '--retry', '3', '--max-time', '2500',
+                          '-o', '/tmp/fw.rar', it['file']], check=True)
+          PY
+          7z x -y -aos -o/tmp/rar /tmp/fw.rar >/dev/null 2>&1 || true
+          SYSIMG="$(find /tmp/rar -name system.img | head -1)"
+          debugfs -R "dump /priv-app/EL830LF01_Home.apk /tmp/Home.apk" "$SYSIMG" 2>&1 | tail -1
+          mkdir -p /tmp/home && cd /tmp/home && unzip -o -q /tmp/Home.apk
+          java -jar /tmp/baksmali.jar d classes.dex -o smali 2>&1 | tail -2
+
+      - name: "Жёстко заданный список + Config"
+        run: |
+          OUT="${GITHUB_WORKSPACE}/probes/home6-list.txt"
+          cd /tmp/home
+          {
+            echo "# Список приложений главного экрана (жёстко в коде) и класс Config"
+            echo
+            echo "== метод со списком (HomeApp.smali 1380-1620) =="
+            sed -n '1380,1620p' smali/tw/com/elead/el830/home/HomeApp.smali
+            echo
+            echo "== класс Config: откуда читает настройки =="
+            find smali -name "Config.smali" | head
+            for f in $(find smali -name "Config.smali"); do
+              echo "--- $f"
+              grep -n "const-string\|\.method" "$f" | head -80
+            done
+          } > "$OUT" 2>&1 || true
+          wc -l "$OUT"
+
+      - name: "Контекст нажатия: HomeService.smali:7975"
+        run: |
+          OUT="${GITHUB_WORKSPACE}/probes/home6-click.txt"
+          cd /tmp/home
+          {
+            echo "# Кто и с какими аргументами вызывает startNewActivity"
+            echo
+            echo "== HomeService.smali 7900-7990 =="
+            sed -n '7900,7990p' smali/tw/com/elead/el830/home/HomeService.smali
+            echo
+            echo "== метод getPackageName/getActivity в ApplicationInfo =="
+            grep -n "\.method" smali/tw/com/elead/el830/home/ApplicationInfo.smali
+            echo
+            echo "== методы HomeService рядом с getApplicationInfo =="
+            grep -n "mEleadApplications;->get\|Ltw/com/elead/el830/home/ApplicationInfo;" \
+              smali/tw/com/elead/el830/home/HomeService.smali | head -30
+          } > "$OUT" 2>&1 || true
+          wc -l "$OUT"
+
+      - name: "Коммит"
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A probes
+          if git diff --cached --quiet; then echo "нет изменений"; exit 0; fi
+          git commit -m "проба: жёстко заданный список приложений и Config"
+          for try in 1 2 3 4 5; do
+            if git pull --rebase --autostash origin "${{ github.ref_name }}" >/dev/null 2>&1 \
+               && git push origin HEAD:${{ github.ref_name }}; then exit 0; fi
+            sleep 10; git rebase --abort >/dev/null 2>&1 || true
+          done
