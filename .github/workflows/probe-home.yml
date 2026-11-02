@@ -1,9 +1,9 @@
-name: Разбор оболочки Elead Home
+name: Разбор оболочки Home
 
 on:
   push:
     paths:
-      - 'autoanalysis/probehome.txt'
+      - 'autoanalysis/probe-home.txt'
   workflow_dispatch:
 
 permissions:
@@ -15,79 +15,93 @@ jobs:
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
+
       - name: "Инструменты"
         run: |
           sudo apt-get update -qq 2>/dev/null || true
-          sudo apt-get install -y -qq p7zip-full unrar-free e2fsprogs >/dev/null 2>&1 || true
-      - name: "Скачать и распаковать"
+          sudo apt-get install -y -qq p7zip-full unzip curl >/dev/null 2>&1 || true
+          mkdir -p probes
+          SDK=/usr/local/lib/android/sdk
+          BT=$(ls -d "$SDK"/build-tools/* 2>/dev/null | sort -V | tail -1)
+          echo "build-tools: $BT"
+          echo "BT=$BT" >> "$GITHUB_ENV"
+          curl -sSL --retry 3 --max-time 300 -o /tmp/baksmali.jar \
+            https://github.com/baksmali/smali/releases/download/v2.5.2/baksmali-2.5.2.jar
+          ls -l /tmp/baksmali.jar
+
+      - name: "Скачать прошивку"
         run: |
-          mkdir -p out reports /tmp/rar
+          mkdir -p /tmp/rar
           python3 - <<'PY'
           import json, subprocess, urllib.parse, urllib.request
           pk = 'https://disk.yandex.ru/d/qJdjjeB8Aiq3Lg'
           url = ('https://cloud-api.yandex.net/v1/disk/public/resources'
                  '?public_key=' + urllib.parse.quote(pk, safe='') + '&limit=100')
           items = json.load(urllib.request.urlopen(url, timeout=60))['_embedded']['items']
-          it = [i for i in items if i['type']=='file' and '2016' in i['name']][0]
-          subprocess.run(['curl','-L','--fail','--retry','3','--max-time','2500',
-                          '-o','/tmp/fw.rar',it['file']], check=True)
+          it = [i for i in items if i['type'] == 'file' and '2016' in i['name']][0]
+          subprocess.run(['curl', '-L', '--fail', '--retry', '3', '--max-time', '2500',
+                          '-o', '/tmp/fw.rar', it['file']], check=True)
           PY
           7z x -y -aos -o/tmp/rar /tmp/fw.rar >/dev/null 2>&1 || true
-          cp "$(find /tmp/rar -name system.img | head -1)" out/system.img
-      - name: "Конфигураторы приложений + разбор Home.apk"
+          find /tmp/rar -name system.img | head -1
+
+      - name: "Манифест оболочки и mac_permissions"
         run: |
-          IMG=out/system.img
-          mkdir -p /tmp/etc
-          for f in component_register core_register contentpipe_register; do
-            debugfs -R "dump /etc/$f /tmp/etc/$f" $IMG 2>/dev/null
-          done
+          SYSIMG="$(find /tmp/rar -name system.img | head -1)"
+          OUT="${GITHUB_WORKSPACE}/probes/home-manifest.txt"
           {
-            echo "######## component_register ########"
-            cat /tmp/etc/component_register 2>/dev/null | head -120
+            echo "# Манифест EL830LF01_Home.apk"
             echo
-            echo "######## core_register ########"
-            cat /tmp/etc/core_register 2>/dev/null | head -60
+            debugfs -R "dump /priv-app/EL830LF01_Home.apk /tmp/Home.apk" "$SYSIMG" 2>&1 | tail -2
+            "$BT/aapt" dump xmltree /tmp/Home.apk AndroidManifest.xml 2>&1 | grep -iE "E: (activity|service|receiver|provider)|A: android:name|action|category|permission|exported" | head -200
             echo
-            echo "######## contentpipe_register ########"
-            cat /tmp/etc/contentpipe_register 2>/dev/null | head -60
-          } > reports/конфигураторы-приложений.txt
-          cat reports/конфигураторы-приложений.txt | head -150
-      - name: "Разбор EL830LF01_Home.apk"
+            echo "## mac_permissions.xml (кто считается платформой)"
+            debugfs -R "dump /etc/security/mac_permissions.xml /tmp/mac.xml" "$SYSIMG" 2>&1 | tail -1
+            cat /tmp/mac.xml 2>/dev/null | head -60
+          } > "$OUT" 2>&1 || true
+          wc -l "$OUT"
+
+      - name: "Разбор кода: как включается кнопка MirrorLink"
         run: |
-          IMG=out/system.img
-          debugfs -R "dump /priv-app/EL830LF01_Home.apk /tmp/Home.apk" $IMG 2>/dev/null
-          debugfs -R "dump /priv-app/ElSettings.apk /tmp/ElSettings.apk" $IMG 2>/dev/null
+          OUT="${GITHUB_WORKSPACE}/probes/home-mirrorlink-code.txt"
+          mkdir -p /tmp/home && cd /tmp/home
+          unzip -o -q /tmp/Home.apk
+          java -jar /tmp/baksmali.jar d classes.dex -o smali 2>&1 | tail -3
+          find smali -name "*Mirror*" | head
           {
-            echo "######## Home.apk: строки о источниках списка приложений ########"
-            unzip -p /tmp/Home.apk classes.dex 2>/dev/null | strings -n 6 | \
-              grep -iE "component_register|queryIntentActivities|getInstalledApplications|getInstalledPackages|LAUNCHER|packageName|register" | sort -u | head -60
+            echo "# Как оболочка включает кнопку MirrorLink"
             echo
-            echo "######## Home.apk: имена пакетов, которые он знает ########"
-            unzip -p /tmp/Home.apk classes.dex 2>/dev/null | strings -n 6 | \
-              grep -E "^(com|tw)\.[a-z0-9.]+$" | sort -u | head -60
+            echo "## файлы с MirrorLink"
+            grep -rl -i "mirrorlink" smali | head -20
             echo
-            echo "######## ElSettings.apk: имена пакетов ########"
-            unzip -p /tmp/ElSettings.apk classes.dex 2>/dev/null | strings -n 6 | \
-              grep -E "^(com|tw)\.[a-z0-9.]+$" | sort -u | head -60
-          } 2>&1 | tee reports/разбор-home.txt | head -120
-      - name: "Проверка подписи APK переключателя"
-        run: |
-          unzip -l switcher/switcher.apk 2>/dev/null | grep -E "META-INF" || echo "нет META-INF"
-      - name: "Коммит"
+            echo "## все обращения к PACKAGE_MIRRORLINK"
+            grep -rn "PACKAGE_MIRRORLINK\|MIRRORLINK_STATE\|enableMirrorLinkIcon" smali | head -30
+            echo
+            echo "## MirrorLinkReceiver целиком"
+            for f in $(grep -rl -i "mirrorlink" smali | grep -i mirror | head -3); do
+              echo "--- $f"
+              cat "$f"
+            done
+            echo
+            echo "## методы, где вызывается enableMirrorLinkIcon"
+            for f in $(grep -rl "enableMirrorLinkIcon" smali); do
+              echo "--- $f"
+              grep -n -A40 "enableMirrorLinkIcon" "$f" | head -120
+            done
+          } > "$OUT" 2>&1 || true
+          wc -l "$OUT"
+
+      - name: "Коммит отчётов"
         if: always()
         run: |
+          ls -l probes/
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          printf 'firmware/\nout/\nswitcher/build/\n' > .git/info/exclude
-          git add -A reports
+          git add -A probes
           if git diff --cached --quiet; then echo "нет изменений"; exit 0; fi
-          git commit -m "разбор оболочки Elead Home: источники списка приложений"
+          git commit -m "проба: разбор кода оболочки — условие включения кнопки MirrorLink"
           for try in 1 2 3 4 5; do
             if git pull --rebase --autostash origin "${{ github.ref_name }}" >/dev/null 2>&1 \
-               && git push origin HEAD:${{ github.ref_name }}; then
-              echo "отчёты отправлены (попытка $try)"; exit 0
-            fi
-            echo "попытка $try не удалась, повтор через 10 с"; sleep 10
-            git rebase --abort >/dev/null 2>&1 || true
+               && git push origin HEAD:${{ github.ref_name }}; then exit 0; fi
+            sleep 10; git rebase --abort >/dev/null 2>&1 || true
           done
-          echo "не удалось отправить отчёты — не критично, образ собран"
