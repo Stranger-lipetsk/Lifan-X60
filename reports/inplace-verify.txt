@@ -1,11 +1,11 @@
 # Проверка стадии 3
 
 ## APK, собранный сейчас
-cfedc6b362cc975daa40668eb83fc1aface0987b17e0aa325cb93ee88a471f6e  switcher/switcher.apk
+df1d1fc0896c66ad7cab98bb1e08b6334d38fb85a32751384b03a87934a5364b  switcher/switcher.apk
 
 ## APK, вытащенный из готового образа
 debugfs 1.47.0 (5-Feb-2023)
-cfedc6b362cc975daa40668eb83fc1aface0987b17e0aa325cb93ee88a471f6e  /tmp/from-image.apk
+df1d1fc0896c66ad7cab98bb1e08b6334d38fb85a32751384b03a87934a5364b  /tmp/from-image.apk
 
 ## сигнал оболочке внутри образа
 ДА — кнопка MirrorLink будет активной
@@ -13,3 +13,6 @@ cfedc6b362cc975daa40668eb83fc1aface0987b17e0aa325cb93ee88a471f6e  /tmp/from-imag
 ## скрипт карт внутри образа
 dump: Filesystem not open
 grep: /tmp/from-image.sh: No such file or directory
+строк с сигналом MirrorLink: 
+grep: /tmp/from-image.sh: No such file or directory
+ждёт запуск оболочки: 
