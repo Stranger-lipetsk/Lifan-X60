@@ -1,0 +1,46 @@
+# Проверка файла 17wFrJMb-WxTPDuu9ueA3zhilBuaMnC5Y
+
+## https://drive.google.com/uc?export=download&id=17wFrJMb-WxTPDuu9ueA3zhilBuaMnC5Y
+код: 200  размер: 2473
+тип: content-type: text/html; charset=utf-8
+первые байты: 0000000   <   !   D   O   C   T   Y   P   E       h   t   m   l   >   <
+
+## https://drive.google.com/uc?id=17wFrJMb-WxTPDuu9ueA3zhilBuaMnC5Y&export=download&confirm=t
+код: 200  размер: 2473
+тип: content-type: text/html; charset=utf-8
+первые байты: 0000000   <   !   D   O   C   T   Y   P   E       h   t   m   l   >   <
+
+## https://drive.usercontent.google.com/download?id=17wFrJMb-WxTPDuu9ueA3zhilBuaMnC5Y&export=download&confirm=t
+код: 200  размер: 13389061
+тип: content-type: application/octet-stream
+первые байты: 0000000   P   K 003 004  \n  \0  \0  \b  \0  \0 031 035 220   8   > 333
+ВЕРДИКТ: получен ZIP/APK!
+
+## https://docs.google.com/uc?export=download&id=17wFrJMb-WxTPDuu9ueA3zhilBuaMnC5Y
+код: 200  размер: 2473
+тип: content-type: text/html; charset=utf-8
+первые байты: 0000000   <   !   D   O   C   T   Y   P   E       h   t   m   l   >   <
+
+## https://www.googleapis.com/drive/v3/files/17wFrJMb-WxTPDuu9ueA3zhilBuaMnC5Y?alt=media
+код: 403  размер: 254
+тип: content-type: application/json; charset=UTF-8
+первые байты: 0000000   {  \n           "   e   r   r   o   r   "   :       {  \n    
+
+## https://drive.google.com/file/d/17wFrJMb-WxTPDuu9ueA3zhilBuaMnC5Y/view
+код: 200  размер: 132067
+тип: content-type: text/html; charset=utf-8
+первые байты: 0000000   <   !   D   O   C   T   Y   P   E       h   t   m   l   >   <
+
+## итог
+ФАЙЛ ПОЛУЧЕН: 13389061 байт
+package: name='org.prowl.torque' versionCode='1205' versionName='1.8.205' platformBuildVersionName='9' platformBuildVersionCode='28' compileSdkVersion='28' compileSdkVersionCodename='9'
+install-location:'auto'
+sdkVersion:'5'
+Archive:  firmware/apks/yandex-navigator.apk
+  Length      Date    Time    Name
+---------  ---------- -----   ----
+      422  2008-04-16 03:40   assets/Emerald M3D ECU.csv
+    16381  2008-04-16 03:40   assets/Orion BMS.csv
+    10963  2008-04-16 03:40   assets/Prius Gen 2 (2004-2009).csv
+    22566  2008-04-16 03:40   assets/Prius Gen 3 (2010+).csv
+    27181  2008-04-16 03:40   assets/Prius PHV.csv
