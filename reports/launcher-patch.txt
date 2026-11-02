@@ -3,10 +3,20 @@
   добавлен в список экрана: org.prowl.torque
   уже есть: com.navitel
   проверка enable снята (1 место)
-не найдена ветка cond_23e
+  setActivity уже есть в методе — пропуск
+готово
 
 ## проверка результата
 ### пакеты в списке главного экрана
-e9f8f695785e2ec98c44ba2ead3bdec3ae2901e86cbb39bc01b6ccd4f22d8f84  out/Home-patched.apk
+  ru.yandex.yandexnavi: 1
+  org.prowl.torque: 1
+  com.navitel: 2
+### проверка enable в gotoEleadApplication
+58:    iget-boolean v6, v5, Ltw/com/elead/el830/home/ApplicationInfo;->enable:Z
+59-
+60-    goto :cond_2
+### setActivity в ветке cond_23e
+11
+ad2e076a39ed462b714710281f86d7a9595699f1303a8f2196e0cf8c6b608fc9  out/Home-patched.apk
 КЛЮЧА НЕТ: секрет LAUNCHER_KEY_B64 не задан.
 Оболочка подписана системным testkey — нужен именно он.
