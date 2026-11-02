@@ -1,0 +1,21 @@
+# WiFi: файлы, прошивка, калибровка
+
+## /etc/wifi/wlconf
+debugfs 1.47.0 (5-Feb-2023)
+    805   40755 (2)      0      0    4096 26-Apr-2026 17:05 .
+    802   40755 (2)      0      0    4096 26-Apr-2026 17:05 ..
+    806  100644 (1)      0      0    9251 26-Apr-2026 17:05 struct.bin
+    807  100644 (1)      0      0    1226 26-Apr-2026 17:05 wl18xx-conf-default.bin
+
+
+## прошивки радио (*.bin) во всём /etc
+
+## wpa_supplicant.conf
+
+## wl1271-nvs.bin где-нибудь
+
+## каталог /system/bin/wifi
+debugfs 1.47.0 (5-Feb-2023)
+/bin/wifi: File not found by ext2_lookup 
+
+## rc.wifi (если есть)
