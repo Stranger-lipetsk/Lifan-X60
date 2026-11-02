@@ -106,12 +106,18 @@ jobs:
             done
           } | tee reports/inplace-сводка.md
 
+<<<<<<< HEAD
       - name: "Публикация стадии 1 в релиз"
         # релиз не расходует квоту хранилища Actions и не истекает через 90 дней
+=======
+      - name: "Публикация образов в релизы"
+        # релизы не расходуют квоту хранилища Actions и не истекают через 90 дней
+>>>>>>> 930ae51 (feat(ci): публиковать полный образ (стадия 3) и запасной (стадия 2))
         if: always()
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+<<<<<<< HEAD
           if [ ! -f out/stage1-clean.img ]; then echo "нет образа"; exit 0; fi
           cp out/stage1-clean.img out/system.img
           NOTE="Стадия 1: заводской system.img, из которого удалены только лишние
@@ -124,6 +130,23 @@ jobs:
               --title "Lite-образ, стадия 1 (проверка)" \
               --notes "$NOTE"
           fi
+=======
+          pub() {   # $1 = файл, $2 = тег, $3 = заголовок, $4 = описание
+            [ -f "$1" ] || { echo "нет $1"; return 0; }
+            cp "$1" out/upload.img
+            if gh release view "$2" >/dev/null 2>&1; then
+              gh release upload "$2" out/upload.img --clobber
+            else
+              gh release create "$2" out/upload.img --title "$3" --notes "$4"
+            fi
+          }
+          pub out/stage3-full.img lite-full \
+            "Lite-образ (полный)" \
+            "Заводской system.img, изменённый без пересборки файловой системы: удалены 9 лишних приложений, добавлена панель выхода в Android, добавлен скрипт автоподключения карт. Суперблок, журнал и размещение inode заводские."
+          pub out/stage2-panel.img lite-panel \
+            "Lite-образ (без скрипта карт)" \
+            "То же, что lite-full, но без install-recovery.sh — запасной вариант, если полный образ не загрузится."
+>>>>>>> 930ae51 (feat(ci): публиковать полный образ (стадия 3) и запасной (стадия 2))
 
       - name: "Коммит отчётов"
         if: always()
