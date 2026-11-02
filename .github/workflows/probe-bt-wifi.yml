@@ -1,0 +1,101 @@
+name: Разбор Bluetooth и WiFi
+
+on:
+  push:
+    paths:
+      - 'autoanalysis/probe-bt.txt'
+  workflow_dispatch:
+
+permissions: { contents: write }
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - name: "Инструменты"
+        run: |
+          sudo apt-get update -qq 2>/dev/null || true
+          sudo apt-get install -y -qq p7zip-full unzip curl >/dev/null 2>&1 || true
+          mkdir -p reports
+      - name: "Скачать прошивку"
+        run: |
+          mkdir -p /tmp/rar
+          python3 - <<'PY'
+          import json, subprocess, urllib.parse, urllib.request
+          pk = 'https://disk.yandex.ru/d/qJdjjeB8Aiq3Lg'
+          url = ('https://cloud-api.yandex.net/v1/disk/public/resources'
+                 '?public_key=' + urllib.parse.quote(pk, safe='') + '&limit=100')
+          items = json.load(urllib.request.urlopen(url, timeout=60))['_embedded']['items']
+          it = [i for i in items if i['type'] == 'file' and '2016' in i['name']][0]
+          subprocess.run(['curl','-L','--fail','--retry','3','--max-time','2500',
+                          '-o','/tmp/fw.rar', it['file']], check=True)
+          PY
+          7z x -y -aos -o/tmp/rar /tmp/fw.rar >/dev/null 2>&1 || true
+          cp "$(find /tmp/rar -name system.img | head -1)" /tmp/system.img
+          cp "$(find /tmp/rar -name "kernel*.img" | head -1)" /tmp/kernel.img 2>/dev/null || true
+          ls -l /tmp/*.img
+
+      - name: "Что есть для Bluetooth"
+        run: |
+          OUT="$GITHUB_WORKSPACE/reports/bt-wifi.txt"
+          {
+            echo "# Bluetooth и WiFi в прошивке"
+            echo
+            echo "## файлы Bluetooth в /system"
+            debugfs -R "ls -l /etc/bluetooth" /tmp/system.img 2>/dev/null
+            debugfs -R "ls -l /lib" /tmp/system.img 2>/dev/null | grep -i blue
+            debugfs -R "ls -l /bin" /tmp/system.img 2>/dev/null | grep -iE "hci|bluetooth|bt"
+            echo "## APK с Bluetooth"
+            debugfs -R "ls -l /app" /tmp/system.img 2>/dev/null | grep -i blue
+            debugfs -R "ls -l /priv-app" /tmp/system.img 2>/dev/null | grep -i blue
+            echo
+            echo "## firmware для WiFi"
+            debugfs -R "ls -l /etc/firmware" /tmp/system.img 2>/dev/null | head -20
+            echo
+            echo "## настройки wifi"
+            debugfs -R "ls -l /etc/wifi" /tmp/system.img 2>/dev/null
+            echo
+            echo "## есть ли wpa_supplicant"
+            debugfs -R "ls -l /bin/wpa_supplicant" /tmp/system.img 2>/dev/null
+            debugfs -R "ls -l /bin/hostapd" /tmp/system.img 2>/dev/null
+            echo
+            echo "## что говорит build.prop про bluetooth/wifi"
+            debugfs -R "dump /build.prop /tmp/bp.txt" /tmp/system.img 2>/dev/null
+            grep -iE "bluetooth|wifi|wlan|bt" /tmp/bp.txt
+          } > "$OUT" 2>&1
+          cat "$OUT"
+
+      - name: "Драйверы в ядре"
+        run: |
+          OUT="$GITHUB_WORKSPACE/reports/bt-wifi.txt"
+          {
+            echo
+            echo "## драйверы в ядре (строки)"
+            for d in hci_uart bluetooth ftdi_sio ch341 pl2303 cp210x wl12xx wlcore; do
+              n=$(grep -ci "$d" /tmp/kernel.img 2>/dev/null || echo 0)
+              echo "  $d: $n"
+            done
+            echo
+            echo "## USB-серийные устройства (контекст)"
+            grep -aoE "(ftdi|ch341|pl2303|cp210x)[a-z_]*" /tmp/kernel.img 2>/dev/null | sort | uniq -c | head -10
+            echo
+            echo "## bluetooth стек"
+            grep -aoE "hci_[a-z_]+|btusb|bluez" /tmp/kernel.img 2>/dev/null | sort | uniq -c | head -10
+          } >> "$OUT" 2>&1
+          tail -30 "$OUT"
+
+      - name: "Коммит"
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A reports
+          git diff --cached --quiet && exit 0
+          git commit -m "проба: bluetooth и wifi"
+          for try in 1 2 3 4 5; do
+            if git pull --rebase --autostash origin "${{ github.ref_name }}" >/dev/null 2>&1 \
+               && git push origin HEAD:${{ github.ref_name }}; then exit 0; fi
+            sleep 10; git rebase --abort >/dev/null 2>&1 || true
+          done
