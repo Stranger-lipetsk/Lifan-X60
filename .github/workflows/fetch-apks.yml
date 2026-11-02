@@ -40,7 +40,9 @@ jobs:
               return r.stdout.strip()
 
           for i, fid in enumerate(IDS, 1):
-              base = 'https://drive.google.com/uc?export=download&id=' + fid
+              # рабочая точка входа: отдаёт файл даже при закрытом «просмотре»
+              base = ('https://drive.usercontent.google.com/download?id=' + fid
+                      + '&export=download&confirm=t')
               out = '/tmp/dl%d.bin' % i
               code = curlm(base, out)
               size = os.path.getsize(out) if os.path.exists(out) else 0
