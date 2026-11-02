@@ -102,7 +102,8 @@ jobs:
             echo
             echo "## скрипт карт внутри образа"
             debugfs -R "dump /etc/install-recovery.sh /tmp/from-image.sh" out/stage3-full.img 2>&1 | tail -1
-            grep -c "UsbIfaceReady" /tmp/from-image.sh || true
+            echo "строк с сигналом MirrorLink: $(grep -c 'UsbIfaceReady' /tmp/from-image.sh)"
+            echo "ждёт запуск оболочки: $(grep -c 'tw.com.elead.el830.home' /tmp/from-image.sh)"
           } 2>&1 | tee reports/inplace-verify.txt
 
       - name: "Сводка"

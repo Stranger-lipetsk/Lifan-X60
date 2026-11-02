@@ -38,20 +38,43 @@ MAP_DIR=NavitelContent/Maps
 
 # --------------------------------------------------------------------------
 #  Сигнал штатной оболочке «MirrorLink готов».
-#  Оболочка может стартовать позже скрипта, поэтому шлём несколько раз
-#  с интервалом — потерянный сигнал не страшен, лишний тоже.
+#
+#  Кнопка MirrorLink на главном экране магнитолы СЕРАЯ, пока оболочка не
+#  получит broadcast "vn.com.fsoft.UsbIfaceReady" (HomeService$24 в
+#  EL830LF01_Home.apk вызывает по нему enableMirrorLinkIcon(true)).
+#  Нажать серую кнопку нельзя, запустить панель вручную тоже — поэтому
+#  сигнал обязан прийти сам при загрузке. Отправляем его отсюда.
+#
+#  Оболочка стартует позже этого скрипта, поэтому сначала ждём её процесс,
+#  затем шлём сигнал несколько раз: лишний сигнал безвреден.
 # --------------------------------------------------------------------------
 announce_ready() {
+    # 1. ждём, пока поднимется оболочка (максимум ~2 минуты)
     i=0
-    while [ $i -lt 6 ]; do
-        if [ -x /system/bin/am ]; then
-            /system/bin/am broadcast -a vn.com.fsoft.UsbIfaceReady \
-                >> $LOG 2>&1
+    while [ $i -lt 60 ]; do
+        if ps 2>/dev/null | grep -q "tw.com.elead.el830.home"; then
+            echo "оболочка запущена (жду ${i} циклов)" >> $LOG
+            break
         fi
         i=$((i + 1))
-        sleep 5
+        sleep 2
     done
-    echo "сигнал MirrorLink отправлен ($i раз)" >> $LOG
+
+    # 2. ещё немного ждём: оболочке нужно время, чтобы зарегистрировать приёмник
+    sleep 10
+
+    # 3. шлём сигнал несколько раз
+    sent=0
+    n=0
+    while [ $n -lt 10 ]; do
+        if [ -x /system/bin/am ]; then
+            /system/bin/am broadcast -a vn.com.fsoft.UsbIfaceReady \
+                >> $LOG 2>&1 && sent=$((sent + 1))
+        fi
+        n=$((n + 1))
+        sleep 6
+    done
+    echo "сигнал MirrorLink отправлен: $sent из $n" >> $LOG
 }
 
 mkdir -p /data/local/tmp 2>/dev/null
