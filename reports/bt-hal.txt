@@ -1,0 +1,38 @@
+# Bluetooth HAL и USB
+
+## все библиотеки в /lib/hw
+(12) .. 993 (28) a2dp_sink.default.so 
+(24) camera.imx6.so 
+(28) audio.usb.default.so 
+(28) gralloc.default.so 
+(28) gralloc_viv.imx6.so 
+(28) keystore.default.so 
+(32) audio.primary.default.so 
+(32) elead_video.default.so 
+(32) hwcomposer_fsl.imx6.so 
+(32) local_time.default.so 
+(3432) power.imx6.so 
+(36) audio.r_submix.default.so 
+
+## есть ли bluetooth.default.so
+debugfs 1.47.0 (5-Feb-2023)
+/lib/hw/bluetooth.default.so: File not found by ext2_lookup 
+
+## bluetoothd / bluez утилиты
+/bin/bluetoothd: 0
+/bin/hciconfig: 0
+/bin/hcitool: 0
+/bin/brcm_patchram_plus: 0
+/bin/hciattach: 0
+
+## пакет com.android.bluetooth есть?
+ 15  (24) Bluetooth.apk    16  (20) Camera2.apk    17  (28) CertInstaller.apk   
+ 26  (52) EL831CLF01_elBluetoothDial_2016.12.13.01.apk   
+ 27  (56) EL831CLF01_elBluetoothMusic_2016.12.13.01.apk   
+ 28  (56) EL831CLF01_elBluetoothPhone_2016.12.13.01.apk   
+ 29  (56) EL831CLF01_elBluetoothSetup_2016.12.13.01.apk   
+
+## USB-хосты в init
+
+## fstab: какие разделы монтируются
+0
