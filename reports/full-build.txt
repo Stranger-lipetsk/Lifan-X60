@@ -1,0 +1,46 @@
+патч /tmp/HomeDec/smali/tw/com/elead/el830/home/HomeApp.smali
+  добавлен в список экрана: ru.yandex.yandexnavi
+  добавлен в список экрана: org.prowl.torque
+  проверка enable снята (1 место)
+  в ветку по умолчанию добавлен setActivity (перед put, строка 748)
+готово
+
+## лаунчер
+ls: cannot access 'out/Home.apk': No such file or directory
+-rw-r--r-- 1 runner runner 5708737 Nov  2 17:39 out/Home-new.apk
+добавляем: --add-apk switcher/switcher.apk:/app --add-file out/Home-new.apk:/priv-app/EL830LF01_Home.apk
+использую sudo для записи в образ
+копия: out/system-org.img -> out/system-full.img (377487360 байт)
+свободно в образе до правок: 17.6 МиБ
+  удалено: /priv-app/Navitel-9.13.73-large.apk (105.9 МиБ)
+  удалено: /app/BSEDemo.apk (0.2 МиБ)
+  удалено: /app/EL830TAM1_GPIO_TEST_2015.01.01.01.apk (0.0 МиБ)
+  удалено: /app/CubeLiveWallpapers.apk (0.0 МиБ)
+  удалено: /app/VisualizationWallpapers.apk (0.2 МиБ)
+  удалено: /app/BasicDreams.apk (0.0 МиБ)
+  удалено: /app/WfdSink.apk (0.1 МиБ)
+  удалено: /app/FSLOta.apk (0.0 МиБ)
+  удалено: /app/HTMLViewer.apk (0.0 МиБ)
+  добавлено: /app/switcher.apk (16879 байт)
+  добавлено: /priv-app/EL830LF01_Home.apk (режим 0100644)
+  добавлено: /etc/install-recovery.sh (режим 0100755)
+свободно в образе после правок: 124.0 МиБ
+--- проверка ФС ---
+e2fsck: чисто
+  Pass 1: Checking inodes, blocks, and sizes
+  Pass 5: Checking group summary information
+  system: 1391/23040 files (0.0% non-contiguous), 60407/92160 blocks
+
+ГОТОВО: out/system-full.img
+размер: 377487360 байт
+
+## содержимое образа
+     13  100644 (1)      0      0   16879  2-Nov-2026 17:39 switcher.apk
+   1291  100644 (1)      0      0   4588177 26-Apr-2026 17:05 EL830LF01_Home.apk
+User:     0   Group:     0   Size: 4588177
+Fragment:  Address: 0    Number: 0    Size: 0
+Size of extra inode fields: 28
+66b3f8d7debabd6ef1776210917bb68f3c73fb6db6d863fadaf8c12afbdd3f10  out/system-full.img
+Pass 4: Checking reference counts
+Pass 5: Checking group summary information
+system: 1391/23040 files (0.0% non-contiguous), 60407/92160 blocks
