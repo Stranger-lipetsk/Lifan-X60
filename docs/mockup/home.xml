@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AbsoluteLayout android:id="@id/drag_layer" android:background="@drawable/window_bg_full" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <AbsoluteLayout android:layout_width="fill_parent" android:layout_height="fill_parent">
+        <TableLayout android:id="@id/tb_layout" android:layout_width="@dimen/table_layout_width" android:layout_height="wrap_content" android:stretchColumns="*" android:layout_x="@dimen/table_layout_x" android:layout_y="@dimen/table_layout_y">
+            <TableRow>
+                <RelativeLayout android:layout_gravity="center" android:id="@id/clock" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_span="4">
+                    <ImageView android:id="@id/clock_h1" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+                    <ImageView android:id="@id/clock_h0" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="3.0dip" android:src="@drawable/main_ico_clock_7" android:layout_toRightOf="@id/clock_h1" />
+                    <ImageView android:id="@id/clock_colon" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="17.0dip" android:src="@drawable/main_ico_clock_colon" android:layout_toRightOf="@id/clock_h0" />
+                    <ImageView android:id="@id/clock_m1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="17.0dip" android:src="@drawable/main_ico_clock_0" android:layout_toRightOf="@id/clock_colon" />
+                    <ImageView android:id="@id/clock_m0" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="3.0dip" android:src="@drawable/main_ico_clock_4" android:layout_toRightOf="@id/clock_m1" />
+                </RelativeLayout>
+            </TableRow>
+            <TableRow android:paddingBottom="24.0dip">
+                <RelativeLayout android:layout_gravity="center" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_span="4">
+                    <TextView android:textSize="24.0sp" android:textColor="@android:color/white" android:id="@id/date" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+                </RelativeLayout>
+            </TableRow>
+            <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/mainmenu_bg" />
+            <TableRow android:paddingTop="28.0dip">
+                <tw.com.elead.el830.home.FavoriteBtn android:layout_gravity="center|top" android:id="@id/favorite_app1" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+                <tw.com.elead.el830.home.FavoriteBtn android:layout_gravity="center|top" android:id="@id/favorite_app2" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+                <tw.com.elead.el830.home.FavoriteBtn android:layout_gravity="center|top" android:id="@id/favorite_app3" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+                <tw.com.elead.el830.home.FavoriteBtn android:layout_gravity="center|top" android:id="@id/favorite_app4" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+            </TableRow>
+        </TableLayout>
+        <tw.com.elead.el830.home.view.CircleListView android:id="@id/circle_list" android:background="@drawable/main_bg_circle_list" android:visibility="invisible" android:clickable="false" android:layout_width="@dimen/applications_layout_width" android:layout_height="@dimen/applications_layout_height" android:dividerHeight="4.0dip" android:layout_x="@dimen/applications_layout_x" android:layout_y="@dimen/applications_layout_y" style="@style/ListTheme" />
+        <Button android:id="@id/btn_show_clapps" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_x="@dimen/btn_show_allapps_layout_x" android:layout_y="@dimen/btn_show_allapps_layout_y_1" style="@style/FlipShowButtonClick" />
+        <Button android:id="@id/btn_hide_clapps" android:visibility="invisible" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_x="575.0dip" android:layout_y="@dimen/btn_show_allapps_layout_y_1" style="@style/FlipHideButtonClick" />
+    </AbsoluteLayout>
+</AbsoluteLayout>
