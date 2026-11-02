@@ -106,15 +106,24 @@ jobs:
             done
           } | tee reports/inplace-сводка.md
 
-      - name: "Артефакт: стадия 1 (только чистка)"
-        # заливаем ТОЛЬКО стадию 1: квота хранилища 500 МБ, каждый образ ~130 МБ
+      - name: "Публикация стадии 1 в релиз"
+        # релиз не расходует квоту хранилища Actions и не истекает через 90 дней
         if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: stage1-clean
-          path: out/stage1-clean.img
-          retention-days: 14
-          compression-level: 9
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ ! -f out/stage1-clean.img ]; then echo "нет образа"; exit 0; fi
+          cp out/stage1-clean.img out/system.img
+          NOTE="Стадия 1: заводской system.img, из которого удалены только лишние
+          приложения. Файловая система НЕ пересоздавалась — суперблок, журнал и
+          размещение inode заводские. Размер: $(stat -c%s out/system.img) байт."
+          if gh release view lite-stage1 >/dev/null 2>&1; then
+            gh release upload lite-stage1 out/system.img --clobber
+          else
+            gh release create lite-stage1 out/system.img \
+              --title "Lite-образ, стадия 1 (проверка)" \
+              --notes "$NOTE"
+          fi
 
       - name: "Коммит отчётов"
         if: always()
