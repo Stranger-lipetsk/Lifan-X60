@@ -1,0 +1,58 @@
+# Диагностика
+
+## https://yandex-navigator.ru.uptodown.com/android
+размер: 191177
+ссылки вида /android/…:
+href="https://ru.uptodown.com/android/ai-learning-apps"
+href="https://ru.uptodown.com/android/communication"
+href="https://ru.uptodown.com/android/editors-choice"
+href="https://ru.uptodown.com/android/games"
+href="https://ru.uptodown.com/android/games-like-grand-theft-auto"
+href="https://ru.uptodown.com/android/gps-apps"
+href="https://ru.uptodown.com/android/halloween"
+href="https://ru.uptodown.com/android/horror-games"
+href="https://ru.uptodown.com/android/lifestyle"
+href="https://ru.uptodown.com/android/multimedia"
+href="https://ru.uptodown.com/android/offline-maps"
+href="https://ru.uptodown.com/android/on-the-road"
+ссылки /download:
+data-url:
+data-url="https://yandex-navigator.ru.uptodown.com/android/versions"
+data-url="https://yandex-navigator.ru.uptodown.com/android"
+data-url="https://yandex-navigator.ru.uptodown.com/android"
+data-url="https://yandex-navigator.ru.uptodown.com/android"
+
+## https://yandex-navigator.ru.uptodown.com/android/versions
+размер: 104151
+ссылки вида /android/…:
+href="https://ru.uptodown.com/android/ai-learning-apps"
+href="https://ru.uptodown.com/android/communication"
+href="https://ru.uptodown.com/android/editors-choice"
+href="https://ru.uptodown.com/android/games"
+href="https://ru.uptodown.com/android/games-like-grand-theft-auto"
+href="https://ru.uptodown.com/android/halloween"
+href="https://ru.uptodown.com/android/horror-games"
+href="https://ru.uptodown.com/android/lifestyle"
+href="https://ru.uptodown.com/android/multimedia"
+href="https://ru.uptodown.com/android/productivity"
+href="https://ru.uptodown.com/android/sports-scores-apps"
+href="https://ru.uptodown.com/android/tools"
+ссылки /download:
+data-url:
+data-url="https://yandex-navigator.ru.uptodown.com/android"
+data-url="https://yandex-navigator.ru.uptodown.com/android"
+data-url="https://yandex-navigator.ru.uptodown.com/android"
+data-url="https://yandex-navigator.ru.uptodown.com/android"
+
+## https://navitel.ru.uptodown.com/android/versions
+размер: 39587
+ссылки вида /android/…:
+href="https://ru.uptodown.com/android/communication"
+href="https://ru.uptodown.com/android/editors-choice"
+href="https://ru.uptodown.com/android/games"
+href="https://ru.uptodown.com/android/lifestyle"
+href="https://ru.uptodown.com/android/multimedia"
+href="https://ru.uptodown.com/android/productivity"
+href="https://ru.uptodown.com/android/tools"
+ссылки /download:
+data-url:
