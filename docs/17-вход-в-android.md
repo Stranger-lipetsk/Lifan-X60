@@ -98,6 +98,49 @@ adb uninstall com.fpt.mirrorlink.android
 После этого о кнопке MirrorLink и HOME-режиме не остаётся ничего: система
 возвращается к заводскому поведению (кнопка MirrorLink снова серая).
 
+## 17.2.2 Кнопка навигатора: как она появляется и как мы её вернули
+
+Наблюдение с устройства подтвердило механику полностью. Кнопки на главном
+экране — это **не настройки экрана**, а результат установки пакета:
+
+1. оболочка держит жёсткий список пакетов (`initDefault_EL830CLF01()`);
+2. при старте `loadEleadApplications()` проходит по списку и для каждого
+   имени ищет приложение:
+
+```smali
+.method private findMainActivityForPackage(Landroid/content/Context;Ljava/lang/String;)Landroid/content/pm/ResolveInfo;
+    ...
+    const-string v4, "android.intent.category.LAUNCHER"
+    invoke-virtual {v2, p2}, Landroid/content/Intent;->setPackage(Ljava/lang/String;)Landroid/content/Intent;
+    invoke-virtual {v3, v2, v6}, Landroid/content/pm/PackageManager;->queryIntentActivities(...)
+```
+
+`setPackage(p2)` — имя пакета **точное**, из списка. Нет установленного пакета
+`com.navitel` → нет записи в таблице → нет кнопки на экране. Именно поэтому
+после удаления Navitel кнопка навигатора исчезла, а после установки нашей
+панели под именем `com.fpt.mirrorlink.android` появилась кнопка MirrorLink.
+Обе кнопки ведут себя по одному и тому же правилу.
+
+**Отсюда решение.** Панель теперь собирается в двух экземплярах:
+
+| Файл в образе | Пакет | Что даёт |
+|---|---|---|
+| `/system/app/switcher.apk` | `com.fpt.mirrorlink.android` | кнопка **MirrorLink** |
+| `/system/app/navi.apk` | `com.navitel` | кнопка **навигатора** |
+
+Второй экземпляр — та же панель, только собранная под именем `com.navitel`:
+
+```bash
+PACKAGE=com.navitel APK_NAME=navi.apk bash switcher/build.sh
+```
+
+Поэтому кнопка навигатора на главном экране появляется и открывает панель.
+Оболочка осталась нетронутой, её код не патчился.
+
+Побочное следствие: настоящий Navitel с этим образом поставить нельзя — имя
+пакета занято. Если он понадобится, наш экземпляр удаляется одной командой
+(`adb uninstall com.navitel`), и место освобождается.
+
 ## 17.3 Про кнопку навигатора и её «активность»
 
 Наблюдение верное: кнопка навигатора активна, когда на SD есть карты. Это
