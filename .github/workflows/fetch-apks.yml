@@ -70,40 +70,53 @@ jobs:
 
       - name: "Разложить APK"
         run: |
-          SDK=/usr/local/lib/android/sdk
-          BT=$(ls -d "$SDK"/build-tools/* 2>/dev/null | sort -V | tail -1)
+          BT=$(ls -d /usr/local/lib/android/sdk/build-tools/* 2>/dev/null | sort -V | tail -1)
           echo "build-tools: $BT"
           python3 - <<'PY'
           import subprocess, os, shutil, glob
           BT = subprocess.run(['bash','-lc','ls -d /usr/local/lib/android/sdk/build-tools/* | sort -V | tail -1'],
                               capture_output=True, text=True).stdout.strip()
-          names = {1: 'navitel', 2: 'yandex-navigator', 3: 'torque'}
-          for i, key in names.items():
+          for i in (1, 2, 3, 4, 5):
               src = '/tmp/dl%d.bin' % i
               if not os.path.exists(src) or os.path.getsize(src) < 10000:
-                  print('%s: файла нет или слишком мал' % key)
+                  continue
+              if open(src, 'rb').read(2) != b'PK':
+                  print('файл %d: не APK (видимо, страница входа) — пропуск' % i)
                   continue
               # бывает zip-архив с APK внутри
-              head = open(src, 'rb').read(4)
-              if head[:2] != b'PK':
-                  print('%s: это не APK (вероятно, страница входа Google) — пропуск' % key)
-                  continue
               apk = src
-              if head[:2] == b'PK':
-                  r = subprocess.run(['unzip', '-o', '-q', src, '-d', '/tmp/unz%d' % i],
-                                     capture_output=True, text=True)
+              inner = []
+              try:
+                  subprocess.run(['unzip','-o','-q',src,'-d','/tmp/unz%d' % i], check=False)
                   inner = glob.glob('/tmp/unz%d/**/*.apk' % i, recursive=True)
-                  if inner:
-                      apk = inner[0]
-              dest = 'firmware/apks/%s.apk' % key
+              except Exception:
+                  pass
+              # настоящий APK отличается наличием AndroidManifest.xml
+              names = []
+              try:
+                  names = subprocess.run(['unzip','-l',apk], capture_output=True, text=True).stdout
+              except Exception:
+                  pass
+              if 'AndroidManifest.xml' not in names and inner:
+                  apk = inner[0]
+              badging = subprocess.run([BT + '/aapt', 'dump', 'badging', apk],
+                                       capture_output=True, text=True).stdout
+              pkg = ''
+              for ln in badging.splitlines():
+                  if ln.startswith("package: name='"):
+                      pkg = ln.split("'")[1]
+                      break
+              ver = ''
+              for ln in badging.splitlines():
+                  if 'versionName=' in ln and ln.startswith('package:'):
+                      ver = ln.split("versionName='")[1].split("'")[0]
+                      break
+              if not pkg:
+                  print('файл %d: пакет не определён — пропуск' % i)
+                  continue
+              dest = 'firmware/apks/%s.apk' % pkg
               shutil.copyfile(apk, dest)
-              size = os.path.getsize(dest)
-              print('%s -> %d байт' % (dest, size))
-              if BT:
-                  b = subprocess.run([BT + '/aapt', 'dump', 'badging', dest],
-                                     capture_output=True, text=True).stdout
-                  for ln in b.splitlines()[:4]:
-                      print('   ', ln)
+              print('%s -> %s (%d байт), версия %s' % (dest, pkg, os.path.getsize(dest), ver))
           PY
           ls -l firmware/apks/
 
