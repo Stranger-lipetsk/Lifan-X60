@@ -1,0 +1,153 @@
+# Что происходит при нажатии кнопки на главном экране
+
+== main_btn_mirrorlink / обработчики кнопок в Home.smali ==
+smali/tw/com/elead/el830/home/Home$1.smali:39:.method public onClick(Landroid/view/View;)V
+smali/tw/com/elead/el830/home/Home$2.smali:39:.method public onClick(Landroid/view/View;)V
+smali/tw/com/elead/el830/home/Home$7.smali:39:.method public onClick(Landroid/view/View;)V
+smali/tw/com/elead/el830/home/Home$7.smali:47:    const-string v2, "Home.java favoritesClickListener ... onClick()"
+smali/tw/com/elead/el830/home/Home.smali:3959:.method public onClick(Landroid/view/View;Landroid/widget/BaseAdapter;)V
+smali/tw/com/elead/el830/home/Home.smali:3968:    const-string v3, "Home.java Circle ListView ... onClick"
+smali/tw/com/elead/el830/home/HomeService$3.smali:1672:    const-string v11, "HomeService.java  MSG_GOTO_APPLICATION, -> NEW_PACKAGE_NAME = "
+smali/tw/com/elead/el830/home/HomeService.smali:53:.field public static final MSG_GOTO_APPLICATION:I = 0x192
+
+== MSG_GOTO_APPLICATION в HomeService ==
+smali/tw/com/elead/el830/home/HomeService$3.smali:1672:    const-string v11, "HomeService.java  MSG_GOTO_APPLICATION, -> NEW_PACKAGE_NAME = "
+smali/tw/com/elead/el830/home/HomeService.smali:53:.field public static final MSG_GOTO_APPLICATION:I = 0x192
+
+== фрагмент обработки MSG_GOTO_APPLICATION ==
+.field public static final MSG_CANCEL_WAIT_DEVICE_DIALOG:I = 0x6c
+
+.field public static final MSG_CANCEL_WIFI_SWITCH_DIALOG:I = 0x321
+
+.field public static final MSG_CCD_CHECK:I = 0xce
+
+.field public static final MSG_CCD_VIDEO_STATE:I = 0xcc
+
+.field public static final MSG_GET_GPSDATA:I = 0xc9
+
+.field public static final MSG_GOTO_APPLICATION:I = 0x192
+
+.field public static final MSG_GO_SLEEP:I = 0x0
+
+.field public static final MSG_GPS_ON:I = 0x7d1
+
+.field public static final MSG_KILL_DIAL:I = 0x386
+
+.field public static final MSG_MAKE_HIBERNATE:I = 0x3e9
+
+.field public static final MSG_MAKE_PRE_HIBERNATE:I = 0x3e8
+
+.field public static final MSG_MCU:I = 0x1
+
+.field public static final MSG_MCU_AMP_SWITCH:I = 0x6a
+
+.field public static final MSG_MCU_ENGR_CMD:I = 0xf
+
+.field public static final MSG_MCU_SYNC:I = 0x7d2
+
+.field public static final MSG_MEDIA_IPOD_PLUG:I = 0x19d
+
+.field public static final MSG_MEDIA_SD_MOUNT:I = 0x19a
+
+.field public static final MSG_MEDIA_USB1_MOUNT:I = 0x19b
+
+.field public static final MSG_MEDIA_USB2_MOUNT:I = 0x19c
+
+.field public static final MSG_NAVI_PLAY_STATUS:I = 0x25c
+
+.field public static final MSG_PLAY_STATUS:I = 0x25d
+
+.field public static final MSG_RESTART_SUBAPP:I = 0x3ea
+
+.field public static final MSG_SETUP_ENGINEER_MODE:I = 0x1f8
+
+.field public static final MSG_SETUP_MCU_AUDIO_CONFIG:I = 0x1f5
+
+.field public static final MSG_SETUP_MCU_BRIGHTNESS:I = 0x1f6
+
+.field public static final MSG_SETUP_MCU_RTC_ALARM:I = 0x1f7
+
+.field public static final MSG_SETUP_MIC_TEST:I = 0x1fa
+
+.field public static final MSG_SETUP_RESET_TO_DEFAULT:I = 0x1fc
+
+.field public static final MSG_SETUP_SET_SYS_TIME:I = 0x1f9
+
+.field public static final MSG_SETUP_SYS_LOCALE:I = 0x1fb
+
+.field public static final MSG_SET_BTAUDIO:I = 0x387
+
+.field public static final MSG_SET_MODE:I = 0x8
+
+.field public static final MSG_START_DIAL:I = 0x385
+
+.field public static final MSG_START_STEALTH_ACTIVITY:I = 0x3eb
+
+.field public static final MSG_STEERING_SWITCH_MODE:I = 0xe
+
+.field public static final MSG_STOP_BOOTANIM:I = 0x9
+
+.field public static final MSG_SWITCH_CCD:I = 0x5
+
+.field public static final MSG_SWITCH_CCD_TFT:I = 0x10
+
+.field public static final MSG_SWITCH_MODE:I = 0x4
+
+.field public static final MSG_SWITCH_MODE_FROM_DISCLAIMER:I = 0xb
+
+.field public static final MSG_SWITCH_MODE_WAIT_TIME_OUT:I = 0xd
+
+.field public static final MSG_SWITCH_POWER:I = 0x7
+
+.field public static final MSG_SYNC_V4L2:I = 0xcb
+
+.field public static final MSG_VIDEO_COLORKEY:I = 0xa
+
+.field public static final MSG_VIDEO_SIGNAL:I = 0x6
+
+.field public static final MSG_VR_CMD:I = 0x3
+
+.field public static final MSG_WATCHDOG:I = 0xca
+
+.field private static final TAG:Ljava/lang/String; = "Home"
+
+.field private static final TAG_2:Ljava/lang/String; = "HomeService.java "
+
+.field private static homeApp:Ltw/com/elead/el830/home/HomeApp;
+
+.field public static iStealthCnt:I
+
+.field private static lLastRTCSyncTimeMicro:J
+
+.field private static mCCD:Ltw/com/elead/el830/home/CCD;
+
+.field private static mDisclaimer:Ltw/com/elead/el830/home/Disclaimer;
+
+.field private static mEleadManager:Ltw/com/elead/manager/EleadManager;
+
+.field private static mI2C2:Ltw/com/elead/el830/I2C2;
+
+.field private static strLastMemAudioPkgName:Ljava/lang/String;
+
+.field private static strLastMemDispPkgName:Ljava/lang/String;
+
+
+# instance fields
+.field private final AUTO_LOG_SYNC_TIME:I
+
+.field private final BOOTANIM_TIMEOUT:I
+
+.field private final BT_AUDIO_STATE_TURN_OFF:I
+
+.field private final BT_AUDIO_STATE_TURN_ON:I
+
+.field private final BT_CALL_END:I
+
+.field private final BT_COME_CALL:I
+
+.field private final BT_COME_NAME:I
+
+== кто вызывает startNewActivity ==
+smali/tw/com/elead/el830/home/HomeService.smali:7975:    invoke-direct {v0, v1, v2}, Ltw/com/elead/el830/home/HomeService;->startNewActivity(Ljava/lang/String;Ljava/lang/String;)V
+smali/tw/com/elead/el830/home/HomeService.smali:31453:.method private startNewActivity(Ljava/lang/String;Ljava/lang/String;)V
+smali/tw/com/elead/el830/home/HomeService.smali:31486:    const-string v3, "HomeService.java  startNewActivity() ....... package_name = "

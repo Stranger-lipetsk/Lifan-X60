@@ -1,0 +1,199 @@
+# Список приложений главного экрана: как формируется
+
+== конструктор/init HomeApp (строки 560-700) ==
+
+.field private uRRTireTemperature:B
+
+.field private uRearAxleTire:B
+
+
+# direct methods
+.method static constructor <clinit>()V
+    .registers 1
+
+    .prologue
+    .line 184
+    new-instance v0, Ljava/util/HashMap;
+
+    invoke-direct {v0}, Ljava/util/HashMap;-><init>()V
+
+    sput-object v0, Ltw/com/elead/el830/home/HomeApp;->mEleadApplications:Ljava/util/HashMap;
+
+    .line 1908
+    const/4 v0, 0x5
+
+    sput v0, Ltw/com/elead/el830/home/HomeApp;->iIMIDpositionX:I
+
+    .line 1909
+    const/16 v0, 0xb4
+
+    sput v0, Ltw/com/elead/el830/home/HomeApp;->iIMIDpositionY:I
+
+    return-void
+.end method
+
+.method public constructor <init>()V
+    .registers 7
+
+    .prologue
+    const/4 v5, 0x3
+
+    const/4 v4, -0x1
+
+    const/16 v3, 0x9
+
+    const/4 v2, 0x1
+
+    const/4 v1, 0x0
+
+    .line 34
+    invoke-direct {p0}, Landroid/app/Application;-><init>()V
+
+    .line 37
+    const-string v0, "Home"
+
+    iput-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->TAG:Ljava/lang/String;
+
+    .line 38
+    const-string v0, "HomeApp.java"
+
+    iput-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->TAG_2:Ljava/lang/String;
+
+    .line 178
+    new-instance v0, Ltw/com/elead/el830/Config;
+
+    invoke-direct {v0}, Ltw/com/elead/el830/Config;-><init>()V
+
+    iput-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mSysConfig:Ltw/com/elead/el830/Config;
+
+    .line 181
+    new-instance v0, Ljava/util/ArrayList;
+
+    invoke-direct {v0}, Ljava/util/ArrayList;-><init>()V
+
+    iput-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+
+    .line 182
+    new-instance v0, Ljava/util/ArrayList;
+
+    invoke-direct {v0}, Ljava/util/ArrayList;-><init>()V
+
+    iput-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps_default:Ljava/util/ArrayList;
+
+    .line 187
+    new-instance v0, Ljava/util/ArrayList;
+
+    invoke-direct {v0}, Ljava/util/ArrayList;-><init>()V
+
+    iput-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mSWApps:Ljava/util/ArrayList;
+
+    .line 190
+    new-instance v0, Ljava/util/LinkedList;
+
+    invoke-direct {v0}, Ljava/util/LinkedList;-><init>()V
+
+    iput-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->llAppStack:Ljava/util/LinkedList;
+
+    .line 192
+    iput-boolean v2, p0, Ltw/com/elead/el830/home/HomeApp;->bTFTPowerStatBeforeAccOff:Z
+
+    .line 194
+    iput-boolean v1, p0, Ltw/com/elead/el830/home/HomeApp;->bRadioOff:Z
+
+    .line 198
+    const/4 v0, 0x0
+
+    iput-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadManager:Ltw/com/elead/manager/EleadManager;
+
+    .line 1819
+    iput v5, p0, Ltw/com/elead/el830/home/HomeApp;->iProductModel:I
+
+    .line 1821
+    iput v1, p0, Ltw/com/elead/el830/home/HomeApp;->iBootMode:I
+
+    .line 1822
+    iput-boolean v1, p0, Ltw/com/elead/el830/home/HomeApp;->bPreHibernated:Z
+
+    .line 1823
+    iput-boolean v2, p0, Ltw/com/elead/el830/home/HomeApp;->bSysFirstBoot:Z
+
+    .line 1824
+    iput-boolean v2, p0, Ltw/com/elead/el830/home/HomeApp;->bMainBoardPlug:Z
+
+    .line 1825
+    iput-boolean v1, p0, Ltw/com/elead/el830/home/HomeApp;->bACC:Z
+
+    .line 1826
+    iput-boolean v2, p0, Ltw/com/elead/el830/home/HomeApp;->bDisclaimer:Z
+
+    .line 1827
+    iput-boolean v1, p0, Ltw/com/elead/el830/home/HomeApp;->bCCDMode:Z
+
+    .line 1828
+    iput-boolean v1, p0, Ltw/com/elead/el830/home/HomeApp;->bAUX1:Z
+
+    .line 1829
+    iput-boolean v1, p0, Ltw/com/elead/el830/home/HomeApp;->bAUX2:Z
+
+    .line 1830
+    iput-boolean v1, p0, Ltw/com/elead/el830/home/HomeApp;->bHDMI:Z
+
+    .line 1831
+    iput-boolean v1, p0, Ltw/com/elead/el830/home/HomeApp;->bDTV:Z
+
+    .line 1832
+
+== где заполняется mEleadApps/add ==
+482:.field private mEleadApps:Ljava/util/ArrayList;
+493:.field private mEleadApps_default:Ljava/util/ArrayList;
+630:    iput-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+637:    iput-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps_default:Ljava/util/ArrayList;
+1421:    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+1426:    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+1430:    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+1433:    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+1437:    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+1440:    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+1444:    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+1447:    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+1451:    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+1454:    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+1458:    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+1461:    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+1465:    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+1468:    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+1472:    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+1475:    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+1479:    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+1482:    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+1486:    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+1489:    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+1493:    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+1496:    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+1500:    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+1503:    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+1507:    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+1510:    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+1514:    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+1517:    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+1521:    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+1524:    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+1528:    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+1531:    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+1539:    iput-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps_default:Ljava/util/ArrayList;
+1557:    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+1562:    iget-object v0, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadApps:Ljava/util/ArrayList;
+1566:    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+grep: write error: Broken pipe
+
+== методы HomeApp с add (контекст 20 строк) ==
+1430:    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+1437:    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+1444:    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+1451:    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+1458:    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+1465:    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+1472:    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+1479:    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+1486:    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+1493:    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
