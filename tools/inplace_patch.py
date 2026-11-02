@@ -104,9 +104,9 @@ def main():
             continue
         name = os.path.basename(src)
         dest = destdir.rstrip('/') + '/' + name
-        if file_size(args.out, dest, sudo):
-            debugfs(args.out, f'rm {dest}', sudo)
+        if file_size(args.out, dest, sudo) is not None:
             print(f'  заменяю: {dest}')
+        debugfs(args.out, f'rm {dest}', sudo)
         out, rc = debugfs(args.out, f'write "{src}" {dest}', sudo)
         if 'could not' in out.lower() or 'error' in out.lower():
             print(f'  ОШИБКА записи {dest}: {out.strip()[:200]}')
@@ -121,9 +121,10 @@ def main():
             print(f'  НЕТ ФАЙЛА: {src}')
             continue
         # если файл уже есть, debugfs создаст рядом копию («файл.1») —
-        # сначала удаляем прежнюю запись
-        if file_size(args.out, dest, sudo):
-            debugfs(args.out, f'rm {dest}', sudo)
+        # поэтому прежнюю запись удаляем всегда, до записи
+        existed = file_size(args.out, dest, sudo) is not None
+        debugfs(args.out, f'rm {dest}', sudo)
+        if existed:
             print(f'  заменяю: {dest}')
         out, rc = debugfs(args.out, f'write "{src}" {dest}', sudo)
         if 'could not' in out.lower() or 'error' in out.lower():

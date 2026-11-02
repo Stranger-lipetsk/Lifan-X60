@@ -57,11 +57,11 @@ jobs:
 
           # новый dex обязан грузиться: сверяем, что все ссылки разрешаются
           # (при ошибке в smali apktool молча выдаёт битый APK)
-          curl -sSL --max-time 200 -o /tmp/smali.jar \
-            https://github.com/baksmali/smali/releases/download/v2.5.2/smali-2.5.2.jar
+          curl -sSL --max-time 200 -o /tmp/baksmali.jar \
+            https://github.com/baksmali/smali/releases/download/v2.5.2/baksmali-2.5.2.jar
           mkdir -p /tmp/chk && cd /tmp/chk && rm -rf ./*
           unzip -o -q "${GITHUB_WORKSPACE}/out/Home-patched.apk" classes.dex
-          java -jar /tmp/smali.jar d classes.dex -o smali 2>&1 | tail -2
+          java -jar /tmp/baksmali.jar d classes.dex -o smali 2>&1 | tail -2
           if [ -d smali ]; then
             echo "DEX РАЗБИРАЕТСЯ БЕЗ ОШИБОК" | tee -a "${GITHUB_WORKSPACE}/reports/full-build.txt"
           else
@@ -132,6 +132,14 @@ jobs:
       - name: "Проверка образа"
         run: |
           {
+            echo
+            echo "## сверка лаунчера с собранным"
+            debugfs -R "dump /priv-app/EL830LF01_Home.apk /tmp/chk-home.apk" out/system-full.img 2>&1 | tail -1
+            sha256sum /tmp/chk-home.apk out/Home-new.apk
+            if ! cmp -s /tmp/chk-home.apk out/Home-new.apk; then
+              echo "ЛАУНЧЕР В ОБРАЗЕ НЕ СОВПАДАЕТ С СОБРАННЫМ"; exit 1
+            fi
+            echo "лаунчер в образе: наш"
             echo
             echo "## содержимое образа"
             debugfs -R "ls -l /app" out/system-full.img 2>/dev/null | grep -iE "navitel|yandex|torque|switcher"
