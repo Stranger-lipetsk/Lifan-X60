@@ -11,6 +11,9 @@ on:
         description: 'Сохранить ли свежий system-img-lite (1/0)'
         required: false
         default: '1'
+  push:
+    paths:
+      - 'autoanalysis/cleanup.txt'
 
 permissions:
   actions: write
@@ -25,7 +28,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPO: ${{ github.repository }}
-          KEEP_DAYS: ${{ github.event.inputs.keep_days || '7' }}
+          KEEP_DAYS: ${{ github.event.inputs.keep_days || '0' }}
           KEEP_IMAGE: ${{ github.event.inputs.keep_image || '1' }}
         run: |
           set -euo pipefail
