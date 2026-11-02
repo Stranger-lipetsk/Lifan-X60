@@ -34,11 +34,13 @@
 Яндекс Навигатор с пробками: **[docs/12-яндекс-навигатор.md](docs/12-яндекс-навигатор.md)**
 Wi-Fi точки доступа телефона: **[docs/13-wifi-точка-доступа.md](docs/13-wifi-точка-доступа.md)**
 Квота Actions и очистка артефактов: **[docs/14-квота-actions.md](docs/14-квота-actions.md)**
+**Готовый образ из релиза (проверено):** **[docs/16-рабочий-образ-из-релиза.md](docs/16-рабочий-образ-из-релиза.md)**
 
 ⚠️ **Не загружается после прошивки?** → **[docs/15-восстановление-циклическая-загрузка.md](docs/15-восстановление-циклическая-загрузка.md)**
-🔧 **Рабочий образ (стадия проверки):** релиз **[lite-stage1](https://github.com/Stranger-lipetsk/Lifan-X60/releases/tag/lite-stage1)** — правка заводского образа без пересборки ФС
+✅ **Рабочий образ (проверен на устройстве):** релиз **[lite-full](https://github.com/Stranger-lipetsk/Lifan-X60/releases/tag/lite-full)** — см. **[docs/16-рабочий-образ-из-релиза.md](docs/16-рабочий-образ-из-релиза.md)**
 Доступ к Android, Wi-Fi и файлам: **[docs/08-mirrorlink-vyhod-k-android.md](docs/08-mirrorlink-vyhod-k-android.md)**
-Сборка образа: `python3 tools/build_system.py --fw архив.rar --out out/system.img ...`
+Сборка образа: `python3 tools/inplace_patch.py --system system.img --out out/system.img ...`
+(правит заводской образ **без пересборки ФС**; прежний `tools/build_system.py` давал нерабочий образ)
 
 ## Потолок версии Android
 
