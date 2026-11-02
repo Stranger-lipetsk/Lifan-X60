@@ -1,0 +1,126 @@
+name: Патч лаунчера (кнопки на главном экране)
+
+on:
+  push:
+    paths:
+      - 'autoanalysis/build-launcher.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: "Инструменты"
+        run: |
+          sudo apt-get update -qq 2>/dev/null || true
+          sudo apt-get install -y -qq p7zip-full unzip curl openssl >/dev/null 2>&1 || true
+          mkdir -p out reports
+          curl -sSL --retry 3 --max-time 300 -o /tmp/apktool.jar \
+            https://github.com/iBotPeaches/Apktool/releases/download/v2.9.3/apktool_2.9.3.jar
+          ls -l /tmp/apktool.jar
+
+      - name: "Прошивка: скачать и распаковать оболочку"
+        run: |
+          mkdir -p /tmp/rar
+          python3 - <<'PY'
+          import json, subprocess, urllib.parse, urllib.request
+          pk = 'https://disk.yandex.ru/d/qJdjjeB8Aiq3Lg'
+          url = ('https://cloud-api.yandex.net/v1/disk/public/resources'
+                 '?public_key=' + urllib.parse.quote(pk, safe='') + '&limit=100')
+          items = json.load(urllib.request.urlopen(url, timeout=60))['_embedded']['items']
+          it = [i for i in items if i['type'] == 'file' and '2016' in i['name']][0]
+          subprocess.run(['curl', '-L', '--fail', '--retry', '3', '--max-time', '2500',
+                          '-o', '/tmp/fw.rar', it['file']], check=True)
+          PY
+          7z x -y -aos -o/tmp/rar /tmp/fw.rar >/dev/null 2>&1 || true
+          SYSIMG="$(find /tmp/rar -name system.img | head -1)"
+          echo "SYSIMG=$SYSIMG" >> "$GITHUB_ENV"
+          debugfs -R "dump /priv-app/EL830LF01_Home.apk /tmp/Home.apk" "$SYSIMG" 2>&1 | tail -1
+          ls -l /tmp/Home.apk
+
+      - name: "Патч: добавить пакеты и снять заслонку"
+        run: |
+          java -jar /tmp/apktool.jar d -f /tmp/Home.apk -o /tmp/HomeDec 2>&1 | tail -3
+          PKGS=""
+          for p in ${LAUNCHER_PACKAGES}; do PKGS="$PKGS --add $p"; done
+          echo "пакеты:$PKGS"
+          python3 tools/patch_launcher.py --dir /tmp/HomeDec $PKGS 2>&1 | tee reports/launcher-patch.txt
+        env:
+          LAUNCHER_PACKAGES: >-
+            ru.yandex.yandexnavi org.prowl.torque com.navitel
+
+      - name: "Проверка патча в smali"
+        run: |
+          {
+            echo
+            echo "## проверка результата"
+            echo "### пакеты в списке главного экрана"
+            for p in ru.yandex.yandexnavi org.prowl.torque com.navitel; do
+              c=$(grep -c "const-string v1, \"$p\"" /tmp/HomeDec/smali/tw/com/elead/el830/home/HomeApp.smali)
+              echo "  $p: $c"
+            done
+            echo "### проверка enable в gotoEleadApplication"
+            awk '/^\.method public gotoEleadApplication/,/^\.end method/' \
+              /tmp/HomeDec/smali/tw/com/elead/el830/home/HomeApp.smali \
+              | grep -n -A2 "enable:Z" || echo "  проверки нет — верно"
+            echo "### setActivity в ветке cond_23e"
+            awk '/^\.method private loadEleadApplications/,/^\.end method/' \
+              /tmp/HomeDec/smali/tw/com/elead/el830/home/HomeApp.smali \
+              | grep -c "setActivity"
+          } | tee -a reports/launcher-patch.txt
+
+      - name: "Сборка APK"
+        run: |
+          java -jar /tmp/apktool.jar b /tmp/HomeDec -o out/Home-patched.apk 2>&1 | tail -5
+          ls -l out/Home-patched.apk /tmp/Home.apk
+          sha256sum out/Home-patched.apk | tee -a reports/launcher-patch.txt
+
+      - name: "Подпись"
+        env:
+          LAUNCHER_KEY_B64: ${{ secrets.LAUNCHER_KEY_B64 }}
+        run: |
+          if [ -z "$LAUNCHER_KEY_B64" ]; then
+            echo "КЛЮЧА НЕТ: секрет LAUNCHER_KEY_B64 не задан." | tee -a reports/launcher-patch.txt
+            echo "Оболочка подписана системным testkey — нужен именно он." | tee -a reports/launcher-patch.txt
+            exit 0
+          fi
+          echo "$LAUNCHER_KEY_B64" | base64 -d > /tmp/testkey.pk8
+          ls -l /tmp/testkey.pk8
+          SDK=/usr/local/lib/android/sdk
+          BT=$(ls -d "$SDK"/build-tools/* 2>/dev/null | sort -V | tail -1)
+          if [ -n "$BT" ] && [ -x "$BT/apksigner" ]; then
+            "$BT/apksigner" sign --key /tmp/testkey.pk8 --cert /tmp/testkey.x509.pem \
+              --min-sdk-version 19 --v1-signing-enabled true \
+              --out out/Home-signed.apk out/Home-patched.apk 2>&1 | tail -3
+          else
+            # apksigner нет — подписываем старым способом через openssl + zip
+            mkdir -p /tmp/sig/META-INF && cd /tmp/sig
+            cp /tmp/testkey.x509.pem cert.pem && cp /tmp/testkey.pk8 key.pk8
+            openssl pkcs8 -inform DER -in key.pk8 -passin pass:android -out key.pem || \
+              openssl rsa -inform DER -in key.pk8 -out key.pem
+            echo "apksigner не найден — нужен Android build-tools"
+          fi
+          ls -l out/ 2>/dev/null
+          echo "=== подпись собранного APK ===" >> "$GITHUB_WORKSPACE/reports/launcher-patch.txt"
+          keytool -printcert -jarfile out/Home-signed.apk 2>/dev/null | head -8 \
+            >> "$GITHUB_WORKSPACE/reports/launcher-patch.txt" || true
+
+      - name: "Коммит отчёта"
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A reports
+          git diff --cached --quiet && exit 0
+          git commit -m "патч лаунчера: отчёт"
+          for try in 1 2 3 4 5; do
+            if git pull --rebase --autostash origin "${{ github.ref_name }}" >/dev/null 2>&1 \
+               && git push origin HEAD:${{ github.ref_name }}; then exit 0; fi
+            sleep 10; git rebase --abort >/dev/null 2>&1 || true
+          done
