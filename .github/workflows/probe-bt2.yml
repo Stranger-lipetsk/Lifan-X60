@@ -1,0 +1,99 @@
+name: Bluetooth — как устроен
+
+on:
+  push:
+    paths:
+      - 'autoanalysis/probe-bt2.txt'
+  workflow_dispatch:
+
+permissions: { contents: write }
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - name: "Инструменты"
+        run: |
+          sudo apt-get update -qq 2>/dev/null || true
+          sudo apt-get install -y -qq p7zip-full unzip curl binutils >/dev/null 2>&1 || true
+          curl -sSL --retry 3 --max-time 300 -o /tmp/apktool.jar \
+            https://github.com/iBotPeaches/Apktool/releases/download/v2.9.3/apktool_2.9.3.jar
+          mkdir -p reports /tmp/x
+      - name: "Java"
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: "Скачать прошивку"
+        run: |
+          mkdir -p /tmp/rar
+          python3 - <<'PY'
+          import json, subprocess, urllib.parse, urllib.request
+          pk = 'https://disk.yandex.ru/d/qJdjjeB8Aiq3Lg'
+          url = ('https://cloud-api.yandex.net/v1/disk/public/resources'
+                 '?public_key=' + urllib.parse.quote(pk, safe='') + '&limit=100')
+          items = json.load(urllib.request.urlopen(url, timeout=60))['_embedded']['items']
+          it = [i for i in items if i['type'] == 'file' and '2016' in i['name']][0]
+          subprocess.run(['curl','-L','--fail','--retry','3','--max-time','2500',
+                          '-o','/tmp/fw.rar', it['file']], check=True)
+          PY
+          7z x -y -aos -o/tmp/rar /tmp/fw.rar >/dev/null 2>&1 || true
+          cp "$(find /tmp/rar -name system.img | head -1)" /tmp/system.img
+          debugfs -R "dump /lib/libbluelet.so /tmp/x/libbluelet.so" /tmp/system.img 2>&1 | tail -1
+          debugfs -R "dump /app/EL831CLF01_elBluetoothSetup_2016.12.13.01.apk /tmp/x/btsetup.apk" /tmp/system.img 2>&1 | tail -1
+          debugfs -R "dump /app/Bluetooth.apk /tmp/x/bluetooth.apk" /tmp/system.img 2>&1 | tail -1
+          ls -l /tmp/x
+
+      - name: "Профили и HAL"
+        run: |
+          OUT="$GITHUB_WORKSPACE/reports/bt-как-устроен.txt"
+          exec > "$OUT" 2>&1 || true
+          set +e
+          echo "# Bluetooth: как устроен"
+          echo
+          echo "## HAL стандартного стека Android"
+          debugfs -R "ls -l /lib/hw" /tmp/system.img 2>/dev/null | grep -iE "bluetooth|\.so" | head -20
+          echo
+          echo "## профили внутри libbluelet.so"
+          for p in SPP HFP A2DP AVRCP PBAP MAP OPP HID GATT SPP_SERVER; do
+            n=$(strings -n 3 /tmp/x/libbluelet.so 2>/dev/null | grep -c "\\b$p\\b")
+            echo "  $p: $n"
+          done
+          echo
+          echo "## строки про профили и порт"
+          strings -n 6 /tmp/x/libbluelet.so 2>/dev/null | grep -iE "spp|serial port|RFCOMM|ttymxc|hci|pin|pair" | head -25
+          echo
+          echo "## manifest elBluetoothSetup"
+          java -jar /tmp/apktool.jar d -f -s /tmp/x/btsetup.apk -o /tmp/x/btsetup 2>&1 | tail -2
+          grep -oE "uses-permission android:name=\"[^\"]*\"" /tmp/x/btsetup/AndroidManifest.xml 2>/dev/null | head -20
+          echo
+          echo "## Bluetooth.apk (стандартный стек?)"
+          unzip -l /tmp/x/bluetooth.apk 2>/dev/null | grep -E "classes.dex|lib/" | head -5
+          echo
+          echo "## скрипты запуска BT"
+          debugfs -R "ls -l /etc" /tmp/system.img 2>/dev/null | grep -iE "bt|blue" 
+          debugfs -R "dump /bin/setup_btmac.sh /tmp/btmac.sh" /tmp/system.img 2>/dev/null
+          echo "--- setup_btmac.sh ---"
+          cat /tmp/btmac.sh 2>/dev/null
+          echo
+          echo "## init: как поднимается UART-порт"
+          debugfs -R "dump /init.el_imx6_solo_v2.rc /tmp/init2.rc" /tmp/system.img 2>/dev/null
+          grep -nE "ttymxc1|bt_|bluelet|hciattach" /tmp/init2.rc 2>/dev/null
+          debugfs -R "dump /init.rc /tmp/init1.rc" /tmp/system.img 2>/dev/null
+          grep -nE "ttymxc1|bt_|bluelet|hciattach|bluetooth" /tmp/init1.rc 2>/dev/null
+
+      - name: "Коммит"
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A reports
+          git diff --cached --quiet && exit 0
+          git commit -m "проба: устройство Bluetooth"
+          for try in 1 2 3 4 5; do
+            if git pull --rebase --autostash origin "${{ github.ref_name }}" >/dev/null 2>&1 \
+               && git push origin HEAD:${{ github.ref_name }}; then exit 0; fi
+            sleep 10; git rebase --abort >/dev/null 2>&1 || true
+          done
