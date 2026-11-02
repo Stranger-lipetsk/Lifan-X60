@@ -1,6 +1,6 @@
 === прошивка офиц. 2016г.rar ===
--rw-r--r-- 1 runner runner 247896231 Nov  2 11:36 firmware/original/прошивка офиц. 2016г.rar
-535875d2670c86f27e42f690407403c18f4a33edd0f6f25ba35e0a8e4832b868  firmware/original/прошивка офиц. 2016г.rar
+-rw-r--r-- 1 runner runner 691975 Nov  2 11:41 firmware/original/прошивка офиц. 2016г.rar
+a08c986dbdd8d4e6ba8459ecc278912201992fd3f8232ce4c694a4268a0b80b9  firmware/original/прошивка офиц. 2016г.rar
 firmware/original/прошивка офиц. 2016г.rar: RAR archive data, v5
 
 --- 7z l ---
@@ -9,16 +9,18 @@ firmware/original/прошивка офиц. 2016г.rar: RAR archive data, v5
  64-bit locale=C.UTF-8 Threads:2 OPEN_MAX:65536
 
 Scanning the drive for archives:
-1 file, 247896231 bytes (237 MiB)
+1 file, 691975 bytes (676 KiB)
 
 Listing archive: firmware/original/прошивка офиц. 2016г.rar
 
 --
 Path = firmware/original/прошивка офиц. 2016г.rar
 Type = Rar5
-Physical Size = 247896231
+ERRORS:
+Unexpected end of archive
+Physical Size = 3903987
 Solid = -
-Blocks = 8
+Blocks = 2
 Encrypted = -
 Multivolume = -
 Volumes = 1
@@ -27,67 +29,16 @@ Volumes = 1
 ------------------- ----- ------------ ------------  ------------------------
 2015-07-29 18:03:08 ....A           83           83  прошивка офиц. 2016г/backup/config.ini
 2017-06-27 04:40:00 ....A      3926016      3903710  прошивка офиц. 2016г/boot.img
-2017-06-27 04:40:02 ....A        75083        26589  прошивка офиц. 2016г/MCU_FW.hex
-2017-06-27 04:40:08 ....A     48758784     48438385  прошивка офиц. 2016г/sd_boot.img
-2017-06-27 04:40:02 ....A    377487360    195471518  прошивка офиц. 2016г/system.img
-2017-06-27 04:40:02 ....A       110440        54797  прошивка офиц. 2016г/u-boot.bin
-2023-10-05 10:29:52 D....            0            0  прошивка офиц. 2016г/backup
-2023-10-05 10:29:56 D....            0            0  прошивка офиц. 2016г
 ------------------- ----- ------------ ------------  ------------------------
-2023-10-05 10:29:56          430357766    247895082  6 files, 2 folders
+2017-06-27 04:40:00            3926099      3903793  2 files
+
+Errors: 1
 
 --- binwalk ---
 
 DECIMAL       HEXADECIMAL     DESCRIPTION
 --------------------------------------------------------------------------------
 0             0x0             RAR archive data, version 5.x
-36385156      0x22B3184       MySQL ISAM compressed data file Version 6
-120546427     0x72F647B       StuffIt Deluxe Segment (data): f
-175578013     0xA771B9D       MySQL MISAM compressed data file Version 2
 
 
 --- строки: маркеры платформы ---
-pX3T|M
-UfpX3cW/
-4ipX5rl
-Msm0!{[H
-spx5Wn
-PX640E
-+Aapx5
-O^apX6
-HPx5zW
-Px3(lp
-WPx6<f
-PX6C;4%
-Px68~A
-irrk31qP
-K6NPX5
-Xpx6@2"()	
-#DG7a	Px6
-aPx6eT9
--W1PX3
-T{opX5
-pPX6cH
-6|WpX6	
-ppmpX4
-F6{upX6
-MkX4px3
-|Px3wx
-/qPx32B$K
-tpx3:t#
-e^Px6|W
- \!PX6
-31px6.
-4_S;wPX3
-.px6Yj
-Px3\H3lK
-px6P#4
-RaPx5C
-j5qpx3c
-GPX4$XD	
-r~xPX5
-~1!MPx5!
-+-5mSM5hM
-gpx3bA
-dpX54'
-(-PX6R
