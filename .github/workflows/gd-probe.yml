@@ -1,0 +1,70 @@
+name: Проверка ссылки Google Drive
+
+on:
+  push:
+    paths:
+      - 'autoanalysis/gd-probe.txt'
+  workflow_dispatch:
+
+permissions: { contents: write }
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: "Перебор точек входа"
+        run: |
+          mkdir -p reports
+          FID=17wFrJMb-WxTPDuu9ueA3zhilBuaMnC5Y
+          UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0 Safari/537.36"
+          OUT=reports/gd-probe.txt
+          {
+            echo "# Проверка файла $FID"
+            echo
+            for u in \
+              "https://drive.google.com/uc?export=download&id=$FID" \
+              "https://drive.google.com/uc?id=$FID&export=download&confirm=t" \
+              "https://drive.usercontent.google.com/download?id=$FID&export=download&confirm=t" \
+              "https://docs.google.com/uc?export=download&id=$FID" \
+              "https://www.googleapis.com/drive/v3/files/$FID?alt=media" \
+              "https://drive.google.com/file/d/$FID/view" ; do
+              echo "## $u"
+              code=$(curl -s -A "$UA" -L --max-time 60 -o /tmp/f.bin -w '%{http_code}' -D /tmp/h.txt "$u")
+              echo "код: $code  размер: $(stat -c%s /tmp/f.bin)"
+              echo "тип: $(grep -i '^content-type:' /tmp/h.txt | tail -1 | tr -d '\r')"
+              echo "первые байты: $(head -c 16 /tmp/f.bin | od -c | head -1)"
+              if head -c 300 /tmp/f.bin | grep -qi "accounts.google.com"; then
+                echo "ВЕРДИКТ: страница входа — файл закрыт"
+              elif head -c 4 /tmp/f.bin | grep -q "PK"; then
+                echo "ВЕРДИКТ: получен ZIP/APK!"
+                cp /tmp/f.bin /tmp/got.apk
+              fi
+              echo
+            done
+            echo "## итог"
+            if [ -f /tmp/got.apk ]; then echo "ФАЙЛ ПОЛУЧЕН: $(stat -c%s /tmp/got.apk) байт"; else echo "файл не получен"; fi
+          } > "$OUT" 2>&1
+          cat "$OUT"
+          if [ -f /tmp/got.apk ]; then
+            mkdir -p firmware/apks
+            cp /tmp/got.apk firmware/apks/yandex-navigator.apk
+            BT=$(ls -d /usr/local/lib/android/sdk/build-tools/* | sort -V | tail -1)
+            "$BT/aapt" dump badging firmware/apks/yandex-navigator.apk 2>&1 | head -3 | tee -a "$OUT"
+            unzip -l firmware/apks/yandex-navigator.apk | head -8 | tee -a "$OUT"
+          fi
+
+      - name: "Коммит"
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A reports firmware
+          git diff --cached --quiet && exit 0
+          git commit -m "проверка ссылки Google Drive"
+          for try in 1 2 3 4 5; do
+            if git pull --rebase --autostash origin "${{ github.ref_name }}" >/dev/null 2>&1 \
+               && git push origin HEAD:${{ github.ref_name }}; then exit 0; fi
+            sleep 10; git rebase --abort >/dev/null 2>&1 || true
+          done
