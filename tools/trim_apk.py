@@ -24,8 +24,8 @@ NO_RECOMPRESS = ('classes.dex',)
 
 
 def wanted(name, keep_abi, keep_voices, keep_locale):
-    if name.startswith('META-INF/'):
-        return False
+    # META-INF/ трогать нельзя: там подпись AndroidManifest.xml, по ней
+    # Android 4.4 принимает системное приложение
     if name.startswith('lib/'):
         abi = name.split('/')[1] if name.count('/') >= 1 else ''
         return any(abi.startswith(k) for k in keep_abi)
