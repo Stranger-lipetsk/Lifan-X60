@@ -37,13 +37,19 @@ import java.util.List;
  * Все запуски идут через PackageManager (поиск реальных активностей), поэтому
  * приложение не ломается, если имена активностей отличаются.
  *
- * ВАЖНО: кнопка MirrorLink на главном экране магнитолы активна только тогда,
- * когда оболочка получит широковещательное сообщение "vn.com.fsoft.UsbIfaceReady"
- * от этого приложения (разобрано по коду EL830LF01_Home.apk: HomeService
- * регистрирует приёмник на этот action и по нему вызывает
- * enableMirrorLinkIcon(true) -> enableEleadApplication(..., true)).
- * Поэтому при старте и при возврате на экран приложение отправляет этот
- * сигнал — иначе штатная иконка остаётся серой.
+ * ВАЖНО про штатную кнопку MirrorLink (разобрано по коду EL830LF01_Home.apk):
+ *   1. иконка выключена жёстко (HomeApp.loadEleadApplications ставит
+ *      ApplicationInfo.enable = false для пакета com.fpt.mirrorlink.android);
+ *   2. включается только по broadcast "vn.com.fsoft.UsbIfaceReady";
+ *   3. при нажатии Home вызывает gotoEleadApplication(package) — а там стоит
+ *      проверка `if (!mApp.enable) return false`, то есть иконка обязана быть
+ *      включена ДО нажатия;
+ *   4. затем стартует интент, который оболочка сама нашла через
+ *      queryIntentActivities(MAIN/LAUNCHER) и запомнила в ApplicationInfo.intent.
+ * Отсюда: нажатие на иконку запускает ИМЕННО ту активность, которую оболочка
+ * нашла при старте, и только если иконка была включена на тот момент.
+ * Поэтому приложение при старте отправляет сигнал, а сам запуск Android-среды
+ * доступен и без кнопки — через панель уведомлений или действие START_ANDROID.
  */
 public class MainActivity extends Activity {
 
@@ -60,6 +66,10 @@ public class MainActivity extends Activity {
      * Строго из кода Elead Home — не переименовывать.
      */
     private static final String ACTION_IFACE_READY = "vn.com.fsoft.UsbIfaceReady";
+
+    /** Внешний запуск панели из любого другого приложения. */
+    public static final String ACTION_START_ANDROID =
+            "com.fpt.mirrorlink.android.START_ANDROID";
 
     private static final String PREFS = "switcher";
     private static final String KEY_AUTOBACK = "autoback_v2";
@@ -84,6 +94,14 @@ public class MainActivity extends Activity {
 
         SharedPreferences prefs = getSharedPreferences(PREFS, MODE_PRIVATE);
         autoBackEnabled = prefs.getBoolean(KEY_AUTOBACK, false);
+
+        // если панель открыли «внешним» действием — сразу уходим в Android
+        if (getIntent() != null
+                && ACTION_START_ANDROID.equals(getIntent().getAction())) {
+            launchHome(PKG_AOSP_HOME);
+            finish();
+            return;
+        }
 
         ScrollView scroll = new ScrollView(this);
         scroll.setBackgroundColor(COL_BG);

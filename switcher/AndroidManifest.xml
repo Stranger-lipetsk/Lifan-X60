@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.fpt.mirrorlink.android"
-    android:versionCode="1"
-    android:versionName="1.0">
+    android:versionCode="2"
+    android:versionName="2.0">
 
     <uses-sdk android:minSdkVersion="19" android:targetSdkVersion="19" />
 
@@ -26,18 +26,28 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
+            <!-- внешний запуск: панель сразу открывает рабочий стол Android.
+                 Нужен, чтобы попасть в Android без штатной кнопки MirrorLink. -->
+            <intent-filter>
+                <action android:name="com.fpt.mirrorlink.android.START_ANDROID" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
         </activity>
 
-        <!-- HOME-режим (необязательно). Пока выключен, кнопка «Домой»
-             работает как обычно. Включается командой:
-               adb shell pm enable com.fpt.mirrorlink.android/.HomeAlias
-             Выключается:
-               adb shell pm disable com.fpt.mirrorlink.android/.HomeAlias -->
+        <!-- HOME-режим. ВКЛЮЧЁН по умолчанию: это главный вход в Android,
+             который не зависит от штатной кнопки MirrorLink.
+             При загрузке Android выбор домашнего экрана даст два пункта —
+             выбираем «Переключатель (Домой)» и «Всегда».
+             Вернуть штатное поведение:
+               adb shell pm disable com.fpt.mirrorlink.android/.HomeAlias
+             Включить обратно:
+               adb shell pm enable com.fpt.mirrorlink.android/.HomeAlias -->
         <activity-alias
             android:name=".HomeAlias"
             android:targetActivity=".MainActivity"
             android:exported="true"
-            android:enabled="false"
+            android:enabled="true"
             android:label="Переключатель (Домой)">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
