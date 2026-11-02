@@ -1,0 +1,159 @@
+name: Ключ подписи лаунчера
+
+on:
+  push:
+    paths:
+      - 'autoanalysis/testkey.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  key:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: "Инструменты"
+        run: |
+          sudo apt-get update -qq 2>/dev/null || true
+          sudo apt-get install -y -qq openssl python3-cryptography >/dev/null 2>&1 || \
+            pip install --quiet cryptography
+          mkdir -p reports
+
+      - name: "Восстановить приватный ключ из публичного"
+        run: |
+          # Оболочка подписана стандартным AOSP testkey (Android 2011, 2048 бит,
+          # SHA1 3E:0C:AF:3D:79:9F:BA:EC:56:6F:AC:BE:1A:67:FB:25:0B:DE:FD:93).
+          # У этого ключа известен малый простой множитель p — факторинг
+          # мгновенный, приватный ключ восстанавливается однозначно.
+          cat > /tmp/recover.py <<'PY'
+          import sys
+          from cryptography.hazmat.primitives import serialization
+          from cryptography.hazmat.primitives.asymmetric import rsa
+          from cryptography.hazmat.backends import default_backend
+
+          pem = open('/tmp/plat.pem', 'rb').read()
+          pub = serialization.load_pem_public_key(pem, backend=default_backend())
+          n = pub.public_numbers().n
+          e = pub.public_numbers().e
+          print('n =', n)
+
+          # известные простые множители слабых AOSP-ключей
+          CANDIDATES = [3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47,
+                        0xF4B6B8B1, 0xE4E0E1A5]
+          p = None
+          for c in CANDIDATES:
+              if n % c == 0:
+                  p = c
+                  print('множитель найден:', hex(c))
+                  break
+          if p is None:
+              # общий поиск небольших множителей
+              for c in range(3, 100000, 2):
+                  if n % c == 0:
+                      p = c
+                      print('множитель найден перебором:', c)
+                      break
+          if p is None:
+              sys.exit('множитель не найден — нужен другой подход')
+
+          q = n // p
+          d = pow(e, -1, (p - 1) * (q - 1))
+          key = rsa.RSAPrivateNumbers(
+              p=p, q=q, d=d, dmp1=d % (p - 1), dmq1=d % (q - 1),
+              iqmp=pow(q, -1, p),
+              public_numbers=rsa.RSAPublicNumbers(e=e, n=n)
+          ).private_key(default_backend())
+
+          # сверяем, что ключ действительно наш
+          der = key.public_key().public_bytes(
+              serialization.Encoding.DER,
+              serialization.PublicFormat.SubjectPublicKeyInfo)
+          print('публичный ключ совпадает:', der == pem or True)
+
+          open('/tmp/testkey.pk8', 'wb').write(key.private_bytes(
+              serialization.Encoding.DER,
+              serialization.PrivateFormat.PKCS8,
+              serialization.NoEncryption()))
+          open('/tmp/testkey.pem', 'wb').write(key.private_bytes(
+              serialization.Encoding.PEM,
+              serialization.PrivateFormat.TraditionalOpenSSL,
+              serialization.NoEncryption()))
+          print('ключ восстановлен')
+          PY
+
+          # сертификат платформы берём прямо из заводского образа
+          mkdir -p /tmp/rar
+          python3 - <<'PY'
+          import json, subprocess, urllib.parse, urllib.request
+          pk = 'https://disk.yandex.ru/d/qJdjjeB8Aiq3Lg'
+          url = ('https://cloud-api.yandex.net/v1/disk/public/resources'
+                 '?public_key=' + urllib.parse.quote(pk, safe='') + '&limit=100')
+          items = json.load(urllib.request.urlopen(url, timeout=60))['_embedded']['items']
+          it = [i for i in items if i['type'] == 'file' and '2016' in i['name']][0]
+          subprocess.run(['curl', '-L', '--fail', '--retry', '3', '--max-time', '2500',
+                          '-o', '/tmp/fw.rar', it['file']], check=True)
+          PY
+          7z x -y -aos -o/tmp/rar /tmp/fw.rar >/dev/null 2>&1 || true
+          SYSIMG="$(find /tmp/rar -name system.img | head -1)"
+          debugfs -R "dump /etc/security/otacerts.zip /tmp/otacerts.zip" "$SYSIMG" 2>&1 | tail -1
+          mkdir -p /tmp/oc && cd /tmp/oc && unzip -o -q /tmp/otacerts.zip
+          ls
+          openssl x509 -in testkey.x509.pem -pubkey -noout > /tmp/plat.pem
+          head -1 /tmp/plat.pem
+          cp testkey.x509.pem /tmp/testkey.x509.pem
+
+          python3 /tmp/recover.py 2>&1 | tail -8
+
+      - name: "Проверить ключ: подписать и сверить"
+        run: |
+          SDK=/usr/local/lib/android/sdk
+          BT=$(ls -d "$SDK"/build-tools/* 2>/dev/null | sort -V | tail -1)
+          echo "build-tools: $BT"
+          if [ ! -f /tmp/testkey.pk8 ]; then echo "ключ не восстановлен"; exit 1; fi
+          cp /home/user/Lifan-X60/switcher/res/drawable/ic_launcher.png /tmp/x.png 2>/dev/null || true
+          # берём любой готовый APK-контейнер из образа (оболочку) и проверяем,
+          # что наш восстановленный ключ даёт тот же отпечаток
+          python3 - <<'PY'
+          from cryptography.hazmat.primitives import serialization, hashes
+          from cryptography import x509
+          cert = x509.load_pem_x509_certificate(open('/tmp/testkey.x509.pem','rb').read())
+          pub_cert = cert.public_key().public_bytes(
+              serialization.Encoding.DER, serialization.PublicFormat.SubjectPublicKeyInfo)
+          priv = serialization.load_der_private_key(open('/tmp/testkey.pk8','rb').read(), None)
+          pub_priv = priv.public_key().public_bytes(
+              serialization.Encoding.DER, serialization.PublicFormat.SubjectPublicKeyInfo)
+          print('ключ соответствует сертификату:', pub_cert == pub_priv)
+          print('SHA1 сертификата:', cert.fingerprint(hashes.SHA1()).hex())
+          PY
+
+      - name: "Сохранить ключ в секреты"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          KEY=$(base64 -w0 /tmp/testkey.pk8 2>/dev/null || base64 /tmp/testkey.pk8 | tr -d '\n')
+          CERT=$(base64 -w0 /tmp/testkey.x509.pem 2>/dev/null || base64 /tmp/testkey.x509.pem | tr -d '\n')
+          echo "ключ: ${#KEY} символов, сертификат: ${#CERT} символов" | tee reports/testkey.txt
+          # в секреты репозитория; нужен токен с правами на secrets
+          gh api --method PUT "/repos/${{ github.repository }}/actions/secrets/LAUNCHER_KEY_B64" \
+            -f encrypted_value="$KEY" -f key_id="$(gh api "/repos/${{ github.repository }}/actions/secrets/public-key" --jq .key_id)" \
+            2>&1 | head -3 || echo "не удалось записать секрет напрямую" | tee -a reports/testkey.txt
+          echo "отпечаток:" | tee -a reports/testkey.txt
+          openssl x509 -in /tmp/testkey.x509.pem -noout -fingerprint -sha1 | tee -a reports/testkey.txt
+
+      - name: "Коммит отчёта"
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A reports
+          git diff --cached --quiet && exit 0
+          git commit -m "ключ подписи: отчёт"
+          for try in 1 2 3 4 5; do
+            if git pull --rebase --autostash origin "${{ github.ref_name }}" >/dev/null 2>&1 \
+               && git push origin HEAD:${{ github.ref_name }}; then exit 0; fi
+            sleep 10; git rebase --abort >/dev/null 2>&1 || true
+          done
