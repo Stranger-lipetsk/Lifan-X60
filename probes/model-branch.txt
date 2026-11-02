@@ -1,0 +1,361 @@
+# 1. Как выбирается initDefault (модель устройства)
+
+## HomeApp.smali 7760-7950
+    iput-object v2, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadManager:Ltw/com/elead/manager/EleadManager;
+
+    .line 244
+    invoke-static {}, Ltw/com/elead/el830/home/QuickBoot;->getBootMode()I
+
+    move-result v2
+
+    iput v2, p0, Ltw/com/elead/el830/home/HomeApp;->iBootMode:I
+
+    .line 247
+    const-string v2, "sys.mount.ignore"
+
+    invoke-static {v2}, Landroid/os/SystemProperties;->get(Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object v1
+
+    .line 248
+    .local v1, "strMountIgnore":Ljava/lang/String;
+    if-eqz v1, :cond_2d
+
+    invoke-virtual {v1}, Ljava/lang/String;->isEmpty()Z
+
+    move-result v2
+
+    if-eqz v2, :cond_34
+
+    .line 251
+    :cond_2d
+    const-string v2, "sys.mount.ignore"
+
+    const-string v3, "true"
+
+    invoke-static {v2, v3}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
+
+    .line 255
+    :cond_34
+    invoke-direct {p0}, Ltw/com/elead/el830/home/HomeApp;->getSysProductModelID()V
+
+    .line 258
+    invoke-virtual {p0}, Ltw/com/elead/el830/home/HomeApp;->initSysConfig()V
+
+    .line 264
+    invoke-virtual {p0}, Ltw/com/elead/el830/home/HomeApp;->getProductModel()I
+
+    move-result v2
+
+    if-ne v2, v4, :cond_b8
+
+    .line 265
+    invoke-direct {p0}, Ltw/com/elead/el830/home/HomeApp;->initDefault_EL830CLF01()V
+
+    .line 271
+    :goto_43
+    invoke-virtual {p0}, Ltw/com/elead/el830/home/HomeApp;->getProductModel()I
+
+    move-result v2
+
+    if-ne v2, v4, :cond_bc
+
+    .line 273
+    iget-object v2, p0, Ltw/com/elead/el830/home/HomeApp;->mSWApps:Ljava/util/ArrayList;
+
+    const-string v3, "tw.com.elead.el830.radio"
+
+    invoke-virtual {v2, v3}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    .line 274
+    iget-object v2, p0, Ltw/com/elead/el830/home/HomeApp;->mSWApps:Ljava/util/ArrayList;
+
+    const-string v3, "tw.com.elead.el830.mediaplayer:USB"
+
+    invoke-virtual {v2, v3}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    .line 275
+    iget-object v2, p0, Ltw/com/elead/el830/home/HomeApp;->mSWApps:Ljava/util/ArrayList;
+
+    const-string v3, "tw.com.elead.el830.mediaplayer:SD"
+
+    invoke-virtual {v2, v3}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    .line 276
+    iget-object v2, p0, Ltw/com/elead/el830/home/HomeApp;->mSWApps:Ljava/util/ArrayList;
+
+    const-string v3, "tw.com.elead.el830.avin"
+
+    invoke-virtual {v2, v3}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    .line 277
+    iget-object v2, p0, Ltw/com/elead/el830/home/HomeApp;->mSWApps:Ljava/util/ArrayList;
+
+    const-string v3, "tw.com.elead.el830.elbluetooth.music"
+
+    invoke-virtual {v2, v3}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    .line 303
+    :goto_6c
+    invoke-virtual {p0, p0}, Ltw/com/elead/el830/home/HomeApp;->loadPreferences(Landroid/content/Context;)V
+
+    .line 306
+    invoke-virtual {p0}, Ltw/com/elead/el830/home/HomeApp;->getProductModel()I
+
+    move-result v2
+
+    if-nez v2, :cond_86
+
+    .line 308
+    iget-boolean v2, p0, Ltw/com/elead/el830/home/HomeApp;->bTFTPowerStatBeforeAccOff:Z
+
+    if-nez v2, :cond_86
+
+    .line 311
+    iget-object v2, p0, Ltw/com/elead/el830/home/HomeApp;->mEleadManager:Ltw/com/elead/manager/EleadManager;
+
+    const/4 v3, 0x0
+
+    invoke-virtual {v2, v3}, Ltw/com/elead/manager/EleadManager;->setBklPwr(Z)Z
+
+    .line 312
+    const-string v2, "Home"
+
+    const-string v3, "HomeApp.java turn off back light, due to the last memory is power off..."
+
+    invoke-static {v2, v3}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+
+    .line 318
+    :cond_86
+    invoke-direct {p0}, Ltw/com/elead/el830/home/HomeApp;->loadEleadApplications()V
+
+    .line 321
+    invoke-direct {p0}, Ltw/com/elead/el830/home/HomeApp;->enableExternalStorage()V
+
+    .line 324
+    iget-object v2, p0, Ltw/com/elead/el830/home/HomeApp;->currAudioPackageName:Ljava/lang/String;
+
+    invoke-virtual {p0, v2}, Ltw/com/elead/el830/home/HomeApp;->addToAppStack(Ljava/lang/String;)Z
+
+    .line 327
+    iget-object v2, p0, Ltw/com/elead/el830/home/HomeApp;->currAudioPackageName:Ljava/lang/String;
+
+    invoke-virtual {p0, v2}, Ltw/com/elead/el830/home/HomeApp;->getAppVolumeTable(Ljava/lang/String;)I
+
+    move-result v2
+
+    iput v2, p0, Ltw/com/elead/el830/home/HomeApp;->iVolumeTable:I
+
+    .line 330
+    iget-object v2, p0, Ltw/com/elead/el830/home/HomeApp;->currDisplayPackageName:Ljava/lang/String;
+
+    invoke-virtual {p0, v2}, Ltw/com/elead/el830/home/HomeApp;->getAppDisplayTable(Ljava/lang/String;)I
+
+    move-result v2
+
+    iput v2, p0, Ltw/com/elead/el830/home/HomeApp;->iDisplayTable:I
+
+    .line 332
+    new-instance v0, Landroid/content/Intent;
+
+    invoke-direct {v0}, Landroid/content/Intent;-><init>()V
+
+    .line 334
+    .local v0, "mIntent":Landroid/content/Intent;
+    const-string v2, "tw.com.elead.el830.home.IHomeService"
+
+    invoke-virtual {v0, v2}, Landroid/content/Intent;->setAction(Ljava/lang/String;)Landroid/content/Intent;
+
+    .line 335
+    invoke-virtual {p0}, Ltw/com/elead/el830/home/HomeApp;->getPackageName()Ljava/lang/String;
+
+    move-result-object v2
+
+    invoke-virtual {v0, v2}, Landroid/content/Intent;->setPackage(Ljava/lang/String;)Landroid/content/Intent;
+
+    .line 336
+    sget-object v2, Landroid/os/UserHandle;->CURRENT:Landroid/os/UserHandle;
+
+    invoke-virtual {p0, v0, v2}, Ltw/com/elead/el830/home/HomeApp;->startServiceAsUser(Landroid/content/Intent;Landroid/os/UserHandle;)Landroid/content/ComponentName;
+
+    .line 344
+    return-void
+
+    .line 267
+    .end local v0    # "mIntent":Landroid/content/Intent;
+    :cond_b8
+    invoke-direct {p0}, Ltw/com/elead/el830/home/HomeApp;->initDefault()V
+
+    goto :goto_43
+
+    .line 283
+    :cond_bc
+    iget-object v2, p0, Ltw/com/elead/el830/home/HomeApp;->mSWApps:Ljava/util/ArrayList;
+
+
+# 2. Ветка по умолчанию в loadEleadApplications
+## :cond_23e и то, что после него (хвост метода)
+747:    :cond_23e
+1615:    if-eqz v9, :cond_23e
+строка :cond_23e -> 747
+    .line 725
+    const/4 v9, 0x0
+
+    iput v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->displayTable:I
+
+    .line 726
+    const/4 v9, 0x4
+
+    iput v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->volumeTable:I
+
+    .line 727
+    const/4 v9, 0x4
+
+    iput v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->audioChannel:I
+
+    .line 728
+    const/4 v9, 0x1
+
+    iput v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->videoChannel:I
+
+    .line 729
+    const/4 v9, 0x0
+
+    iput v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->wifiMode:I
+
+    .line 730
+    const/4 v9, 0x1
+
+    iput-boolean v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->beforeAccOff:Z
+
+    .line 731
+    const v9, 0x7f0c0119
+
+    invoke-virtual {p0, v9}, Ltw/com/elead/el830/home/HomeApp;->getString(I)Ljava/lang/String;
+
+    move-result-object v9
+
+    iput-object v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->vrCmd:Ljava/lang/String;
+
+    .line 905
+    :cond_23e
+    :goto_23e
+    sget-object v9, Ltw/com/elead/el830/home/HomeApp;->mEleadApplications:Ljava/util/HashMap;
+
+    invoke-virtual {v9, v7, v0}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+
+    goto/16 :goto_af
+
+    .line 733
+    :cond_245
+    const-string v9, "tw.com.elead.el830.elbluetooth.phone"
+
+    invoke-virtual {v7, v9}, Ljava/lang/String;->equalsIgnoreCase(Ljava/lang/String;)Z
+
+    move-result v9
+
+    if-eqz v9, :cond_298
+
+    .line 735
+    const v9, 0x7f0c0013
+
+    invoke-virtual {p0, v9}, Ltw/com/elead/el830/home/HomeApp;->getString(I)Ljava/lang/String;
+
+    move-result-object v9
+
+    iput-object v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->title:Ljava/lang/CharSequence;
+
+    .line 736
+    new-instance v9, Landroid/content/ComponentName;
+
+    iget-object v10, v4, Landroid/content/pm/ResolveInfo;->activityInfo:Landroid/content/pm/ActivityInfo;
+
+    iget-object v10, v10, Landroid/content/pm/ActivityInfo;->applicationInfo:Landroid/content/pm/ApplicationInfo;
+
+    iget-object v10, v10, Landroid/content/pm/ApplicationInfo;->packageName:Ljava/lang/String;
+
+    iget-object v11, v4, Landroid/content/pm/ResolveInfo;->activityInfo:Landroid/content/pm/ActivityInfo;
+
+    iget-object v11, v11, Landroid/content/pm/ActivityInfo;->name:Ljava/lang/String;
+
+    invoke-direct {v9, v10, v11}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    const/high16 v10, 0x10200000
+
+    invoke-virtual {v0, v9, v10}, Ltw/com/elead/el830/home/ApplicationInfo;->setActivity(Landroid/content/ComponentName;I)V
+
+    .line 737
+    const-string v9, "tw.com.elead.el830.home"
+
+    iput-object v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->menu:Ljava/lang/String;
+
+    .line 738
+    iput-object v8, v0, Ltw/com/elead/el830/home/ApplicationInfo;->subFunc:Ljava/lang/String;
+
+    .line 739
+    const/4 v9, 0x0
+
+    iput v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->funcType:I
+
+    .line 740
+    const/4 v9, 0x1
+
+    iput-boolean v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->bMenuItem:Z
+
+    .line 741
+    const/4 v9, 0x0
+
+    iput-boolean v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->enable:Z
+
+    .line 742
+    const/4 v9, 0x0
+
+    iput-boolean v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->selected:Z
+
+    .line 743
+    const/4 v9, 0x0
+
+    iput v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->displayTable:I
+
+    .line 744
+    const/4 v9, -0x1
+
+    iput v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->volumeTable:I
+
+    .line 745
+    const/4 v9, 0x0
+
+    iput v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->audioChannel:I
+
+    .line 746
+    const/4 v9, 0x0
+
+    iput v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->videoChannel:I
+
+    .line 747
+    const/4 v9, 0x0
+
+    iput v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->wifiMode:I
+
+    .line 748
+    const/4 v9, 0x1
+
+    iput-boolean v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->beforeAccOff:Z
+
+    .line 749
+    const v9, 0x7f0c011a
+
+    invoke-virtual {p0, v9}, Ltw/com/elead/el830/home/HomeApp;->getString(I)Ljava/lang/String;
+
+    move-result-object v9
+
+    iput-object v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->vrCmd:Ljava/lang/String;
+
+    goto :goto_23e
+
+    .line 751
+    :cond_298
+    const-string v9, "tw.com.elead.el830.elbluetooth.music"
+
+    invoke-virtual {v7, v9}, Ljava/lang/String;->equalsIgnoreCase(Ljava/lang/String;)Z
+
