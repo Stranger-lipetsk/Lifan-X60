@@ -135,10 +135,5 @@ jobs:
           done
           echo "не удалось отправить отчёты — не критично, образ собран"
 
-      - name: Артефакт
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: firmware-reports
-          path: reports/
-          retention-days: 7
+      # Отчёты коммитятся в репозиторий шагом выше — артефакт не нужен
+      # (он весил сотни МБ и съедал квоту Actions storage).

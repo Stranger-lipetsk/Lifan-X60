@@ -69,9 +69,3 @@ jobs:
             git rebase --abort >/dev/null 2>&1 || true
           done
           echo "не удалось отправить отчёты — не критично, образ собран"
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: pass3-reports
-          path: reports/pass3
-          retention-days: 7
