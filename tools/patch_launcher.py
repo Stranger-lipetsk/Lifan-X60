@@ -121,20 +121,24 @@ def add_set_activity(text):
         raise SystemExit('не найден loadEleadApplications')
     method = m.group(0)
 
-    # метка может быть склеена с :goto_23e
+    # в baksmali метки склеены: строка ":cond_23e", следующая ":goto_23e"
     m_label = re.search(r'^\s*:cond_23e\s*$', method, re.M)
     if not m_label:
-        m_label = re.search(r'^\s*:cond_23e', method, re.M)
-    if not m_label:
         raise SystemExit('не найдена ветка cond_23e')
-    at = method.index(m_label.group(0)) + len(m_label.group(0))
-    tail = method[at:]
-    if 'ApplicationInfo;->setActivity' in tail[:2500]:
+
+    tail = method[m_label.end():]
+    # сразу после меток идёт put() в HashMap — интент задаём перед ним
+    m_put = re.search(r'^\s*invoke-virtual \{[^}]*\}, Ljava/util/HashMap;->put',
+                      tail, re.M)
+    if not m_put:
+        raise SystemExit('не найден put() после :cond_23e')
+    if 'ApplicationInfo;->setActivity' in tail[:m_put.start()]:
         print('  setActivity в ветке по умолчанию уже есть')
         return text
 
-    # вставляем в самом начале ветки, до заполнения полей
-    new_method = method[:at] + '\n' + SET_ACTIVITY + tail
+    at = m_label.end() + m_put.start()
+    # перед вставкой нужен перенос строки после метки :goto_23e
+    new_method = method[:at] + SET_ACTIVITY + method[at:]
     print('  в ветку «незнакомый пакет» добавлен setActivity')
     return text[:m.start()] + new_method + text[m.end():]
 
