@@ -1,11 +1,11 @@
 === файл ===
--rw-r--r-- 1 runner runner 264241152 Nov  2 04:17 out/system.img
-байт: 264241152 (раздел p3: 536870912 = 512 МиБ, образ должен быть НЕ БОЛЬШЕ)
-РАЗМЕР: OK (252 МиБ, влезает в 512 МиБ)
+-rw-r--r-- 1 runner runner 289406976 Nov  2 04:20 out/system.img
+байт: 289406976 (раздел p3: 536870912 = 512 МиБ, образ должен быть НЕ БОЛЬШЕ)
+РАЗМЕР: OK (276 МиБ, влезает в 512 МиБ)
 === ФС ===
 Filesystem volume name:   system
 Filesystem features:      has_journal ext_attr resize_inode dir_index filetype extent flex_bg sparse_super large_file huge_file dir_nlink extra_isize
-Block count:              64512
+Block count:              70656
 Block size:               4096
 Inode size:	          256
 Journal features:         (none)
@@ -14,15 +14,15 @@ Journal features:         (none)
 Pass 3: Checking directory connectivity
 Pass 4: Checking reference counts
 Pass 5: Checking group summary information
-system: 1391/64512 files (0.1% non-contiguous), 62959/64512 blocks
+system: 1391/70656 files (0.1% non-contiguous), 63349/70656 blocks
 === клавиатура на месте? ===
      26  100644 (1)      0      0   13353625 26-Apr-2026 17:05 IQQIService-Elead-International-20160105.1.apk
 === удалённое ===
 Navitel удалён — OK
 === панель MirrorLink (com.fpt.mirrorlink.android) ===
-     35  100644 (1)      0      0   16879  2-Nov-2026 04:17 com.fpt.mirrorlink.android.apk
+     35  100644 (1)      0      0   16879  2-Nov-2026 04:20 com.fpt.mirrorlink.android.apk
 === автоподключение карт (install-recovery.sh) ===
-      607  100755 (1)      0      0    6265  2-Nov-2026 04:17 install-recovery.sh
+      607  100755 (1)      0      0    6265  2-Nov-2026 04:20 install-recovery.sh
 права на исполнение: OK
 === build.prop ===
 ro.build.version.release=4.4.2
@@ -30,7 +30,7 @@ ro.product.locale.language=ru
 ro.product.locale.region=RU
 persist.sys.timezone=Europe/Moscow
 === свободное место внутри образа ===
-Block count:              64512
-Free blocks:              1553
+Block count:              70656
+Free blocks:              7307
 === sha256 ===
-465d8fe717104809ff0eb006f6326afc316a78a31441d8c2682cc33605c56f00  out/system.img
+d5c554d9855fd5fd1b525a0cf1bb74fdb4a9893ac69653a3b68254f2316e98a1  out/system.img
