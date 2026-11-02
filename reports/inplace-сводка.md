@@ -4,6 +4,6 @@
 суперблок и журнал остаются заводскими.
 
 | stage0-control.img | 377487360 байт | 0f898f48ee910fe0… |
-| stage1-clean.img | 377487360 байт | e1b545c52e737ca3… |
-| stage2-panel.img | 377487360 байт | ac20ecc8def265fb… |
-| stage3-full.img | 377487360 байт | 089b31198fbbdb8c… |
+| stage1-clean.img | 377487360 байт | a1a00072165321f1… |
+| stage2-panel.img | 377487360 байт | 890ba25fcdc86a82… |
+| stage3-full.img | 377487360 байт | fce3a9653a16d4c1… |
