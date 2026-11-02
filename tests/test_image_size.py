@@ -69,10 +69,26 @@ if bs.PARTITION_MB == 512:
     ok('PARTITION_MB = 512')
 else:
     bad('PARTITION_MB неверный')
-if bs.SIZE_HEADROOM_MB == 40:
-    ok('SIZE_HEADROOM_MB = 40')
+if bs.FREE_RESERVE_MB == 40:
+    ok('FREE_RESERVE_MB = 40')
 else:
-    bad('SIZE_HEADROOM_MB неверный')
+    bad('FREE_RESERVE_MB неверный')
+
+if 0.05 <= bs.MKE2FS_OVERHEAD <= 0.12:
+    ok(f'MKE2FS_OVERHEAD = {bs.MKE2FS_OVERHEAD} (правдоподобно)')
+else:
+    bad('MKE2FS_OVERHEAD неверный')
+
+# ключевое: прогноз свободного места должен быть близок к 40 МиБ
+for content in (100, 211.8, 238.5, 300):
+    m = bs.auto_size_mb(int(content * MiB))
+    free = m * (1 - bs.MKE2FS_OVERHEAD) - content
+    if free >= 30:
+        ok(f'содержимое {content:5.1f} -> {m} МиБ, свободно ~{free:.0f} МиБ')
+    else:
+        bad(f'содержимое {content:5.1f} -> {m} МиБ, свободно всего ~{free:.0f} МиБ')
+    if m > bs.PARTITION_MB:
+        bad(f'содержимое {content:5.1f} даёт образ {m} МиБ > раздела')
 
 # 5. в build_image есть защита от образа больше раздела
 src = open(os.path.join(os.path.dirname(__file__), '..', 'tools',

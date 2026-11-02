@@ -288,15 +288,21 @@ def fix_ownership(root):
 # 5. Сборка образа
 # --------------------------------------------------------------------------
 PARTITION_MB = 512          # физический размер раздела p3
-SIZE_HEADROOM_MB = 40       # запас на метаданные ext4 и свободное место
+FREE_RESERVE_MB = 40        # сколько свободного места оставить внутри образа
+# ext4 по умолчанию отдаёт под служебные структуры ~6.7 % (журнал, inode, GDT)
+# плюс резерв блока для root. Считаем по максимуму, чтобы не промахнуться.
+MKE2FS_OVERHEAD = 0.075
 
 
 def auto_size_mb(total_bytes):
-    """Размер образа по содержимому: содержимое + запас, кратно 4 МиБ."""
-    need = total_bytes / 1024 / 1024 + SIZE_HEADROOM_MB
+    """
+    Минимальный размер образа, при котором внутри останется FREE_RESERVE_MB
+    свободного места с учётом служебных структур ext4. Кратно 4 МиБ.
+    """
+    content = total_bytes / 1024 / 1024
+    need = (content + FREE_RESERVE_MB) / (1.0 - MKE2FS_OVERHEAD)
     mb = int(need) + 1
-    mb = (mb + 3) // 4 * 4
-    return mb
+    return (mb + 3) // 4 * 4
 
 
 def build_image(root, out_img, size_mb='auto'):
@@ -368,6 +374,20 @@ def build_image(root, out_img, size_mb='auto'):
             print('  ' + ln.strip())
     if '64bit' in h or 'metadata_csum' in h:
         raise SystemExit('ОШИБКА: в ФС остались фичи, несовместимые с ядром 3.0.35')
+
+    # свободное место внутри образа: нужно, чтобы приложения могли обновляться
+    free_blocks = block_size = None
+    for ln in h.splitlines():
+        if ln.startswith('Free blocks'):
+            free_blocks = int(ln.split(':')[1].strip())
+        elif ln.startswith('Block size'):
+            block_size = int(ln.split(':')[1].strip())
+    if free_blocks and block_size:
+        free_mb = free_blocks * block_size / 1024 / 1024
+        print(f'--- свободно внутри образа: {free_mb:.1f} МиБ')
+        if free_mb < 15:
+            print(f'ВНИМАНИЕ: свободно меньше 15 МиБ ({free_mb:.1f}) — '
+                  f'мало для обновлений приложений')
     return out_img
 
 
