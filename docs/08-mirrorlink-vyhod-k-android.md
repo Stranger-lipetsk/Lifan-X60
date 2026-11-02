@@ -78,33 +78,76 @@ APK уже в образе, так что этот шаг нужен тольк�
 | `/etc/install-recovery.sh` | 6265 байт, 0755 |
 | Клавиатура IQQI | на месте |
 
-## Что если кнопка всё равно не открывает панель
+## Почему кнопка была серой (разобрано 02.11.2026)
 
-Оболочка может запускать не просто `getLaunchIntentForPackage`, а конкретную
-активность или сервис. Тогда есть три запасных пути — по возрастанию сложности:
+Первая версия панели встала в образ, но кнопка MirrorLink осталась **серой и
+не нажималась**. Причина найдена в коде самой оболочки (`EL830LF01_Home.apk`,
+разбор через baksmali — `probes/home2-condition.txt`, `probes/home3-*.txt`).
 
-1. **Проверить, видит ли оболочка пакет.**
+**Что делает оболочка.** При старте `HomeApp.loadEleadApplications()` собирает
+таблицу своих приложений. Для пакета `com.fpt.mirrorlink.android` она явно
+ставит `ApplicationInfo.enable = false`:
+
+```
+:cond_4df
+const-string v9, "com.fpt.mirrorlink.android"
+invoke-virtual {v7, v9}, Ljava/lang/String;->equalsIgnoreCase(Ljava/lang/String;)Z
+...
+.line 885
+const/4 v9, 0x0
+iput-boolean v9, v0, Ltw/com/elead/el830/home/ApplicationInfo;->enable:Z
+```
+
+То есть **иконка выключена по умолчанию всегда** — независимо от того, что
+пакет установлен и что в нём есть `LAUNCHER`-активность.
+
+**Что её включает.** `HomeService` регистрирует приёмник на три сообщения:
+
+```
+mirrorlinkfilter.addAction("vn.com.fsoft.UsbIfaceReady");   -> enableMirrorLinkIcon(true)
+mirrorlinkfilter.addAction("vn.com.fsoft.UsbIfaceDown");    -> enableMirrorLinkIcon(false)
+mirrorlinkfilter.addAction("vn.com.fsoft.getscreenoff");    -> гашение экрана
+```
+
+По первому сообщению вызывается `enableMirrorLinkIcon(true)` →
+`enableEleadApplication("com.fpt.mirrorlink.android", true)` → иконка становится
+активной и нажимаемой. Отправляло это сообщение **само оригинальное
+приложение MirrorLink**, которого в прошивке нет.
+
+**Вывод:** мало положить пакет в образ — нужно, чтобы кто-то отправил
+`vn.com.fsoft.UsbIfaceReady` уже после старта оболочки.
+
+## Что сделано
+
+| Где | Что |
+|---|---|
+| `switcher/.../MainActivity.java` | при старте и при возврате на экран отправляет `vn.com.fsoft.UsbIfaceReady` |
+| `tools/system-files/install-recovery.sh` | при загрузке ждёт процесс оболочки, затем шлёт сигнал 10 раз с интервалом 6 с |
+
+Скрипт нужен потому, что нажать серую кнопку нельзя и запустить панель вручную
+тоже — сигнал обязан прийти сам при загрузке. Скрипт выполняется от root на
+каждой загрузке (`service flash_recovery /system/etc/install-recovery.sh`).
+
+## Как проверить после прошивки
+
+1. Кнопка MirrorLink на главном экране должна быть **цветной**, нажатие
+   открывает панель.
+2. Если осталась серой — посмотреть лог:
    ```bash
-   adb shell pm list packages | grep fpt
-   adb shell am start -n com.fpt.mirrorlink.android/.MainActivity
+   adb shell cat /data/local/tmp/mount_storage.log
    ```
-   Если команда `am start` открывает панель, а кнопка нет — дело в том,
-   *как* оболочка запускает.
+   Ищем строки:
+   - `оболочка запущена (жду N циклов)` — скрипт дождался оболочки;
+   - `сигнал MirrorLink отправлен: 10 из 10` — сигнал ушёл.
 
-2. **Создать недостающий сервис/ресивер.** Оболочка содержит
-   `MirrorLinkReceiver` и `MSG_UPDATE_MIRRORLINK_STATE`. Если она ждёт
-   широковещательное сообщение о состоянии — добавим в манифест приёмник
-   с нужным action (потребуется ещё один прогон разбора: посмотреть, какой
-   action регистрируется в `MirrorLinkReceiver`).
+   Если строк нет вовсе — скрипт не запускался. Если `0 из 10` — в системе нет
+   `/system/bin/am`.
 
-3. **Перекрыть кнопку на уровне оболочки.** Оболочка читает состояние
-   MirrorLink из системного свойства / настроек. Можно подставить значение
-   «включено» — тогда иконка станет активной. Требует правки
-   `SettingsProvider` или `build.prop`, делается в образе.
-
-Точный ответ даст проверка пункта 1 на машине: `am start` покажет, работает
-ли пакет сам по себе, а лог `logcat` при нажатии кнопки покажет, что именно
-вызывает оболочка.
+3. Ручная проверка сигнала (пока панель хоть как-то доступна):
+   ```bash
+   adb shell am broadcast -a vn.com.fsoft.UsbIfaceReady
+   ```
+   После этого кнопка должна стать активной сразу.
 
 ## Сборка APK из исходников
 
