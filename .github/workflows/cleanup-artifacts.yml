@@ -30,6 +30,7 @@ jobs:
           REPO: ${{ github.repository }}
           KEEP_DAYS: ${{ github.event.inputs.keep_days || '0' }}
           KEEP_IMAGE: ${{ github.event.inputs.keep_image || '1' }}
+          KEEP_NAMES: ${{ github.event.inputs.keep_names || '' }}
         run: |
           set -euo pipefail
           echo "репозиторий: $REPO, порог: $KEEP_DAYS дн., сохранять образ: $KEEP_IMAGE"
@@ -41,6 +42,7 @@ jobs:
           repo = os.environ['REPO']
           keep_days = int(os.environ.get('KEEP_DAYS', '7'))
           keep_image = os.environ.get('KEEP_IMAGE', '1') == '1'
+      keep_names = os.environ.get('KEEP_NAMES', '')
           token = os.environ['GH_TOKEN']
 
           def api(path, method='GET'):
@@ -65,8 +67,12 @@ jobs:
           total_mb = sum(i['size_in_bytes'] for i in items) / 1048576
           print(f'суммарный объём: {total_mb:.0f} МБ')
 
-          # свежайший образ не удаляем ни при каких условиях
-          imgs = [i for i in items if i['name'] == 'system-img-lite']
+          # свежайший образ из KEEP_NAMES не удаляем (пусто = удаляем всё)
+          # сохраняем только те имена, что перечислены в KEEP_NAMES (через запятую)
+          keep_names = [n.strip() for n in
+                        os.environ.get('KEEP_NAMES', '').split(',')
+                        if n.strip()]
+          imgs = [i for i in items if i['name'] in keep_names]
           newest_img = max(imgs, key=lambda x: x['created_at']) if imgs else None
           if newest_img:
               print(f'сохраняю образ: id={newest_img["id"]} от {newest_img["created_at"][:16]}')
