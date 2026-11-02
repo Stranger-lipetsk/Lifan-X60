@@ -1,5 +1,5 @@
 === badging ===
-package: name='com.fpt.mirrorlink.android' versionCode='1' versionName='1.0' platformBuildVersionName='17' platformBuildVersionCode='37' compileSdkVersion='37' compileSdkVersionCodename='17'
+package: name='com.fpt.mirrorlink.android' versionCode='2' versionName='2.0' platformBuildVersionName='17' platformBuildVersionCode='37' compileSdkVersion='37' compileSdkVersionCodename='17'
 sdkVersion:'19'
 targetSdkVersion:'19'
 uses-permission: name='android.permission.REORDER_TASKS'
@@ -14,6 +14,7 @@ feature-group: label=''
   uses-feature: name='android.hardware.screen.landscape'
   uses-implied-feature: name='android.hardware.screen.landscape' reason='one or more activities have specified a landscape orientation'
 main
+other-activities
 supports-screens: 'small' 'normal' 'large' 'xlarge'
 supports-any-density: 'true'
 locales: '--_--'
@@ -21,8 +22,8 @@ densities: '160'
 === активности и фильтры ===
 N: android=http://schemas.android.com/apk/res/android
   E: manifest (line=2)
-    A: android:versionCode(0x0101021b)=(type 0x10)0x1
-    A: android:versionName(0x0101021c)="1.0" (Raw: "1.0")
+    A: android:versionCode(0x0101021b)=(type 0x10)0x2
+    A: android:versionName(0x0101021c)="2.0" (Raw: "2.0")
     A: android:compileSdkVersion(0x01010572)=(type 0x10)0x25
     A: android:compileSdkVersionCodename(0x01010573)="17" (Raw: "17")
     A: package="com.fpt.mirrorlink.android" (Raw: "com.fpt.mirrorlink.android")
@@ -50,26 +51,31 @@ N: android=http://schemas.android.com/apk/res/android
             A: android:name(0x01010003)="android.intent.action.MAIN" (Raw: "android.intent.action.MAIN")
           E: category (line=26)
             A: android:name(0x01010003)="android.intent.category.LAUNCHER" (Raw: "android.intent.category.LAUNCHER")
-      E: activity-alias (line=36)
+        E: intent-filter (line=31)
+          E: action (line=32)
+            A: android:name(0x01010003)="com.fpt.mirrorlink.android.START_ANDROID" (Raw: "com.fpt.mirrorlink.android.START_ANDROID")
+          E: category (line=33)
+            A: android:name(0x01010003)="android.intent.category.DEFAULT" (Raw: "android.intent.category.DEFAULT")
+      E: activity-alias (line=46)
         A: android:label(0x01010001)="Переключатель (Домой)" (Raw: "Переключатель (Домой)")
         A: android:name(0x01010003)=".HomeAlias" (Raw: ".HomeAlias")
-        A: android:enabled(0x0101000e)=(type 0x12)0x0
+        A: android:enabled(0x0101000e)=(type 0x12)0xffffffff
         A: android:exported(0x01010010)=(type 0x12)0xffffffff
         A: android:targetActivity(0x01010202)=".MainActivity" (Raw: ".MainActivity")
-        E: intent-filter (line=42)
-          E: action (line=43)
+        E: intent-filter (line=52)
+          E: action (line=53)
             A: android:name(0x01010003)="android.intent.action.MAIN" (Raw: "android.intent.action.MAIN")
-          E: category (line=44)
+          E: category (line=54)
             A: android:name(0x01010003)="android.intent.category.HOME" (Raw: "android.intent.category.HOME")
-          E: category (line=45)
+          E: category (line=55)
             A: android:name(0x01010003)="android.intent.category.DEFAULT" (Raw: "android.intent.category.DEFAULT")
-      E: activity-alias (line=51)
+      E: activity-alias (line=61)
         A: android:label(0x01010001)="Переключатель" (Raw: "Переключатель")
         A: android:name(0x01010003)="com.fpt.mirrorlink.android.MirrorLinkActivity" (Raw: "com.fpt.mirrorlink.android.MirrorLinkActivity")
         A: android:exported(0x01010010)=(type 0x12)0xffffffff
         A: android:targetActivity(0x01010202)=".MainActivity" (Raw: ".MainActivity")
-        E: intent-filter (line=56)
-          E: action (line=57)
+        E: intent-filter (line=66)
+          E: action (line=67)
             A: android:name(0x01010003)="android.intent.action.MAIN" (Raw: "android.intent.action.MAIN")
-          E: category (line=58)
+          E: category (line=68)
             A: android:name(0x01010003)="android.intent.category.LAUNCHER" (Raw: "android.intent.category.LAUNCHER")
