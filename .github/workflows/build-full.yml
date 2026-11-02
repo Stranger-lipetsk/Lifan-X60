@@ -49,6 +49,7 @@ jobs:
 
       - name: "Патч лаунчера"
         run: |
+          set -o pipefail
           debugfs -R "dump /priv-app/EL830LF01_Home.apk /tmp/Home.apk" out/system-org.img 2>&1 | tail -1
           java -jar /tmp/apktool.jar d -f /tmp/Home.apk -o /tmp/HomeDec 2>&1 | tail -2
 
@@ -116,6 +117,7 @@ jobs:
 
       - name: "Урезать APK"
         run: |
+          set -o pipefail
           # В APK лежат библиотеки под x86/arm64, которые i.MX6 не использует,
           # и десятки голосов Navitel. Для системных APK Android 4.4 сверяет
           # подпись только у AndroidManifest.xml, поэтому файл можно править.
@@ -141,6 +143,7 @@ jobs:
 
       - name: "Собрать образ"
         run: |
+          set -o pipefail
           REMOVE=""
           for p in Navitel-9.13.73-large.apk; do REMOVE="$REMOVE --remove /priv-app/$p"; done
           for p in BSEDemo EL830TAM1_GPIO_TEST_2015.01.01.01 CubeLiveWallpapers \

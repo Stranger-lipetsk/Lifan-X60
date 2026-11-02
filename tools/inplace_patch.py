@@ -72,7 +72,9 @@ def apply_props(img, pairs, sudo):
     там нет, система берёт пояс из настроек, а они сбрасываются при
     перепрошивке (раздел data форматируется).
     """
-    tmp = '/tmp/build.prop.patch'
+    tmp = '/tmp/build.prop.patch'          # читаем (файл создаёт debugfs)
+    tmp_w = '/tmp/build.prop.patch.new'    # пишем отдельно: первый может
+                                           # принадлежать root после dump
     if not read_file(img, '/build.prop', sudo, tmp):
         print('  ВНИМАНИЕ: /build.prop не найден, свойства не заданы')
         return
@@ -101,10 +103,11 @@ def apply_props(img, pairs, sudo):
             added.append(f'{key}={val}')
 
     if changed or added:
-        with open(tmp, 'w', encoding='utf-8') as f:
+        with open(tmp_w, 'w', encoding='utf-8') as f:
             f.write('\n'.join(lines) + '\n')
+        os.chmod(tmp_w, 0o644)
         debugfs(img, 'rm /build.prop', sudo)
-        out, rc = debugfs(img, f'write "{tmp}" /build.prop', sudo)
+        out, rc = debugfs(img, f'write "{tmp_w}" /build.prop', sudo)
         debugfs(img, 'sif /build.prop mode 0100644', sudo)
         debugfs(img, 'sif /build.prop uid 0', sudo)
         debugfs(img, 'sif /build.prop gid 0', sudo)
