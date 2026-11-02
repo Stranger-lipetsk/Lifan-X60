@@ -1,0 +1,95 @@
+name: Очистка артефактов
+
+on:
+  workflow_dispatch:
+    inputs:
+      keep_days:
+        description: 'Удалить артефакты старше N дней (0 = удалить всё, кроме свежайшего образа)'
+        required: false
+        default: '7'
+      keep_image:
+        description: 'Сохранить ли свежий system-img-lite (1/0)'
+        required: false
+        default: '1'
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: "Удаление старых артефактов"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          KEEP_DAYS: ${{ github.event.inputs.keep_days || '7' }}
+          KEEP_IMAGE: ${{ github.event.inputs.keep_image || '1' }}
+        run: |
+          set -euo pipefail
+          echo "репозиторий: $REPO, порог: $KEEP_DAYS дн., сохранять образ: $KEEP_IMAGE"
+
+          python3 - <<'PY'
+          import json, os, subprocess, sys
+          from datetime import datetime, timedelta, timezone
+
+          repo = os.environ['REPO']
+          keep_days = int(os.environ.get('KEEP_DAYS', '7'))
+          keep_image = os.environ.get('KEEP_IMAGE', '1') == '1'
+          token = os.environ['GH_TOKEN']
+
+          def api(path, method='GET'):
+              cmd = ['gh', 'api', '-X', method, f'/repos/{repo}/actions/artifacts{path}']
+              p = subprocess.run(cmd, capture_output=True, text=True)
+              return p.stdout, p.returncode
+
+          items = []
+          page = 1
+          while True:
+              out, rc = api(f'?per_page=100&page={page}')
+              if rc != 0:
+                  print('не удалось получить список артефактов'); sys.exit(0)
+              data = json.loads(out or '{}')
+              batch = data.get('artifacts', [])
+              items += batch
+              if len(batch) < 100:
+                  break
+              page += 1
+
+          print(f'всего артефактов: {len(items)}')
+          total_mb = sum(i['size_in_bytes'] for i in items) / 1048576
+          print(f'суммарный объём: {total_mb:.0f} МБ')
+
+          # свежайший образ не удаляем ни при каких условиях
+          imgs = [i for i in items if i['name'] == 'system-img-lite']
+          newest_img = max(imgs, key=lambda x: x['created_at']) if imgs else None
+          if newest_img:
+              print(f'сохраняю образ: id={newest_img["id"]} от {newest_img["created_at"][:16]}')
+
+          cutoff = datetime.now(timezone.utc) - timedelta(days=keep_days)
+          to_delete = []
+          for a in items:
+              if keep_image and newest_img and a['id'] == newest_img['id']:
+                  continue
+              created = datetime.fromisoformat(a['created_at'].replace('Z', '+00:00'))
+              if keep_days == 0 or created < cutoff:
+                  to_delete.append(a)
+
+          freed = sum(a['size_in_bytes'] for a in to_delete) / 1048576
+          print(f'к удалению: {len(to_delete)} шт, {freed:.0f} МБ')
+
+          ok = fail = 0
+          for a in to_delete:
+              _, rc = api(f'/{a["id"]}', method='DELETE')
+              if rc == 0:
+                  ok += 1
+              else:
+                  fail += 1
+          print(f'удалено: {ok}, ошибок: {fail}')
+
+          if ok:
+              remain = len(items) - ok
+              print(f'осталось артефактов: ~{remain}')
+          PY
