@@ -36,6 +36,7 @@ Wi-Fi точки доступа телефона: **[docs/13-wifi-точка-д�
 Квота Actions и очистка артефактов: **[docs/14-квота-actions.md](docs/14-квота-actions.md)**
 
 ⚠️ **Не загружается после прошивки?** → **[docs/15-восстановление-циклическая-загрузка.md](docs/15-восстановление-циклическая-загрузка.md)**
+🔧 **Рабочий образ (стадия проверки):** релиз **[lite-stage1](https://github.com/Stranger-lipetsk/Lifan-X60/releases/tag/lite-stage1)** — правка заводского образа без пересборки ФС
 Доступ к Android, Wi-Fi и файлам: **[docs/08-mirrorlink-vyhod-k-android.md](docs/08-mirrorlink-vyhod-k-android.md)**
 Сборка образа: `python3 tools/build_system.py --fw архив.rar --out out/system.img ...`
 
