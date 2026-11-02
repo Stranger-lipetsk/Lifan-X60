@@ -1,17 +1,76 @@
 # Bluetooth и WiFi в прошивке
 
-## файлы Bluetooth в /system
+## /etc/bluetooth
+debugfs 1.47.0 (5-Feb-2023)
     593   40755 (2)      0      0    4096 26-Apr-2026 17:05 .
     585   40755 (2)      0      0    4096 26-Apr-2026 17:05 ..
     594  100644 (1)      0      0      91 26-Apr-2026 17:05 bt_vendor.conf
 
+debugfs 1.47.0 (5-Feb-2023)
+--- содержимое bt_vendor.conf ---
+UartPort = /dev/ttymxc1
+FwPatchFilePath = /etc/firmware/ 
+FwPatchFileName = bcm20710a1.hcd
+
+## библиотеки Bluetooth
    1072  100644 (1)      0      0   1633676 26-Apr-2026 17:05 libbluelet.so
+## исполняемые файлы BT
     312  100755 (1)      0   2000    5404 26-Apr-2026 17:05 bt_test
-    313  100755 (1)      0   2000    5356 26-Apr-2026 17:05 btpcmtest
-    547  100755 (1)      0   2000     799 26-Apr-2026 17:05 setup_btmac.sh
-## APK с Bluetooth
+## APK Bluetooth
      15  100644 (1)      0      0   294080 26-Apr-2026 17:05 Bluetooth.apk
      26  100644 (1)      0      0   845792 26-Apr-2026 17:05 EL831CLF01_elBluetoothDial_2016.12.13.01.apk
      27  100644 (1)      0      0   899003 26-Apr-2026 17:05 EL831CLF01_elBluetoothMusic_2016.12.13.01.apk
      28  100644 (1)      0      0   1139049 26-Apr-2026 17:05 EL831CLF01_elBluetoothPhone_2016.12.13.01.apk
      29  100644 (1)      0      0   912852 26-Apr-2026 17:05 EL831CLF01_elBluetoothSetup_2016.12.13.01.apk
+
+## WiFi: /etc/firmware
+debugfs 1.47.0 (5-Feb-2023)
+    611   40755 (2)      0      0    4096 26-Apr-2026 17:05 .
+    585   40755 (2)      0      0    4096 26-Apr-2026 17:05 ..
+    612  100644 (1)      0      0   26621 26-Apr-2026 17:05 bcm20710a1.hcd
+
+## WiFi: /etc/wifi
+debugfs 1.47.0 (5-Feb-2023)
+    802   40755 (2)      0      0    4096 26-Apr-2026 17:05 .
+    585   40755 (2)      0      0    4096 26-Apr-2026 17:05 ..
+    803  100644 (1)      0      0    1203 26-Apr-2026 17:05 nvram.txt
+    804  100644 (1)      0      0      24 26-Apr-2026 17:05 p2p_supplicant_overlay.conf
+    805   40755 (2)      0      0    4096 26-Apr-2026 17:05 wlconf
+    808  100644 (1)      0      0     271 26-Apr-2026 17:05 wpa_supplicant.conf
+    809  100644 (1)      0      0      31 26-Apr-2026 17:05 wpa_supplicant_overlay.conf
+
+## WiFi: бинарники
+/bin/wpa_supplicant: 1
+/bin/hostapd: 1
+/bin/dhcpcd: 1
+/bin/ping: 1
+
+## build.prop про bluetooth/wifi/wlan
+ro.wifi.channels=
+wifi.interface=wlan0
+softap.interface=wlan0
+wifi.ap.interface
+wlan0
+qemu.hw.mainkeys=1
+
+## распаковать ядро
+файл: 
+распаковано: 0 байт
+
+## драйверы (вхождения в ядре)
+  hci_uart: 0
+  hci_vhci: 0
+  bluetooth: 0
+  btusb: 0
+  wl12xx: 0
+  wlcore: 0
+  wl1271: 0
+  ftdi_sio: 0
+  ch341: 0
+  pl2303: 0
+  cp210x: 0
+  usbserial: 0
+
+## контекст USB-серийных
+
+## контекст bluetooth
