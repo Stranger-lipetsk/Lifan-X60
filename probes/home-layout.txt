@@ -1,0 +1,83 @@
+# Раскладка главного экрана
+
+## какие layout есть
+/tmp/HomeDec/res/layout:
+action_tab_layout.xml
+app_item.xml
+application.xml
+aux_item.xml
+base_main.xml
+basic_item.xml
+basic_page.xml
+ccd.xml
+check_item.xml
+circle_list_item.xml
+connection_list_item.xml
+disclaimer.xml
+drive_forbidden.xml
+drop_down_list_item.xml
+elead_customer_dialog.xml
+elead_dialog.xml
+elead_dialog_bt1.xml
+elead_dialog_bt2.xml
+elead_progress_dialog.xml
+elead_progress_dialog_bt1.xml
+elead_progress_dialog_bt2.xml
+favorite.xml
+favorite_item.xml
+group_list_item_tag.xml
+home.xml
+list_item.xml
+option_layout.xml
+overflow_bt.xml
+setup_activity_animation.xml
+setup_brightness.xml
+setup_deviceid.xml
+setup_gesture.xml
+setup_gesture_figner2_1.xml
+setup_gesture_figner2_2.xml
+setup_gesture_figner3_1.xml
+setup_gesture_figner3_2.xml
+setup_gesture_figner4_1.xml
+setup_gps.xml
+setup_gps_item.xml
+
+## setContentView в коде
+/tmp/HomeDec/smali/tw/com/elead/el830/setup/SetupActivity.smali:436:    invoke-virtual {p0, v2}, Ltw/com/elead/el830/setup/SetupActivity;->setContentView(I)V
+/tmp/HomeDec/smali/tw/com/elead/el830/setup/WifiMacAddress.smali:852:    invoke-virtual {p0, v0}, Ltw/com/elead/el830/setup/WifiMacAddress;->setContentView(I)V
+/tmp/HomeDec/smali/tw/com/elead/el830/setup/DeviceIDActivity.smali:847:    invoke-virtual {p0, v0}, Ltw/com/elead/el830/setup/DeviceIDActivity;->setContentView(I)V
+/tmp/HomeDec/smali/tw/com/elead/el830/setup/Brightness.smali:218:    invoke-virtual {p0, v0}, Ltw/com/elead/el830/setup/Brightness;->setContentView(I)V
+/tmp/HomeDec/smali/tw/com/elead/el830/setup/ServiceDiagnosis.smali:499:    invoke-virtual {p0, v2}, Ltw/com/elead/el830/setup/ServiceDiagnosis;->setContentView(I)V
+/tmp/HomeDec/smali/tw/com/elead/el830/setup/Graphic.smali:175:    invoke-virtual {p0, v0}, Ltw/com/elead/el830/setup/Graphic;->setContentView(I)V
+/tmp/HomeDec/smali/tw/com/elead/el830/setup/Speaker.smali:1537:    invoke-virtual {p0, v0}, Ltw/com/elead/el830/setup/Speaker;->setContentView(I)V
+/tmp/HomeDec/smali/tw/com/elead/el830/setup/DeveloperDiagnosis.smali:955:    invoke-virtual {p0, v3}, Ltw/com/elead/el830/setup/DeveloperDiagnosis;->setContentView(I)V
+/tmp/HomeDec/smali/tw/com/elead/el830/setup/RadioFreq.smali:744:    invoke-virtual {p0, v2}, Ltw/com/elead/el830/setup/RadioFreq;->setContentView(I)V
+/tmp/HomeDec/smali/tw/com/elead/el830/setup/SafetyConnection.smali:148:    invoke-virtual {p0, v3}, Ltw/com/elead/el830/setup/SafetyConnection;->setContentView(I)V
+/tmp/HomeDec/smali/tw/com/elead/el830/setup/LanguageList.smali:1025:    invoke-virtual {p0, v2}, Ltw/com/elead/el830/setup/LanguageList;->setContentView(I)V
+/tmp/HomeDec/smali/tw/com/elead/el830/setup/PowerOffTimer.smali:204:    invoke-virtual {p0, v2}, Ltw/com/elead/el830/setup/PowerOffTimer;->setContentView(I)V
+/tmp/HomeDec/smali/tw/com/elead/el830/setup/UUIDActivity.smali:909:    invoke-virtual {p0, v2}, Ltw/com/elead/el830/setup/UUIDActivity;->setContentView(I)V
+/tmp/HomeDec/smali/tw/com/elead/el830/setup/TimezoneList.smali:1053:    invoke-virtual {p0, v3}, Ltw/com/elead/el830/setup/TimezoneList;->setContentView(I)V
+/tmp/HomeDec/smali/tw/com/elead/el830/setup/SVC.smali:199:    invoke-virtual {p0, v2}, Ltw/com/elead/el830/setup/SVC;->setContentView(I)V
+/tmp/HomeDec/smali/tw/com/elead/el830/setup/GPS.smali:520:    invoke-virtual {p0, v0}, Ltw/com/elead/el830/setup/GPS;->setContentView(I)V
+/tmp/HomeDec/smali/tw/com/elead/el830/setup/StealthMode.smali:226:    invoke-virtual {p0, v2}, Ltw/com/elead/el830/setup/StealthMode;->setContentView(I)V
+/tmp/HomeDec/smali/tw/com/elead/el830/setup/Time.smali:262:    invoke-virtual {p0, v1}, Ltw/com/elead/el830/setup/Time;->setContentView(I)V
+/tmp/HomeDec/smali/tw/com/elead/el830/setup/Version.smali:3972:    invoke-virtual {p0, v0}, Ltw/com/elead/el830/setup/Version;->setContentView(I)V
+/tmp/HomeDec/smali/tw/com/elead/el830/setup/Gesture.smali:459:    invoke-virtual {p0, v0}, Ltw/com/elead/el830/setup/Gesture;->setContentView(I)V
+
+## имена drawable кнопок
+/tmp/HomeDec/res/drawable-mdpi-v4/main_btn_mirrorlink_disable.png
+/tmp/HomeDec/res/drawable-mdpi-v4/main_btn_bt_music_click.png
+/tmp/HomeDec/res/drawable-mdpi-v4/ver_ico_navi.png
+/tmp/HomeDec/res/drawable-mdpi-v4/main_btn_radio_normal.png
+/tmp/HomeDec/res/drawable-mdpi-v4/main_btn_radio_disable.png
+/tmp/HomeDec/res/drawable-mdpi-v4/main_btn_mirrorlink_click.png
+/tmp/HomeDec/res/drawable-mdpi-v4/ver_ico_eznavi.png
+/tmp/HomeDec/res/drawable-mdpi-v4/main_btn_navi_normal.png
+/tmp/HomeDec/res/drawable-mdpi-v4/ver_ico_radio.png
+/tmp/HomeDec/res/drawable-mdpi-v4/main_btn_bt_music_normal.png
+/tmp/HomeDec/res/drawable-mdpi-v4/main_btn_mirrorlink_normal.png
+/tmp/HomeDec/res/drawable-mdpi-v4/main_btn_bt_music_disable.png
+/tmp/HomeDec/res/drawable-mdpi-v4/main_btn_navi_disable.png
+/tmp/HomeDec/res/drawable-mdpi-v4/main_btn_radio_click.png
+/tmp/HomeDec/res/drawable-mdpi-v4/ver_ico_bt_music.png
+/tmp/HomeDec/res/drawable-mdpi-v4/main_btn_navi_click.png
