@@ -23,7 +23,7 @@ jobs:
           sudo apt-get install -y -qq p7zip-full >/dev/null 2>&1 || true
           mkdir -p probes
 
-      - name: "Скачать заводскую прошивку и вытащить оболочку"
+      - name: "Скачать заводскую прошивку"
         run: |
           mkdir -p /tmp/rar
           python3 - <<'PY'
@@ -37,66 +37,89 @@ jobs:
                           '-o', '/tmp/fw.rar', it['file']], check=True)
           PY
           7z x -y -aos -o/tmp/rar /tmp/fw.rar >/dev/null 2>&1 || true
-          SYSIMG="$(find /tmp/rar -name system.img | head -1)"
-          echo "system.img: $SYSIMG"
-          debugfs -R "dump /priv-app/EL830LF01_Home.apk /tmp/Home.apk" "$SYSIMG" 2>&1 || true
-          ls -l /tmp/Home.apk
+          find /tmp/rar -name system.img | head -1
 
-      - name: "Разбор оболочки: вызовы MirrorLink и системная подпись"
+      - name: "Разбор оболочки и подписей"
         run: |
-          mkdir -p /tmp/home && cd /tmp/home
-          unzip -o -q /tmp/Home.apk 2>/dev/null || true
-          ls
-          echo "=== подписи внутри APK (system/opensource/platform) ==="
-          strings -a classes.dex | grep -iE "^(system|opensource|platform|shared|media)$" | sort | uniq -c | head
-          echo
-          echo "=== соседние строки с PACKAGE_MIRRORLINK ==="
-          strings -a classes.dex | grep -n -iE "PACKAGE_|mirrorlink" | head -40
-          echo
-          echo "=== системные ключи подписи в заводском образе ==="
+          OUT="${GITHUB_WORKSPACE}/probes/mirrorlink-report.txt"
           SYSIMG="$(find /tmp/rar -name system.img | head -1)"
-          for p in /etc/security/otacerts.zip /etc/security/ /etc/permissions/platform.xml; do
-            echo "--- $p"
-            debugfs -R "ls -l $p" "$SYSIMG" 2>&1 | head -5
-          done
-          debugfs -R "dump /etc/permissions/platform.xml /tmp/platform.xml" "$SYSIMG" 2>/dev/null || true
-          if [ -f /tmp/platform.xml ]; then
-            echo "=== записи о подписи system в platform.xml ==="
-            grep -A3 -iE "system|shared" /tmp/platform.xml | head -40
-          fi
-          debugfs -R "dump /etc/security/otacerts.zip /tmp/otacerts.zip" "$SYSIMG" 2>/dev/null || true
-          if [ -f /tmp/otacerts.zip ]; then
-            echo "=== сертификаты платформы ==="
-            unzip -o -q /tmp/otacerts.zip -d /tmp/otacerts && ls /tmp/otacerts
-            for f in /tmp/otacerts/*; do
-              echo "--- $f"
-              openssl x509 -in "$f" -inform DER -subject -issuer 2>/dev/null \
-                || openssl x509 -in "$f" -subject -issuer 2>/dev/null
-              openssl x509 -in "$f" -inform DER -pubkey -noout 2>/dev/null \
-                | openssl pkey -pubin -outform DER 2>/dev/null | sha256sum
-            done
-          fi
-          echo
-          echo "=== наш текущий APK: чем подписан ==="
-          cp /home/user/Lifan-X60/switcher/AndroidManifest.xml /tmp/ 2>/dev/null || true
-          echo "(наш APK подписан самодельным ключом CN=Lifan X60 — см. switcher/build.sh)"
-
-      - name: "Сохранить отчёт"
-        run: |
+          mkdir -p /tmp/home
           {
-            echo "# Разбор MirrorLink"
+            echo "# Разбор MirrorLink в заводской оболочке"
             echo
-            cd /tmp/home && strings -a classes.dex | grep -iE "mirrorlink|PACKAGE_" | head -60
-          } > "probes/mirrorlink-report.txt" 2>/dev/null || true
-          ls -l probes/
+            echo "system.img: $SYSIMG"
+            echo
+            echo "## 1. Достаём EL830LF01_Home.apk"
+            debugfs -R "dump /priv-app/EL830LF01_Home.apk /tmp/Home.apk" "$SYSIMG" 2>&1
+            ls -l /tmp/Home.apk
+            cd /tmp/home && unzip -o -q /tmp/Home.apk 2>&1 | head -5
+            ls
+            echo
+            echo "## 2. Строки о MirrorLink (с контекстом)"
+            strings -a classes.dex | grep -n -iE "mirrorlink|PACKAGE_|MIRROR" | head -60
+            echo
+            echo "## 3. Строки о подписи и правах"
+            strings -a classes.dex | grep -iE "signature|permission|checkSign|allowHidden|platform" | head -40
+            echo
+            echo "## 4. Есть ли appeal к системной подписи в оболочке"
+            strings -a classes.dex | grep -iE "getPackageInfo.*64|GET_SIGNATURES|signatures\[" | head -20
+            echo
+            echo "## 5. Явные имена активностей, которые оболочка запускает"
+            strings -a classes.dex | grep -E "android\.intent\.action\.|setClassName|ComponentName" | head -40
+            echo
+            echo "## 6. Ресурсы кнопки mirrorlink"
+            ls res/ 2>/dev/null | head
+            find . -name "*mirrorlink*" 2>/dev/null | head
+          } > "$OUT" 2>&1 || true
+          wc -l "$OUT"
 
-      - name: "Коммит отчёта"
+      - name: "Системные сертификаты и platform.xml"
         run: |
+          OUT="${GITHUB_WORKSPACE}/probes/system-keys.txt"
+          SYSIMG="$(find /tmp/rar -name system.img | head -1)"
+          {
+            echo "# Системные ключи и права в заводском образе"
+            echo
+            echo "## /etc/security"
+            debugfs -R "ls -l /etc/security" "$SYSIMG" 2>&1 | head -20
+            echo
+            echo "## platform.xml"
+            debugfs -R "dump /etc/permissions/platform.xml /tmp/platform.xml" "$SYSIMG" 2>&1
+            if [ -f /tmp/platform.xml ]; then
+              echo "### записи system/shared"
+              grep -B2 -A4 -iE "android.uid.system|sharedUserId|BUILT_IN" /tmp/platform.xml | head -60
+              echo
+              echo "### полный список тегов"
+              grep -oE "<[a-z-]+" /tmp/platform.xml | sort | uniq -c | head -20
+            fi
+            echo
+            echo "## otacerts.zip (сертификаты платформы)"
+            debugfs -R "dump /etc/security/otacerts.zip /tmp/otacerts.zip" "$SYSIMG" 2>&1
+            if [ -f /tmp/otacerts.zip ]; then
+              mkdir -p /tmp/otacerts && unzip -o -q /tmp/otacerts.zip -d /tmp/otacerts
+              ls -l /tmp/otacerts
+              for f in /tmp/otacerts/*; do
+                echo "--- $f"
+                openssl x509 -in "$f" -inform DER -subject -issuer -dates 2>/dev/null \
+                  || openssl x509 -in "$f" -subject -issuer -dates 2>/dev/null \
+                  || echo "не читается как сертификат"
+              done
+            fi
+            echo
+            echo "## Есть ли в образе сторонняя подпись платформы"
+            debugfs -R "ls -l /etc/security" "$SYSIMG" 2>&1
+          } > "$OUT" 2>&1 || true
+          wc -l "$OUT"
+
+      - name: "Коммит отчётов"
+        if: always()
+        run: |
+          ls -l probes/
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A probes
           if git diff --cached --quiet; then echo "нет изменений"; exit 0; fi
-          git commit -m "проба: разбор MirrorLink в заводской оболочке"
+          git commit -m "проба: разбор MirrorLink и системных ключей"
           for try in 1 2 3 4 5; do
             if git pull --rebase --autostash origin "${{ github.ref_name }}" >/dev/null 2>&1 \
                && git push origin HEAD:${{ github.ref_name }}; then exit 0; fi
