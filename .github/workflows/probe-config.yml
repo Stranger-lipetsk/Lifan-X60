@@ -1,0 +1,138 @@
+name: Разбор config.ini и запуска кнопок
+
+on:
+  push:
+    paths:
+      - 'autoanalysis/probe-config.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: "Инструменты"
+        run: |
+          sudo apt-get update -qq 2>/dev/null || true
+          sudo apt-get install -y -qq p7zip-full unrar-free unzip curl >/dev/null 2>&1 || true
+          mkdir -p probes
+          SDK=/usr/local/lib/android/sdk
+          BT=$(ls -d "$SDK"/build-tools/* 2>/dev/null | sort -V | tail -1)
+          echo "BT=$BT" >> "$GITHUB_ENV"
+          curl -sSL --retry 3 --max-time 300 -o /tmp/baksmali.jar \
+            https://github.com/baksmali/smali/releases/download/v2.5.2/baksmali-2.5.2.jar
+          ls -l /tmp/baksmali.jar
+
+      - name: "Скачать прошивку"
+        run: |
+          mkdir -p /tmp/rar /tmp/off
+          python3 - <<'PY'
+          import json, subprocess, urllib.parse, urllib.request
+          pk = 'https://disk.yandex.ru/d/qJdjjeB8Aiq3Lg'
+          url = ('https://cloud-api.yandex.net/v1/disk/public/resources'
+                 '?public_key=' + urllib.parse.quote(pk, safe='') + '&limit=100')
+          items = json.load(urllib.request.urlopen(url, timeout=60))['_embedded']['items']
+          for it in items:
+              if it['type'] != 'file':
+                  continue
+              name = '/tmp/' + ('fw-main.rar' if '2016' in it['name'] and 'Navi' in it['name'] else 'fw-other.rar')
+              if '2016' in it['name']:
+                  print('качаю', it['name'], '->', name)
+                  subprocess.run(['curl', '-L', '--fail', '--retry', '3',
+                                  '--max-time', '2500', '-o', name, it['file']], check=False)
+          PY
+          ls -l /tmp/fw-*.rar
+          for f in /tmp/fw-*.rar; do
+            7z x -y -aos -o/tmp/rar "$f" >/dev/null 2>&1 || unrar x -o+ "$f" /tmp/rar/ >/dev/null 2>&1 || true
+          done
+          find /tmp/rar -maxdepth 2 | head -20
+
+      - name: "config.ini из заводского архива"
+        run: |
+          OUT="${GITHUB_WORKSPACE}/probes/config-ini.txt"
+          {
+            echo "# config.ini: что там про экран и кнопки"
+            echo
+            find /tmp/rar -iname "config.ini" | while read f; do
+              echo "=== $f ($(stat -c%s "$f") байт) ==="
+              file "$f"
+              echo "--- как текст ---"
+              cat "$f" 2>/dev/null | head -100
+              echo "--- hex ---"
+              xxd "$f" 2>/dev/null | head -40
+              echo
+            done
+          } > "$OUT" 2>&1 || true
+          wc -l "$OUT"
+
+      - name: "Как оболочка запускает приложения (startNewActivity)"
+        run: |
+          SYSIMG="$(find /tmp/rar -name system.img | head -1)"
+          debugfs -R "dump /priv-app/EL830LF01_Home.apk /tmp/Home.apk" "$SYSIMG" 2>&1 | tail -1
+          mkdir -p /tmp/home && cd /tmp/home && unzip -o -q /tmp/Home.apk
+          java -jar /tmp/baksmali.jar d classes.dex -o smali 2>&1 | tail -2
+          OUT="${GITHUB_WORKSPACE}/probes/home4-launch.txt"
+          {
+            echo "# Как Home запускает выбранное приложение"
+            echo
+            echo "== startNewActivity =="
+            awk '/^\.method.*startNewActivity/,/^\.end method/' smali/tw/com/elead/el830/home/HomeService.smali | head -150
+            echo
+            echo "== MSG_GOTO_APPLICATION / startActivity по ApplicationInfo =="
+            grep -rn "getActivity\|ApplicationInfo->activity\|startActivity(" smali/tw/com/elead/el830/home/HomeService.smali | head -20
+            echo
+            echo "== ApplicationInfo.setActivity / getActivity =="
+            awk '/^\.method.*(setActivity|getActivity)/,/^\.end method/' smali/tw/com/elead/el830/home/ApplicationInfo.smali
+            echo
+            echo "== loadApplications: откуда берётся список mEleadApps =="
+            grep -rn "mEleadApps" smali/tw/com/elead/el830/home/HomeApp.smali | head -20
+            echo
+            echo "== R.array из resources (список приложений экрана) =="
+            "$BT/aapt" dump --values resources /tmp/Home.apk 2>/dev/null | grep -iE "array|el830\.|mirrorlink|navi" | head -40
+          } > "$OUT" 2>&1 || true
+          wc -l "$OUT"
+
+      - name: "Строки arrays.xml и настройки экрана"
+        run: |
+          SYSIMG="$(find /tmp/rar -name system.img | head -1)"
+          OUT="${GITHUB_WORKSPACE}/probes/home4-arrays.txt"
+          {
+            echo "# Ресурсы-массивы оболочки (список приложений главного экрана)"
+            echo
+            cd /tmp/home
+            "$BT/aapt" dump --values resources /tmp/Home.apk 2>/dev/null > /tmp/res.txt
+            grep -n -A30 "array" /tmp/res.txt | head -120
+            echo
+            echo "== все строки, похожие на пакеты =="
+            grep -oE '"[a-z]+\.[a-z0-9.]+"' /tmp/res.txt | sort -u | head -60
+            echo
+            echo "== содержимое /mnt/para_fw в образе (если есть) =="
+            debugfs -R "ls -l /mnt" "$SYSIMG" 2>&1 | head
+            echo
+            echo "== есть ли в образе файлы настроек оболочки =="
+            for p in /data /etc/config.ini /etc/el830 /system/etc/config.ini; do
+              echo "--- $p"
+              debugfs -R "ls -l $p" "$SYSIMG" 2>&1 | head -8
+            done
+          } > "$OUT" 2>&1 || true
+          wc -l "$OUT"
+
+      - name: "Коммит отчётов"
+        if: always()
+        run: |
+          ls -l probes/
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A probes
+          if git diff --cached --quiet; then echo "нет изменений"; exit 0; fi
+          git commit -m "проба: config.ini и запуск приложений оболочкой"
+          for try in 1 2 3 4 5; do
+            if git pull --rebase --autostash origin "${{ github.ref_name }}" >/dev/null 2>&1 \
+               && git push origin HEAD:${{ github.ref_name }}; then exit 0; fi
+            sleep 10; git rebase --abort >/dev/null 2>&1 || true
+          done
