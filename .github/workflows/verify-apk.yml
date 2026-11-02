@@ -1,0 +1,69 @@
+name: Проверка APK панели
+
+on:
+  push:
+    paths:
+      - 'autoanalysis/verify-apk.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: "Java и SDK"
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: "Собрать APK"
+        run: |
+          bash switcher/build.sh 2>&1 | tail -12
+
+      - name: "Проверить, что сигнал внутри APK"
+        run: |
+          OUT="${GITHUB_WORKSPACE}/reports/apk-check.txt"
+          SDK=/usr/local/lib/android/sdk
+          BT=$(ls -d "$SDK"/build-tools/* | sort -V | tail -1)
+          {
+            echo "# Проверка APK панели"
+            echo
+            echo "## sha256 и размер"
+            sha256sum switcher/switcher.apk
+            ls -l switcher/switcher.apk
+            echo
+            echo "## строки dex: сигнал оболочке"
+            mkdir -p /tmp/apk && cd /tmp/apk && rm -rf ./* && unzip -o -q "$GITHUB_WORKSPACE/switcher/switcher.apk"
+            strings -a classes.dex | grep -iE "UsbIfaceReady|mirrorlink" | sort -u
+            echo
+            echo "## содержит ли код отправку broadcast"
+            if strings -a classes.dex | grep -q "vn.com.fsoft.UsbIfaceReady"; then
+              echo "ДА — сигнал внутри APK"
+            else
+              echo "НЕТ — сигнала в APK нет!"
+            fi
+            echo
+            echo "## badging"
+            "$BT/aapt" dump badging "$GITHUB_WORKSPACE/switcher/switcher.apk" 2>/dev/null | head -8
+          } > "$OUT" 2>&1 || true
+          cat "$OUT"
+
+      - name: "Коммит отчёта"
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A reports
+          if git diff --cached --quiet; then echo "нет изменений"; exit 0; fi
+          git commit -m "проверка: сигнал MirrorLink внутри APK"
+          for try in 1 2 3 4 5; do
+            if git pull --rebase --autostash origin "${{ github.ref_name }}" >/dev/null 2>&1 \
+               && git push origin HEAD:${{ github.ref_name }}; then exit 0; fi
+            sleep 10; git rebase --abort >/dev/null 2>&1 || true
+          done
