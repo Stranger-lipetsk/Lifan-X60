@@ -1,0 +1,270 @@
+# Обработка MSG_GOTO_APPLICATION (0x192)
+
+== фрагмент HomeService$3 вокруг 'MSG_GOTO_APPLICATION, -> NEW_PACKAGE_NAME' ==
+строка: 1672
+
+    # getter for: Ltw/com/elead/el830/home/HomeService;->homeApp:Ltw/com/elead/el830/home/HomeApp;
+    invoke-static {}, Ltw/com/elead/el830/home/HomeService;->access$000()Ltw/com/elead/el830/home/HomeApp;
+
+    move-result-object v11
+
+    invoke-virtual {v11}, Ltw/com/elead/el830/home/HomeApp;->getTFTDisplay()Z
+
+    move-result v11
+
+    # invokes: Ltw/com/elead/el830/home/HomeService;->setTFTDisplay_CCD(ZZ)V
+    invoke-static {v3, v4, v11}, Ltw/com/elead/el830/home/HomeService;->access$1700(Ltw/com/elead/el830/home/HomeService;ZZ)V
+
+    goto/16 :goto_7
+
+    .line 3099
+    .end local v23    # "bIsReady":Z
+    :sswitch_538
+    invoke-virtual/range {p1 .. p1}, Landroid/os/Message;->getData()Landroid/os/Bundle;
+
+    move-result-object v29
+
+    .line 3100
+    .restart local v29    # "bundle":Landroid/os/Bundle;
+    const-string v3, "NEW_PACKAGE_NAME"
+
+    move-object/from16 v0, v29
+
+    invoke-virtual {v0, v3}, Landroid/os/Bundle;->getString(Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object v58
+
+    .line 3102
+    .local v58, "strNewPackageName":Ljava/lang/String;
+    const-string v3, "Home"
+
+    new-instance v4, Ljava/lang/StringBuilder;
+
+    invoke-direct {v4}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v11, "HomeService.java  MSG_GOTO_APPLICATION, -> NEW_PACKAGE_NAME = "
+
+    invoke-virtual {v4, v11}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v4
+
+    move-object/from16 v0, v58
+
+    invoke-virtual {v4, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v4
+
+    invoke-virtual {v4}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v4
+
+    invoke-static {v3, v4}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+
+    .line 3104
+    const-string v3, "tw.com.elead.el830.elbluetooth.dial"
+
+    move-object/from16 v0, v58
+
+    invoke-virtual {v0, v3}, Ljava/lang/String;->equalsIgnoreCase(Ljava/lang/String;)Z
+
+    move-result v3
+
+    if-nez v3, :cond_573
+
+    move-object/from16 v0, p0
+
+    iget-object v3, v0, Ltw/com/elead/el830/home/HomeService$3;->this$0:Ltw/com/elead/el830/home/HomeService;
+
+    # getter for: Ltw/com/elead/el830/home/HomeService;->bIsInDial:Z
+    invoke-static {v3}, Ltw/com/elead/el830/home/HomeService;->access$3100(Ltw/com/elead/el830/home/HomeService;)Z
+
+    move-result v3
+
+    const/4 v4, 0x1
+
+    if-eq v3, v4, :cond_a
+
+    .line 3107
+    :cond_573
+    # getter for: Ltw/com/elead/el830/home/HomeService;->homeApp:Ltw/com/elead/el830/home/HomeApp;
+    invoke-static {}, Ltw/com/elead/el830/home/HomeService;->access$000()Ltw/com/elead/el830/home/HomeApp;
+
+    move-result-object v3
+
+    invoke-virtual {v3}, Ltw/com/elead/el830/home/HomeApp;->getCurrentPackageName()Ljava/lang/String;
+
+    move-result-object v54
+
+    .line 3108
+    .local v54, "strCurrentAudioPackageName":Ljava/lang/String;
+    # getter for: Ltw/com/elead/el830/home/HomeService;->homeApp:Ltw/com/elead/el830/home/HomeApp;
+    invoke-static {}, Ltw/com/elead/el830/home/HomeService;->access$000()Ltw/com/elead/el830/home/HomeApp;
+
+    move-result-object v3
+
+    move-object/from16 v0, v58
+
+    invoke-virtual {v3, v0}, Ltw/com/elead/el830/home/HomeApp;->isAudioMode(Ljava/lang/String;)Z
+
+    move-result v3
+
+    if-eqz v3, :cond_59a
+
+    move-object/from16 v0, v54
+
+    move-object/from16 v1, v58
+
+    invoke-virtual {v0, v1}, Ljava/lang/String;->equalsIgnoreCase(Ljava/lang/String;)Z
+
+    move-result v3
+
+    if-nez v3, :cond_59a
+
+    .line 3110
+    move-object/from16 v0, p0
+
+    iget-object v3, v0, Ltw/com/elead/el830/home/HomeService$3;->this$0:Ltw/com/elead/el830/home/HomeService;
+
+    const-string v4, "tw.com.elead.el830.home.HomeAudioOff"
+
+    # invokes: Ltw/com/elead/el830/home/HomeService;->switchAudioChannel(Ljava/lang/String;)V
+    invoke-static {v3, v4}, Ltw/com/elead/el830/home/HomeService;->access$2500(Ltw/com/elead/el830/home/HomeService;Ljava/lang/String;)V
+
+    .line 3113
+    :cond_59a
+    # getter for: Ltw/com/elead/el830/home/HomeService;->homeApp:Ltw/com/elead/el830/home/HomeApp;
+    invoke-static {}, Ltw/com/elead/el830/home/HomeService;->access$000()Ltw/com/elead/el830/home/HomeApp;
+
+    move-result-object v3
+
+    move-object/from16 v0, v58
+
+    invoke-virtual {v3, v0}, Ltw/com/elead/el830/home/HomeApp;->gotoEleadApplication(Ljava/lang/String;)Z
+
+    .line 3116
+    move-object/from16 v0, p0
+
+    iget-object v3, v0, Ltw/com/elead/el830/home/HomeService$3;->this$0:Ltw/com/elead/el830/home/HomeService;
+
+    move-object/from16 v0, v58
+
+    # invokes: Ltw/com/elead/el830/home/HomeService;->switchWifiMode(Ljava/lang/String;)V
+    invoke-static {v3, v0}, Ltw/com/elead/el830/home/HomeService;->access$3200(Ltw/com/elead/el830/home/HomeService;Ljava/lang/String;)V
+
+    goto/16 :goto_7
+
+    .line 3121
+    .end local v29    # "bundle":Landroid/os/Bundle;
+    .end local v54    # "strCurrentAudioPackageName":Ljava/lang/String;
+    .end local v58    # "strNewPackageName":Ljava/lang/String;
+    :sswitch_5ae
+    move-object/from16 v0, p1
+
+    iget-object v3, v0, Landroid/os/Message;->obj:Ljava/lang/Object;
+
+    if-eqz v3, :cond_7
+
+    .line 3122
+    move-object/from16 v0, p1
+
+    iget-object v3, v0, Landroid/os/Message;->obj:Ljava/lang/Object;
+
+    check-cast v3, Ljava/lang/Boolean;
+
+    invoke-virtual {v3}, Ljava/lang/Boolean;->booleanValue()Z
+
+    move-result v25
+
+    .line 3123
+    .local v25, "bPlug":Z
+    const-string v3, "Home"
+
+    new-instance v4, Ljava/lang/StringBuilder;
+
+    invoke-direct {v4}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v11, "HomeService.java MSG_MEDIA_SD_MOUNT ...... bPlug:"
+
+    invoke-virtual {v4, v11}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v4
+
+    move/from16 v0, v25
+
+    invoke-virtual {v4, v0}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
+
+    move-result-object v4
+
+    const-string v11, ", strLastMemAudioPkgName:"
+
+    invoke-virtual {v4, v11}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v4
+
+    # getter for: Ltw/com/elead/el830/home/HomeService;->strLastMemAudioPkgName:Ljava/lang/String;
+    invoke-static {}, Ltw/com/elead/el830/home/HomeService;->access$3300()Ljava/lang/String;
+
+    move-result-object v11
+
+    invoke-virtual {v4, v11}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v4
+
+    invoke-virtual {v4}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v4
+
+    invoke-static {v3, v4}, Landroid/util/Log;->v(Ljava/lang/String;Ljava/lang/String;)I
+
+    .line 3126
+    move-object/from16 v0, p0
+
+    iget-object v3, v0, Ltw/com/elead/el830/home/HomeService$3;->this$0:Ltw/com/elead/el830/home/HomeService;
+
+    move/from16 v0, v25
+
+    # invokes: Ltw/com/elead/el830/home/HomeService;->enableStatusBarSDIcon(Z)V
+    invoke-static {v3, v0}, Ltw/com/elead/el830/home/HomeService;->access$3400(Ltw/com/elead/el830/home/HomeService;Z)V
+
+    .line 3128
+    move-object/from16 v0, p0
+
+    iget-object v3, v0, Ltw/com/elead/el830/home/HomeService$3;->this$0:Ltw/com/elead/el830/home/HomeService;
+
+    move/from16 v0, v25
+
+    # invokes: Ltw/com/elead/el830/home/HomeService;->enableSDIcon(Z)V
+    invoke-static {v3, v0}, Ltw/com/elead/el830/home/HomeService;->access$3500(Ltw/com/elead/el830/home/HomeService;Z)V
+
+    .line 3130
+    move-object/from16 v0, p0
+
+    iget-object v3, v0, Ltw/com/elead/el830/home/HomeService$3;->this$0:Ltw/com/elead/el830/home/HomeService;
+
+    invoke-virtual {v3}, Ltw/com/elead/el830/home/HomeService;->NaviIsExist()Z
+
+    move-result v3
+
+    if-eqz v3, :cond_62a
+
+    if-eqz v25, :cond_62a
+
+    .line 3131
+    move-object/from16 v0, p0
+
+    iget-object v3, v0, Ltw/com/elead/el830/home/HomeService$3;->this$0:Ltw/com/elead/el830/home/HomeService;
+
+    move/from16 v0, v25
+
+    # invokes: Ltw/com/elead/el830/home/HomeService;->enableNaviIcon(Z)V
+    invoke-static {v3, v0}, Ltw/com/elead/el830/home/HomeService;->access$3600(Ltw/com/elead/el830/home/HomeService;Z)V
+
+    .line 3135
+    :goto_60d
+    if-eqz v25, :cond_7
+
+
+== ищем startActivity / intent в этом обработчике ==
+1656:    const-string v3, "NEW_PACKAGE_NAME"
+1672:    const-string v11, "HomeService.java  MSG_GOTO_APPLICATION, -> NEW_PACKAGE_NAME = "
+4615:    invoke-virtual {v3, v0, v4}, Ltw/com/elead/el830/home/HomeService;->startActivityAsUser(Landroid/content/Intent;Landroid/os/UserHandle;)V
