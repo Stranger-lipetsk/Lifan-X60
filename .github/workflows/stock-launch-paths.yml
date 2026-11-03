@@ -8,6 +8,7 @@ on:
       - 'tools/inspect_stock_hibernate.py'
       - 'tools/trace_stock_boot.py'
       - 'tools/trace_stock_mirrorlink.py'
+      - 'tools/inspect_stock_navitel_routes.py'
   workflow_dispatch:
 
 permissions:
@@ -70,6 +71,13 @@ jobs:
             done
           } > reports/stock-optimization-text.txt
           cat reports/stock-optimization-text.txt
+      - name: Исследовать возможные переходы из Navitel
+        run: |
+          set -euo pipefail
+          test -s "$RUNNER_TEMP/apks/Navitel.apk"
+          java -jar "$RUNNER_TEMP/apktool.jar" d -f -r "$RUNNER_TEMP/apks/Navitel.apk" -o "$RUNNER_TEMP/navitel-decoded" >/dev/null
+          python3 tools/inspect_stock_navitel_routes.py "$RUNNER_TEMP/navitel-decoded" > reports/stock-navitel-routes.txt
+          cat reports/stock-navitel-routes.txt
       - name: Проверить экран подготовки к гибернации
         run: |
           set -euo pipefail
@@ -90,7 +98,7 @@ jobs:
           set -e
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add reports/stock-launch-paths.txt reports/stock-optimization-text.txt reports/stock-hibernate-path.txt reports/stock-boot-trace.txt reports/stock-mirrorlink-trace.txt
+          git add reports/stock-launch-paths.txt reports/stock-optimization-text.txt reports/stock-hibernate-path.txt reports/stock-boot-trace.txt reports/stock-mirrorlink-trace.txt reports/stock-navitel-routes.txt
           git diff --cached --quiet && exit 0
           git commit -m 'report: inspect stock launcher and USB media paths'
           for try in 1 2 3 4 5; do
