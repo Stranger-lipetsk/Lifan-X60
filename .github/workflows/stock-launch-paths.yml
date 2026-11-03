@@ -77,6 +77,11 @@ jobs:
           test -s "$RUNNER_TEMP/apks/Navitel.apk"
           java -jar "$RUNNER_TEMP/apktool.jar" d -f -r "$RUNNER_TEMP/apks/Navitel.apk" -o "$RUNNER_TEMP/navitel-decoded" >/dev/null
           python3 tools/inspect_stock_navitel_routes.py "$RUNNER_TEMP/navitel-decoded" > reports/stock-navitel-routes.txt
+          aapt=$(find /usr/local/lib/android/sdk/build-tools -type f -name aapt | sort -V | tail -1)
+          echo >> reports/stock-navitel-routes.txt
+          echo '## Selected Navitel dialog text resources' >> reports/stock-navitel-routes.txt
+          "$aapt" dump --values resources "$RUNNER_TEMP/apks/Navitel.apk" > "$RUNNER_TEMP/navitel-resources.txt"
+          grep -E -A 1 'resource 0x7f0c(005b|0022|0091) ' "$RUNNER_TEMP/navitel-resources.txt" >> reports/stock-navitel-routes.txt || true
           cat reports/stock-navitel-routes.txt
       - name: Проверить экран подготовки к гибернации
         run: |

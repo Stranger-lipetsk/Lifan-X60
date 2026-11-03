@@ -49,6 +49,8 @@ def main():
                          and ('android.settings.' in method))
             targeted |= ('Lcom/oslib/PackageControl;->installPackage(' in method)
             targeted |= ('Lcom/navitel/content/activity/a$b;' in method and '<init>' in method)
+            targeted |= ('Lcom/navitel/content/activity/a;-><init>' in method)
+            targeted |= (path.as_posix().endswith('/com/navitel/content/activity/a.smali') and ' constructor <init>(' in sig)
             targeted |= ('Lcom/navitel/Navitel$a;' in method and '<init>' in method)
             if targeted:
                 lines = method.splitlines()
