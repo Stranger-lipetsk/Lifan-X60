@@ -408,6 +408,21 @@ const-string v1, "application/vnd.android.package-archive"
 .end method
 
 
+### smali/com/navitel/content/activity/a.smali .method constructor <init>(Lcom/navitel/content/activity/c;Lcom/navitel/content/activity/c$e;)V lines: 12
+.method constructor <init>(Lcom/navitel/content/activity/c;Lcom/navitel/content/activity/c$e;)V
+    .locals 0
+
+    iput-object p1, p0, Lcom/navitel/content/activity/a;->b:Lcom/navitel/content/activity/c;
+
+    iput-object p2, p0, Lcom/navitel/content/activity/a;->a:Lcom/navitel/content/activity/c$e;
+
+    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
+
+    return-void
+.end method
+
+
+
 ### smali/com/navitel/content/activity/a.smali .method public a(Landroid/app/AlertDialog$Builder;)V lines: 25
 .method public a(Landroid/app/AlertDialog$Builder;)V
     .locals 2
@@ -431,6 +446,84 @@ const-string v1, "application/vnd.android.package-archive"
     const v1, 0x7f0c0091
 
     invoke-virtual {p1, v1, v0}, Landroid/app/AlertDialog$Builder;->setNeutralButton(ILandroid/content/DialogInterface$OnClickListener;)Landroid/app/AlertDialog$Builder;
+
+    return-void
+.end method
+
+
+### smali/com/navitel/content/activity/c.smali .method public a(Lcom/navitel/content/activity/c$e;)V lines: 75
+.method public a(Lcom/navitel/content/activity/c$e;)V
+    .locals 2
+
+    iget-object v0, p0, Lcom/navitel/content/activity/c;->a:Landroid/content/Context;
+
+    invoke-static {v0}, Lcom/oslib/NetworkInformation;->isNetworkConnected(Landroid/content/Context;)Z
+
+    move-result v0
+
+    if-eqz v0, :cond_3
+
+    iget-object v0, p0, Lcom/navitel/content/activity/c;->a:Landroid/content/Context;
+
+    invoke-static {v0}, Lcom/oslib/NetworkInformation;->getNetworkConnectionName(Landroid/content/Context;)Ljava/lang/String;
+
+    move-result-object v0
+
+    invoke-virtual {v0}, Ljava/lang/String;->length()I
+
+    move-result v1
+
+    if-nez v1, :cond_0
+
+    goto :goto_1
+
+    :cond_0
+    iget-object v1, p0, Lcom/navitel/content/activity/c;->a:Landroid/content/Context;
+
+    invoke-static {v1}, Lcom/oslib/NetworkInformation;->isMeteredConnection(Landroid/content/Context;)Z
+
+    move-result v1
+
+    if-eqz v1, :cond_1
+
+    .line 1
+    new-instance v1, Lcom/navitel/content/activity/b;
+
+    invoke-direct {v1, p0, v0, p1}, Lcom/navitel/content/activity/b;-><init>(Lcom/navitel/content/activity/c;Ljava/lang/String;Lcom/navitel/content/activity/c$e;)V
+
+    invoke-direct {p0, v1}, Lcom/navitel/content/activity/c;->a(Lcom/navitel/content/activity/c$c;)V
+
+    goto :goto_0
+
+    .line 2
+    :cond_1
+    check-cast p1, Lcom/navitel/content/activity/e;
+
+    .line 3
+    iget-object p1, p1, Lcom/navitel/content/activity/e;->a:Lcom/navitel/content/activity/Prepare;
+
+    iget-boolean v0, p1, Lcom/navitel/content/activity/Prepare;->a:Z
+
+    if-eqz v0, :cond_2
+
+    invoke-static {p1}, Lcom/navitel/content/activity/Prepare;->a(Lcom/navitel/content/activity/Prepare;)Lcom/navitel/content/service/o;
+
+    move-result-object p1
+
+    invoke-interface {p1}, Lcom/navitel/content/service/o;->b()V
+
+    :cond_2
+    :goto_0
+    return-void
+
+    .line 4
+    :cond_3
+    :goto_1
+    new-instance v0, Lcom/navitel/content/activity/a;
+
+    invoke-direct {v0, p0, p1}, Lcom/navitel/content/activity/a;-><init>(Lcom/navitel/content/activity/c;Lcom/navitel/content/activity/c$e;)V
+
+    invoke-direct {p0, v0}, Lcom/navitel/content/activity/c;->a(Lcom/navitel/content/activity/c$c;)V
 
     return-void
 .end method
@@ -477,3 +570,301 @@ const-string v1, "application/vnd.android.package-archive"
     return p0
 .end method
 
+
+## Selected Navitel dialog text resources
+      spec resource 0x7f0c0022 com.navitel:string/cancel_string: flags=0x40000004
+      spec resource 0x7f0c0023 com.navitel:string/com_facebook_image_download_unknown_error: flags=0x40000004
+--
+      spec resource 0x7f0c005b com.navitel:string/need_internet_connection: flags=0x40000004
+      spec resource 0x7f0c005c com.navitel:string/no_required_permissions: flags=0x40000004
+--
+      spec resource 0x7f0c0091 com.navitel:string/wifi_settings: flags=0x40000004
+      spec resource 0x7f0c0092 com.navitel:string/work_shortcut: flags=0x40000004
+--
+        resource 0x7f0c0022 com.navitel:string/cancel_string: t=0x03 d=0x00000338 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Cancel"
+--
+        resource 0x7f0c005b com.navitel:string/need_internet_connection: t=0x03 d=0x0000033a (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Internet connection required to install Navitel Navigator."
+--
+        resource 0x7f0c0091 com.navitel:string/wifi_settings: t=0x03 d=0x00000337 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Wi-Fi settings"
+--
+        resource 0x7f0c0022 com.navitel:string/cancel_string: t=0x03 d=0x0000038f (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Annullér"
+--
+        resource 0x7f0c005b com.navitel:string/need_internet_connection: t=0x03 d=0x00000384 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Installationen af Navitel Navigator kræver Internetforbindelse."
+--
+        resource 0x7f0c0091 com.navitel:string/wifi_settings: t=0x03 d=0x00000392 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Wi-Fi indstillinger"
+--
+        resource 0x7f0c0022 com.navitel:string/cancel_string: t=0x03 d=0x000003df (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "لغو کنید"
+--
+        resource 0x7f0c005b com.navitel:string/need_internet_connection: t=0x03 d=0x000003de (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "برای نصب ناوبر Navitel Navigator نیاز به اتصال به اینترنت است."
+--
+        resource 0x7f0c0091 com.navitel:string/wifi_settings: t=0x03 d=0x000003e2 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "تنظیم Wi-Fi"
+--
+        resource 0x7f0c0022 com.navitel:string/cancel_string: t=0x03 d=0x000004a2 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Oppheve"
+--
+        resource 0x7f0c005b com.navitel:string/need_internet_connection: t=0x03 d=0x000004b3 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Internettilkopling trengs for å kunne installere applikasjonen Navitel Navigator."
+--
+        resource 0x7f0c0091 com.navitel:string/wifi_settings: t=0x03 d=0x000004a4 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Wi-Fi-innstilling"
+--
+        resource 0x7f0c0022 com.navitel:string/cancel_string: t=0x03 d=0x0000050f (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Abbrechen"
+--
+        resource 0x7f0c005b com.navitel:string/need_internet_connection: t=0x03 d=0x00000517 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Zur Installation der Anwendung Navitel Navigator ist eine Internetverbindung notwendig."
+--
+        resource 0x7f0c0091 com.navitel:string/wifi_settings: t=0x03 d=0x000004e2 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "WiFi-Einstellungen"
+--
+        resource 0x7f0c0022 com.navitel:string/cancel_string: t=0x03 d=0x000005bf (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Отказ"
+--
+        resource 0x7f0c005b com.navitel:string/need_internet_connection: t=0x03 d=0x000005a2 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "За да инсталирате апликацията Navitel Navigator е необходимо да се свържете към интернета."
+--
+        resource 0x7f0c0091 com.navitel:string/wifi_settings: t=0x03 d=0x00000598 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Настройване на Wi-Fi"
+--
+        resource 0x7f0c0022 com.navitel:string/cancel_string: t=0x03 d=0x000005f8 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Peru"
+--
+        resource 0x7f0c005b com.navitel:string/need_internet_connection: t=0x03 d=0x00000618 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Navitel Navigator -sovelluksen asennusta varten tarvitaan internet-yhteys."
+--
+        resource 0x7f0c0091 com.navitel:string/wifi_settings: t=0x03 d=0x0000060c (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Wi-Fi-asetukset"
+--
+        resource 0x7f0c0022 com.navitel:string/cancel_string: t=0x03 d=0x00000675 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Hủy"
+--
+        resource 0x7f0c005b com.navitel:string/need_internet_connection: t=0x03 d=0x0000067a (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Yêu cầu kết nối internet để cài Navitel Navigator."
+--
+        resource 0x7f0c0091 com.navitel:string/wifi_settings: t=0x03 d=0x000006a0 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Cài đặt Wi-Fi"
+--
+        resource 0x7f0c0022 com.navitel:string/cancel_string: t=0x03 d=0x000006e8 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Грешка"
+--
+        resource 0x7f0c005b com.navitel:string/need_internet_connection: t=0x03 d=0x000006d5 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Потребна е интернет конекција за да се инсталира Navitel Navigator."
+--
+        resource 0x7f0c0091 com.navitel:string/wifi_settings: t=0x03 d=0x000006fa (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Подесувања на Wi-Fi"
+--
+        resource 0x7f0c0022 com.navitel:string/cancel_string: t=0x03 d=0x0000072f (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Zrušiť"
+--
+        resource 0x7f0c005b com.navitel:string/need_internet_connection: t=0x03 d=0x00000723 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Na inštaláciu aplikácie Navitel Navigator je nutné pripojenie na internet."
+--
+        resource 0x7f0c0091 com.navitel:string/wifi_settings: t=0x03 d=0x0000071e (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Nastavenia Wi-Fi"
+--
+        resource 0x7f0c0022 com.navitel:string/cancel_string: t=0x03 d=0x00000769 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Відмінити"
+--
+        resource 0x7f0c005b com.navitel:string/need_internet_connection: t=0x03 d=0x00000767 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Для установки Навітел Навігатор потрібно підключення до мережі Інтернет."
+--
+        resource 0x7f0c0091 com.navitel:string/wifi_settings: t=0x03 d=0x00000765 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Налаштування Wi-Fi"
+--
+        resource 0x7f0c0022 com.navitel:string/cancel_string: t=0x03 d=0x00000782 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Ακύρωση"
+--
+        resource 0x7f0c005b com.navitel:string/need_internet_connection: t=0x03 d=0x0000078b (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Για την εγκατάσταση της εφαρμογής Navitel Navigator απαιτείται η σύνδεση με το Internet."
+--
+        resource 0x7f0c0091 com.navitel:string/wifi_settings: t=0x03 d=0x00000786 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Ρύθμιση του Wi-Fi"
+--
+        resource 0x7f0c0022 com.navitel:string/cancel_string: t=0x03 d=0x0000081b (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Stoppen"
+--
+        resource 0x7f0c005b com.navitel:string/need_internet_connection: t=0x03 d=0x00000822 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Om Navitel Navigator te kunnen installeren, moet het apparaat met het internet verbonden zijn."
+--
+        resource 0x7f0c0091 com.navitel:string/wifi_settings: t=0x03 d=0x00000803 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "WiFi-instellingen"
+--
+        resource 0x7f0c0022 com.navitel:string/cancel_string: t=0x03 d=0x00000862 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Anuluj"
+--
+        resource 0x7f0c005b com.navitel:string/need_internet_connection: t=0x03 d=0x0000084b (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Do zainstalowania aplikacji Navitel Navigator konieczne jest połączenie internetowe."
+--
+        resource 0x7f0c0091 com.navitel:string/wifi_settings: t=0x03 d=0x00000842 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Opcje Wi-Fi"
+--
+        resource 0x7f0c0022 com.navitel:string/cancel_string: t=0x03 d=0x0000086f (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Prekliči"
+--
+        resource 0x7f0c005b com.navitel:string/need_internet_connection: t=0x03 d=0x00000889 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Za namestitev aplikacije Navitel Navigator je potrebna internetna povezava."
+--
+        resource 0x7f0c0091 com.navitel:string/wifi_settings: t=0x03 d=0x00000892 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Nastavitve Wi-Fi"
+--
+        resource 0x7f0c0022 com.navitel:string/cancel_string: t=0x03 d=0x00000338 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Cancel"
+--
+        resource 0x7f0c005b com.navitel:string/need_internet_connection: t=0x03 d=0x0000033a (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Internet connection required to install Navitel Navigator."
+--
+        resource 0x7f0c0091 com.navitel:string/wifi_settings: t=0x03 d=0x00000337 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Wi-Fi settings"
+--
+        resource 0x7f0c0022 com.navitel:string/cancel_string: t=0x03 d=0x00000a08 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Anulează"
+--
+        resource 0x7f0c005b com.navitel:string/need_internet_connection: t=0x03 d=0x000009fa (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Pentru ca aplicaţia Navitel Navigator să fie instalată este necesară o conexiune la Internet."
+--
+        resource 0x7f0c0091 com.navitel:string/wifi_settings: t=0x03 d=0x00000a0f (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Setări Wi-Fi"
+--
+        resource 0x7f0c0022 com.navitel:string/cancel_string: t=0x03 d=0x00000a33 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Anulloje"
+--
+        resource 0x7f0c005b com.navitel:string/need_internet_connection: t=0x03 d=0x00000a49 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Për instalimin e aplikacionit Navitel Navigator duhet lidhje interneti."
+--
+        resource 0x7f0c0091 com.navitel:string/wifi_settings: t=0x03 d=0x00000a3d (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Përcaktimet e Wi-Fi."
+--
+        resource 0x7f0c0022 com.navitel:string/cancel_string: t=0x03 d=0x00000a91 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Annuler"
+--
+        resource 0x7f0c005b com.navitel:string/need_internet_connection: t=0x03 d=0x00000aa5 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Connexion Internet requise pour installer Navitel Navigator."
+--
+        resource 0x7f0c0091 com.navitel:string/wifi_settings: t=0x03 d=0x00000a9a (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Réglage du Wi-Fi"
+--
+        resource 0x7f0c0022 com.navitel:string/cancel_string: t=0x03 d=0x00000b65 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "İptal"
+--
+        resource 0x7f0c005b com.navitel:string/need_internet_connection: t=0x03 d=0x00000b7d (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Navitel Navigator uygulamasını kurmak için internet bağlantısı gerekli."
+--
+        resource 0x7f0c0091 com.navitel:string/wifi_settings: t=0x03 d=0x00000b89 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Wi-Fi ayarları"
+--
+        resource 0x7f0c0022 com.navitel:string/cancel_string: t=0x03 d=0x00000be9 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Ukinuti"
+--
+        resource 0x7f0c005b com.navitel:string/need_internet_connection: t=0x03 d=0x00000be0 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Za instalaciju aplikacije Navitel Navigator je neophodno priključenje na internet."
+--
+        resource 0x7f0c0091 com.navitel:string/wifi_settings: t=0x03 d=0x00000bef (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Podešenja Wi-Fi"
+--
+        resource 0x7f0c0022 com.navitel:string/cancel_string: t=0x03 d=0x00000bf3 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Zrušit"
+--
+        resource 0x7f0c005b com.navitel:string/need_internet_connection: t=0x03 d=0x00000c06 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Pro instalaci Navitel Navigator je vyžadováno internetové připojení."
+--
+        resource 0x7f0c0091 com.navitel:string/wifi_settings: t=0x03 d=0x00000bf4 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Nastavení Wi-Fi"
+--
+        resource 0x7f0c0022 com.navitel:string/cancel_string: t=0x03 d=0x00000c53 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Anular"
+--
+        resource 0x7f0c005b com.navitel:string/need_internet_connection: t=0x03 d=0x00000c49 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "La instalación de Navitel Navigator requiere conexión a internet."
+--
+        resource 0x7f0c0091 com.navitel:string/wifi_settings: t=0x03 d=0x00000c55 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Configuración de Wi-Fi"
+--
+        resource 0x7f0c0022 com.navitel:string/cancel_string: t=0x03 d=0x00000ccc (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Katkesta"
+--
+        resource 0x7f0c005b com.navitel:string/need_internet_connection: t=0x03 d=0x00000cd8 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Navitel Navigator installimiseks peab olema interneti ühendus."
+--
+        resource 0x7f0c0091 com.navitel:string/wifi_settings: t=0x03 d=0x00000cb2 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Wifi seadistused"
+--
+        resource 0x7f0c0022 com.navitel:string/cancel_string: t=0x03 d=0x00000ce3 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Cancella"
+--
+        resource 0x7f0c005b com.navitel:string/need_internet_connection: t=0x03 d=0x00000ce2 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Per installare Navitel Navigator è necessaria la connessione a Internet."
+--
+        resource 0x7f0c0091 com.navitel:string/wifi_settings: t=0x03 d=0x00000cfa (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Impostazioni Wi-Fi"
+--
+        resource 0x7f0c0022 com.navitel:string/cancel_string: t=0x03 d=0x00000d2b (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Atšaukti"
+--
+        resource 0x7f0c005b com.navitel:string/need_internet_connection: t=0x03 d=0x00000d36 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Interneto ryšys yra būtinas norint įdiegti Navitel Navigator."
+--
+        resource 0x7f0c0091 com.navitel:string/wifi_settings: t=0x03 d=0x00000d3d (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Wi-Fi nustatymai"
+--
+        resource 0x7f0c0022 com.navitel:string/cancel_string: t=0x03 d=0x00000c58 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Cancelar"
+--
+        resource 0x7f0c005b com.navitel:string/need_internet_connection: t=0x03 d=0x00000d55 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "A instalação de Navitel Navigator requer conexão à Internet."
+--
+        resource 0x7f0c0091 com.navitel:string/wifi_settings: t=0x03 d=0x00000d51 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Configuração de Wi-Fi"
+--
+        resource 0x7f0c0022 com.navitel:string/cancel_string: t=0x03 d=0x00000dbe (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Mégsem"
+--
+        resource 0x7f0c005b com.navitel:string/need_internet_connection: t=0x03 d=0x00000dbf (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "A Navitel Navigator alkalmazás telepítéséhez internetkapcsolat szükséges."
+--
+        resource 0x7f0c0091 com.navitel:string/wifi_settings: t=0x03 d=0x00000dd9 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Wi-Fi beállítások"
+--
+        resource 0x7f0c0022 com.navitel:string/cancel_string: t=0x03 d=0x00000dff (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Отмена"
+--
+        resource 0x7f0c005b com.navitel:string/need_internet_connection: t=0x03 d=0x00000e08 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Для установки Навител Навигатора требуется подключение к Интернет."
+--
+        resource 0x7f0c0091 com.navitel:string/wifi_settings: t=0x03 d=0x00000e02 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Настройка Wi-Fi"
+--
+        resource 0x7f0c0022 com.navitel:string/cancel_string: t=0x03 d=0x00000e5e (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Atcelt"
+--
+        resource 0x7f0c005b com.navitel:string/need_internet_connection: t=0x03 d=0x00000e7e (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Lai uzinstalētu Navitel Navigator, ir nepieciešams interneta pieslēgums."
+--
+        resource 0x7f0c0091 com.navitel:string/wifi_settings: t=0x03 d=0x00000e81 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Wi-Fi iestatījumi"
+--
+        resource 0x7f0c0022 com.navitel:string/cancel_string: t=0x03 d=0x00000eb7 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Avbryt"
+--
+        resource 0x7f0c005b com.navitel:string/need_internet_connection: t=0x03 d=0x00000e96 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Det krävs en internetuppkoppling för att installera Navitel Navigator."
+--
+        resource 0x7f0c0091 com.navitel:string/wifi_settings: t=0x03 d=0x00000e95 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Wi-Fi-inställningar"
+--
+        resource 0x7f0c0022 com.navitel:string/cancel_string: t=0x03 d=0x00000fa1 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Ləğv et"
+--
+        resource 0x7f0c005b com.navitel:string/need_internet_connection: t=0x03 d=0x00000fa4 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Navitel Navigator proqramını quraşdırmaq üçün internet bağlantısı lazımdır."
+--
+        resource 0x7f0c0091 com.navitel:string/wifi_settings: t=0x03 d=0x00000f87 (s=0x0008 r=0x00) (PUBLIC)
+          (string8) "Wi-Fi parametrləri"
