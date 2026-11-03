@@ -1,0 +1,94 @@
+name: Сравнение дилерских прошивок и версии энтузиаста
+
+on:
+  push:
+    paths:
+      - '.github/workflows/compare-dealer-2021.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - name: Подготовить инструменты
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq p7zip-full e2fsprogs cpio file
+          mkdir -p "$RUNNER_TEMP/compare" reports
+      - name: Скачать и распаковать архивы
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          root="$RUNNER_TEMP/compare"
+          mkdir -p "$root/downloads/dealer" "$root/downloads/dealer-time" "$root/downloads/enthusiast"
+          gh release download 'прошивка_от_дилера' -p lifan.rar -D "$root/downloads/dealer"
+          gh release download 'прошивка_от_дилера_с_исправленным_часовым_поясом' -p 831_lf01_20170309_time_russia.rar -D "$root/downloads/dealer-time"
+          gh release download stock -p x60_2021.7z -D "$root/downloads/enthusiast"
+          {
+            echo '# Проверка исходных архивов'
+            find "$root/downloads" -type f -exec sha256sum {} \;
+          } > reports/compare-dealer-downloads.txt
+          cat reports/compare-dealer-downloads.txt
+          for label in dealer dealer-time enthusiast; do
+            archive=$(find "$root/downloads/$label" -type f -print -quit)
+            test -n "$archive"
+            mkdir -p "$root/$label"
+            7z x -y "$archive" -o"$root/$label" > "$root/$label-7z.log"
+            echo "Распакован $label"
+          done
+      - name: Прочитать системные образы без изменения
+        run: |
+          set -euo pipefail
+          root="$RUNNER_TEMP/compare"
+          for label in dealer dealer-time enthusiast; do
+            mapfile -d '' imgs < <(find "$root/$label" -type f -iname system.img -print0)
+            if [ "${#imgs[@]}" -ne 1 ]; then
+              echo "Ожидался один system.img в $label, найдено ${#imgs[@]}"; find "$root/$label" -type f; exit 1
+            fi
+            img="${imgs[0]}"
+            echo "== $label =="
+            file "$img"
+            mkdir -p "$root/$label-system"
+            debugfs -R "rdump / $root/$label-system" "$img" > "$root/$label-debugfs.log" 2>&1
+            test -s "$root/$label-system/build.prop"
+            test -d "$root/$label-system/priv-app"
+            if grep -iE 'no space left|input/output error|filesystem not open|failed to open|ext2.* error' "$root/$label-debugfs.log"; then
+              echo "Ошибка чтения system.img"; exit 1
+            fi
+            find "$root/$label-system" -type d -exec chmod u+rwx {} +
+            find "$root/$label-system" -type f -exec chmod u+r {} +
+          done
+      - name: Сравнить содержимое и приложения
+        run: |
+          set -euo pipefail
+          bt=$(find /usr/local/lib/android/sdk/build-tools -type f -name aapt | sort -V | tail -1)
+          signer="$(dirname "$bt")/apksigner"
+          test -x "$bt" && test -x "$signer"
+          python3 tools/compare_firmware_releases.py "$RUNNER_TEMP/compare" "$bt" "$signer" \
+            > reports/compare-dealer-2021.txt
+          wc -c reports/compare-dealer-2021.txt
+          head -100 reports/compare-dealer-2021.txt
+      - name: Сохранить текстовые отчёты
+        if: always()
+        run: |
+          set -e
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          for f in reports/compare-dealer-downloads.txt reports/compare-dealer-2021.txt; do
+            if [ -f "$f" ]; then git add "$f"; fi
+          done
+          git diff --cached --quiet && exit 0
+          git commit -m 'report: compare dealer and enthusiast firmware'
+          for try in 1 2 3 4 5; do
+            if git pull --rebase origin "${{ github.ref_name }}" && git push origin HEAD:"${{ github.ref_name }}"; then exit 0; fi
+            git rebase --abort || true
+            sleep 5
+          done
+          exit 1
