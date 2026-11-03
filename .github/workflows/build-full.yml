@@ -115,31 +115,27 @@ jobs:
           bash switcher/build.sh 2>&1 | tail -4
           ls -l switcher/switcher.apk
 
-      - name: "Урезать APK"
+      - name: "Проверить APK (без изменений)"
         run: |
+          # ВАЖНО: APK кладём в образ БАЙТ-В-БАЙТ как есть, ничего не
+          # пересобирая. Любая переупаковка zip — риск: на этой прошивке
+          # уже дважды вылезали проблемы. Оригинальный файл безопасен.
           set -o pipefail
-          # В APK лежат библиотеки под x86/arm64, которые i.MX6 не использует,
-          # и десятки голосов Navitel. Для системных APK Android 4.4 сверяет
-          # подпись только у AndroidManifest.xml, поэтому файл можно править.
-          mkdir -p out/apks
+          TOTAL=0
           for f in firmware/apks/*.apk; do
             [ -f "$f" ] || continue
-            PKG=$(basename "$f" .apk)
-            EXTRA=""
-            case "$PKG" in
-              com.navitel*) EXTRA="--voices ru en --locale ru en" ;;
-            esac
-            python3 tools/trim_apk.py --apk "$f" --out "out/apks/$PKG.apk" --compress $EXTRA \
-              2>&1 | tee -a reports/full-build.txt
-            # манифест и подпись обязаны остаться на месте
-            unzip -l "out/apks/$PKG.apk" | grep -q "AndroidManifest.xml" \
-              || { echo "В $PKG НЕТ МАНИФЕСТА" | tee -a reports/full-build.txt; exit 1; }
-            unzip -l "out/apks/$PKG.apk" | grep -qiE "META-INF/.*\.(RSA|DSA|EC)" \
-              || { echo "В $PKG ПОТЕРЯНА ПОДПИСЬ МАНИФЕСТА" | tee -a reports/full-build.txt; exit 1; }
-            unzip -l "out/apks/$PKG.apk" | grep -q "META-INF/MANIFEST.MF" \
-              || { echo "В $PKG НЕТ MANIFEST.MF" | tee -a reports/full-build.txt; exit 1; }
+            SZ=$(stat -c%s "$f")
+            TOTAL=$((TOTAL + SZ))
+            PKG=$("$BT/aapt" dump badging "$f" 2>/dev/null | sed -n "s/^package: name='\([^']*\)'.*/\1/p" | head -1)
+            [ -n "$PKG" ] || { echo "НЕ APK: $f" | tee -a reports/full-build.txt; exit 1; }
+            echo "  $(basename "$f")  $((SZ/1048576)) МиБ  $PKG" | tee -a reports/full-build.txt
           done
-          ls -l out/apks/
+          NEED=$((TOTAL / 1048576))
+          echo "нужно места: ${NEED} МиБ (свободно после чистки ~124 МиБ)" | tee -a reports/full-build.txt
+          if [ "$NEED" -gt 115 ]; then
+            echo "НЕ ХВАТИТ МЕСТА — надо убрать ещё файлы из образа" | tee -a reports/full-build.txt
+            exit 1
+          fi
 
       - name: "Собрать образ"
         run: |
@@ -154,7 +150,7 @@ jobs:
           ADD=""
           ADD="$ADD --add-apk switcher/switcher.apk:/app"
           ADD="$ADD --add-file out/Home-new.apk:/priv-app/EL830LF01_Home.apk"
-          for f in out/apks/*.apk; do
+          for f in firmware/apks/*.apk; do
             [ -f "$f" ] || continue
             PKG=$("$BT/aapt" dump badging "$f" 2>/dev/null | sed -n "s/^package: name='\([^']*\)'.*/\1/p" | head -1)
             [ -n "$PKG" ] || { echo "пропуск $f: не APK" | tee -a reports/full-build.txt; continue; }
@@ -188,6 +184,22 @@ jobs:
             echo "## содержимое образа"
             debugfs -R "ls -l /app" out/system-full.img 2>/dev/null | grep -iE "navitel|yandex|torque|switcher"
             debugfs -R "ls -l /priv-app" out/system-full.img 2>/dev/null | grep -iE "navitel|yandex|torque|Home"
+            echo "сверка APK в образе с исходными (должно совпасть):"
+            for f in firmware/apks/*.apk; do
+              [ -f "$f" ] || continue
+              N=$(basename "$f")
+              case "$N" in
+                com.navitel*) P=/priv-app ;;
+                *)            P=/app ;;
+              esac
+              debugfs -R "dump $P/$N /tmp/chk-$N" out/system-full.img 2>/dev/null
+              if cmp -s "$f" "/tmp/chk-$N"; then
+                echo "  $N: совпадает"
+              else
+                echo "  $N: НЕ СОВПАДАЕТ"
+                exit 1
+              fi
+            done
             echo "часовой пояс:"
             debugfs -R "dump /build.prop /tmp/bp.txt" out/system-full.img 2>/dev/null
             grep -E "timezone|locale" /tmp/bp.txt
