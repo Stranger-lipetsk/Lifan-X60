@@ -1,0 +1,951 @@
+# Поиск путей запуска в штатных APK
+Совпадения строк не доказывают доступность метода с экрана.
+
+## Home - файлов smali: 1158
+
+### APK extension or MIME - совпадений: 0
+
+### Open/download actions - совпадений: 0
+
+### Android settings launch - совпадений: 0
+
+### Media file filters - совпадений: 5
+
+--- smali/tw/com/elead/el830/home/Utils.smali строка 386 .method public static enableVideoColorkey(Z)Z
+    .line 511
+    .local v0, "bSuccess":Z
+    :try_start_0
+    new-instance v2, Ljava/io/FileWriter;
+
+    const-string v4, "/proc/elead_video/colorkey_enable"
+
+    invoke-direct {v2, v4}, Ljava/io/FileWriter;-><init>(Ljava/lang/String;)V
+
+    .line 513
+    .local v2, "mFileWriter":Ljava/io/FileWriter;
+    new-instance v3, Ljava/io/BufferedWriter;
+
+--- smali/tw/com/elead/el830/home/Utils.smali строка 456 .method public static enableVideoLocalCalpha(Z)Z
+    .line 540
+    .local v0, "bSuccess":Z
+    :try_start_0
+    new-instance v2, Ljava/io/FileWriter;
+
+    const-string v4, "/proc/elead_video/lalpha_enable"
+
+    invoke-direct {v2, v4}, Ljava/io/FileWriter;-><init>(Ljava/lang/String;)V
+
+    .line 542
+    .local v2, "mFileWriter":Ljava/io/FileWriter;
+    new-instance v3, Ljava/io/BufferedWriter;
+
+--- smali/android/support/v4/app/ShareCompat$IntentBuilder.smali строка 904 .method public setType(Ljava/lang/String;)Landroid/support/v4/app/ShareCompat$IntentBuilder;
+    return-object p0
+.end method
+
+.method public setType(Ljava/lang/String;)Landroid/support/v4/app/ShareCompat$IntentBuilder;
+    .locals 1
+    .param p1, "mimeType"    # Ljava/lang/String;
+
+    .prologue
+    .line 418
+    iget-object v0, p0, Landroid/support/v4/app/ShareCompat$IntentBuilder;->mIntent:Landroid/content/Intent;
+
+    invoke-virtual {v0, p1}, Landroid/content/Intent;->setType(Ljava/lang/String;)Landroid/content/Intent;
+
+--- smali/android/support/v4/content/FileProvider.smali строка 793 .method public getType(Landroid/net/Uri;)Ljava/lang/String;
+
+    move-result-object v0
+
+    .line 456
+    .local v0, "extension":Ljava/lang/String;
+    invoke-static {}, Landroid/webkit/MimeTypeMap;->getSingleton()Landroid/webkit/MimeTypeMap;
+
+    move-result-object v4
+
+    invoke-virtual {v4, v0}, Landroid/webkit/MimeTypeMap;->getMimeTypeFromExtension(Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object v3
+
+--- smali/android/support/v4/content/FileProvider.smali строка 797 .method public getType(Landroid/net/Uri;)Ljava/lang/String;
+    .local v0, "extension":Ljava/lang/String;
+    invoke-static {}, Landroid/webkit/MimeTypeMap;->getSingleton()Landroid/webkit/MimeTypeMap;
+
+    move-result-object v4
+
+    invoke-virtual {v4, v0}, Landroid/webkit/MimeTypeMap;->getMimeTypeFromExtension(Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object v3
+
+    .line 457
+    .local v3, "mime":Ljava/lang/String;
+    if-eqz v3, :cond_0
+
+## MediaPlayer - файлов smali: 1142
+
+### APK extension or MIME - совпадений: 0
+
+### Open/download actions - совпадений: 0
+
+### Android settings launch - совпадений: 0
+
+### Media file filters - совпадений: 907
+
+--- smali/org/cmc/music/fs/FSParser.smali строка 179 .method public static final parseFilename(Ljava/lang/String;Ljava/lang/String;)Lorg/cmc/music/metadata/MusicMetadata;
+    :cond_1
+    invoke-virtual {p0}, Ljava/lang/String;->toLowerCase()Ljava/lang/String;
+
+    move-result-object v9
+
+    const-string v10, ".mp3"
+
+    invoke-virtual {v9, v10}, Ljava/lang/String;->endsWith(Ljava/lang/String;)Z
+
+    move-result v9
+
+    if-nez v9, :cond_2
+
+--- smali/org/cmc/music/myid3/MyID3.smali строка 1781 .method private write(Ljava/io/File;Ljava/io/File;[B[B[B)V
+
+    invoke-virtual/range {v21 .. v21}, Ljava/lang/String;->toLowerCase()Ljava/lang/String;
+
+    move-result-object v21
+
+    const-string v22, ".mp3"
+
+    invoke-virtual/range {v21 .. v22}, Ljava/lang/String;->endsWith(Ljava/lang/String;)Z
+
+    move-result v21
+
+    if-nez v21, :cond_1
+
+--- smali/org/cmc/music/myid3/MyID3.smali строка 2288 .method public read(Ljava/io/File;Lorg/cmc/music/myid3/MyID3Listener;)Lorg/cmc/music/metadata/MusicMetadataSet;
+
+    invoke-virtual {v4}, Ljava/lang/String;->toLowerCase()Ljava/lang/String;
+
+    move-result-object v4
+
+    const-string v5, ".mp3"
+
+    invoke-virtual {v4, v5}, Ljava/lang/String;->endsWith(Ljava/lang/String;)Z
+
+    move-result v4
+
+    if-eqz v4, :cond_0
+
+--- smali/org/cmc/music/myid3/MyID3v2FrameImage.smali строка 11 (outside method)
+# instance fields
+.field public final description:Ljava/lang/String;
+
+.field public final imageData:[B
+
+.field public final mimeType:Ljava/lang/String;
+
+.field public final pictureType:I
+
+
+# direct methods
+.method public constructor <init>(Ljava/lang/String;[BLorg/cmc/music/myid3/ID3v2FrameFlags;[BLjava/lang/String;Ljava/lang/String;I)V
+
+--- smali/org/cmc/music/myid3/MyID3v2FrameImage.smali строка 23 .method public constructor <init>(Ljava/lang/String;[BLorg/cmc/music/myid3/ID3v2FrameFlags;[BLjava/lang/String;Ljava/lang/String;I)V
+    .locals 0
+    .param p1, "frame_id"    # Ljava/lang/String;
+    .param p2, "data_bytes"    # [B
+    .param p3, "flags"    # Lorg/cmc/music/myid3/ID3v2FrameFlags;
+    .param p4, "imageData"    # [B
+    .param p5, "mimeType"    # Ljava/lang/String;
+    .param p6, "description"    # Ljava/lang/String;
+    .param p7, "pictureType"    # I
+
+    .prologue
+    .line 24
+    invoke-direct {p0, p1, p2, p3}, Lorg/cmc/music/myid3/MyID3v2FrameData;-><init>(Ljava/lang/String;[BLorg/cmc/music/myid3/ID3v2FrameFlags;)V
+
+--- smali/org/cmc/music/myid3/MyID3v2FrameImage.smali строка 35 .method public constructor <init>(Ljava/lang/String;[BLorg/cmc/music/myid3/ID3v2FrameFlags;[BLjava/lang/String;Ljava/lang/String;I)V
+
+    .line 25
+    iput-object p4, p0, Lorg/cmc/music/myid3/MyID3v2FrameImage;->imageData:[B
+
+    .line 26
+    iput-object p5, p0, Lorg/cmc/music/myid3/MyID3v2FrameImage;->mimeType:Ljava/lang/String;
+
+    .line 27
+    iput-object p6, p0, Lorg/cmc/music/myid3/MyID3v2FrameImage;->description:Ljava/lang/String;
+
+    .line 28
+    iput p7, p0, Lorg/cmc/music/myid3/MyID3v2FrameImage;->pictureType:I
+
+--- smali/org/cmc/music/myid3/MyID3v2FrameImage.smali строка 58 .method public getImageData()Lorg/cmc/music/metadata/ImageData;
+    .line 33
+    new-instance v0, Lorg/cmc/music/metadata/ImageData;
+
+    iget-object v1, p0, Lorg/cmc/music/myid3/MyID3v2FrameImage;->imageData:[B
+
+    iget-object v2, p0, Lorg/cmc/music/myid3/MyID3v2FrameImage;->mimeType:Ljava/lang/String;
+
+    iget-object v3, p0, Lorg/cmc/music/myid3/MyID3v2FrameImage;->description:Ljava/lang/String;
+
+    iget v4, p0, Lorg/cmc/music/myid3/MyID3v2FrameImage;->pictureType:I
+
+    invoke-direct {v0, v1, v2, v3, v4}, Lorg/cmc/music/metadata/ImageData;-><init>([BLjava/lang/String;Ljava/lang/String;I)V
+
+--- smali/org/cmc/music/myid3/MyID3v2Read.smali строка 898 .method private readDataTag(I[B[BLjava/lang/String;Lorg/cmc/music/myid3/ID3v2FrameFlags;)V
+    invoke-virtual {v13}, Ljava/lang/String;->toLowerCase()Ljava/lang/String;
+
+    move-result-object v8
+
+    .line 775
+    .local v8, "mimeType":Ljava/lang/String;
+    const-string v3, "image/"
+
+    invoke-virtual {v8, v3}, Ljava/lang/String;->startsWith(Ljava/lang/String;)Z
+
+    move-result v3
+
+
+--- smali/org/cmc/music/myid3/MyID3v2Read.smali строка 1011 .method private readDataTag(I[B[BLjava/lang/String;Lorg/cmc/music/myid3/ID3v2FrameFlags;)V
+
+    goto/16 :goto_0
+
+    .line 779
+    .end local v7    # "imageData":[B
+    .end local v8    # "mimeType":Ljava/lang/String;
+    .end local v9    # "description":Ljava/lang/String;
+    .end local v10    # "pictureType":I
+    .end local v14    # "frameIndex":I
+    .end local v23    # "stringDataLength":I
+    .restart local v15    # "frameIndex":I
+    :cond_6
+
+--- smali/org/cmc/music/myid3/MyID3v2Read.smali строка 1027 .method private readDataTag(I[B[BLjava/lang/String;Lorg/cmc/music/myid3/ID3v2FrameFlags;)V
+    invoke-direct {v0, v1, v15, v11}, Lorg/cmc/music/myid3/MyID3v2Read;->readString([BII)Ljava/lang/String;
+
+    move-result-object v8
+
+    .line 781
+    .restart local v8    # "mimeType":Ljava/lang/String;
+    move-object/from16 v0, p0
+
+    move-object/from16 v1, p3
+
+    invoke-direct {v0, v1, v15, v11}, Lorg/cmc/music/myid3/MyID3v2Read;->findStringDataLength([BII)I
+
+
+--- smali/org/cmc/music/myid3/MyID3v2Read.smali строка 1045 .method private readDataTag(I[B[BLjava/lang/String;Lorg/cmc/music/myid3/ID3v2FrameFlags;)V
+    .end local v15    # "frameIndex":I
+    .restart local v14    # "frameIndex":I
+    goto :goto_1
+
+    .line 807
+    .end local v8    # "mimeType":Ljava/lang/String;
+    .end local v11    # "charEncodingCode":I
+    .end local v14    # "frameIndex":I
+    .end local v23    # "stringDataLength":I
+    :cond_7
+    const-string v3, "PRIV"
+
+
+--- smali/org/cmc/music/myid3/MyID3v2Write.smali строка 902 .method private toFrameImage(Ljava/lang/String;Ljava/lang/Number;Lorg/cmc/music/metadata/ImageData;)Lorg/cmc/music/myid3/MyID3v2Write$Frame;
+    .local v1, "char_encoding_code":I
+    :goto_0
+    invoke-virtual {v0, v1}, Ljava/io/ByteArrayOutputStream;->write(I)V
+
+    .line 291
+    iget-object v8, p3, Lorg/cmc/music/metadata/ImageData;->mimeType:Ljava/lang/String;
+
+    invoke-direct {p0, v8, v7}, Lorg/cmc/music/myid3/MyID3v2Write;->encodeString(Ljava/lang/String;Z)[B
+
+    move-result-object v4
+
+    .line 294
+
+--- smali/org/cmc/music/myid3/MyID3v2Write.smali строка 909 .method private toFrameImage(Ljava/lang/String;Ljava/lang/Number;Lorg/cmc/music/metadata/ImageData;)Lorg/cmc/music/myid3/MyID3v2Write$Frame;
+    invoke-direct {p0, v8, v7}, Lorg/cmc/music/myid3/MyID3v2Write;->encodeString(Ljava/lang/String;Z)[B
+
+    move-result-object v4
+
+    .line 294
+    .local v4, "mimeTypeBytes":[B
+    invoke-virtual {v0, v4}, Ljava/io/ByteArrayOutputStream;->write([B)V
+
+    .line 295
+    invoke-virtual {v0, v6}, Ljava/io/ByteArrayOutputStream;->write(I)V
+
+    .line 297
+
+--- smali/org/cmc/music/myid3/MyID3v2Write.smali строка 957 .method private toFrameImage(Ljava/lang/String;Ljava/lang/Number;Lorg/cmc/music/metadata/ImageData;)Lorg/cmc/music/myid3/MyID3v2Write$Frame;
+    return-object v6
+
+    .end local v1    # "char_encoding_code":I
+    .end local v2    # "descriptionBytes":[B
+    .end local v3    # "frameBytes":[B
+    .end local v4    # "mimeTypeBytes":[B
+    :cond_0
+    move v1, v7
+
+    .line 287
+    goto :goto_0
+.end method
+
+--- smali/org/cmc/music/metadata/ImageData.smali строка 11 (outside method)
+# instance fields
+.field public final description:Ljava/lang/String;
+
+.field public final imageData:[B
+
+.field public final mimeType:Ljava/lang/String;
+
+.field public final pictureType:I
+
+
+# direct methods
+.method public constructor <init>([BLjava/lang/String;Ljava/lang/String;I)V
+
+--- smali/org/cmc/music/metadata/ImageData.smali строка 20 .method public constructor <init>([BLjava/lang/String;Ljava/lang/String;I)V
+
+# direct methods
+.method public constructor <init>([BLjava/lang/String;Ljava/lang/String;I)V
+    .locals 0
+    .param p1, "imageData"    # [B
+    .param p2, "mimeType"    # Ljava/lang/String;
+    .param p3, "description"    # Ljava/lang/String;
+    .param p4, "pictureType"    # I
+
+    .prologue
+    .line 13
+    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
+
+--- smali/org/cmc/music/metadata/ImageData.smali строка 32 .method public constructor <init>([BLjava/lang/String;Ljava/lang/String;I)V
+
+    .line 16
+    iput-object p1, p0, Lorg/cmc/music/metadata/ImageData;->imageData:[B
+
+    .line 17
+    iput-object p2, p0, Lorg/cmc/music/metadata/ImageData;->mimeType:Ljava/lang/String;
+
+    .line 18
+    iput-object p3, p0, Lorg/cmc/music/metadata/ImageData;->description:Ljava/lang/String;
+
+    .line 19
+    iput p4, p0, Lorg/cmc/music/metadata/ImageData;->pictureType:I
+
+--- smali/org/cmc/music/clean/NameRectifier.smali строка 1223 .method private clean(Ljava/lang/String;Ljava/util/Map;)Ljava/lang/String;
+    aput-object v19, v15, v18
+
+    const/16 v18, 0x2
+
+    .line 260
+    const-string v19, ".Mp3"
+
+    aput-object v19, v15, v18
+
+    const/16 v18, 0x3
+
+    .line 261
+
+--- smali/org/cmc/music/clean/RenamingFileFilter.smali строка 581 .method protected isMusicFile(Ljava/io/File;)Z
+
+    move-result-object v0
+
+    .line 29
+    .local v0, "s":Ljava/lang/String;
+    const-string v1, ".mp3"
+
+    invoke-virtual {v0, v1}, Ljava/lang/String;->endsWith(Ljava/lang/String;)Z
+
+    move-result v1
+
+    const-string v2, ".ogg"
+
+--- smali/tw/com/elead/el830/mediaplayer/MediaPlayerService$4.smali строка 2348 .method public handleMessage(Landroid/os/Message;)V
+
+    .line 3162
+    if-eqz v6, :cond_14
+
+    .line 3163
+    sget-boolean v33, Ltw/com/elead/el830/video/VideoPlayFragment;->bNullSurface:Z
+
+    if-eqz v33, :cond_13
+
+    .line 3164
+    move-object/from16 v0, p0
+
+
+--- smali/tw/com/elead/el830/mediaplayer/MediaPlayerService$4.smali строка 2389 .method public handleMessage(Landroid/os/Message;)V
+
+    invoke-static/range {v33 .. v33}, Ltw/com/elead/el830/mediaplayer/MediaPlayerService;->access$8(Ltw/com/elead/el830/mediaplayer/MediaPlayerService;)Landroid/media/MediaPlayer;
+
+    move-result-object v33
+
+    sget-object v34, Ltw/com/elead/el830/video/VideoPlayFragment;->hwSurfaceHolder:Landroid/view/SurfaceHolder;
+
+    invoke-virtual/range {v33 .. v34}, Landroid/media/MediaPlayer;->setDisplay(Landroid/view/SurfaceHolder;)V
+
+    goto/16 :goto_0
+
+    .line 3169
+
+--- smali/tw/com/elead/el830/mediaplayer/Globals.smali строка 461 .method static constructor <clinit>()V
+
+    .line 152
+    sput-object v0, Ltw/com/elead/el830/mediaplayer/Globals;->supportedAudioFileFormats:[Ljava/lang/String;
+
+    .line 159
+    const-string v0, "content://media/external/audio/albumart"
+
+    invoke-static {v0}, Landroid/net/Uri;->parse(Ljava/lang/String;)Landroid/net/Uri;
+
+    move-result-object v0
+
+    sput-object v0, Ltw/com/elead/el830/mediaplayer/Globals;->sArtworkUri:Landroid/net/Uri;
+
+--- smali/tw/com/elead/el830/video/VideoPlayFragment$7.smali строка 1 (outside method)
+.class Ltw/com/elead/el830/video/VideoPlayFragment$7;
+.super Ljava/lang/Object;
+.source "VideoPlayFragment.java"
+
+# interfaces
+.implements Landroid/view/View$OnClickListener;
+
+
+--- smali/tw/com/elead/el830/video/VideoPlayFragment$7.smali строка 11 (outside method)
+.implements Landroid/view/View$OnClickListener;
+
+
+# annotations
+.annotation system Ldalvik/annotation/EnclosingMethod;
+    value = Ltw/com/elead/el830/video/VideoPlayFragment;->initVideoUI()V
+.end annotation
+
+.annotation system Ldalvik/annotation/InnerClass;
+    accessFlags = 0x0
+    name = null
+.end annotation
+
+--- smali/tw/com/elead/el830/video/VideoPlayFragment$7.smali строка 21 (outside method)
+    name = null
+.end annotation
+
+
+# instance fields
+.field final synthetic this$0:Ltw/com/elead/el830/video/VideoPlayFragment;
+
+
+# direct methods
+.method constructor <init>(Ltw/com/elead/el830/video/VideoPlayFragment;)V
+    .locals 0
+
+
+--- smali/tw/com/elead/el830/video/VideoPlayFragment$7.smali строка 25 .method constructor <init>(Ltw/com/elead/el830/video/VideoPlayFragment;)V
+# instance fields
+.field final synthetic this$0:Ltw/com/elead/el830/video/VideoPlayFragment;
+
+
+# direct methods
+.method constructor <init>(Ltw/com/elead/el830/video/VideoPlayFragment;)V
+    .locals 0
+
+    .prologue
+    .line 1
+    iput-object p1, p0, Ltw/com/elead/el830/video/VideoPlayFragment$7;->this$0:Ltw/com/elead/el830/video/VideoPlayFragment;
+
+
+--- smali/tw/com/elead/el830/video/VideoPlayFragment$7.smali строка 30 .method constructor <init>(Ltw/com/elead/el830/video/VideoPlayFragment;)V
+.method constructor <init>(Ltw/com/elead/el830/video/VideoPlayFragment;)V
+    .locals 0
+
+    .prologue
+    .line 1
+    iput-object p1, p0, Ltw/com/elead/el830/video/VideoPlayFragment$7;->this$0:Ltw/com/elead/el830/video/VideoPlayFragment;
+
+    .line 285
+    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
+
+    return-void
+.end method
+
+--- smali/tw/com/elead/el830/video/VideoPlayFragment$7.smali строка 46 .method public onClick(Landroid/view/View;)V
+    .locals 1
+    .param p1, "v"    # Landroid/view/View;
+
+    .prologue
+    .line 288
+    iget-object v0, p0, Ltw/com/elead/el830/video/VideoPlayFragment$7;->this$0:Ltw/com/elead/el830/video/VideoPlayFragment;
+
+    invoke-static {v0}, Ltw/com/elead/el830/video/VideoPlayFragment;->access$0(Ltw/com/elead/el830/video/VideoPlayFragment;)Ltw/com/elead/el830/video/VideoActivity;
+
+    move-result-object v0
+
+    invoke-virtual {v0}, Ltw/com/elead/el830/video/VideoActivity;->actionPrev()V
+
+--- smali/tw/com/elead/el830/video/VideoPlayFragment$7.smali строка 48 .method public onClick(Landroid/view/View;)V
+
+    .prologue
+    .line 288
+    iget-object v0, p0, Ltw/com/elead/el830/video/VideoPlayFragment$7;->this$0:Ltw/com/elead/el830/video/VideoPlayFragment;
+
+    invoke-static {v0}, Ltw/com/elead/el830/video/VideoPlayFragment;->access$0(Ltw/com/elead/el830/video/VideoPlayFragment;)Ltw/com/elead/el830/video/VideoActivity;
+
+    move-result-object v0
+
+    invoke-virtual {v0}, Ltw/com/elead/el830/video/VideoActivity;->actionPrev()V
+
+    .line 289
+
+--- smali/tw/com/elead/el830/video/VideoPlayFragment$7.smali строка 52 .method public onClick(Landroid/view/View;)V
+
+    invoke-static {v0}, Ltw/com/elead/el830/video/VideoPlayFragment;->access$0(Ltw/com/elead/el830/video/VideoPlayFragment;)Ltw/com/elead/el830/video/VideoActivity;
+
+    move-result-object v0
+
+    invoke-virtual {v0}, Ltw/com/elead/el830/video/VideoActivity;->actionPrev()V
+
+    .line 289
+    return-void
+.end method
+... показаны первые 30 совпадений
+
+## MirrorLink - файлов smali: 2117
+
+### APK extension or MIME - совпадений: 0
+
+### Open/download actions - совпадений: 1
+
+--- smali/com/fpt/mirrorlink/android/vnc/util/Utils.smali строка 20 .method static constructor <clinit>()V
+
+    .prologue
+    .line 30
+    new-instance v0, Landroid/content/Intent;
+
+    const-string v1, "android.intent.action.VIEW"
+
+    const-string v2, "http://code.google.com/p/android-vnc-viewer/wiki/Documentation"
+
+    invoke-static {v2}, Landroid/net/Uri;->parse(Ljava/lang/String;)Landroid/net/Uri;
+
+    move-result-object v2
+
+### Android settings launch - совпадений: 0
+
+### Media file filters - совпадений: 167
+
+--- smali/org/teleal/cling/support/messagebox/AddMessage.smali строка 7 (outside method)
+.super Lorg/teleal/cling/controlpoint/ActionCallback;
+.source "AddMessage.java"
+
+
+# instance fields
+.field protected final mimeType:Lorg/teleal/common/util/MimeType;
+
+
+# direct methods
+.method public constructor <init>(Lorg/teleal/cling/model/meta/Service;Lorg/teleal/cling/support/messagebox/model/Message;)V
+    .locals 3
+    .param p1, "service"    # Lorg/teleal/cling/model/meta/Service;
+
+--- smali/org/teleal/cling/support/messagebox/AddMessage.smali строка 33 .method public constructor <init>(Lorg/teleal/cling/model/meta/Service;Lorg/teleal/cling/support/messagebox/model/Message;)V
+    invoke-direct {p0, v0}, Lorg/teleal/cling/controlpoint/ActionCallback;-><init>(Lorg/teleal/cling/model/action/ActionInvocation;)V
+
+    .line 31
+    const-string v0, "text/xml;charset=\"utf-8\""
+
+    invoke-static {v0}, Lorg/teleal/common/util/MimeType;->valueOf(Ljava/lang/String;)Lorg/teleal/common/util/MimeType;
+
+    move-result-object v0
+
+    iput-object v0, p0, Lorg/teleal/cling/support/messagebox/AddMessage;->mimeType:Lorg/teleal/common/util/MimeType;
+
+    .line 36
+
+--- smali/org/teleal/cling/support/messagebox/AddMessage.smali строка 37 .method public constructor <init>(Lorg/teleal/cling/model/meta/Service;Lorg/teleal/cling/support/messagebox/model/Message;)V
+
+    invoke-static {v0}, Lorg/teleal/common/util/MimeType;->valueOf(Ljava/lang/String;)Lorg/teleal/common/util/MimeType;
+
+    move-result-object v0
+
+    iput-object v0, p0, Lorg/teleal/cling/support/messagebox/AddMessage;->mimeType:Lorg/teleal/common/util/MimeType;
+
+    .line 36
+    invoke-virtual {p0}, Lorg/teleal/cling/support/messagebox/AddMessage;->getActionInvocation()Lorg/teleal/cling/model/action/ActionInvocation;
+
+    move-result-object v0
+
+
+--- smali/org/teleal/cling/support/messagebox/AddMessage.smali строка 63 .method public constructor <init>(Lorg/teleal/cling/model/meta/Service;Lorg/teleal/cling/support/messagebox/model/Message;)V
+
+    move-result-object v0
+
+    const-string v1, "MessageType"
+
+    iget-object v2, p0, Lorg/teleal/cling/support/messagebox/AddMessage;->mimeType:Lorg/teleal/common/util/MimeType;
+
+    invoke-virtual {v2}, Lorg/teleal/common/util/MimeType;->toString()Ljava/lang/String;
+
+    move-result-object v2
+
+    invoke-virtual {v0, v1, v2}, Lorg/teleal/cling/model/action/ActionInvocation;->setInput(Ljava/lang/String;Ljava/lang/Object;)V
+
+--- smali/org/teleal/cling/support/messagebox/AddMessage.smali строка 65 .method public constructor <init>(Lorg/teleal/cling/model/meta/Service;Lorg/teleal/cling/support/messagebox/model/Message;)V
+
+    const-string v1, "MessageType"
+
+    iget-object v2, p0, Lorg/teleal/cling/support/messagebox/AddMessage;->mimeType:Lorg/teleal/common/util/MimeType;
+
+    invoke-virtual {v2}, Lorg/teleal/common/util/MimeType;->toString()Ljava/lang/String;
+
+    move-result-object v2
+
+    invoke-virtual {v0, v1, v2}, Lorg/teleal/cling/model/action/ActionInvocation;->setInput(Ljava/lang/String;Ljava/lang/Object;)V
+
+    .line 38
+
+--- smali/org/teleal/cling/support/model/ProtocolInfo.smali строка 203 .method public constructor <init>(Lorg/teleal/common/util/MimeType;)V
+
+    .line 76
+    return-void
+.end method
+
+.method public constructor <init>(Lorg/teleal/common/util/MimeType;)V
+    .locals 1
+    .param p1, "contentFormatMimeType"    # Lorg/teleal/common/util/MimeType;
+
+    .prologue
+    .line 66
+    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
+
+--- smali/org/teleal/cling/support/model/ProtocolInfo.smali строка 205 .method public constructor <init>(Lorg/teleal/common/util/MimeType;)V
+    return-void
+.end method
+
+.method public constructor <init>(Lorg/teleal/common/util/MimeType;)V
+    .locals 1
+    .param p1, "contentFormatMimeType"    # Lorg/teleal/common/util/MimeType;
+
+    .prologue
+    .line 66
+    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
+
+    .line 48
+
+--- smali/org/teleal/cling/support/model/ProtocolInfo.smali строка 237 .method public constructor <init>(Lorg/teleal/common/util/MimeType;)V
+    sget-object v0, Lorg/teleal/cling/support/model/Protocol;->HTTP_GET:Lorg/teleal/cling/support/model/Protocol;
+
+    iput-object v0, p0, Lorg/teleal/cling/support/model/ProtocolInfo;->protocol:Lorg/teleal/cling/support/model/Protocol;
+
+    .line 68
+    invoke-virtual {p1}, Lorg/teleal/common/util/MimeType;->toString()Ljava/lang/String;
+
+    move-result-object v0
+
+    iput-object v0, p0, Lorg/teleal/cling/support/model/ProtocolInfo;->contentFormat:Ljava/lang/String;
+
+    .line 69
+
+--- smali/org/teleal/cling/support/model/ProtocolInfo.smali строка 372 .method public getContentFormatMimeType()Lorg/teleal/common/util/MimeType;
+    iget-object v0, p0, Lorg/teleal/cling/support/model/ProtocolInfo;->contentFormat:Ljava/lang/String;
+
+    return-object v0
+.end method
+
+.method public getContentFormatMimeType()Lorg/teleal/common/util/MimeType;
+    .locals 1
+    .annotation system Ldalvik/annotation/Throws;
+        value = {
+            Ljava/lang/IllegalArgumentException;
+        }
+    .end annotation
+
+--- smali/org/teleal/cling/support/model/ProtocolInfo.smali строка 384 .method public getContentFormatMimeType()Lorg/teleal/common/util/MimeType;
+
+    .prologue
+    .line 91
+    iget-object v0, p0, Lorg/teleal/cling/support/model/ProtocolInfo;->contentFormat:Ljava/lang/String;
+
+    invoke-static {v0}, Lorg/teleal/common/util/MimeType;->valueOf(Ljava/lang/String;)Lorg/teleal/common/util/MimeType;
+
+    move-result-object v0
+
+    return-object v0
+.end method
+
+
+--- smali/org/teleal/cling/support/model/Res.smali строка 157 .method public constructor <init>(Lorg/teleal/common/util/MimeType;Ljava/lang/Long;Ljava/lang/String;)V
+
+    .line 66
+    return-void
+.end method
+
+.method public constructor <init>(Lorg/teleal/common/util/MimeType;Ljava/lang/Long;Ljava/lang/String;)V
+    .locals 1
+    .param p1, "httpGetMimeType"    # Lorg/teleal/common/util/MimeType;
+    .param p2, "size"    # Ljava/lang/Long;
+    .param p3, "value"    # Ljava/lang/String;
+
+    .prologue
+
+--- smali/org/teleal/cling/support/model/Res.smali строка 159 .method public constructor <init>(Lorg/teleal/common/util/MimeType;Ljava/lang/Long;Ljava/lang/String;)V
+    return-void
+.end method
+
+.method public constructor <init>(Lorg/teleal/common/util/MimeType;Ljava/lang/Long;Ljava/lang/String;)V
+    .locals 1
+    .param p1, "httpGetMimeType"    # Lorg/teleal/common/util/MimeType;
+    .param p2, "size"    # Ljava/lang/Long;
+    .param p3, "value"    # Ljava/lang/String;
+
+    .prologue
+    .line 51
+    new-instance v0, Lorg/teleal/cling/support/model/ProtocolInfo;
+
+--- smali/org/teleal/cling/support/model/Res.smali строка 167 .method public constructor <init>(Lorg/teleal/common/util/MimeType;Ljava/lang/Long;Ljava/lang/String;)V
+
+    .prologue
+    .line 51
+    new-instance v0, Lorg/teleal/cling/support/model/ProtocolInfo;
+
+    invoke-direct {v0, p1}, Lorg/teleal/cling/support/model/ProtocolInfo;-><init>(Lorg/teleal/common/util/MimeType;)V
+
+    invoke-direct {p0, v0, p2, p3}, Lorg/teleal/cling/support/model/Res;-><init>(Lorg/teleal/cling/support/model/ProtocolInfo;Ljava/lang/Long;Ljava/lang/String;)V
+
+    .line 52
+    return-void
+.end method
+
+--- smali/org/teleal/cling/support/model/Res.smali строка 175 .method public constructor <init>(Lorg/teleal/common/util/MimeType;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;)V
+
+    .line 52
+    return-void
+.end method
+
+.method public constructor <init>(Lorg/teleal/common/util/MimeType;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;)V
+    .locals 6
+    .param p1, "httpGetMimeType"    # Lorg/teleal/common/util/MimeType;
+    .param p2, "size"    # Ljava/lang/Long;
+    .param p3, "duration"    # Ljava/lang/String;
+    .param p4, "bitrate"    # Ljava/lang/Long;
+    .param p5, "value"    # Ljava/lang/String;
+
+--- smali/org/teleal/cling/support/model/Res.smali строка 177 .method public constructor <init>(Lorg/teleal/common/util/MimeType;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;)V
+    return-void
+.end method
+
+.method public constructor <init>(Lorg/teleal/common/util/MimeType;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;)V
+    .locals 6
+    .param p1, "httpGetMimeType"    # Lorg/teleal/common/util/MimeType;
+    .param p2, "size"    # Ljava/lang/Long;
+    .param p3, "duration"    # Ljava/lang/String;
+    .param p4, "bitrate"    # Ljava/lang/Long;
+    .param p5, "value"    # Ljava/lang/String;
+
+    .prologue
+
+--- smali/org/teleal/cling/support/model/Res.smali строка 187 .method public constructor <init>(Lorg/teleal/common/util/MimeType;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;)V
+
+    .prologue
+    .line 47
+    new-instance v1, Lorg/teleal/cling/support/model/ProtocolInfo;
+
+    invoke-direct {v1, p1}, Lorg/teleal/cling/support/model/ProtocolInfo;-><init>(Lorg/teleal/common/util/MimeType;)V
+
+    move-object v0, p0
+
+    move-object v2, p2
+
+    move-object v3, p3
+
+--- smali/org/teleal/cling/support/avtransport/AVTransportErrorCode.smali строка 22 (outside method)
+# static fields
+.field private static final synthetic $VALUES:[Lorg/teleal/cling/support/avtransport/AVTransportErrorCode;
+
+.field public static final enum CONTENT_BUSY:Lorg/teleal/cling/support/avtransport/AVTransportErrorCode;
+
+.field public static final enum ILLEGAL_MIME_TYPE:Lorg/teleal/cling/support/avtransport/AVTransportErrorCode;
+
+.field public static final enum ILLEGAL_SEEK_TARGET:Lorg/teleal/cling/support/avtransport/AVTransportErrorCode;
+
+.field public static final enum INVALID_INSTANCE_ID:Lorg/teleal/cling/support/avtransport/AVTransportErrorCode;
+
+.field public static final enum MEDIA_FULL:Lorg/teleal/cling/support/avtransport/AVTransportErrorCode;
+
+--- smali/org/teleal/cling/support/avtransport/AVTransportErrorCode.smali строка 264 .method static constructor <clinit>()V
+    sput-object v0, Lorg/teleal/cling/support/avtransport/AVTransportErrorCode;->RECORDQUALITYMODE_NOT_SUPPORTED:Lorg/teleal/cling/support/avtransport/AVTransportErrorCode;
+
+    .line 38
+    new-instance v0, Lorg/teleal/cling/support/avtransport/AVTransportErrorCode;
+
+    const-string v1, "ILLEGAL_MIME_TYPE"
+
+    const/16 v2, 0xd
+
+    const/16 v3, 0x2ca
+
+    const-string v4, "The specified resource has a MIME-type which is not supported"
+
+--- smali/org/teleal/cling/support/avtransport/AVTransportErrorCode.smali строка 270 .method static constructor <clinit>()V
+
+    const/16 v2, 0xd
+
+    const/16 v3, 0x2ca
+
+    const-string v4, "The specified resource has a MIME-type which is not supported"
+
+    invoke-direct {v0, v1, v2, v3, v4}, Lorg/teleal/cling/support/avtransport/AVTransportErrorCode;-><init>(Ljava/lang/String;IILjava/lang/String;)V
+
+    sput-object v0, Lorg/teleal/cling/support/avtransport/AVTransportErrorCode;->ILLEGAL_MIME_TYPE:Lorg/teleal/cling/support/avtransport/AVTransportErrorCode;
+
+    .line 39
+
+--- smali/org/teleal/cling/support/avtransport/AVTransportErrorCode.smali строка 274 .method static constructor <clinit>()V
+
+    const-string v4, "The specified resource has a MIME-type which is not supported"
+
+    invoke-direct {v0, v1, v2, v3, v4}, Lorg/teleal/cling/support/avtransport/AVTransportErrorCode;-><init>(Ljava/lang/String;IILjava/lang/String;)V
+
+    sput-object v0, Lorg/teleal/cling/support/avtransport/AVTransportErrorCode;->ILLEGAL_MIME_TYPE:Lorg/teleal/cling/support/avtransport/AVTransportErrorCode;
+
+    .line 39
+    new-instance v0, Lorg/teleal/cling/support/avtransport/AVTransportErrorCode;
+
+    const-string v1, "CONTENT_BUSY"
+
+
+--- smali/org/teleal/cling/support/avtransport/AVTransportErrorCode.smali строка 396 .method static constructor <clinit>()V
+
+    aput-object v2, v0, v1
+
+    const/16 v1, 0xd
+
+    sget-object v2, Lorg/teleal/cling/support/avtransport/AVTransportErrorCode;->ILLEGAL_MIME_TYPE:Lorg/teleal/cling/support/avtransport/AVTransportErrorCode;
+
+    aput-object v2, v0, v1
+
+    const/16 v1, 0xe
+
+    sget-object v2, Lorg/teleal/cling/support/avtransport/AVTransportErrorCode;->CONTENT_BUSY:Lorg/teleal/cling/support/avtransport/AVTransportErrorCode;
+
+--- smali/org/teleal/cling/model/message/UpnpMessage.smali строка 413 .method public getContentTypeCharset()Ljava/lang/String;
+
+    invoke-virtual {v0}, Lorg/teleal/cling/model/message/header/ContentTypeHeader;->getValue()Ljava/lang/Object;
+
+    move-result-object v1
+
+    check-cast v1, Lorg/teleal/common/util/MimeType;
+
+    invoke-virtual {v1}, Lorg/teleal/common/util/MimeType;->getParameters()Ljava/util/Map;
+
+    move-result-object v1
+
+    const-string v2, "charset"
+
+--- smali/org/teleal/cling/model/message/UpnpMessage.smali строка 415 .method public getContentTypeCharset()Ljava/lang/String;
+
+    move-result-object v1
+
+    check-cast v1, Lorg/teleal/common/util/MimeType;
+
+    invoke-virtual {v1}, Lorg/teleal/common/util/MimeType;->getParameters()Ljava/util/Map;
+
+    move-result-object v1
+
+    const-string v2, "charset"
+
+    invoke-interface {v1, v2}, Ljava/util/Map;->get(Ljava/lang/Object;)Ljava/lang/Object;
+
+--- smali/org/teleal/cling/model/message/StreamResponseMessage.smali строка 60 .method public constructor <init>(Ljava/lang/String;Lorg/teleal/common/util/MimeType;)V
+
+    .line 65
+    return-void
+.end method
+
+.method public constructor <init>(Ljava/lang/String;Lorg/teleal/common/util/MimeType;)V
+    .locals 1
+    .param p1, "body"    # Ljava/lang/String;
+    .param p2, "mimeType"    # Lorg/teleal/common/util/MimeType;
+
+    .prologue
+    .line 68
+
+--- smali/org/teleal/cling/model/message/StreamResponseMessage.smali строка 63 .method public constructor <init>(Ljava/lang/String;Lorg/teleal/common/util/MimeType;)V
+.end method
+
+.method public constructor <init>(Ljava/lang/String;Lorg/teleal/common/util/MimeType;)V
+    .locals 1
+    .param p1, "body"    # Ljava/lang/String;
+    .param p2, "mimeType"    # Lorg/teleal/common/util/MimeType;
+
+    .prologue
+    .line 68
+    new-instance v0, Lorg/teleal/cling/model/message/header/ContentTypeHeader;
+
+    invoke-direct {v0, p2}, Lorg/teleal/cling/model/message/header/ContentTypeHeader;-><init>(Lorg/teleal/common/util/MimeType;)V
+
+--- smali/org/teleal/cling/model/message/StreamResponseMessage.smali строка 69 .method public constructor <init>(Ljava/lang/String;Lorg/teleal/common/util/MimeType;)V
+
+    .prologue
+    .line 68
+    new-instance v0, Lorg/teleal/cling/model/message/header/ContentTypeHeader;
+
+    invoke-direct {v0, p2}, Lorg/teleal/cling/model/message/header/ContentTypeHeader;-><init>(Lorg/teleal/common/util/MimeType;)V
+
+    invoke-direct {p0, p1, v0}, Lorg/teleal/cling/model/message/StreamResponseMessage;-><init>(Ljava/lang/String;Lorg/teleal/cling/model/message/header/ContentTypeHeader;)V
+
+    .line 69
+    return-void
+.end method
+
+--- smali/org/teleal/cling/model/message/StreamResponseMessage.smali строка 189 .method public constructor <init>([BLorg/teleal/common/util/MimeType;)V
+
+    .line 74
+    return-void
+.end method
+
+.method public constructor <init>([BLorg/teleal/common/util/MimeType;)V
+    .locals 1
+    .param p1, "body"    # [B
+    .param p2, "mimeType"    # Lorg/teleal/common/util/MimeType;
+
+    .prologue
+    .line 77
+
+--- smali/org/teleal/cling/model/message/StreamResponseMessage.smali строка 192 .method public constructor <init>([BLorg/teleal/common/util/MimeType;)V
+.end method
+
+.method public constructor <init>([BLorg/teleal/common/util/MimeType;)V
+    .locals 1
+    .param p1, "body"    # [B
+    .param p2, "mimeType"    # Lorg/teleal/common/util/MimeType;
+
+    .prologue
+    .line 77
+    new-instance v0, Lorg/teleal/cling/model/message/header/ContentTypeHeader;
+
+    invoke-direct {v0, p2}, Lorg/teleal/cling/model/message/header/ContentTypeHeader;-><init>(Lorg/teleal/common/util/MimeType;)V
+
+--- smali/org/teleal/cling/model/message/StreamResponseMessage.smali строка 198 .method public constructor <init>([BLorg/teleal/common/util/MimeType;)V
+
+    .prologue
+    .line 77
+    new-instance v0, Lorg/teleal/cling/model/message/header/ContentTypeHeader;
+
+    invoke-direct {v0, p2}, Lorg/teleal/cling/model/message/header/ContentTypeHeader;-><init>(Lorg/teleal/common/util/MimeType;)V
+
+    invoke-direct {p0, p1, v0}, Lorg/teleal/cling/model/message/StreamResponseMessage;-><init>([BLorg/teleal/cling/model/message/header/ContentTypeHeader;)V
+
+    .line 78
+    return-void
+.end method
+
+--- smali/org/teleal/cling/model/meta/Icon.smali строка 22 (outside method)
+
+.field private device:Lorg/teleal/cling/model/meta/Device;
+
+.field private final height:I
+
+.field private final mimeType:Lorg/teleal/common/util/MimeType;
+
+.field private final uri:Ljava/net/URI;
+
+.field private final width:I
+
+
+... показаны первые 30 совпадений
