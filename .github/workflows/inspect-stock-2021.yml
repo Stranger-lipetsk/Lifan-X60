@@ -47,7 +47,7 @@ jobs:
                 debugfs -R "ls -l $p" "$img" 2>&1 || true
               done
               mkdir -p "$RUNNER_TEMP/stock/extract"
-              for p in build.prop app/Launcher2.apk app/ElSettings.apk app/Settings.apk priv-app/EL830LF01_Home.apk; do
+              for p in build.prop app/DocumentsUI.apk app/PackageInstaller.apk app/EL831CLF01_MirrorLink_2016.06.13.01.apk priv-app/EL830LF01_Home.apk priv-app/ElSettings.apk priv-app/Launcher2; do
                 dest="$RUNNER_TEMP/stock/extract/$(basename "$p")"
                 debugfs -R "dump /$p $dest" "$img" 2>&1 || true
               done
@@ -56,6 +56,11 @@ jobs:
                 grep -E '^(ro.product.|ro.build.version.|ro.build.description|persist.sys.usb.config|ro.debuggable|ro.adb.secure)' "$RUNNER_TEMP/stock/extract/build.prop" || true
               fi
               BT=$(find /usr/local/lib/android/sdk/build-tools -name aapt -type f | sort -V | tail -1)
+              if [ -s "$RUNNER_TEMP/stock/extract/Launcher2" ]; then
+                echo '--- Launcher2 без расширения ---'
+                file "$RUNNER_TEMP/stock/extract/Launcher2"
+                cp "$RUNNER_TEMP/stock/extract/Launcher2" "$RUNNER_TEMP/stock/extract/Launcher2-inspect.apk"
+              fi
               for apk in "$RUNNER_TEMP"/stock/extract/*.apk; do
                 [ -s "$apk" ] || continue
                 echo "--- $(basename "$apk"): manifest ---"
