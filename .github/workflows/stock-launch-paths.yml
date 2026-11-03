@@ -5,6 +5,7 @@ on:
     paths:
       - '.github/workflows/stock-launch-paths.yml'
       - 'tools/inspect_stock_launch_paths.py'
+      - 'tools/inspect_stock_hibernate.py'
   workflow_dispatch:
 
 permissions:
@@ -67,6 +68,12 @@ jobs:
             done
           } > reports/stock-optimization-text.txt
           cat reports/stock-optimization-text.txt
+      - name: Проверить экран подготовки к гибернации
+        run: |
+          set -euo pipefail
+          aapt=$(find /usr/local/lib/android/sdk/build-tools -type f -name aapt | sort -V | tail -1)
+          python3 tools/inspect_stock_hibernate.py "$RUNNER_TEMP/decompiled/Home" "$RUNNER_TEMP/apks/Home.apk" "$aapt" > reports/stock-hibernate-path.txt
+          wc -c reports/stock-hibernate-path.txt
       - name: Отчёт только по коду
         run: |
           set -euo pipefail
@@ -79,7 +86,7 @@ jobs:
           set -e
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add reports/stock-launch-paths.txt reports/stock-optimization-text.txt
+          git add reports/stock-launch-paths.txt reports/stock-optimization-text.txt reports/stock-hibernate-path.txt
           git diff --cached --quiet && exit 0
           git commit -m 'report: inspect stock launcher and USB media paths'
           for try in 1 2 3 4 5; do
