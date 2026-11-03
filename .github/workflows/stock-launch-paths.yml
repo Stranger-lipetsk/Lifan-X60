@@ -1,0 +1,70 @@
+name: Поиск выхода в Android в работающем стоке
+
+on:
+  push:
+    paths:
+      - '.github/workflows/stock-launch-paths.yml'
+      - 'tools/inspect_stock_launch_paths.py'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Инструменты и сток
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq p7zip-full e2fsprogs curl
+          mkdir -p "$RUNNER_TEMP/fw" "$RUNNER_TEMP/apks" "$RUNNER_TEMP/decompiled" reports
+          gh release download stock --pattern x60_2021.7z --dir "$RUNNER_TEMP/fw"
+          archive="$RUNNER_TEMP/fw/x60_2021.7z"
+          echo "75e7d6cd900fac971b55fec9f59913153bf7a1096bd761f7229c9a1d6d57b540  $archive" | sha256sum -c -
+          7z x -y "$archive" -o"$RUNNER_TEMP/fw/unpacked" >/dev/null
+          curl -fLsS --retry 3 --max-time 120 -o "$RUNNER_TEMP/apktool.jar" https://github.com/iBotPeaches/Apktool/releases/download/v2.9.3/apktool_2.9.3.jar
+      - name: Прочитать штатные APK
+        run: |
+          set -euo pipefail
+          img="$RUNNER_TEMP/fw/unpacked/system.img"
+          test -f "$img"
+          debugfs -R "dump /app/EL831CLF01_MediaPlayer_2017.01.11.01.apk $RUNNER_TEMP/apks/MediaPlayer.apk" "$img"
+          debugfs -R "dump /priv-app/EL830LF01_Home.apk $RUNNER_TEMP/apks/Home.apk" "$img"
+          debugfs -R "dump /app/EL831CLF01_MirrorLink_2016.06.13.01.apk $RUNNER_TEMP/apks/MirrorLink.apk" "$img"
+          for name in MediaPlayer Home MirrorLink; do
+            test -s "$RUNNER_TEMP/apks/$name.apk"
+            sha256sum "$RUNNER_TEMP/apks/$name.apk"
+            java -jar "$RUNNER_TEMP/apktool.jar" d -f -r "$RUNNER_TEMP/apks/$name.apk" -o "$RUNNER_TEMP/decompiled/$name" >/dev/null
+            test -d "$RUNNER_TEMP/decompiled/$name/smali"
+          done
+      - name: Отчёт только по коду
+        run: |
+          set -euo pipefail
+          python3 tools/inspect_stock_launch_paths.py "$RUNNER_TEMP/decompiled" > reports/stock-launch-paths.txt
+          cat reports/stock-launch-paths.txt | head -100 || true
+          wc -c reports/stock-launch-paths.txt
+      - name: Сохранить отчёт
+        if: success()
+        run: |
+          set -e
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/stock-launch-paths.txt
+          git diff --cached --quiet && exit 0
+          git commit -m 'report: inspect stock launcher and USB media paths'
+          for try in 1 2 3 4 5; do
+            if git pull --rebase origin "${{ github.ref_name }}" && git push origin HEAD:"${{ github.ref_name }}"; then exit 0; fi
+            git rebase --abort || true
+            sleep 5
+          done
+          exit 1
