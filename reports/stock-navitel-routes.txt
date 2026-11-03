@@ -1,0 +1,96 @@
+# Navitel stock: possible UI exit routes; static search only
+A match does not prove that a screen, browser or installer is reachable.
+Files: 4049
+
+## intent actions matches: 18
+
+### smali/com/abaltatech/weblinkserver/i$a.smali line 166 .method public k(Ljava/lang/String;)Z
+const-string v3, "android.intent.action.VIEW"
+
+### smali/com/abaltatech/weblinkserver/i$a.smali line 223 .method public l(Ljava/lang/String;)Z
+const-string v4, "android.intent.action.VIEW"
+
+### smali/com/amazon/device/iap/internal/b/b.smali line 99 .method protected doAction()V
+const-string v2, "android.intent.action.VIEW"
+
+### smali/com/facebook/internal/WebDialog$DialogWebViewClient.smali line 399 .method public shouldOverrideUrlLoading(Landroid/webkit/WebView;Ljava/lang/String;)Z
+const-string v2, "android.intent.action.VIEW"
+
+### smali/com/facebook/messenger/MessengerUtils.smali line 572 .method private static startViewUri(Landroid/content/Context;Ljava/lang/String;)V
+const-string v1, "android.intent.action.VIEW"
+
+### smali/com/google/android/gms/common/internal/zzg.smali line 54 .method public static zza(Ljava/lang/String;Ljava/lang/String;)Landroid/content/Intent;
+const-string v1, "android.intent.action.VIEW"
+
+### smali/com/navitel/c/c.smali line 48 .method private b(Landroid/content/Context;Landroid/appwidget/AppWidgetManager;I)V
+const-string v2, "android.intent.action.VIEW"
+
+### smali/com/navitel/widgets/shortcuts/ShortcutSelectionActivity$a.smali line 75 .method public onItemClick(Landroid/widget/AdapterView;Landroid/view/View;IJ)V
+const-string p3, "android.intent.action.VIEW"
+
+### smali/com/oslib/PackageControl.smali line 51 .method public static activateMarketProgramUpdate(Landroid/content/Context;Ljava/lang/String;)V
+const-string v1, "android.intent.action.VIEW"
+
+### smali/com/oslib/PackageControl.smali line 176 .method public static installPackage(Landroid/content/Context;Ljava/lang/String;)Z
+const-string v1, "android.intent.action.VIEW"
+
+### smali/com/oslib/PackageControl.smali line 215 .method public static isMarketAvailable(Landroid/content/Context;)Z
+const-string v2, "android.intent.action.VIEW"
+
+### smali/com/oslib/Phone.smali line 130 .method public static openURL(Landroid/content/Context;Ljava/lang/String;)V
+const-string v1, "android.intent.action.VIEW"
+
+### smali/com/oslib/activity/OslibActivity.smali line 238 .method protected initNative([Ljava/lang/String;)V
+const-string v0, "android.intent.action.VIEW"
+
+### smali/com/oslib/activity/OslibActivity.smali line 530 .method protected onNewIntent(Landroid/content/Intent;)V
+const-string v1, "android.intent.action.VIEW"
+
+### smali/com/oslib/activity/SDPermissionHelper.smali line 25 .method private _askForSD()V
+const-string v0, "android.intent.action.OPEN_DOCUMENT_TREE"
+
+### smali/com/oslib/push/PushReceiverService.smali line 94 .method private _showNewsNotification(Landroid/os/Bundle;)V
+const-string v5, "android.intent.action.VIEW"
+
+### smali/mp/f.smali line 232 .method public a(Ljava/lang/String;)V
+const-string v2, "android.intent.action.VIEW"
+
+### smali/mp/lib/model/o.smali line 112 .method public shouldOverrideUrlLoading(Landroid/webkit/WebView;Ljava/lang/String;)Z
+const-string v0, "android.intent.action.VIEW"
+
+## settings and package installer matches: 6
+
+### smali/com/google/android/gms/common/internal/zzg.smali line 115 .method public static zzg(Ljava/lang/String;)Landroid/content/Intent;
+const-string v1, "android.settings.APPLICATION_DETAILS_SETTINGS"
+
+### smali/com/navitel/Navitel$a.smali line 42 .method public onClick(Landroid/content/DialogInterface;I)V
+const-string p2, "android.settings.APPLICATION_DETAILS_SETTINGS"
+
+### smali/com/navitel/content/activity/a$b.smali line 50 .method public onClick(Landroid/content/DialogInterface;I)V
+const-string v0, "android.settings.WIFI_SETTINGS"
+
+### smali/com/oslib/LocationManager.smali line 206 .method public showLocationSettingsDlg()V
+const-string v1, "android.settings.LOCATION_SOURCE_SETTINGS"
+
+### smali/com/oslib/PackageControl.smali line 117 .method public static getPreinstalledPackageMarker()Ljava/lang/String;
+const-string v2, "/system/app/Navitel.apk"
+
+### smali/com/oslib/PackageControl.smali line 184 .method public static installPackage(Landroid/content/Context;Ljava/lang/String;)Z
+const-string v1, "application/vnd.android.package-archive"
+
+## browser and help matches: 5
+
+### smali/com/facebook/internal/WebDialog$DialogWebViewClient.smali line 180 .method public shouldOverrideUrlLoading(Landroid/webkit/WebView;Ljava/lang/String;)Z
+.method public shouldOverrideUrlLoading(Landroid/webkit/WebView;Ljava/lang/String;)Z
+
+### smali/com/vk/sdk/VKOpenAuthActivity$b.smali line 229 .method public shouldOverrideUrlLoading(Landroid/webkit/WebView;Ljava/lang/String;)Z
+.method public shouldOverrideUrlLoading(Landroid/webkit/WebView;Ljava/lang/String;)Z
+
+### smali/mp/e0/u.smali line 23 .method public shouldOverrideUrlLoading(Landroid/webkit/WebView;Ljava/lang/String;)Z
+.method public shouldOverrideUrlLoading(Landroid/webkit/WebView;Ljava/lang/String;)Z
+
+### smali/mp/lib/model/o.smali line 99 .method public shouldOverrideUrlLoading(Landroid/webkit/WebView;Ljava/lang/String;)Z
+.method public shouldOverrideUrlLoading(Landroid/webkit/WebView;Ljava/lang/String;)Z
+
+### smali/mp/v.smali line 23 .method public shouldOverrideUrlLoading(Landroid/webkit/WebView;Ljava/lang/String;)Z
+.method public shouldOverrideUrlLoading(Landroid/webkit/WebView;Ljava/lang/String;)Z
