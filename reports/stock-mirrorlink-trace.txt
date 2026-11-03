@@ -1,0 +1,1017 @@
+# Stock MirrorLink readiness and launch: static code only
+No conclusions about device behavior can be made without runtime evidence.
+
+## Home selected methods: 5
+
+### smali/tw/com/elead/el830/home/Home.smali launcher click .method public onClick(Landroid/view/View;Landroid/widget/BaseAdapter;)V lines: 79
+.method public onClick(Landroid/view/View;Landroid/widget/BaseAdapter;)V
+    .locals 4
+    .param p1, "v"    # Landroid/view/View;
+    .param p2, "adapter"    # Landroid/widget/BaseAdapter;
+
+    .prologue
+    .line 1499
+    const-string v2, "Home"
+
+    const-string v3, "Home.java Circle ListView ... onClick"
+
+    invoke-static {v2, v3}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+
+    .line 1501
+    const v2, 0x7f070003
+
+    invoke-virtual {p1, v2}, Landroid/view/View;->getTag(I)Ljava/lang/Object;
+
+    move-result-object v2
+
+    check-cast v2, Ljava/lang/Integer;
+
+    invoke-virtual {v2}, Ljava/lang/Integer;->intValue()I
+
+    move-result v1
+
+    .line 1502
+    .local v1, "position":I
+    iget-object v2, p0, Ltw/com/elead/el830/home/Home;->mPackageAdapter:Ltw/com/elead/el830/home/PackageAdapter;
+
+    invoke-virtual {v2, v1}, Ltw/com/elead/el830/home/PackageAdapter;->getItem(I)Ljava/lang/Object;
+
+    move-result-object v0
+
+    check-cast v0, Ltw/com/elead/el830/home/AppInfo;
+
+    .line 1504
+    .local v0, "info":Ltw/com/elead/el830/home/AppInfo;
+    iget-object v2, p0, Ltw/com/elead/el830/home/Home;->mCircleListView:Ltw/com/elead/el830/home/view/CircleListView;
+
+    invoke-virtual {v2}, Ltw/com/elead/el830/home/view/CircleListView;->findViewAtCenter()Landroid/view/View;
+
+    move-result-object v2
+
+    invoke-virtual {p1, v2}, Ljava/lang/Object;->equals(Ljava/lang/Object;)Z
+
+    move-result v2
+
+    if-eqz v2, :cond_2
+
+    .line 1506
+    iget-boolean v2, v0, Ltw/com/elead/el830/home/AppInfo;->enable:Z
+
+    if-nez v2, :cond_1
+
+    .line 1515
+    :cond_0
+    :goto_0
+    return-void
+
+    .line 1509
+    :cond_1
+    if-eqz v0, :cond_0
+
+    .line 1510
+    iget-object v2, v0, Ltw/com/elead/el830/home/AppInfo;->Package:Ljava/lang/String;
+
+    invoke-direct {p0, v2}, Ltw/com/elead/el830/home/Home;->switchNewMode(Ljava/lang/String;)V
+
+    goto :goto_0
+
+    .line 1513
+    :cond_2
+    iget-object v2, p0, Ltw/com/elead/el830/home/Home;->mCircleListView:Ltw/com/elead/el830/home/view/CircleListView;
+
+    invoke-virtual {v2, p1}, Ltw/com/elead/el830/home/view/CircleListView;->smoothScrollToView(Landroid/view/View;)V
+
+    goto :goto_0
+.end method
+
+
+### smali/tw/com/elead/el830/home/HomeService$24.smali readiness .method public onReceive(Landroid/content/Context;Landroid/content/Intent;)V lines: 105
+.method public onReceive(Landroid/content/Context;Landroid/content/Intent;)V
+    .locals 5
+    .param p1, "context"    # Landroid/content/Context;
+    .param p2, "intent"    # Landroid/content/Intent;
+
+    .prologue
+    .line 10047
+    invoke-virtual {p2}, Landroid/content/Intent;->getAction()Ljava/lang/String;
+
+    move-result-object v2
+
+    .line 10048
+    .local v2, "intentAction":Ljava/lang/String;
+    const-string v3, "vn.com.fsoft.UsbIfaceReady"
+
+    invoke-virtual {v2, v3}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v3
+
+    if-eqz v3, :cond_1
+
+    .line 10050
+    iget-object v3, p0, Ltw/com/elead/el830/home/HomeService$24;->this$0:Ltw/com/elead/el830/home/HomeService;
+
+    const/4 v4, 0x1
+
+    invoke-static {v3, v4}, Ltw/com/elead/el830/home/HomeService;->access$10400(Ltw/com/elead/el830/home/HomeService;Z)V
+
+    .line 10071
+    :cond_0
+    :goto_0
+    return-void
+
+    .line 10052
+    :cond_1
+    const-string v3, "vn.com.fsoft.UsbIfaceDown"
+
+    invoke-virtual {v2, v3}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v3
+
+    if-eqz v3, :cond_2
+
+    .line 10054
+    iget-object v3, p0, Ltw/com/elead/el830/home/HomeService$24;->this$0:Ltw/com/elead/el830/home/HomeService;
+
+    const/4 v4, 0x0
+
+    invoke-static {v3, v4}, Ltw/com/elead/el830/home/HomeService;->access$10400(Ltw/com/elead/el830/home/HomeService;Z)V
+
+    goto :goto_0
+
+    .line 10056
+    :cond_2
+    const-string v3, "vn.com.fsoft.getscreenoff"
+
+    invoke-virtual {v2, v3}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v3
+
+    if-eqz v3, :cond_0
+
+    .line 10058
+    invoke-static {}, Ltw/com/elead/el830/home/HomeService;->access$000()Ltw/com/elead/el830/home/HomeApp;
+
+    move-result-object v3
+
+    invoke-virtual {v3}, Ltw/com/elead/el830/home/HomeApp;->getVideoScreenOff()Z
+
+    move-result v3
+
+    if-eqz v3, :cond_3
+
+    .line 10061
+    new-instance v0, Landroid/content/Intent;
+
+    const-string v3, "com.elead.Screenoff"
+
+    invoke-direct {v0, v3}, Landroid/content/Intent;-><init>(Ljava/lang/String;)V
+
+    .line 10062
+    .local v0, "MLinkScreenOff":Landroid/content/Intent;
+    iget-object v3, p0, Ltw/com/elead/el830/home/HomeService$24;->this$0:Ltw/com/elead/el830/home/HomeService;
+
+    invoke-virtual {v3, v0}, Ltw/com/elead/el830/home/HomeService;->sendBroadcast(Landroid/content/Intent;)V
+
+    goto :goto_0
+
+    .line 10067
+    .end local v0    # "MLinkScreenOff":Landroid/content/Intent;
+    :cond_3
+    new-instance v1, Landroid/content/Intent;
+
+    const-string v3, "com.elead.Screenon"
+
+    invoke-direct {v1, v3}, Landroid/content/Intent;-><init>(Ljava/lang/String;)V
+
+    .line 10068
+    .local v1, "MLinkScreenOn":Landroid/content/Intent;
+    iget-object v3, p0, Ltw/com/elead/el830/home/HomeService$24;->this$0:Ltw/com/elead/el830/home/HomeService;
+
+    invoke-virtual {v3, v1}, Ltw/com/elead/el830/home/HomeService;->sendBroadcast(Landroid/content/Intent;)V
+
+    goto :goto_0
+.end method
+
+
+### smali/tw/com/elead/el830/home/HomeService.smali readiness .method static synthetic access$10400(Ltw/com/elead/el830/home/HomeService;Z)V lines: 11
+.method static synthetic access$10400(Ltw/com/elead/el830/home/HomeService;Z)V
+    .locals 0
+    .param p0, "x0"    # Ltw/com/elead/el830/home/HomeService;
+    .param p1, "x1"    # Z
+
+    .prologue
+    .line 139
+    invoke-direct {p0, p1}, Ltw/com/elead/el830/home/HomeService;->enableMirrorLinkIcon(Z)V
+
+    return-void
+.end method
+
+
+### smali/tw/com/elead/el830/home/HomeService.smali readiness .method private enableMirrorLinkIcon(Z)V lines: 138
+.method private enableMirrorLinkIcon(Z)V
+    .locals 6
+    .param p1, "bEnable"    # Z
+
+    .prologue
+    .line 7905
+    sget-object v4, Ltw/com/elead/el830/home/HomeService;->homeApp:Ltw/com/elead/el830/home/HomeApp;
+
+    invoke-virtual {v4}, Ltw/com/elead/el830/home/HomeApp;->getDisplayPackageName()Ljava/lang/String;
+
+    move-result-object v4
+
+    const-string v5, "com.fpt.mirrorlink.android"
+
+    invoke-virtual {v4, v5}, Ljava/lang/String;->equalsIgnoreCase(Ljava/lang/String;)Z
+
+    move-result v0
+
+    .line 7908
+    .local v0, "bCurrMode":Z
+    sget-object v4, Ltw/com/elead/el830/home/HomeService;->homeApp:Ltw/com/elead/el830/home/HomeApp;
+
+    const-string v5, "com.fpt.mirrorlink.android"
+
+    invoke-virtual {v4, v5, p1}, Ltw/com/elead/el830/home/HomeApp;->enableEleadApplication(Ljava/lang/String;Z)Z
+
+    .line 7911
+    sget-object v4, Ltw/com/elead/el830/home/HomeService;->homeApp:Ltw/com/elead/el830/home/HomeApp;
+
+    invoke-virtual {v4}, Ltw/com/elead/el830/home/HomeApp;->getHomeHandler()Landroid/os/Handler;
+
+    move-result-object v4
+
+    if-eqz v4, :cond_0
+
+    .line 7913
+    new-instance v3, Landroid/os/Message;
+
+    invoke-direct {v3}, Landroid/os/Message;-><init>()V
+
+    .line 7914
+    .local v3, "msgIcon":Landroid/os/Message;
+    const/16 v4, 0x3f3
+
+    iput v4, v3, Landroid/os/Message;->what:I
+
+    .line 7915
+    if-eqz p1, :cond_3
+
+    const/4 v4, 0x1
+
+    :goto_0
+    iput v4, v3, Landroid/os/Message;->arg1:I
+
+    .line 7916
+    sget-object v4, Ltw/com/elead/el830/home/HomeService;->homeApp:Ltw/com/elead/el830/home/HomeApp;
+
+    invoke-virtual {v4}, Ltw/com/elead/el830/home/HomeApp;->getHomeHandler()Landroid/os/Handler;
+
+    move-result-object v4
+
+    invoke-virtual {v4, v3}, Landroid/os/Handler;->sendMessage(Landroid/os/Message;)Z
+
+    .line 7920
+    .end local v3    # "msgIcon":Landroid/os/Message;
+    :cond_0
+    if-nez p1, :cond_1
+
+    .line 7921
+    sget-object v4, Ltw/com/elead/el830/home/HomeService;->homeApp:Ltw/com/elead/el830/home/HomeApp;
+
+    const-string v5, "com.fpt.mirrorlink.android"
+
+    invoke-virtual {v4, v5}, Ltw/com/elead/el830/home/HomeApp;->removeFromAppStack(Ljava/lang/String;)Z
+
+    .line 7924
+    :cond_1
+    sget-object v4, Ltw/com/elead/el830/home/HomeService;->homeApp:Ltw/com/elead/el830/home/HomeApp;
+
+    invoke-virtual {v4}, Ltw/com/elead/el830/home/HomeApp;->getDisclaimer()Z
+
+    move-result v4
+
+    if-eqz v4, :cond_4
+
+    .line 7936
+    :cond_2
+    :goto_1
+    return-void
+
+    .line 7915
+    .restart local v3    # "msgIcon":Landroid/os/Message;
+    :cond_3
+    const/4 v4, 0x0
+
+    goto :goto_0
+
+    .line 7927
+    .end local v3    # "msgIcon":Landroid/os/Message;
+    :cond_4
+    if-nez p1, :cond_2
+
+    if-eqz v0, :cond_2
+
+    .line 7929
+    new-instance v1, Landroid/os/Bundle;
+
+    invoke-direct {v1}, Landroid/os/Bundle;-><init>()V
+
+    .line 7930
+    .local v1, "bundle":Landroid/os/Bundle;
+    const-string v4, "PACKAGE_NAME"
+
+    const-string v5, "tw.com.elead.el830.home.HomeAudioOff"
+
+    invoke-virtual {v1, v4, v5}, Landroid/os/Bundle;->putString(Ljava/lang/String;Ljava/lang/String;)V
+
+    .line 7931
+    new-instance v2, Landroid/os/Message;
+
+    invoke-direct {v2}, Landroid/os/Message;-><init>()V
+
+    .line 7932
+    .local v2, "msg":Landroid/os/Message;
+    const/4 v4, 0x4
+
+    iput v4, v2, Landroid/os/Message;->what:I
+
+    .line 7933
+    invoke-virtual {v2, v1}, Landroid/os/Message;->setData(Landroid/os/Bundle;)V
+
+    .line 7934
+    iget-object v4, p0, Ltw/com/elead/el830/home/HomeService;->mHandlerService:Landroid/os/Handler;
+
+    invoke-virtual {v4, v2}, Landroid/os/Handler;->sendMessage(Landroid/os/Message;)Z
+
+    goto :goto_1
+.end method
+
+
+### smali/tw/com/elead/el830/home/HomeService.smali readiness .method public onCreate()V lines: 663
+.method public onCreate()V
+    .locals 14
+
+    .prologue
+    const/4 v4, 0x0
+
+    const/4 v3, 0x1
+
+    .line 407
+    const-string v0, "Home"
+
+    const-string v1, "HomeService.java onCreate......................."
+
+    invoke-static {v0, v1}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+
+    .line 409
+    invoke-super {p0}, Landroid/app/Service;->onCreate()V
+
+    .line 412
+    invoke-virtual {p0}, Ltw/com/elead/el830/home/HomeService;->getApplicationContext()Landroid/content/Context;
+
+    move-result-object v0
+
+    check-cast v0, Ltw/com/elead/el830/home/HomeApp;
+
+    sput-object v0, Ltw/com/elead/el830/home/HomeService;->homeApp:Ltw/com/elead/el830/home/HomeApp;
+
+    .line 413
+    sget-object v0, Ltw/com/elead/el830/home/HomeService;->homeApp:Ltw/com/elead/el830/home/HomeApp;
+
+    iget-object v1, p0, Ltw/com/elead/el830/home/HomeService;->mHandlerService:Landroid/os/Handler;
+
+    invoke-virtual {v0, v1}, Ltw/com/elead/el830/home/HomeApp;->setServiceHandler(Landroid/os/Handler;)V
+
+    .line 416
+    sget-object v0, Ltw/com/elead/el830/home/HomeService;->homeApp:Ltw/com/elead/el830/home/HomeApp;
+
+    invoke-virtual {v0}, Ltw/com/elead/el830/home/HomeApp;->getBootMode()I
+
+    move-result v0
+
+    if-ne v0, v3, :cond_0
+
+    .line 417
+    iput-boolean v4, p0, Ltw/com/elead/el830/home/HomeService;->bEnableWatchdog:Z
+
+    .line 420
+    :cond_0
+    invoke-virtual {p0}, Ltw/com/elead/el830/home/HomeService;->getApplicationContext()Landroid/content/Context;
+
+    move-result-object v0
+
+    const-string v1, "elead_service"
+
+    invoke-virtual {v0, v1}, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
+
+    move-result-object v0
+
+    check-cast v0, Ltw/com/elead/manager/EleadManager;
+
+    sput-object v0, Ltw/com/elead/el830/home/HomeService;->mEleadManager:Ltw/com/elead/manager/EleadManager;
+
+    .line 421
+    sget-object v0, Ltw/com/elead/el830/home/HomeService;->mEleadManager:Ltw/com/elead/manager/EleadManager;
+
+    iget-object v1, p0, Ltw/com/elead/el830/home/HomeService;->mEleadStatusListener:Ltw/com/elead/manager/EleadStatusListener;
+
+    invoke-virtual {v0, v1}, Ltw/com/elead/manager/EleadManager;->addStatusListener(Ltw/com/elead/manager/EleadStatusListener;)Z
+
+    move-result v0
+
+    if-nez v0, :cond_1
+
+    .line 422
+    const-string v0, "Home"
+
+    const-string v1, "HomeService.java mEleadManager.addStatusListener ..... fail!!!"
+
+    invoke-static {v0, v1}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
+
+    .line 424
+    :cond_1
+    sget-object v0, Ltw/com/elead/el830/home/HomeService;->mEleadManager:Ltw/com/elead/manager/EleadManager;
+
+    iget-object v1, p0, Ltw/com/elead/el830/home/HomeService;->mEleadMCUListener:Ltw/com/elead/manager/EleadMCUListener;
+
+    invoke-virtual {v0, v1}, Ltw/com/elead/manager/EleadManager;->addMCUListener(Ltw/com/elead/manager/EleadMCUListener;)Z
+
+    move-result v0
+
+    if-nez v0, :cond_2
+
+    .line 425
+    const-string v0, "Home"
+
+    const-string v1, "HomeService.java mEleadManager.addMCUListener ..... fail!!!"
+
+    invoke-static {v0, v1}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
+
+    .line 427
+    :cond_2
+    sget-object v0, Ltw/com/elead/el830/home/HomeService;->mEleadManager:Ltw/com/elead/manager/EleadManager;
+
+    iget-object v1, p0, Ltw/com/elead/el830/home/HomeService;->mEleadAppListener:Ltw/com/elead/manager/EleadAppListener;
+
+    invoke-virtual {v0, v1}, Ltw/com/elead/manager/EleadManager;->addAppListener(Ltw/com/elead/manager/EleadAppListener;)Z
+
+    move-result v0
+
+    if-nez v0, :cond_3
+
+    .line 428
+    const-string v0, "Home"
+
+    const-string v1, "HomeService.java mEleadManager.addAppListener ..... fail!!!"
+
+    invoke-static {v0, v1}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
+
+    .line 432
+    :cond_3
+    sget-object v0, Ltw/com/elead/el830/home/HomeService;->homeApp:Ltw/com/elead/el830/home/HomeApp;
+
+    sget-object v1, Ltw/com/elead/el830/home/HomeService;->mEleadManager:Ltw/com/elead/manager/EleadManager;
+
+    invoke-virtual {v1}, Ltw/com/elead/manager/EleadManager;->getAccOnDet()Z
+
+    move-result v1
+
+    invoke-virtual {v0, v1}, Ltw/com/elead/el830/home/HomeApp;->setACC(Z)V
+
+    .line 435
+    sget-object v0, Ltw/com/elead/el830/home/HomeService;->mEleadManager:Ltw/com/elead/manager/EleadManager;
+
+    sget-object v1, Ltw/com/elead/el830/home/HomeService;->homeApp:Ltw/com/elead/el830/home/HomeApp;
+
+    invoke-virtual {v1}, Ltw/com/elead/el830/home/HomeApp;->getBeepEnable()Z
+
+    move-result v1
+
+    invoke-virtual {v0, v1}, Ltw/com/elead/manager/EleadManager;->setBeepEnable(Z)Z
+
+    .line 437
+    const-string v0, "statusbar"
+
+    invoke-virtual {p0, v0}, Ltw/com/elead/el830/home/HomeService;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
+
+    move-result-object v0
+
+    check-cast v0, Landroid/app/StatusBarManager;
+
+    iput-object v0, p0, Ltw/com/elead/el830/home/HomeService;->mStatusBarManager:Landroid/app/StatusBarManager;
+
+    .line 440
+    iget-object v0, p0, Ltw/com/elead/el830/home/HomeService;->mStatusBarManager:Landroid/app/StatusBarManager;
+
+    const/high16 v1, 0x10000
+
+    invoke-virtual {v0, v1}, Landroid/app/StatusBarManager;->disable(I)V
+
+    .line 444
+    :try_start_0
+    invoke-static {}, Landroid/app/ActivityManagerNative;->getDefault()Landroid/app/IActivityManager;
+
+    move-result-object v0
+
+    iget-object v1, p0, Ltw/com/elead/el830/home/HomeService;->mIActivityObserverCallback:Landroid/app/IActivityObserver$Stub;
+
+    invoke-interface {v0, v1}, Landroid/app/IActivityManager;->registerActivityObserver(Landroid/app/IActivityObserver;)V
+    :try_end_0
+    .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
+
+    .line 461
+    :goto_0
+    invoke-direct {p0}, Ltw/com/elead/el830/home/HomeService;->initDisclaimerWindow()V
+
+    .line 463
+    invoke-static {}, Ljava/util/Locale;->getDefault()Ljava/util/Locale;
+
+    move-result-object v6
+
+    .line 464
+    .local v6, "defLoc":Ljava/util/Locale;
+    iput-object v6, p0, Ltw/com/elead/el830/home/HomeService;->currLocale:Ljava/util/Locale;
+
+    .line 465
+    invoke-virtual {v6}, Ljava/util/Locale;->getDisplayName()Ljava/lang/String;
+
+    move-result-object v12
+
+    .line 466
+    .local v12, "szLoc":Ljava/lang/String;
+    const-string v0, "Home"
+
+    new-instance v1, Ljava/lang/StringBuilder;
+
+    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v2, "HomeService.java =====Get Language ===== "
+
+    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v1
+
+    invoke-virtual {v1, v12}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v1
+
+    invoke-virtual {v1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v1
+
+    invoke-static {v0, v1}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+
+    .line 470
+    sget-object v0, Ltw/com/elead/el830/home/HomeService;->homeApp:Ltw/com/elead/el830/home/HomeApp;
+
+    invoke-virtual {v0}, Ltw/com/elead/el830/home/HomeApp;->getSysFirstBoot()Z
+
+    move-result v0
+
+    if-eqz v0, :cond_4
+
+    .line 471
+    const-string v0, "Home"
+
+    const-string v1, "HomeService.java =====Set Default ===== "
+
+    invoke-static {v0, v1}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+
+    .line 472
+    sget-object v0, Ltw/com/elead/el830/home/HomeService;->homeApp:Ltw/com/elead/el830/home/HomeApp;
+
+    invoke-virtual {v0, v4}, Ltw/com/elead/el830/home/HomeApp;->setSysFirstBoot(Z)V
+
+    .line 473
+    sget-object v0, Ltw/com/elead/el830/home/HomeService;->homeApp:Ltw/com/elead/el830/home/HomeApp;
+
+    invoke-virtual {v0, p0}, Ltw/com/elead/el830/home/HomeApp;->savePreferences(Landroid/content/Context;)Z
+
+    .line 476
+    sget-object v0, Ltw/com/elead/el830/home/HomeService;->homeApp:Ltw/com/elead/el830/home/HomeApp;
+
+    sget-object v1, Ltw/com/elead/el830/home/HomeService;->homeApp:Ltw/com/elead/el830/home/HomeApp;
+
+    invoke-virtual {v1}, Ltw/com/elead/el830/home/HomeApp;->getDefaultTimeZone()Ljava/lang/String;
+
+    move-result-object v1
+
+    invoke-static {v0, v1}, Ltw/com/elead/el830/home/Utils;->setSystemTimeZone(Landroid/content/Context;Ljava/lang/String;)V
+
+    .line 478
+    sget-object v0, Ltw/com/elead/el830/home/HomeService;->homeApp:Ltw/com/elead/el830/home/HomeApp;
+
+    sget-object v1, Ltw/com/elead/el830/home/HomeService;->homeApp:Ltw/com/elead/el830/home/HomeApp;
+
+    invoke-virtual {v1}, Ltw/com/elead/el830/home/HomeApp;->getDefaultLocaleIndex()I
+
+    move-result v1
+
+    invoke-static {v0, v1}, Ltw/com/elead/el830/home/Utils;->setSystemLocale(Landroid/content/Context;I)Z
+
+    .line 480
+    sget-object v0, Ltw/com/elead/el830/home/HomeService;->homeApp:Ltw/com/elead/el830/home/HomeApp;
+
+    sget-object v1, Ltw/com/elead/el830/home/HomeService;->homeApp:Ltw/com/elead/el830/home/HomeApp;
+
+    invoke-virtual {v1}, Ltw/com/elead/el830/home/HomeApp;->getDefaultWifiAPSSID()Ljava/lang/String;
+
+    move-result-object v1
+
+    invoke-static {v0, v1}, Ltw/com/elead/el830/home/Utils;->setSystemWifiAPSSID(Landroid/content/Context;Ljava/lang/String;)V
+
+    .line 482
+    sget-object v0, Ltw/com/elead/el830/home/HomeService;->homeApp:Ltw/com/elead/el830/home/HomeApp;
+
+    invoke-virtual {v0}, Ltw/com/elead/el830/home/HomeApp;->getBootMode()I
+
+    move-result v0
+
+    if-ne v0, v3, :cond_4
+
+    .line 483
+    sget-object v0, Ltw/com/elead/el830/home/HomeService;->mDisclaimer:Ltw/com/elead/el830/home/Disclaimer;
+
+    invoke-virtual {v0}, Ltw/com/elead/el830/home/Disclaimer;->enablePreHibernateMode()V
+
+    .line 493
+    :cond_4
+    invoke-direct {p0}, Ltw/com/elead/el830/home/HomeService;->initSOCVolume()V
+
+    .line 504
+    invoke-virtual {p0}, Ltw/com/elead/el830/home/HomeService;->getApplicationContext()Landroid/content/Context;
+
+    move-result-object v0
+
+    invoke-static {v0}, Ltw/com/elead/el830/home/MCU;->openUART(Landroid/content/Context;)V
+
+    .line 507
+    new-instance v0, Landroid/os/Handler;
+
+    invoke-direct {v0}, Landroid/os/Handler;-><init>()V
+
+    iput-object v0, p0, Ltw/com/elead/el830/home/HomeService;->mMainHandler:Landroid/os/Handler;
+
+    .line 508
+    iget-object v0, p0, Ltw/com/elead/el830/home/HomeService;->mMainHandler:Landroid/os/Handler;
+
+    iget-object v1, p0, Ltw/com/elead/el830/home/HomeService;->runnable:Ljava/lang/Runnable;
+
+    invoke-virtual {v0, v1}, Landroid/os/Handler;->post(Ljava/lang/Runnable;)Z
+
+    .line 511
+    invoke-direct {p0}, Ltw/com/elead/el830/home/HomeService;->setMCUSync()V
+
+    .line 514
+    invoke-direct {p0, v3}, Ltw/com/elead/el830/home/HomeService;->setTinyPlayerVolumeSync(Z)V
+
+    .line 517
+    invoke-direct {p0}, Ltw/com/elead/el830/home/HomeService;->setBTAudioCtlSync()V
+
+    .line 520
+    const-string v0, "Home"
+
+    new-instance v1, Ljava/lang/StringBuilder;
+
+    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v2, "HomeService.java onCreate() ......... homeApp.getACC():"
+
+    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v1
+
+    sget-object v2, Ltw/com/elead/el830/home/HomeService;->homeApp:Ltw/com/elead/el830/home/HomeApp;
+
+    invoke-virtual {v2}, Ltw/com/elead/el830/home/HomeApp;->getACC()Z
+
+    move-result v2
+
+    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
+
+    move-result-object v1
+
+    invoke-virtual {v1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v1
+
+    invoke-static {v0, v1}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+
+    .line 526
+    new-instance v8, Landroid/content/IntentFilter;
+
+    invoke-direct {v8}, Landroid/content/IntentFilter;-><init>()V
+
+    .line 527
+    .local v8, "filterGesture":Landroid/content/IntentFilter;
+    const-string v0, "android.intent.action.TOUCH_GESTURE"
+
+    invoke-virtual {v8, v0}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
+
+    .line 528
+    const-string v0, "android.intent.action.SCREEN_ON"
+
+    invoke-virtual {v8, v0}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
+
+    .line 529
+    const-string v0, "android.intent.action.SCREEN_OFF"
+
+    invoke-virtual {v8, v0}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
+
+    .line 530
+    const/16 v0, 0x3e8
+
+    invoke-virtual {v8, v0}, Landroid/content/IntentFilter;->setPriority(I)V
+
+    .line 531
+    iget-object v0, p0, Ltw/com/elead/el830/home/HomeService;->GestureReceiver:Landroid/content/BroadcastReceiver;
+
+    invoke-virtual {p0, v0, v8}, Ltw/com/elead/el830/home/HomeService;->registerReceiver(Landroid/content/BroadcastReceiver;Landroid/content/IntentFilter;)Landroid/content/Intent;
+
+    .line 534
+    new-instance v9, Landroid/content/IntentFilter;
+
+    invoke-direct {v9}, Landroid/content/IntentFilter;-><init>()V
+
+    .line 535
+    .local v9, "filterMedia":Landroid/content/IntentFilter;
+    const-string v0, "android.intent.action.MEDIA_MOUNTED"
+
+    invoke-virtual {v9, v0}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
+
+    .line 536
+    const-string v0, "android.intent.action.MEDIA_UNMOUNTED"
+
+    invoke-virtual {v9, v0}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
+
+    .line 537
+    const-string v0, "android.intent.action.MEDIA_EJECT"
+
+    invoke-virtual {v9, v0}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
+
+    .line 539
+    const-string v0, "file"
+
+    invoke-virtual {v9, v0}, Landroid/content/IntentFilter;->addDataScheme(Ljava/lang/String;)V
+
+    .line 540
+    iget-object v0, p0, Ltw/com/elead/el830/home/HomeService;->MediaReceiver:Landroid/content/BroadcastReceiver;
+
+    invoke-virtual {p0, v0, v9}, Ltw/com/elead/el830/home/HomeService;->registerReceiver(Landroid/content/BroadcastReceiver;Landroid/content/IntentFilter;)Landroid/content/Intent;
+
+    .line 543
+    new-instance v10, Landroid/content/IntentFilter;
+
+    invoke-direct {v10}, Landroid/content/IntentFilter;-><init>()V
+
+    .line 544
+    .local v10, "filterWifi":Landroid/content/IntentFilter;
+    const-string v0, "android.net.wifi.WIFI_STATE_CHANGED"
+
+    invoke-virtual {v10, v0}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
+
+    .line 545
+    const-string v0, "android.net.wifi.WIFI_AP_STATE_CHANGED"
+
+    invoke-virtual {v10, v0}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
+
+    .line 546
+    const-string v0, "android.net.wifi.STATE_CHANGE"
+
+    invoke-virtual {v10, v0}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
+
+    .line 547
+    const-string v0, "android.media.VOLUME_CHANGED_ACTION"
+
+    invoke-virtual {v10, v0}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
+
+    .line 548
+    iget-object v0, p0, Ltw/com/elead/el830/home/HomeService;->WifiStateChangedReceiver:Landroid/content/BroadcastReceiver;
+
+    invoke-virtual {p0, v0, v10}, Ltw/com/elead/el830/home/HomeService;->registerReceiver(Landroid/content/BroadcastReceiver;Landroid/content/IntentFilter;)Landroid/content/Intent;
+
+    .line 550
+    new-instance v13, Landroid/content/IntentFilter;
+
+    invoke-direct {v13}, Landroid/content/IntentFilter;-><init>()V
+
+    .line 551
+    .local v13, "timefilter":Landroid/content/IntentFilter;
+    const-string v0, "android.intent.action.TIME_SET"
+
+    invoke-virtual {v13, v0}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
+
+    .line 552
+    const-string v0, "android.intent.action.TIME_TICK"
+
+    invoke-virtual {v13, v0}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
+
+    .line 553
+    const-string v0, "android.intent.action.TIMEZONE_CHANGED"
+
+    invoke-virtual {v13, v0}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
+
+    .line 554
+    const-string v0, "android.intent.action.DATE_CHANGED"
+
+    invoke-virtual {v13, v0}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
+
+    .line 555
+    iget-object v0, p0, Ltw/com/elead/el830/home/HomeService;->TimeReceiver:Landroid/content/BroadcastReceiver;
+
+    invoke-virtual {p0, v0, v13}, Ltw/com/elead/el830/home/HomeService;->registerReceiver(Landroid/content/BroadcastReceiver;Landroid/content/IntentFilter;)Landroid/content/Intent;
+
+    .line 557
+    new-instance v11, Landroid/content/IntentFilter;
+
+    invoke-direct {v11}, Landroid/content/IntentFilter;-><init>()V
+
+    .line 558
+    .local v11, "mirrorlinkfilter":Landroid/content/IntentFilter;
+    const-string v0, "vn.com.fsoft.UsbIfaceReady"
+
+    invoke-virtual {v11, v0}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
+
+    .line 559
+    const-string v0, "vn.com.fsoft.UsbIfaceDown"
+
+    invoke-virtual {v11, v0}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
+
+    .line 560
+    const-string v0, "vn.com.fsoft.getscreenoff"
+
+    invoke-virtual {v11, v0}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
+
+    .line 561
+    iget-object v0, p0, Ltw/com/elead/el830/home/HomeService;->MirrorLinkReceiver:Landroid/content/BroadcastReceiver;
+
+    invoke-virtual {p0, v0, v11}, Ltw/com/elead/el830/home/HomeService;->registerReceiver(Landroid/content/BroadcastReceiver;Landroid/content/IntentFilter;)Landroid/content/Intent;
+
+    .line 564
+    sget-object v0, Ltw/com/elead/el830/home/HomeService;->homeApp:Ltw/com/elead/el830/home/HomeApp;
+
+    invoke-virtual {v0}, Ltw/com/elead/el830/home/HomeApp;->getBootMode()I
+
+    move-result v0
+
+    if-eq v0, v3, :cond_5
+
+    .line 566
+    invoke-direct {p0}, Ltw/com/elead/el830/home/HomeService;->startSubAppService()V
+
+    .line 569
+    invoke-direct {p0}, Ltw/com/elead/el830/home/HomeService;->doBindSubAppService()V
+
+    .line 576
+    :cond_5
+    invoke-direct {p0}, Ltw/com/elead/el830/home/HomeService;->initExternalStorageStatusBarIcon()V
+
+    .line 579
+    invoke-direct {p0, v4}, Ltw/com/elead/el830/home/HomeService;->setMCUAMP(Z)V
+
+    .line 580
+    invoke-virtual {p0, v3}, Ltw/com/elead/el830/home/HomeService;->showDisclaimer(Z)V
+
+    .line 583
+    invoke-direct {p0}, Ltw/com/elead/el830/home/HomeService;->initCCDWindow()V
+
+    .line 586
+    sget-object v0, Ltw/com/elead/el830/home/HomeService;->homeApp:Ltw/com/elead/el830/home/HomeApp;
+
+    invoke-virtual {v0}, Ltw/com/elead/el830/home/HomeApp;->getBootMode()I
+
+    move-result v0
+
+    if-eq v0, v3, :cond_6
+
+    .line 587
+    sget-object v0, Ltw/com/elead/el830/home/HomeService;->mEleadManager:Ltw/com/elead/manager/EleadManager;
+
+    invoke-virtual {v0}, Ltw/com/elead/manager/EleadManager;->setVideoSync()Z
+
+    move-result v0
+
+    iput-boolean v0, p0, Ltw/com/elead/el830/home/HomeService;->bVideoSynced:Z
+
+    .line 588
+    iget-boolean v0, p0, Ltw/com/elead/el830/home/HomeService;->bVideoSynced:Z
+
+    if-nez v0, :cond_6
+
+    .line 589
+    const-string v0, "Home"
+
+    const-string v1, "HomeService.java mEleadManager.setVideoSync ..... fail!!!"
+
+    invoke-static {v0, v1}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
+
+    .line 594
+    :cond_6
+    const-string v0, "Home"
+
+    new-instance v1, Ljava/lang/StringBuilder;
+
+    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v2, "HomeService.java onCreate() ......... mEleadManager.getCcdDet() = "
+
+    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v1
+
+    sget-object v2, Ltw/com/elead/el830/home/HomeService;->mEleadManager:Ltw/com/elead/manager/EleadManager;
+
+    invoke-virtual {v2}, Ltw/com/elead/manager/EleadManager;->getCcdDet()Z
+
+    move-result v2
+
+    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
+
+    move-result-object v1
+
+    invoke-virtual {v1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v1
+
+    invoke-static {v0, v1}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+
+    .line 595
+    sget-object v0, Ltw/com/elead/el830/home/HomeService;->mEleadManager:Ltw/com/elead/manager/EleadManager;
+
+    invoke-virtual {v0}, Ltw/com/elead/manager/EleadManager;->getCcdDet()Z
+
+    move-result v0
+
+    if-eqz v0, :cond_7
+
+    .line 596
+    invoke-direct {p0, v3}, Ltw/com/elead/el830/home/HomeService;->switchCCDModeApp(Z)V
+
+    .line 600
+    sget-object v0, Ltw/com/elead/el830/home/HomeService;->homeApp:Ltw/com/elead/el830/home/HomeApp;
+
+    invoke-virtual {v0}, Ltw/com/elead/el830/home/HomeApp;->getTFTDisplay()Z
+
+    move-result v0
+
+    invoke-direct {p0, v3, v0}, Ltw/com/elead/el830/home/HomeService;->setTFTDisplay_CCD(ZZ)V
+
+    .line 603
+    :cond_7
+    const-string v0, "location"
+
+    invoke-virtual {p0, v0}, Ltw/com/elead/el830/home/HomeService;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
+
+    move-result-object v0
+
+    check-cast v0, Landroid/location/LocationManager;
+
+    iput-object v0, p0, Ltw/com/elead/el830/home/HomeService;->mLocationManager:Landroid/location/LocationManager;
+
+    .line 604
+    iget-object v0, p0, Ltw/com/elead/el830/home/HomeService;->mLocationManager:Landroid/location/LocationManager;
+
+    const-string v1, "gps"
+
+    const-wide/16 v2, 0x2710
+
+    const/4 v4, 0x0
+
+    iget-object v5, p0, Ltw/com/elead/el830/home/HomeService;->mLocationListener:Landroid/location/LocationListener;
+
+    invoke-virtual/range {v0 .. v5}, Landroid/location/LocationManager;->requestLocationUpdates(Ljava/lang/String;JFLandroid/location/LocationListener;)V
+
+    .line 617
+    invoke-direct {p0}, Ltw/com/elead/el830/home/HomeService;->disableAnimation()Z
+
+    .line 618
+    return-void
+
+    .line 445
+    .end local v6    # "defLoc":Ljava/util/Locale;
+    .end local v8    # "filterGesture":Landroid/content/IntentFilter;
+    .end local v9    # "filterMedia":Landroid/content/IntentFilter;
+    .end local v10    # "filterWifi":Landroid/content/IntentFilter;
+    .end local v11    # "mirrorlinkfilter":Landroid/content/IntentFilter;
+    .end local v12    # "szLoc":Ljava/lang/String;
+    .end local v13    # "timefilter":Landroid/content/IntentFilter;
+    :catch_0
+    move-exception v7
+
+    .line 447
+    .local v7, "e":Landroid/os/RemoteException;
+    invoke-virtual {v7}, Landroid/os/RemoteException;->printStackTrace()V
+
+    .line 448
+    const-string v0, "Home"
+
+    const-string v1, "HomeService.java ActivityManagerNative.getDefault().registerActivityObserver ..... fail!!!"
+
+    invoke-static {v0, v1}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
+
+    goto/16 :goto_0
+.end method
+
+
+## MirrorLink selected methods: 0
