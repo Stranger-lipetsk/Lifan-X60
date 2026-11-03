@@ -96,11 +96,10 @@ debugfs 1.47.0 (5-Feb-2023)
 
 debugfs 1.47.0 (5-Feb-2023)
 debugfs 1.47.0 (5-Feb-2023)
-/app/Launcher2.apk: File not found by ext2_lookup 
 debugfs 1.47.0 (5-Feb-2023)
-/app/ElSettings.apk: File not found by ext2_lookup 
 debugfs 1.47.0 (5-Feb-2023)
-/app/Settings.apk: File not found by ext2_lookup 
+debugfs 1.47.0 (5-Feb-2023)
+debugfs 1.47.0 (5-Feb-2023)
 debugfs 1.47.0 (5-Feb-2023)
 --- build.prop: модель и версия ---
 ro.build.version.incremental=20140630
@@ -118,6 +117,63 @@ ro.product.manufacturer=e-lead
 ro.product.locale.language=zh
 ro.product.locale.region=CN
 ro.build.description=el_imx6_solo_v2-userdebug 4.4.2 1.0.0-rc3 20140630 dev-keys
+--- Launcher2 без расширения ---
+/home/runner/work/_temp/stock/extract/Launcher2: Android package (APK), with AndroidManifest.xml
+--- DocumentsUI.apk: manifest ---
+package: name='com.android.documentsui' versionCode='19' versionName='4.4.2-20140630'
+sdkVersion:'19'
+targetSdkVersion:'19'
+uses-permission: name='android.permission.MANAGE_DOCUMENTS'
+uses-permission: name='android.permission.REMOVE_TASKS'
+application-label:'Documents'
+application-label-ar:'مستندات'
+application-label-es:'Documentos'
+application-label-es-US:'Documentos'
+application-label-fa:'اسناد'
+application-label-fr:'Documents'
+application-label-pt:'Documentos'
+application-label-ru:'Документы'
+application-label-zh-CN:'文档'
+application: label='Documents' icon=''
+launchable-activity: name='com.android.documentsui.TestActivity'  label='' icon=''
+feature-group: label=''
+  uses-feature: name='android.hardware.faketouch'
+  uses-implied-feature: name='android.hardware.faketouch' reason='default feature for all apps'
+main
+other-activities
+other-receivers
+supports-screens: 'small' 'normal' 'large' 'xlarge'
+supports-any-density: 'true'
+locales: '--_--' 'ar' 'es' 'es-US' 'fa' 'fr' 'pt' 'ru' 'zh-CN'
+densities: '160' '240'
+--- HOME и LAUNCHER в дереве manifest ---
+      A: android:name(0x01010003)="android.permission.MANAGE_DOCUMENTS" (Raw: "android.permission.MANAGE_DOCUMENTS")
+      A: android:name(0x01010003)="android.permission.REMOVE_TASKS" (Raw: "android.permission.REMOVE_TASKS")
+      A: android:name(0x01010003)=".DocumentsApplication" (Raw: ".DocumentsApplication")
+        A: android:name(0x01010003)=".DocumentsActivity" (Raw: ".DocumentsActivity")
+            A: android:name(0x01010003)="android.intent.action.OPEN_DOCUMENT" (Raw: "android.intent.action.OPEN_DOCUMENT")
+            A: android:name(0x01010003)="android.intent.category.DEFAULT" (Raw: "android.intent.category.DEFAULT")
+            A: android:name(0x01010003)="android.intent.category.OPENABLE" (Raw: "android.intent.category.OPENABLE")
+            A: android:name(0x01010003)="android.intent.action.CREATE_DOCUMENT" (Raw: "android.intent.action.CREATE_DOCUMENT")
+            A: android:name(0x01010003)="android.intent.category.DEFAULT" (Raw: "android.intent.category.DEFAULT")
+            A: android:name(0x01010003)="android.intent.category.OPENABLE" (Raw: "android.intent.category.OPENABLE")
+            A: android:name(0x01010003)="android.intent.action.GET_CONTENT" (Raw: "android.intent.action.GET_CONTENT")
+            A: android:name(0x01010003)="android.intent.category.DEFAULT" (Raw: "android.intent.category.DEFAULT")
+            A: android:name(0x01010003)="android.intent.category.OPENABLE" (Raw: "android.intent.category.OPENABLE")
+            A: android:name(0x01010003)="android.provider.action.MANAGE_ROOT" (Raw: "android.provider.action.MANAGE_ROOT")
+            A: android:name(0x01010003)="android.intent.category.DEFAULT" (Raw: "android.intent.category.DEFAULT")
+        A: android:name(0x01010003)=".SettingsActivity" (Raw: ".SettingsActivity")
+        A: android:exported(0x01010010)=(type 0x12)0x0
+        A: android:name(0x01010003)=".RecentsProvider" (Raw: ".RecentsProvider")
+        A: android:exported(0x01010010)=(type 0x12)0x0
+        A: android:name(0x01010003)=".PackageReceiver" (Raw: ".PackageReceiver")
+            A: android:name(0x01010003)="android.intent.action.PACKAGE_FULLY_REMOVED" (Raw: "android.intent.action.PACKAGE_FULLY_REMOVED")
+            A: android:name(0x01010003)="android.intent.action.PACKAGE_DATA_CLEARED" (Raw: "android.intent.action.PACKAGE_DATA_CLEARED")
+        A: android:name(0x01010003)=".TestActivity" (Raw: ".TestActivity")
+        A: android:enabled(0x0101000e)=(type 0x12)0x0
+            A: android:name(0x01010003)="android.intent.action.MAIN" (Raw: "android.intent.action.MAIN")
+            A: android:name(0x01010003)="android.intent.category.DEFAULT" (Raw: "android.intent.category.DEFAULT")
+            A: android:name(0x01010003)="android.intent.category.LAUNCHER" (Raw: "android.intent.category.LAUNCHER")
 --- EL830LF01_Home.apk: manifest ---
 package: name='tw.com.elead.el830.home' versionCode='1' versionName='2017.03.09.01'
 sdkVersion:'19'
@@ -234,6 +290,435 @@ supports-any-density: 'true'
         A: android:name(0x01010003)="tw.com.elead.el830.setup.StealthMode" (Raw: "tw.com.elead.el830.setup.StealthMode")
         A: android:name(0x01010003)="tw.com.elead.el830.setup.SetupService" (Raw: "tw.com.elead.el830.setup.SetupService")
             A: android:name(0x01010003)="tw.com.elead.el830.setup.ISetupService" (Raw: "tw.com.elead.el830.setup.ISetupService")
+--- EL831CLF01_MirrorLink_2016.06.13.01.apk: manifest ---
+package: name='com.fpt.mirrorlink.android' versionCode='1' versionName='2016.06.13.01'
+install-location:'auto'
+uses-permission: name='android.permission.INTERNET'
+uses-permission: name='android.permission.ACCESS_WIFI_STATE'
+uses-permission: name='android.permission.CHANGE_WIFI_MULTICAST_STATE'
+uses-permission: name='android.permission.ACCESS_NETWORK_STATE'
+uses-permission: name='android.permission.ACCESS_NETWORK_STATE'
+uses-permission: name='android.permission.RECORD_AUDIO'
+uses-permission: name='android.permission.INTERNET'
+uses-permission: name='android.permission.WRITE_EXTERNAL_STORAGE'
+uses-permission: name='android.permission.GET_TASKS'
+sdkVersion:'10'
+targetSdkVersion:'19'
+application-label:'MLink'
+application-label-ar-EG:'MLink'
+application-label-es-US:'MLink'
+application-label-fa:'MLink'
+application-label-fr:'MLink'
+application-label-ja-JP:'MLink'
+application-label-pt-BR:'MLink'
+application-label-ru-RU:'MLink'
+application-label-zh-CN:'MLink'
+application-label-zh-TW:'MLink'
+application-icon-120:'res/drawable-mdpi/mirrorlink_icon.png'
+application-icon-160:'res/drawable-mdpi/mirrorlink_icon.png'
+application-icon-240:'res/drawable-mdpi/mirrorlink_icon.png'
+application-icon-320:'res/drawable-mdpi/mirrorlink_icon.png'
+application-icon-480:'res/drawable-mdpi/mirrorlink_icon.png'
+application: label='MLink' icon='res/drawable-mdpi/mirrorlink_icon.png'
+application-debuggable
+launchable-activity: name='com.fpt.mirrorlink.android.view.MainActivity'  label='' icon=''
+uses-permission: name='android.permission.READ_EXTERNAL_STORAGE'
+uses-implied-permission: name='android.permission.READ_EXTERNAL_STORAGE' reason='requested WRITE_EXTERNAL_STORAGE'
+feature-group: label=''
+  uses-feature: name='android.hardware.faketouch'
+  uses-implied-feature: name='android.hardware.faketouch' reason='default feature for all apps'
+  uses-feature: name='android.hardware.microphone'
+  uses-implied-feature: name='android.hardware.microphone' reason='requested android.permission.RECORD_AUDIO permission'
+  uses-feature: name='android.hardware.screen.landscape'
+  uses-implied-feature: name='android.hardware.screen.landscape' reason='one or more activities have specified a landscape orientation'
+  uses-feature: name='android.hardware.wifi'
+  uses-implied-feature: name='android.hardware.wifi' reason='requested android.permission.ACCESS_WIFI_STATE permission, and requested android.permission.CHANGE_WIFI_MULTICAST_STATE permission'
+main
+other-activities
+other-receivers
+other-services
+supports-screens: 'small' 'normal' 'large' 'xlarge'
+supports-any-density: 'true'
+locales: '--_--' 'ar-EG' 'es-US' 'fa' 'fr' 'ja-JP' 'pt-BR' 'ru-RU' 'zh-CN' 'zh-TW'
+densities: '120' '160' '240' '320' '480'
+--- HOME и LAUNCHER в дереве manifest ---
+      A: android:name(0x01010003)="android.permission.INTERNET" (Raw: "android.permission.INTERNET")
+      A: android:name(0x01010003)="android.permission.ACCESS_WIFI_STATE" (Raw: "android.permission.ACCESS_WIFI_STATE")
+      A: android:name(0x01010003)="android.permission.CHANGE_WIFI_MULTICAST_STATE" (Raw: "android.permission.CHANGE_WIFI_MULTICAST_STATE")
+      A: android:name(0x01010003)="android.permission.ACCESS_NETWORK_STATE" (Raw: "android.permission.ACCESS_NETWORK_STATE")
+      A: android:name(0x01010003)="android.permission.ACCESS_NETWORK_STATE" (Raw: "android.permission.ACCESS_NETWORK_STATE")
+      A: android:name(0x01010003)="android.permission.RECORD_AUDIO" (Raw: "android.permission.RECORD_AUDIO")
+      A: android:name(0x01010003)="android.permission.INTERNET" (Raw: "android.permission.INTERNET")
+      A: android:name(0x01010003)="android.permission.WRITE_EXTERNAL_STORAGE" (Raw: "android.permission.WRITE_EXTERNAL_STORAGE")
+      A: android:name(0x01010003)="android.permission.GET_TASKS" (Raw: "android.permission.GET_TASKS")
+      A: android:name(0x01010003)=".config.MirrorLinkApplication" (Raw: ".config.MirrorLinkApplication")
+        A: android:name(0x01010003)="com.fpt.mirrorlink.android.view.VNCActivity" (Raw: "com.fpt.mirrorlink.android.view.VNCActivity")
+        A: android:name(0x01010003)="com.fpt.mirrorlink.android.view.MainActivity" (Raw: "com.fpt.mirrorlink.android.view.MainActivity")
+            A: android:name(0x01010003)="android.intent.action.MAIN" (Raw: "android.intent.action.MAIN")
+            A: android:name(0x01010003)="android.intent.category.LAUNCHER" (Raw: "android.intent.category.LAUNCHER")
+        A: android:name(0x01010003)="com.fpt.mirrorlink.android.vnc.activity.androidVNCActivity" (Raw: "com.fpt.mirrorlink.android.vnc.activity.androidVNCActivity")
+        A: android:name(0x01010003)="com.fpt.mirrorlink.android.vnc.activity.VncCanvasActivity" (Raw: "com.fpt.mirrorlink.android.vnc.activity.VncCanvasActivity")
+            A: android:name(0x01010003)="android.intent.action.VIEW" (Raw: "android.intent.action.VIEW")
+            A: android:name(0x01010003)="android.intent.action.VIEW" (Raw: "android.intent.action.VIEW")
+            A: android:name(0x01010003)="android.intent.category.DEFAULT" (Raw: "android.intent.category.DEFAULT")
+        A: android:name(0x01010003)="com.fpt.mirrorlink.android.receiver.UsbPlugReceiver" (Raw: "com.fpt.mirrorlink.android.receiver.UsbPlugReceiver")
+            A: android:name(0x01010003)="vn.com.fsoft.UsbIfaceReady" (Raw: "vn.com.fsoft.UsbIfaceReady")
+        A: android:name(0x01010003)="com.fpt.mirrorlink.android.receiver.UsbUnplugReceiver" (Raw: "com.fpt.mirrorlink.android.receiver.UsbUnplugReceiver")
+            A: android:name(0x01010003)="vn.com.fsoft.UsbIfaceDown" (Raw: "vn.com.fsoft.UsbIfaceDown")
+        A: android:name(0x01010003)="com.fpt.mirrorlink.android.receiver.RtpCommandReceiver" (Raw: "com.fpt.mirrorlink.android.receiver.RtpCommandReceiver")
+            A: android:name(0x01010003)="vn.com.fsoft.Dispose" (Raw: "vn.com.fsoft.Dispose")
+            A: android:name(0x01010003)="vn.com.fsoft.Launch" (Raw: "vn.com.fsoft.Launch")
+        A: android:name(0x01010003)="com.fpt.mirrorlink.android.upnp.controller.MLinkUpnpService" (Raw: "com.fpt.mirrorlink.android.upnp.controller.MLinkUpnpService")
+--- ElSettings.apk: manifest ---
+package: name='com.android.settings' versionCode='19' versionName='4.4.2-20140630'
+sdkVersion:'19'
+targetSdkVersion:'19'
+original-package:'com.android.settings'
+uses-permission: name='android.permission.WRITE_EXTERNAL_STORAGE'
+uses-permission: name='android.permission.READ_EXTERNAL_STORAGE'
+uses-permission: name='android.permission.WRITE_SETTINGS'
+uses-permission: name='android.permission.WRITE_SECURE_SETTINGS'
+uses-permission: name='android.permission.DEVICE_POWER'
+uses-permission: name='android.permission.CHANGE_CONFIGURATION'
+uses-permission: name='android.permission.MOUNT_UNMOUNT_FILESYSTEMS'
+uses-permission: name='android.permission.VIBRATE'
+uses-permission: name='android.permission.BLUETOOTH'
+uses-permission: name='android.permission.BLUETOOTH_ADMIN'
+uses-permission: name='android.permission.BLUETOOTH_PRIVILEGED'
+uses-permission: name='android.permission.NFC'
+uses-permission: name='android.permission.HARDWARE_TEST'
+uses-permission: name='android.permission.CALL_PHONE'
+uses-permission: name='android.permission.MODIFY_AUDIO_SETTINGS'
+uses-permission: name='android.permission.MASTER_CLEAR'
+uses-permission: name='android.permission.USE_CREDENTIALS'
+uses-permission: name='com.google.android.googleapps.permission.GOOGLE_AUTH'
+uses-permission: name='android.permission.ACCESS_DOWNLOAD_MANAGER'
+uses-permission: name='android.permission.READ_CONTACTS'
+uses-permission: name='android.permission.WRITE_CONTACTS'
+uses-permission: name='android.permission.ACCESS_NETWORK_STATE'
+uses-permission: name='android.permission.ACCESS_WIMAX_STATE'
+uses-permission: name='android.permission.CHANGE_WIMAX_STATE'
+uses-permission: name='android.permission.ACCESS_WIFI_STATE'
+uses-permission: name='com.android.certinstaller.INSTALL_AS_USER'
+uses-permission: name='android.permission.CHANGE_WIFI_STATE'
+uses-permission: name='android.permission.INTERNET'
+uses-permission: name='android.permission.CLEAR_APP_USER_DATA'
+uses-permission: name='android.permission.READ_PHONE_STATE'
+uses-permission: name='android.permission.MODIFY_PHONE_STATE'
+uses-permission: name='android.permission.ACCESS_COARSE_LOCATION'
+uses-permission: name='android.permission.WRITE_APN_SETTINGS'
+uses-permission: name='android.permission.ACCESS_CHECKIN_PROPERTIES'
+uses-permission: name='android.permission.READ_USER_DICTIONARY'
+uses-permission: name='android.permission.WRITE_USER_DICTIONARY'
+uses-permission: name='android.permission.FORCE_STOP_PACKAGES'
+uses-permission: name='android.permission.PACKAGE_USAGE_STATS'
+uses-permission: name='android.permission.BATTERY_STATS'
+uses-permission: name='com.android.launcher.permission.READ_SETTINGS'
+uses-permission: name='com.android.launcher.permission.WRITE_SETTINGS'
+uses-permission: name='android.permission.MOVE_PACKAGE'
+uses-permission: name='android.permission.USE_CREDENTIALS'
+uses-permission: name='android.permission.BACKUP'
+uses-permission: name='android.permission.READ_SYNC_SETTINGS'
+uses-permission: name='android.permission.WRITE_SYNC_SETTINGS'
+--- HOME и LAUNCHER в дереве manifest ---
+      A: android:name(0x01010003)="com.android.settings" (Raw: "com.android.settings")
+      A: android:name(0x01010003)="android.permission.WRITE_EXTERNAL_STORAGE" (Raw: "android.permission.WRITE_EXTERNAL_STORAGE")
+      A: android:name(0x01010003)="android.permission.READ_EXTERNAL_STORAGE" (Raw: "android.permission.READ_EXTERNAL_STORAGE")
+      A: android:name(0x01010003)="android.permission.WRITE_SETTINGS" (Raw: "android.permission.WRITE_SETTINGS")
+      A: android:name(0x01010003)="android.permission.WRITE_SECURE_SETTINGS" (Raw: "android.permission.WRITE_SECURE_SETTINGS")
+      A: android:name(0x01010003)="android.permission.DEVICE_POWER" (Raw: "android.permission.DEVICE_POWER")
+      A: android:name(0x01010003)="android.permission.CHANGE_CONFIGURATION" (Raw: "android.permission.CHANGE_CONFIGURATION")
+      A: android:name(0x01010003)="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" (Raw: "android.permission.MOUNT_UNMOUNT_FILESYSTEMS")
+      A: android:name(0x01010003)="android.permission.VIBRATE" (Raw: "android.permission.VIBRATE")
+      A: android:name(0x01010003)="android.permission.BLUETOOTH" (Raw: "android.permission.BLUETOOTH")
+      A: android:name(0x01010003)="android.permission.BLUETOOTH_ADMIN" (Raw: "android.permission.BLUETOOTH_ADMIN")
+      A: android:name(0x01010003)="android.permission.BLUETOOTH_PRIVILEGED" (Raw: "android.permission.BLUETOOTH_PRIVILEGED")
+      A: android:name(0x01010003)="android.permission.NFC" (Raw: "android.permission.NFC")
+      A: android:name(0x01010003)="android.permission.HARDWARE_TEST" (Raw: "android.permission.HARDWARE_TEST")
+      A: android:name(0x01010003)="android.permission.CALL_PHONE" (Raw: "android.permission.CALL_PHONE")
+      A: android:name(0x01010003)="android.permission.MODIFY_AUDIO_SETTINGS" (Raw: "android.permission.MODIFY_AUDIO_SETTINGS")
+      A: android:name(0x01010003)="android.permission.MASTER_CLEAR" (Raw: "android.permission.MASTER_CLEAR")
+      A: android:name(0x01010003)="android.permission.USE_CREDENTIALS" (Raw: "android.permission.USE_CREDENTIALS")
+      A: android:name(0x01010003)="com.google.android.googleapps.permission.GOOGLE_AUTH" (Raw: "com.google.android.googleapps.permission.GOOGLE_AUTH")
+      A: android:name(0x01010003)="android.permission.ACCESS_DOWNLOAD_MANAGER" (Raw: "android.permission.ACCESS_DOWNLOAD_MANAGER")
+      A: android:name(0x01010003)="android.permission.READ_CONTACTS" (Raw: "android.permission.READ_CONTACTS")
+      A: android:name(0x01010003)="android.permission.WRITE_CONTACTS" (Raw: "android.permission.WRITE_CONTACTS")
+      A: android:name(0x01010003)="android.permission.ACCESS_NETWORK_STATE" (Raw: "android.permission.ACCESS_NETWORK_STATE")
+      A: android:name(0x01010003)="android.permission.ACCESS_WIMAX_STATE" (Raw: "android.permission.ACCESS_WIMAX_STATE")
+      A: android:name(0x01010003)="android.permission.CHANGE_WIMAX_STATE" (Raw: "android.permission.CHANGE_WIMAX_STATE")
+      A: android:name(0x01010003)="android.permission.ACCESS_WIFI_STATE" (Raw: "android.permission.ACCESS_WIFI_STATE")
+      A: android:name(0x01010003)="com.android.certinstaller.INSTALL_AS_USER" (Raw: "com.android.certinstaller.INSTALL_AS_USER")
+      A: android:name(0x01010003)="android.permission.CHANGE_WIFI_STATE" (Raw: "android.permission.CHANGE_WIFI_STATE")
+      A: android:name(0x01010003)="android.permission.INTERNET" (Raw: "android.permission.INTERNET")
+      A: android:name(0x01010003)="android.permission.CLEAR_APP_USER_DATA" (Raw: "android.permission.CLEAR_APP_USER_DATA")
+      A: android:name(0x01010003)="android.permission.READ_PHONE_STATE" (Raw: "android.permission.READ_PHONE_STATE")
+      A: android:name(0x01010003)="android.permission.MODIFY_PHONE_STATE" (Raw: "android.permission.MODIFY_PHONE_STATE")
+      A: android:name(0x01010003)="android.permission.ACCESS_COARSE_LOCATION" (Raw: "android.permission.ACCESS_COARSE_LOCATION")
+      A: android:name(0x01010003)="android.permission.WRITE_APN_SETTINGS" (Raw: "android.permission.WRITE_APN_SETTINGS")
+      A: android:name(0x01010003)="android.permission.ACCESS_CHECKIN_PROPERTIES" (Raw: "android.permission.ACCESS_CHECKIN_PROPERTIES")
+      A: android:name(0x01010003)="android.permission.READ_USER_DICTIONARY" (Raw: "android.permission.READ_USER_DICTIONARY")
+      A: android:name(0x01010003)="android.permission.WRITE_USER_DICTIONARY" (Raw: "android.permission.WRITE_USER_DICTIONARY")
+      A: android:name(0x01010003)="android.permission.FORCE_STOP_PACKAGES" (Raw: "android.permission.FORCE_STOP_PACKAGES")
+      A: android:name(0x01010003)="android.permission.PACKAGE_USAGE_STATS" (Raw: "android.permission.PACKAGE_USAGE_STATS")
+      A: android:name(0x01010003)="android.permission.BATTERY_STATS" (Raw: "android.permission.BATTERY_STATS")
+      A: android:name(0x01010003)="com.android.launcher.permission.READ_SETTINGS" (Raw: "com.android.launcher.permission.READ_SETTINGS")
+      A: android:name(0x01010003)="com.android.launcher.permission.WRITE_SETTINGS" (Raw: "com.android.launcher.permission.WRITE_SETTINGS")
+      A: android:name(0x01010003)="android.permission.MOVE_PACKAGE" (Raw: "android.permission.MOVE_PACKAGE")
+      A: android:name(0x01010003)="android.permission.USE_CREDENTIALS" (Raw: "android.permission.USE_CREDENTIALS")
+      A: android:name(0x01010003)="android.permission.BACKUP" (Raw: "android.permission.BACKUP")
+      A: android:name(0x01010003)="android.permission.READ_SYNC_SETTINGS" (Raw: "android.permission.READ_SYNC_SETTINGS")
+      A: android:name(0x01010003)="android.permission.WRITE_SYNC_SETTINGS" (Raw: "android.permission.WRITE_SYNC_SETTINGS")
+      A: android:name(0x01010003)="android.permission.READ_SYNC_STATS" (Raw: "android.permission.READ_SYNC_STATS")
+      A: android:name(0x01010003)="android.permission.READ_SYNC_SETTINGS" (Raw: "android.permission.READ_SYNC_SETTINGS")
+      A: android:name(0x01010003)="android.permission.WRITE_SYNC_SETTINGS" (Raw: "android.permission.WRITE_SYNC_SETTINGS")
+      A: android:name(0x01010003)="android.permission.STATUS_BAR" (Raw: "android.permission.STATUS_BAR")
+      A: android:name(0x01010003)="android.permission.MANAGE_USB" (Raw: "android.permission.MANAGE_USB")
+      A: android:name(0x01010003)="android.permission.SET_POINTER_SPEED" (Raw: "android.permission.SET_POINTER_SPEED")
+      A: android:name(0x01010003)="android.permission.SET_KEYBOARD_LAYOUT" (Raw: "android.permission.SET_KEYBOARD_LAYOUT")
+      A: android:name(0x01010003)="android.permission.INTERACT_ACROSS_USERS_FULL" (Raw: "android.permission.INTERACT_ACROSS_USERS_FULL")
+      A: android:name(0x01010003)="android.permission.COPY_PROTECTED_DATA" (Raw: "android.permission.COPY_PROTECTED_DATA")
+      A: android:name(0x01010003)="android.permission.MANAGE_USERS" (Raw: "android.permission.MANAGE_USERS")
+      A: android:name(0x01010003)="android.permission.READ_PROFILE" (Raw: "android.permission.READ_PROFILE")
+      A: android:name(0x01010003)="android.permission.CONFIGURE_WIFI_DISPLAY" (Raw: "android.permission.CONFIGURE_WIFI_DISPLAY")
+      A: android:name(0x01010003)="android.permission.SET_TIME" (Raw: "android.permission.SET_TIME")
+      A: android:name(0x01010003)="android.permission.ACCESS_NOTIFICATIONS" (Raw: "android.permission.ACCESS_NOTIFICATIONS")
+      A: android:name(0x01010003)="android.permission.REBOOT" (Raw: "android.permission.REBOOT")
+      A: android:name(0x01010003)="android.permission.MANAGE_DEVICE_ADMINS" (Raw: "android.permission.MANAGE_DEVICE_ADMINS")
+        A: android:name(0x01010003)="Settings" (Raw: "Settings")
+            A: android:name(0x01010003)="android.intent.action.MAIN" (Raw: "android.intent.action.MAIN")
+            A: android:name(0x01010003)="android.settings.SETTINGS" (Raw: "android.settings.SETTINGS")
+            A: android:name(0x01010003)="android.intent.category.DEFAULT" (Raw: "android.intent.category.DEFAULT")
+            A: android:name(0x01010003)="android.intent.category.LAUNCHER" (Raw: "android.intent.category.LAUNCHER")
+        A: android:name(0x01010003)=".SubSettings" (Raw: ".SubSettings")
+        A: android:name(0x01010003)="CreateShortcut" (Raw: "CreateShortcut")
+            A: android:name(0x01010003)="android.intent.action.CREATE_SHORTCUT" (Raw: "android.intent.action.CREATE_SHORTCUT")
+            A: android:name(0x01010003)="android.intent.category.DEFAULT" (Raw: "android.intent.category.DEFAULT")
+        A: android:name(0x01010003)="Settings$WirelessSettingsActivity" (Raw: "Settings$WirelessSettingsActivity")
+            A: android:name(0x01010003)="android.intent.action.MAIN" (Raw: "android.intent.action.MAIN")
+            A: android:name(0x01010003)="android.settings.WIRELESS_SETTINGS" (Raw: "android.settings.WIRELESS_SETTINGS")
+            A: android:name(0x01010003)="android.settings.AIRPLANE_MODE_SETTINGS" (Raw: "android.settings.AIRPLANE_MODE_SETTINGS")
+            A: android:name(0x01010003)="android.settings.NFC_SETTINGS" (Raw: "android.settings.NFC_SETTINGS")
+            A: android:name(0x01010003)="android.intent.category.DEFAULT" (Raw: "android.intent.category.DEFAULT")
+            A: android:name(0x01010003)="android.intent.category.VOICE_LAUNCH" (Raw: "android.intent.category.VOICE_LAUNCH")
+          A: android:name(0x01010003)="com.android.settings.FRAGMENT_CLASS" (Raw: "com.android.settings.FRAGMENT_CLASS")
+          A: android:name(0x01010003)="com.android.settings.TOP_LEVEL_HEADER_ID" (Raw: "com.android.settings.TOP_LEVEL_HEADER_ID")
+        A: android:name(0x01010003)="Settings$WifiSettingsActivity" (Raw: "Settings$WifiSettingsActivity")
+            A: android:name(0x01010003)="android.intent.action.MAIN" (Raw: "android.intent.action.MAIN")
+            A: android:name(0x01010003)="android.settings.WIFI_SETTINGS" (Raw: "android.settings.WIFI_SETTINGS")
+            A: android:name(0x01010003)="android.intent.category.DEFAULT" (Raw: "android.intent.category.DEFAULT")
+            A: android:name(0x01010003)="android.intent.category.VOICE_LAUNCH" (Raw: "android.intent.category.VOICE_LAUNCH")
+            A: android:name(0x01010003)="com.android.settings.SHORTCUT" (Raw: "com.android.settings.SHORTCUT")
+          A: android:name(0x01010003)="com.android.settings.FRAGMENT_CLASS" (Raw: "com.android.settings.FRAGMENT_CLASS")
+          A: android:name(0x01010003)="com.android.settings.TOP_LEVEL_HEADER_ID" (Raw: "com.android.settings.TOP_LEVEL_HEADER_ID")
+        A: android:name(0x01010003)=".wifi.WifiSettings" (Raw: ".wifi.WifiSettings")
+        A: android:exported(0x01010010)=(type 0x12)0xffffffff
+          A: android:name(0x01010003)="com.android.settings.FRAGMENT_CLASS" (Raw: "com.android.settings.FRAGMENT_CLASS")
+          A: android:name(0x01010003)="com.android.settings.TOP_LEVEL_HEADER_ID" (Raw: "com.android.settings.TOP_LEVEL_HEADER_ID")
+        A: android:name(0x01010003)=".wifi.WifiPickerActivity" (Raw: ".wifi.WifiPickerActivity")
+            A: android:name(0x01010003)="android.intent.action.MAIN" (Raw: "android.intent.action.MAIN")
+            A: android:name(0x01010003)="android.net.wifi.PICK_WIFI_NETWORK" (Raw: "android.net.wifi.PICK_WIFI_NETWORK")
+            A: android:name(0x01010003)="android.intent.category.DEFAULT" (Raw: "android.intent.category.DEFAULT")
+        A: android:name(0x01010003)=".wifi.WifiSetupActivity" (Raw: ".wifi.WifiSetupActivity")
+            A: android:name(0x01010003)="android.intent.action.MAIN" (Raw: "android.intent.action.MAIN")
+            A: android:name(0x01010003)="com.android.net.wifi.SETUP_WIFI_NETWORK" (Raw: "com.android.net.wifi.SETUP_WIFI_NETWORK")
+            A: android:name(0x01010003)="android.intent.category.DEFAULT" (Raw: "android.intent.category.DEFAULT")
+        A: android:name(0x01010003)=".wifi.WifiSettingsForSetupWizardXL" (Raw: ".wifi.WifiSettingsForSetupWizardXL")
+        A: android:exported(0x01010010)=(type 0x12)0xffffffff
+        A: android:name(0x01010003)="Settings$AdvancedWifiSettingsActivity" (Raw: "Settings$AdvancedWifiSettingsActivity")
+            A: android:name(0x01010003)="android.intent.action.MAIN" (Raw: "android.intent.action.MAIN")
+            A: android:name(0x01010003)="android.settings.WIFI_IP_SETTINGS" (Raw: "android.settings.WIFI_IP_SETTINGS")
+            A: android:name(0x01010003)="android.intent.category.VOICE_LAUNCH" (Raw: "android.intent.category.VOICE_LAUNCH")
+            A: android:name(0x01010003)="android.intent.category.DEFAULT" (Raw: "android.intent.category.DEFAULT")
+          A: android:name(0x01010003)="com.android.settings.FRAGMENT_CLASS" (Raw: "com.android.settings.FRAGMENT_CLASS")
+          A: android:name(0x01010003)="com.android.settings.TOP_LEVEL_HEADER_ID" (Raw: "com.android.settings.TOP_LEVEL_HEADER_ID")
+          A: android:name(0x01010003)="com.android.settings.PARENT_FRAGMENT_TITLE" (Raw: "com.android.settings.PARENT_FRAGMENT_TITLE")
+          A: android:name(0x01010003)="com.android.settings.PARENT_FRAGMENT_CLASS" (Raw: "com.android.settings.PARENT_FRAGMENT_CLASS")
+        A: android:name(0x01010003)=".wifi.WifiInfo" (Raw: ".wifi.WifiInfo")
+            A: android:name(0x01010003)="android.intent.action.MAIN" (Raw: "android.intent.action.MAIN")
+            A: android:name(0x01010003)="android.intent.category.DEVELOPMENT_PREFERENCE" (Raw: "android.intent.category.DEVELOPMENT_PREFERENCE")
+            A: android:name(0x01010003)="android.intent.category.DEFAULT" (Raw: "android.intent.category.DEFAULT")
+        A: android:name(0x01010003)=".wifi.WifiConfigInfo" (Raw: ".wifi.WifiConfigInfo")
+            A: android:name(0x01010003)="android.intent.action.MAIN" (Raw: "android.intent.action.MAIN")
+            A: android:name(0x01010003)="android.intent.category.DEVELOPMENT_PREFERENCE" (Raw: "android.intent.category.DEVELOPMENT_PREFERENCE")
+            A: android:name(0x01010003)="android.intent.category.DEFAULT" (Raw: "android.intent.category.DEFAULT")
+        A: android:name(0x01010003)=".wifi.WifiAPITest" (Raw: ".wifi.WifiAPITest")
+            A: android:name(0x01010003)="android.intent.action.MAIN" (Raw: "android.intent.action.MAIN")
+            A: android:name(0x01010003)="android.intent.category.DEVELOPMENT_PREFERENCE" (Raw: "android.intent.category.DEVELOPMENT_PREFERENCE")
+            A: android:name(0x01010003)="android.intent.category.DEFAULT" (Raw: "android.intent.category.DEFAULT")
+        A: android:name(0x01010003)=".wifi.WifiStatusTest" (Raw: ".wifi.WifiStatusTest")
+            A: android:name(0x01010003)="android.intent.action.MAIN" (Raw: "android.intent.action.MAIN")
+            A: android:name(0x01010003)="android.intent.category.DEVELOPMENT_PREFERENCE" (Raw: "android.intent.category.DEVELOPMENT_PREFERENCE")
+            A: android:name(0x01010003)="android.intent.category.DEFAULT" (Raw: "android.intent.category.DEFAULT")
+        A: android:name(0x01010003)=".wifi.WifiApSettings" (Raw: ".wifi.WifiApSettings")
+            A: android:name(0x01010003)="android.intent.action.MAIN" (Raw: "android.intent.action.MAIN")
+            A: android:name(0x01010003)="android.intent.category.DEFAULT" (Raw: "android.intent.category.DEFAULT")
+            A: android:name(0x01010003)="android.intent.category.VOICE_LAUNCH" (Raw: "android.intent.category.VOICE_LAUNCH")
+        A: android:name(0x01010003)="ApnSettings" (Raw: "ApnSettings")
+            A: android:name(0x01010003)="android.intent.action.MAIN" (Raw: "android.intent.action.MAIN")
+            A: android:name(0x01010003)="android.settings.APN_SETTINGS" (Raw: "android.settings.APN_SETTINGS")
+            A: android:name(0x01010003)="android.intent.category.DEFAULT" (Raw: "android.intent.category.DEFAULT")
+            A: android:name(0x01010003)="android.intent.category.VOICE_LAUNCH" (Raw: "android.intent.category.VOICE_LAUNCH")
+        A: android:name(0x01010003)="Settings$BluetoothSettingsActivity" (Raw: "Settings$BluetoothSettingsActivity")
+            A: android:name(0x01010003)="android.intent.action.MAIN" (Raw: "android.intent.action.MAIN")
+            A: android:name(0x01010003)="android.settings.BLUETOOTH_SETTINGS" (Raw: "android.settings.BLUETOOTH_SETTINGS")
+            A: android:name(0x01010003)="android.intent.category.VOICE_LAUNCH" (Raw: "android.intent.category.VOICE_LAUNCH")
+            A: android:name(0x01010003)="com.android.settings.SHORTCUT" (Raw: "com.android.settings.SHORTCUT")
+            A: android:name(0x01010003)="android.intent.category.DEFAULT" (Raw: "android.intent.category.DEFAULT")
+          A: android:name(0x01010003)="com.android.settings.FRAGMENT_CLASS" (Raw: "com.android.settings.FRAGMENT_CLASS")
+          A: android:name(0x01010003)="com.android.settings.TOP_LEVEL_HEADER_ID" (Raw: "com.android.settings.TOP_LEVEL_HEADER_ID")
+        A: android:name(0x01010003)=".bluetooth.BluetoothSettings" (Raw: ".bluetooth.BluetoothSettings")
+        A: android:exported(0x01010010)=(type 0x12)0xffffffff
+          A: android:name(0x01010003)="com.android.settings.FRAGMENT_CLASS" (Raw: "com.android.settings.FRAGMENT_CLASS")
+          A: android:name(0x01010003)="com.android.settings.TOP_LEVEL_HEADER_ID" (Raw: "com.android.settings.TOP_LEVEL_HEADER_ID")
+        A: android:name(0x01010003)=".bluetooth.DevicePickerActivity" (Raw: ".bluetooth.DevicePickerActivity")
+            A: android:name(0x01010003)="android.bluetooth.devicepicker.action.LAUNCH" (Raw: "android.bluetooth.devicepicker.action.LAUNCH")
+            A: android:name(0x01010003)="android.intent.category.DEFAULT" (Raw: "android.intent.category.DEFAULT")
+        A: android:name(0x01010003)="Settings$TetherSettingsActivity" (Raw: "Settings$TetherSettingsActivity")
+            A: android:name(0x01010003)="android.intent.action.MAIN" (Raw: "android.intent.action.MAIN")
+            A: android:name(0x01010003)="android.intent.category.DEFAULT" (Raw: "android.intent.category.DEFAULT")
+            A: android:name(0x01010003)="android.intent.category.VOICE_LAUNCH" (Raw: "android.intent.category.VOICE_LAUNCH")
+            A: android:name(0x01010003)="com.android.settings.SHORTCUT" (Raw: "com.android.settings.SHORTCUT")
+          A: android:name(0x01010003)="com.android.settings.FRAGMENT_CLASS" (Raw: "com.android.settings.FRAGMENT_CLASS")
+          A: android:name(0x01010003)="com.android.settings.TOP_LEVEL_HEADER_ID" (Raw: "com.android.settings.TOP_LEVEL_HEADER_ID")
+          A: android:name(0x01010003)="com.android.settings.PARENT_FRAGMENT_TITLE" (Raw: "com.android.settings.PARENT_FRAGMENT_TITLE")
+--- Launcher2-inspect.apk: manifest ---
+package: name='com.android.launcher' versionCode='19' versionName='4.4.2-20140630'
+sdkVersion:'19'
+targetSdkVersion:'19'
+original-package:'com.android.launcher2'
+uses-permission: name='android.permission.CALL_PHONE'
+uses-permission: name='android.permission.SET_WALLPAPER'
+uses-permission: name='android.permission.SET_WALLPAPER_HINTS'
+uses-permission: name='android.permission.VIBRATE'
+uses-permission: name='android.permission.BIND_APPWIDGET'
+uses-permission: name='android.permission.GET_ACCOUNTS'
+uses-permission: name='com.android.launcher.permission.READ_SETTINGS'
+uses-permission: name='com.android.launcher.permission.WRITE_SETTINGS'
+application-label:'Launcher'
+application-label-ar:'المشغل'
+application-label-es:'Launcher'
+application-label-es-US:'Launcher'
+application-label-fa:'راه انداز'
+application-label-fr:'Lanceur d'applications'
+application-label-pt:'Launcher'
+application-label-ru:'Launcher'
+application-label-zh-CN:'启动器'
+application-icon-160:'res/mipmap-mdpi/ic_launcher_home.png'
+application-icon-240:'res/mipmap-hdpi/ic_launcher_home.png'
+application-icon-320:'res/mipmap-xhdpi/ic_launcher_home.png'
+application-icon-480:'res/mipmap-xhdpi/ic_launcher_home.png'
+application-icon-65535:'res/mipmap-xhdpi/ic_launcher_home.png'
+application: label='Launcher' icon='res/mipmap-mdpi/ic_launcher_home.png'
+feature-group: label=''
+  uses-feature: name='android.hardware.faketouch'
+  uses-implied-feature: name='android.hardware.faketouch' reason='default feature for all apps'
+  uses-feature: name='android.hardware.telephony'
+  uses-implied-feature: name='android.hardware.telephony' reason='requested a telephony permission'
+provides-component:'launcher'
+main
+other-activities
+other-receivers
+supports-screens: 'small' 'normal' 'large' 'xlarge'
+supports-any-density: 'true'
+locales: '--_--' 'ar' 'es' 'es-US' 'fa' 'fr' 'pt' 'ru' 'zh-CN'
+densities: '160' '240' '320' '480' '65535'
+--- HOME и LAUNCHER в дереве manifest ---
+      A: android:name(0x01010003)="com.android.launcher2" (Raw: "com.android.launcher2")
+      A: android:name(0x01010003)="com.android.launcher.permission.PRELOAD_WORKSPACE" (Raw: "com.android.launcher.permission.PRELOAD_WORKSPACE")
+      A: android:name(0x01010003)="com.android.launcher.permission.INSTALL_SHORTCUT" (Raw: "com.android.launcher.permission.INSTALL_SHORTCUT")
+      A: android:name(0x01010003)="com.android.launcher.permission.UNINSTALL_SHORTCUT" (Raw: "com.android.launcher.permission.UNINSTALL_SHORTCUT")
+      A: android:name(0x01010003)="com.android.launcher.permission.READ_SETTINGS" (Raw: "com.android.launcher.permission.READ_SETTINGS")
+      A: android:name(0x01010003)="com.android.launcher.permission.WRITE_SETTINGS" (Raw: "com.android.launcher.permission.WRITE_SETTINGS")
+      A: android:name(0x01010003)="android.permission.CALL_PHONE" (Raw: "android.permission.CALL_PHONE")
+      A: android:name(0x01010003)="android.permission.SET_WALLPAPER" (Raw: "android.permission.SET_WALLPAPER")
+      A: android:name(0x01010003)="android.permission.SET_WALLPAPER_HINTS" (Raw: "android.permission.SET_WALLPAPER_HINTS")
+      A: android:name(0x01010003)="android.permission.VIBRATE" (Raw: "android.permission.VIBRATE")
+      A: android:name(0x01010003)="android.permission.BIND_APPWIDGET" (Raw: "android.permission.BIND_APPWIDGET")
+      A: android:name(0x01010003)="android.permission.GET_ACCOUNTS" (Raw: "android.permission.GET_ACCOUNTS")
+      A: android:name(0x01010003)="com.android.launcher.permission.READ_SETTINGS" (Raw: "com.android.launcher.permission.READ_SETTINGS")
+      A: android:name(0x01010003)="com.android.launcher.permission.WRITE_SETTINGS" (Raw: "com.android.launcher.permission.WRITE_SETTINGS")
+      A: android:name(0x01010003)="com.android.launcher2.LauncherApplication" (Raw: "com.android.launcher2.LauncherApplication")
+        A: android:name(0x01010003)="com.android.launcher2.Launcher" (Raw: "com.android.launcher2.Launcher")
+            A: android:name(0x01010003)="android.intent.action.MAIN" (Raw: "android.intent.action.MAIN")
+            A: android:name(0x01010003)="android.intent.category.HOME" (Raw: "android.intent.category.HOME")
+            A: android:name(0x01010003)="android.intent.category.DEFAULT" (Raw: "android.intent.category.DEFAULT")
+            A: android:name(0x01010003)="android.intent.category.MONKEY" (Raw: "android.intent.category.MONKEY")
+        A: android:name(0x01010003)="com.android.launcher2.WallpaperChooser" (Raw: "com.android.launcher2.WallpaperChooser")
+            A: android:name(0x01010003)="android.intent.action.SET_WALLPAPER" (Raw: "android.intent.action.SET_WALLPAPER")
+            A: android:name(0x01010003)="android.intent.category.DEFAULT" (Raw: "android.intent.category.DEFAULT")
+          A: android:name(0x01010003)="android.wallpaper.preview" (Raw: "android.wallpaper.preview")
+        A: android:name(0x01010003)="com.android.launcher2.PreloadReceiver" (Raw: "com.android.launcher2.PreloadReceiver")
+            A: android:name(0x01010003)="com.android.launcher.action.PRELOAD_WORKSPACE" (Raw: "com.android.launcher.action.PRELOAD_WORKSPACE")
+        A: android:name(0x01010003)="com.android.launcher2.InstallShortcutReceiver" (Raw: "com.android.launcher2.InstallShortcutReceiver")
+            A: android:name(0x01010003)="com.android.launcher.action.INSTALL_SHORTCUT" (Raw: "com.android.launcher.action.INSTALL_SHORTCUT")
+        A: android:name(0x01010003)="com.android.launcher2.UninstallShortcutReceiver" (Raw: "com.android.launcher2.UninstallShortcutReceiver")
+            A: android:name(0x01010003)="com.android.launcher.action.UNINSTALL_SHORTCUT" (Raw: "com.android.launcher.action.UNINSTALL_SHORTCUT")
+        A: android:name(0x01010003)="com.android.launcher2.UserInitializeReceiver" (Raw: "com.android.launcher2.UserInitializeReceiver")
+        A: android:exported(0x01010010)=(type 0x12)0x0
+            A: android:name(0x01010003)="android.intent.action.USER_INITIALIZE" (Raw: "android.intent.action.USER_INITIALIZE")
+        A: android:name(0x01010003)="com.android.launcher2.PackageChangedReceiver" (Raw: "com.android.launcher2.PackageChangedReceiver")
+            A: android:name(0x01010003)="android.intent.action.PACKAGE_CHANGED" (Raw: "android.intent.action.PACKAGE_CHANGED")
+            A: android:name(0x01010003)="android.intent.action.PACKAGE_REPLACED" (Raw: "android.intent.action.PACKAGE_REPLACED")
+            A: android:name(0x01010003)="android.intent.action.PACKAGE_REMOVED" (Raw: "android.intent.action.PACKAGE_REMOVED")
+        A: android:name(0x01010003)="com.android.launcher2.LauncherProvider" (Raw: "com.android.launcher2.LauncherProvider")
+        A: android:exported(0x01010010)=(type 0x12)0xffffffff
+        A: android:name(0x01010003)="android.nfc.disable_beam_default" (Raw: "android.nfc.disable_beam_default")
+--- PackageInstaller.apk: manifest ---
+package: name='com.android.packageinstaller' versionCode='19' versionName='4.4.2-20140630'
+sdkVersion:'19'
+targetSdkVersion:'19'
+original-package:'com.android.packageinstaller'
+uses-permission: name='android.permission.INSTALL_PACKAGES'
+uses-permission: name='android.permission.DELETE_PACKAGES'
+uses-permission: name='android.permission.CLEAR_APP_CACHE'
+uses-permission: name='android.permission.READ_PHONE_STATE'
+uses-permission: name='android.permission.CLEAR_APP_USER_DATA'
+uses-permission: name='android.permission.READ_EXTERNAL_STORAGE'
+uses-permission: name='android.permission.MANAGE_USERS'
+uses-permission: name='android.permission.GRANT_REVOKE_PERMISSIONS'
+application-label:'Package installer'
+application-label-ar:'أداة تثبيت الحزم'
+application-label-es:'Instalador de paquetes'
+application-label-es-US:'Programa de instalación del paquete'
+application-label-fa:'نصب کننده بسته'
+application-label-fr:'Programme d'installation du kit'
+application-label-pt:'Instalador do pacote'
+application-label-ru:'Программа установки пакета'
+application-label-zh-CN:'应用包安装程序'
+application: label='Package installer' icon=''
+feature-group: label=''
+  uses-feature: name='android.hardware.faketouch'
+  uses-implied-feature: name='android.hardware.faketouch' reason='default feature for all apps'
+other-activities
+supports-screens: 'small' 'normal' 'large' 'xlarge'
+supports-any-density: 'true'
+locales: '--_--' 'ar' 'es' 'es-US' 'fa' 'fr' 'pt' 'ru' 'zh-CN'
+densities: '160' '240'
+--- HOME и LAUNCHER в дереве manifest ---
+      A: android:name(0x01010003)="com.android.packageinstaller" (Raw: "com.android.packageinstaller")
+      A: android:name(0x01010003)="android.permission.INSTALL_PACKAGES" (Raw: "android.permission.INSTALL_PACKAGES")
+      A: android:name(0x01010003)="android.permission.DELETE_PACKAGES" (Raw: "android.permission.DELETE_PACKAGES")
+      A: android:name(0x01010003)="android.permission.CLEAR_APP_CACHE" (Raw: "android.permission.CLEAR_APP_CACHE")
+      A: android:name(0x01010003)="android.permission.READ_PHONE_STATE" (Raw: "android.permission.READ_PHONE_STATE")
+      A: android:name(0x01010003)="android.permission.CLEAR_APP_USER_DATA" (Raw: "android.permission.CLEAR_APP_USER_DATA")
+      A: android:name(0x01010003)="android.permission.READ_EXTERNAL_STORAGE" (Raw: "android.permission.READ_EXTERNAL_STORAGE")
+      A: android:name(0x01010003)="android.permission.MANAGE_USERS" (Raw: "android.permission.MANAGE_USERS")
+      A: android:name(0x01010003)="android.permission.GRANT_REVOKE_PERMISSIONS" (Raw: "android.permission.GRANT_REVOKE_PERMISSIONS")
+        A: android:name(0x01010003)=".PackageInstallerActivity" (Raw: ".PackageInstallerActivity")
+            A: android:name(0x01010003)="android.intent.action.VIEW" (Raw: "android.intent.action.VIEW")
+            A: android:name(0x01010003)="android.intent.action.INSTALL_PACKAGE" (Raw: "android.intent.action.INSTALL_PACKAGE")
+            A: android:name(0x01010003)="android.intent.category.DEFAULT" (Raw: "android.intent.category.DEFAULT")
+            A: android:name(0x01010003)="android.intent.action.INSTALL_PACKAGE" (Raw: "android.intent.action.INSTALL_PACKAGE")
+            A: android:name(0x01010003)="android.intent.category.DEFAULT" (Raw: "android.intent.category.DEFAULT")
+        A: android:name(0x01010003)=".InstallAppProgress" (Raw: ".InstallAppProgress")
+        A: android:name(0x01010003)=".UninstallerActivity" (Raw: ".UninstallerActivity")
+            A: android:name(0x01010003)="android.intent.action.DELETE" (Raw: "android.intent.action.DELETE")
+            A: android:name(0x01010003)="android.intent.action.UNINSTALL_PACKAGE" (Raw: "android.intent.action.UNINSTALL_PACKAGE")
+            A: android:name(0x01010003)="android.intent.category.DEFAULT" (Raw: "android.intent.category.DEFAULT")
+        A: android:name(0x01010003)=".UninstallAppProgress" (Raw: ".UninstallAppProgress")
+        A: android:name(0x01010003)=".GrantActivity" (Raw: ".GrantActivity")
+            A: android:name(0x01010003)="android.content.pm.action.REQUEST_PERMISSION" (Raw: "android.content.pm.action.REQUEST_PERMISSION")
+            A: android:name(0x01010003)="android.intent.category.DEFAULT" (Raw: "android.intent.category.DEFAULT")
 
 ## Init и скрипты обновления (файлы вне образов)
 --- /home/runner/work/_temp/stock/unpacked/backup/config.ini ---
