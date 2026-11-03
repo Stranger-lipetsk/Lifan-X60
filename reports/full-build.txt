@@ -755,3 +755,60 @@ f4a96401b076069cdb205e5f042381b25cd9f3dbb7dfe886b6850a8854de2c11  out/system-ful
 Pass 4: Checking reference counts
 Pass 5: Checking group summary information
 system: 1393/23040 files (0.1% non-contiguous), 88162/92160 blocks
+  com.navitel.apk  94 МиБ  com.navitel
+  org.prowl.torque.apk  12 МиБ  org.prowl.torque
+нужно места: 107 МиБ (свободно после чистки ~124 МиБ)
+лаунчер: РОДНОЙ (патч отключён)
+добавляем: --add-apk switcher/switcher.apk:/app --add-apk firmware/apks/com.navitel.apk:/priv-app --add-apk firmware/apks/org.prowl.torque.apk:/app
+использую sudo для записи в образ
+копия: out/system-org.img -> out/system-full.img (377487360 байт)
+свободно в образе до правок: 17.6 МиБ
+  удалено: /priv-app/Navitel-9.13.73-large.apk (105.9 МиБ)
+  удалено: /app/BSEDemo.apk (0.2 МиБ)
+  удалено: /app/EL830TAM1_GPIO_TEST_2015.01.01.01.apk (0.0 МиБ)
+  удалено: /app/CubeLiveWallpapers.apk (0.0 МиБ)
+  удалено: /app/VisualizationWallpapers.apk (0.2 МиБ)
+  удалено: /app/BasicDreams.apk (0.0 МиБ)
+  удалено: /app/WfdSink.apk (0.1 МиБ)
+  удалено: /app/FSLOta.apk (0.0 МиБ)
+  удалено: /app/HTMLViewer.apk (0.0 МиБ)
+  добавлено: /app/switcher.apk (16879 байт)
+  добавлено: /priv-app/com.navitel.apk (99176587 байт)
+  добавлено: /app/org.prowl.torque.apk (13389061 байт)
+  добавлено: /etc/install-recovery.sh (режим 0100755)
+  build.prop: строк 57
+  свойство добавлено: persist.sys.timezone=Europe/Moscow
+свободно в образе после правок: 16.7 МиБ
+--- проверка ФС ---
+e2fsck: чисто
+  Pass 1: Checking inodes, blocks, and sizes
+  Pass 5: Checking group summary information
+  system: 1393/23040 files (0.1% non-contiguous), 87889/92160 blocks
+
+ГОТОВО: out/system-full.img
+размер: 377487360 байт
+
+лаунчер в образе: родной
+
+## содержимое образа
+     13  100644 (1)      0      0   16879  3-Nov-2026 08:39 switcher.apk
+     18  100644 (1)      0      0   13389061  3-Nov-2026 08:39 org.prowl.torque.apk
+   1291  100644 (1)      0      0   4588177 26-Apr-2026 17:05 EL830LF01_Home.apk
+     14  100644 (1)      0      0   99176587  3-Nov-2026 08:39 com.navitel.apk
+сверка APK в образе с исходными (должно совпасть):
+  com.navitel.apk: совпадает
+  org.prowl.torque.apk: совпадает
+часовой пояс:
+ro.product.locale.language=zh
+ro.product.locale.region=CN
+persist.sys.timezone=Europe/Moscow
+размер лаунчера в образе:
+User:     0   Group:     0   Size: 4588177
+Fragment:  Address: 0    Number: 0    Size: 0
+в APK внутри образа: маркер патча (yandexnavi/torque)
+debugfs 1.47.0 (5-Feb-2023)
+1
+c2169c93aea9fa5f8cd451088e78ec336f88da036c7e45a08b05ed2a022416af  out/system-full.img
+Pass 4: Checking reference counts
+Pass 5: Checking group summary information
+system: 1393/23040 files (0.1% non-contiguous), 87889/92160 blocks
