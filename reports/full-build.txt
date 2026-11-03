@@ -583,3 +583,89 @@ debugfs 1.47.0 (5-Feb-2023)
 Pass 4: Checking reference counts
 Pass 5: Checking group summary information
 system: 1393/23040 files (0.1% non-contiguous), 73708/92160 blocks
+APK firmware/apks/com.navitel.apk -> пакет com.navitel
+APK firmware/apks/org.prowl.torque.apk -> пакет org.prowl.torque
+патч /tmp/HomeDec/smali/tw/com/elead/el830/home/HomeApp.smali
+  уже есть: com.navitel
+  добавлен в список экрана: org.prowl.torque
+  проверка enable снята (1 место)
+  в ветку по умолчанию добавлен setActivity (перед put, строка 748)
+готово
+DEX РАЗБИРАЕТСЯ БЕЗ ОШИБОК
+
+## лаунчер
+-rw-r--r-- 1 runner runner 4588177 Nov  3 07:33 /tmp/Home.apk
+-rw-r--r-- 1 runner runner 5708697 Nov  3 07:33 out/Home-new.apk
+dex внутри (метод должен быть STORED):
+ 1852612  Stored  1852612   0% 2026-11-03 07:33 c31fc915  classes.dex
+подпись нового файла:
+keytool error: java.lang.SecurityException: SHA1 digest error for classes.dex
+подпись заводского:
+Owner: EMAILADDRESS=android@freescale.com, CN=Android, OU=Android, O=Android, L=Mountain View, ST=California, C=US
+	 SHA1: 3E:0C:AF:3D:79:9F:BA:EC:56:6F:AC:BE:1A:67:FB:25:0B:DE:FD:93
+Signature algorithm name: SHA1withRSA (weak)
+The certificate uses the SHA1withRSA signature algorithm which is considered a security risk. This algorithm will be disabled in a future update.
+патч в dex:
+0
+убрано библиотек: 75 (121.0 МиБ распакованных)
+пересжато записей: 4
+com.navitel.apk: 94.6 МиБ -> 35.0 МиБ
+убрано библиотек: 2 (4.4 МиБ распакованных)
+пересжато записей: 165
+org.prowl.torque.apk: 12.8 МиБ -> 10.0 МиБ
+добавляем: --add-apk switcher/switcher.apk:/app --add-file out/Home-new.apk:/priv-app/EL830LF01_Home.apk --add-apk out/apks/com.navitel.apk:/priv-app --add-apk out/apks/org.prowl.torque.apk:/app
+использую sudo для записи в образ
+копия: out/system-org.img -> out/system-full.img (377487360 байт)
+свободно в образе до правок: 17.6 МиБ
+  удалено: /priv-app/Navitel-9.13.73-large.apk (105.9 МиБ)
+  удалено: /app/BSEDemo.apk (0.2 МиБ)
+  удалено: /app/EL830TAM1_GPIO_TEST_2015.01.01.01.apk (0.0 МиБ)
+  удалено: /app/CubeLiveWallpapers.apk (0.0 МиБ)
+  удалено: /app/VisualizationWallpapers.apk (0.2 МиБ)
+  удалено: /app/BasicDreams.apk (0.0 МиБ)
+  удалено: /app/WfdSink.apk (0.1 МиБ)
+  удалено: /app/FSLOta.apk (0.0 МиБ)
+  удалено: /app/HTMLViewer.apk (0.0 МиБ)
+  добавлено: /app/switcher.apk (16879 байт)
+  добавлено: /priv-app/com.navitel.apk (36687045 байт)
+  добавлено: /app/org.prowl.torque.apk (10529628 байт)
+  заменяю: /priv-app/EL830LF01_Home.apk
+  добавлено: /priv-app/EL830LF01_Home.apk (режим 0100644)
+  добавлено: /etc/install-recovery.sh (режим 0100755)
+  build.prop: строк 57
+  свойство добавлено: persist.sys.timezone=Europe/Moscow
+свободно в образе после правок: 77.9 МиБ
+--- проверка ФС ---
+e2fsck: чисто
+  Pass 1: Checking inodes, blocks, and sizes
+  Pass 5: Checking group summary information
+  system: 1393/23040 files (0.1% non-contiguous), 72208/92160 blocks
+
+ГОТОВО: out/system-full.img
+размер: 377487360 байт
+
+## сверка лаунчера с собранным
+debugfs 1.47.0 (5-Feb-2023)
+0986a9b2eec1cd409c4b9941f94686aeaa4b2e1798e1a96b6a442d4e96ed04f7  /tmp/chk-home.apk
+0986a9b2eec1cd409c4b9941f94686aeaa4b2e1798e1a96b6a442d4e96ed04f7  out/Home-new.apk
+лаунчер в образе: наш
+
+## содержимое образа
+     13  100644 (1)      0      0   16879  3-Nov-2026 07:34 switcher.apk
+     18  100644 (1)      0      0   10529628  3-Nov-2026 07:34 org.prowl.torque.apk
+     21  100644 (1)      0      0   5708697  3-Nov-2026 07:34 EL830LF01_Home.apk
+     14  100644 (1)      0      0   36687045  3-Nov-2026 07:34 com.navitel.apk
+часовой пояс:
+ro.product.locale.language=zh
+ro.product.locale.region=CN
+persist.sys.timezone=Europe/Moscow
+размер лаунчера в образе:
+User:     0   Group:     0   Project:     0   Size: 5708697
+Fragment:  Address: 0    Number: 0    Size: 0
+в APK внутри образа: маркер патча (yandexnavi/torque)
+debugfs 1.47.0 (5-Feb-2023)
+2
+966d9573752dff5220500a87cf61d01fb196d85ae09797ef1594ba651673dd28  out/system-full.img
+Pass 4: Checking reference counts
+Pass 5: Checking group summary information
+system: 1393/23040 files (0.1% non-contiguous), 72208/92160 blocks
