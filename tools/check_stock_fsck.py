@@ -10,8 +10,8 @@ from pathlib import Path
 
 
 def validate(text: str, status: int) -> None:
-    if status != 4:
-        raise ValueError(f'expected e2fsck status 4 for known stock warning, got {status}')
+    if status not in (0, 4):
+        raise ValueError(f'expected clean status or known stock warning, got {status}')
     lines = [line.strip() for line in text.splitlines() if line.strip()]
     patterns = (
         r'e2fsck [0-9.]+ \([^\n]+\)',
@@ -27,10 +27,13 @@ def validate(text: str, status: int) -> None:
         if sum(line.startswith(f'Pass {i}: ') for line in lines) != 1:
             raise ValueError(f'missing or duplicate pass {i}')
     warning = 'Padding at end of inode bitmap is not set. Fix? no'
-    if lines.count(warning) != 1:
-        raise ValueError('expected padding warning exactly once')
-    if sum('WARNING: Filesystem still has errors' in line for line in lines) != 1:
-        raise ValueError('missing or duplicate filesystem warning')
+    expected_warnings = 1 if status == 4 else 0
+    if lines.count(warning) != expected_warnings:
+        raise ValueError('unexpected padding warning count')
+    if sum('WARNING: Filesystem still has errors' in line for line in lines) != expected_warnings:
+        raise ValueError('unexpected filesystem warning count')
+    if sum(re.fullmatch(patterns[-1], line) is not None for line in lines) != 1:
+        raise ValueError('missing or duplicate filesystem summary')
 
 
 def main():
@@ -40,7 +43,7 @@ def main():
         validate(Path(sys.argv[1]).read_text(), int(sys.argv[2]))
     except (ValueError, OSError) as exc:
         raise SystemExit(str(exc))
-    print('Only the previously observed stock inode-bitmap padding warning is present.')
+    print('Check passed: clean, or only the previously observed stock inode-bitmap padding warning.')
 
 
 if __name__ == '__main__':

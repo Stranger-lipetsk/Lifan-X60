@@ -43,6 +43,7 @@ jobs:
             e2fsck -fn "$img" > "$log" 2>&1 || status=$?
             cat "$log"
             python3 tools/check_stock_fsck.py "$log" "$status"
+            test "$status" = "$3" || { echo "Неожиданный статус e2fsck: $status"; return 1; }
           }
           {
             echo '# Тест: сток 2021 + Launcher2.apk'
@@ -52,7 +53,7 @@ jobs:
             echo 'SHA-256 стокового образа:'
             sha256sum "$base"
             echo 'Проверка стоковой файловой системы (без исправления):'
-            check_fs "$base" "$check/base-fsck.log"
+            check_fs "$base" "$check/base-fsck.log" 4
             echo 'Извлечённый исходный Launcher2:'
             debugfs -R "dump /priv-app/Launcher2 $check/Launcher2.apk" "$base"
             test -s "$check/Launcher2.apk"
@@ -69,7 +70,7 @@ jobs:
             debugfs -w -R 'sif /priv-app/Launcher2.apk uid 0' "$target" 2>&1
             debugfs -w -R 'sif /priv-app/Launcher2.apk gid 0' "$target" 2>&1
             echo 'Проверка нового образа: разрешено только известное предупреждение стока:'
-            check_fs "$target" "$check/target-fsck.log"
+            check_fs "$target" "$check/target-fsck.log" 0
             echo 'Сверка неизменённых исходных файлов и новой копии:'
             for name in Home LauncherOriginal Navitel BuildProp; do
               case "$name" in
@@ -124,9 +125,9 @@ jobs:
           Тестовый образ на основе stock/x60_2021.7z. Только добавлен
           штатный /priv-app/Launcher2.apk, копия исходного Launcher2.
           Родная оболочка, Navitel и build.prop не изменены (проверены cmp).
-          e2fsck сообщает об одной и той же ошибке padding inode bitmap в
-          исходном и изменённом образах; других замечаний проверка не выявила.
-          Ошибка не исправлялась. На устройстве эта сборка ещё НЕ проверена.
+          В исходном образе e2fsck обнаружил предупреждение padding inode bitmap.
+          После записи debugfs предупреждение не отображается; служебные метаданные
+          могли измениться. На устройстве эта сборка ещё НЕ проверена.
           Выбор HOME, установка APK
           и успешная загрузка не гарантированы. Не обновляйте MCU.
 

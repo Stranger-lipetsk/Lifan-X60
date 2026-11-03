@@ -26,9 +26,18 @@ Padding at end of inode bitmap is not set. Fix? no
         with self.assertRaises(ValueError):
             validate(self.report.replace('Padding at end of inode bitmap is not set. Fix? no', ''), 4)
 
-    def test_unexpected_status_rejected(self):
+    def test_clean_result_accepted(self):
+        clean = self.report.replace('Padding at end of inode bitmap is not set. Fix? no\n', '')
+        clean = clean.replace('/tmp/system.img: ********** WARNING: Filesystem still has errors **********\n', '')
+        validate(clean, 0)
+
+    def test_status_and_warning_mismatch_rejected(self):
         with self.assertRaises(ValueError):
             validate(self.report, 0)
+
+    def test_other_status_rejected(self):
+        with self.assertRaises(ValueError):
+            validate(self.report, 8)
 
 
 if __name__ == '__main__':
