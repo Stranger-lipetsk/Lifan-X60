@@ -1,0 +1,19 @@
+# Тест: сток 2021 + Launcher2.apk
+Этот образ не проверен на устройстве. Родная оболочка не изменяется.
+Вход в Android и установка APK не гарантированы.
+
+SHA-256 стокового образа:
+b6bbbe529942ffec250cad993ae9cbb808721c27cf2536fb3fb11120130e8545  /home/runner/work/_temp/input/extracted/system.img
+Проверка стоковой файловой системы:
+e2fsck 1.47.0 (5-Feb-2023)
+Pass 1: Checking inodes, blocks, and sizes
+Pass 2: Checking directory structure
+Pass 3: Checking directory connectivity
+Pass 4: Checking reference counts
+Pass 5: Checking group summary information
+Padding at end of inode bitmap is not set. Fix? no
+
+
+/home/runner/work/_temp/input/extracted/system.img: ********** WARNING: Filesystem still has errors **********
+
+/home/runner/work/_temp/input/extracted/system.img: 1399/23040 files (0.0% non-contiguous), 85475/92160 blocks
