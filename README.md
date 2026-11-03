@@ -42,6 +42,7 @@ Wi-Fi точки доступа телефона: **[docs/13-wifi-точка-д�
 📦 **Приложения в образе и кнопки на экране:** **[docs/18-приложения-и-кнопки.md](docs/18-приложения-и-кнопки.md)**
 🖼 **Как выглядит главный экран:** **[docs/19-как-выглядит-главный-экран.md](docs/19-как-выглядит-главный-экран.md)**
 🔌 **OBD-II, Bluetooth и Wi-Fi:** **[docs/20-obd2-bluetooth-i-wifi.md](docs/20-obd2-bluetooth-i-wifi.md)**
+💻 **ADB с ноутбука:** **[docs/21-adb-с-ноутбука.md](docs/21-adb-с-ноутбука.md)**
 ⬇️ **Образ с приложениями:** [релиз `lite-apps`](https://github.com/Stranger-lipetsk/Lifan-X60/releases/tag/lite-apps)
 Доступ к Android, Wi-Fi и файлам: **[docs/08-mirrorlink-vyhod-k-android.md](docs/08-mirrorlink-vyhod-k-android.md)**
 Сборка образа: `python3 tools/inplace_patch.py --system system.img --out out/system.img ...`
