@@ -1,0 +1,239 @@
+# Состав stock/x60_2021.7z
+
+SHA-256 архива:
+75e7d6cd900fac971b55fec9f59913153bf7a1096bd761f7229c9a1d6d57b540
+
+## Файлы архива
+110448 ./u-boot.bin
+377487360 ./system.img
+3926016 ./boot.img
+48758784 ./sd_boot.img
+75083 ./MCU_FW.hex
+83 ./backup/config.ini
+
+## Файлы system.img
+### /home/runner/work/_temp/stock/unpacked/system.img
+/home/runner/work/_temp/stock/unpacked/system.img: Linux rev 1.0 ext4 filesystem data, UUID=57f8f4bc-abf4-655f-bf67-946fc0f9f25b (extents) (large files)
+--- / ---
+debugfs 1.47.0 (5-Feb-2023)
+      2   40755 (2)      0      0    4096  1-Jan-1970 00:00 .
+      2   40755 (2)      0      0    4096  1-Jan-1970 00:00 ..
+     11   40700 (2)      0      0    4096  1-Jan-1970 00:00 lost+found
+     12   40755 (2)      0      0    4096 28-Mar-2021 11:29 app
+     44   40755 (2)      0   2000    4096 28-Mar-2021 11:29 bin
+    585  100644 (1)      0      0    1724 28-Mar-2021 11:29 build.prop
+    586   40755 (2)      0      0    4096 28-Mar-2021 11:29 etc
+    811   40755 (2)      0      0    4096 28-Mar-2021 11:29 fonts
+    886   40755 (2)      0      0    4096 28-Mar-2021 11:29 framework
+    978   40755 (2)      0      0    8192 28-Mar-2021 11:58 lib
+   1286   40755 (2)      0      0    4096 28-Mar-2021 11:29 media
+   1288   40777 (2)      0   2000    4096 28-Mar-2021 11:35 priv-app
+   1310   40755 (2)      0      0    4096 28-Mar-2021 11:29 usr
+   1362   40755 (2)      0   2000    4096 28-Mar-2021 11:29 vendor
+   1374   40755 (2)      0   2000    4096 28-Mar-2021 11:29 xbin
+
+--- /app ---
+debugfs 1.47.0 (5-Feb-2023)
+     12   40755 (2)      0      0    4096 28-Mar-2021 11:29 .
+      2   40755 (2)      0      0    4096  1-Jan-1970 00:00 ..
+     13  100644 (1)      0      0   197918 28-Mar-2021 11:29 BSEDemo.apk
+     14  100644 (1)      0      0   25910 28-Mar-2021 11:29 BasicDreams.apk
+     15  100644 (1)      0      0   294080 28-Mar-2021 11:29 Bluetooth.apk
+     16  100644 (1)      0      0   2400817 28-Mar-2021 11:29 Camera2.apk
+     17  100644 (1)      0      0   42883 28-Mar-2021 11:29 CertInstaller.apk
+     18  100644 (1)      0      0   19341 28-Mar-2021 11:29 CubeLiveWallpapers.apk
+     19  100644 (1)      0      0   318717 28-Mar-2021 11:29 DocumentsUI.apk
+     20  100644 (1)      0      0   141114 28-Mar-2021 11:29 DownloadProviderUi.apk
+     21  100644 (1)      0      0   21489 28-Mar-2021 11:29 EL830TAM1_GPIO_TEST_2015.01.01.01.apk
+     22  100644 (1)      0      0   1180203 28-Mar-2021 11:29 EL831CLF01_Avin_2016.06.21.01.apk
+     23  100644 (1)      0      0   1193599 28-Mar-2021 11:29 EL831CLF01_MediaPlayer_2017.01.11.01.apk
+     24  100644 (1)      0      0   1959442 28-Mar-2021 11:29 EL831CLF01_MirrorLink_2016.06.13.01.apk
+     25  100644 (1)      0      0   796551 28-Mar-2021 11:29 EL831CLF01_Radio_2016.12.16.01.apk
+     26  100644 (1)      0      0   753892 28-Mar-2021 11:29 EL831CLF01_elBTService_2016.09.05.01.apk
+     27  100644 (1)      0      0   845792 28-Mar-2021 11:29 EL831CLF01_elBluetoothDial_2016.12.13.01.apk
+     28  100644 (1)      0      0   899003 28-Mar-2021 11:29 EL831CLF01_elBluetoothMusic_2016.12.13.01.apk
+     29  100644 (1)      0      0   1139049 28-Mar-2021 11:29 EL831CLF01_elBluetoothPhone_2016.12.13.01.apk
+     30  100644 (1)      0      0   912852 28-Mar-2021 11:29 EL831CLF01_elBluetoothSetup_2016.12.13.01.apk
+     31  100644 (1)      0      0   24303 28-Mar-2021 11:29 FSLOta.apk
+     32  100644 (1)      0      0    7674 28-Mar-2021 11:29 HTMLViewer.apk
+     33  100644 (1)      0      0   13353625 28-Mar-2021 11:29 IQQIService-Elead-International-20160105.1.apk
+     34  100644 (1)      0      0   27899 28-Mar-2021 11:29 KeyChain.apk
+     35  100644 (1)      0      0   559538 28-Mar-2021 11:29 Music.apk
+     36  100644 (1)      0      0    5648 28-Mar-2021 11:29 PacProcessor.apk
+     37  100644 (1)      0      0   124968 28-Mar-2021 11:29 PackageInstaller.apk
+     38  100644 (1)      0      0   15806 28-Mar-2021 11:29 PicoTts.apk
+     39  100644 (1)      0      0    3678 28-Mar-2021 11:29 Provision.apk
+     40  100644 (1)      0      0   83210 28-Mar-2021 11:29 TelephonyProvider.apk
+     41  100644 (1)      0      0   10907 28-Mar-2021 11:29 UserDictionaryProvider.apk
+     42  100644 (1)      0      0   163088 28-Mar-2021 11:29 VisualizationWallpapers.apk
+     43  100644 (1)      0      0   67623 28-Mar-2021 11:29 WfdSink.apk
+
+--- /priv-app ---
+debugfs 1.47.0 (5-Feb-2023)
+   1288   40777 (2)      0   2000    4096 28-Mar-2021 11:35 .
+      2   40755 (2)      0      0    4096  1-Jan-1970 00:00 ..
+   1289  100644 (1)      0      0   29576 28-Mar-2021 11:29 BackupRestoreConfirmation.apk
+   1290  100644 (1)      0      0   14317 28-Mar-2021 11:29 DefaultContainerService.apk
+   1291  100644 (1)      0      0   247033 28-Mar-2021 11:29 DownloadProvider.apk
+   1292  100644 (1)      0      0   4580386 28-Mar-2021 11:29 EL830LF01_Home.apk
+   1293  100644 (1)      0      0   4041923 28-Mar-2021 11:29 ElSettings.apk
+   1294  100644 (1)      0      0   16937 28-Mar-2021 11:29 ExternalStorageProvider.apk
+   1295  100644 (1)      0      0   10295 28-Mar-2021 11:29 FusedLocation.apk
+   1296  100644 (1)      0      0   66366 28-Mar-2021 11:29 InputDevices.apk
+   1297  100644 (1)      0      0   893170 28-Mar-2021 11:29 Keyguard.apk
+   1298  100644 (1)      0      0   12267776 28-Mar-2021 11:29 Launcher2
+   1299  100644 (1)      0      0   108229 28-Mar-2021 11:29 MediaProvider.apk
+   1300  100644 (1)      0      0   78200 28-Mar-2021 11:29 MusicFX.apk
+   1301  100644 (1)      0      0   111095055  6-Nov-2020 10:37 Navitel-large.apk
+   1302  100644 (1)      0      0    5691 28-Mar-2021 11:29 OneTimeInitializer.apk
+   1303  100644 (1)      0      0    8182 28-Mar-2021 11:29 ProxyHandler.apk
+   1304  100644 (1)      0      0   119100 28-Mar-2021 11:29 SettingsProvider.apk
+   1305  100644 (1)      0      0    6890 28-Mar-2021 11:29 SharedStorageBackup.apk
+   1306  100644 (1)      0      0   20810 28-Mar-2021 11:29 Shell.apk
+   1307  100644 (1)      0      0   1133036 28-Mar-2021 11:29 SystemUI.apk
+   1308  100644 (1)      0      0   17779 28-Mar-2021 11:29 VpnDialogs.apk
+   1309  100644 (1)      0      0   64390 28-Mar-2021 11:29 WallpaperCropper.apk
+
+debugfs 1.47.0 (5-Feb-2023)
+debugfs 1.47.0 (5-Feb-2023)
+/app/Launcher2.apk: File not found by ext2_lookup 
+debugfs 1.47.0 (5-Feb-2023)
+/app/ElSettings.apk: File not found by ext2_lookup 
+debugfs 1.47.0 (5-Feb-2023)
+/app/Settings.apk: File not found by ext2_lookup 
+debugfs 1.47.0 (5-Feb-2023)
+--- build.prop: модель и версия ---
+ro.build.version.incremental=20140630
+ro.build.version.sdk=19
+ro.build.version.codename=REL
+ro.build.version.release=4.4.2
+ro.product.model=EL_SOLO
+ro.product.brand=solo_v2
+ro.product.name=el_imx6_solo_v2
+ro.product.device=el_imx6_solo_v2
+ro.product.board=EL_SOLO
+ro.product.cpu.abi=armeabi-v7a
+ro.product.cpu.abi2=armeabi
+ro.product.manufacturer=e-lead
+ro.product.locale.language=zh
+ro.product.locale.region=CN
+ro.build.description=el_imx6_solo_v2-userdebug 4.4.2 1.0.0-rc3 20140630 dev-keys
+--- EL830LF01_Home.apk: manifest ---
+package: name='tw.com.elead.el830.home' versionCode='1' versionName='2017.03.09.01'
+sdkVersion:'19'
+targetSdkVersion:'19'
+uses-permission: name='android.permission.CALL_PHONE'
+uses-permission: name='android.permission.GET_TASKS'
+uses-permission: name='android.permission.READ_CONTACTS'
+uses-permission: name='android.permission.SET_WALLPAPER'
+uses-permission: name='android.permission.VIBRATE'
+uses-permission: name='android.permission.INTERNET'
+uses-permission: name='android.permission.EXPAND_STATUS_BAR'
+uses-permission: name='android.permission.BLUETOOTH'
+uses-permission: name='android.permission.BLUETOOTH_ADMIN'
+uses-permission: name='android.permission.SYSTEM_ALERT_WINDOW'
+uses-permission: name='android.permission.WRITE_CALENDAR'
+uses-permission: name='android.permission.SET_TIME'
+uses-permission: name='android.permission.SET_TIME_ZONE'
+uses-permission: name='android.permission.RECEIVE_BOOT_COMPLETED'
+uses-permission: name='android.permission.FORCE_STOP_PACKAGES'
+uses-permission: name='android.permission.ACCESS_WIFI_STATE'
+application-label:'Home'
+application-label-ar:'الصفحة الرئيسية'
+application-label-ar-EG:'الصفحة الرئيسية'
+application-label-es-US:'Inicio'
+application-label-fa:'صفحه اصلی'
+application-label-fr:'Accueil'
+application-label-pt-BR:'Menu'
+application-label-ru-RU:'Главный экран'
+application-label-zh:'Home'
+application-label-zh-CN:'Home'
+application-icon-160:'res/drawable-mdpi/icon.png'
+application-icon-240:'res/drawable-hdpi/icon.png'
+application: label='Home' icon='res/drawable-mdpi/icon.png'
+application-debuggable
+feature-group: label=''
+  uses-feature: name='android.hardware.bluetooth'
+  uses-implied-feature: name='android.hardware.bluetooth' reason='requested android.permission.BLUETOOTH permission, requested android.permission.BLUETOOTH_ADMIN permission, and targetSdkVersion > 4'
+  uses-feature: name='android.hardware.faketouch'
+  uses-implied-feature: name='android.hardware.faketouch' reason='default feature for all apps'
+  uses-feature: name='android.hardware.screen.landscape'
+  uses-implied-feature: name='android.hardware.screen.landscape' reason='one or more activities have specified a landscape orientation'
+  uses-feature: name='android.hardware.telephony'
+  uses-implied-feature: name='android.hardware.telephony' reason='requested a telephony permission'
+  uses-feature: name='android.hardware.wifi'
+  uses-implied-feature: name='android.hardware.wifi' reason='requested android.permission.ACCESS_WIFI_STATE permission'
+provides-component:'launcher'
+main
+other-activities
+other-services
+supports-screens: 'small' 'normal' 'large' 'xlarge'
+supports-any-density: 'true'
+--- HOME и LAUNCHER в дереве manifest ---
+      A: android:name(0x01010003)="android.permission.CALL_PHONE" (Raw: "android.permission.CALL_PHONE")
+      A: android:name(0x01010003)="android.permission.GET_TASKS" (Raw: "android.permission.GET_TASKS")
+      A: android:name(0x01010003)="android.permission.READ_CONTACTS" (Raw: "android.permission.READ_CONTACTS")
+      A: android:name(0x01010003)="android.permission.SET_WALLPAPER" (Raw: "android.permission.SET_WALLPAPER")
+      A: android:name(0x01010003)="android.permission.VIBRATE" (Raw: "android.permission.VIBRATE")
+      A: android:name(0x01010003)="android.permission.INTERNET" (Raw: "android.permission.INTERNET")
+      A: android:name(0x01010003)="android.permission.EXPAND_STATUS_BAR" (Raw: "android.permission.EXPAND_STATUS_BAR")
+      A: android:name(0x01010003)="android.permission.BLUETOOTH" (Raw: "android.permission.BLUETOOTH")
+      A: android:name(0x01010003)="android.permission.BLUETOOTH_ADMIN" (Raw: "android.permission.BLUETOOTH_ADMIN")
+      A: android:name(0x01010003)="android.permission.SYSTEM_ALERT_WINDOW" (Raw: "android.permission.SYSTEM_ALERT_WINDOW")
+      A: android:name(0x01010003)="android.permission.WRITE_CALENDAR" (Raw: "android.permission.WRITE_CALENDAR")
+      A: android:name(0x01010003)="android.permission.SET_TIME" (Raw: "android.permission.SET_TIME")
+      A: android:name(0x01010003)="android.permission.SET_TIME_ZONE" (Raw: "android.permission.SET_TIME_ZONE")
+      A: android:name(0x01010003)="android.permission.RECEIVE_BOOT_COMPLETED" (Raw: "android.permission.RECEIVE_BOOT_COMPLETED")
+      A: android:name(0x01010003)="android.permission.FORCE_STOP_PACKAGES" (Raw: "android.permission.FORCE_STOP_PACKAGES")
+      A: android:name(0x01010003)="android.permission.ACCESS_WIFI_STATE" (Raw: "android.permission.ACCESS_WIFI_STATE")
+      A: android:name(0x01010003)=".HomeApp" (Raw: ".HomeApp")
+        A: android:name(0x01010003)=".Home" (Raw: ".Home")
+            A: android:name(0x01010003)="android.intent.action.MAIN" (Raw: "android.intent.action.MAIN")
+            A: android:name(0x01010003)="android.intent.category.HOME" (Raw: "android.intent.category.HOME")
+            A: android:name(0x01010003)="android.intent.category.DEFAULT" (Raw: "android.intent.category.DEFAULT")
+        A: android:name(0x01010003)=".HomeService" (Raw: ".HomeService")
+            A: android:name(0x01010003)="tw.com.elead.el830.home.IHomeService" (Raw: "tw.com.elead.el830.home.IHomeService")
+        A: android:name(0x01010003)=".HomeNaviService" (Raw: ".HomeNaviService")
+            A: android:name(0x01010003)="tw.com.elead.el830.home.IHomeNaviService" (Raw: "tw.com.elead.el830.home.IHomeNaviService")
+        A: android:name(0x01010003)=".BTDialWindow" (Raw: ".BTDialWindow")
+        A: android:name(0x01010003)="tw.com.elead.el830.setup.SetupActivity" (Raw: "tw.com.elead.el830.setup.SetupActivity")
+        A: android:name(0x01010003)="tw.com.elead.el830.setup.Audio" (Raw: "tw.com.elead.el830.setup.Audio")
+        A: android:name(0x01010003)="tw.com.elead.el830.setup.Default" (Raw: "tw.com.elead.el830.setup.Default")
+        A: android:name(0x01010003)="tw.com.elead.el830.setup.SVC" (Raw: "tw.com.elead.el830.setup.SVC")
+        A: android:name(0x01010003)="tw.com.elead.el830.setup.Version" (Raw: "tw.com.elead.el830.setup.Version")
+        A: android:name(0x01010003)="tw.com.elead.el830.setup.Brightness" (Raw: "tw.com.elead.el830.setup.Brightness")
+        A: android:name(0x01010003)="tw.com.elead.el830.setup.ServiceDiagnosis" (Raw: "tw.com.elead.el830.setup.ServiceDiagnosis")
+        A: android:name(0x01010003)="tw.com.elead.el830.setup.Connection" (Raw: "tw.com.elead.el830.setup.Connection")
+        A: android:name(0x01010003)="tw.com.elead.el830.setup.GPS" (Raw: "tw.com.elead.el830.setup.GPS")
+        A: android:name(0x01010003)="tw.com.elead.el830.setup.MIC" (Raw: "tw.com.elead.el830.setup.MIC")
+        A: android:name(0x01010003)="tw.com.elead.el830.setup.GyroSetting" (Raw: "tw.com.elead.el830.setup.GyroSetting")
+        A: android:name(0x01010003)="tw.com.elead.el830.setup.GyroCalibration" (Raw: "tw.com.elead.el830.setup.GyroCalibration")
+        A: android:name(0x01010003)="tw.com.elead.el830.setup.PowerOffTimer" (Raw: "tw.com.elead.el830.setup.PowerOffTimer")
+        A: android:name(0x01010003)="tw.com.elead.el830.setup.DeveloperDiagnosis" (Raw: "tw.com.elead.el830.setup.DeveloperDiagnosis")
+        A: android:name(0x01010003)="tw.com.elead.el830.setup.Sensor" (Raw: "tw.com.elead.el830.setup.Sensor")
+        A: android:name(0x01010003)="tw.com.elead.el830.setup.RFDevice" (Raw: "tw.com.elead.el830.setup.RFDevice")
+        A: android:name(0x01010003)="tw.com.elead.el830.setup.UUIDActivity" (Raw: "tw.com.elead.el830.setup.UUIDActivity")
+        A: android:name(0x01010003)="tw.com.elead.el830.setup.DeviceIDActivity" (Raw: "tw.com.elead.el830.setup.DeviceIDActivity")
+        A: android:name(0x01010003)="tw.com.elead.el830.setup.WifiMacAddress" (Raw: "tw.com.elead.el830.setup.WifiMacAddress")
+        A: android:name(0x01010003)="tw.com.elead.el830.setup.TimezoneList" (Raw: "tw.com.elead.el830.setup.TimezoneList")
+        A: android:name(0x01010003)="tw.com.elead.el830.setup.TimeSetting" (Raw: "tw.com.elead.el830.setup.TimeSetting")
+        A: android:name(0x01010003)="tw.com.elead.el830.setup.Gesture" (Raw: "tw.com.elead.el830.setup.Gesture")
+        A: android:name(0x01010003)="tw.com.elead.el830.setup.RadioFreq" (Raw: "tw.com.elead.el830.setup.RadioFreq")
+        A: android:name(0x01010003)="tw.com.elead.el830.setup.SysUpgrade" (Raw: "tw.com.elead.el830.setup.SysUpgrade")
+        A: android:name(0x01010003)="tw.com.elead.el830.setup.LanguageList" (Raw: "tw.com.elead.el830.setup.LanguageList")
+        A: android:name(0x01010003)="tw.com.elead.el830.setup.HUDSetting" (Raw: "tw.com.elead.el830.setup.HUDSetting")
+        A: android:name(0x01010003)="tw.com.elead.el830.setup.HUDBrightness" (Raw: "tw.com.elead.el830.setup.HUDBrightness")
+        A: android:name(0x01010003)="tw.com.elead.el830.setup.SafetyConnection" (Raw: "tw.com.elead.el830.setup.SafetyConnection")
+        A: android:name(0x01010003)="tw.com.elead.el830.setup.HUDSpeed" (Raw: "tw.com.elead.el830.setup.HUDSpeed")
+        A: android:name(0x01010003)="tw.com.elead.el830.setup.DateSetting" (Raw: "tw.com.elead.el830.setup.DateSetting")
+        A: android:name(0x01010003)="tw.com.elead.el830.setup.Time" (Raw: "tw.com.elead.el830.setup.Time")
+        A: android:name(0x01010003)="tw.com.elead.el830.setup.Wallpaper" (Raw: "tw.com.elead.el830.setup.Wallpaper")
+        A: android:name(0x01010003)="tw.com.elead.el830.setup.Speaker" (Raw: "tw.com.elead.el830.setup.Speaker")
+        A: android:name(0x01010003)="tw.com.elead.el830.setup.Graphic" (Raw: "tw.com.elead.el830.setup.Graphic")
+        A: android:name(0x01010003)="tw.com.elead.el830.setup.EQ" (Raw: "tw.com.elead.el830.setup.EQ")
+        A: android:name(0x01010003)="tw.com.elead.el830.setup.StealthMode" (Raw: "tw.com.elead.el830.setup.StealthMode")
+        A: android:name(0x01010003)="tw.com.elead.el830.setup.SetupService" (Raw: "tw.com.elead.el830.setup.SetupService")
+            A: android:name(0x01010003)="tw.com.elead.el830.setup.ISetupService" (Raw: "tw.com.elead.el830.setup.ISetupService")
+
+## Init и скрипты обновления (файлы вне образов)
+--- /home/runner/work/_temp/stock/unpacked/backup/config.ini ---
