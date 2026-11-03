@@ -1,0 +1,538 @@
+# Сравнение прошивок: дилер / дилер-время / энтузиаст
+Это статический анализ содержимого; результат не подтверждает работоспособность на устройстве.
+
+## Состав dealer
+MCU_FW.hex 75083 bc341c6de95c18babcaa8664c585236ea02828c7de4fba30c97380108bdcb495
+boot.img 3926016 060d291a523bbe0d40c86537f070ed0feb90e04e0db0efef2a3e4594e9223b4b
+config.ini 83 71d5f037d7d07ca128601698de15338e8a66b1cf1f287e4c4ea7f51b87194f4b
+sd_boot.img 48758784 734f6b6442108916df89303ec5f52ceaa0ebb927d3b984a1e8a85ef2a6c12597
+system.img 377487360 f70a5e42f9cc9f819486b2af2ee26f8c9567eb4f9ec8056ef9e0676684b79592
+u-boot.bin 110448 7d1cb6b366dda8ef0ea51c3350689d365032ed47e172c6e23dac7a63ae33f002
+
+## Свойства dealer
+ro.build.id=1.0.0-rc3
+ro.build.display.id=el_imx6_solo_v2-userdebug 4.4.2 1.0.0-rc3 20140630 dev-keys
+ro.build.version.incremental=20140630
+ro.build.version.sdk=19
+ro.build.version.codename=REL
+ro.build.version.release=4.4.2
+ro.build.date=Thu Mar  9 15:30:40 CST 2017
+ro.build.date.utc=1489044640
+ro.build.type=userdebug
+ro.build.user=chian
+ro.build.host=ELEAD-UBUNTU2
+ro.build.tags=dev-keys
+ro.product.model=EL_SOLO
+ro.product.brand=solo_v2
+ro.product.name=el_imx6_solo_v2
+ro.product.device=el_imx6_solo_v2
+ro.product.board=EL_SOLO
+ro.product.cpu.abi=armeabi-v7a
+ro.product.cpu.abi2=armeabi
+ro.product.manufacturer=e-lead
+ro.product.locale.language=zh
+ro.product.locale.region=CN
+ro.build.product=el_imx6_solo_v2
+ro.build.description=el_imx6_solo_v2-userdebug 4.4.2 1.0.0-rc3 20140630 dev-keys
+ro.build.fingerprint=solo_v2/el_imx6_solo_v2/el_imx6_solo_v2:4.4.2/1.0.0-rc3/20140630:userdebug/dev-keys
+ro.build.characteristics=tablet
+persist.sys.dalvik.vm.lib=libdvm.so
+
+## Интересующие APK dealer
+
+### EL831CLF01_MirrorLink_2016.06.13.01.apk size= 1959442 sha256= 2ced955173e99c63079ef5db925a23c5106d53848bae56989affbc0b2affde4c
+aapt exit: 0
+package: name='com.fpt.mirrorlink.android' versionCode='1' versionName='2016.06.13.01'
+sdkVersion:'10'
+targetSdkVersion:'19'
+application: label='MLink' icon='res/drawable-mdpi/mirrorlink_icon.png'
+launchable-activity: name='com.fpt.mirrorlink.android.view.MainActivity'  label='' icon=''
+apksigner verify exit: 0
+V1 Signer: certificate DN: CN=Android Debug, O=Android, C=US
+V1 Signer: certificate SHA-256 digest: e80f5d4f9a371e56fed44bd8829536d64643b9530e1675266282fe3f22343239
+V1 Signer: certificate SHA-1 digest: 16573593d409e398da879a1cf7ecadc4f9d3f653
+V1 Signer: certificate MD5 digest: 77892ed84167ddc315ef91276bd5fc7b
+zip test: OK
+AndroidManifest.xml sha256= b31c1db43503164ac5503ae5194683176806971a0b337e0f1ae38d05ae19b67f size= 6360
+classes.dex sha256= eb77f4f60a44a349c7996844cd73e194330e15aba4dfc98f01ef33bfebfb7fe1 size= 3012460
+native ABIs: none
+native library count: 0
+
+### PackageInstaller.apk size= 124968 sha256= 39abdee3fc202e75bba6b3fc1c8d91081d3ff9bfeaa4c4e1297634f827794f5b
+aapt exit: 0
+package: name='com.android.packageinstaller' versionCode='19' versionName='4.4.2-20140630'
+sdkVersion:'19'
+targetSdkVersion:'19'
+application: label='Package installer' icon=''
+apksigner verify exit: 0
+V1 Signer: certificate DN: EMAILADDRESS=android@freescale.com, CN=Android, OU=Android, O=Android, L=Mountain View, ST=California, C=US
+V1 Signer: certificate SHA-256 digest: 7fbae817b7db24642d8959c347b561c003c6cfde2cb10f909c932f21a4d6d804
+V1 Signer: certificate SHA-1 digest: 3e0caf3d799fbaec566facbe1a67fb250bdefd93
+V1 Signer: certificate MD5 digest: 748a35b8c2e489de57f2d360315efe3d
+zip test: OK
+AndroidManifest.xml sha256= dfc43a96d3129c6629b6c34f70a2e4e46d7d26374e0c0042254bb3ceea9d9c21 size= 5592
+classes.dex sha256= fb9e28dc2bb166e281d5eb4ee1029f320ed0973b775fdebcc54d413384ad3bee size= 138272
+native ABIs: none
+native library count: 0
+
+### EL830LF01_Home.apk size= 4580386 sha256= 75ee685d5399e4c394146cac593ec2ed4bfbd5f6cc9151f9ae479992c84011a6
+aapt exit: 0
+package: name='tw.com.elead.el830.home' versionCode='1' versionName='2017.03.09.01'
+sdkVersion:'19'
+targetSdkVersion:'19'
+application: label='Home' icon='res/drawable-mdpi/icon.png'
+native-code: 'armeabi-v7a'
+apksigner verify exit: 0
+V1 Signer: certificate DN: EMAILADDRESS=android@freescale.com, CN=Android, OU=Android, O=Android, L=Mountain View, ST=California, C=US
+V1 Signer: certificate SHA-256 digest: 7fbae817b7db24642d8959c347b561c003c6cfde2cb10f909c932f21a4d6d804
+V1 Signer: certificate SHA-1 digest: 3e0caf3d799fbaec566facbe1a67fb250bdefd93
+V1 Signer: certificate MD5 digest: 748a35b8c2e489de57f2d360315efe3d
+zip test: OK
+AndroidManifest.xml sha256= 3e580af0c923307c998db164b1997aa6f74c0cf5f1452dc594e039ae057ec0c6 size= 13684
+classes.dex sha256= d8b41f3b89ce3828022a0780a0aad4e105861c8c4b42636ac4b8cfae50114f20 size= 1853604
+native ABIs: armeabi-v7a
+native library count: 6
+
+### ElSettings.apk size= 4041923 sha256= 7bad36157589f7cc4f2f5810cde4fc796b28a9379c5493f3bdfa6aa0eae33bbe
+aapt exit: 0
+package: name='com.android.settings' versionCode='19' versionName='4.4.2-20140630'
+sdkVersion:'19'
+targetSdkVersion:'19'
+application: label='Settings' icon='res/mipmap-mdpi/ic_launcher_settings.png'
+launchable-activity: name='com.android.settings.Settings'  label='Settings' icon=''
+apksigner verify exit: 0
+V1 Signer: certificate DN: EMAILADDRESS=android@freescale.com, CN=Android, OU=Android, O=Android, L=Mountain View, ST=California, C=US
+V1 Signer: certificate SHA-256 digest: 7fbae817b7db24642d8959c347b561c003c6cfde2cb10f909c932f21a4d6d804
+V1 Signer: certificate SHA-1 digest: 3e0caf3d799fbaec566facbe1a67fb250bdefd93
+V1 Signer: certificate MD5 digest: 748a35b8c2e489de57f2d360315efe3d
+zip test: OK
+AndroidManifest.xml sha256= 29f34cd323fbdba2156e2139bbeab47a7785bcc72b1e8163e31add6b0fd8fe97 size= 101556
+classes.dex sha256= f9b2e46a338fb832cc8813e335034b0c3ee12268da1366f906750ec2fb15a985 size= 1372124
+native ABIs: none
+native library count: 0
+
+### Launcher2 size= 12267776 sha256= 82787a6007589a169242f2c1391252342a9824748a8b469d1d522acab83458e6
+aapt exit: 0
+package: name='com.android.launcher' versionCode='19' versionName='4.4.2-20140630'
+sdkVersion:'19'
+targetSdkVersion:'19'
+application: label='Launcher' icon='res/mipmap-mdpi/ic_launcher_home.png'
+apksigner verify exit: 0
+V1 Signer: certificate DN: EMAILADDRESS=android@freescale.com, CN=Android, OU=Android, O=Android, L=Mountain View, ST=California, C=US
+V1 Signer: certificate SHA-256 digest: 212912e875e5077f955c3079b6ceb1151c2b64d9bd9f6673dceff70d312eb2d5
+V1 Signer: certificate SHA-1 digest: 759cdd0e646c6aedd91c9436fa664570fdf285d6
+V1 Signer: certificate MD5 digest: 53f8307d4d7aaa9817b1d38497cf21a7
+zip test: OK
+AndroidManifest.xml sha256= 7c19a39f7186d552b4e27c921ef1aaa89236c6135e7e3acba1b606cb0eec9b9b size= 9408
+classes.dex sha256= c4f9454699a42e45c82903cae626a59d5138502872ad2accbf1b7bc99bc02d37 size= 514804
+native ABIs: none
+native library count: 0
+
+### Navitel-large-9.6.2765.apk size= 100604920 sha256= d93b10c6e1d938f4f8c65764c53d37b9b8d38772dc4b01344be1e176d4642853
+aapt exit: 0
+package: name='com.navitel' versionCode='160608003' versionName='9.6.2765'
+sdkVersion:'5'
+targetSdkVersion:'9'
+application: label='Navitel' icon='res/drawable-mdpi-v4/icon.png'
+launchable-activity: name='com.navitel.Navitel'  label='Navitel' icon=''
+native-code: 'armeabi' 'x86'
+apksigner verify exit: 0
+V1 Signer: certificate DN: CN=Unknown, OU=R&D, O=JSC CNT, L=Moscow, ST=Unknown, C=RU
+V1 Signer: certificate SHA-256 digest: 5358662d39856446c7391c699878e0509f7ed0657d7634c0083e07b08ad2f035
+V1 Signer: certificate SHA-1 digest: 775adfe54734ff4ec440040442ec3b2c39b75faf
+V1 Signer: certificate MD5 digest: 6d20e59c42dbe5f1dcdc5eee73df11c9
+zip test: OK
+AndroidManifest.xml sha256= 8137e90fd39b80367abddab24e70b7f4aa6536560fca35f2cc16a0df2ecfc818 size= 22208
+classes.dex sha256= 243cdc6e9c6c70da73d2a53baccbabf8c8cfad48df54af1ac094933784183002 size= 2749136
+native ABIs: armeabi, x86
+native library count: 3
+
+## Состав dealer-time
+831-LF01-20170309_time_Russia/MCU_FW.hex 75083 bc341c6de95c18babcaa8664c585236ea02828c7de4fba30c97380108bdcb495
+831-LF01-20170309_time_Russia/boot.img 3926016 060d291a523bbe0d40c86537f070ed0feb90e04e0db0efef2a3e4594e9223b4b
+831-LF01-20170309_time_Russia/sd_boot.img 48758784 734f6b6442108916df89303ec5f52ceaa0ebb927d3b984a1e8a85ef2a6c12597
+831-LF01-20170309_time_Russia/system.img 377487360 f70a5e42f9cc9f819486b2af2ee26f8c9567eb4f9ec8056ef9e0676684b79592
+831-LF01-20170309_time_Russia/u-boot.bin 110448 7d1cb6b366dda8ef0ea51c3350689d365032ed47e172c6e23dac7a63ae33f002
+
+## Свойства dealer-time
+ro.build.id=1.0.0-rc3
+ro.build.display.id=el_imx6_solo_v2-userdebug 4.4.2 1.0.0-rc3 20140630 dev-keys
+ro.build.version.incremental=20140630
+ro.build.version.sdk=19
+ro.build.version.codename=REL
+ro.build.version.release=4.4.2
+ro.build.date=Thu Mar  9 15:30:40 CST 2017
+ro.build.date.utc=1489044640
+ro.build.type=userdebug
+ro.build.user=chian
+ro.build.host=ELEAD-UBUNTU2
+ro.build.tags=dev-keys
+ro.product.model=EL_SOLO
+ro.product.brand=solo_v2
+ro.product.name=el_imx6_solo_v2
+ro.product.device=el_imx6_solo_v2
+ro.product.board=EL_SOLO
+ro.product.cpu.abi=armeabi-v7a
+ro.product.cpu.abi2=armeabi
+ro.product.manufacturer=e-lead
+ro.product.locale.language=zh
+ro.product.locale.region=CN
+ro.build.product=el_imx6_solo_v2
+ro.build.description=el_imx6_solo_v2-userdebug 4.4.2 1.0.0-rc3 20140630 dev-keys
+ro.build.fingerprint=solo_v2/el_imx6_solo_v2/el_imx6_solo_v2:4.4.2/1.0.0-rc3/20140630:userdebug/dev-keys
+ro.build.characteristics=tablet
+persist.sys.dalvik.vm.lib=libdvm.so
+
+## Интересующие APK dealer-time
+
+### EL831CLF01_MirrorLink_2016.06.13.01.apk size= 1959442 sha256= 2ced955173e99c63079ef5db925a23c5106d53848bae56989affbc0b2affde4c
+aapt exit: 0
+package: name='com.fpt.mirrorlink.android' versionCode='1' versionName='2016.06.13.01'
+sdkVersion:'10'
+targetSdkVersion:'19'
+application: label='MLink' icon='res/drawable-mdpi/mirrorlink_icon.png'
+launchable-activity: name='com.fpt.mirrorlink.android.view.MainActivity'  label='' icon=''
+apksigner verify exit: 0
+V1 Signer: certificate DN: CN=Android Debug, O=Android, C=US
+V1 Signer: certificate SHA-256 digest: e80f5d4f9a371e56fed44bd8829536d64643b9530e1675266282fe3f22343239
+V1 Signer: certificate SHA-1 digest: 16573593d409e398da879a1cf7ecadc4f9d3f653
+V1 Signer: certificate MD5 digest: 77892ed84167ddc315ef91276bd5fc7b
+zip test: OK
+AndroidManifest.xml sha256= b31c1db43503164ac5503ae5194683176806971a0b337e0f1ae38d05ae19b67f size= 6360
+classes.dex sha256= eb77f4f60a44a349c7996844cd73e194330e15aba4dfc98f01ef33bfebfb7fe1 size= 3012460
+native ABIs: none
+native library count: 0
+
+### PackageInstaller.apk size= 124968 sha256= 39abdee3fc202e75bba6b3fc1c8d91081d3ff9bfeaa4c4e1297634f827794f5b
+aapt exit: 0
+package: name='com.android.packageinstaller' versionCode='19' versionName='4.4.2-20140630'
+sdkVersion:'19'
+targetSdkVersion:'19'
+application: label='Package installer' icon=''
+apksigner verify exit: 0
+V1 Signer: certificate DN: EMAILADDRESS=android@freescale.com, CN=Android, OU=Android, O=Android, L=Mountain View, ST=California, C=US
+V1 Signer: certificate SHA-256 digest: 7fbae817b7db24642d8959c347b561c003c6cfde2cb10f909c932f21a4d6d804
+V1 Signer: certificate SHA-1 digest: 3e0caf3d799fbaec566facbe1a67fb250bdefd93
+V1 Signer: certificate MD5 digest: 748a35b8c2e489de57f2d360315efe3d
+zip test: OK
+AndroidManifest.xml sha256= dfc43a96d3129c6629b6c34f70a2e4e46d7d26374e0c0042254bb3ceea9d9c21 size= 5592
+classes.dex sha256= fb9e28dc2bb166e281d5eb4ee1029f320ed0973b775fdebcc54d413384ad3bee size= 138272
+native ABIs: none
+native library count: 0
+
+### EL830LF01_Home.apk size= 4580386 sha256= 75ee685d5399e4c394146cac593ec2ed4bfbd5f6cc9151f9ae479992c84011a6
+aapt exit: 0
+package: name='tw.com.elead.el830.home' versionCode='1' versionName='2017.03.09.01'
+sdkVersion:'19'
+targetSdkVersion:'19'
+application: label='Home' icon='res/drawable-mdpi/icon.png'
+native-code: 'armeabi-v7a'
+apksigner verify exit: 0
+V1 Signer: certificate DN: EMAILADDRESS=android@freescale.com, CN=Android, OU=Android, O=Android, L=Mountain View, ST=California, C=US
+V1 Signer: certificate SHA-256 digest: 7fbae817b7db24642d8959c347b561c003c6cfde2cb10f909c932f21a4d6d804
+V1 Signer: certificate SHA-1 digest: 3e0caf3d799fbaec566facbe1a67fb250bdefd93
+V1 Signer: certificate MD5 digest: 748a35b8c2e489de57f2d360315efe3d
+zip test: OK
+AndroidManifest.xml sha256= 3e580af0c923307c998db164b1997aa6f74c0cf5f1452dc594e039ae057ec0c6 size= 13684
+classes.dex sha256= d8b41f3b89ce3828022a0780a0aad4e105861c8c4b42636ac4b8cfae50114f20 size= 1853604
+native ABIs: armeabi-v7a
+native library count: 6
+
+### ElSettings.apk size= 4041923 sha256= 7bad36157589f7cc4f2f5810cde4fc796b28a9379c5493f3bdfa6aa0eae33bbe
+aapt exit: 0
+package: name='com.android.settings' versionCode='19' versionName='4.4.2-20140630'
+sdkVersion:'19'
+targetSdkVersion:'19'
+application: label='Settings' icon='res/mipmap-mdpi/ic_launcher_settings.png'
+launchable-activity: name='com.android.settings.Settings'  label='Settings' icon=''
+apksigner verify exit: 0
+V1 Signer: certificate DN: EMAILADDRESS=android@freescale.com, CN=Android, OU=Android, O=Android, L=Mountain View, ST=California, C=US
+V1 Signer: certificate SHA-256 digest: 7fbae817b7db24642d8959c347b561c003c6cfde2cb10f909c932f21a4d6d804
+V1 Signer: certificate SHA-1 digest: 3e0caf3d799fbaec566facbe1a67fb250bdefd93
+V1 Signer: certificate MD5 digest: 748a35b8c2e489de57f2d360315efe3d
+zip test: OK
+AndroidManifest.xml sha256= 29f34cd323fbdba2156e2139bbeab47a7785bcc72b1e8163e31add6b0fd8fe97 size= 101556
+classes.dex sha256= f9b2e46a338fb832cc8813e335034b0c3ee12268da1366f906750ec2fb15a985 size= 1372124
+native ABIs: none
+native library count: 0
+
+### Launcher2 size= 12267776 sha256= 82787a6007589a169242f2c1391252342a9824748a8b469d1d522acab83458e6
+aapt exit: 0
+package: name='com.android.launcher' versionCode='19' versionName='4.4.2-20140630'
+sdkVersion:'19'
+targetSdkVersion:'19'
+application: label='Launcher' icon='res/mipmap-mdpi/ic_launcher_home.png'
+apksigner verify exit: 0
+V1 Signer: certificate DN: EMAILADDRESS=android@freescale.com, CN=Android, OU=Android, O=Android, L=Mountain View, ST=California, C=US
+V1 Signer: certificate SHA-256 digest: 212912e875e5077f955c3079b6ceb1151c2b64d9bd9f6673dceff70d312eb2d5
+V1 Signer: certificate SHA-1 digest: 759cdd0e646c6aedd91c9436fa664570fdf285d6
+V1 Signer: certificate MD5 digest: 53f8307d4d7aaa9817b1d38497cf21a7
+zip test: OK
+AndroidManifest.xml sha256= 7c19a39f7186d552b4e27c921ef1aaa89236c6135e7e3acba1b606cb0eec9b9b size= 9408
+classes.dex sha256= c4f9454699a42e45c82903cae626a59d5138502872ad2accbf1b7bc99bc02d37 size= 514804
+native ABIs: none
+native library count: 0
+
+### Navitel-large-9.6.2765.apk size= 100604920 sha256= d93b10c6e1d938f4f8c65764c53d37b9b8d38772dc4b01344be1e176d4642853
+aapt exit: 0
+package: name='com.navitel' versionCode='160608003' versionName='9.6.2765'
+sdkVersion:'5'
+targetSdkVersion:'9'
+application: label='Navitel' icon='res/drawable-mdpi-v4/icon.png'
+launchable-activity: name='com.navitel.Navitel'  label='Navitel' icon=''
+native-code: 'armeabi' 'x86'
+apksigner verify exit: 0
+V1 Signer: certificate DN: CN=Unknown, OU=R&D, O=JSC CNT, L=Moscow, ST=Unknown, C=RU
+V1 Signer: certificate SHA-256 digest: 5358662d39856446c7391c699878e0509f7ed0657d7634c0083e07b08ad2f035
+V1 Signer: certificate SHA-1 digest: 775adfe54734ff4ec440040442ec3b2c39b75faf
+V1 Signer: certificate MD5 digest: 6d20e59c42dbe5f1dcdc5eee73df11c9
+zip test: OK
+AndroidManifest.xml sha256= 8137e90fd39b80367abddab24e70b7f4aa6536560fca35f2cc16a0df2ecfc818 size= 22208
+classes.dex sha256= 243cdc6e9c6c70da73d2a53baccbabf8c8cfad48df54af1ac094933784183002 size= 2749136
+native ABIs: armeabi, x86
+native library count: 3
+
+## Состав enthusiast
+MCU_FW.hex 75083 bc341c6de95c18babcaa8664c585236ea02828c7de4fba30c97380108bdcb495
+backup/config.ini 83 0d2481ced64fe652efe0a360df357bc939b9727dd68aa65c6b0121e4ae608fad
+boot.img 3926016 060d291a523bbe0d40c86537f070ed0feb90e04e0db0efef2a3e4594e9223b4b
+sd_boot.img 48758784 734f6b6442108916df89303ec5f52ceaa0ebb927d3b984a1e8a85ef2a6c12597
+system.img 377487360 b6bbbe529942ffec250cad993ae9cbb808721c27cf2536fb3fb11120130e8545
+u-boot.bin 110448 7d1cb6b366dda8ef0ea51c3350689d365032ed47e172c6e23dac7a63ae33f002
+
+## Свойства enthusiast
+ro.build.id=1.0.0-rc3
+ro.build.display.id=el_imx6_solo_v2-userdebug 4.4.2 1.0.0-rc3 20140630 dev-keys
+ro.build.version.incremental=20140630
+ro.build.version.sdk=19
+ro.build.version.codename=REL
+ro.build.version.release=4.4.2
+ro.build.date=Thu Mar  9 15:30:40 CST 2017
+ro.build.date.utc=1489044640
+ro.build.type=userdebug
+ro.build.user=chian
+ro.build.host=ELEAD-UBUNTU2
+ro.build.tags=dev-keys
+ro.product.model=EL_SOLO
+ro.product.brand=solo_v2
+ro.product.name=el_imx6_solo_v2
+ro.product.device=el_imx6_solo_v2
+ro.product.board=EL_SOLO
+ro.product.cpu.abi=armeabi-v7a
+ro.product.cpu.abi2=armeabi
+ro.product.manufacturer=e-lead
+ro.product.locale.language=zh
+ro.product.locale.region=CN
+ro.build.product=el_imx6_solo_v2
+ro.build.description=el_imx6_solo_v2-userdebug 4.4.2 1.0.0-rc3 20140630 dev-keys
+ro.build.fingerprint=solo_v2/el_imx6_solo_v2/el_imx6_solo_v2:4.4.2/1.0.0-rc3/20140630:userdebug/dev-keys
+ro.build.characteristics=tablet
+persist.sys.dalvik.vm.lib=libdvm.so
+
+## Интересующие APK enthusiast
+
+### EL831CLF01_MirrorLink_2016.06.13.01.apk size= 1959442 sha256= 2ced955173e99c63079ef5db925a23c5106d53848bae56989affbc0b2affde4c
+aapt exit: 0
+package: name='com.fpt.mirrorlink.android' versionCode='1' versionName='2016.06.13.01'
+sdkVersion:'10'
+targetSdkVersion:'19'
+application: label='MLink' icon='res/drawable-mdpi/mirrorlink_icon.png'
+launchable-activity: name='com.fpt.mirrorlink.android.view.MainActivity'  label='' icon=''
+apksigner verify exit: 0
+V1 Signer: certificate DN: CN=Android Debug, O=Android, C=US
+V1 Signer: certificate SHA-256 digest: e80f5d4f9a371e56fed44bd8829536d64643b9530e1675266282fe3f22343239
+V1 Signer: certificate SHA-1 digest: 16573593d409e398da879a1cf7ecadc4f9d3f653
+V1 Signer: certificate MD5 digest: 77892ed84167ddc315ef91276bd5fc7b
+zip test: OK
+AndroidManifest.xml sha256= b31c1db43503164ac5503ae5194683176806971a0b337e0f1ae38d05ae19b67f size= 6360
+classes.dex sha256= eb77f4f60a44a349c7996844cd73e194330e15aba4dfc98f01ef33bfebfb7fe1 size= 3012460
+native ABIs: none
+native library count: 0
+
+### PackageInstaller.apk size= 124968 sha256= 39abdee3fc202e75bba6b3fc1c8d91081d3ff9bfeaa4c4e1297634f827794f5b
+aapt exit: 0
+package: name='com.android.packageinstaller' versionCode='19' versionName='4.4.2-20140630'
+sdkVersion:'19'
+targetSdkVersion:'19'
+application: label='Package installer' icon=''
+apksigner verify exit: 0
+V1 Signer: certificate DN: EMAILADDRESS=android@freescale.com, CN=Android, OU=Android, O=Android, L=Mountain View, ST=California, C=US
+V1 Signer: certificate SHA-256 digest: 7fbae817b7db24642d8959c347b561c003c6cfde2cb10f909c932f21a4d6d804
+V1 Signer: certificate SHA-1 digest: 3e0caf3d799fbaec566facbe1a67fb250bdefd93
+V1 Signer: certificate MD5 digest: 748a35b8c2e489de57f2d360315efe3d
+zip test: OK
+AndroidManifest.xml sha256= dfc43a96d3129c6629b6c34f70a2e4e46d7d26374e0c0042254bb3ceea9d9c21 size= 5592
+classes.dex sha256= fb9e28dc2bb166e281d5eb4ee1029f320ed0973b775fdebcc54d413384ad3bee size= 138272
+native ABIs: none
+native library count: 0
+
+### EL830LF01_Home.apk size= 4580386 sha256= 75ee685d5399e4c394146cac593ec2ed4bfbd5f6cc9151f9ae479992c84011a6
+aapt exit: 0
+package: name='tw.com.elead.el830.home' versionCode='1' versionName='2017.03.09.01'
+sdkVersion:'19'
+targetSdkVersion:'19'
+application: label='Home' icon='res/drawable-mdpi/icon.png'
+native-code: 'armeabi-v7a'
+apksigner verify exit: 0
+V1 Signer: certificate DN: EMAILADDRESS=android@freescale.com, CN=Android, OU=Android, O=Android, L=Mountain View, ST=California, C=US
+V1 Signer: certificate SHA-256 digest: 7fbae817b7db24642d8959c347b561c003c6cfde2cb10f909c932f21a4d6d804
+V1 Signer: certificate SHA-1 digest: 3e0caf3d799fbaec566facbe1a67fb250bdefd93
+V1 Signer: certificate MD5 digest: 748a35b8c2e489de57f2d360315efe3d
+zip test: OK
+AndroidManifest.xml sha256= 3e580af0c923307c998db164b1997aa6f74c0cf5f1452dc594e039ae057ec0c6 size= 13684
+classes.dex sha256= d8b41f3b89ce3828022a0780a0aad4e105861c8c4b42636ac4b8cfae50114f20 size= 1853604
+native ABIs: armeabi-v7a
+native library count: 6
+
+### ElSettings.apk size= 4041923 sha256= 7bad36157589f7cc4f2f5810cde4fc796b28a9379c5493f3bdfa6aa0eae33bbe
+aapt exit: 0
+package: name='com.android.settings' versionCode='19' versionName='4.4.2-20140630'
+sdkVersion:'19'
+targetSdkVersion:'19'
+application: label='Settings' icon='res/mipmap-mdpi/ic_launcher_settings.png'
+launchable-activity: name='com.android.settings.Settings'  label='Settings' icon=''
+apksigner verify exit: 0
+V1 Signer: certificate DN: EMAILADDRESS=android@freescale.com, CN=Android, OU=Android, O=Android, L=Mountain View, ST=California, C=US
+V1 Signer: certificate SHA-256 digest: 7fbae817b7db24642d8959c347b561c003c6cfde2cb10f909c932f21a4d6d804
+V1 Signer: certificate SHA-1 digest: 3e0caf3d799fbaec566facbe1a67fb250bdefd93
+V1 Signer: certificate MD5 digest: 748a35b8c2e489de57f2d360315efe3d
+zip test: OK
+AndroidManifest.xml sha256= 29f34cd323fbdba2156e2139bbeab47a7785bcc72b1e8163e31add6b0fd8fe97 size= 101556
+classes.dex sha256= f9b2e46a338fb832cc8813e335034b0c3ee12268da1366f906750ec2fb15a985 size= 1372124
+native ABIs: none
+native library count: 0
+
+### Launcher2 size= 12267776 sha256= 82787a6007589a169242f2c1391252342a9824748a8b469d1d522acab83458e6
+aapt exit: 0
+package: name='com.android.launcher' versionCode='19' versionName='4.4.2-20140630'
+sdkVersion:'19'
+targetSdkVersion:'19'
+application: label='Launcher' icon='res/mipmap-mdpi/ic_launcher_home.png'
+apksigner verify exit: 0
+V1 Signer: certificate DN: EMAILADDRESS=android@freescale.com, CN=Android, OU=Android, O=Android, L=Mountain View, ST=California, C=US
+V1 Signer: certificate SHA-256 digest: 212912e875e5077f955c3079b6ceb1151c2b64d9bd9f6673dceff70d312eb2d5
+V1 Signer: certificate SHA-1 digest: 759cdd0e646c6aedd91c9436fa664570fdf285d6
+V1 Signer: certificate MD5 digest: 53f8307d4d7aaa9817b1d38497cf21a7
+zip test: OK
+AndroidManifest.xml sha256= 7c19a39f7186d552b4e27c921ef1aaa89236c6135e7e3acba1b606cb0eec9b9b size= 9408
+classes.dex sha256= c4f9454699a42e45c82903cae626a59d5138502872ad2accbf1b7bc99bc02d37 size= 514804
+native ABIs: none
+native library count: 0
+
+### Navitel-large.apk size= 111095055 sha256= 6e216ab39aacaafacda1ebb09f6edc8726e4d1eb6b4985256ccd18aeb5046c44
+aapt exit: 0
+package: name='com.navitel' versionCode='201103033' versionName='9.13.73' platformBuildVersionName='9' platformBuildVersionCode='28' compileSdkVersion='23' compileSdkVersionCodename='6.0-2438415'
+sdkVersion:'14'
+targetSdkVersion:'28'
+application: label='Navitel' icon='res/mipmap-anydpi-v26/ic_launcher.xml'
+launchable-activity: name='com.navitel.Navitel'  label='Navitel' icon=''
+native-code: 'armeabi-v7a'
+apksigner verify exit: 0
+V3.0 Signer: certificate DN: EMAILADDRESS=android@android.com, CN=Android, OU=Android, O=Android, L=Mountain View, ST=California, C=US
+V3.0 Signer: certificate SHA-256 digest: a40da80a59d170caa950cf15c18c454d47a39b26989d8b640ecd745ba71bf5dc
+V3.0 Signer: certificate SHA-1 digest: 61ed377e85d386a8dfee6b864bd85b0bfaa5af81
+V3.0 Signer: certificate MD5 digest: e89b158e4bcf988ebd09eb83f5378e87
+zip test: OK
+AndroidManifest.xml sha256= 2b1bfcee130b2ebc06a3fa489e0431d2ef7fb85ce768e0f2cedf0d3cc1663569 size= 23868
+classes.dex sha256= e7c776ed721cdf269b0302eff42af6dca55c6012877c16688a02ca8d08ec6eaa size= 3336752
+native ABIs: armeabi-v7a
+native library count: 2
+
+## dealer system -> dealer-time system
+unique files/symlinks before/after: 1342 / 1342
+
+### Removed 0
+
+### Added 0
+
+### Changed 0
+
+### Text differences (UTF-8, bounded)
+
+## dealer-time system -> enthusiast system
+unique files/symlinks before/after: 1342 / 1342
+
+### Removed 2
+lib/libNavitelService.so | ('file', 13598503, '1baa4d67b15ef07800afc534c895e609be062d1d1083973eb3f919420f01493f') => -
+priv-app/Navitel-large-9.6.2765.apk | ('file', 100604920, 'd93b10c6e1d938f4f8c65764c53d37b9b8d38772dc4b01344be1e176d4642853') => -
+
+### Added 2
+lib/libnavitel.so | - => ('file', 15501520, '124de68163955e088f6ba8aaa2c7610ab2737c4187d08a80375985048a834a6f')
+priv-app/Navitel-large.apk | - => ('file', 111095055, '6e216ab39aacaafacda1ebb09f6edc8726e4d1eb6b4985256ccd18aeb5046c44')
+
+### Changed 1
+lib/libWebLinkServerLib.so | ('file', 75896, 'd8b5a04de637e0ea2a1a4f922493af2a8ae773b5a4386e9202797d1e5b561e30') => ('file', 125396, 'e7a706e3b7a439b6e9eb1c9c3c8161b09c170ed6c08b86642ef7bd9fec60fc4d')
+
+### Text differences (UTF-8, bounded)
+
+## dealer system -> enthusiast system
+unique files/symlinks before/after: 1342 / 1342
+
+### Removed 2
+lib/libNavitelService.so | ('file', 13598503, '1baa4d67b15ef07800afc534c895e609be062d1d1083973eb3f919420f01493f') => -
+priv-app/Navitel-large-9.6.2765.apk | ('file', 100604920, 'd93b10c6e1d938f4f8c65764c53d37b9b8d38772dc4b01344be1e176d4642853') => -
+
+### Added 2
+lib/libnavitel.so | - => ('file', 15501520, '124de68163955e088f6ba8aaa2c7610ab2737c4187d08a80375985048a834a6f')
+priv-app/Navitel-large.apk | - => ('file', 111095055, '6e216ab39aacaafacda1ebb09f6edc8726e4d1eb6b4985256ccd18aeb5046c44')
+
+### Changed 1
+lib/libWebLinkServerLib.so | ('file', 75896, 'd8b5a04de637e0ea2a1a4f922493af2a8ae773b5a4386e9202797d1e5b561e30') => ('file', 125396, 'e7a706e3b7a439b6e9eb1c9c3c8161b09c170ed6c08b86642ef7bd9fec60fc4d')
+
+### Text differences (UTF-8, bounded)
+
+ramdisk dealer boot.img kernel=3588212 ramdisk=332703 page=2048
+
+ramdisk dealer-time boot.img kernel=3588212 ramdisk=332703 page=2048
+
+ramdisk enthusiast boot.img kernel=3588212 ramdisk=332703 page=2048
+
+## dealer boot.img ramdisk -> dealer-time
+unique files/symlinks before/after: 19 / 19
+
+### Removed 0
+
+### Added 0
+
+### Changed 0
+
+### Text differences (UTF-8, bounded)
+
+## dealer-time boot.img ramdisk -> enthusiast
+unique files/symlinks before/after: 19 / 19
+
+### Removed 0
+
+### Added 0
+
+### Changed 0
+
+### Text differences (UTF-8, bounded)
+
+ramdisk dealer sd_boot.img kernel=3588212 ramdisk=45165047 page=2048
+
+ramdisk dealer-time sd_boot.img kernel=3588212 ramdisk=45165047 page=2048
+
+ramdisk enthusiast sd_boot.img kernel=3588212 ramdisk=45165047 page=2048
+
+## dealer sd_boot.img ramdisk -> dealer-time
+unique files/symlinks before/after: 873 / 873
+
+### Removed 0
+
+### Added 0
+
+### Changed 0
+
+### Text differences (UTF-8, bounded)
+
+## dealer-time sd_boot.img ramdisk -> enthusiast
+unique files/symlinks before/after: 873 / 873
+
+### Removed 0
+
+### Added 0
+
+### Changed 0
+
+### Text differences (UTF-8, bounded)

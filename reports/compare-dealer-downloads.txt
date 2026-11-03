@@ -4,4 +4,30 @@
 d050adfa1a044b9774c9173e3eb09297e68f4ad3d1b388af5a320bc695a0ab0e  /home/runner/work/_temp/compare/downloads/dealer-time/831_lf01_20170309_time_russia.rar
 
 ## dealer-7z.log
-/home/runner/work/_temp/d7656756-9fc7-4c43-bd0b-7dcbd5911d0a.sh: line 16: 7zz: command not found
+
+## dealer-time-7z.log
+
+## enthusiast-7z.log
+
+7-Zip 23.01 (x64) : Copyright (c) 1999-2023 Igor Pavlov : 2023-06-20
+ 64-bit locale=C.UTF-8 Threads:2 OPEN_MAX:65536
+
+Scanning the drive for archives:
+1 file, 209673005 bytes (200 MiB)
+
+Extracting archive: /home/runner/work/_temp/compare/downloads/enthusiast/x60_2021.7z
+--
+Path = /home/runner/work/_temp/compare/downloads/enthusiast/x60_2021.7z
+Type = 7z
+Physical Size = 209673005
+Headers Size = 306
+Method = LZMA2:26
+Solid = +
+Blocks = 1
+
+Everything is Ok
+
+Folders: 1
+Files: 6
+Size:       430357774
+Compressed: 209673005
