@@ -1,0 +1,163 @@
+# Поиск текста экрана оптимизации в ресурсах штатных APK
+Отсутствие совпадений не доказывает отсутствие надписи на устройстве.
+## ElSettings.apk
+      spec resource 0x7f0b01f5 com.android.settings:string/wifi_scan_notify_remember_choice: flags=0x00000004
+      spec resource 0x7f0b01f6 com.android.settings:string/wifi_setting_sleep_policy_title: flags=0x00000004
+      spec resource 0x7f0b01f7 com.android.settings:string/wifi_setting_sleep_policy_error: flags=0x00000004
+      spec resource 0x7f0b01f8 com.android.settings:string/wifi_suspend_optimizations: flags=0x00000004
+      spec resource 0x7f0b01f9 com.android.settings:string/wifi_suspend_optimizations_summary: flags=0x00000004
+      spec resource 0x7f0b01fa com.android.settings:string/wifi_add_network: flags=0x00000004
+      spec resource 0x7f0b01fb com.android.settings:string/wifi_access_points: flags=0x00000004
+      spec resource 0x7f0b01fc com.android.settings:string/wifi_menu_wps_pbc: flags=0x00000004
+--
+          (string8) "Keep Wi‑Fi on during sleep"
+        resource 0x7f0b01f7 com.android.settings:string/wifi_setting_sleep_policy_error: t=0x03 d=0x000005b2 (s=0x0008 r=0x00)
+          (string8) "There was a problem changing the setting"
+        resource 0x7f0b01f8 com.android.settings:string/wifi_suspend_optimizations: t=0x03 d=0x000005b3 (s=0x0008 r=0x00)
+          (string8) "Wi‑Fi optimization"
+        resource 0x7f0b01f9 com.android.settings:string/wifi_suspend_optimizations_summary: t=0x03 d=0x000005b4 (s=0x0008 r=0x00)
+          (string8) "Minimize battery usage when Wi‑Fi is on"
+        resource 0x7f0b01fa com.android.settings:string/wifi_add_network: t=0x03 d=0x000005b5 (s=0x0008 r=0x00)
+          (string8) "Add network"
+--
+          (string8) "‏هنگام خواب، Wi-Fi را روشن بگذارید"
+        resource 0x7f0b01f7 com.android.settings:string/wifi_setting_sleep_policy_error: t=0x03 d=0x00001f7f (s=0x0008 r=0x00)
+          (string8) "هنگام تغییر تنظیمات مشکلی رخ داد"
+        resource 0x7f0b01f8 com.android.settings:string/wifi_suspend_optimizations: t=0x03 d=0x00001f80 (s=0x0008 r=0x00)
+          (string8) "‏بهینه‌سازی Wi-Fi"
+        resource 0x7f0b01f9 com.android.settings:string/wifi_suspend_optimizations_summary: t=0x03 d=0x00001f81 (s=0x0008 r=0x00)
+          (string8) "‏به حداقل رساندن مصرف باتری زمانی که Wi-Fi روشن است"
+        resource 0x7f0b01fa com.android.settings:string/wifi_add_network: t=0x03 d=0x00001f82 (s=0x0008 r=0x00)
+          (string8) "افزودن شبکه"
+--
+          (string8) "‏احتفاظ بـ Wi-Fi في وضع السكون"
+        resource 0x7f0b01f7 com.android.settings:string/wifi_setting_sleep_policy_error: t=0x03 d=0x00000d62 (s=0x0008 r=0x00)
+          (string8) "حدثت مشكلة أثناء تغيير الإعدادات"
+        resource 0x7f0b01f8 com.android.settings:string/wifi_suspend_optimizations: t=0x03 d=0x00000d63 (s=0x0008 r=0x00)
+          (string8) "‏تحسين Wi-Fi"
+        resource 0x7f0b01f9 com.android.settings:string/wifi_suspend_optimizations_summary: t=0x03 d=0x00000d64 (s=0x0008 r=0x00)
+          (string8) "‏تقليل استخدام البطارية إلى الحد الأدنى عند تشغيل Wi-Fi"
+        resource 0x7f0b01fa com.android.settings:string/wifi_add_network: t=0x03 d=0x00000d65 (s=0x0008 r=0x00)
+          (string8) "إضافة شبكة"
+--
+          (string8) "Wi-Fi actif en veille"
+        resource 0x7f0b01f7 com.android.settings:string/wifi_setting_sleep_policy_error: t=0x03 d=0x00002677 (s=0x0008 r=0x00)
+          (string8) "Un problème est survenu lors de la modification des paramètres."
+        resource 0x7f0b01f8 com.android.settings:string/wifi_suspend_optimizations: t=0x03 d=0x00002678 (s=0x0008 r=0x00)
+          (string8) "Optimisation du Wi-Fi"
+        resource 0x7f0b01f9 com.android.settings:string/wifi_suspend_optimizations_summary: t=0x03 d=0x00002679 (s=0x0008 r=0x00)
+          (string8) "Minimiser la consommation de la batterie lorsque le Wi-Fi est activé"
+        resource 0x7f0b01fa com.android.settings:string/wifi_add_network: t=0x03 d=0x0000267a (s=0x0008 r=0x00)
+          (string8) "Ajouter un réseau"
+--
+          (string8) "Usar Wi-Fi en suspensión"
+        resource 0x7f0b01f7 com.android.settings:string/wifi_setting_sleep_policy_error: t=0x03 d=0x00001347 (s=0x0008 r=0x00)
+          (string8) "Error al cambiar la configuración"
+        resource 0x7f0b01f8 com.android.settings:string/wifi_suspend_optimizations: t=0x03 d=0x00001348 (s=0x0008 r=0x00)
+          (string8) "Optimización de Wi‑Fi"
+        resource 0x7f0b01f9 com.android.settings:string/wifi_suspend_optimizations_summary: t=0x03 d=0x00001349 (s=0x0008 r=0x00)
+          (string8) "Minimizar uso de batería con Wi-Fi activado"
+        resource 0x7f0b01fa com.android.settings:string/wifi_add_network: t=0x03 d=0x0000134a (s=0x0008 r=0x00)
+          (string8) "Añadir red"
+--
+          (string8) "Manter Wi-Fi durante inatividade"
+        resource 0x7f0b01f7 com.android.settings:string/wifi_setting_sleep_policy_error: t=0x03 d=0x00002d15 (s=0x0008 r=0x00)
+          (string8) "Ocorreu um problema com a mudança de configuração"
+        resource 0x7f0b01f8 com.android.settings:string/wifi_suspend_optimizations: t=0x03 d=0x00002d16 (s=0x0008 r=0x00)
+          (string8) "Otimização de Wi-Fi"
+        resource 0x7f0b01f9 com.android.settings:string/wifi_suspend_optimizations_summary: t=0x03 d=0x00002d17 (s=0x0008 r=0x00)
+          (string8) "Minimizar o uso da bateria quando o Wi-Fi estiver ligado"
+        resource 0x7f0b01fa com.android.settings:string/wifi_add_network: t=0x03 d=0x00002d18 (s=0x0008 r=0x00)
+          (string8) "Adicionar rede"
+--
+          (string8) "Wi-Fi в спящем режиме"
+        resource 0x7f0b01f7 com.android.settings:string/wifi_setting_sleep_policy_error: t=0x03 d=0x000033e0 (s=0x0008 r=0x00)
+          (string8) "Не удалось изменить этот параметр"
+        resource 0x7f0b01f8 com.android.settings:string/wifi_suspend_optimizations: t=0x03 d=0x000033e1 (s=0x0008 r=0x00)
+          (string8) "Оптимизация Wi-Fi"
+        resource 0x7f0b01f9 com.android.settings:string/wifi_suspend_optimizations_summary: t=0x03 d=0x000033e2 (s=0x0008 r=0x00)
+          (string8) "Экономить заряд батареи, когда используется Wi-Fi"
+        resource 0x7f0b01fa com.android.settings:string/wifi_add_network: t=0x03 d=0x000033e3 (s=0x0008 r=0x00)
+          (string8) "Добавить сеть"
+--
+          (string8) "在休眠状态下保持 WLAN 网络连接"
+        resource 0x7f0b01f7 com.android.settings:string/wifi_setting_sleep_policy_error: t=0x03 d=0x00003aa7 (s=0x0008 r=0x00)
+          (string8) "更改设置时出现问题"
+        resource 0x7f0b01f8 com.android.settings:string/wifi_suspend_optimizations: t=0x03 d=0x00003aa8 (s=0x0008 r=0x00)
+          (string8) "WLAN 优化"
+        resource 0x7f0b01f9 com.android.settings:string/wifi_suspend_optimizations_summary: t=0x03 d=0x00003aa9 (s=0x0008 r=0x00)
+          (string8) "开启 WLAN 时尽可能节约电池用量"
+        resource 0x7f0b01fa com.android.settings:string/wifi_add_network: t=0x03 d=0x00003aaa (s=0x0008 r=0x00)
+          (string8) "添加网络"
+--
+          (string8) "Mantener Wi-Fi durante suspensión"
+        resource 0x7f0b01f7 com.android.settings:string/wifi_setting_sleep_policy_error: t=0x03 d=0x00001a31 (s=0x0008 r=0x00)
+          (string8) "Hubo un problema mientras se cambiaba la configuración"
+        resource 0x7f0b01f8 com.android.settings:string/wifi_suspend_optimizations: t=0x03 d=0x00001a32 (s=0x0008 r=0x00)
+          (string8) "Optimización de Wi-Fi"
+        resource 0x7f0b01f9 com.android.settings:string/wifi_suspend_optimizations_summary: t=0x03 d=0x00001a33 (s=0x0008 r=0x00)
+          (string8) "Minimizar el consumo de la batería con Wi-Fi activado"
+        resource 0x7f0b01fa com.android.settings:string/wifi_add_network: t=0x03 d=0x00001a34 (s=0x0008 r=0x00)
+          (string8) "Agregar red"
+--
+          (string8) "Ķęęρ Ẅϊ‑Γϊ όи ďΰґϊиĝ šĺęęρ"
+        resource 0x7f0b01f7 com.android.settings:string/wifi_setting_sleep_policy_error: t=0x03 d=0x0000420b (s=0x0008 r=0x00)
+          (string8) "Ŧћęґę ẅăš ă ρґότĺęḿ ċћăиĝϊиĝ тћę šęттϊиĝ"
+        resource 0x7f0b01f8 com.android.settings:string/wifi_suspend_optimizations: t=0x03 d=0x0000420c (s=0x0008 r=0x00)
+          (string8) "Ẅϊ‑Γϊ όρтϊḿϊźăтϊόи"
+        resource 0x7f0b01f9 com.android.settings:string/wifi_suspend_optimizations_summary: t=0x03 d=0x0000420d (s=0x0008 r=0x00)
+          (string8) "Ḿϊиϊḿϊźę τăттęґỳ ΰšăĝę ẅћęи Ẅϊ‑Γϊ ϊš όи"
+        resource 0x7f0b01fa com.android.settings:string/wifi_add_network: t=0x03 d=0x0000420e (s=0x0008 r=0x00)
+          (string8) "Åďď иęтẅόґĸ"
+## Framework.apk
+        resource 0x01040410 android:string/android_upgrading_title: t=0x03 d=0x000010c9 (s=0x0008 r=0x00)
+          (string8) "Android is upgrading…"
+        resource 0x01040411 android:string/android_upgrading_apk: t=0x03 d=0x000010ca (s=0x0008 r=0x00)
+          (string8) "Optimizing app %1$d of %2$d."
+        resource 0x01040412 android:string/android_upgrading_starting_apps: t=0x03 d=0x000010cb (s=0x0008 r=0x00)
+          (string8) "Starting apps."
+        resource 0x01040413 android:string/android_upgrading_complete: t=0x03 d=0x000010cc (s=0x0008 r=0x00)
+--
+        resource 0x01040410 android:string/android_upgrading_title: t=0x03 d=0x00002921 (s=0x0008 r=0x00)
+          (string8) "Mise à jour d'Android…"
+        resource 0x01040411 android:string/android_upgrading_apk: t=0x03 d=0x00002922 (s=0x0008 r=0x00)
+          (string8) "Optimisation de l'application %1$d sur %2$d…"
+        resource 0x01040412 android:string/android_upgrading_starting_apps: t=0x03 d=0x00002923 (s=0x0008 r=0x00)
+          (string8) "Lancement des applications…"
+        resource 0x01040413 android:string/android_upgrading_complete: t=0x03 d=0x00002924 (s=0x0008 r=0x00)
+--
+        resource 0x01040410 android:string/android_upgrading_title: t=0x03 d=0x00001b28 (s=0x0008 r=0x00)
+          (string8) "Actualizando Android"
+        resource 0x01040411 android:string/android_upgrading_apk: t=0x03 d=0x00001b29 (s=0x0008 r=0x00)
+          (string8) "Optimizando aplicación %1$d de %2$d..."
+        resource 0x01040412 android:string/android_upgrading_starting_apps: t=0x03 d=0x00001cfa (s=0x0008 r=0x00)
+          (string8) "Iniciando aplicaciones"
+        resource 0x01040413 android:string/android_upgrading_complete: t=0x03 d=0x00001b2a (s=0x0008 r=0x00)
+--
+        resource 0x01040410 android:string/android_upgrading_title: t=0x03 d=0x000037fe (s=0x0008 r=0x00)
+          (string8) "Android 正在升级..."
+        resource 0x01040411 android:string/android_upgrading_apk: t=0x03 d=0x000037ff (s=0x0008 r=0x00)
+          (string8) "正在优化第 %1$d 个应用（共 %2$d 个）。"
+        resource 0x01040412 android:string/android_upgrading_starting_apps: t=0x03 d=0x00003800 (s=0x0008 r=0x00)
+          (string8) "正在启动应用。"
+        resource 0x01040413 android:string/android_upgrading_complete: t=0x03 d=0x00003801 (s=0x0008 r=0x00)
+--
+        resource 0x01040410 android:string/android_upgrading_title: t=0x03 d=0x0000200a (s=0x0008 r=0x00)
+          (string8) "Android se está actualizando..."
+        resource 0x01040411 android:string/android_upgrading_apk: t=0x03 d=0x0000200b (s=0x0008 r=0x00)
+          (string8) "Optimizando la aplicación %1$d de %2$d"
+        resource 0x01040412 android:string/android_upgrading_starting_apps: t=0x03 d=0x00001cfa (s=0x0008 r=0x00)
+          (string8) "Iniciando aplicaciones"
+        resource 0x01040413 android:string/android_upgrading_complete: t=0x03 d=0x0000200c (s=0x0008 r=0x00)
+## Home.apk
+        resource 0x7f0c0113 tw.com.elead.el830.home:string/setup_radio_oirt: t=0x03 d=0x000001ce (s=0x0008 r=0x00)
+          (string8) "Eastern Europe"
+        resource 0x7f0c0114 tw.com.elead.el830.home:string/discalimer_prehibernate: t=0x03 d=0x000001cf (s=0x0008 r=0x00)
+          (string8) "Please wait for system optimization."
+        resource 0x7f0c0115 tw.com.elead.el830.home:string/discalimer_hibernate: t=0x03 d=0x000001d0 (s=0x0008 r=0x00)
+          (string8) "Hibernate"
+        resource 0x7f0c0116 tw.com.elead.el830.home:string/btpip_number: t=0x03 d=0x000001d1 (s=0x0008 r=0x00)
+## MediaPlayer.apk
+## MirrorLink.apk
+## Navitel.apk
+## SystemUI.apk
