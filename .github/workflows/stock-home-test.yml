@@ -38,6 +38,12 @@ jobs:
           target="$RUNNER_TEMP/output/system.img"
           check="$RUNNER_TEMP/output/check"
           mkdir -p "$check"
+          check_fs() {
+            local img="$1" log="$2" status=0
+            e2fsck -fn "$img" > "$log" 2>&1 || status=$?
+            cat "$log"
+            python3 tools/check_stock_fsck.py "$log" "$status"
+          }
           {
             echo '# Тест: сток 2021 + Launcher2.apk'
             echo 'Этот образ не проверен на устройстве. Родная оболочка не изменяется.'
@@ -45,8 +51,8 @@ jobs:
             echo
             echo 'SHA-256 стокового образа:'
             sha256sum "$base"
-            echo 'Проверка стоковой файловой системы:'
-            e2fsck -fn "$base"
+            echo 'Проверка стоковой файловой системы (без исправления):'
+            check_fs "$base" "$check/base-fsck.log"
             echo 'Извлечённый исходный Launcher2:'
             debugfs -R "dump /priv-app/Launcher2 $check/Launcher2.apk" "$base"
             test -s "$check/Launcher2.apk"
@@ -56,9 +62,14 @@ jobs:
             test "$("$BT" dump badging "$check/Launcher2.apk" | sed -n "s/^package: name='\([^']*\)'.*/\1/p")" = com.android.launcher
             debugfs -R 'stat /priv-app/Launcher2.apk' "$base" > "$check/before-stat.txt" 2>&1 || true
             grep -qi 'File not found' "$check/before-stat.txt" || { echo 'Launcher2.apk уже существует — стоп'; exit 1; }
-            python3 tools/inplace_patch.py --system "$base" --out "$target" --add-apk "$check/Launcher2.apk:/priv-app"
-            echo 'Строгая проверка целостности нового образа:'
-            e2fsck -fn "$target"
+            echo 'Изменение только копии образа с помощью debugfs (без пересоздания ФС):'
+            cp "$base" "$target"
+            debugfs -w -R "write $check/Launcher2.apk /priv-app/Launcher2.apk" "$target" 2>&1
+            debugfs -w -R 'sif /priv-app/Launcher2.apk mode 0100644' "$target" 2>&1
+            debugfs -w -R 'sif /priv-app/Launcher2.apk uid 0' "$target" 2>&1
+            debugfs -w -R 'sif /priv-app/Launcher2.apk gid 0' "$target" 2>&1
+            echo 'Проверка нового образа: разрешено только известное предупреждение стока:'
+            check_fs "$target" "$check/target-fsck.log"
             echo 'Сверка неизменённых исходных файлов и новой копии:'
             for name in Home LauncherOriginal Navitel BuildProp; do
               case "$name" in
@@ -113,7 +124,10 @@ jobs:
           Тестовый образ на основе stock/x60_2021.7z. Только добавлен
           штатный /priv-app/Launcher2.apk, копия исходного Launcher2.
           Родная оболочка, Navitel и build.prop не изменены (проверены cmp).
-          На устройстве эта сборка ещё НЕ проверена. Выбор HOME, установка APK
+          e2fsck сообщает об одной и той же ошибке padding inode bitmap в
+          исходном и изменённом образах; других замечаний проверка не выявила.
+          Ошибка не исправлялась. На устройстве эта сборка ещё НЕ проверена.
+          Выбор HOME, установка APK
           и успешная загрузка не гарантированы. Не обновляйте MCU.
 
           В ZIP один полный system.img; распакуйте перед прошивкой.
