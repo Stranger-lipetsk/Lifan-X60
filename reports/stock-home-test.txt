@@ -4,7 +4,7 @@
 
 SHA-256 стокового образа:
 b6bbbe529942ffec250cad993ae9cbb808721c27cf2536fb3fb11120130e8545  /home/runner/work/_temp/input/extracted/system.img
-Проверка стоковой файловой системы:
+Проверка стоковой файловой системы (без исправления):
 e2fsck 1.47.0 (5-Feb-2023)
 Pass 1: Checking inodes, blocks, and sizes
 Pass 2: Checking directory structure
@@ -17,3 +17,30 @@ Padding at end of inode bitmap is not set. Fix? no
 /home/runner/work/_temp/input/extracted/system.img: ********** WARNING: Filesystem still has errors **********
 
 /home/runner/work/_temp/input/extracted/system.img: 1399/23040 files (0.0% non-contiguous), 85475/92160 blocks
+Only the previously observed stock inode-bitmap padding warning is present.
+Извлечённый исходный Launcher2:
+debugfs 1.47.0 (5-Feb-2023)
+/home/runner/work/_temp/output/check/Launcher2.apk: Android package (APK), with AndroidManifest.xml
+package: name='com.android.launcher' versionCode='19' versionName='4.4.2-20140630'
+sdkVersion:'19'
+targetSdkVersion:'19'
+original-package:'com.android.launcher2'
+uses-permission: name='android.permission.CALL_PHONE'
+uses-permission: name='android.permission.SET_WALLPAPER'
+uses-permission: name='android.permission.SET_WALLPAPER_HINTS'
+uses-permission: name='android.permission.VIBRATE'
+Изменение только копии образа с помощью debugfs (без пересоздания ФС):
+debugfs 1.47.0 (5-Feb-2023)
+Allocated inode: 1400
+debugfs 1.47.0 (5-Feb-2023)
+debugfs 1.47.0 (5-Feb-2023)
+debugfs 1.47.0 (5-Feb-2023)
+Проверка нового образа: разрешено только известное предупреждение стока:
+e2fsck 1.47.0 (5-Feb-2023)
+Pass 1: Checking inodes, blocks, and sizes
+Pass 2: Checking directory structure
+Pass 3: Checking directory connectivity
+Pass 4: Checking reference counts
+Pass 5: Checking group summary information
+/home/runner/work/_temp/output/system.img: 1400/23040 files (0.0% non-contiguous), 88471/92160 blocks
+expected e2fsck status 4 for known stock warning, got 0
