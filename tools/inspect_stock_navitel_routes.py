@@ -39,6 +39,25 @@ def main():
             print(lines[i].strip()[:250])
         if len(hits) > 30:
             print('... first 30 shown')
+    print('\n## Candidate methods and callers (selected, static)')
+    for path in files:
+        text = path.read_text(errors='replace')
+        for method in re.findall(r'(?ms)^\.method [^\n]*\n.*?^\.end method\s*$', text):
+            sig = method.splitlines()[0]
+            targeted = (path.name == 'PackageControl.smali' and ' installPackage(' in sig)
+            targeted |= (path.name in ('Navitel$a.smali', 'a$b.smali') and ' onClick(' in sig
+                         and ('android.settings.' in method))
+            targeted |= ('Lcom/oslib/PackageControl;->installPackage(' in method)
+            targeted |= ('Lcom/navitel/content/activity/a$b;' in method and '<init>' in method)
+            targeted |= ('Lcom/navitel/Navitel$a;' in method and '<init>' in method)
+            if targeted:
+                lines = method.splitlines()
+                print('\n###', path.relative_to(root), sig, 'lines:', len(lines))
+                if len(lines) <= 300:
+                    print(method)
+                else:
+                    # Do not publish arbitrary strings from very large methods.
+                    print('Long method omitted; see class and method above.')
 
 
 if __name__ == '__main__':
