@@ -50,8 +50,8 @@ def show_apk(path, aapt, signer):
     for line in out.splitlines():
         if line.startswith(('package:', 'sdkVersion:', 'targetSdkVersion:', 'launchable-activity:', 'native-code:', 'application:')):
             print(line)
-    rc, out = command(signer, 'verify', '--min-sdk-version', '19', '--print-certs', str(path))
-    print('apksigner verify exit:', rc)
+    rc, out = command(signer, 'verify', '--min-sdk-version', '19', '--max-sdk-version', '19', '--print-certs', str(path))
+    print('apksigner verify Android API 19 exit:', rc)
     for line in out.splitlines():
         if re.search(r'Signer|SHA-256|ERROR|WARNING|Exception|does not verify', line, re.I):
             print(line[:400])
@@ -67,6 +67,13 @@ def show_apk(path, aapt, signer):
             libs = [n for n in apk.namelist() if n.startswith('lib/') and n.endswith('.so')]
             print('native ABIs:', ', '.join(sorted({n.split('/')[1] for n in libs})) or 'none')
             print('native library count:', len(libs))
+            if 'navitel' in path.name.lower():
+                for name in libs:
+                    h = hashlib.sha256()
+                    with apk.open(name) as lib:
+                        for data in iter(lambda: lib.read(1024 * 1024), b''):
+                            h.update(data)
+                    print('APK native library:', name, 'sha256=', h.hexdigest())
     except (zipfile.BadZipFile, OSError) as exc:
         print('ZIP error:', exc)
 
@@ -139,6 +146,19 @@ def main():
         for path in sorted(bundles[label].rglob('*')):
             if path.is_file():
                 print(path.relative_to(bundles[label]), path.stat().st_size, digest(path))
+        print('\n## Config.ini в архиве', label)
+        configs = list(bundles[label].rglob('config.ini'))
+        if not configs:
+            print('нет файла config.ini')
+        for config in configs:
+            print('путь:', config.relative_to(bundles[label]))
+            for line in config.read_text(errors='replace').splitlines():
+                line = line.strip()
+                if '=' in line and not line.startswith(('#', ';')):
+                    key, value = line.split('=', 1)
+                    print('ключ:', key.strip(), ('значение: ' + value.strip()) if re.search(r'time|zone|gmt|clock', key, re.I) else '(значение скрыто)')
+                elif line.startswith('[') and line.endswith(']'):
+                    print('секция:', line)
         print('\n## Свойства', label)
         prop = images[label] / 'build.prop'
         if prop.exists():

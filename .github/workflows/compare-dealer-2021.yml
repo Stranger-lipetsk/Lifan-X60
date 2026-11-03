@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - '.github/workflows/compare-dealer-2021.yml'
+      - 'tools/compare_firmware_releases.py'
   workflow_dispatch:
 
 permissions:
