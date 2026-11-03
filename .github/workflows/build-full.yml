@@ -48,6 +48,7 @@ jobs:
           cp "$(find /tmp/rar -name system.img | head -1)" out/system-org.img
 
       - name: "Патч лаунчера"
+        if: hashFiles('autoanalysis/no-launcher-patch.txt') == ''
         run: |
           set -o pipefail
           debugfs -R "dump /priv-app/EL830LF01_Home.apk /tmp/Home.apk" out/system-org.img 2>&1 | tail -1
@@ -83,6 +84,7 @@ jobs:
           fi
 
       - name: "Dex в штатный APK (подпись не меняется)"
+        if: hashFiles('autoanalysis/no-launcher-patch.txt') == ''
         run: |
           # Пересобранный apktool-ом APK подписан чужим ключом — система такой
           # не примет. Берём из него только classes.dex и вставляем в заводской
@@ -149,7 +151,12 @@ jobs:
 
           ADD=""
           ADD="$ADD --add-apk switcher/switcher.apk:/app"
-          ADD="$ADD --add-file out/Home-new.apk:/priv-app/EL830LF01_Home.apk"
+          if [ -f out/Home-new.apk ]; then
+            ADD="$ADD --add-file out/Home-new.apk:/priv-app/EL830LF01_Home.apk"
+            echo "лаунчер: патченый" | tee -a reports/full-build.txt
+          else
+            echo "лаунчер: РОДНОЙ (патч отключён)" | tee -a reports/full-build.txt
+          fi
           for f in firmware/apks/*.apk; do
             [ -f "$f" ] || continue
             PKG=$("$BT/aapt" dump badging "$f" 2>/dev/null | sed -n "s/^package: name='\([^']*\)'.*/\1/p" | head -1)
@@ -173,13 +180,16 @@ jobs:
         run: |
           {
             echo
-            echo "## сверка лаунчера с собранным"
-            debugfs -R "dump /priv-app/EL830LF01_Home.apk /tmp/chk-home.apk" out/system-full.img 2>&1 | tail -1
-            sha256sum /tmp/chk-home.apk out/Home-new.apk
-            if ! cmp -s /tmp/chk-home.apk out/Home-new.apk; then
-              echo "ЛАУНЧЕР В ОБРАЗЕ НЕ СОВПАДАЕТ С СОБРАННЫМ"; exit 1
+            if [ -f out/Home-new.apk ]; then
+              echo "## сверка лаунчера с собранным"
+              debugfs -R "dump /priv-app/EL830LF01_Home.apk /tmp/chk-home.apk" out/system-full.img 2>&1 | tail -1
+              if ! cmp -s /tmp/chk-home.apk out/Home-new.apk; then
+                echo "ЛАУНЧЕР В ОБРАЗЕ НЕ СОВПАДАЕТ С СОБРАННЫМ"; exit 1
+              fi
+              echo "лаунчер в образе: наш"
+            else
+              echo "лаунчер в образе: родной"
             fi
-            echo "лаунчер в образе: наш"
             echo
             echo "## содержимое образа"
             debugfs -R "ls -l /app" out/system-full.img 2>/dev/null | grep -iE "navitel|yandex|torque|switcher"
@@ -217,13 +227,19 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           cp out/system-full.img out/system.img
-          NOTE="Приложения в образе: Navitel 11.11.1110 и Torque Pro 1.8.205.
-          Кнопки для них — на родном экране магнитолы.
-          Файловая система заводская, лаунчер с родной подписью."
-          if gh release view lite-apps >/dev/null 2>&1; then
-            gh release upload lite-apps out/system.img --clobber
+          if [ -f autoanalysis/no-launcher-patch.txt ]; then
+            TAG=lite-test
+            NOTE="ТЕСТ: Navitel и Torque в образе, оболочка РОДНАЯ (без патча).
+            Если этот образ загрузится — приложения безопасны, дело в патче лаунчера."
           else
-            gh release create lite-apps out/system.img --title "Образ с приложениями" --notes "$NOTE"
+            TAG=lite-apps
+            NOTE="Приложения в образе: Navitel 11.11.1110 и Torque Pro 1.8.205.
+          Файловая система заводская, лаунчер патчен (кнопки на экране)."
+          fi
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" out/system.img --clobber
+          else
+            gh release create "$TAG" out/system.img --title "Образ $TAG" --notes "$NOTE"
           fi
 
       - name: "Коммит отчёта"
