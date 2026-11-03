@@ -1,0 +1,139 @@
+name: Тестовый сток с Android-лаунчером
+
+on:
+  push:
+    paths:
+      - '.github/workflows/stock-home-test.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Инструменты
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq p7zip-full e2fsprogs zip unzip file
+      - name: Скачать неизменённый сток
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/input" "$RUNNER_TEMP/output" reports
+          gh release download stock --pattern x60_2021.7z --dir "$RUNNER_TEMP/input"
+          archive="$RUNNER_TEMP/input/x60_2021.7z"
+          echo "75e7d6cd900fac971b55fec9f59913153bf7a1096bd761f7229c9a1d6d57b540  $archive" | sha256sum -c -
+          7z x -y "$archive" -o"$RUNNER_TEMP/input/extracted" >/dev/null
+          test -f "$RUNNER_TEMP/input/extracted/system.img"
+      - name: Добавить только заводской лаунчер
+        run: |
+          set -euo pipefail
+          base="$RUNNER_TEMP/input/extracted/system.img"
+          target="$RUNNER_TEMP/output/system.img"
+          check="$RUNNER_TEMP/output/check"
+          mkdir -p "$check"
+          {
+            echo '# Тест: сток 2021 + Launcher2.apk'
+            echo 'Этот образ не проверен на устройстве. Родная оболочка не изменяется.'
+            echo 'Вход в Android и установка APK не гарантированы.'
+            echo
+            echo 'SHA-256 стокового образа:'
+            sha256sum "$base"
+            echo 'Проверка стоковой файловой системы:'
+            e2fsck -fn "$base"
+            echo 'Извлечённый исходный Launcher2:'
+            debugfs -R "dump /priv-app/Launcher2 $check/Launcher2.apk" "$base"
+            test -s "$check/Launcher2.apk"
+            file "$check/Launcher2.apk"
+            BT=$(find /usr/local/lib/android/sdk/build-tools -type f -name aapt | sort -V | tail -1)
+            "$BT" dump badging "$check/Launcher2.apk" | head -8
+            test "$("$BT" dump badging "$check/Launcher2.apk" | sed -n "s/^package: name='\([^']*\)'.*/\1/p")" = com.android.launcher
+            debugfs -R 'stat /priv-app/Launcher2.apk' "$base" > "$check/before-stat.txt" 2>&1 || true
+            grep -qi 'File not found' "$check/before-stat.txt" || { echo 'Launcher2.apk уже существует — стоп'; exit 1; }
+            python3 tools/inplace_patch.py --system "$base" --out "$target" --add-apk "$check/Launcher2.apk:/priv-app"
+            echo 'Строгая проверка целостности нового образа:'
+            e2fsck -fn "$target"
+            echo 'Сверка неизменённых исходных файлов и новой копии:'
+            for name in Home LauncherOriginal Navitel BuildProp; do
+              case "$name" in
+                Home) path=/priv-app/EL830LF01_Home.apk ;;
+                LauncherOriginal) path=/priv-app/Launcher2 ;;
+                Navitel) path=/priv-app/Navitel-large.apk ;;
+                BuildProp) path=/build.prop ;;
+              esac
+              debugfs -R "dump $path $check/$name.before" "$base" 2>/dev/null
+              debugfs -R "dump $path $check/$name.after" "$target" 2>/dev/null
+              test -s "$check/$name.before" && test -s "$check/$name.after"
+              cmp "$check/$name.before" "$check/$name.after"
+              echo "$path: совпадает"
+            done
+            debugfs -R "dump /priv-app/Launcher2.apk $check/Launcher2.new" "$target" 2>/dev/null
+            test -s "$check/Launcher2.new"
+            cmp "$check/Launcher2.apk" "$check/Launcher2.new"
+            echo 'Launcher2.apk совпадает с исходным Launcher2'
+            debugfs -R 'stat /priv-app/Launcher2.apk' "$target" 2>&1
+            echo 'Размеры и SHA-256:'
+            stat -c '%n %s bytes' "$base" "$target"
+            test "$(stat -c %s "$base")" = "$(stat -c %s "$target")"
+            sha256sum "$target"
+          } 2>&1 | tee reports/stock-home-test.txt
+      - name: Упаковать и проверить ZIP
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP/output"
+          zip -9 -q system-home-test.zip system.img
+          unzip -tq system-home-test.zip
+          img_hash=$(sha256sum system.img | cut -d ' ' -f1)
+          zip_img_hash=$(unzip -p system-home-test.zip system.img | sha256sum | cut -d ' ' -f1)
+          test "$img_hash" = "$zip_img_hash"
+          {
+            echo
+            echo 'Проверка содержимого ZIP: SHA-256 совпадает с образом.'
+            stat -c '%n %s bytes' system-home-test.zip
+            sha256sum system-home-test.zip
+          } | tee -a "$GITHUB_WORKSPACE/reports/stock-home-test.txt"
+      - name: Опубликовать отдельный тестовый релиз
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          tag=stock-home-test-20261103
+          if gh release view "$tag" >/dev/null 2>&1; then
+            echo "Релиз $tag уже существует — перезаписывать нельзя"; exit 1
+          fi
+          img_hash=$(sha256sum "$RUNNER_TEMP/output/system.img" | cut -d' ' -f1)
+          zip_hash=$(sha256sum "$RUNNER_TEMP/output/system-home-test.zip" | cut -d' ' -f1)
+          cat > "$RUNNER_TEMP/notes.txt" <<EOF
+          Тестовый образ на основе stock/x60_2021.7z. Только добавлен
+          штатный /priv-app/Launcher2.apk, копия исходного Launcher2.
+          Родная оболочка, Navitel и build.prop не изменены (проверены cmp).
+          На устройстве эта сборка ещё НЕ проверена. Выбор HOME, установка APK
+          и успешная загрузка не гарантированы. Не обновляйте MCU.
+
+          В ZIP один полный system.img; распакуйте перед прошивкой.
+          SHA-256 system.img: $img_hash
+          SHA-256 system-home-test.zip: $zip_hash
+          EOF
+          gh release create "$tag" "$RUNNER_TEMP/output/system-home-test.zip" \
+            --target "${{ github.ref_name }}" --title 'Тест стока с Android-лаунчером' \
+            --notes-file "$RUNNER_TEMP/notes.txt" --prerelease
+      - name: Сохранить отчёт
+        run: |
+          set -e
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/stock-home-test.txt
+          git diff --cached --quiet && exit 0
+          git commit -m 'report: stock launcher test image'
+          for try in 1 2 3 4 5; do
+            if git pull --rebase origin "${{ github.ref_name }}" && git push origin HEAD:"${{ github.ref_name }}"; then exit 0; fi
+            git rebase --abort || true
+            sleep 5
+          done
+          exit 1
