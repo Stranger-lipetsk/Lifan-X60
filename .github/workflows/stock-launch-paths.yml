@@ -41,12 +41,32 @@ jobs:
           debugfs -R "dump /app/EL831CLF01_MediaPlayer_2017.01.11.01.apk $RUNNER_TEMP/apks/MediaPlayer.apk" "$img"
           debugfs -R "dump /priv-app/EL830LF01_Home.apk $RUNNER_TEMP/apks/Home.apk" "$img"
           debugfs -R "dump /app/EL831CLF01_MirrorLink_2016.06.13.01.apk $RUNNER_TEMP/apks/MirrorLink.apk" "$img"
+          debugfs -R "dump /priv-app/ElSettings.apk $RUNNER_TEMP/apks/ElSettings.apk" "$img"
+          debugfs -R "dump /priv-app/SystemUI.apk $RUNNER_TEMP/apks/SystemUI.apk" "$img"
+          debugfs -R "dump /priv-app/Navitel-large.apk $RUNNER_TEMP/apks/Navitel.apk" "$img"
+          debugfs -R "dump /framework/framework-res.apk $RUNNER_TEMP/apks/Framework.apk" "$img"
           for name in MediaPlayer Home MirrorLink; do
             test -s "$RUNNER_TEMP/apks/$name.apk"
             sha256sum "$RUNNER_TEMP/apks/$name.apk"
             java -jar "$RUNNER_TEMP/apktool.jar" d -f -r "$RUNNER_TEMP/apks/$name.apk" -o "$RUNNER_TEMP/decompiled/$name" >/dev/null
             test -d "$RUNNER_TEMP/decompiled/$name/smali"
           done
+      - name: Поиск текста экрана оптимизации
+        run: |
+          set -euo pipefail
+          aapt=$(find /usr/local/lib/android/sdk/build-tools -type f -name aapt | sort -V | tail -1)
+          test -x "$aapt"
+          {
+            echo '# Поиск текста экрана оптимизации в ресурсах штатных APK'
+            echo 'Отсутствие совпадений не доказывает отсутствие надписи на устройстве.'
+            for apk in "$RUNNER_TEMP"/apks/*.apk; do
+              test -s "$apk"
+              echo "## $(basename "$apk")"
+              "$aapt" dump --values resources "$apk" > "$RUNNER_TEMP/resources.txt" 2>&1 || { echo 'Ошибка aapt'; continue; }
+              grep -iE -B 3 -A 3 'optimization|optimisation|optimiz|optimis|优化' "$RUNNER_TEMP/resources.txt" | head -300 || true
+            done
+          } > reports/stock-optimization-text.txt
+          cat reports/stock-optimization-text.txt
       - name: Отчёт только по коду
         run: |
           set -euo pipefail
@@ -59,7 +79,7 @@ jobs:
           set -e
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add reports/stock-launch-paths.txt
+          git add reports/stock-launch-paths.txt reports/stock-optimization-text.txt
           git diff --cached --quiet && exit 0
           git commit -m 'report: inspect stock launcher and USB media paths'
           for try in 1 2 3 4 5; do
