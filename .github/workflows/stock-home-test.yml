@@ -124,8 +124,10 @@ jobs:
             --target "${{ github.ref_name }}" --title 'Тест стока с Android-лаунчером' \
             --notes-file "$RUNNER_TEMP/notes.txt" --prerelease
       - name: Сохранить отчёт
+        if: always()
         run: |
           set -e
+          test -f reports/stock-home-test.txt || exit 0
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add reports/stock-home-test.txt
