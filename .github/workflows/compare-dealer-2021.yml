@@ -19,7 +19,7 @@ jobs:
         run: |
           set -euo pipefail
           sudo apt-get update -qq
-          sudo apt-get install -y -qq p7zip-full e2fsprogs cpio file
+          sudo apt-get install -y -qq 7zip unrar-free e2fsprogs cpio file
           mkdir -p "$RUNNER_TEMP/compare" reports
       - name: Скачать и распаковать архивы
         env:
@@ -40,7 +40,7 @@ jobs:
             archive=$(find "$root/downloads/$label" -type f -print -quit)
             test -n "$archive"
             mkdir -p "$root/$label"
-            7z x -y "$archive" -o"$root/$label" > "$root/$label-7z.log"
+            7zz x -y "$archive" -o"$root/$label" > "$root/$label-7z.log" 2>&1
             echo "Распакован $label"
           done
       - name: Прочитать системные образы без изменения
@@ -81,6 +81,11 @@ jobs:
           set -e
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          for log in "$RUNNER_TEMP"/compare/*-7z.log; do
+            [ -f "$log" ] || continue
+            printf '\n## %s\n' "$(basename "$log")" >> reports/compare-dealer-downloads.txt
+            tail -35 "$log" >> reports/compare-dealer-downloads.txt
+          done
           for f in reports/compare-dealer-downloads.txt reports/compare-dealer-2021.txt; do
             if [ -f "$f" ]; then git add "$f"; fi
           done
