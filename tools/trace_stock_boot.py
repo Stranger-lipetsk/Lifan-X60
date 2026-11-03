@@ -45,6 +45,8 @@ def main():
             reason = 'disclaimer click'
         elif p.name == 'HomeService$31.smali' and 'onActivityResumed(' in sig:
             reason = 'activity observer'
+        elif p.name == 'HomeApp.smali' and re.search(r'\b(getSysFirstBoot|getPreHibernated|savePreHibernatePreferences)\(', sig):
+            reason = 'first boot and stored state'
         elif p.name == 'HomeService.smali' and ('sysPreHibernate(' in sig or '->sysPreHibernate()V' in method):
             reason = 'pre-hibernate and wrappers'
         elif p.name.startswith('HomeService') and any('->' + w + '(' in method for w in wrappers):
@@ -65,6 +67,18 @@ def main():
             for i in indices:
                 print('\n--- context at method line', i + 1)
                 print('\n'.join(lines[max(0, i-60):i+61]))
+            # Sparse switch maps message numbers to labels; include the
+            # relevant cases so a label near a call is not mistaken for 0x3e8.
+            for message in ('0x3e8', '0x3e9'):
+                mapping = re.search(r'^\s*' + message + r'\s*->\s*(:sswitch_\w+)', method, re.M)
+                if not mapping:
+                    continue
+                label = mapping.group(1)
+                print('\n--- message', message, 'maps to', label)
+                for i, line in enumerate(lines):
+                    if line.strip() == label:
+                        print('\n'.join(lines[i:i+180]))
+                        break
         else:
             print(method)
     print('\n## Methods selected:', len(selected))
