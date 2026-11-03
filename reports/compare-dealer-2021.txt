@@ -9,6 +9,10 @@ sd_boot.img 48758784 734f6b6442108916df89303ec5f52ceaa0ebb927d3b984a1e8a85ef2a6c
 system.img 377487360 f70a5e42f9cc9f819486b2af2ee26f8c9567eb4f9ec8056ef9e0676684b79592
 u-boot.bin 110448 7d1cb6b366dda8ef0ea51c3350689d365032ed47e172c6e23dac7a63ae33f002
 
+## Config.ini в архиве dealer
+путь: config.ini
+ключ: sys.device.id (значение скрыто)
+
 ## Свойства dealer
 ro.build.id=1.0.0-rc3
 ro.build.display.id=el_imx6_solo_v2-userdebug 4.4.2 1.0.0-rc3 20140630 dev-keys
@@ -47,7 +51,7 @@ sdkVersion:'10'
 targetSdkVersion:'19'
 application: label='MLink' icon='res/drawable-mdpi/mirrorlink_icon.png'
 launchable-activity: name='com.fpt.mirrorlink.android.view.MainActivity'  label='' icon=''
-apksigner verify exit: 0
+apksigner verify Android API 19 exit: 0
 V1 Signer: certificate DN: CN=Android Debug, O=Android, C=US
 V1 Signer: certificate SHA-256 digest: e80f5d4f9a371e56fed44bd8829536d64643b9530e1675266282fe3f22343239
 V1 Signer: certificate SHA-1 digest: 16573593d409e398da879a1cf7ecadc4f9d3f653
@@ -64,7 +68,7 @@ package: name='com.android.packageinstaller' versionCode='19' versionName='4.4.2
 sdkVersion:'19'
 targetSdkVersion:'19'
 application: label='Package installer' icon=''
-apksigner verify exit: 0
+apksigner verify Android API 19 exit: 0
 V1 Signer: certificate DN: EMAILADDRESS=android@freescale.com, CN=Android, OU=Android, O=Android, L=Mountain View, ST=California, C=US
 V1 Signer: certificate SHA-256 digest: 7fbae817b7db24642d8959c347b561c003c6cfde2cb10f909c932f21a4d6d804
 V1 Signer: certificate SHA-1 digest: 3e0caf3d799fbaec566facbe1a67fb250bdefd93
@@ -82,7 +86,7 @@ sdkVersion:'19'
 targetSdkVersion:'19'
 application: label='Home' icon='res/drawable-mdpi/icon.png'
 native-code: 'armeabi-v7a'
-apksigner verify exit: 0
+apksigner verify Android API 19 exit: 0
 V1 Signer: certificate DN: EMAILADDRESS=android@freescale.com, CN=Android, OU=Android, O=Android, L=Mountain View, ST=California, C=US
 V1 Signer: certificate SHA-256 digest: 7fbae817b7db24642d8959c347b561c003c6cfde2cb10f909c932f21a4d6d804
 V1 Signer: certificate SHA-1 digest: 3e0caf3d799fbaec566facbe1a67fb250bdefd93
@@ -100,7 +104,7 @@ sdkVersion:'19'
 targetSdkVersion:'19'
 application: label='Settings' icon='res/mipmap-mdpi/ic_launcher_settings.png'
 launchable-activity: name='com.android.settings.Settings'  label='Settings' icon=''
-apksigner verify exit: 0
+apksigner verify Android API 19 exit: 0
 V1 Signer: certificate DN: EMAILADDRESS=android@freescale.com, CN=Android, OU=Android, O=Android, L=Mountain View, ST=California, C=US
 V1 Signer: certificate SHA-256 digest: 7fbae817b7db24642d8959c347b561c003c6cfde2cb10f909c932f21a4d6d804
 V1 Signer: certificate SHA-1 digest: 3e0caf3d799fbaec566facbe1a67fb250bdefd93
@@ -117,7 +121,7 @@ package: name='com.android.launcher' versionCode='19' versionName='4.4.2-2014063
 sdkVersion:'19'
 targetSdkVersion:'19'
 application: label='Launcher' icon='res/mipmap-mdpi/ic_launcher_home.png'
-apksigner verify exit: 0
+apksigner verify Android API 19 exit: 0
 V1 Signer: certificate DN: EMAILADDRESS=android@freescale.com, CN=Android, OU=Android, O=Android, L=Mountain View, ST=California, C=US
 V1 Signer: certificate SHA-256 digest: 212912e875e5077f955c3079b6ceb1151c2b64d9bd9f6673dceff70d312eb2d5
 V1 Signer: certificate SHA-1 digest: 759cdd0e646c6aedd91c9436fa664570fdf285d6
@@ -136,7 +140,7 @@ targetSdkVersion:'9'
 application: label='Navitel' icon='res/drawable-mdpi-v4/icon.png'
 launchable-activity: name='com.navitel.Navitel'  label='Navitel' icon=''
 native-code: 'armeabi' 'x86'
-apksigner verify exit: 0
+apksigner verify Android API 19 exit: 0
 V1 Signer: certificate DN: CN=Unknown, OU=R&D, O=JSC CNT, L=Moscow, ST=Unknown, C=RU
 V1 Signer: certificate SHA-256 digest: 5358662d39856446c7391c699878e0509f7ed0657d7634c0083e07b08ad2f035
 V1 Signer: certificate SHA-1 digest: 775adfe54734ff4ec440040442ec3b2c39b75faf
@@ -146,6 +150,9 @@ AndroidManifest.xml sha256= 8137e90fd39b80367abddab24e70b7f4aa6536560fca35f2cc16
 classes.dex sha256= 243cdc6e9c6c70da73d2a53baccbabf8c8cfad48df54af1ac094933784183002 size= 2749136
 native ABIs: armeabi, x86
 native library count: 3
+APK native library: lib/x86/libNavitelService.so sha256= 5e821b63de533269c1595397b79e64b359cd3cffdccd92889753a2dc1fca5954
+APK native library: lib/armeabi/libWebLinkServerLib.so sha256= d8b5a04de637e0ea2a1a4f922493af2a8ae773b5a4386e9202797d1e5b561e30
+APK native library: lib/armeabi/libNavitelService.so sha256= 1baa4d67b15ef07800afc534c895e609be062d1d1083973eb3f919420f01493f
 
 ## Состав dealer-time
 831-LF01-20170309_time_Russia/MCU_FW.hex 75083 bc341c6de95c18babcaa8664c585236ea02828c7de4fba30c97380108bdcb495
@@ -153,6 +160,9 @@ native library count: 3
 831-LF01-20170309_time_Russia/sd_boot.img 48758784 734f6b6442108916df89303ec5f52ceaa0ebb927d3b984a1e8a85ef2a6c12597
 831-LF01-20170309_time_Russia/system.img 377487360 f70a5e42f9cc9f819486b2af2ee26f8c9567eb4f9ec8056ef9e0676684b79592
 831-LF01-20170309_time_Russia/u-boot.bin 110448 7d1cb6b366dda8ef0ea51c3350689d365032ed47e172c6e23dac7a63ae33f002
+
+## Config.ini в архиве dealer-time
+нет файла config.ini
 
 ## Свойства dealer-time
 ro.build.id=1.0.0-rc3
@@ -192,7 +202,7 @@ sdkVersion:'10'
 targetSdkVersion:'19'
 application: label='MLink' icon='res/drawable-mdpi/mirrorlink_icon.png'
 launchable-activity: name='com.fpt.mirrorlink.android.view.MainActivity'  label='' icon=''
-apksigner verify exit: 0
+apksigner verify Android API 19 exit: 0
 V1 Signer: certificate DN: CN=Android Debug, O=Android, C=US
 V1 Signer: certificate SHA-256 digest: e80f5d4f9a371e56fed44bd8829536d64643b9530e1675266282fe3f22343239
 V1 Signer: certificate SHA-1 digest: 16573593d409e398da879a1cf7ecadc4f9d3f653
@@ -209,7 +219,7 @@ package: name='com.android.packageinstaller' versionCode='19' versionName='4.4.2
 sdkVersion:'19'
 targetSdkVersion:'19'
 application: label='Package installer' icon=''
-apksigner verify exit: 0
+apksigner verify Android API 19 exit: 0
 V1 Signer: certificate DN: EMAILADDRESS=android@freescale.com, CN=Android, OU=Android, O=Android, L=Mountain View, ST=California, C=US
 V1 Signer: certificate SHA-256 digest: 7fbae817b7db24642d8959c347b561c003c6cfde2cb10f909c932f21a4d6d804
 V1 Signer: certificate SHA-1 digest: 3e0caf3d799fbaec566facbe1a67fb250bdefd93
@@ -227,7 +237,7 @@ sdkVersion:'19'
 targetSdkVersion:'19'
 application: label='Home' icon='res/drawable-mdpi/icon.png'
 native-code: 'armeabi-v7a'
-apksigner verify exit: 0
+apksigner verify Android API 19 exit: 0
 V1 Signer: certificate DN: EMAILADDRESS=android@freescale.com, CN=Android, OU=Android, O=Android, L=Mountain View, ST=California, C=US
 V1 Signer: certificate SHA-256 digest: 7fbae817b7db24642d8959c347b561c003c6cfde2cb10f909c932f21a4d6d804
 V1 Signer: certificate SHA-1 digest: 3e0caf3d799fbaec566facbe1a67fb250bdefd93
@@ -245,7 +255,7 @@ sdkVersion:'19'
 targetSdkVersion:'19'
 application: label='Settings' icon='res/mipmap-mdpi/ic_launcher_settings.png'
 launchable-activity: name='com.android.settings.Settings'  label='Settings' icon=''
-apksigner verify exit: 0
+apksigner verify Android API 19 exit: 0
 V1 Signer: certificate DN: EMAILADDRESS=android@freescale.com, CN=Android, OU=Android, O=Android, L=Mountain View, ST=California, C=US
 V1 Signer: certificate SHA-256 digest: 7fbae817b7db24642d8959c347b561c003c6cfde2cb10f909c932f21a4d6d804
 V1 Signer: certificate SHA-1 digest: 3e0caf3d799fbaec566facbe1a67fb250bdefd93
@@ -262,7 +272,7 @@ package: name='com.android.launcher' versionCode='19' versionName='4.4.2-2014063
 sdkVersion:'19'
 targetSdkVersion:'19'
 application: label='Launcher' icon='res/mipmap-mdpi/ic_launcher_home.png'
-apksigner verify exit: 0
+apksigner verify Android API 19 exit: 0
 V1 Signer: certificate DN: EMAILADDRESS=android@freescale.com, CN=Android, OU=Android, O=Android, L=Mountain View, ST=California, C=US
 V1 Signer: certificate SHA-256 digest: 212912e875e5077f955c3079b6ceb1151c2b64d9bd9f6673dceff70d312eb2d5
 V1 Signer: certificate SHA-1 digest: 759cdd0e646c6aedd91c9436fa664570fdf285d6
@@ -281,7 +291,7 @@ targetSdkVersion:'9'
 application: label='Navitel' icon='res/drawable-mdpi-v4/icon.png'
 launchable-activity: name='com.navitel.Navitel'  label='Navitel' icon=''
 native-code: 'armeabi' 'x86'
-apksigner verify exit: 0
+apksigner verify Android API 19 exit: 0
 V1 Signer: certificate DN: CN=Unknown, OU=R&D, O=JSC CNT, L=Moscow, ST=Unknown, C=RU
 V1 Signer: certificate SHA-256 digest: 5358662d39856446c7391c699878e0509f7ed0657d7634c0083e07b08ad2f035
 V1 Signer: certificate SHA-1 digest: 775adfe54734ff4ec440040442ec3b2c39b75faf
@@ -291,6 +301,9 @@ AndroidManifest.xml sha256= 8137e90fd39b80367abddab24e70b7f4aa6536560fca35f2cc16
 classes.dex sha256= 243cdc6e9c6c70da73d2a53baccbabf8c8cfad48df54af1ac094933784183002 size= 2749136
 native ABIs: armeabi, x86
 native library count: 3
+APK native library: lib/x86/libNavitelService.so sha256= 5e821b63de533269c1595397b79e64b359cd3cffdccd92889753a2dc1fca5954
+APK native library: lib/armeabi/libWebLinkServerLib.so sha256= d8b5a04de637e0ea2a1a4f922493af2a8ae773b5a4386e9202797d1e5b561e30
+APK native library: lib/armeabi/libNavitelService.so sha256= 1baa4d67b15ef07800afc534c895e609be062d1d1083973eb3f919420f01493f
 
 ## Состав enthusiast
 MCU_FW.hex 75083 bc341c6de95c18babcaa8664c585236ea02828c7de4fba30c97380108bdcb495
@@ -299,6 +312,10 @@ boot.img 3926016 060d291a523bbe0d40c86537f070ed0feb90e04e0db0efef2a3e4594e9223b4
 sd_boot.img 48758784 734f6b6442108916df89303ec5f52ceaa0ebb927d3b984a1e8a85ef2a6c12597
 system.img 377487360 b6bbbe529942ffec250cad993ae9cbb808721c27cf2536fb3fb11120130e8545
 u-boot.bin 110448 7d1cb6b366dda8ef0ea51c3350689d365032ed47e172c6e23dac7a63ae33f002
+
+## Config.ini в архиве enthusiast
+путь: backup/config.ini
+ключ: sys.device.id (значение скрыто)
 
 ## Свойства enthusiast
 ro.build.id=1.0.0-rc3
@@ -338,7 +355,7 @@ sdkVersion:'10'
 targetSdkVersion:'19'
 application: label='MLink' icon='res/drawable-mdpi/mirrorlink_icon.png'
 launchable-activity: name='com.fpt.mirrorlink.android.view.MainActivity'  label='' icon=''
-apksigner verify exit: 0
+apksigner verify Android API 19 exit: 0
 V1 Signer: certificate DN: CN=Android Debug, O=Android, C=US
 V1 Signer: certificate SHA-256 digest: e80f5d4f9a371e56fed44bd8829536d64643b9530e1675266282fe3f22343239
 V1 Signer: certificate SHA-1 digest: 16573593d409e398da879a1cf7ecadc4f9d3f653
@@ -355,7 +372,7 @@ package: name='com.android.packageinstaller' versionCode='19' versionName='4.4.2
 sdkVersion:'19'
 targetSdkVersion:'19'
 application: label='Package installer' icon=''
-apksigner verify exit: 0
+apksigner verify Android API 19 exit: 0
 V1 Signer: certificate DN: EMAILADDRESS=android@freescale.com, CN=Android, OU=Android, O=Android, L=Mountain View, ST=California, C=US
 V1 Signer: certificate SHA-256 digest: 7fbae817b7db24642d8959c347b561c003c6cfde2cb10f909c932f21a4d6d804
 V1 Signer: certificate SHA-1 digest: 3e0caf3d799fbaec566facbe1a67fb250bdefd93
@@ -373,7 +390,7 @@ sdkVersion:'19'
 targetSdkVersion:'19'
 application: label='Home' icon='res/drawable-mdpi/icon.png'
 native-code: 'armeabi-v7a'
-apksigner verify exit: 0
+apksigner verify Android API 19 exit: 0
 V1 Signer: certificate DN: EMAILADDRESS=android@freescale.com, CN=Android, OU=Android, O=Android, L=Mountain View, ST=California, C=US
 V1 Signer: certificate SHA-256 digest: 7fbae817b7db24642d8959c347b561c003c6cfde2cb10f909c932f21a4d6d804
 V1 Signer: certificate SHA-1 digest: 3e0caf3d799fbaec566facbe1a67fb250bdefd93
@@ -391,7 +408,7 @@ sdkVersion:'19'
 targetSdkVersion:'19'
 application: label='Settings' icon='res/mipmap-mdpi/ic_launcher_settings.png'
 launchable-activity: name='com.android.settings.Settings'  label='Settings' icon=''
-apksigner verify exit: 0
+apksigner verify Android API 19 exit: 0
 V1 Signer: certificate DN: EMAILADDRESS=android@freescale.com, CN=Android, OU=Android, O=Android, L=Mountain View, ST=California, C=US
 V1 Signer: certificate SHA-256 digest: 7fbae817b7db24642d8959c347b561c003c6cfde2cb10f909c932f21a4d6d804
 V1 Signer: certificate SHA-1 digest: 3e0caf3d799fbaec566facbe1a67fb250bdefd93
@@ -408,7 +425,7 @@ package: name='com.android.launcher' versionCode='19' versionName='4.4.2-2014063
 sdkVersion:'19'
 targetSdkVersion:'19'
 application: label='Launcher' icon='res/mipmap-mdpi/ic_launcher_home.png'
-apksigner verify exit: 0
+apksigner verify Android API 19 exit: 0
 V1 Signer: certificate DN: EMAILADDRESS=android@freescale.com, CN=Android, OU=Android, O=Android, L=Mountain View, ST=California, C=US
 V1 Signer: certificate SHA-256 digest: 212912e875e5077f955c3079b6ceb1151c2b64d9bd9f6673dceff70d312eb2d5
 V1 Signer: certificate SHA-1 digest: 759cdd0e646c6aedd91c9436fa664570fdf285d6
@@ -427,16 +444,18 @@ targetSdkVersion:'28'
 application: label='Navitel' icon='res/mipmap-anydpi-v26/ic_launcher.xml'
 launchable-activity: name='com.navitel.Navitel'  label='Navitel' icon=''
 native-code: 'armeabi-v7a'
-apksigner verify exit: 0
-V3.0 Signer: certificate DN: EMAILADDRESS=android@android.com, CN=Android, OU=Android, O=Android, L=Mountain View, ST=California, C=US
-V3.0 Signer: certificate SHA-256 digest: a40da80a59d170caa950cf15c18c454d47a39b26989d8b640ecd745ba71bf5dc
-V3.0 Signer: certificate SHA-1 digest: 61ed377e85d386a8dfee6b864bd85b0bfaa5af81
-V3.0 Signer: certificate MD5 digest: e89b158e4bcf988ebd09eb83f5378e87
+apksigner verify Android API 19 exit: 0
+V1 Signer: certificate DN: EMAILADDRESS=android@android.com, CN=Android, OU=Android, O=Android, L=Mountain View, ST=California, C=US
+V1 Signer: certificate SHA-256 digest: a40da80a59d170caa950cf15c18c454d47a39b26989d8b640ecd745ba71bf5dc
+V1 Signer: certificate SHA-1 digest: 61ed377e85d386a8dfee6b864bd85b0bfaa5af81
+V1 Signer: certificate MD5 digest: e89b158e4bcf988ebd09eb83f5378e87
 zip test: OK
 AndroidManifest.xml sha256= 2b1bfcee130b2ebc06a3fa489e0431d2ef7fb85ce768e0f2cedf0d3cc1663569 size= 23868
 classes.dex sha256= e7c776ed721cdf269b0302eff42af6dca55c6012877c16688a02ca8d08ec6eaa size= 3336752
 native ABIs: armeabi-v7a
 native library count: 2
+APK native library: lib/armeabi-v7a/libnavitel.so sha256= 124de68163955e088f6ba8aaa2c7610ab2737c4187d08a80375985048a834a6f
+APK native library: lib/armeabi-v7a/libWebLinkServerLib.so sha256= e7a706e3b7a439b6e9eb1c9c3c8161b09c170ed6c08b86642ef7bd9fec60fc4d
 
 ## dealer system -> dealer-time system
 unique files/symlinks before/after: 1342 / 1342
