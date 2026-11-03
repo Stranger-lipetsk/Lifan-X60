@@ -94,3 +94,386 @@ const-string v1, "application/vnd.android.package-archive"
 
 ### smali/mp/v.smali line 23 .method public shouldOverrideUrlLoading(Landroid/webkit/WebView;Ljava/lang/String;)Z
 .method public shouldOverrideUrlLoading(Landroid/webkit/WebView;Ljava/lang/String;)Z
+
+## Candidate methods and callers (selected, static)
+
+### smali/com/navitel/Navitel$a.smali .method constructor <init>(Lcom/navitel/Navitel;)V lines: 10
+.method constructor <init>(Lcom/navitel/Navitel;)V
+    .locals 0
+
+    iput-object p1, p0, Lcom/navitel/Navitel$a;->a:Lcom/navitel/Navitel;
+
+    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
+
+    return-void
+.end method
+
+
+
+### smali/com/navitel/Navitel$a.smali .method public onClick(Landroid/content/DialogInterface;I)V lines: 43
+.method public onClick(Landroid/content/DialogInterface;I)V
+    .locals 1
+
+    new-instance p1, Landroid/content/Intent;
+
+    const-string p2, "android.settings.APPLICATION_DETAILS_SETTINGS"
+
+    invoke-direct {p1, p2}, Landroid/content/Intent;-><init>(Ljava/lang/String;)V
+
+    const-string p2, "package:"
+
+    invoke-static {p2}, Lc/b/a/a/a;->a(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object p2
+
+    iget-object v0, p0, Lcom/navitel/Navitel$a;->a:Lcom/navitel/Navitel;
+
+    invoke-virtual {v0}, Landroid/app/Activity;->getPackageName()Ljava/lang/String;
+
+    move-result-object v0
+
+    invoke-virtual {p2, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    invoke-virtual {p2}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object p2
+
+    invoke-static {p2}, Landroid/net/Uri;->parse(Ljava/lang/String;)Landroid/net/Uri;
+
+    move-result-object p2
+
+    invoke-virtual {p1, p2}, Landroid/content/Intent;->setData(Landroid/net/Uri;)Landroid/content/Intent;
+
+    iget-object p2, p0, Lcom/navitel/Navitel$a;->a:Lcom/navitel/Navitel;
+
+    invoke-virtual {p2, p1}, Landroid/app/Activity;->startActivity(Landroid/content/Intent;)V
+
+    iget-object p1, p0, Lcom/navitel/Navitel$a;->a:Lcom/navitel/Navitel;
+
+    invoke-virtual {p1}, Landroid/app/Activity;->finish()V
+
+    return-void
+.end method
+
+
+### smali/com/navitel/Navitel.smali .method public onRequestPermissionsResult(I[Ljava/lang/String;[I)V lines: 212
+.method public onRequestPermissionsResult(I[Ljava/lang/String;[I)V
+    .locals 5
+
+    const/16 v0, 0x2b
+
+    const/16 v1, 0x2a
+
+    if-ne p1, v1, :cond_5
+
+    array-length v1, p3
+
+    if-lez v1, :cond_5
+
+    new-instance p1, Ljava/util/ArrayList;
+
+    invoke-direct {p1}, Ljava/util/ArrayList;-><init>()V
+
+    const/4 v1, 0x0
+
+    const/4 v2, 0x0
+
+    :goto_0
+    array-length v3, p3
+
+    if-ge v2, v3, :cond_1
+
+    aget v3, p3, v2
+
+    if-eqz v3, :cond_0
+
+    aget-object v3, p2, v2
+
+    invoke-interface {p1, v3}, Ljava/util/List;->add(Ljava/lang/Object;)Z
+
+    :cond_0
+    add-int/lit8 v2, v2, 0x1
+
+    goto :goto_0
+
+    :cond_1
+    invoke-interface {p1}, Ljava/util/List;->size()I
+
+    move-result p2
+
+    if-nez p2, :cond_2
+
+    iget-object p1, p0, Lcom/navitel/Navitel;->a:Lcom/navitel/a/a;
+
+    invoke-virtual {p1, p0, v0}, Lcom/navitel/a/a;->b(Landroid/app/Activity;I)V
+
+    goto/16 :goto_3
+
+    :cond_2
+    new-instance p2, Ljava/lang/String;
+
+    invoke-direct {p2}, Ljava/lang/String;-><init>()V
+
+    const/4 p3, 0x0
+
+    :goto_1
+    invoke-interface {p1}, Ljava/util/List;->size()I
+
+    move-result v0
+
+    const/4 v2, 0x1
+
+    if-ge p3, v0, :cond_4
+
+    :try_start_0
+    new-instance v0, Ljava/lang/StringBuilder;
+
+    invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V
+
+    invoke-virtual {v0, p2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    invoke-virtual {p0}, Landroid/app/Activity;->getPackageManager()Landroid/content/pm/PackageManager;
+
+    move-result-object v3
+
+    invoke-interface {p1, p3}, Ljava/util/List;->get(I)Ljava/lang/Object;
+
+    move-result-object v4
+
+    check-cast v4, Ljava/lang/String;
+
+    invoke-virtual {v3, v4, v1}, Landroid/content/pm/PackageManager;->getPermissionInfo(Ljava/lang/String;I)Landroid/content/pm/PermissionInfo;
+
+    move-result-object v3
+
+    invoke-virtual {p0}, Landroid/app/Activity;->getPackageManager()Landroid/content/pm/PackageManager;
+
+    move-result-object v4
+
+    invoke-virtual {v3, v4}, Landroid/content/pm/PermissionInfo;->loadLabel(Landroid/content/pm/PackageManager;)Ljava/lang/CharSequence;
+
+    move-result-object v3
+
+    invoke-virtual {v0, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
+
+    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object p2
+
+    invoke-interface {p1}, Ljava/util/List;->size()I
+
+    move-result v0
+
+    sub-int/2addr v0, v2
+
+    if-eq p3, v0, :cond_3
+
+    new-instance v0, Ljava/lang/StringBuilder;
+
+    invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V
+
+    invoke-virtual {v0, p2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    const-string v2, ", "
+
+    invoke-virtual {v0, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object p2
+    :try_end_0
+    .catch Landroid/content/pm/PackageManager$NameNotFoundException; {:try_start_0 .. :try_end_0} :catch_0
+
+    goto :goto_2
+
+    :catch_0
+    const-string v0, "Unable get permission info: "
+
+    invoke-static {v0}, Lc/b/a/a/a;->a(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v0
+
+    invoke-interface {p1, p3}, Ljava/util/List;->get(I)Ljava/lang/Object;
+
+    move-result-object v2
+
+    check-cast v2, Ljava/lang/String;
+
+    invoke-virtual {v0, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v0
+
+    invoke-static {v0}, Lcom/oslib/Logger;->v(Ljava/lang/String;)V
+
+    :cond_3
+    :goto_2
+    add-int/lit8 p3, p3, 0x1
+
+    goto :goto_1
+
+    :cond_4
+    new-instance p1, Landroid/app/AlertDialog$Builder;
+
+    invoke-direct {p1, p0}, Landroid/app/AlertDialog$Builder;-><init>(Landroid/content/Context;)V
+
+    invoke-virtual {p0}, Landroid/app/Activity;->getResources()Landroid/content/res/Resources;
+
+    move-result-object p3
+
+    const v0, 0x7f0c005c
+
+    invoke-virtual {p3, v0}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
+
+    move-result-object p3
+
+    new-array v0, v2, [Ljava/lang/Object;
+
+    aput-object p2, v0, v1
+
+    invoke-static {p3, v0}, Ljava/lang/String;->format(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
+
+    move-result-object p2
+
+    invoke-virtual {p1, p2}, Landroid/app/AlertDialog$Builder;->setMessage(Ljava/lang/CharSequence;)Landroid/app/AlertDialog$Builder;
+
+    const p2, 0x7f0c0020
+
+    invoke-virtual {p1, p2}, Landroid/app/AlertDialog$Builder;->setTitle(I)Landroid/app/AlertDialog$Builder;
+
+    invoke-virtual {p1, v1}, Landroid/app/AlertDialog$Builder;->setCancelable(Z)Landroid/app/AlertDialog$Builder;
+
+    const p2, 0x7f0c0060
+
+    new-instance p3, Lcom/navitel/Navitel$a;
+
+    invoke-direct {p3, p0}, Lcom/navitel/Navitel$a;-><init>(Lcom/navitel/Navitel;)V
+
+    invoke-virtual {p1, p2, p3}, Landroid/app/AlertDialog$Builder;->setNegativeButton(ILandroid/content/DialogInterface$OnClickListener;)Landroid/app/AlertDialog$Builder;
+
+    invoke-virtual {p1}, Landroid/app/AlertDialog$Builder;->create()Landroid/app/AlertDialog;
+
+    move-result-object p1
+
+    invoke-virtual {p1}, Landroid/app/AlertDialog;->show()V
+
+    goto :goto_3
+
+    :cond_5
+    if-ne p1, v0, :cond_6
+
+    invoke-direct {p0}, Lcom/navitel/Navitel;->a()V
+
+    :cond_6
+    :goto_3
+    return-void
+.end method
+
+
+### smali/com/navitel/content/activity/a$b.smali .method constructor <init>(Lcom/navitel/content/activity/a;)V lines: 10
+.method constructor <init>(Lcom/navitel/content/activity/a;)V
+    .locals 0
+
+    iput-object p1, p0, Lcom/navitel/content/activity/a$b;->a:Lcom/navitel/content/activity/a;
+
+    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
+
+    return-void
+.end method
+
+
+
+### smali/com/navitel/content/activity/a$b.smali .method public onClick(Landroid/content/DialogInterface;I)V lines: 21
+.method public onClick(Landroid/content/DialogInterface;I)V
+    .locals 1
+
+    iget-object p1, p0, Lcom/navitel/content/activity/a$b;->a:Lcom/navitel/content/activity/a;
+
+    iget-object p1, p1, Lcom/navitel/content/activity/a;->b:Lcom/navitel/content/activity/c;
+
+    invoke-static {p1}, Lcom/navitel/content/activity/c;->a(Lcom/navitel/content/activity/c;)Landroid/content/Context;
+
+    move-result-object p1
+
+    new-instance p2, Landroid/content/Intent;
+
+    const-string v0, "android.settings.WIFI_SETTINGS"
+
+    invoke-direct {p2, v0}, Landroid/content/Intent;-><init>(Ljava/lang/String;)V
+
+    invoke-virtual {p1, p2}, Landroid/content/Context;->startActivity(Landroid/content/Intent;)V
+
+    return-void
+.end method
+
+
+### smali/com/navitel/content/activity/a.smali .method public a(Landroid/app/AlertDialog$Builder;)V lines: 25
+.method public a(Landroid/app/AlertDialog$Builder;)V
+    .locals 2
+
+    const v0, 0x7f0c005b
+
+    invoke-virtual {p1, v0}, Landroid/app/AlertDialog$Builder;->setMessage(I)Landroid/app/AlertDialog$Builder;
+
+    new-instance v0, Lcom/navitel/content/activity/a$a;
+
+    invoke-direct {v0, p0}, Lcom/navitel/content/activity/a$a;-><init>(Lcom/navitel/content/activity/a;)V
+
+    const v1, 0x7f0c0022
+
+    invoke-virtual {p1, v1, v0}, Landroid/app/AlertDialog$Builder;->setNegativeButton(ILandroid/content/DialogInterface$OnClickListener;)Landroid/app/AlertDialog$Builder;
+
+    new-instance v0, Lcom/navitel/content/activity/a$b;
+
+    invoke-direct {v0, p0}, Lcom/navitel/content/activity/a$b;-><init>(Lcom/navitel/content/activity/a;)V
+
+    const v1, 0x7f0c0091
+
+    invoke-virtual {p1, v1, v0}, Landroid/app/AlertDialog$Builder;->setNeutralButton(ILandroid/content/DialogInterface$OnClickListener;)Landroid/app/AlertDialog$Builder;
+
+    return-void
+.end method
+
+
+### smali/com/oslib/PackageControl.smali .method public static installPackage(Landroid/content/Context;Ljava/lang/String;)Z lines: 39
+.method public static installPackage(Landroid/content/Context;Ljava/lang/String;)Z
+    .locals 2
+
+    :try_start_0
+    new-instance v0, Ljava/io/File;
+
+    invoke-direct {v0, p1}, Ljava/io/File;-><init>(Ljava/lang/String;)V
+
+    new-instance p1, Landroid/content/Intent;
+
+    const-string v1, "android.intent.action.VIEW"
+
+    invoke-direct {p1, v1}, Landroid/content/Intent;-><init>(Ljava/lang/String;)V
+
+    invoke-static {v0}, Landroid/net/Uri;->fromFile(Ljava/io/File;)Landroid/net/Uri;
+
+    move-result-object v0
+
+    const-string v1, "application/vnd.android.package-archive"
+
+    invoke-virtual {p1, v0, v1}, Landroid/content/Intent;->setDataAndType(Landroid/net/Uri;Ljava/lang/String;)Landroid/content/Intent;
+
+    const/high16 v0, 0x10000000
+
+    invoke-virtual {p1, v0}, Landroid/content/Intent;->addFlags(I)Landroid/content/Intent;
+
+    invoke-virtual {p0, p1}, Landroid/content/Context;->startActivity(Landroid/content/Intent;)V
+    :try_end_0
+    .catch Landroid/content/ActivityNotFoundException; {:try_start_0 .. :try_end_0} :catch_0
+
+    const/4 p0, 0x1
+
+    return p0
+
+    :catch_0
+    const/4 p0, 0x0
+
+    return p0
+.end method
+
