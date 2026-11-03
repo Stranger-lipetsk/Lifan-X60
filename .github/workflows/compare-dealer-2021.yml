@@ -19,7 +19,7 @@ jobs:
         run: |
           set -euo pipefail
           sudo apt-get update -qq
-          sudo apt-get install -y -qq 7zip unrar-free e2fsprogs cpio file
+          sudo apt-get install -y -qq unar p7zip-full e2fsprogs cpio file
           mkdir -p "$RUNNER_TEMP/compare" reports
       - name: Скачать и распаковать архивы
         env:
@@ -40,7 +40,11 @@ jobs:
             archive=$(find "$root/downloads/$label" -type f -print -quit)
             test -n "$archive"
             mkdir -p "$root/$label"
-            7zz x -y "$archive" -o"$root/$label" > "$root/$label-7z.log" 2>&1
+            if [ "$label" = enthusiast ]; then
+              7z x -y "$archive" -o"$root/$label" > "$root/$label-7z.log" 2>&1
+            else
+              unar -q -f -D -o "$root/$label" "$archive" > "$root/$label-7z.log" 2>&1
+            fi
             echo "Распакован $label"
           done
       - name: Прочитать системные образы без изменения
