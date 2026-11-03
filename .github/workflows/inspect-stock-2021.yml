@@ -1,0 +1,88 @@
+name: Проверка загруженной заводской прошивки
+
+on:
+  push:
+    paths:
+      - '.github/workflows/inspect-stock-2021.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - name: Установить инструменты
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq p7zip-full e2fsprogs file
+      - name: Проверить состав стока
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/stock" reports
+          gh release download stock --pattern 'x60_2021.7z' --dir "$RUNNER_TEMP/stock"
+          archive="$RUNNER_TEMP/stock/x60_2021.7z"
+          echo '75e7d6cd900fac971b55fec9f59913153bf7a1096bd761f7229c9a1d6d57b540  '"$archive" | sha256sum -c -
+          7z x -y "$archive" -o"$RUNNER_TEMP/stock/unpacked" >/dev/null
+          {
+            echo '# Состав stock/x60_2021.7z'
+            echo
+            echo 'SHA-256 архива:'
+            sha256sum "$archive" | cut -d' ' -f1
+            echo
+            echo '## Файлы архива'
+            (cd "$RUNNER_TEMP/stock/unpacked" && find . -type f -printf '%s %p\n' | sort)
+            echo
+            echo '## Файлы system.img'
+            find "$RUNNER_TEMP/stock/unpacked" -type f -iname 'system.img' -print | while IFS= read -r img; do
+              echo "### $img"
+              file "$img"
+              for p in / /app /priv-app; do
+                echo "--- $p ---"
+                debugfs -R "ls -l $p" "$img" 2>&1 || true
+              done
+              mkdir -p "$RUNNER_TEMP/stock/extract"
+              for p in build.prop app/Launcher2.apk app/ElSettings.apk app/Settings.apk priv-app/EL830LF01_Home.apk; do
+                dest="$RUNNER_TEMP/stock/extract/$(basename "$p")"
+                debugfs -R "dump /$p $dest" "$img" 2>&1 || true
+              done
+              if [ -f "$RUNNER_TEMP/stock/extract/build.prop" ]; then
+                echo '--- build.prop: модель и версия ---'
+                grep -E '^(ro.product.|ro.build.version.|ro.build.description|persist.sys.usb.config|ro.debuggable|ro.adb.secure)' "$RUNNER_TEMP/stock/extract/build.prop" || true
+              fi
+              BT=$(find /usr/local/lib/android/sdk/build-tools -name aapt -type f | sort -V | tail -1)
+              for apk in "$RUNNER_TEMP"/stock/extract/*.apk; do
+                [ -s "$apk" ] || continue
+                echo "--- $(basename "$apk"): manifest ---"
+                "$BT" dump badging "$apk" 2>&1 | head -50 || true
+                echo '--- HOME и LAUNCHER в дереве manifest ---'
+                "$BT" dump xmltree "$apk" AndroidManifest.xml 2>&1 | grep -E 'HOME|LAUNCHER|MAIN|name\(0x01010003\)|exported|enabled' | head -160 || true
+              done
+            done
+            echo
+            echo '## Init и скрипты обновления (файлы вне образов)'
+            find "$RUNNER_TEMP/stock/unpacked" -type f \( -name '*.sh' -o -name '*.rc' -o -name '*.ini' -o -name '*.txt' \) -size -500k -print | while IFS= read -r f; do
+              echo "--- $f ---"
+              grep -inE 'adb|mke2fs|system.img|build_emmc|recovery|partition|format' "$f" | head -50 || true
+            done
+          } > reports/stock-2021-inspection.txt
+          cat reports/stock-2021-inspection.txt
+      - name: Сохранить отчёт
+        run: |
+          set -e
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/stock-2021-inspection.txt
+          git diff --cached --quiet && exit 0
+          git commit -m 'report: inspect stock 2021 firmware'
+          for try in 1 2 3 4 5; do
+            if git pull --rebase origin "${{ github.ref_name }}" && git push origin HEAD:"${{ github.ref_name }}"; then exit 0; fi
+            git rebase --abort || true
+            sleep 5
+          done
+          exit 1
