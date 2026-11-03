@@ -17,7 +17,7 @@ Padding at end of inode bitmap is not set. Fix? no
 /home/runner/work/_temp/input/extracted/system.img: ********** WARNING: Filesystem still has errors **********
 
 /home/runner/work/_temp/input/extracted/system.img: 1399/23040 files (0.0% non-contiguous), 85475/92160 blocks
-Only the previously observed stock inode-bitmap padding warning is present.
+Check passed: clean, or only the previously observed stock inode-bitmap padding warning.
 Извлечённый исходный Launcher2:
 debugfs 1.47.0 (5-Feb-2023)
 /home/runner/work/_temp/output/check/Launcher2.apk: Android package (APK), with AndroidManifest.xml
@@ -43,4 +43,32 @@ Pass 3: Checking directory connectivity
 Pass 4: Checking reference counts
 Pass 5: Checking group summary information
 /home/runner/work/_temp/output/system.img: 1400/23040 files (0.0% non-contiguous), 88471/92160 blocks
-expected e2fsck status 4 for known stock warning, got 0
+Check passed: clean, or only the previously observed stock inode-bitmap padding warning.
+Сверка неизменённых исходных файлов и новой копии:
+/priv-app/EL830LF01_Home.apk: совпадает
+/priv-app/Launcher2: совпадает
+/priv-app/Navitel-large.apk: совпадает
+/build.prop: совпадает
+Launcher2.apk совпадает с исходным Launcher2
+debugfs 1.47.0 (5-Feb-2023)
+Inode: 1400   Type: regular    Mode:  0644   Flags: 0x80000
+Generation: 0    Version: 0x00000000:00000000
+User:     0   Group:     0   Project:     0   Size: 12267776
+File ACL: 0
+Links: 1   Blockcount: 23968
+Fragment:  Address: 0    Number: 0    Size: 0
+ ctime: 0x6ae9ceb4:00000000 -- Tue Nov  3 12:08:20 2026
+ atime: 0x6ae9ceb4:00000000 -- Tue Nov  3 12:08:20 2026
+ mtime: 0x6ae9ceb4:00000000 -- Tue Nov  3 12:08:20 2026
+crtime: 0x6ae9ceb4:00000000 -- Tue Nov  3 12:08:20 2026
+Size of extra inode fields: 32
+EXTENTS:
+(0-2995):26085-29080
+Размеры и SHA-256:
+/home/runner/work/_temp/input/extracted/system.img 377487360 bytes
+/home/runner/work/_temp/output/system.img 377487360 bytes
+79df29ec1ea97fd2e1da605c9651c6e5cce9d05d79518ff8e3e7d1dd16553dba  /home/runner/work/_temp/output/system.img
+
+Проверка содержимого ZIP: SHA-256 совпадает с образом.
+system-home-test.zip 221212620 bytes
+5a6125486ece150349c8106585b9ad1f76f93ad1de052e1f324d24c8fcc87738  system-home-test.zip
