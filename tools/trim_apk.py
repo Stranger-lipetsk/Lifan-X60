@@ -68,11 +68,13 @@ def main():
                 continue
             data = src.read(info.filename)
             name = info.filename
-            # без сжатия обязан быть только dex: Dalvik открывает его через
-            # mmap. Нативные библиотеки можно сжимать — так они и лежали
-            # в исходных APK, разжимать их нельзя (файл раздувается).
-            no_compress = name.split('/')[-1].startswith('classes') and name.endswith('.dex')
-            if no_compress:
+            # ВАЖНО: dex оставляем сжатым, как он и лежал в исходном APK.
+            # Раньше я делал его несжатым (STORED) ради mmap — и это дало
+            # зависание на «Please wait for system optimization»: на этой
+            # прошивке Dalvik ждёт выровненный (4 байта) несжатый dex, а
+            # внутри zip смещение получается произвольным. Сжатый dex
+            # Dalvik распаковывает сам, и это работало всегда.
+            if False:
                 comp = zipfile.ZIP_STORED
             elif args.compress and info.compress_type == zipfile.ZIP_STORED and len(data) > 4096:
                 probe = zlib.compress(data, 6)
@@ -92,6 +94,10 @@ def main():
             zi = zipfile.ZipInfo(name, date_time=info.date_time)
             zi.compress_type = comp
             zi.external_attr = info.external_attr
+            if comp == zipfile.ZIP_STORED:
+                # выравниваем начало данных на 4 байта, иначе Dalvik
+                # не сможет открыть такой dex через mmap
+                zi.extra = b'\x00\x00' * 2
             dst.writestr(zi, data)
 
     src.close()
