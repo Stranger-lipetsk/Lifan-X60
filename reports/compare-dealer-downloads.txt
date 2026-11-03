@@ -2,3 +2,6 @@
 75e7d6cd900fac971b55fec9f59913153bf7a1096bd761f7229c9a1d6d57b540  /home/runner/work/_temp/compare/downloads/enthusiast/x60_2021.7z
 34bdbd06d8660c0fa39e560e061897d8e4dfd565e9124d24881ec81ed4cf21bc  /home/runner/work/_temp/compare/downloads/dealer/lifan.rar
 d050adfa1a044b9774c9173e3eb09297e68f4ad3d1b388af5a320bc695a0ab0e  /home/runner/work/_temp/compare/downloads/dealer-time/831_lf01_20170309_time_russia.rar
+
+## dealer-7z.log
+/home/runner/work/_temp/d7656756-9fc7-4c43-bd0b-7dcbd5911d0a.sh: line 16: 7zz: command not found
