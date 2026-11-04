@@ -34,7 +34,7 @@ def main():
                       '--min-sdk-version', '19', '--max-sdk-version', '19', str(apk)])
         print('apksigner API19 exit:', result.returncode)
         for line in result.stdout.splitlines():
-            if ('Verified using v1' in line or 'Signer #' in line and 'SHA-256 digest' in line
+            if ('Verified using v1' in line or ('Signer' in line and 'SHA-256 digest' in line)
                     or line.startswith(('ERROR', 'DOES NOT VERIFY', 'WARNING'))):
                 print(line)
     print('\n## /system/bin/check_usb_iface.sh')
