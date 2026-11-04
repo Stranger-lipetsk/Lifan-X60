@@ -1,0 +1,74 @@
+SHA-256 stock system.img: b6bbbe529942ffec250cad993ae9cbb808721c27cf2536fb3fb11120130e8545
+SHA-256 published system.img: 79df29ec1ea97fd2e1da605c9651c6e5cce9d05d79518ff8e3e7d1dd16553dba
+The published digest equals the previously generated stock-home-test system image.
+# Stock vs published launcher system: regular files and symlinks
+Content, sizes and symlink targets only; inode metadata and runtime are not compared.
+Boot image and data partition are not included in the published image.
+File/symlink counts: 1342 1343
+Differences: 1
+priv-app/Launcher2.apk: None -> ('file', 12267776, '82787a6007589a169242f2c1391252342a9824748a8b469d1d522acab83458e6')
+
+## Paths related to Wi-Fi / networking, content only
+Matching paths examined: 21
+Changed paths: 0
+Matching path names do not cover every Wi-Fi dependency; only content is checked.
+
+## debugfs stat: /system/etc/wifi
+### stock
+Inode: 803   Type: directory    Mode:  0755   Flags: 0x80080
+User:     0   Group:     0   Size: 4096
+Links: 3   Blockcount: 8
+  security.selinux (26) = "u:object_r:system_file:s0\000"
+### launcher
+Inode: 803   Type: directory    Mode:  0755   Flags: 0x80080
+User:     0   Group:     0   Size: 4096
+Links: 3   Blockcount: 8
+  security.selinux (26) = "u:object_r:system_file:s0\000"
+
+## debugfs stat: /system/bin/wpa_supplicant
+### stock
+Inode: 584   Type: regular    Mode:  0755   Flags: 0x80080
+User:     0   Group:  2000   Size: 793480
+Links: 1   Blockcount: 1552
+  security.selinux (23) = "u:object_r:wpa_exec:s0\000"
+### launcher
+Inode: 584   Type: regular    Mode:  0755   Flags: 0x80080
+User:     0   Group:  2000   Size: 793480
+Links: 1   Blockcount: 1552
+  security.selinux (23) = "u:object_r:wpa_exec:s0\000"
+
+## debugfs stat: /system/bin/dhcpcd
+### stock
+Inode: 341   Type: regular    Mode:  0755   Flags: 0x80080
+User:     0   Group:  2000   Size: 67032
+Links: 1   Blockcount: 136
+  security.selinux (24) = "u:object_r:dhcp_exec:s0\000"
+### launcher
+Inode: 341   Type: regular    Mode:  0755   Flags: 0x80080
+User:     0   Group:  2000   Size: 67032
+Links: 1   Blockcount: 136
+  security.selinux (24) = "u:object_r:dhcp_exec:s0\000"
+
+## debugfs stat: /system/lib/hw
+### stock
+Inode: 993   Type: directory    Mode:  0755   Flags: 0x80080
+User:     0   Group:     0   Size: 4096
+Links: 2   Blockcount: 8
+  security.selinux (26) = "u:object_r:system_file:s0\000"
+### launcher
+Inode: 993   Type: directory    Mode:  0755   Flags: 0x80080
+User:     0   Group:     0   Size: 4096
+Links: 2   Blockcount: 8
+  security.selinux (26) = "u:object_r:system_file:s0\000"
+
+## debugfs stat: /system/vendor/firmware/ti-connectivity
+### stock
+Inode: 1369   Type: directory    Mode:  0755   Flags: 0x80080
+User:     0   Group:  2000   Size: 4096
+Links: 2   Blockcount: 8
+  security.selinux (26) = "u:object_r:system_file:s0\000"
+### launcher
+Inode: 1369   Type: directory    Mode:  0755   Flags: 0x80080
+User:     0   Group:  2000   Size: 4096
+Links: 2   Blockcount: 8
+  security.selinux (26) = "u:object_r:system_file:s0\000"
