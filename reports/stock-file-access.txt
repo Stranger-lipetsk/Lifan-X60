@@ -1963,3 +1963,9 @@ smali/com/android/settings/wifi/AdvancedWifiSettings.smali:133 .method private i
     const-string v13, "wifi_watchdog_poor_network_test_enabled"
 
 ... method truncated at 300 lines
+
+## APK DEX literal scan: MANAGE_ROOT
+Only literal strings are searched; obfuscation and dynamic construction are not excluded.
+literal match: app/DocumentsUI.apk
+literal match: app/DownloadProviderUi.apk
+ZIP/APK files scanned: 52
