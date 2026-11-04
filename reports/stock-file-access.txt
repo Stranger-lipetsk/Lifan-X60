@@ -9,508 +9,43 @@ df452ccc6e736df21e934b7b6c88ee8377f9453ab4908391b1bbbd4ce7f16630  DocumentsUI.ap
 # Stock Android file-picker and installer static trace
 Exact image source and hashes are checked by workflow; runtime reachability is not proved.
 
-## CertInstaller files: 19 hits: 490
-smali/com/android/certinstaller/CertInstaller$1.smali:1 (outside method)
-  .class Lcom/android/certinstaller/CertInstaller$1;
-smali/com/android/certinstaller/CertInstaller$1.smali:3 (outside method)
-  .source "CertInstaller.java"
-smali/com/android/certinstaller/CertInstaller$1.smali:8 (outside method)
-  value = Lcom/android/certinstaller/CertInstaller;->extractPkcs12InBackground(Ljava/lang/String;)V
-smali/com/android/certinstaller/CertInstaller$1.smali:29 (outside method)
-  .field final synthetic this$0:Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$1.smali:35 .method constructor <init>(Lcom/android/certinstaller/CertInstaller;Ljava/lang/String;)V
-  .method constructor <init>(Lcom/android/certinstaller/CertInstaller;Ljava/lang/String;)V
-smali/com/android/certinstaller/CertInstaller$1.smali:40 .method constructor <init>(Lcom/android/certinstaller/CertInstaller;Ljava/lang/String;)V
-  iput-object p1, p0, Lcom/android/certinstaller/CertInstaller$1;->this$0:Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$1.smali:42 .method constructor <init>(Lcom/android/certinstaller/CertInstaller;Ljava/lang/String;)V
-  iput-object p2, p0, Lcom/android/certinstaller/CertInstaller$1;->val$password:Ljava/lang/String;
-smali/com/android/certinstaller/CertInstaller$1.smali:57 .method protected varargs doInBackground([Ljava/lang/Void;)Ljava/lang/Boolean;
-  iget-object v0, p0, Lcom/android/certinstaller/CertInstaller$1;->this$0:Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$1.smali:59 .method protected varargs doInBackground([Ljava/lang/Void;)Ljava/lang/Boolean;
-  invoke-static {v0}, Lcom/android/certinstaller/CertInstaller;->access$200(Lcom/android/certinstaller/CertInstaller;)Lcom/android/certinstaller/CredentialHelper;
-smali/com/android/certinstaller/CertInstaller$1.smali:63 .method protected varargs doInBackground([Ljava/lang/Void;)Ljava/lang/Boolean;
-  iget-object v1, p0, Lcom/android/certinstaller/CertInstaller$1;->val$password:Ljava/lang/String;
-smali/com/android/certinstaller/CertInstaller$1.smali:65 .method protected varargs doInBackground([Ljava/lang/Void;)Ljava/lang/Boolean;
-  invoke-virtual {v0, v1}, Lcom/android/certinstaller/CredentialHelper;->extractPkcs12(Ljava/lang/String;)Z
-smali/com/android/certinstaller/CertInstaller$1.smali:85 .method protected bridge synthetic doInBackground([Ljava/lang/Object;)Ljava/lang/Object;
-  invoke-virtual {p0, p1}, Lcom/android/certinstaller/CertInstaller$1;->doInBackground([Ljava/lang/Void;)Ljava/lang/Boolean;
-smali/com/android/certinstaller/CertInstaller$1.smali:98 .method protected onPostExecute(Ljava/lang/Boolean;)V
-  new-instance v0, Lcom/android/certinstaller/CertInstaller$OnExtractionDoneAction;
-smali/com/android/certinstaller/CertInstaller$1.smali:104 .method protected onPostExecute(Ljava/lang/Boolean;)V
-  invoke-direct {v0, v1}, Lcom/android/certinstaller/CertInstaller$OnExtractionDoneAction;-><init>(Z)V
-smali/com/android/certinstaller/CertInstaller$1.smali:107 .method protected onPostExecute(Ljava/lang/Boolean;)V
-  .local v0, "action":Lcom/android/certinstaller/CertInstaller$MyAction;
-smali/com/android/certinstaller/CertInstaller$1.smali:108 .method protected onPostExecute(Ljava/lang/Boolean;)V
-  iget-object v1, p0, Lcom/android/certinstaller/CertInstaller$1;->this$0:Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$1.smali:110 .method protected onPostExecute(Ljava/lang/Boolean;)V
-  invoke-static {v1}, Lcom/android/certinstaller/CertInstaller;->access$400(Lcom/android/certinstaller/CertInstaller;)I
-smali/com/android/certinstaller/CertInstaller$1.smali:119 .method protected onPostExecute(Ljava/lang/Boolean;)V
-  iget-object v1, p0, Lcom/android/certinstaller/CertInstaller$1;->this$0:Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$1.smali:121 .method protected onPostExecute(Ljava/lang/Boolean;)V
-  invoke-static {v1, v0}, Lcom/android/certinstaller/CertInstaller;->access$502(Lcom/android/certinstaller/CertInstaller;Lcom/android/certinstaller/CertInstaller$MyAction;)Lcom/android/certinstaller/CertInstaller$MyAction;
-smali/com/android/certinstaller/CertInstaller$1.smali:129 .method protected onPostExecute(Ljava/lang/Boolean;)V
-  iget-object v1, p0, Lcom/android/certinstaller/CertInstaller$1;->this$0:Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$1.smali:131 .method protected onPostExecute(Ljava/lang/Boolean;)V
-  invoke-interface {v0, v1}, Lcom/android/certinstaller/CertInstaller$MyAction;->run(Lcom/android/certinstaller/CertInstaller;)V
-smali/com/android/certinstaller/CertInstaller$1.smali:145 .method protected bridge synthetic onPostExecute(Ljava/lang/Object;)V
-  invoke-virtual {p0, p1}, Lcom/android/certinstaller/CertInstaller$1;->onPostExecute(Ljava/lang/Boolean;)V
-smali/com/android/certinstaller/CertInstaller$2.smali:1 (outside method)
-  .class Lcom/android/certinstaller/CertInstaller$2;
-smali/com/android/certinstaller/CertInstaller$2.smali:3 (outside method)
-  .source "CertInstaller.java"
-smali/com/android/certinstaller/CertInstaller$2.smali:11 (outside method)
-  value = Lcom/android/certinstaller/CertInstaller;->createPkcs12PasswordDialog()Landroid/app/Dialog;
-smali/com/android/certinstaller/CertInstaller$2.smali:21 (outside method)
-  .field final synthetic this$0:Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$2.smali:25 .method constructor <init>(Lcom/android/certinstaller/CertInstaller;)V
-  .method constructor <init>(Lcom/android/certinstaller/CertInstaller;)V
-smali/com/android/certinstaller/CertInstaller$2.smali:30 .method constructor <init>(Lcom/android/certinstaller/CertInstaller;)V
-  iput-object p1, p0, Lcom/android/certinstaller/CertInstaller$2;->this$0:Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$2.smali:46 .method public onClick(Landroid/content/DialogInterface;I)V
-  iget-object v0, p0, Lcom/android/certinstaller/CertInstaller$2;->this$0:Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$2.smali:50 .method public onClick(Landroid/content/DialogInterface;I)V
-  invoke-static {v0, v1}, Lcom/android/certinstaller/CertInstaller;->access$600(Lcom/android/certinstaller/CertInstaller;I)V
-smali/com/android/certinstaller/CertInstaller$3.smali:1 (outside method)
-  .class Lcom/android/certinstaller/CertInstaller$3;
-smali/com/android/certinstaller/CertInstaller$3.smali:3 (outside method)
-  .source "CertInstaller.java"
-smali/com/android/certinstaller/CertInstaller$3.smali:11 (outside method)
-  value = Lcom/android/certinstaller/CertInstaller;->createPkcs12PasswordDialog()Landroid/app/Dialog;
-smali/com/android/certinstaller/CertInstaller$3.smali:21 (outside method)
-  .field final synthetic this$0:Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$3.smali:25 .method constructor <init>(Lcom/android/certinstaller/CertInstaller;)V
-  .method constructor <init>(Lcom/android/certinstaller/CertInstaller;)V
-smali/com/android/certinstaller/CertInstaller$3.smali:30 .method constructor <init>(Lcom/android/certinstaller/CertInstaller;)V
-  iput-object p1, p0, Lcom/android/certinstaller/CertInstaller$3;->this$0:Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$3.smali:46 .method public onClick(Landroid/content/DialogInterface;I)V
-  iget-object v1, p0, Lcom/android/certinstaller/CertInstaller$3;->this$0:Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$3.smali:48 .method public onClick(Landroid/content/DialogInterface;I)V
-  invoke-static {v1}, Lcom/android/certinstaller/CertInstaller;->access$700(Lcom/android/certinstaller/CertInstaller;)Lcom/android/certinstaller/ViewHelper;
-smali/com/android/certinstaller/CertInstaller$3.smali:54 .method public onClick(Landroid/content/DialogInterface;I)V
-  invoke-virtual {v1, v2}, Lcom/android/certinstaller/ViewHelper;->getText(I)Ljava/lang/String;
-smali/com/android/certinstaller/CertInstaller$3.smali:60 .method public onClick(Landroid/content/DialogInterface;I)V
-  iget-object v1, p0, Lcom/android/certinstaller/CertInstaller$3;->this$0:Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$3.smali:62 .method public onClick(Landroid/content/DialogInterface;I)V
-  new-instance v2, Lcom/android/certinstaller/CertInstaller$Pkcs12ExtractAction;
-smali/com/android/certinstaller/CertInstaller$3.smali:64 .method public onClick(Landroid/content/DialogInterface;I)V
-  invoke-direct {v2, v0}, Lcom/android/certinstaller/CertInstaller$Pkcs12ExtractAction;-><init>(Ljava/lang/String;)V
-smali/com/android/certinstaller/CertInstaller$3.smali:66 .method public onClick(Landroid/content/DialogInterface;I)V
-  invoke-static {v1, v2}, Lcom/android/certinstaller/CertInstaller;->access$502(Lcom/android/certinstaller/CertInstaller;Lcom/android/certinstaller/CertInstaller$MyAction;)Lcom/android/certinstaller/CertInstaller$MyAction;
-smali/com/android/certinstaller/CertInstaller$3.smali:69 .method public onClick(Landroid/content/DialogInterface;I)V
-  iget-object v1, p0, Lcom/android/certinstaller/CertInstaller$3;->this$0:Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$3.smali:71 .method public onClick(Landroid/content/DialogInterface;I)V
-  invoke-static {v1}, Lcom/android/certinstaller/CertInstaller;->access$500(Lcom/android/certinstaller/CertInstaller;)Lcom/android/certinstaller/CertInstaller$MyAction;
-smali/com/android/certinstaller/CertInstaller$3.smali:75 .method public onClick(Landroid/content/DialogInterface;I)V
-  iget-object v2, p0, Lcom/android/certinstaller/CertInstaller$3;->this$0:Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$3.smali:77 .method public onClick(Landroid/content/DialogInterface;I)V
-  invoke-interface {v1, v2}, Lcom/android/certinstaller/CertInstaller$MyAction;->run(Lcom/android/certinstaller/CertInstaller;)V
-smali/com/android/certinstaller/CertInstaller$4.smali:1 (outside method)
-  .class Lcom/android/certinstaller/CertInstaller$4;
-smali/com/android/certinstaller/CertInstaller$4.smali:3 (outside method)
-  .source "CertInstaller.java"
-smali/com/android/certinstaller/CertInstaller$4.smali:11 (outside method)
-  value = Lcom/android/certinstaller/CertInstaller;->createPkcs12PasswordDialog()Landroid/app/Dialog;
-smali/com/android/certinstaller/CertInstaller$4.smali:21 (outside method)
-  .field final synthetic this$0:Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$4.smali:25 .method constructor <init>(Lcom/android/certinstaller/CertInstaller;)V
-  .method constructor <init>(Lcom/android/certinstaller/CertInstaller;)V
-smali/com/android/certinstaller/CertInstaller$4.smali:30 .method constructor <init>(Lcom/android/certinstaller/CertInstaller;)V
-  iput-object p1, p0, Lcom/android/certinstaller/CertInstaller$4;->this$0:Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$4.smali:45 .method public onCancel(Landroid/content/DialogInterface;)V
-  iget-object v0, p0, Lcom/android/certinstaller/CertInstaller$4;->this$0:Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$4.smali:49 .method public onCancel(Landroid/content/DialogInterface;)V
-  invoke-static {v0, v1}, Lcom/android/certinstaller/CertInstaller;->access$600(Lcom/android/certinstaller/CertInstaller;I)V
-smali/com/android/certinstaller/CertInstaller$5.smali:1 (outside method)
-  .class Lcom/android/certinstaller/CertInstaller$5;
-smali/com/android/certinstaller/CertInstaller$5.smali:3 (outside method)
-  .source "CertInstaller.java"
-smali/com/android/certinstaller/CertInstaller$5.smali:11 (outside method)
-  value = Lcom/android/certinstaller/CertInstaller;->createNameCredentialDialog()Landroid/app/Dialog;
-smali/com/android/certinstaller/CertInstaller$5.smali:21 (outside method)
-  .field final synthetic this$0:Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$5.smali:25 .method constructor <init>(Lcom/android/certinstaller/CertInstaller;)V
-  .method constructor <init>(Lcom/android/certinstaller/CertInstaller;)V
-smali/com/android/certinstaller/CertInstaller$5.smali:30 .method constructor <init>(Lcom/android/certinstaller/CertInstaller;)V
-  iput-object p1, p0, Lcom/android/certinstaller/CertInstaller$5;->this$0:Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$5.smali:62 .method public onItemSelected(Landroid/widget/AdapterView;Landroid/view/View;IJ)V
-  const-string v0, "CertInstaller"
-smali/com/android/certinstaller/CertInstaller$5.smali:90 .method public onItemSelected(Landroid/widget/AdapterView;Landroid/view/View;IJ)V
-  iget-object v0, p0, Lcom/android/certinstaller/CertInstaller$5;->this$0:Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$5.smali:92 .method public onItemSelected(Landroid/widget/AdapterView;Landroid/view/View;IJ)V
-  invoke-static {v0}, Lcom/android/certinstaller/CertInstaller;->access$200(Lcom/android/certinstaller/CertInstaller;)Lcom/android/certinstaller/CredentialHelper;
-smali/com/android/certinstaller/CertInstaller$5.smali:98 .method public onItemSelected(Landroid/widget/AdapterView;Landroid/view/View;IJ)V
-  invoke-virtual {v0, v1}, Lcom/android/certinstaller/CredentialHelper;->setInstallAsUid(I)V
-smali/com/android/certinstaller/CertInstaller$5.smali:104 .method public onItemSelected(Landroid/widget/AdapterView;Landroid/view/View;IJ)V
-  iget-object v0, p0, Lcom/android/certinstaller/CertInstaller$5;->this$0:Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$5.smali:106 .method public onItemSelected(Landroid/widget/AdapterView;Landroid/view/View;IJ)V
-  invoke-static {v0}, Lcom/android/certinstaller/CertInstaller;->access$200(Lcom/android/certinstaller/CertInstaller;)Lcom/android/certinstaller/CredentialHelper;
-smali/com/android/certinstaller/CertInstaller$5.smali:112 .method public onItemSelected(Landroid/widget/AdapterView;Landroid/view/View;IJ)V
-  invoke-virtual {v0, v1}, Lcom/android/certinstaller/CredentialHelper;->setInstallAsUid(I)V
-smali/com/android/certinstaller/CertInstaller$6.smali:1 (outside method)
-  .class Lcom/android/certinstaller/CertInstaller$6;
-smali/com/android/certinstaller/CertInstaller$6.smali:3 (outside method)
-  .source "CertInstaller.java"
-smali/com/android/certinstaller/CertInstaller$6.smali:11 (outside method)
-  value = Lcom/android/certinstaller/CertInstaller;->createNameCredentialDialog()Landroid/app/Dialog;
-smali/com/android/certinstaller/CertInstaller$6.smali:21 (outside method)
-  .field final synthetic this$0:Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$6.smali:25 .method constructor <init>(Lcom/android/certinstaller/CertInstaller;)V
-  .method constructor <init>(Lcom/android/certinstaller/CertInstaller;)V
-smali/com/android/certinstaller/CertInstaller$6.smali:30 .method constructor <init>(Lcom/android/certinstaller/CertInstaller;)V
-  iput-object p1, p0, Lcom/android/certinstaller/CertInstaller$6;->this$0:Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$6.smali:46 .method public onClick(Landroid/content/DialogInterface;I)V
-  iget-object v0, p0, Lcom/android/certinstaller/CertInstaller$6;->this$0:Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$6.smali:50 .method public onClick(Landroid/content/DialogInterface;I)V
-  invoke-static {v0, v1}, Lcom/android/certinstaller/CertInstaller;->access$600(Lcom/android/certinstaller/CertInstaller;I)V
-smali/com/android/certinstaller/CertInstaller$7.smali:1 (outside method)
-  .class Lcom/android/certinstaller/CertInstaller$7;
-smali/com/android/certinstaller/CertInstaller$7.smali:3 (outside method)
-  .source "CertInstaller.java"
-smali/com/android/certinstaller/CertInstaller$7.smali:11 (outside method)
-  value = Lcom/android/certinstaller/CertInstaller;->createNameCredentialDialog()Landroid/app/Dialog;
-smali/com/android/certinstaller/CertInstaller$7.smali:21 (outside method)
-  .field final synthetic this$0:Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$7.smali:25 .method constructor <init>(Lcom/android/certinstaller/CertInstaller;)V
-  .method constructor <init>(Lcom/android/certinstaller/CertInstaller;)V
-smali/com/android/certinstaller/CertInstaller$7.smali:30 .method constructor <init>(Lcom/android/certinstaller/CertInstaller;)V
-  iput-object p1, p0, Lcom/android/certinstaller/CertInstaller$7;->this$0:Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$7.smali:48 .method public onClick(Landroid/content/DialogInterface;I)V
-  iget-object v2, p0, Lcom/android/certinstaller/CertInstaller$7;->this$0:Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$7.smali:50 .method public onClick(Landroid/content/DialogInterface;I)V
-  invoke-static {v2}, Lcom/android/certinstaller/CertInstaller;->access$700(Lcom/android/certinstaller/CertInstaller;)Lcom/android/certinstaller/ViewHelper;
-smali/com/android/certinstaller/CertInstaller$7.smali:56 .method public onClick(Landroid/content/DialogInterface;I)V
-  invoke-virtual {v2, v3}, Lcom/android/certinstaller/ViewHelper;->getText(I)Ljava/lang/String;
-smali/com/android/certinstaller/CertInstaller$7.smali:69 .method public onClick(Landroid/content/DialogInterface;I)V
-  iget-object v2, p0, Lcom/android/certinstaller/CertInstaller$7;->this$0:Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$7.smali:71 .method public onClick(Landroid/content/DialogInterface;I)V
-  invoke-static {v2}, Lcom/android/certinstaller/CertInstaller;->access$700(Lcom/android/certinstaller/CertInstaller;)Lcom/android/certinstaller/ViewHelper;
-smali/com/android/certinstaller/CertInstaller$7.smali:75 .method public onClick(Landroid/content/DialogInterface;I)V
-  invoke-virtual {v2, v4}, Lcom/android/certinstaller/ViewHelper;->setHasEmptyError(Z)V
-smali/com/android/certinstaller/CertInstaller$7.smali:78 .method public onClick(Landroid/content/DialogInterface;I)V
-  iget-object v2, p0, Lcom/android/certinstaller/CertInstaller$7;->this$0:Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$7.smali:80 .method public onClick(Landroid/content/DialogInterface;I)V
-  invoke-virtual {v2, v4}, Lcom/android/certinstaller/CertInstaller;->removeDialog(I)V
-smali/com/android/certinstaller/CertInstaller$7.smali:83 .method public onClick(Landroid/content/DialogInterface;I)V
-  iget-object v2, p0, Lcom/android/certinstaller/CertInstaller$7;->this$0:Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$7.smali:85 .method public onClick(Landroid/content/DialogInterface;I)V
-  invoke-virtual {v2, v4}, Lcom/android/certinstaller/CertInstaller;->showDialog(I)V
-smali/com/android/certinstaller/CertInstaller$7.smali:93 .method public onClick(Landroid/content/DialogInterface;I)V
-  iget-object v2, p0, Lcom/android/certinstaller/CertInstaller$7;->this$0:Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$7.smali:95 .method public onClick(Landroid/content/DialogInterface;I)V
-  invoke-virtual {v2, v4}, Lcom/android/certinstaller/CertInstaller;->removeDialog(I)V
-smali/com/android/certinstaller/CertInstaller$7.smali:98 .method public onClick(Landroid/content/DialogInterface;I)V
-  iget-object v2, p0, Lcom/android/certinstaller/CertInstaller$7;->this$0:Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$7.smali:100 .method public onClick(Landroid/content/DialogInterface;I)V
-  invoke-static {v2}, Lcom/android/certinstaller/CertInstaller;->access$200(Lcom/android/certinstaller/CertInstaller;)Lcom/android/certinstaller/CredentialHelper;
-smali/com/android/certinstaller/CertInstaller$7.smali:104 .method public onClick(Landroid/content/DialogInterface;I)V
-  invoke-virtual {v2, v1}, Lcom/android/certinstaller/CredentialHelper;->setName(Ljava/lang/String;)V
-smali/com/android/certinstaller/CertInstaller$7.smali:108 .method public onClick(Landroid/content/DialogInterface;I)V
-  iget-object v2, p0, Lcom/android/certinstaller/CertInstaller$7;->this$0:Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$7.smali:110 .method public onClick(Landroid/content/DialogInterface;I)V
-  iget-object v3, p0, Lcom/android/certinstaller/CertInstaller$7;->this$0:Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$7.smali:112 .method public onClick(Landroid/content/DialogInterface;I)V
-  invoke-static {v3}, Lcom/android/certinstaller/CertInstaller;->access$200(Lcom/android/certinstaller/CertInstaller;)Lcom/android/certinstaller/CredentialHelper;
-smali/com/android/certinstaller/CertInstaller$7.smali:116 .method public onClick(Landroid/content/DialogInterface;I)V
-  invoke-virtual {v3}, Lcom/android/certinstaller/CredentialHelper;->createSystemInstallIntent()Landroid/content/Intent;
-smali/com/android/certinstaller/CertInstaller$7.smali:122 .method public onClick(Landroid/content/DialogInterface;I)V
-  invoke-virtual {v2, v3, v4}, Lcom/android/certinstaller/CertInstaller;->startActivityForResult(Landroid/content/Intent;I)V
-smali/com/android/certinstaller/CertInstaller$7.smali:134 .method public onClick(Landroid/content/DialogInterface;I)V
-  const-string v2, "CertInstaller"
-smali/com/android/certinstaller/CertInstaller$7.smali:157 .method public onClick(Landroid/content/DialogInterface;I)V
-  iget-object v2, p0, Lcom/android/certinstaller/CertInstaller$7;->this$0:Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$7.smali:161 .method public onClick(Landroid/content/DialogInterface;I)V
-  invoke-static {v2, v3}, Lcom/android/certinstaller/CertInstaller;->access$600(Lcom/android/certinstaller/CertInstaller;I)V
-smali/com/android/certinstaller/CertInstaller$8.smali:1 (outside method)
-  .class Lcom/android/certinstaller/CertInstaller$8;
-smali/com/android/certinstaller/CertInstaller$8.smali:3 (outside method)
-  .source "CertInstaller.java"
-smali/com/android/certinstaller/CertInstaller$8.smali:11 (outside method)
-  value = Lcom/android/certinstaller/CertInstaller;->createNameCredentialDialog()Landroid/app/Dialog;
-smali/com/android/certinstaller/CertInstaller$8.smali:21 (outside method)
-  .field final synthetic this$0:Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$8.smali:25 .method constructor <init>(Lcom/android/certinstaller/CertInstaller;)V
-  .method constructor <init>(Lcom/android/certinstaller/CertInstaller;)V
-smali/com/android/certinstaller/CertInstaller$8.smali:30 .method constructor <init>(Lcom/android/certinstaller/CertInstaller;)V
-  iput-object p1, p0, Lcom/android/certinstaller/CertInstaller$8;->this$0:Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$8.smali:45 .method public onCancel(Landroid/content/DialogInterface;)V
-  iget-object v0, p0, Lcom/android/certinstaller/CertInstaller$8;->this$0:Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$8.smali:49 .method public onCancel(Landroid/content/DialogInterface;)V
-  invoke-static {v0, v1}, Lcom/android/certinstaller/CertInstaller;->access$600(Lcom/android/certinstaller/CertInstaller;I)V
-smali/com/android/certinstaller/CertInstaller$InstallCaCertsToKeyChainTask.smali:1 (outside method)
-  .class Lcom/android/certinstaller/CertInstaller$InstallCaCertsToKeyChainTask;
-smali/com/android/certinstaller/CertInstaller$InstallCaCertsToKeyChainTask.smali:3 (outside method)
-  .source "CertInstaller.java"
-smali/com/android/certinstaller/CertInstaller$InstallCaCertsToKeyChainTask.smali:8 (outside method)
-  value = Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$InstallCaCertsToKeyChainTask.smali:29 (outside method)
-  .field final synthetic this$0:Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$InstallCaCertsToKeyChainTask.smali:33 .method private constructor <init>(Lcom/android/certinstaller/CertInstaller;)V
-  .method private constructor <init>(Lcom/android/certinstaller/CertInstaller;)V
-smali/com/android/certinstaller/CertInstaller$InstallCaCertsToKeyChainTask.smali:38 .method private constructor <init>(Lcom/android/certinstaller/CertInstaller;)V
-  iput-object p1, p0, Lcom/android/certinstaller/CertInstaller$InstallCaCertsToKeyChainTask;->this$0:Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$InstallCaCertsToKeyChainTask.smali:45 .method synthetic constructor <init>(Lcom/android/certinstaller/CertInstaller;Lcom/android/certinstaller/CertInstaller$1;)V
-  .method synthetic constructor <init>(Lcom/android/certinstaller/CertInstaller;Lcom/android/certinstaller/CertInstaller$1;)V
-smali/com/android/certinstaller/CertInstaller$InstallCaCertsToKeyChainTask.smali:47 .method synthetic constructor <init>(Lcom/android/certinstaller/CertInstaller;Lcom/android/certinstaller/CertInstaller$1;)V
-  .param p1, "x0"    # Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$InstallCaCertsToKeyChainTask.smali:48 .method synthetic constructor <init>(Lcom/android/certinstaller/CertInstaller;Lcom/android/certinstaller/CertInstaller$1;)V
-  .param p2, "x1"    # Lcom/android/certinstaller/CertInstaller$1;
-smali/com/android/certinstaller/CertInstaller$InstallCaCertsToKeyChainTask.smali:52 .method synthetic constructor <init>(Lcom/android/certinstaller/CertInstaller;Lcom/android/certinstaller/CertInstaller$1;)V
-  invoke-direct {p0, p1}, Lcom/android/certinstaller/CertInstaller$InstallCaCertsToKeyChainTask;-><init>(Lcom/android/certinstaller/CertInstaller;)V
-smali/com/android/certinstaller/CertInstaller$InstallCaCertsToKeyChainTask.smali:66 .method protected varargs doInBackground([Ljava/lang/Void;)Ljava/lang/Boolean;
-  iget-object v2, p0, Lcom/android/certinstaller/CertInstaller$InstallCaCertsToKeyChainTask;->this$0:Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$InstallCaCertsToKeyChainTask.smali:77 .method protected varargs doInBackground([Ljava/lang/Void;)Ljava/lang/Boolean;
-  iget-object v2, p0, Lcom/android/certinstaller/CertInstaller$InstallCaCertsToKeyChainTask;->this$0:Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$InstallCaCertsToKeyChainTask.smali:79 .method protected varargs doInBackground([Ljava/lang/Void;)Ljava/lang/Boolean;
-  invoke-static {v2}, Lcom/android/certinstaller/CertInstaller;->access$200(Lcom/android/certinstaller/CertInstaller;)Lcom/android/certinstaller/CredentialHelper;
-smali/com/android/certinstaller/CertInstaller$InstallCaCertsToKeyChainTask.smali:87 .method protected varargs doInBackground([Ljava/lang/Void;)Ljava/lang/Boolean;
-  invoke-virtual {v2, v3}, Lcom/android/certinstaller/CredentialHelper;->installCaCertsToKeyChain(Landroid/security/IKeyChainService;)Z
-smali/com/android/certinstaller/CertInstaller$InstallCaCertsToKeyChainTask.smali:149 .method protected bridge synthetic doInBackground([Ljava/lang/Object;)Ljava/lang/Object;
-  invoke-virtual {p0, p1}, Lcom/android/certinstaller/CertInstaller$InstallCaCertsToKeyChainTask;->doInBackground([Ljava/lang/Void;)Ljava/lang/Boolean;
-smali/com/android/certinstaller/CertInstaller$InstallCaCertsToKeyChainTask.smali:169 .method protected onPostExecute(Ljava/lang/Boolean;)V
-  iget-object v0, p0, Lcom/android/certinstaller/CertInstaller$InstallCaCertsToKeyChainTask;->this$0:Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$InstallCaCertsToKeyChainTask.smali:173 .method protected onPostExecute(Ljava/lang/Boolean;)V
-  invoke-virtual {v0, v1}, Lcom/android/certinstaller/CertInstaller;->setResult(I)V
-smali/com/android/certinstaller/CertInstaller$InstallCaCertsToKeyChainTask.smali:177 .method protected onPostExecute(Ljava/lang/Boolean;)V
-  iget-object v0, p0, Lcom/android/certinstaller/CertInstaller$InstallCaCertsToKeyChainTask;->this$0:Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$InstallCaCertsToKeyChainTask.smali:179 .method protected onPostExecute(Ljava/lang/Boolean;)V
-  invoke-virtual {v0}, Lcom/android/certinstaller/CertInstaller;->finish()V
-smali/com/android/certinstaller/CertInstaller$InstallCaCertsToKeyChainTask.smali:194 .method protected bridge synthetic onPostExecute(Ljava/lang/Object;)V
-  invoke-virtual {p0, p1}, Lcom/android/certinstaller/CertInstaller$InstallCaCertsToKeyChainTask;->onPostExecute(Ljava/lang/Boolean;)V
-smali/com/android/certinstaller/CertInstaller$InstallOthersAction.smali:1 (outside method)
-  .class Lcom/android/certinstaller/CertInstaller$InstallOthersAction;
-smali/com/android/certinstaller/CertInstaller$InstallOthersAction.smali:3 (outside method)
-  .source "CertInstaller.java"
-smali/com/android/certinstaller/CertInstaller$InstallOthersAction.smali:6 (outside method)
-  .implements Lcom/android/certinstaller/CertInstaller$MyAction;
-smali/com/android/certinstaller/CertInstaller$InstallOthersAction.smali:11 (outside method)
-  value = Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$InstallOthersAction.smali:31 .method synthetic constructor <init>(Lcom/android/certinstaller/CertInstaller$1;)V
-  .method synthetic constructor <init>(Lcom/android/certinstaller/CertInstaller$1;)V
-smali/com/android/certinstaller/CertInstaller$InstallOthersAction.smali:33 .method synthetic constructor <init>(Lcom/android/certinstaller/CertInstaller$1;)V
-  .param p1, "x0"    # Lcom/android/certinstaller/CertInstaller$1;
-smali/com/android/certinstaller/CertInstaller$InstallOthersAction.smali:37 .method synthetic constructor <init>(Lcom/android/certinstaller/CertInstaller$1;)V
-  invoke-direct {p0}, Lcom/android/certinstaller/CertInstaller$InstallOthersAction;-><init>()V
-smali/com/android/certinstaller/CertInstaller$InstallOthersAction.smali:44 .method public run(Lcom/android/certinstaller/CertInstaller;)V
-  .method public run(Lcom/android/certinstaller/CertInstaller;)V
-smali/com/android/certinstaller/CertInstaller$InstallOthersAction.smali:46 .method public run(Lcom/android/certinstaller/CertInstaller;)V
-  .param p1, "host"    # Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$InstallOthersAction.smali:52 .method public run(Lcom/android/certinstaller/CertInstaller;)V
-  invoke-static {p1, v0}, Lcom/android/certinstaller/CertInstaller;->access$502(Lcom/android/certinstaller/CertInstaller;Lcom/android/certinstaller/CertInstaller$MyAction;)Lcom/android/certinstaller/CertInstaller$MyAction;
-smali/com/android/certinstaller/CertInstaller$InstallOthersAction.smali:55 .method public run(Lcom/android/certinstaller/CertInstaller;)V
-  invoke-virtual {p1}, Lcom/android/certinstaller/CertInstaller;->installOthers()V
-smali/com/android/certinstaller/CertInstaller$MyAction.smali:1 (outside method)
-  .class interface abstract Lcom/android/certinstaller/CertInstaller$MyAction;
-smali/com/android/certinstaller/CertInstaller$MyAction.smali:3 (outside method)
-  .source "CertInstaller.java"
-smali/com/android/certinstaller/CertInstaller$MyAction.smali:11 (outside method)
-  value = Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$MyAction.smali:21 .method public abstract run(Lcom/android/certinstaller/CertInstaller;)V
-  .method public abstract run(Lcom/android/certinstaller/CertInstaller;)V
-smali/com/android/certinstaller/CertInstaller$MyMap.smali:1 (outside method)
-  .class Lcom/android/certinstaller/CertInstaller$MyMap;
-smali/com/android/certinstaller/CertInstaller$MyMap.smali:3 (outside method)
-  .source "CertInstaller.java"
-smali/com/android/certinstaller/CertInstaller$MyMap.smali:11 (outside method)
-  value = Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$MyMap.smali:45 .method synthetic constructor <init>(Lcom/android/certinstaller/CertInstaller$1;)V
-  .method synthetic constructor <init>(Lcom/android/certinstaller/CertInstaller$1;)V
-smali/com/android/certinstaller/CertInstaller$MyMap.smali:47 .method synthetic constructor <init>(Lcom/android/certinstaller/CertInstaller$1;)V
-  .param p1, "x0"    # Lcom/android/certinstaller/CertInstaller$1;
-smali/com/android/certinstaller/CertInstaller$MyMap.smali:51 .method synthetic constructor <init>(Lcom/android/certinstaller/CertInstaller$1;)V
-  invoke-direct {p0}, Lcom/android/certinstaller/CertInstaller$MyMap;-><init>()V
-smali/com/android/certinstaller/CertInstaller$MyMap.smali:64 .method protected removeEldestEntry(Ljava/util/Map$Entry;)Z
-  invoke-virtual {p0}, Lcom/android/certinstaller/CertInstaller$MyMap;->size()I
-smali/com/android/certinstaller/CertInstaller$OnExtractionDoneAction.smali:1 (outside method)
-  .class Lcom/android/certinstaller/CertInstaller$OnExtractionDoneAction;
-smali/com/android/certinstaller/CertInstaller$OnExtractionDoneAction.smali:3 (outside method)
-  .source "CertInstaller.java"
-smali/com/android/certinstaller/CertInstaller$OnExtractionDoneAction.smali:6 (outside method)
-  .implements Lcom/android/certinstaller/CertInstaller$MyAction;
-smali/com/android/certinstaller/CertInstaller$OnExtractionDoneAction.smali:11 (outside method)
-  value = Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$OnExtractionDoneAction.smali:34 .method constructor <init>(Z)V
-  iput-boolean p1, p0, Lcom/android/certinstaller/CertInstaller$OnExtractionDoneAction;->mSuccess:Z
-smali/com/android/certinstaller/CertInstaller$OnExtractionDoneAction.smali:42 .method public run(Lcom/android/certinstaller/CertInstaller;)V
-  .method public run(Lcom/android/certinstaller/CertInstaller;)V
-smali/com/android/certinstaller/CertInstaller$OnExtractionDoneAction.smali:44 .method public run(Lcom/android/certinstaller/CertInstaller;)V
-  .param p1, "host"    # Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$OnExtractionDoneAction.smali:48 .method public run(Lcom/android/certinstaller/CertInstaller;)V
-  iget-boolean v0, p0, Lcom/android/certinstaller/CertInstaller$OnExtractionDoneAction;->mSuccess:Z
-smali/com/android/certinstaller/CertInstaller$OnExtractionDoneAction.smali:50 .method public run(Lcom/android/certinstaller/CertInstaller;)V
-  invoke-virtual {p1, v0}, Lcom/android/certinstaller/CertInstaller;->onExtractionDone(Z)V
-smali/com/android/certinstaller/CertInstaller$Pkcs12ExtractAction.smali:1 (outside method)
-  .class Lcom/android/certinstaller/CertInstaller$Pkcs12ExtractAction;
-smali/com/android/certinstaller/CertInstaller$Pkcs12ExtractAction.smali:3 (outside method)
-  .source "CertInstaller.java"
-smali/com/android/certinstaller/CertInstaller$Pkcs12ExtractAction.smali:6 (outside method)
-  .implements Lcom/android/certinstaller/CertInstaller$MyAction;
-smali/com/android/certinstaller/CertInstaller$Pkcs12ExtractAction.smali:11 (outside method)
-  value = Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$Pkcs12ExtractAction.smali:36 .method constructor <init>(Ljava/lang/String;)V
-  iput-object p1, p0, Lcom/android/certinstaller/CertInstaller$Pkcs12ExtractAction;->mPassword:Ljava/lang/String;
-smali/com/android/certinstaller/CertInstaller$Pkcs12ExtractAction.smali:44 .method public run(Lcom/android/certinstaller/CertInstaller;)V
-  .method public run(Lcom/android/certinstaller/CertInstaller;)V
-smali/com/android/certinstaller/CertInstaller$Pkcs12ExtractAction.smali:46 .method public run(Lcom/android/certinstaller/CertInstaller;)V
-  .param p1, "host"    # Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller$Pkcs12ExtractAction.smali:50 .method public run(Lcom/android/certinstaller/CertInstaller;)V
-  iget-boolean v0, p0, Lcom/android/certinstaller/CertInstaller$Pkcs12ExtractAction;->hasRun:Z
-smali/com/android/certinstaller/CertInstaller$Pkcs12ExtractAction.smali:62 .method public run(Lcom/android/certinstaller/CertInstaller;)V
-  iput-boolean v0, p0, Lcom/android/certinstaller/CertInstaller$Pkcs12ExtractAction;->hasRun:Z
-smali/com/android/certinstaller/CertInstaller$Pkcs12ExtractAction.smali:65 .method public run(Lcom/android/certinstaller/CertInstaller;)V
-  iget-object v0, p0, Lcom/android/certinstaller/CertInstaller$Pkcs12ExtractAction;->mPassword:Ljava/lang/String;
-smali/com/android/certinstaller/CertInstaller$Pkcs12ExtractAction.smali:67 .method public run(Lcom/android/certinstaller/CertInstaller;)V
-  invoke-virtual {p1, v0}, Lcom/android/certinstaller/CertInstaller;->extractPkcs12InBackground(Ljava/lang/String;)V
-smali/com/android/certinstaller/CertInstaller.smali:1 (outside method)
-  .class public Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller.smali:3 (outside method)
-  .source "CertInstaller.java"
-smali/com/android/certinstaller/CertInstaller.smali:9 (outside method)
-  Lcom/android/certinstaller/CertInstaller$OnExtractionDoneAction;,
-smali/com/android/certinstaller/CertInstaller.smali:10 (outside method)
-  Lcom/android/certinstaller/CertInstaller$InstallOthersAction;,
-smali/com/android/certinstaller/CertInstaller.smali:11 (outside method)
-  Lcom/android/certinstaller/CertInstaller$Pkcs12ExtractAction;,
-smali/com/android/certinstaller/CertInstaller.smali:12 (outside method)
-  Lcom/android/certinstaller/CertInstaller$MyAction;,
-smali/com/android/certinstaller/CertInstaller.smali:13 (outside method)
-  Lcom/android/certinstaller/CertInstaller$MyMap;,
-smali/com/android/certinstaller/CertInstaller.smali:14 (outside method)
-  Lcom/android/certinstaller/CertInstaller$InstallCaCertsToKeyChainTask;
-smali/com/android/certinstaller/CertInstaller.smali:20 (outside method)
-  .field private mCredentials:Lcom/android/certinstaller/CredentialHelper;
-smali/com/android/certinstaller/CertInstaller.smali:24 (outside method)
-  .field private mNextAction:Lcom/android/certinstaller/CertInstaller$MyAction;
-smali/com/android/certinstaller/CertInstaller.smali:28 (outside method)
-  .field private final mView:Lcom/android/certinstaller/ViewHelper;
-smali/com/android/certinstaller/CertInstaller.smali:44 .method public constructor <init>()V
-  iput-object v0, p0, Lcom/android/certinstaller/CertInstaller;->mKeyStore:Landroid/security/KeyStore;
-smali/com/android/certinstaller/CertInstaller.smali:47 .method public constructor <init>()V
-  new-instance v0, Lcom/android/certinstaller/ViewHelper;
-smali/com/android/certinstaller/CertInstaller.smali:49 .method public constructor <init>()V
-  invoke-direct {v0}, Lcom/android/certinstaller/ViewHelper;-><init>()V
-smali/com/android/certinstaller/CertInstaller.smali:51 .method public constructor <init>()V
-  iput-object v0, p0, Lcom/android/certinstaller/CertInstaller;->mView:Lcom/android/certinstaller/ViewHelper;
-smali/com/android/certinstaller/CertInstaller.smali:57 .method static synthetic access$200(Lcom/android/certinstaller/CertInstaller;)Lcom/android/certinstaller/CredentialHelper;
-  .method static synthetic access$200(Lcom/android/certinstaller/CertInstaller;)Lcom/android/certinstaller/CredentialHelper;
-smali/com/android/certinstaller/CertInstaller.smali:59 .method static synthetic access$200(Lcom/android/certinstaller/CertInstaller;)Lcom/android/certinstaller/CredentialHelper;
-  .param p0, "x0"    # Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller.smali:63 .method static synthetic access$200(Lcom/android/certinstaller/CertInstaller;)Lcom/android/certinstaller/CredentialHelper;
-  iget-object v0, p0, Lcom/android/certinstaller/CertInstaller;->mCredentials:Lcom/android/certinstaller/CredentialHelper;
-smali/com/android/certinstaller/CertInstaller.smali:68 .method static synthetic access$400(Lcom/android/certinstaller/CertInstaller;)I
-  .method static synthetic access$400(Lcom/android/certinstaller/CertInstaller;)I
-smali/com/android/certinstaller/CertInstaller.smali:70 .method static synthetic access$400(Lcom/android/certinstaller/CertInstaller;)I
-  .param p0, "x0"    # Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller.smali:74 .method static synthetic access$400(Lcom/android/certinstaller/CertInstaller;)I
-  iget v0, p0, Lcom/android/certinstaller/CertInstaller;->mState:I
-smali/com/android/certinstaller/CertInstaller.smali:79 .method static synthetic access$500(Lcom/android/certinstaller/CertInstaller;)Lcom/android/certinstaller/CertInstaller$MyAction;
-  .method static synthetic access$500(Lcom/android/certinstaller/CertInstaller;)Lcom/android/certinstaller/CertInstaller$MyAction;
-smali/com/android/certinstaller/CertInstaller.smali:81 .method static synthetic access$500(Lcom/android/certinstaller/CertInstaller;)Lcom/android/certinstaller/CertInstaller$MyAction;
-  .param p0, "x0"    # Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller.smali:85 .method static synthetic access$500(Lcom/android/certinstaller/CertInstaller;)Lcom/android/certinstaller/CertInstaller$MyAction;
-  iget-object v0, p0, Lcom/android/certinstaller/CertInstaller;->mNextAction:Lcom/android/certinstaller/CertInstaller$MyAction;
-smali/com/android/certinstaller/CertInstaller.smali:90 .method static synthetic access$502(Lcom/android/certinstaller/CertInstaller;Lcom/android/certinstaller/CertInstaller$MyAction;)Lcom/android/certinstaller/CertInstaller$MyAction;
-  .method static synthetic access$502(Lcom/android/certinstaller/CertInstaller;Lcom/android/certinstaller/CertInstaller$MyAction;)Lcom/android/certinstaller/CertInstaller$MyAction;
-smali/com/android/certinstaller/CertInstaller.smali:92 .method static synthetic access$502(Lcom/android/certinstaller/CertInstaller;Lcom/android/certinstaller/CertInstaller$MyAction;)Lcom/android/certinstaller/CertInstaller$MyAction;
-  .param p0, "x0"    # Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller.smali:93 .method static synthetic access$502(Lcom/android/certinstaller/CertInstaller;Lcom/android/certinstaller/CertInstaller$MyAction;)Lcom/android/certinstaller/CertInstaller$MyAction;
-  .param p1, "x1"    # Lcom/android/certinstaller/CertInstaller$MyAction;
-smali/com/android/certinstaller/CertInstaller.smali:97 .method static synthetic access$502(Lcom/android/certinstaller/CertInstaller;Lcom/android/certinstaller/CertInstaller$MyAction;)Lcom/android/certinstaller/CertInstaller$MyAction;
-  iput-object p1, p0, Lcom/android/certinstaller/CertInstaller;->mNextAction:Lcom/android/certinstaller/CertInstaller$MyAction;
-smali/com/android/certinstaller/CertInstaller.smali:102 .method static synthetic access$600(Lcom/android/certinstaller/CertInstaller;I)V
-  .method static synthetic access$600(Lcom/android/certinstaller/CertInstaller;I)V
-smali/com/android/certinstaller/CertInstaller.smali:104 .method static synthetic access$600(Lcom/android/certinstaller/CertInstaller;I)V
-  .param p0, "x0"    # Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller.smali:109 .method static synthetic access$600(Lcom/android/certinstaller/CertInstaller;I)V
-  invoke-direct {p0, p1}, Lcom/android/certinstaller/CertInstaller;->toastErrorAndFinish(I)V
-smali/com/android/certinstaller/CertInstaller.smali:114 .method static synthetic access$700(Lcom/android/certinstaller/CertInstaller;)Lcom/android/certinstaller/ViewHelper;
-  .method static synthetic access$700(Lcom/android/certinstaller/CertInstaller;)Lcom/android/certinstaller/ViewHelper;
-smali/com/android/certinstaller/CertInstaller.smali:116 .method static synthetic access$700(Lcom/android/certinstaller/CertInstaller;)Lcom/android/certinstaller/ViewHelper;
-  .param p0, "x0"    # Lcom/android/certinstaller/CertInstaller;
-smali/com/android/certinstaller/CertInstaller.smali:120 .method static synthetic access$700(Lcom/android/certinstaller/CertInstaller;)Lcom/android/certinstaller/ViewHelper;
-  iget-object v0, p0, Lcom/android/certinstaller/CertInstaller;->mView:Lcom/android/certinstaller/ViewHelper;
-smali/com/android/certinstaller/CertInstaller.smali:125 .method private createCredentialHelper(Landroid/content/Intent;)Lcom/android/certinstaller/CredentialHelper;
-  .method private createCredentialHelper(Landroid/content/Intent;)Lcom/android/certinstaller/CredentialHelper;
-smali/com/android/certinstaller/CertInstaller.smali:132 .method private createCredentialHelper(Landroid/content/Intent;)Lcom/android/certinstaller/CredentialHelper;
-  new-instance v1, Lcom/android/certinstaller/CredentialHelper;
-smali/com/android/certinstaller/CertInstaller.smali:134 .method private createCredentialHelper(Landroid/content/Intent;)Lcom/android/certinstaller/CredentialHelper;
-  invoke-direct {v1, p1}, Lcom/android/certinstaller/CredentialHelper;-><init>(Landroid/content/Intent;)V
-smali/com/android/certinstaller/CertInstaller.smali:148 .method private createCredentialHelper(Landroid/content/Intent;)Lcom/android/certinstaller/CredentialHelper;
-  const-string v1, "CertInstaller"
-smali/com/android/certinstaller/CertInstaller.smali:157 .method private createCredentialHelper(Landroid/content/Intent;)Lcom/android/certinstaller/CredentialHelper;
-  invoke-direct {p0, v1}, Lcom/android/certinstaller/CertInstaller;->toastErrorAndFinish(I)V
-smali/com/android/certinstaller/CertInstaller.smali:160 .method private createCredentialHelper(Landroid/content/Intent;)Lcom/android/certinstaller/CredentialHelper;
-  new-instance v1, Lcom/android/certinstaller/CredentialHelper;
-smali/com/android/certinstaller/CertInstaller.smali:162 .method private createCredentialHelper(Landroid/content/Intent;)Lcom/android/certinstaller/CredentialHelper;
-  invoke-direct {v1}, Lcom/android/certinstaller/CredentialHelper;-><init>()V
-smali/com/android/certinstaller/CertInstaller.smali:184 .method private createNameCredentialDialog()Landroid/app/Dialog;
-  iget-object v4, p0, Lcom/android/certinstaller/CertInstaller;->mView:Lcom/android/certinstaller/ViewHelper;
-smali/com/android/certinstaller/CertInstaller.smali:186 .method private createNameCredentialDialog()Landroid/app/Dialog;
-  invoke-virtual {v4, v3}, Lcom/android/certinstaller/ViewHelper;->setView(Landroid/view/View;)V
-smali/com/android/certinstaller/CertInstaller.smali:189 .method private createNameCredentialDialog()Landroid/app/Dialog;
-  iget-object v4, p0, Lcom/android/certinstaller/CertInstaller;->mView:Lcom/android/certinstaller/ViewHelper;
-smali/com/android/certinstaller/CertInstaller.smali:191 .method private createNameCredentialDialog()Landroid/app/Dialog;
-  invoke-virtual {v4}, Lcom/android/certinstaller/ViewHelper;->getHasEmptyError()Z
-smali/com/android/certinstaller/CertInstaller.smali:198 .method private createNameCredentialDialog()Landroid/app/Dialog;
-  iget-object v4, p0, Lcom/android/certinstaller/CertInstaller;->mView:Lcom/android/certinstaller/ViewHelper;
-smali/com/android/certinstaller/CertInstaller.smali:202 .method private createNameCredentialDialog()Landroid/app/Dialog;
-  invoke-virtual {v4, v5}, Lcom/android/certinstaller/ViewHelper;->showError(I)V
-smali/com/android/certinstaller/CertInstaller.smali:205 .method private createNameCredentialDialog()Landroid/app/Dialog;
-  iget-object v4, p0, Lcom/android/certinstaller/CertInstaller;->mView:Lcom/android/certinstaller/ViewHelper;
-smali/com/android/certinstaller/CertInstaller.smali:209 .method private createNameCredentialDialog()Landroid/app/Dialog;
-  invoke-virtual {v4, v5}, Lcom/android/certinstaller/ViewHelper;->setHasEmptyError(Z)V
-smali/com/android/certinstaller/CertInstaller.smali:213 .method private createNameCredentialDialog()Landroid/app/Dialog;
-  iget-object v4, p0, Lcom/android/certinstaller/CertInstaller;->mView:Lcom/android/certinstaller/ViewHelper;
-smali/com/android/certinstaller/CertInstaller.smali:217 .method private createNameCredentialDialog()Landroid/app/Dialog;
-  iget-object v6, p0, Lcom/android/certinstaller/CertInstaller;->mCredentials:Lcom/android/certinstaller/CredentialHelper;
-smali/com/android/certinstaller/CertInstaller.smali:219 .method private createNameCredentialDialog()Landroid/app/Dialog;
-  invoke-virtual {v6, p0}, Lcom/android/certinstaller/CredentialHelper;->getDescription(Landroid/content/Context;)Ljava/lang/CharSequence;
-smali/com/android/certinstaller/CertInstaller.smali:227 .method private createNameCredentialDialog()Landroid/app/Dialog;
-  invoke-virtual {v4, v5, v6}, Lcom/android/certinstaller/ViewHelper;->setText(ILjava/lang/String;)V
-smali/com/android/certinstaller/CertInstaller.smali:240 .method private createNameCredentialDialog()Landroid/app/Dialog;
-  iget-object v4, p0, Lcom/android/certinstaller/CertInstaller;->mCredentials:Lcom/android/certinstaller/CredentialHelper;
-smali/com/android/certinstaller/CertInstaller.smali:242 .method private createNameCredentialDialog()Landroid/app/Dialog;
-  invoke-virtual {v4}, Lcom/android/certinstaller/CredentialHelper;->isInstallAsUidSet()Z
-smali/com/android/certinstaller/CertInstaller.smali:261 .method private createNameCredentialDialog()Landroid/app/Dialog;
-  invoke-direct {p0}, Lcom/android/certinstaller/CertInstaller;->getDefaultName()Ljava/lang/String;
-smali/com/android/certinstaller/CertInstaller.smali:287 .method private createNameCredentialDialog()Landroid/app/Dialog;
-  new-instance v6, Lcom/android/certinstaller/CertInstaller$7;
-smali/com/android/certinstaller/CertInstaller.smali:289 .method private createNameCredentialDialog()Landroid/app/Dialog;
-  invoke-direct {v6, p0}, Lcom/android/certinstaller/CertInstaller$7;-><init>(Lcom/android/certinstaller/CertInstaller;)V
-smali/com/android/certinstaller/CertInstaller.smali:297 .method private createNameCredentialDialog()Landroid/app/Dialog;
-  new-instance v6, Lcom/android/certinstaller/CertInstaller$6;
-smali/com/android/certinstaller/CertInstaller.smali:299 .method private createNameCredentialDialog()Landroid/app/Dialog;
-  invoke-direct {v6, p0}, Lcom/android/certinstaller/CertInstaller$6;-><init>(Lcom/android/certinstaller/CertInstaller;)V
-smali/com/android/certinstaller/CertInstaller.smali:311 .method private createNameCredentialDialog()Landroid/app/Dialog;
-  new-instance v4, Lcom/android/certinstaller/CertInstaller$8;
-smali/com/android/certinstaller/CertInstaller.smali:313 .method private createNameCredentialDialog()Landroid/app/Dialog;
-  invoke-direct {v4, p0}, Lcom/android/certinstaller/CertInstaller$8;-><init>(Lcom/android/certinstaller/CertInstaller;)V
-smali/com/android/certinstaller/CertInstaller.smali:333 .method private createNameCredentialDialog()Landroid/app/Dialog;
-  new-instance v4, Lcom/android/certinstaller/CertInstaller$5;
-smali/com/android/certinstaller/CertInstaller.smali:335 .method private createNameCredentialDialog()Landroid/app/Dialog;
-  invoke-direct {v4, p0}, Lcom/android/certinstaller/CertInstaller$5;-><init>(Lcom/android/certinstaller/CertInstaller;)V
-smali/com/android/certinstaller/CertInstaller.smali:359 .method private createPkcs12PasswordDialog()Landroid/app/Dialog;
-  iget-object v3, p0, Lcom/android/certinstaller/CertInstaller;->mView:Lcom/android/certinstaller/ViewHelper;
-smali/com/android/certinstaller/CertInstaller.smali:361 .method private createPkcs12PasswordDialog()Landroid/app/Dialog;
-  invoke-virtual {v3, v2}, Lcom/android/certinstaller/ViewHelper;->setView(Landroid/view/View;)V
-smali/com/android/certinstaller/CertInstaller.smali:364 .method private createPkcs12PasswordDialog()Landroid/app/Dialog;
-  iget-object v3, p0, Lcom/android/certinstaller/CertInstaller;->mView:Lcom/android/certinstaller/ViewHelper;
-smali/com/android/certinstaller/CertInstaller.smali:366 .method private createPkcs12PasswordDialog()Landroid/app/Dialog;
-  invoke-virtual {v3}, Lcom/android/certinstaller/ViewHelper;->getHasEmptyError()Z
-smali/com/android/certinstaller/CertInstaller.smali:373 .method private createPkcs12PasswordDialog()Landroid/app/Dialog;
-  iget-object v3, p0, Lcom/android/certinstaller/CertInstaller;->mView:Lcom/android/certinstaller/ViewHelper;
-smali/com/android/certinstaller/CertInstaller.smali:377 .method private createPkcs12PasswordDialog()Landroid/app/Dialog;
-  invoke-virtual {v3, v4}, Lcom/android/certinstaller/ViewHelper;->showError(I)V
-smali/com/android/certinstaller/CertInstaller.smali:380 .method private createPkcs12PasswordDialog()Landroid/app/Dialog;
-  iget-object v3, p0, Lcom/android/certinstaller/CertInstaller;->mView:Lcom/android/certinstaller/ViewHelper;
-smali/com/android/certinstaller/CertInstaller.smali:382 .method private createPkcs12PasswordDialog()Landroid/app/Dialog;
-  invoke-virtual {v3, v5}, Lcom/android/certinstaller/ViewHelper;->setHasEmptyError(Z)V
-smali/com/android/certinstaller/CertInstaller.smali:386 .method private createPkcs12PasswordDialog()Landroid/app/Dialog;
-  iget-object v3, p0, Lcom/android/certinstaller/CertInstaller;->mCredentials:Lcom/android/certinstaller/CredentialHelper;
-smali/com/android/certinstaller/CertInstaller.smali:388 .method private createPkcs12PasswordDialog()Landroid/app/Dialog;
-  invoke-virtual {v3}, Lcom/android/certinstaller/CredentialHelper;->getName()Ljava/lang/String;
-smali/com/android/certinstaller/CertInstaller.smali:402 .method private createPkcs12PasswordDialog()Landroid/app/Dialog;
-  invoke-virtual {p0, v3}, Lcom/android/certinstaller/CertInstaller;->getString(I)Ljava/lang/String;
-... truncated at 250 hits
+## CertInstaller files: 19 hits: 18
+smali/com/android/certinstaller/CertInstallerMain.smali:22 .method static constructor <clinit>()V
+  const-string v2, "application/x-pkcs12"
+smali/com/android/certinstaller/CertInstallerMain.smali:28 .method static constructor <clinit>()V
+  const-string v2, "application/x-x509-ca-cert"
+smali/com/android/certinstaller/CertInstallerMain.smali:34 .method static constructor <clinit>()V
+  const-string v2, "application/x-x509-user-cert"
+smali/com/android/certinstaller/CertInstallerMain.smali:40 .method static constructor <clinit>()V
+  const-string v2, "application/x-x509-server-cert"
+smali/com/android/certinstaller/CertInstallerMain.smali:46 .method static constructor <clinit>()V
+  const-string v2, "application/x-pem-file"
+smali/com/android/certinstaller/CertInstallerMain.smali:52 .method static constructor <clinit>()V
+  const-string v2, "application/pkix-cert"
+smali/com/android/certinstaller/CertInstallerMain.smali:192 .method private startInstallActivity(Ljava/lang/String;[B)V
+  const-string v1, "application/x-pkcs12"
+smali/com/android/certinstaller/CertInstallerMain.smali:216 .method private startInstallActivity(Ljava/lang/String;[B)V
+  const-string v1, "application/x-x509-ca-cert"
+smali/com/android/certinstaller/CertInstallerMain.smali:224 .method private startInstallActivity(Ljava/lang/String;[B)V
+  const-string v1, "application/x-x509-user-cert"
+smali/com/android/certinstaller/CertInstallerMain.smali:232 .method private startInstallActivity(Ljava/lang/String;[B)V
+  const-string v1, "application/x-x509-server-cert"
+smali/com/android/certinstaller/CertInstallerMain.smali:240 .method private startInstallActivity(Ljava/lang/String;[B)V
+  const-string v1, "application/x-pem-file"
+smali/com/android/certinstaller/CertInstallerMain.smali:248 .method private startInstallActivity(Ljava/lang/String;[B)V
+  const-string v1, "application/pkix-cert"
+smali/com/android/certinstaller/CertInstallerMain.smali:395 .method protected onCreate(Landroid/os/Bundle;)V
+  const-string v2, "android.credentials.INSTALL"
+smali/com/android/certinstaller/CertInstallerMain.smali:403 .method protected onCreate(Landroid/os/Bundle;)V
+  const-string v2, "android.credentials.INSTALL_AS_USER"
+smali/com/android/certinstaller/CertInstallerMain.smali:420 .method protected onCreate(Landroid/os/Bundle;)V
+  const-string v3, "android.credentials.INSTALL_AS_USER"
+smali/com/android/certinstaller/CertInstallerMain.smali:469 .method protected onCreate(Landroid/os/Bundle;)V
+  const-string v1, "android.intent.action.OPEN_DOCUMENT"
+smali/com/android/certinstaller/CertInstallerMain.smali:518 .method protected onCreate(Landroid/os/Bundle;)V
+  const-string v2, "android.intent.action.VIEW"
+smali/com/android/certinstaller/CredentialHelper.smali:821 .method createSystemInstallIntent()Landroid/content/Intent;
+  const-string v3, "com.android.credentials.INSTALL"
 
 ### Full method smali/com/android/certinstaller/CertInstallerMain.smali
 .method static constructor <clinit>()V
@@ -561,116 +96,6 @@ smali/com/android/certinstaller/CertInstaller.smali:402 .method private createPk
     sput-object v0, Lcom/android/certinstaller/CertInstallerMain;->ACCEPT_MIME_TYPES:[Ljava/lang/String;
 
     return-void
-.end method
-
-### Full method smali/com/android/certinstaller/CertInstallerMain.smali
-.method private startInstallActivity(Ljava/lang/String;Landroid/net/Uri;)V
-    .locals 6
-    .param p1, "mimeType"    # Ljava/lang/String;
-    .param p2, "uri"    # Landroid/net/Uri;
-
-    .prologue
-    .line 101
-    if-nez p1, :cond_0
-
-    .line 102
-    invoke-virtual {p0}, Lcom/android/certinstaller/CertInstallerMain;->getContentResolver()Landroid/content/ContentResolver;
-
-    move-result-object v3
-
-    invoke-virtual {v3, p2}, Landroid/content/ContentResolver;->getType(Landroid/net/Uri;)Ljava/lang/String;
-
-    move-result-object p1
-
-    .line 105
-    :cond_0
-    const/4 v1, 0x0
-
-    .line 107
-    .local v1, "in":Ljava/io/InputStream;
-    :try_start_0
-    invoke-virtual {p0}, Lcom/android/certinstaller/CertInstallerMain;->getContentResolver()Landroid/content/ContentResolver;
-
-    move-result-object v3
-
-    invoke-virtual {v3, p2}, Landroid/content/ContentResolver;->openInputStream(Landroid/net/Uri;)Ljava/io/InputStream;
-
-    move-result-object v1
-
-    .line 109
-    invoke-static {v1}, Llibcore/io/Streams;->readFully(Ljava/io/InputStream;)[B
-
-    move-result-object v2
-
-    .line 110
-    .local v2, "raw":[B
-    invoke-direct {p0, p1, v2}, Lcom/android/certinstaller/CertInstallerMain;->startInstallActivity(Ljava/lang/String;[B)V
-    :try_end_0
-    .catch Ljava/io/IOException; {:try_start_0 .. :try_end_0} :catch_0
-    .catchall {:try_start_0 .. :try_end_0} :catchall_0
-
-    .line 116
-    invoke-static {v1}, Llibcore/io/IoUtils;->closeQuietly(Ljava/lang/AutoCloseable;)V
-
-    .line 118
-    .end local v2    # "raw":[B
-    :goto_0
-    return-void
-
-    .line 112
-    :catch_0
-    move-exception v0
-
-    .line 113
-    .local v0, "e":Ljava/io/IOException;
-    :try_start_1
-    const-string v3, "CertInstaller"
-
-    new-instance v4, Ljava/lang/StringBuilder;
-
-    invoke-direct {v4}, Ljava/lang/StringBuilder;-><init>()V
-
-    const-string v5, "Failed to read certificate: "
-
-    invoke-virtual {v4, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v4
-
-    invoke-virtual {v4, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
-
-    move-result-object v4
-
-    invoke-virtual {v4}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
-
-    move-result-object v4
-
-    invoke-static {v3, v4}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
-
-    .line 114
-    const v3, 0x7f06001a
-
-    const/4 v4, 0x1
-
-    invoke-static {p0, v3, v4}, Landroid/widget/Toast;->makeText(Landroid/content/Context;II)Landroid/widget/Toast;
-
-    move-result-object v3
-
-    invoke-virtual {v3}, Landroid/widget/Toast;->show()V
-    :try_end_1
-    .catchall {:try_start_1 .. :try_end_1} :catchall_0
-
-    .line 116
-    invoke-static {v1}, Llibcore/io/IoUtils;->closeQuietly(Ljava/lang/AutoCloseable;)V
-
-    goto :goto_0
-
-    .end local v0    # "e":Ljava/io/IOException;
-    :catchall_0
-    move-exception v3
-
-    invoke-static {v1}, Llibcore/io/IoUtils;->closeQuietly(Ljava/lang/AutoCloseable;)V
-
-    throw v3
 .end method
 
 ### Full method smali/com/android/certinstaller/CertInstallerMain.smali
@@ -783,84 +208,6 @@ smali/com/android/certinstaller/CertInstaller.smali:402 .method private createPk
     invoke-direct {v0, v1}, Ljava/lang/IllegalArgumentException;-><init>(Ljava/lang/String;)V
 
     throw v0
-.end method
-
-### Full method smali/com/android/certinstaller/CertInstallerMain.smali
-.method protected onActivityResult(IILandroid/content/Intent;)V
-    .locals 3
-    .param p1, "requestCode"    # I
-    .param p2, "resultCode"    # I
-    .param p3, "data"    # Landroid/content/Intent;
-
-    .prologue
-    .line 139
-    const/4 v0, 0x2
-
-    if-ne p1, v0, :cond_1
-
-    .line 140
-    const/4 v0, -0x1
-
-    if-ne p2, v0, :cond_0
-
-    .line 141
-    const/4 v0, 0x0
-
-    invoke-virtual {p3}, Landroid/content/Intent;->getData()Landroid/net/Uri;
-
-    move-result-object v1
-
-    invoke-direct {p0, v0, v1}, Lcom/android/certinstaller/CertInstallerMain;->startInstallActivity(Ljava/lang/String;Landroid/net/Uri;)V
-
-    .line 151
-    :goto_0
-    return-void
-
-    .line 143
-    :cond_0
-    invoke-virtual {p0}, Lcom/android/certinstaller/CertInstallerMain;->finish()V
-
-    goto :goto_0
-
-    .line 145
-    :cond_1
-    const/4 v0, 0x1
-
-    if-ne p1, v0, :cond_2
-
-    .line 146
-    invoke-virtual {p0, p2}, Lcom/android/certinstaller/CertInstallerMain;->setResult(I)V
-
-    .line 147
-    invoke-virtual {p0}, Lcom/android/certinstaller/CertInstallerMain;->finish()V
-
-    goto :goto_0
-
-    .line 149
-    :cond_2
-    const-string v0, "CertInstaller"
-
-    new-instance v1, Ljava/lang/StringBuilder;
-
-    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
-
-    const-string v2, "unknown request code: "
-
-    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v1
-
-    invoke-virtual {v1, p1}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
-
-    move-result-object v1
-
-    invoke-virtual {v1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
-
-    move-result-object v1
-
-    invoke-static {v0, v1}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;)I
-
-    goto :goto_0
 .end method
 
 ### Full method smali/com/android/certinstaller/CertInstallerMain.smali
@@ -1707,6 +1054,260 @@ smali/com/android/providers/downloads/ui/DownloadAdapter.smali:306 .method priva
 smali/com/android/providers/downloads/ui/DownloadList.smali:697 .method public onCreate(Landroid/os/Bundle;)V
   const-string v1, "android.provider.action.MANAGE_ROOT"
 
+### Full method smali/com/android/providers/downloads/OpenHelper.smali
+.method private static buildViewIntent(Landroid/content/Context;J)Landroid/content/Intent;
+    .locals 10
+    .param p0, "context"    # Landroid/content/Context;
+    .param p1, "id"    # J
+
+    .prologue
+    const/4 v8, 0x1
+
+    .line 65
+    const-string v7, "download"
+
+    invoke-virtual {p0, v7}, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
+
+    move-result-object v1
+
+    check-cast v1, Landroid/app/DownloadManager;
+
+    .line 67
+    .local v1, "downManager":Landroid/app/DownloadManager;
+    invoke-virtual {v1, v8}, Landroid/app/DownloadManager;->setAccessAllDownloads(Z)V
+
+    .line 69
+    new-instance v7, Landroid/app/DownloadManager$Query;
+
+    invoke-direct {v7}, Landroid/app/DownloadManager$Query;-><init>()V
+
+    new-array v8, v8, [J
+
+    const/4 v9, 0x0
+
+    aput-wide p1, v8, v9
+
+    invoke-virtual {v7, v8}, Landroid/app/DownloadManager$Query;->setFilterById([J)Landroid/app/DownloadManager$Query;
+
+    move-result-object v7
+
+    invoke-virtual {v1, v7}, Landroid/app/DownloadManager;->query(Landroid/app/DownloadManager$Query;)Landroid/database/Cursor;
+
+    move-result-object v0
+
+    .line 71
+    .local v0, "cursor":Landroid/database/Cursor;
+    :try_start_0
+    invoke-interface {v0}, Landroid/database/Cursor;->moveToFirst()Z
+    :try_end_0
+    .catchall {:try_start_0 .. :try_end_0} :catchall_0
+
+    move-result v7
+
+    if-nez v7, :cond_0
+
+    .line 72
+    const/4 v3, 0x0
+
+    .line 103
+    invoke-interface {v0}, Landroid/database/Cursor;->close()V
+
+    :goto_0
+    return-object v3
+
+    .line 75
+    :cond_0
+    :try_start_1
+    const-string v7, "local_uri"
+
+    invoke-static {v0, v7}, Lcom/android/providers/downloads/OpenHelper;->getCursorUri(Landroid/database/Cursor;Ljava/lang/String;)Landroid/net/Uri;
+
+    move-result-object v4
+
+    .line 76
+    .local v4, "localUri":Landroid/net/Uri;
+    const-string v7, "local_filename"
+
+    invoke-static {v0, v7}, Lcom/android/providers/downloads/OpenHelper;->getCursorFile(Landroid/database/Cursor;Ljava/lang/String;)Ljava/io/File;
+
+    move-result-object v2
+
+    .line 77
+    .local v2, "file":Ljava/io/File;
+    const-string v7, "media_type"
+
+    invoke-static {v0, v7}, Lcom/android/providers/downloads/OpenHelper;->getCursorString(Landroid/database/Cursor;Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object v5
+
+    .line 78
+    .local v5, "mimeType":Ljava/lang/String;
+    invoke-static {p0, v2, v5}, Lcom/android/providers/downloads/DownloadDrmHelper;->getOriginalMimeType(Landroid/content/Context;Ljava/io/File;Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object v5
+
+    .line 80
+    new-instance v3, Landroid/content/Intent;
+
+    const-string v7, "android.intent.action.VIEW"
+
+    invoke-direct {v3, v7}, Landroid/content/Intent;-><init>(Ljava/lang/String;)V
+
+    .line 82
+    .local v3, "intent":Landroid/content/Intent;
+    const-string v7, "application/vnd.android.package-archive"
+
+    invoke-virtual {v7, v5}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v7
+
+    if-eqz v7, :cond_1
+
+    .line 84
+    invoke-virtual {v3, v4, v5}, Landroid/content/Intent;->setDataAndType(Landroid/net/Uri;Ljava/lang/String;)Landroid/content/Intent;
+
+    .line 87
+    const-string v7, "uri"
+
+    invoke-static {v0, v7}, Lcom/android/providers/downloads/OpenHelper;->getCursorUri(Landroid/database/Cursor;Ljava/lang/String;)Landroid/net/Uri;
+
+    move-result-object v6
+
+    .line 88
+    .local v6, "remoteUri":Landroid/net/Uri;
+    const-string v7, "android.intent.extra.ORIGINATING_URI"
+
+    invoke-virtual {v3, v7, v6}, Landroid/content/Intent;->putExtra(Ljava/lang/String;Landroid/os/Parcelable;)Landroid/content/Intent;
+
+    .line 89
+    const-string v7, "android.intent.extra.REFERRER"
+
+    invoke-static {p0, p1, p2}, Lcom/android/providers/downloads/OpenHelper;->getRefererUri(Landroid/content/Context;J)Landroid/net/Uri;
+
+    move-result-object v8
+
+    invoke-virtual {v3, v7, v8}, Landroid/content/Intent;->putExtra(Ljava/lang/String;Landroid/os/Parcelable;)Landroid/content/Intent;
+
+    .line 90
+    const-string v7, "android.intent.extra.ORIGINATING_UID"
+
+    invoke-static {p0, p1, p2}, Lcom/android/providers/downloads/OpenHelper;->getOriginatingUid(Landroid/content/Context;J)I
+
+    move-result v8
+
+    invoke-virtual {v3, v7, v8}, Landroid/content/Intent;->putExtra(Ljava/lang/String;I)Landroid/content/Intent;
+    :try_end_1
+    .catchall {:try_start_1 .. :try_end_1} :catchall_0
+
+    .line 103
+    .end local v6    # "remoteUri":Landroid/net/Uri;
+    :goto_1
+    invoke-interface {v0}, Landroid/database/Cursor;->close()V
+
+    goto :goto_0
+
+    .line 91
+    :cond_1
+    :try_start_2
+    const-string v7, "file"
+
+    invoke-virtual {v4}, Landroid/net/Uri;->getScheme()Ljava/lang/String;
+
+    move-result-object v8
+
+    invoke-virtual {v7, v8}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v7
+
+    if-eqz v7, :cond_2
+
+    .line 92
+    const/4 v7, 0x3
+
+    invoke-virtual {v3, v7}, Landroid/content/Intent;->setFlags(I)Landroid/content/Intent;
+
+    .line 94
+    sget-object v7, Landroid/provider/Downloads$Impl;->ALL_DOWNLOADS_CONTENT_URI:Landroid/net/Uri;
+
+    invoke-static {v7, p1, p2}, Landroid/content/ContentUris;->withAppendedId(Landroid/net/Uri;J)Landroid/net/Uri;
+
+    move-result-object v7
+
+    invoke-virtual {v3, v7, v5}, Landroid/content/Intent;->setDataAndType(Landroid/net/Uri;Ljava/lang/String;)Landroid/content/Intent;
+    :try_end_2
+    .catchall {:try_start_2 .. :try_end_2} :catchall_0
+
+    goto :goto_1
+
+    .line 103
+    .end local v2    # "file":Ljava/io/File;
+    .end local v3    # "intent":Landroid/content/Intent;
+    .end local v4    # "localUri":Landroid/net/Uri;
+    .end local v5    # "mimeType":Ljava/lang/String;
+    :catchall_0
+    move-exception v7
+
+    invoke-interface {v0}, Landroid/database/Cursor;->close()V
+
+    throw v7
+
+    .line 97
+    .restart local v2    # "file":Ljava/io/File;
+    .restart local v3    # "intent":Landroid/content/Intent;
+    .restart local v4    # "localUri":Landroid/net/Uri;
+    .restart local v5    # "mimeType":Ljava/lang/String;
+    :cond_2
+    const/4 v7, 0x1
+
+    :try_start_3
+    invoke-virtual {v3, v7}, Landroid/content/Intent;->setFlags(I)Landroid/content/Intent;
+
+    .line 98
+    invoke-virtual {v3, v4, v5}, Landroid/content/Intent;->setDataAndType(Landroid/net/Uri;Ljava/lang/String;)Landroid/content/Intent;
+    :try_end_3
+    .catchall {:try_start_3 .. :try_end_3} :catchall_0
+
+    goto :goto_1
+.end method
+
+### Full method smali/com/android/providers/downloads/ui/DownloadList.smali
+.method public onCreate(Landroid/os/Bundle;)V
+    .locals 3
+    .param p1, "icicle"    # Landroid/os/Bundle;
+
+    .prologue
+    .line 150
+    invoke-super {p0, p1}, Landroid/app/Activity;->onCreate(Landroid/os/Bundle;)V
+
+    .line 153
+    new-instance v0, Landroid/content/Intent;
+
+    const-string v1, "android.provider.action.MANAGE_ROOT"
+
+    invoke-direct {v0, v1}, Landroid/content/Intent;-><init>(Ljava/lang/String;)V
+
+    .line 154
+    .local v0, "intent":Landroid/content/Intent;
+    const-string v1, "com.android.providers.downloads.documents"
+
+    const-string v2, "downloads"
+
+    invoke-static {v1, v2}, Landroid/provider/DocumentsContract;->buildRootUri(Ljava/lang/String;Ljava/lang/String;)Landroid/net/Uri;
+
+    move-result-object v1
+
+    invoke-virtual {v0, v1}, Landroid/content/Intent;->setData(Landroid/net/Uri;)Landroid/content/Intent;
+
+    .line 156
+    invoke-virtual {p0, v0}, Lcom/android/providers/downloads/ui/DownloadList;->startActivity(Landroid/content/Intent;)V
+
+    .line 157
+    invoke-virtual {p0}, Lcom/android/providers/downloads/ui/DownloadList;->finish()V
+
+    .line 158
+    return-void
+.end method
+
 ## Launcher files: 297 hits: 3
 smali/com/android/launcher2/InstallShortcutReceiver.smali:1109 .method private static installShortcut(Landroid/content/Context;Landroid/content/Intent;Ljava/util/ArrayList;Ljava/lang/String;Landroid/content/Intent;IZLandroid/content/SharedPreferences;[I)Z
   const-string v3, "android.intent.action.VIEW"
@@ -1721,11 +1322,9 @@ smali/com/android/packageinstaller/PackageInstallerActivity.smali:510 .method pr
 smali/com/android/packageinstaller/UninstallerActivity.smali:47 .method private startUninstallProgress()V
   const-string v1, "android.intent.action.VIEW"
 
-## Settings files: 1119 hits: 23
+## Settings files: 1119 hits: 20
 smali/com/android/settings/CredentialStorage.smali:779 .method protected onResume()V
   const-string v2, "com.android.credentials.INSTALL"
-smali/com/android/settings/CredentialStorage.smali:787 .method protected onResume()V
-  const-string v2, "com.android.certinstaller"
 smali/com/android/settings/DevelopmentSettings.smali:425 .method private enableVerifierSetting()Z
   const-string v4, "application/vnd.android.package-archive"
 smali/com/android/settings/HelpUtils.smali:83 .method public static prepareHelpMenuItem(Landroid/content/Context;Landroid/view/MenuItem;Ljava/lang/String;)Z
@@ -1764,10 +1363,6 @@ smali/com/android/settings/users/RestrictedProfileSettings$EditUserPhotoControll
   const-string v1, "android.intent.action.GET_CONTENT"
 smali/com/android/settings/wifi/AdvancedWifiSettings.smali:133 .method private initPreferences()V
   const-string v10, "android.credentials.INSTALL_AS_USER"
-smali/com/android/settings/wifi/AdvancedWifiSettings.smali:139 .method private initPreferences()V
-  const-string v10, "com.android.certinstaller"
-smali/com/android/settings/wifi/AdvancedWifiSettings.smali:141 .method private initPreferences()V
-  const-string v13, "com.android.certinstaller.CertInstallerMain"
 
 ### Full method smali/com/android/settings/CredentialStorage.smali
 .method protected onResume()V
@@ -1897,3 +1492,474 @@ smali/com/android/settings/wifi/AdvancedWifiSettings.smali:141 .method private i
 
     goto :goto_0
 .end method
+
+### Full method smali/com/android/settings/deviceinfo/StorageVolumePreferenceCategory.smali
+.method public intentForClick(Landroid/preference/Preference;)Landroid/content/Intent;
+    .locals 3
+
+    .prologue
+    const/4 v2, 0x1
+
+    .line 416
+    const/4 v0, 0x0
+
+    .line 421
+    invoke-virtual {p1}, Landroid/preference/Preference;->getKey()Ljava/lang/String;
+
+    .line 422
+    iget-object v1, p0, Lcom/android/settings/deviceinfo/StorageVolumePreferenceCategory;->mFormatPreference:Landroid/preference/Preference;
+
+    if-ne p1, v1, :cond_1
+
+    .line 423
+    new-instance v0, Landroid/content/Intent;
+
+    const-string v1, "android.intent.action.VIEW"
+
+    invoke-direct {v0, v1}, Landroid/content/Intent;-><init>(Ljava/lang/String;)V
+
+    .line 424
+    invoke-virtual {p0}, Lcom/android/settings/deviceinfo/StorageVolumePreferenceCategory;->getContext()Landroid/content/Context;
+
+    move-result-object v1
+
+    const-class v2, Lcom/android/settings/MediaFormat;
+
+    invoke-virtual {v0, v1, v2}, Landroid/content/Intent;->setClass(Landroid/content/Context;Ljava/lang/Class;)Landroid/content/Intent;
+
+    .line 425
+    const-string v1, "storage_volume"
+
+    iget-object v2, p0, Lcom/android/settings/deviceinfo/StorageVolumePreferenceCategory;->mVolume:Landroid/os/storage/StorageVolume;
+
+    invoke-virtual {v0, v1, v2}, Landroid/content/Intent;->putExtra(Ljava/lang/String;Landroid/os/Parcelable;)Landroid/content/Intent;
+
+    .line 447
+    :cond_0
+    :goto_0
+    return-object v0
+
+    .line 426
+    :cond_1
+    iget-object v1, p0, Lcom/android/settings/deviceinfo/StorageVolumePreferenceCategory;->mItemApps:Lcom/android/settings/deviceinfo/StorageItemPreference;
+
+    if-ne p1, v1, :cond_2
+
+    .line 427
+    new-instance v0, Landroid/content/Intent;
+
+    const-string v1, "android.intent.action.MANAGE_PACKAGE_STORAGE"
+
+    invoke-direct {v0, v1}, Landroid/content/Intent;-><init>(Ljava/lang/String;)V
+
+    .line 428
+    invoke-virtual {p0}, Lcom/android/settings/deviceinfo/StorageVolumePreferenceCategory;->getContext()Landroid/content/Context;
+
+    move-result-object v1
+
+    const-class v2, Lcom/android/settings/Settings$ManageApplicationsActivity;
+
+    invoke-virtual {v0, v1, v2}, Landroid/content/Intent;->setClass(Landroid/content/Context;Ljava/lang/Class;)Landroid/content/Intent;
+
+    goto :goto_0
+
+    .line 430
+    :cond_2
+    iget-object v1, p0, Lcom/android/settings/deviceinfo/StorageVolumePreferenceCategory;->mItemDownloads:Lcom/android/settings/deviceinfo/StorageItemPreference;
+
+    if-ne p1, v1, :cond_3
+
+    .line 431
+    new-instance v0, Landroid/content/Intent;
+
+    const-string v1, "android.intent.action.VIEW_DOWNLOADS"
+
+    invoke-direct {v0, v1}, Landroid/content/Intent;-><init>(Ljava/lang/String;)V
+
+    const-string v1, "android.app.DownloadManager.extra_sortBySize"
+
+    invoke-virtual {v0, v1, v2}, Landroid/content/Intent;->putExtra(Ljava/lang/String;Z)Landroid/content/Intent;
+
+    move-result-object v0
+
+    goto :goto_0
+
+    .line 433
+    :cond_3
+    iget-object v1, p0, Lcom/android/settings/deviceinfo/StorageVolumePreferenceCategory;->mItemMusic:Lcom/android/settings/deviceinfo/StorageItemPreference;
+
+    if-ne p1, v1, :cond_4
+
+    .line 434
+    new-instance v0, Landroid/content/Intent;
+
+    const-string v1, "android.intent.action.GET_CONTENT"
+
+    invoke-direct {v0, v1}, Landroid/content/Intent;-><init>(Ljava/lang/String;)V
+
+    .line 435
+    const-string v1, "audio/mp3"
+
+    invoke-virtual {v0, v1}, Landroid/content/Intent;->setType(Ljava/lang/String;)Landroid/content/Intent;
+
+    goto :goto_0
+
+    .line 436
+    :cond_4
+    iget-object v1, p0, Lcom/android/settings/deviceinfo/StorageVolumePreferenceCategory;->mItemDcim:Lcom/android/settings/deviceinfo/StorageItemPreference;
+
+    if-ne p1, v1, :cond_5
+
+    .line 437
+    new-instance v0, Landroid/content/Intent;
+
+    const-string v1, "android.intent.action.VIEW"
+
+    invoke-direct {v0, v1}, Landroid/content/Intent;-><init>(Ljava/lang/String;)V
+
+    .line 438
+    const-string v1, "android.intent.extra.LOCAL_ONLY"
+
+    invoke-virtual {v0, v1, v2}, Landroid/content/Intent;->putExtra(Ljava/lang/String;Z)Landroid/content/Intent;
+
+    .line 440
+    sget-object v1, Landroid/provider/MediaStore$Images$Media;->EXTERNAL_CONTENT_URI:Landroid/net/Uri;
+
+    invoke-virtual {v0, v1}, Landroid/content/Intent;->setData(Landroid/net/Uri;)Landroid/content/Intent;
+
+    goto :goto_0
+
+    .line 441
+    :cond_5
+    iget-object v1, p0, Lcom/android/settings/deviceinfo/StorageVolumePreferenceCategory;->mItemMisc:Lcom/android/settings/deviceinfo/StorageItemPreference;
+
+    if-ne p1, v1, :cond_0
+
+    .line 442
+    invoke-virtual {p0}, Lcom/android/settings/deviceinfo/StorageVolumePreferenceCategory;->getContext()Landroid/content/Context;
+
+    move-result-object v0
+
+    invoke-virtual {v0}, Landroid/content/Context;->getApplicationContext()Landroid/content/Context;
+
+    move-result-object v1
+
+    .line 443
+    new-instance v0, Landroid/content/Intent;
+
+    const-class v2, Lcom/android/settings/deviceinfo/MiscFilesHandler;
+
+    invoke-direct {v0, v1, v2}, Landroid/content/Intent;-><init>(Landroid/content/Context;Ljava/lang/Class;)V
+
+    .line 444
+    const-string v1, "storage_volume"
+
+    iget-object v2, p0, Lcom/android/settings/deviceinfo/StorageVolumePreferenceCategory;->mVolume:Landroid/os/storage/StorageVolume;
+
+    invoke-virtual {v0, v1, v2}, Landroid/content/Intent;->putExtra(Ljava/lang/String;Landroid/os/Parcelable;)Landroid/content/Intent;
+
+    goto :goto_0
+.end method
+
+### Full method smali/com/android/settings/wifi/AdvancedWifiSettings.smali
+.method private initPreferences()V
+    .locals 14
+
+    .prologue
+    const/4 v12, 0x0
+
+    const/4 v11, 0x1
+
+    .line 76
+    const-string v10, "notify_open_networks"
+
+    invoke-virtual {p0, v10}, Lcom/android/settings/wifi/AdvancedWifiSettings;->findPreference(Ljava/lang/CharSequence;)Landroid/preference/Preference;
+
+    move-result-object v2
+
+    check-cast v2, Landroid/preference/CheckBoxPreference;
+
+    .line 78
+    .local v2, "notifyOpenNetworks":Landroid/preference/CheckBoxPreference;
+    invoke-virtual {p0}, Lcom/android/settings/wifi/AdvancedWifiSettings;->getContentResolver()Landroid/content/ContentResolver;
+
+    move-result-object v10
+
+    const-string v13, "wifi_networks_available_notification_on"
+
+    invoke-static {v10, v13, v12}, Landroid/provider/Settings$Global;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
+
+    move-result v10
+
+    if-ne v10, v11, :cond_4
+
+    move v10, v11
+
+    :goto_0
+    invoke-virtual {v2, v10}, Landroid/preference/CheckBoxPreference;->setChecked(Z)V
+
+    .line 80
+    iget-object v10, p0, Lcom/android/settings/wifi/AdvancedWifiSettings;->mWifiManager:Landroid/net/wifi/WifiManager;
+
+    invoke-virtual {v10}, Landroid/net/wifi/WifiManager;->isWifiEnabled()Z
+
+    move-result v10
+
+    invoke-virtual {v2, v10}, Landroid/preference/CheckBoxPreference;->setEnabled(Z)V
+
+    .line 82
+    const-string v10, "wifi_poor_network_detection"
+
+    invoke-virtual {p0, v10}, Lcom/android/settings/wifi/AdvancedWifiSettings;->findPreference(Ljava/lang/CharSequence;)Landroid/preference/Preference;
+
+    move-result-object v3
+
+    check-cast v3, Landroid/preference/CheckBoxPreference;
+
+    .line 84
+    .local v3, "poorNetworkDetection":Landroid/preference/CheckBoxPreference;
+    if-eqz v3, :cond_0
+
+    .line 85
+    invoke-virtual {p0}, Lcom/android/settings/wifi/AdvancedWifiSettings;->getActivity()Landroid/app/Activity;
+
+    move-result-object v10
+
+    invoke-static {v10}, Lcom/android/settings/Utils;->isWifiOnly(Landroid/content/Context;)Z
+
+    move-result v10
+
+    if-eqz v10, :cond_5
+
+    .line 86
+    invoke-virtual {p0}, Lcom/android/settings/wifi/AdvancedWifiSettings;->getPreferenceScreen()Landroid/preference/PreferenceScreen;
+
+    move-result-object v10
+
+    invoke-virtual {v10, v3}, Landroid/preference/PreferenceScreen;->removePreference(Landroid/preference/Preference;)Z
+
+    .line 95
+    :cond_0
+    :goto_1
+    const-string v10, "wifi_scan_always_available"
+
+    invoke-virtual {p0, v10}, Lcom/android/settings/wifi/AdvancedWifiSettings;->findPreference(Ljava/lang/CharSequence;)Landroid/preference/Preference;
+
+    move-result-object v5
+
+    check-cast v5, Landroid/preference/CheckBoxPreference;
+
+    .line 97
+    .local v5, "scanAlwaysAvailable":Landroid/preference/CheckBoxPreference;
+    invoke-virtual {p0}, Lcom/android/settings/wifi/AdvancedWifiSettings;->getContentResolver()Landroid/content/ContentResolver;
+
+    move-result-object v10
+
+    const-string v13, "wifi_scan_always_enabled"
+
+    invoke-static {v10, v13, v12}, Landroid/provider/Settings$Global;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
+
+    move-result v10
+
+    if-ne v10, v11, :cond_7
+
+    move v10, v11
+
+    :goto_2
+    invoke-virtual {v5, v10}, Landroid/preference/CheckBoxPreference;->setChecked(Z)V
+
+    .line 100
+    new-instance v1, Landroid/content/Intent;
+
+    const-string v10, "android.credentials.INSTALL_AS_USER"
+
+    invoke-direct {v1, v10}, Landroid/content/Intent;-><init>(Ljava/lang/String;)V
+
+    .line 101
+    .local v1, "intent":Landroid/content/Intent;
+    const-string v10, "com.android.certinstaller"
+
+    const-string v13, "com.android.certinstaller.CertInstallerMain"
+
+    invoke-virtual {v1, v10, v13}, Landroid/content/Intent;->setClassName(Ljava/lang/String;Ljava/lang/String;)Landroid/content/Intent;
+
+    .line 103
+    const-string v10, "install_as_uid"
+
+    const/16 v13, 0x3f2
+
+    invoke-virtual {v1, v10, v13}, Landroid/content/Intent;->putExtra(Ljava/lang/String;I)Landroid/content/Intent;
+
+    .line 104
+    const-string v10, "install_credentials"
+
+    invoke-virtual {p0, v10}, Lcom/android/settings/wifi/AdvancedWifiSettings;->findPreference(Ljava/lang/CharSequence;)Landroid/preference/Preference;
+
+    move-result-object v4
+
+    .line 105
+    .local v4, "pref":Landroid/preference/Preference;
+    invoke-virtual {v4, v1}, Landroid/preference/Preference;->setIntent(Landroid/content/Intent;)V
+
+    .line 107
+    const-string v10, "suspend_optimizations"
+
+    invoke-virtual {p0, v10}, Lcom/android/settings/wifi/AdvancedWifiSettings;->findPreference(Ljava/lang/CharSequence;)Landroid/preference/Preference;
+
+    move-result-object v8
+
+    check-cast v8, Landroid/preference/CheckBoxPreference;
+
+    .line 109
+    .local v8, "suspendOptimizations":Landroid/preference/CheckBoxPreference;
+    invoke-virtual {p0}, Lcom/android/settings/wifi/AdvancedWifiSettings;->getContentResolver()Landroid/content/ContentResolver;
+
+    move-result-object v10
+
+    const-string v13, "wifi_suspend_optimizations_enabled"
+
+    invoke-static {v10, v13, v11}, Landroid/provider/Settings$Global;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
+
+    move-result v10
+
+    if-ne v10, v11, :cond_8
+
+    :goto_3
+    invoke-virtual {v8, v11}, Landroid/preference/CheckBoxPreference;->setChecked(Z)V
+
+    .line 112
+    const-string v10, "frequency_band"
+
+    invoke-virtual {p0, v10}, Lcom/android/settings/wifi/AdvancedWifiSettings;->findPreference(Ljava/lang/CharSequence;)Landroid/preference/Preference;
+
+    move-result-object v0
+
+    check-cast v0, Landroid/preference/ListPreference;
+
+    .line 114
+    .local v0, "frequencyPref":Landroid/preference/ListPreference;
+    iget-object v10, p0, Lcom/android/settings/wifi/AdvancedWifiSettings;->mWifiManager:Landroid/net/wifi/WifiManager;
+
+    invoke-virtual {v10}, Landroid/net/wifi/WifiManager;->isDualBandSupported()Z
+
+    move-result v10
+
+    if-eqz v10, :cond_a
+
+    .line 115
+    invoke-virtual {v0, p0}, Landroid/preference/ListPreference;->setOnPreferenceChangeListener(Landroid/preference/Preference$OnPreferenceChangeListener;)V
+
+    .line 116
+    iget-object v10, p0, Lcom/android/settings/wifi/AdvancedWifiSettings;->mWifiManager:Landroid/net/wifi/WifiManager;
+
+    invoke-virtual {v10}, Landroid/net/wifi/WifiManager;->getFrequencyBand()I
+
+    move-result v9
+
+    .line 117
+    .local v9, "value":I
+    const/4 v10, -0x1
+
+    if-eq v9, v10, :cond_9
+
+    .line 118
+    invoke-static {v9}, Ljava/lang/String;->valueOf(I)Ljava/lang/String;
+
+    move-result-object v10
+
+    invoke-virtual {v0, v10}, Landroid/preference/ListPreference;->setValue(Ljava/lang/String;)V
+
+    .line 119
+    invoke-direct {p0, v0, v9}, Lcom/android/settings/wifi/AdvancedWifiSettings;->updateFrequencyBandSummary(Landroid/preference/Preference;I)V
+
+    .line 130
+    .end local v9    # "value":I
+    :cond_1
+    :goto_4
+    const-string v10, "sleep_policy"
+
+    invoke-virtual {p0, v10}, Lcom/android/settings/wifi/AdvancedWifiSettings;->findPreference(Ljava/lang/CharSequence;)Landroid/preference/Preference;
+
+    move-result-object v6
+
+    check-cast v6, Landroid/preference/ListPreference;
+
+    .line 131
+    .local v6, "sleepPolicyPref":Landroid/preference/ListPreference;
+    if-eqz v6, :cond_3
+
+    .line 132
+    invoke-virtual {p0}, Lcom/android/settings/wifi/AdvancedWifiSettings;->getActivity()Landroid/app/Activity;
+
+    move-result-object v10
+
+    invoke-static {v10}, Lcom/android/settings/Utils;->isWifiOnly(Landroid/content/Context;)Z
+
+    move-result v10
+
+    if-eqz v10, :cond_2
+
+    .line 133
+    const v10, 0x7f07001b
+
+    invoke-virtual {v6, v10}, Landroid/preference/ListPreference;->setEntries(I)V
+
+    .line 135
+    :cond_2
+    invoke-virtual {v6, p0}, Landroid/preference/ListPreference;->setOnPreferenceChangeListener(Landroid/preference/Preference$OnPreferenceChangeListener;)V
+
+    .line 136
+    invoke-virtual {p0}, Lcom/android/settings/wifi/AdvancedWifiSettings;->getContentResolver()Landroid/content/ContentResolver;
+
+    move-result-object v10
+
+    const-string v11, "wifi_sleep_policy"
+
+    const/4 v12, 0x2
+
+    invoke-static {v10, v11, v12}, Landroid/provider/Settings$Global;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
+
+    move-result v9
+
+    .line 139
+    .restart local v9    # "value":I
+    invoke-static {v9}, Ljava/lang/String;->valueOf(I)Ljava/lang/String;
+
+    move-result-object v7
+
+    .line 140
+    .local v7, "stringValue":Ljava/lang/String;
+    invoke-virtual {v6, v7}, Landroid/preference/ListPreference;->setValue(Ljava/lang/String;)V
+
+    .line 141
+    invoke-direct {p0, v6, v7}, Lcom/android/settings/wifi/AdvancedWifiSettings;->updateSleepPolicySummary(Landroid/preference/Preference;Ljava/lang/String;)V
+
+    .line 143
+    .end local v7    # "stringValue":Ljava/lang/String;
+    .end local v9    # "value":I
+    :cond_3
+    return-void
+
+    .end local v0    # "frequencyPref":Landroid/preference/ListPreference;
+    .end local v1    # "intent":Landroid/content/Intent;
+    .end local v3    # "poorNetworkDetection":Landroid/preference/CheckBoxPreference;
+    .end local v4    # "pref":Landroid/preference/Preference;
+    .end local v5    # "scanAlwaysAvailable":Landroid/preference/CheckBoxPreference;
+    .end local v6    # "sleepPolicyPref":Landroid/preference/ListPreference;
+    .end local v8    # "suspendOptimizations":Landroid/preference/CheckBoxPreference;
+    :cond_4
+    move v10, v12
+
+    .line 78
+    goto/16 :goto_0
+
+    .line 88
+    .restart local v3    # "poorNetworkDetection":Landroid/preference/CheckBoxPreference;
+    :cond_5
+    invoke-virtual {p0}, Lcom/android/settings/wifi/AdvancedWifiSettings;->getContentResolver()Landroid/content/ContentResolver;
+
+    move-result-object v10
+
+    const-string v13, "wifi_watchdog_poor_network_test_enabled"
+
+... method truncated at 300 lines
