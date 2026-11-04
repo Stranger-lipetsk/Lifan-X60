@@ -1,0 +1,43 @@
+# Stock boot service entry point; static inspection only
+Expected image sha256 and archive must be checked by caller.
+
+## /system/etc/install-recovery.sh
+/etc/install-recovery.sh: File not found by ext2_lookup 
+
+## /system/bin/install-recovery.sh
+/bin/install-recovery.sh: File not found by ext2_lookup 
+
+## /system/bin/pm
+Inode: 420   Type: regular    Mode:  0755   Flags: 0x80080
+User:     0   Group:  2000   Size: 191
+Links: 1   Blockcount: 8
+  security.selinux (26) = "u:object_r:system_file:s0\000"
+
+## /system/bin/sh
+Inode: 550   Type: symlink    Mode:  0755   Flags: 0x80
+User:     0   Group:  2000   Size: 4
+Links: 1   Blockcount: 0
+  security.selinux (26) = "u:object_r:system_file:s0\000"
+Fast link dest: "mksh"
+
+## init.el_imx6_solo_v2.rc
+
+## init.rc
+line 491:     class_start main
+line 493: on property:sys.boot_completed=1
+line 542:     class_start main
+line 545:     class_start main
+service flash_recovery /system/etc/install-recovery.sh
+    class main
+    oneshot
+
+service racoon /system/bin/racoon
+    class main
+    socket racoon stream 600 system system
+    # IKE uses UDP port 500. Racoon will setuid to vpn after binding the port.
+    group vpn net_admin inet
+    disabled
+    oneshot
+
+
+No assumption of actual execution, permissions or successful boot can be made from this report.
