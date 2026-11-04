@@ -1,0 +1,58 @@
+name: Анализ штатной кнопки AUX
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/stock-aux-analysis.yml'
+      - 'tools/trace_stock_aux.py'
+permissions:
+  contents: write
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Загрузить и проверить неизменённый stock
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq p7zip-full e2fsprogs curl
+          mkdir -p "$RUNNER_TEMP/fw" "$RUNNER_TEMP/apks" reports
+          gh release download stock --pattern x60_2021.7z --dir "$RUNNER_TEMP/fw"
+          echo "75e7d6cd900fac971b55fec9f59913153bf7a1096bd761f7229c9a1d6d57b540  $RUNNER_TEMP/fw/x60_2021.7z" | sha256sum -c -
+          7z x -y "$RUNNER_TEMP/fw/x60_2021.7z" -o"$RUNNER_TEMP/fw/unpacked" >/dev/null
+          img="$RUNNER_TEMP/fw/unpacked/system.img"
+          debugfs -R "dump /priv-app/EL830LF01_Home.apk $RUNNER_TEMP/apks/Home.apk" "$img"
+          debugfs -R "dump /app/EL831CLF01_Avin_2016.06.21.01.apk $RUNNER_TEMP/apks/Aux.apk" "$img"
+          test -s "$RUNNER_TEMP/apks/Home.apk" && test -s "$RUNNER_TEMP/apks/Aux.apk"
+          curl -fLsS --retry 3 --max-time 120 -o "$RUNNER_TEMP/apktool.jar" https://github.com/iBotPeaches/Apktool/releases/download/v2.9.3/apktool_2.9.3.jar
+          java -jar "$RUNNER_TEMP/apktool.jar" d -f -r "$RUNNER_TEMP/apks/Home.apk" -o "$RUNNER_TEMP/home" >/dev/null
+      - name: Анализировать AUX без изменения прошивки
+        run: |
+          set -euo pipefail
+          aapt=$(find /usr/local/lib/android/sdk/build-tools -type f -name aapt | sort -V | tail -1)
+          apksigner=$(find /usr/local/lib/android/sdk/build-tools -type f -name apksigner | sort -V | tail -1)
+          test -x "$aapt" && test -x "$apksigner"
+          python3 tools/trace_stock_aux.py "$RUNNER_TEMP/home" "$RUNNER_TEMP/apks/Aux.apk" "$aapt" "$apksigner" > reports/stock-aux-trace.txt
+          grep -E '^## |^package:|^launchable|^V1 Signer|^AUX APK' reports/stock-aux-trace.txt
+      - name: Сохранить только отчёт
+        run: |
+          set -e
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/stock-aux-trace.txt
+          git diff --cached --quiet && exit 0
+          git commit -m 'report: inspect stock AUX launch path'
+          for try in 1 2 3 4 5; do
+            if git pull --rebase origin "${{ github.ref_name }}" && git push origin HEAD:"${{ github.ref_name }}"; then exit 0; fi
+            git rebase --abort || true
+            sleep 5
+          done
+          exit 1
