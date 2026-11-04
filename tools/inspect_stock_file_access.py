@@ -5,6 +5,7 @@ String hits and same-method context are clues, not proof of UI reachability.
 """
 import re
 import sys
+import zipfile
 from pathlib import Path
 
 PATTERN = re.compile(
@@ -60,7 +61,25 @@ def inspect(root):
                         print('... method truncated at 300 lines')
 
 
+def scan_apks(root):
+    print('\n## APK DEX literal scan: MANAGE_ROOT')
+    print('Only literal strings are searched; obfuscation and dynamic construction are not excluded.')
+    count = 0
+    for path in sorted(root.rglob('*')):
+        if not path.is_file() or not zipfile.is_zipfile(path):
+            continue
+        count += 1
+        with zipfile.ZipFile(path) as apk:
+            dexes = [n for n in apk.namelist() if re.fullmatch(r'classes(?:[0-9]+)?\.dex', n)]
+            if any(b'android.provider.action.MANAGE_ROOT' in apk.read(n) for n in dexes):
+                print('literal match:', path.relative_to(root))
+    if count < 10:
+        raise SystemExit('Too few APKs extracted for scan')
+    print('ZIP/APK files scanned:', count)
+
+
 if __name__ == '__main__':
-    if len(sys.argv) != 2:
-        raise SystemExit('usage: inspect_stock_file_access.py DECODED_DIR')
+    if len(sys.argv) != 3:
+        raise SystemExit('usage: inspect_stock_file_access.py DECODED_DIR EXTRACTED_APPS_DIR')
     inspect(Path(sys.argv[1]))
+    scan_apks(Path(sys.argv[2]))

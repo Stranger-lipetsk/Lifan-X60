@@ -35,6 +35,14 @@ jobs:
             debugfs -R "dump $path $RUNNER_TEMP/apks/$name.apk" "$img"
             test -s "$RUNNER_TEMP/apks/$name.apk"
           done
+          mkdir -p "$RUNNER_TEMP/all-apps"
+          for dir in app priv-app; do
+            debugfs -R "rdump /$dir $RUNNER_TEMP/all-apps" "$img" > "$RUNNER_TEMP/$dir-dump.log" 2>&1
+            test -d "$RUNNER_TEMP/all-apps/$dir"
+            if grep -iE 'no space left|input/output error|filesystem not open|failed to open|ext2.* error' "$RUNNER_TEMP/$dir-dump.log"; then exit 1; fi
+          done
+          find "$RUNNER_TEMP/all-apps" -type d -exec chmod u+rwx {} +
+          find "$RUNNER_TEMP/all-apps" -type f -exec chmod u+r {} +
           curl -fLsS --retry 3 --max-time 120 -o "$RUNNER_TEMP/apktool.jar" https://github.com/iBotPeaches/Apktool/releases/download/v2.9.3/apktool_2.9.3.jar
       - name: Проанализировать обработчики выбора файлов
         run: |
@@ -48,7 +56,7 @@ jobs:
             echo 'Stock system image SHA-256: b6bbbe529942ffec250cad993ae9cbb808721c27cf2536fb3fb11120130e8545'
             echo 'Published launcher system has identical pre-existing file contents, see reports/published-launcher-comparison.txt.'
             for apk in "$RUNNER_TEMP"/apks/*.apk; do sha256sum "$apk" | sed "s|$RUNNER_TEMP/apks/||"; done
-            python3 tools/inspect_stock_file_access.py "$RUNNER_TEMP/decoded"
+            python3 tools/inspect_stock_file_access.py "$RUNNER_TEMP/decoded" "$RUNNER_TEMP/all-apps"
           } > reports/stock-file-access.txt
           wc -c reports/stock-file-access.txt
           head -100 reports/stock-file-access.txt
