@@ -6,6 +6,7 @@ on:
       - '.github/workflows/stock-structure-check.yml'
       - 'tools/inspect_stock_structure.py'
       - 'tools/inspect_stock_root.py'
+      - 'tools/inspect_stock_boot_entry.py'
 permissions:
   contents: write
 jobs:
@@ -46,13 +47,14 @@ jobs:
           test -x "$aapt" && test -x "$apksigner"
           python3 tools/inspect_stock_structure.py "$RUNNER_TEMP/apks" "$aapt" "$apksigner" "$RUNNER_TEMP/check_usb_iface.sh" > reports/stock-structure.txt
           python3 tools/inspect_stock_root.py "$RUNNER_TEMP/fw/unpacked/system.img" "$RUNNER_TEMP/fw/unpacked/boot.img" "$RUNNER_TEMP/boot-root" > reports/stock-root-indicators.txt
-          cat reports/stock-root-indicators.txt
+          python3 tools/inspect_stock_boot_entry.py "$RUNNER_TEMP/fw/unpacked/system.img" "$RUNNER_TEMP/fw/unpacked/boot.img" "$RUNNER_TEMP/boot-entry" > reports/stock-boot-entry.txt
+          cat reports/stock-boot-entry.txt
       - name: Сохранить только отчёт
         run: |
           set -e
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add reports/stock-structure.txt reports/stock-root-indicators.txt
+          git add reports/stock-structure.txt reports/stock-root-indicators.txt reports/stock-boot-entry.txt
           git diff --cached --quiet && exit 0
           git commit -m 'report: inspect stock structure and signatures'
           for try in 1 2 3 4 5; do
