@@ -1,0 +1,30 @@
+# Static stock root/ADB indicators, not proof of runtime access
+
+## /system/xbin/su debugfs exit: 0
+Inode: 1399   Type: regular    Mode:  06755   Flags: 0x80080
+User:     0   Group:     0   Size: 75340
+Links: 1   Blockcount: 152
+security.selinux (22) = "u:object_r:su_exec:s0\000"
+
+## /system/bin/su debugfs exit: 0
+/bin/su: File not found by ext2_lookup
+
+## /system/bin/bin/su debugfs exit: 0
+Inode: 254   Type: symlink    Mode:  0755   Flags: 0x80
+User:     0   Group:  2000   Size: 7
+Links: 1   Blockcount: 0
+security.selinux (26) = "u:object_r:system_file:s0\000"
+Fast link dest: "busybox"
+
+## /system/app/Superuser.apk debugfs exit: 0
+/app/Superuser.apk: File not found by ext2_lookup
+
+## /system/app/SuperSU.apk debugfs exit: 0
+/app/SuperSU.apk: File not found by ext2_lookup
+
+## boot.img default.prop extraction exit: 0
+ro.secure=1
+ro.debuggable=1
+persist.sys.usb.config=adb
+
+These properties and files do not demonstrate that a command can run as root on the device.
