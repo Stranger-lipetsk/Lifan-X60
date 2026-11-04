@@ -5,6 +5,7 @@ on:
     paths:
       - '.github/workflows/stock-structure-check.yml'
       - 'tools/inspect_stock_structure.py'
+      - 'tools/inspect_stock_root.py'
 permissions:
   contents: write
 jobs:
@@ -23,7 +24,7 @@ jobs:
         run: |
           set -euo pipefail
           sudo apt-get update -qq
-          sudo apt-get install -y -qq p7zip-full e2fsprogs
+          sudo apt-get install -y -qq p7zip-full e2fsprogs cpio
           mkdir -p "$RUNNER_TEMP/fw" "$RUNNER_TEMP/apks" reports
           gh release download stock --pattern x60_2021.7z --dir "$RUNNER_TEMP/fw"
           echo "75e7d6cd900fac971b55fec9f59913153bf7a1096bd761f7229c9a1d6d57b540  $RUNNER_TEMP/fw/x60_2021.7z" | sha256sum -c -
@@ -44,13 +45,14 @@ jobs:
           apksigner=$(find /usr/local/lib/android/sdk/build-tools -type f -name apksigner | sort -V | tail -1)
           test -x "$aapt" && test -x "$apksigner"
           python3 tools/inspect_stock_structure.py "$RUNNER_TEMP/apks" "$aapt" "$apksigner" "$RUNNER_TEMP/check_usb_iface.sh" > reports/stock-structure.txt
-          cat reports/stock-structure.txt
+          python3 tools/inspect_stock_root.py "$RUNNER_TEMP/fw/unpacked/system.img" "$RUNNER_TEMP/fw/unpacked/boot.img" "$RUNNER_TEMP/boot-root" > reports/stock-root-indicators.txt
+          cat reports/stock-root-indicators.txt
       - name: Сохранить только отчёт
         run: |
           set -e
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add reports/stock-structure.txt
+          git add reports/stock-structure.txt reports/stock-root-indicators.txt
           git diff --cached --quiet && exit 0
           git commit -m 'report: inspect stock structure and signatures'
           for try in 1 2 3 4 5; do
