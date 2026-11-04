@@ -1,0 +1,73 @@
+name: Сравнение опубликованного лаунчера со stock
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/compare-published-launcher.yml'
+      - 'tools/compare_launcher_system.py'
+permissions:
+  contents: write
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - name: Скачать и проверить образы
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq p7zip-full e2fsprogs
+          mkdir -p "$RUNNER_TEMP/stock" "$RUNNER_TEMP/user" reports
+          gh release download stock -p x60_2021.7z -D "$RUNNER_TEMP/stock"
+          gh release download 'рабочая-с-лаунчером' -p system.img -D "$RUNNER_TEMP/user"
+          echo "75e7d6cd900fac971b55fec9f59913153bf7a1096bd761f7229c9a1d6d57b540  $RUNNER_TEMP/stock/x60_2021.7z" | sha256sum -c -
+          echo "79df29ec1ea97fd2e1da605c9651c6e5cce9d05d79518ff8e3e7d1dd16553dba  $RUNNER_TEMP/user/system.img" | sha256sum -c -
+          7z e -y "$RUNNER_TEMP/stock/x60_2021.7z" -o"$RUNNER_TEMP/stock/image" 'system.img' >/dev/null
+          echo "b6bbbe529942ffec250cad993ae9cbb808721c27cf2536fb3fb11120130e8545  $RUNNER_TEMP/stock/image/system.img" | sha256sum -c -
+      - name: Сравнить содержимое системных разделов без записи
+        run: |
+          set -euo pipefail
+          root="$RUNNER_TEMP/compare"
+          mkdir -p "$root/stock" "$root/launcher"
+          stock="$RUNNER_TEMP/stock/image/system.img"
+          launcher="$RUNNER_TEMP/user/system.img"
+          for kind in stock launcher; do
+            if [ "$kind" = stock ]; then img="$stock"; else img="$launcher"; fi
+            debugfs -R "rdump / $root/$kind" "$img" > "$root/$kind.log" 2>&1
+            test -s "$root/$kind/build.prop" && test -d "$root/$kind/priv-app"
+            if grep -iE 'no space left|input/output error|filesystem not open|failed to open|ext2.* error' "$root/$kind.log"; then exit 1; fi
+            find "$root/$kind" -type d -exec chmod u+rwx {} +
+            find "$root/$kind" -type f -exec chmod u+r {} +
+          done
+          {
+            echo 'SHA-256 stock system.img: b6bbbe529942ffec250cad993ae9cbb808721c27cf2536fb3fb11120130e8545'
+            echo 'SHA-256 published system.img: 79df29ec1ea97fd2e1da605c9651c6e5cce9d05d79518ff8e3e7d1dd16553dba'
+            echo 'The published digest equals the previously generated stock-home-test system image.'
+            python3 tools/compare_launcher_system.py "$root/stock" "$root/launcher"
+            for path in /etc/wifi /bin/wpa_supplicant /bin/dhcpcd /lib/hw /vendor/firmware/ti-connectivity; do
+              echo; echo "## debugfs stat: /system$path"
+              for kind in stock launcher; do
+                if [ "$kind" = stock ]; then img="$stock"; else img="$launcher"; fi
+                echo "### $kind"
+                debugfs -R "stat $path" "$img" 2>&1 | grep -E 'Inode:|User:|Links:|security.selinux|File not found|not found by ext2_lookup|Fast link dest:' || true
+              done
+            done
+          } > reports/published-launcher-comparison.txt
+          cat reports/published-launcher-comparison.txt
+      - name: Сохранить только отчёт
+        run: |
+          set -e
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/published-launcher-comparison.txt
+          git diff --cached --quiet && exit 0
+          git commit -m 'report: compare user launcher system with stock'
+          for try in 1 2 3 4 5; do
+            if git pull --rebase origin "${{ github.ref_name }}" && git push origin HEAD:"${{ github.ref_name }}"; then exit 0; fi
+            git rebase --abort || true
+            sleep 5
+          done
+          exit 1
