@@ -12,7 +12,7 @@ PATTERN = re.compile(
     r'|android\.credentials\.INSTALL(?:_AS_USER)?'
     r'|android\.provider\.action\.MANAGE_ROOT'
     r'|application/(?:vnd\.android\.package-archive|x-pkcs12|x-x509|x-pem-file|pkix-cert)'
-    r'|(?:\.apk\b|CertInstaller|EXTRA_MIME_TYPES)', re.I)
+    r'|(?:\.apk\b|EXTRA_MIME_TYPES)', re.I)
 
 
 def inspect(root):
@@ -42,7 +42,9 @@ def inspect(root):
         wanted = {
             'CertInstaller': ('CertInstallerMain.smali',),
             'DocumentsUI': ('DocumentsActivity.smali',),
-            'Settings': ('SecuritySettings.smali', 'CredentialStorage.smali'),
+            'Settings': ('SecuritySettings.smali', 'CredentialStorage.smali',
+                         'StorageVolumePreferenceCategory.smali', 'AdvancedWifiSettings.smali'),
+            'Downloads': ('DownloadList.smali', 'OpenHelper.smali'),
         }.get(app.name, ())
         for path in files:
             if path.name not in wanted:
