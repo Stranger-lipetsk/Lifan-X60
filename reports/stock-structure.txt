@@ -1,0 +1,75 @@
+# Stock components: manifest, APK signatures and USB readiness
+Static evidence only: file presence does not prove installation or UI reachability.
+
+## Framework.apk
+sha256: b1784593cdd107eec5891de8cc1fe134b1f330b44b6d9c3c68ba6b31cfa66d88
+package: name='android' versionCode='19' versionName='4.4.2-20140630'
+sdkVersion:'19'
+targetSdkVersion:'19'
+A: android:sharedUserId(0x0101000b)="android.uid.system" (Raw: "android.uid.system")
+apksigner API19 exit: 0
+Verified using v1 scheme (JAR signing): true
+
+## Home.apk
+sha256: 75ee685d5399e4c394146cac593ec2ed4bfbd5f6cc9151f9ae479992c84011a6
+package: name='tw.com.elead.el830.home' versionCode='1' versionName='2017.03.09.01'
+sdkVersion:'19'
+targetSdkVersion:'19'
+A: android:sharedUserId(0x0101000b)="android.uid.system" (Raw: "android.uid.system")
+A: android:debuggable(0x0101000f)=(type 0x12)0xffffffff
+apksigner API19 exit: 0
+Verified using v1 scheme (JAR signing): true
+
+## MediaPlayer.apk
+sha256: 9eeb5f2a2ae40a5213cfe412ae2c5dddf7b766c2db4e3c1c46de88eb18474328
+package: name='tw.com.elead.el830.mediaplayer' versionCode='1' versionName='2017.01.11.01'
+sdkVersion:'19'
+launchable-activity: name='tw.com.elead.el830.music.MusicActivity'  label='MediaPlayer' icon=''
+A: android:debuggable(0x0101000f)=(type 0x12)0xffffffff
+apksigner API19 exit: 0
+Verified using v1 scheme (JAR signing): true
+
+## MirrorLink.apk
+sha256: 2ced955173e99c63079ef5db925a23c5106d53848bae56989affbc0b2affde4c
+package: name='com.fpt.mirrorlink.android' versionCode='1' versionName='2016.06.13.01'
+sdkVersion:'10'
+targetSdkVersion:'19'
+launchable-activity: name='com.fpt.mirrorlink.android.view.MainActivity'  label='' icon=''
+A: android:debuggable(0x0101000f)=(type 0x12)0xffffffff
+apksigner API19 exit: 0
+Verified using v1 scheme (JAR signing): true
+
+## PackageInstaller.apk
+sha256: 39abdee3fc202e75bba6b3fc1c8d91081d3ff9bfeaa4c4e1297634f827794f5b
+package: name='com.android.packageinstaller' versionCode='19' versionName='4.4.2-20140630'
+sdkVersion:'19'
+targetSdkVersion:'19'
+apksigner API19 exit: 0
+Verified using v1 scheme (JAR signing): true
+
+## Settings.apk
+sha256: 7bad36157589f7cc4f2f5810cde4fc796b28a9379c5493f3bdfa6aa0eae33bbe
+package: name='com.android.settings' versionCode='19' versionName='4.4.2-20140630'
+sdkVersion:'19'
+targetSdkVersion:'19'
+launchable-activity: name='com.android.settings.Settings'  label='Settings' icon=''
+A: android:sharedUserId(0x0101000b)="android.uid.system" (Raw: "android.uid.system")
+apksigner API19 exit: 0
+Verified using v1 scheme (JAR signing): true
+
+## /system/bin/check_usb_iface.sh
+SHA-256: c10a7dd9f3ae4ce9c4dbedfaa738800dac4404fe190a67a9dba31939fd0be7f3
+14: IFACE_IS_DOWN=$TRUE
+15: NOTIFICATION_USB_IFACE_READY=vn.com.fsoft.UsbIfaceReady
+16: NOTIFICATION_USB_IFACE_DOWN=vn.com.fsoft.UsbIfaceDown
+21: if [ -e /sys/class/net/usbH0 ];
+23: if [ "$IFACE_IS_DOWN" -eq "$TRUE" ];
+25: netcfg usbH0 up
+28: IFACE_IS_DOWN=$FALSE
+31: dhcpcd usbH0
+32: dhcpcd usbH0
+36: am broadcast -a $NOTIFICATION_USB_IFACE_READY
+40: if [ "$IFACE_IS_DOWN" -eq "$FALSE" ];
+44: am broadcast -a $NOTIFICATION_USB_IFACE_DOWN
+45: IFACE_IS_DOWN=$TRUE
+Presence of this script does not prove it starts or that any phone is compatible.
