@@ -9,6 +9,8 @@ targetSdkVersion:'19'
 A: android:sharedUserId(0x0101000b)="android.uid.system" (Raw: "android.uid.system")
 apksigner API19 exit: 0
 Verified using v1 scheme (JAR signing): true
+V1 Signer: certificate SHA-256 digest: 7fbae817b7db24642d8959c347b561c003c6cfde2cb10f909c932f21a4d6d804
+V1 Signer: public key SHA-256 digest: 3510803bae3da5f072e443c590c9c97b992f428ed7a3c79802071364ad9d8d5c
 
 ## Home.apk
 sha256: 75ee685d5399e4c394146cac593ec2ed4bfbd5f6cc9151f9ae479992c84011a6
@@ -19,6 +21,8 @@ A: android:sharedUserId(0x0101000b)="android.uid.system" (Raw: "android.uid.syst
 A: android:debuggable(0x0101000f)=(type 0x12)0xffffffff
 apksigner API19 exit: 0
 Verified using v1 scheme (JAR signing): true
+V1 Signer: certificate SHA-256 digest: 7fbae817b7db24642d8959c347b561c003c6cfde2cb10f909c932f21a4d6d804
+V1 Signer: public key SHA-256 digest: 3510803bae3da5f072e443c590c9c97b992f428ed7a3c79802071364ad9d8d5c
 
 ## MediaPlayer.apk
 sha256: 9eeb5f2a2ae40a5213cfe412ae2c5dddf7b766c2db4e3c1c46de88eb18474328
@@ -28,6 +32,8 @@ launchable-activity: name='tw.com.elead.el830.music.MusicActivity'  label='Media
 A: android:debuggable(0x0101000f)=(type 0x12)0xffffffff
 apksigner API19 exit: 0
 Verified using v1 scheme (JAR signing): true
+V1 Signer: certificate SHA-256 digest: 2b8f01b48b3f3869e2f0f8314a3076ad49d19190112b1dff785a9fa0c472a15b
+V1 Signer: public key SHA-256 digest: 6f12ef9e03ac1cc34aa25ab340fa82f2a6d7c2725970ef86fe720571325a3c85
 
 ## MirrorLink.apk
 sha256: 2ced955173e99c63079ef5db925a23c5106d53848bae56989affbc0b2affde4c
@@ -38,6 +44,8 @@ launchable-activity: name='com.fpt.mirrorlink.android.view.MainActivity'  label=
 A: android:debuggable(0x0101000f)=(type 0x12)0xffffffff
 apksigner API19 exit: 0
 Verified using v1 scheme (JAR signing): true
+V1 Signer: certificate SHA-256 digest: e80f5d4f9a371e56fed44bd8829536d64643b9530e1675266282fe3f22343239
+V1 Signer: public key SHA-256 digest: 9dedfa0615f5d39cfaa65df76ff3042187c42cc35fe8ac059bc3d25626c7cee2
 
 ## PackageInstaller.apk
 sha256: 39abdee3fc202e75bba6b3fc1c8d91081d3ff9bfeaa4c4e1297634f827794f5b
@@ -46,6 +54,8 @@ sdkVersion:'19'
 targetSdkVersion:'19'
 apksigner API19 exit: 0
 Verified using v1 scheme (JAR signing): true
+V1 Signer: certificate SHA-256 digest: 7fbae817b7db24642d8959c347b561c003c6cfde2cb10f909c932f21a4d6d804
+V1 Signer: public key SHA-256 digest: 3510803bae3da5f072e443c590c9c97b992f428ed7a3c79802071364ad9d8d5c
 
 ## Settings.apk
 sha256: 7bad36157589f7cc4f2f5810cde4fc796b28a9379c5493f3bdfa6aa0eae33bbe
@@ -56,6 +66,8 @@ launchable-activity: name='com.android.settings.Settings'  label='Settings' icon
 A: android:sharedUserId(0x0101000b)="android.uid.system" (Raw: "android.uid.system")
 apksigner API19 exit: 0
 Verified using v1 scheme (JAR signing): true
+V1 Signer: certificate SHA-256 digest: 7fbae817b7db24642d8959c347b561c003c6cfde2cb10f909c932f21a4d6d804
+V1 Signer: public key SHA-256 digest: 3510803bae3da5f072e443c590c9c97b992f428ed7a3c79802071364ad9d8d5c
 
 ## /system/bin/check_usb_iface.sh
 SHA-256: c10a7dd9f3ae4ce9c4dbedfaa738800dac4404fe190a67a9dba31939fd0be7f3
