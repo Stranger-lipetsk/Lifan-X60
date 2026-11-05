@@ -170,6 +170,7 @@ N: android=http://schemas.android.com/apk/res/android
 # Bluetooth.apk static profile / object-push inspection
 Presence and static flags do not prove runtime activation, pairing or file transfer.
 Smali files: 178
+Paths matching /opp/ or BluetoothOpp: 0
 
 ## smali/com/android/bluetooth/btservice/AdapterService$1.smali
 .method constructor <init>(Lcom/android/bluetooth/btservice/AdapterService;)V
