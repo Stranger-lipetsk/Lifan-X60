@@ -45,8 +45,10 @@ def main():
             reason = 'disclaimer click'
         elif p.name == 'HomeService$31.smali' and 'onActivityResumed(' in sig:
             reason = 'activity observer'
-        elif p.name == 'HomeApp.smali' and re.search(r'\b(getSysFirstBoot|getPreHibernated|savePreHibernatePreferences)\(', sig):
-            reason = 'first boot and stored state'
+        elif p.name == 'HomeApp.smali' and re.search(r'\b(getSysFirstBoot|getPreHibernated|savePreHibernatePreferences|getDefaultTimeZone|getDefaultLocaleIndex)\(', sig):
+            reason = 'first boot, locale/timezone and stored state'
+        elif p.name == 'Utils.smali' and re.search(r'\b(setSystemLocale|setSystemTimeZone)\(', sig):
+            reason = 'locale and timezone application'
         elif p.name == 'HomeService.smali' and ('sysPreHibernate(' in sig or '->sysPreHibernate()V' in method):
             reason = 'pre-hibernate and wrappers'
         elif p.name.startswith('HomeService') and any('->' + w + '(' in method for w in wrappers):
@@ -81,6 +83,14 @@ def main():
                         break
         else:
             print(method)
+    print('\n## Default timezone/locale field references (context only)')
+    pattern = re.compile(r'default.*(?:locale|timezone)|(?:locale|timezone).*default', re.I)
+    for p in files:
+        lines = p.read_text(errors='replace').splitlines()
+        for i, line in enumerate(lines):
+            if pattern.search(line):
+                print('\n###', p.name, 'line', i + 1)
+                print('\n'.join(lines[max(0, i - 4):i + 5]))
     print('\n## Methods selected:', len(selected))
 
 
