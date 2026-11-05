@@ -1,0 +1,27 @@
+# Navitel 11 on a clean Android 4.4.2 x86 emulator
+APK SHA-256: 96876415d8b4342952558fd30d6e11b0ca9355c802060c0a9740b6cc84fc4e1b
+Fresh user installation in a generic x86 emulator, not the ARM head unit.
+App network blocked by UID; no user account, SD maps, license or GPS tested.
+Does not test system replacement, signature migration, Hibernate, ARM native libraries, display or car hardware.
+## Emulator build properties
+ro.build.version.release: 4.4.2
+ro.build.version.sdk: 19
+ro.product.cpu.abi: x86
+ro.build.fingerprint: generic_x86/sdk_x86/generic_x86:4.4.2/KK/4174703:eng/test-keys
+## Package installation
+/home/runner/work/Lifan-X60/Lifan-X60/firmware/apks/com.navitel.apk: 1 file pushed, 0 skipped. 242.3 MB/s (99176587 bytes in 0.390s)
+Performing Push Install
+WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
+	pkg: /data/local/tmp/com.navitel.apk
+Success
+## am start status
+command exit status: 124
+WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
+Starting: Intent { cmp=com.navitel/.app.MainActivity }
+## Navitel activities (dumpsys excerpts)
+    mResumedActivity: ActivityRecord{b0384208 u0 com.android.launcher/com.android.launcher2.Launcher t3}
+  * Recent #1: TaskRecord{b04eaea8 #4 A=com.navitel U=0 sz=0}
+    affinity=com.navitel
+    intent={flg=0x10000000 cmp=com.navitel/.app.MainActivity}
+    realActivity=com.navitel/.app.MainActivity
+## Selected crash indicators, not an exhaustive log
