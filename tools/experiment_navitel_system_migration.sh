@@ -2,7 +2,8 @@
 # Disposable generic ARM emulator only. Never use this on a head unit.
 set -euo pipefail
 exec > >(tee "$RUNNER_TEMP/navitel-migration.log") 2>&1
-work="$RUNNER_TEMP/navitel-migration"; mkdir -p "$work" reports
+# Accessible to the dedicated unprivileged emulator account, unlike runner's private temp.
+work=$(mktemp -d /tmp/navitel-migration.XXXXXX); chmod 0755 "$work"; mkdir -p reports
 sdk=${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}
 adb="$sdk/platform-tools/adb"
 bt=$(find "$sdk/build-tools" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -1)
@@ -33,6 +34,7 @@ echo no | "$sdk/cmdline-tools/latest/bin/avdmanager" create avd -f -n migration_
 curl -fLsS --retry 3 --max-time 120 https://dl.google.com/android/repository/tools_r25.2.5-linux.zip -o "$work/legacy.zip"
 echo "577516819c8b5fae680f049d39014ff1ba4af870b687cab10595783e6f22d33e  $work/legacy.zip" | sha256sum -c -
 mkdir -p "$work/legacy"; unzip -q "$work/legacy.zip" -d "$work/legacy"
+chmod -R a+rX "$work/legacy"
 # The original system app could have BOOT_COMPLETED receivers. Block ALL
 # emulator-owned external network traffic before its first boot, including IPv6.
 # Local loopback remains available for adb. This is a disposable hosted runner.
@@ -62,7 +64,15 @@ sudo -u emulatorlab env HOME=/home/emulatorlab ANDROID_HOME="$sdk" ANDROID_AVD_H
   "$work/legacy/tools/emulator" -avd migration_arm -no-window -no-audio -no-boot-anim -no-snapshot -gpu swiftshader -engine classic > "$work/emulator.txt" 2>&1 &
 pid=$!
 boot() {
-  timeout 300 "$adb" wait-for-device
+  "$adb" wait-for-device &
+  local waitpid=$! connected=no
+  for i in $(seq 1 60); do
+    if ! kill -0 "$pid" 2>/dev/null; then echo 'Emulator exited before adb'; break; fi
+    if ! kill -0 "$waitpid" 2>/dev/null; then wait "$waitpid" && connected=yes; break; fi
+    sleep 5
+  done
+  kill "$waitpid" 2>/dev/null || true
+  [ "$connected" = yes ] || { echo 'ADB connection timeout'; return 1; }
   local booted=no
   for i in $(seq 1 150); do
     if [ "$(timeout 5 "$adb" shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')" = 1 ]; then booted=yes; break; fi
