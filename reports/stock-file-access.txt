@@ -1964,8 +1964,38 @@ smali/com/android/settings/wifi/AdvancedWifiSettings.smali:133 .method private i
 
 ... method truncated at 300 lines
 
-## APK DEX literal scan: MANAGE_ROOT
-Only literal strings are searched; obfuscation and dynamic construction are not excluded.
+## APK DEX literal scan: file and installer intents
+Literal byte hits are leads only: they do not prove a call, a UI path, or runtime availability.
+Dynamic construction, native code, external packages, data and boot are not scanned.
+ZIP/APK files scanned: 52
+
+### MANAGE_ROOT: 2 APK(s)
 literal match: app/DocumentsUI.apk
 literal match: app/DownloadProviderUi.apk
-ZIP/APK files scanned: 52
+
+### OPEN_DOCUMENT: 3 APK(s)
+literal match: app/CertInstaller.apk
+literal match: app/DocumentsUI.apk
+literal match: priv-app/Navitel-large.apk
+
+### GET_CONTENT: 4 APK(s)
+literal match: app/Camera2.apk
+literal match: app/DocumentsUI.apk
+literal match: app/Music.apk
+literal match: priv-app/ElSettings.apk
+
+### INSTALL_PACKAGE: 0 APK(s)
+
+### APK_MIME: 6 APK(s)
+literal match: app/DocumentsUI.apk
+literal match: app/DownloadProviderUi.apk
+literal match: app/PackageInstaller.apk
+literal match: priv-app/DownloadProvider.apk
+literal match: priv-app/ElSettings.apk
+literal match: priv-app/Navitel-large.apk
+
+### CREATE_SHORTCUT: 4 APK(s)
+literal match: app/Music.apk
+literal match: priv-app/ElSettings.apk
+literal match: priv-app/Launcher2
+literal match: priv-app/SystemUI.apk
