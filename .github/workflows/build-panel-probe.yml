@@ -35,7 +35,7 @@ jobs:
           test -x "$bt/aapt" && test -x "$bt/d8" && test -x "$bt/apksigner" && test -f "$jar"
           out="$RUNNER_TEMP/panel"
           mkdir -p "$out/classes" "$out/dex" reports
-          "$bt/aapt" package -f -M launcher-panel/AndroidManifest.xml -I "$jar" -F "$out/unsigned.apk"
+          "$bt/aapt" package -f -M launcher-panel/AndroidManifest.xml -S launcher-panel/res -I "$jar" -F "$out/unsigned.apk"
           javac -source 8 -target 8 -bootclasspath "$jar" -d "$out/classes" launcher-panel/src/ru/lifanx60/panelprobe/MainActivity.java
           find "$out/classes" -name '*.class' > "$out/classes.txt"
           test -s "$out/classes.txt"
