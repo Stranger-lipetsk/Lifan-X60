@@ -128,15 +128,15 @@ python3 tools/check_integrated_laboratory_image.py "$work/old-tree" "$work/new-t
 
 echo 'Phase 5: exercise full archive packaging without publication'
 cp "$work/candidate.img" "$base"
-python3 - "$work/full" "$work/internal-only.zip" "$work/archive-report.txt" <<'PY'
+python3 - "$work/full" "$work/internal-only.zip" "$work/archive-report.txt" "$work/lifan-file-manager-test.zip" <<'PY'
 import hashlib, pathlib, sys, zipfile
-root, out, report = map(pathlib.Path, sys.argv[1:])
+root, out, report, base_zip = map(pathlib.Path, sys.argv[1:])
 names = {'system.img', 'boot.img', 'sd_boot.img', 'u-boot.bin', 'MCU_FW.hex', 'backup/config.ini'}
 actual = {p.relative_to(root).as_posix() for p in root.rglob('*') if p.is_file()}
 if actual != names: raise SystemExit('Unexpected full archive file set')
 with zipfile.ZipFile(out, 'w', compression=zipfile.ZIP_DEFLATED, compresslevel=1, allowZip64=True) as z:
     for name in sorted(names): z.write(root / name, name)
-with zipfile.ZipFile(out) as z, report.open('w') as f:
+with zipfile.ZipFile(out) as z, zipfile.ZipFile(base_zip) as original, report.open('w') as f:
     if set(z.namelist()) != names or len(z.namelist()) != len(names): raise SystemExit('Archive members differ')
     for name in sorted(names):
         actual_hash = hashlib.sha256()
@@ -146,8 +146,13 @@ with zipfile.ZipFile(out) as z, report.open('w') as f:
         with (root / name).open('rb') as src:
             for buf in iter(lambda: src.read(1024*1024), b''): expected.update(buf)
         if actual_hash.digest() != expected.digest(): raise SystemExit('Archive data mismatch: ' + name)
+        if name != 'system.img':
+            before = hashlib.sha256()
+            with original.open(name) as src:
+                for buf in iter(lambda: src.read(1024*1024), b''): before.update(buf)
+            if before.digest() != actual_hash.digest(): raise SystemExit('Original archive member changed: ' + name)
         print(name, actual_hash.hexdigest(), file=f)
-    print('All six ZIP members match local source files; no archive published.', file=f)
+    print('All six ZIP members match local source files; the five non-system members match the original ZIP. No archive published.', file=f)
 PY
 {
   echo '# Integrated full archive rehearsal — NOT A RELEASE, DO NOT FLASH'
