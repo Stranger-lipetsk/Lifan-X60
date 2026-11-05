@@ -75,14 +75,17 @@ jobs:
           "$adb" shell iptables -I OUTPUT 1 -m owner --uid-owner "$uid" -j REJECT
           "$adb" shell iptables -C OUTPUT -m owner --uid-owner "$uid" -j REJECT
           "$adb" logcat -c
+          "$adb" logcat -v brief > "$RUNNER_TEMP/logcat-stream.txt" 2>&1 &
+          logpid=$!
           set +e
-          timeout 90 "$adb" shell am start -W -n com.navitel/com.navitel.app.MainActivity > "$RUNNER_TEMP/start.txt" 2>&1
+          timeout 45 "$adb" shell am start -W -n com.navitel/com.navitel.app.MainActivity > "$RUNNER_TEMP/start.txt" 2>&1
           start_status=$?
           set -e
-          sleep 20
+          sleep 8
           "$adb" shell dumpsys activity activities > "$RUNNER_TEMP/activities.txt" 2>&1 || true
-          "$adb" shell pidof com.navitel > "$RUNNER_TEMP/pid.txt" 2>&1 || true
-          "$adb" logcat -d -v brief > "$RUNNER_TEMP/logcat.txt" 2>&1 || true
+          "$adb" shell ps > "$RUNNER_TEMP/processes.txt" 2>&1 || true
+          kill "$logpid" 2>/dev/null || true
+          wait "$logpid" 2>/dev/null || true
           {
             echo '# Navitel 11 on a clean Android 4.4.2 x86 emulator'
             echo 'APK SHA-256: 96876415d8b4342952558fd30d6e11b0ca9355c802060c0a9740b6cc84fc4e1b'
@@ -97,8 +100,10 @@ jobs:
             echo '## am start status'; echo "command exit status: $start_status"; cat "$RUNNER_TEMP/start.txt"
             echo '## Navitel activities (dumpsys excerpts)'
             grep -iE 'mResumedActivity|mFocusedActivity|com\.navitel' "$RUNNER_TEMP/activities.txt" | head -40 || true
-            echo '## Selected crash indicators, not an exhaustive log'
-            grep -iE 'FATAL EXCEPTION|Process: com\.navitel|ANR in com\.navitel|UnsatisfiedLinkError|VerifyError|NoClassDefFoundError' "$RUNNER_TEMP/logcat.txt" | tail -40 || true
+            echo '## Matching processes'
+            grep -iF 'com.navitel' "$RUNNER_TEMP/processes.txt" || true
+            echo '## Selected startup, failure and runtime lines, not an exhaustive log'
+            grep -iE 'com\.navitel|AndroidRuntime|FATAL EXCEPTION|fatal signal|ANR in|UnsatisfiedLinkError|VerifyError|NoClassDefFoundError|dlopen|dexopt|has died' "$RUNNER_TEMP/logcat-stream.txt" | tail -120 || true
           } > reports/navitel-emulator-laboratory.txt
       - name: Сохранить диагностику при инфраструктурной ошибке
         if: failure()
