@@ -62,8 +62,15 @@ jobs:
             sleep 4
           done
           test "$booted" = yes || { tail -40 "$RUNNER_TEMP/emulator.txt"; echo 'Android emulator did not boot'; exit 1; }
-          "$adb" root >/dev/null || true
-          timeout 90 "$adb" wait-for-device
+          # Avoid restarting adbd unnecessarily: old emulator may go offline during restart.
+          id_output=$("$adb" shell id | tr -d '\r')
+          echo "Emulator shell identity: $id_output"
+          if ! grep -q 'uid=0' <<< "$id_output"; then
+            "$adb" root
+            timeout 120 "$adb" wait-for-device
+            id_output=$("$adb" shell id | tr -d '\r')
+            grep -q 'uid=0' <<< "$id_output" || { echo 'Root shell unavailable'; exit 1; }
+          fi
           # Prevent the test from using any account, license server or external maps.
           "$adb" shell settings put global airplane_mode_on 1
           "$adb" shell am broadcast -a android.intent.action.AIRPLANE_MODE --ez state true >/dev/null
@@ -76,6 +83,13 @@ jobs:
           install_status=$?
           set -e
           if [ "$install_status" -ne 0 ] || ! grep -qF Success "$RUNNER_TEMP/install.txt"; then
+            if grep -qiE 'device offline|device not found|no devices|closed|failed to connect' "$RUNNER_TEMP/install.txt"; then
+              echo 'ADB disconnected during installation; this is not an APK compatibility result.'
+              cat "$RUNNER_TEMP/install.txt"; "$adb" devices -l || true
+              echo 'Emulator process status:'; ps -p "$pid" -o pid,stat,cmd || true
+              echo 'Emulator log:'; tail -100 "$RUNNER_TEMP/emulator.txt" || true
+              exit 1
+            fi
             {
               echo '# Navitel 11: installation failed on clean Android 4.4 ARMv7 emulator'
               echo 'APK SHA-256: 96876415d8b4342952558fd30d6e11b0ca9355c802060c0a9740b6cc84fc4e1b'
