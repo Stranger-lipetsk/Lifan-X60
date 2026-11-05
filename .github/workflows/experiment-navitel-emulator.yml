@@ -33,7 +33,7 @@ jobs:
           emulator="$sdk/emulator/emulator"
           adb="$sdk/platform-tools/adb"
           test -x "$manager" && test -x "$avdmanager" && test -x "$emulator" && test -x "$adb"
-          "$manager" --install 'system-images;android-19;default;x86' >/dev/null
+          "$manager" --install 'emulator' 'platform-tools' 'system-images;android-19;default;x86'
           echo no | "$avdmanager" create avd -f -n navitel_api19 -k 'system-images;android-19;default;x86' >/dev/null
           "$emulator" -avd navitel_api19 -no-window -no-audio -no-boot-anim -no-snapshot -gpu swiftshader_indirect -no-metrics > "$RUNNER_TEMP/emulator.txt" 2>&1 &
           pid=$!
