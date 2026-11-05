@@ -1,0 +1,32 @@
++ sdk=/usr/local/lib/android/sdk
+++ find /usr/local/lib/android/sdk/build-tools -mindepth 1 -maxdepth 1 -type d
+++ sort -V
+++ tail -1
++ bt=/usr/local/lib/android/sdk/build-tools/37.0.0
+++ find /usr/local/lib/android/sdk/platforms -name android.jar
+++ sort -V
+++ tail -1
++ jar=/usr/local/lib/android/sdk/platforms/android-37.2/android.jar
++ test -x /usr/local/lib/android/sdk/build-tools/37.0.0/aapt
++ test -x /usr/local/lib/android/sdk/build-tools/37.0.0/d8
++ test -x /usr/local/lib/android/sdk/build-tools/37.0.0/apksigner
++ test -f /usr/local/lib/android/sdk/platforms/android-37.2/android.jar
++ out=/home/runner/work/_temp/panel
++ mkdir -p /home/runner/work/_temp/panel/classes /home/runner/work/_temp/panel/dex reports
++ /usr/local/lib/android/sdk/build-tools/37.0.0/aapt package -f -M launcher-panel/AndroidManifest.xml -I /usr/local/lib/android/sdk/platforms/android-37.2/android.jar -F /home/runner/work/_temp/panel/unsigned.apk
++ javac -source 8 -target 8 -bootclasspath /usr/local/lib/android/sdk/platforms/android-37.2/android.jar -d /home/runner/work/_temp/panel/classes launcher-panel/src/ru/lifanx60/panelprobe/MainActivity.java
++ find /home/runner/work/_temp/panel/classes -name '*.class'
++ test -s /home/runner/work/_temp/panel/classes.txt
++ /usr/local/lib/android/sdk/build-tools/37.0.0/d8 --lib /usr/local/lib/android/sdk/platforms/android-37.2/android.jar --min-api 19 --output /home/runner/work/_temp/panel/dex @/home/runner/work/_temp/panel/classes.txt
++ test -s /home/runner/work/_temp/panel/dex/classes.dex
++ cp /home/runner/work/_temp/panel/dex/classes.dex /home/runner/work/_temp/panel/classes.dex
++ cd /home/runner/work/_temp/panel
++ zip -q -u unsigned.apk classes.dex
++ /usr/local/lib/android/sdk/build-tools/37.0.0/zipalign -f 4 /home/runner/work/_temp/panel/unsigned.apk /home/runner/work/_temp/panel/aligned.apk
++ keytool -genkeypair -keystore /home/runner/work/_temp/panel/test.keystore -storepass test-only -keypass test-only -alias panelprobe -keyalg RSA -keysize 2048 -validity 10000 -dname 'CN=Lifan X60 Panel Test, O=Community, C=RU'
++ /usr/local/lib/android/sdk/build-tools/37.0.0/apksigner sign --ks /home/runner/work/_temp/panel/test.keystore --ks-pass pass:test-only --key-pass pass:test-only --min-sdk-version 19 --v1-signing-enabled true --out /home/runner/work/_temp/panel/lifan-panel-probe.apk /home/runner/work/_temp/panel/aligned.apk
++ /usr/local/lib/android/sdk/build-tools/37.0.0/apksigner verify --min-sdk-version 19 --max-sdk-version 19 --verbose --print-certs /home/runner/work/_temp/panel/lifan-panel-probe.apk
++ /usr/local/lib/android/sdk/build-tools/37.0.0/aapt dump xmltree /home/runner/work/_temp/panel/lifan-panel-probe.apk AndroidManifest.xml
++ /usr/local/lib/android/sdk/build-tools/37.0.0/aapt dump badging /home/runner/work/_temp/panel/lifan-panel-probe.apk
+11-05 18:04:01.268  2208  2208 W ResourceType: No known package when getting value for resource number 0x01080042
+AndroidManifest.xml:7: error: ERROR getting 'android:icon' attribute: attribute value reference does not exist
