@@ -1,0 +1,1712 @@
+Stock system SHA-256: b6bbbe529942ffec250cad993ae9cbb808721c27cf2536fb3fb11120130e8545
+55ac1a4d8544b596fb48bdb105582d8689da06c0a3f18a46774861e77f0ca827  Bluetooth.apk
+## AndroidManifest binary XML tree
+N: android=http://schemas.android.com/apk/res/android
+  E: manifest (line=2)
+    A: android:sharedUserId(0x0101000b)="android.uid.bluetooth" (Raw: "android.uid.bluetooth")
+    A: android:versionCode(0x0101021b)=(type 0x10)0x13
+    A: android:versionName(0x0101021c)="4.4.2-20140630" (Raw: "4.4.2-20140630")
+    A: package="com.android.bluetooth" (Raw: "com.android.bluetooth")
+    E: uses-sdk (line=0)
+      A: android:minSdkVersion(0x0101020c)=(type 0x10)0x13
+      A: android:targetSdkVersion(0x01010270)=(type 0x10)0x13
+    E: original-package (line=6)
+      A: android:name(0x01010003)="com.android.bluetooth" (Raw: "com.android.bluetooth")
+    E: permission (line=9)
+      A: android:label(0x01010001)=@0x7f050000
+      A: android:name(0x01010003)="android.permission.ACCESS_BLUETOOTH_SHARE" (Raw: "android.permission.ACCESS_BLUETOOTH_SHARE")
+      A: android:protectionLevel(0x01010009)=(type 0x11)0x2
+      A: android:description(0x01010020)=@0x7f050001
+    E: permission (line=15)
+      A: android:label(0x01010001)=@0x7f050002
+      A: android:name(0x01010003)="com.android.permission.WHITELIST_BLUETOOTH_DEVICE" (Raw: "com.android.permission.WHITELIST_BLUETOOTH_DEVICE")
+      A: android:protectionLevel(0x01010009)=(type 0x11)0x2
+      A: android:description(0x01010020)=@0x7f050003
+    C: " ,\n"
+    E: permission (line=21)
+      A: android:label(0x01010001)=@0x7f050004
+      A: android:name(0x01010003)="com.android.permission.HANDOVER_STATUS" (Raw: "com.android.permission.HANDOVER_STATUS")
+      A: android:protectionLevel(0x01010009)=(type 0x11)0x2
+      A: android:description(0x01010020)=@0x7f050005
+    E: uses-permission (line=26)
+      A: android:name(0x01010003)="android.permission.RECEIVE_BOOT_COMPLETED" (Raw: "android.permission.RECEIVE_BOOT_COMPLETED")
+    E: uses-permission (line=27)
+      A: android:name(0x01010003)="android.permission.ACCESS_BLUETOOTH_SHARE" (Raw: "android.permission.ACCESS_BLUETOOTH_SHARE")
+    E: uses-permission (line=28)
+      A: android:name(0x01010003)="android.permission.INTERNET" (Raw: "android.permission.INTERNET")
+    E: uses-permission (line=29)
+      A: android:name(0x01010003)="android.permission.BLUETOOTH" (Raw: "android.permission.BLUETOOTH")
+    E: uses-permission (line=30)
+      A: android:name(0x01010003)="android.permission.BLUETOOTH_ADMIN" (Raw: "android.permission.BLUETOOTH_ADMIN")
+    E: uses-permission (line=31)
+      A: android:name(0x01010003)="android.permission.BLUETOOTH_PRIVILEGED" (Raw: "android.permission.BLUETOOTH_PRIVILEGED")
+    E: uses-permission (line=32)
+      A: android:name(0x01010003)="android.permission.WAKE_LOCK" (Raw: "android.permission.WAKE_LOCK")
+    E: uses-permission (line=33)
+      A: android:name(0x01010003)="android.permission.WRITE_EXTERNAL_STORAGE" (Raw: "android.permission.WRITE_EXTERNAL_STORAGE")
+    E: uses-permission (line=34)
+      A: android:name(0x01010003)="android.permission.READ_CONTACTS" (Raw: "android.permission.READ_CONTACTS")
+    E: uses-permission (line=35)
+      A: android:name(0x01010003)="android.permission.READ_CALL_LOG" (Raw: "android.permission.READ_CALL_LOG")
+    E: uses-permission (line=36)
+      A: android:name(0x01010003)="android.permission.READ_PHONE_STATE" (Raw: "android.permission.READ_PHONE_STATE")
+    E: uses-permission (line=37)
+      A: android:name(0x01010003)="android.permission.WRITE_SETTINGS" (Raw: "android.permission.WRITE_SETTINGS")
+    E: uses-permission (line=38)
+      A: android:name(0x01010003)="com.android.permission.HANDOVER_STATUS" (Raw: "com.android.permission.HANDOVER_STATUS")
+    E: uses-permission (line=39)
+      A: android:name(0x01010003)="android.permission.WRITE_SECURE_SETTINGS" (Raw: "android.permission.WRITE_SECURE_SETTINGS")
+    E: uses-permission (line=40)
+      A: android:name(0x01010003)="android.permission.NET_ADMIN" (Raw: "android.permission.NET_ADMIN")
+    E: uses-permission (line=41)
+      A: android:name(0x01010003)="android.permission.CALL_PRIVILEGED" (Raw: "android.permission.CALL_PRIVILEGED")
+    E: uses-permission (line=42)
+      A: android:name(0x01010003)="android.permission.MODIFY_AUDIO_SETTINGS" (Raw: "android.permission.MODIFY_AUDIO_SETTINGS")
+    E: uses-permission (line=43)
+      A: android:name(0x01010003)="android.permission.NET_TUNNELING" (Raw: "android.permission.NET_TUNNELING")
+    E: uses-permission (line=44)
+      A: android:name(0x01010003)="android.permission.ACCESS_NETWORK_STATE" (Raw: "android.permission.ACCESS_NETWORK_STATE")
+    E: uses-permission (line=45)
+      A: android:name(0x01010003)="android.permission.CHANGE_NETWORK_STATE" (Raw: "android.permission.CHANGE_NETWORK_STATE")
+    E: uses-permission (line=46)
+      A: android:name(0x01010003)="android.permission.CONNECTIVITY_INTERNAL" (Raw: "android.permission.CONNECTIVITY_INTERNAL")
+    E: uses-permission (line=47)
+      A: android:name(0x01010003)="android.permission.MODIFY_PHONE_STATE" (Raw: "android.permission.MODIFY_PHONE_STATE")
+    E: uses-permission (line=48)
+      A: android:name(0x01010003)="android.permission.INTERACT_ACROSS_USERS_FULL" (Raw: "android.permission.INTERACT_ACROSS_USERS_FULL")
+    E: uses-permission (line=49)
+      A: android:name(0x01010003)="android.permission.BLUETOOTH_STACK" (Raw: "android.permission.BLUETOOTH_STACK")
+    E: uses-permission (line=50)
+      A: android:name(0x01010003)="android.permission.INTERACT_ACROSS_USERS" (Raw: "android.permission.INTERACT_ACROSS_USERS")
+    E: uses-permission (line=51)
+      A: android:name(0x01010003)="android.permission.MANAGE_USERS" (Raw: "android.permission.MANAGE_USERS")
+    E: uses-permission (line=52)
+      A: android:name(0x01010003)="com.google.android.gallery3d.permission.GALLERY_PROVIDER" (Raw: "com.google.android.gallery3d.permission.GALLERY_PROVIDER")
+    E: uses-permission (line=53)
+      A: android:name(0x01010003)="com.android.gallery3d.permission.GALLERY_PROVIDER" (Raw: "com.android.gallery3d.permission.GALLERY_PROVIDER")
+    E: uses-permission (line=56)
+      A: android:name(0x01010003)="android.permission.READ_PROFILE" (Raw: "android.permission.READ_PROFILE")
+    E: application (line=57)
+      A: android:label(0x01010001)=@0x7f050075
+      A: android:icon(0x01010002)=@0x7f020001
+      A: android:name(0x01010003)=".btservice.AdapterApp" (Raw: ".btservice.AdapterApp")
+      A: android:persistent(0x0101000d)=(type 0x12)0x0
+      E: service (line=62)
+        A: android:name(0x01010003)=".btservice.AdapterService" (Raw: ".btservice.AdapterService")
+        A: android:process(0x01010011)=@0x7f050062
+        E: intent-filter (line=65)
+          E: action (line=66)
+            A: android:name(0x01010003)="android.bluetooth.IBluetooth" (Raw: "android.bluetooth.IBluetooth")
+      E: service (line=69)
+        A: android:name(0x01010003)=".gatt.GattService" (Raw: ".gatt.GattService")
+        A: android:enabled(0x0101000e)=@0x7f040007
+        A: android:process(0x01010011)=@0x7f050062
+        E: intent-filter (line=73)
+          E: action (line=74)
+            A: android:name(0x01010003)="android.bluetooth.IBluetoothGatt" (Raw: "android.bluetooth.IBluetoothGatt")
+      E: service (line=78)
+        A: android:name(0x01010003)=".hfp.HeadsetService" (Raw: ".hfp.HeadsetService")
+        A: android:enabled(0x0101000e)=@0x7f040002
+        A: android:process(0x01010011)=@0x7f050062
+        E: intent-filter (line=82)
+          E: action (line=83)
+            A: android:name(0x01010003)="android.bluetooth.IBluetoothHeadset" (Raw: "android.bluetooth.IBluetoothHeadset")
+      E: service (line=86)
+        A: android:name(0x01010003)=".a2dp.A2dpService" (Raw: ".a2dp.A2dpService")
+        A: android:enabled(0x0101000e)=@0x7f040000
+        A: android:process(0x01010011)=@0x7f050062
+        E: intent-filter (line=90)
+          E: action (line=91)
+            A: android:name(0x01010003)="android.bluetooth.IBluetoothA2dp" (Raw: "android.bluetooth.IBluetoothA2dp")
+      E: service (line=94)
+        A: android:name(0x01010003)=".pbap.PbapService" (Raw: ".pbap.PbapService")
+        A: android:enabled(0x0101000e)=@0x7f040006
+        A: android:process(0x01010011)=@0x7f050062
+        E: intent-filter (line=98)
+          E: action (line=99)
+            A: android:name(0x01010003)="android.bluetooth.IBluetoothPbap" (Raw: "android.bluetooth.IBluetoothPbap")
+      E: service (line=102)
+        A: android:name(0x01010003)=".map.MapService" (Raw: ".map.MapService")
+        A: android:enabled(0x0101000e)=@0x7f04000a
+        A: android:process(0x01010011)=@0x7f050062
+        E: intent-filter (line=106)
+          E: action (line=107)
+            A: android:name(0x01010003)="android.bluetooth.IBluetoothMap" (Raw: "android.bluetooth.IBluetoothMap")
+      E: service (line=110)
+        A: android:name(0x01010003)=".pan.PanService" (Raw: ".pan.PanService")
+        A: android:enabled(0x0101000e)=@0x7f040005
+        A: android:process(0x01010011)=@0x7f050062
+        E: intent-filter (line=114)
+          E: action (line=115)
+            A: android:name(0x01010003)="android.bluetooth.IBluetoothPan" (Raw: "android.bluetooth.IBluetoothPan")
+      E: service (line=118)
+        A: android:name(0x01010003)=".dun.DunService" (Raw: ".dun.DunService")
+        A: android:enabled(0x0101000e)=@0x7f04000b
+        A: android:process(0x01010011)=@0x7f050062
+        E: intent-filter (line=122)
+          E: action (line=123)
+            A: android:name(0x01010003)="android.bluetooth.IBluetoothDun" (Raw: "android.bluetooth.IBluetoothDun")
+      E: service (line=126)
+        A: android:name(0x01010003)=".ftp.FtpService" (Raw: ".ftp.FtpService")
+        A: android:enabled(0x0101000e)=@0x7f04000c
+        A: android:process(0x01010011)=@0x7f050062
+        E: intent-filter (line=130)
+          E: action (line=131)
+            A: android:name(0x01010003)="android.bluetooth.IBluetoothFtp" (Raw: "android.bluetooth.IBluetoothFtp")
+      E: service (line=134)
+        A: android:name(0x01010003)=".hid.HidService" (Raw: ".hid.HidService")
+        A: android:enabled(0x0101000e)=@0x7f040003
+        A: android:process(0x01010011)=@0x7f050062
+        E: intent-filter (line=138)
+          E: action (line=139)
+            A: android:name(0x01010003)="android.bluetooth.IBluetoothInputDevice" (Raw: "android.bluetooth.IBluetoothInputDevice")
+      E: service (line=142)
+        A: android:name(0x01010003)=".ancs.ANCSClientService" (Raw: ".ancs.ANCSClientService")
+        A: android:enabled(0x0101000e)=@0x7f04000d
+        A: android:process(0x01010011)=@0x7f050062
+        E: intent-filter (line=145)
+          E: action (line=146)
+            A: android:name(0x01010003)="android.bluetooth.IANCSClient" (Raw: "android.bluetooth.IANCSClient")
+# Bluetooth.apk static profile / object-push inspection
+Presence and static flags do not prove runtime activation, pairing or file transfer.
+Smali files: 178
+
+## smali/com/android/bluetooth/btservice/AdapterService$1.smali
+.method constructor <init>(Lcom/android/bluetooth/btservice/AdapterService;)V
+    .locals 0
+
+    .prologue
+    .line 455
+    iput-object p1, p0, Lcom/android/bluetooth/btservice/AdapterService$1;->this$0:Lcom/android/bluetooth/btservice/AdapterService;
+
+    invoke-direct {p0}, Landroid/os/Handler;-><init>()V
+
+    return-void
+.end method
+
+## smali/com/android/bluetooth/btservice/AdapterService$AdapterServiceBinder.smali
+.method public constructor <init>(Lcom/android/bluetooth/btservice/AdapterService;)V
+    .locals 0
+    .param p1, "svc"    # Lcom/android/bluetooth/btservice/AdapterService;
+
+    .prologue
+    .line 540
+    invoke-direct {p0}, Landroid/bluetooth/IBluetooth$Stub;-><init>()V
+
+    .line 541
+    iput-object p1, p0, Lcom/android/bluetooth/btservice/AdapterService$AdapterServiceBinder;->mService:Lcom/android/bluetooth/btservice/AdapterService;
+
+    .line 542
+    return-void
+.end method
+.method public disable()Z
+    .locals 4
+
+    .prologue
+    const/4 v1, 0x0
+
+    .line 592
+    invoke-static {}, Landroid/os/Binder;->getCallingUid()I
+
+    move-result v2
+
+    const/16 v3, 0x3e8
+
+    if-eq v2, v3, :cond_1
+
+    invoke-static {}, Lcom/android/bluetooth/Utils;->checkCaller()Z
+
+    move-result v2
+
+    if-nez v2, :cond_1
+
+    .line 594
+    const-string v2, "BluetoothAdapterService"
+
+    const-string v3, "disable() - Not allowed for non-active user and non system user"
+
+    invoke-static {v2, v3}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;)I
+
+    .line 600
+    :cond_0
+    :goto_0
+    return v1
+
+    .line 598
+    :cond_1
+    invoke-virtual {p0}, Lcom/android/bluetooth/btservice/AdapterService$AdapterServiceBinder;->getService()Lcom/android/bluetooth/btservice/AdapterService;
+
+    move-result-object v0
+
+    .line 599
+    .local v0, "service":Lcom/android/bluetooth/btservice/AdapterService;
+    if-eqz v0, :cond_0
+
+    .line 600
+    invoke-virtual {v0}, Lcom/android/bluetooth/btservice/AdapterService;->disable()Z
+
+    move-result v1
+
+    goto :goto_0
+.end method
+.method public enable()Z
+    .locals 4
+
+    .prologue
+    const/4 v1, 0x0
+
+    .line 569
+    invoke-static {}, Landroid/os/Binder;->getCallingUid()I
+
+    move-result v2
+
+    const/16 v3, 0x3e8
+
+    if-eq v2, v3, :cond_1
+
+    invoke-static {}, Lcom/android/bluetooth/Utils;->checkCaller()Z
+
+    move-result v2
+
+    if-nez v2, :cond_1
+
+    .line 571
+    const-string v2, "BluetoothAdapterService"
+
+    const-string v3, "enable() - Not allowed for non-active user and non system user"
+
+    invoke-static {v2, v3}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;)I
+
+    .line 576
+    :cond_0
+    :goto_0
+    return v1
+
+    .line 574
+    :cond_1
+    invoke-virtual {p0}, Lcom/android/bluetooth/btservice/AdapterService$AdapterServiceBinder;->getService()Lcom/android/bluetooth/btservice/AdapterService;
+
+    move-result-object v0
+
+    .line 575
+    .local v0, "service":Lcom/android/bluetooth/btservice/AdapterService;
+    if-eqz v0, :cond_0
+
+    .line 576
+    invoke-virtual {v0}, Lcom/android/bluetooth/btservice/AdapterService;->enable()Z
+
+    move-result v1
+
+    goto :goto_0
+.end method
+.method public isEnabled()Z
+    .locals 2
+
+    .prologue
+    .line 556
+    invoke-virtual {p0}, Lcom/android/bluetooth/btservice/AdapterService$AdapterServiceBinder;->getService()Lcom/android/bluetooth/btservice/AdapterService;
+
+    move-result-object v0
+
+    .line 557
+    .local v0, "service":Lcom/android/bluetooth/btservice/AdapterService;
+    if-nez v0, :cond_0
+
+    const/4 v1, 0x0
+
+    .line 558
+    :goto_0
+    return v1
+
+    :cond_0
+    invoke-virtual {v0}, Lcom/android/bluetooth/btservice/AdapterService;->isEnabled()Z
+
+    move-result v1
+
+    goto :goto_0
+.end method
+
+## smali/com/android/bluetooth/btservice/AdapterService.smali
+.method static constructor <clinit>()V
+    .locals 1
+
+    .prologue
+    .line 85
+    const/4 v0, 0x0
+
+    sput v0, Lcom/android/bluetooth/btservice/AdapterService;->sRefCount:I
+
+    .line 123
+    return-void
+.end method
+.method public constructor <init>()V
+    .locals 3
+
+    .prologue
+    .line 176
+    invoke-direct {p0}, Landroid/app/Service;-><init>()V
+
+    .line 168
+    new-instance v0, Ljava/util/HashMap;
+
+    invoke-direct {v0}, Ljava/util/HashMap;-><init>()V
+
+    iput-object v0, p0, Lcom/android/bluetooth/btservice/AdapterService;->mProfileServicesState:Ljava/util/HashMap;
+
+    .line 172
+    const/4 v0, 0x0
+
+    iput-boolean v0, p0, Lcom/android/bluetooth/btservice/AdapterService;->mQuietmode:Z
+
+    .line 455
+    new-instance v0, Lcom/android/bluetooth/btservice/AdapterService$1;
+
+    invoke-direct {v0, p0}, Lcom/android/bluetooth/btservice/AdapterService$1;-><init>(Lcom/android/bluetooth/btservice/AdapterService;)V
+
+    iput-object v0, p0, Lcom/android/bluetooth/btservice/AdapterService;->mHandler:Landroid/os/Handler;
+
+    .line 178
+    const-class v1, Lcom/android/bluetooth/btservice/AdapterService;
+
+    monitor-enter v1
+
+    .line 179
+    :try_start_0
+    sget v0, Lcom/android/bluetooth/btservice/AdapterService;->sRefCount:I
+
+    add-int/lit8 v0, v0, 0x1
+
+    sput v0, Lcom/android/bluetooth/btservice/AdapterService;->sRefCount:I
+
+    .line 180
+    new-instance v0, Ljava/lang/StringBuilder;
+
+    invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v2, "AdapterService() - REFCOUNT: CREATED. INSTANCE_COUNT"
+
+    invoke-virtual {v0, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v0
+
+    sget v2, Lcom/android/bluetooth/btservice/AdapterService;->sRefCount:I
+
+    invoke-virtual {v0, v2}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+
+    move-result-object v0
+
+    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v0
+
+    invoke-direct {p0, v0}, Lcom/android/bluetooth/btservice/AdapterService;->debugLog(Ljava/lang/String;)V
+
+    .line 181
+    monitor-exit v1
+
+    .line 183
+    return-void
+
+    .line 181
+    :catchall_0
+    move-exception v0
+
+    monitor-exit v1
+    :try_end_0
+    .catchall {:try_start_0 .. :try_end_0} :catchall_0
+
+    throw v0
+.end method
+.method private isAvailable()Z
+    .locals 1
+
+    .prologue
+    .line 518
+    iget-boolean v0, p0, Lcom/android/bluetooth/btservice/AdapterService;->mCleaningUp:Z
+
+    if-nez v0, :cond_0
+
+    const/4 v0, 0x1
+
+    :goto_0
+    return v0
+
+    :cond_0
+    const/4 v0, 0x0
+
+    goto :goto_0
+.end method
+.method private processProfileServiceStateChanged(Ljava/lang/String;I)V
+    .locals 9
+    .param p1, "serviceName"    # Ljava/lang/String;
+    .param p2, "state"    # I
+
+    .prologue
+    .line 229
+    const/4 v0, 0x0
+
+    .line 233
+    .local v0, "doUpdate":Z
+    iget-object v7, p0, Lcom/android/bluetooth/btservice/AdapterService;->mProfileServicesState:Ljava/util/HashMap;
+
+    monitor-enter v7
+
+    .line 234
+    :try_start_0
+    iget-object v6, p0, Lcom/android/bluetooth/btservice/AdapterService;->mProfileServicesState:Ljava/util/HashMap;
+
+    invoke-virtual {v6, p1}, Ljava/util/HashMap;->get(Ljava/lang/Object;)Ljava/lang/Object;
+
+    move-result-object v5
+
+    check-cast v5, Ljava/lang/Integer;
+
+    .line 235
+    .local v5, "prevState":Ljava/lang/Integer;
+    if-eqz v5, :cond_0
+
+    invoke-virtual {v5}, Ljava/lang/Integer;->intValue()I
+
+    move-result v6
+
+    if-eq v6, p2, :cond_0
+
+    .line 236
+    iget-object v6, p0, Lcom/android/bluetooth/btservice/AdapterService;->mProfileServicesState:Ljava/util/HashMap;
+
+    invoke-static {p2}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
+
+    move-result-object v8
+
+    invoke-virtual {v6, p1, v8}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+
+    .line 237
+    const/4 v0, 0x1
+
+    .line 239
+    :cond_0
+    monitor-exit v7
+    :try_end_0
+    .catchall {:try_start_0 .. :try_end_0} :catchall_0
+
+    .line 240
+    new-instance v6, Ljava/lang/StringBuilder;
+
+    invoke-direct {v6}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v7, "onProfileServiceStateChange() serviceName="
+
+    invoke-virtual {v6, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v6
+
+    invoke-virtual {v6, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v6
+
+    const-string v7, ", state="
+
+    invoke-virtual {v6, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v6
+
+    invoke-virtual {v6, p2}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+
+    move-result-object v6
+
+    const-string v7, ", doUpdate="
+
+    invoke-virtual {v6, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v6
+
+    invoke-virtual {v6, v0}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
+
+    move-result-object v6
+
+    invoke-virtual {v6}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v6
+
+    invoke-direct {p0, v6}, Lcom/android/bluetooth/btservice/AdapterService;->debugLog(Ljava/lang/String;)V
+
+    .line 243
+    if-nez v0, :cond_2
+
+    .line 289
+    :cond_1
+    :goto_0
+    return-void
+
+    .line 239
+    .end local v5    # "prevState":Ljava/lang/Integer;
+    :catchall_0
+    move-exception v6
+
+    :try_start_1
+    monitor-exit v7
+    :try_end_1
+    .catchall {:try_start_1 .. :try_end_1} :catchall_0
+
+    throw v6
+
+    .line 247
+    .restart local v5    # "prevState":Ljava/lang/Integer;
+    :cond_2
+    iget-object v7, p0, Lcom/android/bluetooth/btservice/AdapterService;->mAdapterStateMachine:Lcom/android/bluetooth/btservice/AdapterState;
+
+    monitor-enter v7
+
+    .line 248
+    :try_start_2
+    iget-object v6, p0, Lcom/android/bluetooth/btservice/AdapterService;->mAdapterStateMachine:Lcom/android/bluetooth/btservice/AdapterState;
+
+    invoke-virtual {v6}, Lcom/android/bluetooth/btservice/AdapterState;->isTurningOff()Z
+
+    move-result v3
+
+    .line 249
+    .local v3, "isTurningOff":Z
+    iget-object v6, p0, Lcom/android/bluetooth/btservice/AdapterService;->mAdapterStateMachine:Lcom/android/bluetooth/btservice/AdapterState;
+
+    invoke-virtual {v6}, Lcom/android/bluetooth/btservice/AdapterState;->isTurningOn()Z
+
+    move-result v4
+
+    .line 250
+    .local v4, "isTurningOn":Z
+    monitor-exit v7
+    :try_end_2
+    .catchall {:try_start_2 .. :try_end_2} :catchall_2
+
+    .line 252
+    if-eqz v3, :cond_5
+
+    .line 255
+    iget-object v7, p0, Lcom/android/bluetooth/btservice/AdapterService;->mProfileServicesState:Ljava/util/HashMap;
+
+    monitor-enter v7
+
+    .line 256
+    :try_start_3
+    iget-object v6, p0, Lcom/android/bluetooth/btservice/AdapterService;->mProfileServicesState:Ljava/util/HashMap;
+
+    invoke-virtual {v6}, Ljava/util/HashMap;->entrySet()Ljava/util/Set;
+
+    move-result-object v6
+
+    invoke-interface {v6}, Ljava/util/Set;->iterator()Ljava/util/Iterator;
+
+    move-result-object v2
+
+    .line 257
+    .local v2, "i":Ljava/util/Iterator;, "Ljava/util/Iterator<Ljava/util/Map$Entry<Ljava/lang/String;Ljava/lang/Integer;>;>;"
+    :cond_3
+    invoke-interface {v2}, Ljava/util/Iterator;->hasNext()Z
+
+    move-result v6
+
+    if-eqz v6, :cond_4
+
+    .line 258
+    invoke-interface {v2}, Ljava/util/Iterator;->next()Ljava/lang/Object;
+
+    move-result-object v1
+
+    check-cast v1, Ljava/util/Map$Entry;
+
+    .line 259
+    .local v1, "entry":Ljava/util/Map$Entry;, "Ljava/util/Map$Entry<Ljava/lang/String;Ljava/lang/Integer;>;"
+    const/16 v8, 0xa
+
+    invoke-interface {v1}, Ljava/util/Map$Entry;->getValue()Ljava/lang/Object;
+
+    move-result-object v6
+
+    check-cast v6, Ljava/lang/Integer;
+
+    invoke-virtual {v6}, Ljava/lang/Integer;->intValue()I
+
+    move-result v6
+
+    if-eq v8, v6, :cond_3
+
+    .line 260
+    new-instance v6, Ljava/lang/StringBuilder;
+
+    invoke-direct {v6}, Ljava/lang/StringBuilder;-><init>()V
+
+... method truncated
+.method private setProfileServiceState([Ljava/lang/Class;I)V
+    .locals 9
+    .param p1, "services"    # [Ljava/lang/Class;
+    .param p2, "state"    # I
+
+    .prologue
+    const/16 v8, 0xa
+
+    .line 482
+    const/16 v6, 0xc
+
+    if-eq p2, v6, :cond_1
+
+    if-eq p2, v8, :cond_1
+
+    .line 483
+    const-string v6, "setProfileServiceState() - Invalid state, leaving..."
+
+    invoke-direct {p0, v6}, Lcom/android/bluetooth/btservice/AdapterService;->debugLog(Ljava/lang/String;)V
+
+    .line 515
+    :cond_0
+    return-void
+
+    .line 487
+    :cond_1
+    const/16 v0, 0xa
+
+    .line 488
+    .local v0, "expectedCurrentState":I
+    const/16 v3, 0xb
+
+    .line 489
+    .local v3, "pendingState":I
+    if-ne p2, v8, :cond_2
+
+    .line 490
+    const/16 v0, 0xc
+
+    .line 491
+    const/16 v3, 0xd
+
+    .line 494
+    :cond_2
+    const/4 v1, 0x0
+
+    .local v1, "i":I
+    :goto_0
+    array-length v6, p1
+
+    if-ge v1, v6, :cond_0
+
+    .line 495
+    aget-object v6, p1, v1
+
+    invoke-virtual {v6}, Ljava/lang/Class;->getName()Ljava/lang/String;
+
+    move-result-object v4
+
+    .line 496
+    .local v4, "serviceName":Ljava/lang/String;
+    iget-object v6, p0, Lcom/android/bluetooth/btservice/AdapterService;->mProfileServicesState:Ljava/util/HashMap;
+
+    invoke-virtual {v6, v4}, Ljava/util/HashMap;->get(Ljava/lang/Object;)Ljava/lang/Object;
+
+    move-result-object v5
+
+    check-cast v5, Ljava/lang/Integer;
+
+    .line 497
+    .local v5, "serviceState":Ljava/lang/Integer;
+    if-eqz v5, :cond_4
+
+    invoke-virtual {v5}, Ljava/lang/Integer;->intValue()I
+
+    move-result v6
+
+    if-eq v6, v0, :cond_4
+
+    .line 498
+    new-instance v6, Ljava/lang/StringBuilder;
+
+    invoke-direct {v6}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v7, "setProfileServiceState() - Unable to "
+
+    invoke-virtual {v6, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v7
+
+    if-ne p2, v8, :cond_3
+
+    const-string v6, "start"
+
+    :goto_1
+    invoke-virtual {v7, v6}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v6
+
+    const-string v7, " service "
+
+    invoke-virtual {v6, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v6
+
+    invoke-virtual {v6, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v6
+
+    const-string v7, ". Invalid state: "
+
+    invoke-virtual {v6, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v6
+
+    invoke-virtual {v6, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
+
+    move-result-object v6
+
+    invoke-virtual {v6}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v6
+
+    invoke-direct {p0, v6}, Lcom/android/bluetooth/btservice/AdapterService;->debugLog(Ljava/lang/String;)V
+
+    .line 494
+    :goto_2
+    add-int/lit8 v1, v1, 0x1
+
+    goto :goto_0
+
+    .line 498
+    :cond_3
+    const-string v6, "stop"
+
+    goto :goto_1
+
+    .line 505
+    :cond_4
+    new-instance v6, Ljava/lang/StringBuilder;
+
+    invoke-direct {v6}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v7, "setProfileServiceState() - "
+
+    invoke-virtual {v6, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v7
+
+    if-ne p2, v8, :cond_5
+
+    const-string v6, "Stopping"
+
+    :goto_3
+    invoke-virtual {v7, v6}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v6
+
+    const-string v7, " service "
+
+    invoke-virtual {v6, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v6
+
+    invoke-virtual {v6, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v6
+
+    invoke-virtual {v6}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v6
+
+    invoke-direct {p0, v6}, Lcom/android/bluetooth/btservice/AdapterService;->debugLog(Ljava/lang/String;)V
+
+    .line 509
+    iget-object v6, p0, Lcom/android/bluetooth/btservice/AdapterService;->mProfileServicesState:Ljava/util/HashMap;
+
+    invoke-static {v3}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
+
+    move-result-object v7
+
+    invoke-virtual {v6, v4, v7}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+
+    .line 510
+    new-instance v2, Landroid/content/Intent;
+
+    aget-object v6, p1, v1
+
+    invoke-direct {v2, p0, v6}, Landroid/content/Intent;-><init>(Landroid/content/Context;Ljava/lang/Class;)V
+
+    .line 511
+    .local v2, "intent":Landroid/content/Intent;
+    const-string v6, "action"
+
+    const-string v7, "com.android.bluetooth.btservice.action.STATE_CHANGED"
+
+    invoke-virtual {v2, v6, v7}, Landroid/content/Intent;->putExtra(Ljava/lang/String;Ljava/lang/String;)Landroid/content/Intent;
+
+    .line 512
+    const-string v6, "android.bluetooth.adapter.extra.STATE"
+... method truncated
+.method disable()Z
+    .locals 3
+
+    .prologue
+    .line 1216
+    const-string v1, "android.permission.BLUETOOTH_ADMIN"
+
+    const-string v2, "Need BLUETOOTH ADMIN permission"
+
+    invoke-virtual {p0, v1, v2}, Lcom/android/bluetooth/btservice/AdapterService;->enforceCallingOrSelfPermission(Ljava/lang/String;Ljava/lang/String;)V
+
+    .line 1219
+    const-string v1, "disable() called..."
+
+    invoke-direct {p0, v1}, Lcom/android/bluetooth/btservice/AdapterService;->debugLog(Ljava/lang/String;)V
+
+    .line 1220
+    iget-object v1, p0, Lcom/android/bluetooth/btservice/AdapterService;->mAdapterStateMachine:Lcom/android/bluetooth/btservice/AdapterState;
+
+    const/16 v2, 0x14
+
+    invoke-virtual {v1, v2}, Lcom/android/bluetooth/btservice/AdapterState;->obtainMessage(I)Landroid/os/Message;
+
+    move-result-object v0
+
+    .line 1222
+    .local v0, "m":Landroid/os/Message;
+    iget-object v1, p0, Lcom/android/bluetooth/btservice/AdapterService;->mAdapterStateMachine:Lcom/android/bluetooth/btservice/AdapterState;
+
+    invoke-virtual {v1, v0}, Lcom/android/bluetooth/btservice/AdapterState;->sendMessage(Landroid/os/Message;)V
+
+    .line 1223
+    const/4 v1, 0x1
+
+    return v1
+.end method
+.method enable()Z
+    .locals 1
+
+    .prologue
+    .line 1197
+    const/4 v0, 0x0
+
+    invoke-virtual {p0, v0}, Lcom/android/bluetooth/btservice/AdapterService;->enable(Z)Z
+
+    move-result v0
+
+    return v0
+.end method
+.method public declared-synchronized enable(Z)Z
+    .locals 4
+    .param p1, "quietMode"    # Z
+
+    .prologue
+    const/4 v3, 0x1
+
+    .line 1205
+    monitor-enter p0
+
+    :try_start_0
+    const-string v1, "android.permission.BLUETOOTH_ADMIN"
+
+    const-string v2, "Need BLUETOOTH ADMIN permission"
+
+    invoke-virtual {p0, v1, v2}, Lcom/android/bluetooth/btservice/AdapterService;->enforceCallingOrSelfPermission(Ljava/lang/String;Ljava/lang/String;)V
+
+    .line 1207
+    new-instance v1, Ljava/lang/StringBuilder;
+
+    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v2, "enable() - Enable called with quiet mode status =  "
+
+    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v1
+
+    iget-boolean v2, p0, Lcom/android/bluetooth/btservice/AdapterService;->mQuietmode:Z
+
+    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
+
+    move-result-object v1
+
+    invoke-virtual {v1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v1
+
+    invoke-direct {p0, v1}, Lcom/android/bluetooth/btservice/AdapterService;->debugLog(Ljava/lang/String;)V
+
+    .line 1208
+    iput-boolean p1, p0, Lcom/android/bluetooth/btservice/AdapterService;->mQuietmode:Z
+
+    .line 1209
+    iget-object v1, p0, Lcom/android/bluetooth/btservice/AdapterService;->mAdapterStateMachine:Lcom/android/bluetooth/btservice/AdapterState;
+
+    const/4 v2, 0x1
+
+    invoke-virtual {v1, v2}, Lcom/android/bluetooth/btservice/AdapterState;->obtainMessage(I)Landroid/os/Message;
+
+    move-result-object v0
+
+    .line 1211
+    .local v0, "m":Landroid/os/Message;
+    iget-object v1, p0, Lcom/android/bluetooth/btservice/AdapterService;->mAdapterStateMachine:Lcom/android/bluetooth/btservice/AdapterState;
+
+    invoke-virtual {v1, v0}, Lcom/android/bluetooth/btservice/AdapterState;->sendMessage(Landroid/os/Message;)V
+    :try_end_0
+    .catchall {:try_start_0 .. :try_end_0} :catchall_0
+
+    .line 1212
+    monitor-exit p0
+
+    return v3
+
+    .line 1205
+    .end local v0    # "m":Landroid/os/Message;
+    :catchall_0
+    move-exception v1
+
+    monitor-exit p0
+
+    throw v1
+.end method
+.method isEnabled()Z
+    .locals 2
+
+    .prologue
+    .line 1171
+    const-string v0, "android.permission.BLUETOOTH"
+
+    const-string v1, "Need BLUETOOTH permission"
+
+    invoke-virtual {p0, v0, v1}, Lcom/android/bluetooth/btservice/AdapterService;->enforceCallingOrSelfPermission(Ljava/lang/String;Ljava/lang/String;)V
+
+    .line 1173
+    iget-object v0, p0, Lcom/android/bluetooth/btservice/AdapterService;->mAdapterProperties:Lcom/android/bluetooth/btservice/AdapterProperties;
+
+    invoke-virtual {v0}, Lcom/android/bluetooth/btservice/AdapterProperties;->getState()I
+
+    move-result v0
+
+    const/16 v1, 0xc
+
+    if-ne v0, v1, :cond_0
+
+    const/4 v0, 0x1
+
+    :goto_0
+    return v0
+
+    :cond_0
+    const/4 v0, 0x0
+
+    goto :goto_0
+.end method
+.method public onCreate()V
+    .locals 4
+
+    .prologue
+    const/4 v3, 0x1
+
+    .line 293
+    invoke-super {p0}, Landroid/app/Service;->onCreate()V
+
+    .line 294
+    const-string v0, "onCreate()"
+
+    invoke-direct {p0, v0}, Lcom/android/bluetooth/btservice/AdapterService;->debugLog(Ljava/lang/String;)V
+
+    .line 295
+    new-instance v0, Lcom/android/bluetooth/btservice/AdapterService$AdapterServiceBinder;
+
+    invoke-direct {v0, p0}, Lcom/android/bluetooth/btservice/AdapterService$AdapterServiceBinder;-><init>(Lcom/android/bluetooth/btservice/AdapterService;)V
+
+    iput-object v0, p0, Lcom/android/bluetooth/btservice/AdapterService;->mBinder:Lcom/android/bluetooth/btservice/AdapterService$AdapterServiceBinder;
+
+    .line 296
+    new-instance v0, Lcom/android/bluetooth/btservice/AdapterProperties;
+
+    invoke-direct {v0, p0}, Lcom/android/bluetooth/btservice/AdapterProperties;-><init>(Lcom/android/bluetooth/btservice/AdapterService;)V
+
+    iput-object v0, p0, Lcom/android/bluetooth/btservice/AdapterService;->mAdapterProperties:Lcom/android/bluetooth/btservice/AdapterProperties;
+
+    .line 297
+    iget-object v0, p0, Lcom/android/bluetooth/btservice/AdapterService;->mAdapterProperties:Lcom/android/bluetooth/btservice/AdapterProperties;
+
+    invoke-static {p0, v0}, Lcom/android/bluetooth/btservice/AdapterState;->make(Lcom/android/bluetooth/btservice/AdapterService;Lcom/android/bluetooth/btservice/AdapterProperties;)Lcom/android/bluetooth/btservice/AdapterState;
+
+    move-result-object v0
+
+    iput-object v0, p0, Lcom/android/bluetooth/btservice/AdapterService;->mAdapterStateMachine:Lcom/android/bluetooth/btservice/AdapterState;
+
+    .line 298
+    new-instance v0, Lcom/android/bluetooth/btservice/JniCallbacks;
+
+    iget-object v1, p0, Lcom/android/bluetooth/btservice/AdapterService;->mAdapterStateMachine:Lcom/android/bluetooth/btservice/AdapterState;
+
+    iget-object v2, p0, Lcom/android/bluetooth/btservice/AdapterService;->mAdapterProperties:Lcom/android/bluetooth/btservice/AdapterProperties;
+
+    invoke-direct {v0, v1, v2}, Lcom/android/bluetooth/btservice/JniCallbacks;-><init>(Lcom/android/bluetooth/btservice/AdapterState;Lcom/android/bluetooth/btservice/AdapterProperties;)V
+
+    iput-object v0, p0, Lcom/android/bluetooth/btservice/AdapterService;->mJniCallbacks:Lcom/android/bluetooth/btservice/JniCallbacks;
+
+    .line 300
+    iput-boolean v3, p0, Lcom/android/bluetooth/btservice/AdapterService;->mNativeAvailable:Z
+
+    .line 301
+    new-instance v0, Landroid/os/RemoteCallbackList;
+
+    invoke-direct {v0}, Landroid/os/RemoteCallbackList;-><init>()V
+
+    iput-object v0, p0, Lcom/android/bluetooth/btservice/AdapterService;->mCallbacks:Landroid/os/RemoteCallbackList;
+
+    .line 302
+    sget-object v0, Lcom/android/bluetooth/btservice/AdapterApp;->sStack:Lcom/ivt/bluetooth/BluetoothStack;
+
+    iput-object v0, p0, Lcom/android/bluetooth/btservice/AdapterService;->mStack:Lcom/ivt/bluetooth/BluetoothStack;
+
+    .line 304
+    iget-object v0, p0, Lcom/android/bluetooth/btservice/AdapterService;->mStack:Lcom/ivt/bluetooth/BluetoothStack;
+
+    iget-object v1, p0, Lcom/android/bluetooth/btservice/AdapterService;->mJniCallbacks:Lcom/android/bluetooth/btservice/JniCallbacks;
+
+    invoke-virtual {v0, v1}, Lcom/ivt/bluetooth/BluetoothStack;->registerEventCallback(Lcom/ivt/bluetooth/EventCallback;)V
+
+    .line 307
+    iget-object v0, p0, Lcom/android/bluetooth/btservice/AdapterService;->mStack:Lcom/ivt/bluetooth/BluetoothStack;
+
+    const/4 v1, 0x2
+
+    invoke-virtual {v0, v1}, Lcom/ivt/bluetooth/BluetoothStack;->getAdapterProperty(I)Z
+
+    .line 308
+    iget-object v0, p0, Lcom/android/bluetooth/btservice/AdapterService;->mStack:Lcom/ivt/bluetooth/BluetoothStack;
+
+    invoke-virtual {v0, v3}, Lcom/ivt/bluetooth/BluetoothStack;->getAdapterProperty(I)Z
+
+    .line 310
+    new-instance v0, Lcom/android/bluetooth/btservice/ProfileConnectionManager;
+
+    invoke-direct {v0, p0}, Lcom/android/bluetooth/btservice/ProfileConnectionManager;-><init>(Lcom/android/bluetooth/btservice/AdapterService;)V
+
+    iput-object v0, p0, Lcom/android/bluetooth/btservice/AdapterService;->mConnManager:Lcom/android/bluetooth/btservice/ProfileConnectionManager;
+
+    .line 311
+    return-void
+.end method
+.method stopProfileServices()Z
+    .locals 2
+
+    .prologue
+    .line 366
+    invoke-static {}, Lcom/android/bluetooth/btservice/Config;->getSupportedProfiles()[Ljava/lang/Class;
+
+    move-result-object v0
+
+    .line 367
+    .local v0, "supportedProfileServices":[Ljava/lang/Class;
+    iget-boolean v1, p0, Lcom/android/bluetooth/btservice/AdapterService;->mProfilesStarted:Z
+
+    if-eqz v1, :cond_0
+
+    array-length v1, v0
+
+    if-lez v1, :cond_0
+
+    .line 368
+    const/16 v1, 0xa
+
+    invoke-direct {p0, v0, v1}, Lcom/android/bluetooth/btservice/AdapterService;->setProfileServiceState([Ljava/lang/Class;I)V
+
+    .line 369
+    const/4 v1, 0x1
+
+    .line 372
+    :goto_0
+    return v1
+
+    .line 371
+    :cond_0
+    const-string v1, "stopProfileServices() - No profiles services to stop or already stopped."
+
+    invoke-direct {p0, v1}, Lcom/android/bluetooth/btservice/AdapterService;->debugLog(Ljava/lang/String;)V
+
+    .line 372
+    const/4 v1, 0x0
+
+    goto :goto_0
+.end method
+
+## smali/com/android/bluetooth/btservice/Config.smali
+.method static constructor <clinit>()V
+    .locals 5
+
+    .prologue
+    const/16 v4, 0xa
+
+    const/4 v3, 0x0
+
+    .line 46
+    new-array v0, v4, [Ljava/lang/Class;
+
+    const-class v1, Lcom/android/bluetooth/hfp/HeadsetService;
+
+    aput-object v1, v0, v3
+
+    const/4 v1, 0x1
+
+    const-class v2, Lcom/android/bluetooth/a2dp/A2dpService;
+
+    aput-object v2, v0, v1
+
+    const/4 v1, 0x2
+
+    const-class v2, Lcom/android/bluetooth/pbap/PbapService;
+
+    aput-object v2, v0, v1
+
+    const/4 v1, 0x3
+
+    const-class v2, Lcom/android/bluetooth/gatt/GattService;
+
+    aput-object v2, v0, v1
+
+    const/4 v1, 0x4
+
+    const-class v2, Lcom/android/bluetooth/map/MapService;
+
+    aput-object v2, v0, v1
+
+    const/4 v1, 0x5
+
+    const-class v2, Lcom/android/bluetooth/pan/PanService;
+
+    aput-object v2, v0, v1
+
+    const/4 v1, 0x6
+
+    const-class v2, Lcom/android/bluetooth/dun/DunService;
+
+    aput-object v2, v0, v1
+
+    const/4 v1, 0x7
+
+    const-class v2, Lcom/android/bluetooth/ftp/FtpService;
+
+    aput-object v2, v0, v1
+
+    const/16 v1, 0x8
+
+    const-class v2, Lcom/android/bluetooth/hid/HidService;
+
+    aput-object v2, v0, v1
+
+    const/16 v1, 0x9
+
+    const-class v2, Lcom/android/bluetooth/ancs/ANCSClientService;
+
+    aput-object v2, v0, v1
+
+    sput-object v0, Lcom/android/bluetooth/btservice/Config;->PROFILE_SERVICES:[Ljava/lang/Class;
+
+    .line 61
+    new-array v0, v4, [I
+
+    fill-array-data v0, :array_0
+
+    sput-object v0, Lcom/android/bluetooth/btservice/Config;->PROFILE_SERVICES_FLAG:[I
+
+    .line 74
+    new-array v0, v3, [Ljava/lang/Class;
+
+    sput-object v0, Lcom/android/bluetooth/btservice/Config;->SUPPORTED_PROFILES:[Ljava/lang/Class;
+
+    return-void
+
+    .line 61
+    :array_0
+    .array-data 4
+        0x7f040002
+        0x7f040000
+        0x7f040006
+        0x7f04000a
+        0x7f040005
+        0x7f040007
+        0x7f04000b
+        0x7f04000c
+        0x7f040003
+        0x7f04000d
+    .end array-data
+.end method
+.method public constructor <init>()V
+    .locals 0
+
+    .prologue
+    .line 38
+    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
+
+    return-void
+.end method
+.method static init(Landroid/content/Context;)V
+    .locals 8
+    .param p0, "ctx"    # Landroid/content/Context;
+
+    .prologue
+    .line 77
+    if-nez p0, :cond_1
+
+    .line 95
+    :cond_0
+    :goto_0
+    return-void
+
+    .line 80
+    :cond_1
+    invoke-virtual {p0}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
+
+    move-result-object v2
+
+    .line 81
+    .local v2, "resources":Landroid/content/res/Resources;
+    if-eqz v2, :cond_0
+
+    .line 84
+    new-instance v1, Ljava/util/ArrayList;
+
+    sget-object v5, Lcom/android/bluetooth/btservice/Config;->PROFILE_SERVICES:[Ljava/lang/Class;
+
+    array-length v5, v5
+
+    invoke-direct {v1, v5}, Ljava/util/ArrayList;-><init>(I)V
+
+    .line 85
+    .local v1, "profiles":Ljava/util/ArrayList;, "Ljava/util/ArrayList<Ljava/lang/Class;>;"
+    const/4 v0, 0x0
+
+    .local v0, "i":I
+    :goto_1
+    sget-object v5, Lcom/android/bluetooth/btservice/Config;->PROFILE_SERVICES_FLAG:[I
+
+    array-length v5, v5
+
+    if-ge v0, v5, :cond_3
+
+    .line 86
+    sget-object v5, Lcom/android/bluetooth/btservice/Config;->PROFILE_SERVICES_FLAG:[I
+
+    aget v5, v5, v0
+
+    invoke-virtual {v2, v5}, Landroid/content/res/Resources;->getBoolean(I)Z
+
+    move-result v3
+
+    .line 87
+    .local v3, "supported":Z
+    if-eqz v3, :cond_2
+
+    .line 88
+    const-string v5, "AdapterServiceConfig"
+
+    new-instance v6, Ljava/lang/StringBuilder;
+
+    invoke-direct {v6}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v7, "Adding "
+
+    invoke-virtual {v6, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v6
+
+    sget-object v7, Lcom/android/bluetooth/btservice/Config;->PROFILE_SERVICES:[Ljava/lang/Class;
+
+    aget-object v7, v7, v0
+
+    invoke-virtual {v7}, Ljava/lang/Class;->getSimpleName()Ljava/lang/String;
+
+    move-result-object v7
+
+    invoke-virtual {v6, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v6
+
+    invoke-virtual {v6}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v6
+
+    invoke-static {v5, v6}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+
+    .line 89
+    sget-object v5, Lcom/android/bluetooth/btservice/Config;->PROFILE_SERVICES:[Ljava/lang/Class;
+
+    aget-object v5, v5, v0
+
+    invoke-virtual {v1, v5}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    .line 85
+    :cond_2
+    add-int/lit8 v0, v0, 0x1
+
+    goto :goto_1
+
+    .line 92
+    .end local v3    # "supported":Z
+    :cond_3
+    invoke-virtual {v1}, Ljava/util/ArrayList;->size()I
+
+    move-result v4
+
+    .line 93
+    .local v4, "totalProfiles":I
+    new-array v5, v4, [Ljava/lang/Class;
+
+    sput-object v5, Lcom/android/bluetooth/btservice/Config;->SUPPORTED_PROFILES:[Ljava/lang/Class;
+
+    .line 94
+    sget-object v5, Lcom/android/bluetooth/btservice/Config;->SUPPORTED_PROFILES:[Ljava/lang/Class;
+
+    invoke-virtual {v1, v5}, Ljava/util/ArrayList;->toArray([Ljava/lang/Object;)[Ljava/lang/Object;
+
+    goto :goto_0
+.end method
+
+## smali/com/android/bluetooth/btservice/ProfileService$1.smali
+.method constructor <init>(Lcom/android/bluetooth/btservice/ProfileService;)V
+    .locals 0
+
+    .prologue
+    .line 269
+    iput-object p1, p0, Lcom/android/bluetooth/btservice/ProfileService$1;->this$0:Lcom/android/bluetooth/btservice/ProfileService;
+
+    invoke-direct {p0}, Landroid/os/Handler;-><init>()V
+
+    return-void
+.end method
+
+## smali/com/android/bluetooth/btservice/ProfileService$IProfileServiceBinder.smali
+
+## smali/com/android/bluetooth/btservice/ProfileService.smali
+.method static constructor <clinit>()V
+    .locals 1
+
+    .prologue
+    .line 45
+    new-instance v0, Ljava/util/HashMap;
+
+    invoke-direct {v0}, Ljava/util/HashMap;-><init>()V
+
+    sput-object v0, Lcom/android/bluetooth/btservice/ProfileService;->sReferenceCount:Ljava/util/HashMap;
+
+    return-void
+.end method
+.method protected constructor <init>()V
+    .locals 4
+
+    .prologue
+    const/4 v1, 0x0
+
+    .line 84
+    invoke-direct {p0}, Landroid/app/Service;-><init>()V
+
+    .line 64
+    iput-boolean v1, p0, Lcom/android/bluetooth/btservice/ProfileService;->mStartError:Z
+
+    .line 65
+    iput-boolean v1, p0, Lcom/android/bluetooth/btservice/ProfileService;->mCleaningUp:Z
+
+    .line 269
+    new-instance v1, Lcom/android/bluetooth/btservice/ProfileService$1;
+
+    invoke-direct {v1, p0}, Lcom/android/bluetooth/btservice/ProfileService$1;-><init>(Lcom/android/bluetooth/btservice/ProfileService;)V
+
+    iput-object v1, p0, Lcom/android/bluetooth/btservice/ProfileService;->mHandler:Landroid/os/Handler;
+
+    .line 85
+    invoke-virtual {p0}, Lcom/android/bluetooth/btservice/ProfileService;->getName()Ljava/lang/String;
+
+    move-result-object v1
+
+    iput-object v1, p0, Lcom/android/bluetooth/btservice/ProfileService;->mName:Ljava/lang/String;
+
+    .line 87
+    sget-object v2, Lcom/android/bluetooth/btservice/ProfileService;->sReferenceCount:Ljava/util/HashMap;
+
+    monitor-enter v2
+
+    .line 88
+    :try_start_0
+    sget-object v1, Lcom/android/bluetooth/btservice/ProfileService;->sReferenceCount:Ljava/util/HashMap;
+
+    iget-object v3, p0, Lcom/android/bluetooth/btservice/ProfileService;->mName:Ljava/lang/String;
+
+    invoke-virtual {v1, v3}, Ljava/util/HashMap;->get(Ljava/lang/Object;)Ljava/lang/Object;
+
+    move-result-object v0
+
+    check-cast v0, Ljava/lang/Integer;
+
+    .line 89
+    .local v0, "refCount":Ljava/lang/Integer;
+    if-nez v0, :cond_0
+
+    .line 90
+    const/4 v1, 0x1
+
+    invoke-static {v1}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
+
+    move-result-object v0
+
+    .line 94
+    :goto_0
+    sget-object v1, Lcom/android/bluetooth/btservice/ProfileService;->sReferenceCount:Ljava/util/HashMap;
+
+    iget-object v3, p0, Lcom/android/bluetooth/btservice/ProfileService;->mName:Ljava/lang/String;
+
+    invoke-virtual {v1, v3, v0}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+
+    .line 95
+    new-instance v1, Ljava/lang/StringBuilder;
+
+    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v3, "REFCOUNT: CREATED. INSTANCE_COUNT="
+
+    invoke-virtual {v1, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v1
+
+    invoke-virtual {v1, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
+
+    move-result-object v1
+
+    invoke-virtual {v1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v1
+
+    invoke-virtual {p0, v1}, Lcom/android/bluetooth/btservice/ProfileService;->log(Ljava/lang/String;)V
+
+    .line 96
+    monitor-exit v2
+
+    .line 98
+    return-void
+
+    .line 92
+    :cond_0
+    invoke-virtual {v0}, Ljava/lang/Integer;->intValue()I
+
+    move-result v1
+
+    add-int/lit8 v1, v1, 0x1
+
+    invoke-static {v1}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
+
+    move-result-object v0
+
+    goto :goto_0
+
+    .line 96
+    .end local v0    # "refCount":Ljava/lang/Integer;
+    :catchall_0
+    move-exception v1
+
+    monitor-exit v2
+    :try_end_0
+    .catchall {:try_start_0 .. :try_end_0} :catchall_0
+
+    throw v1
+.end method
+.method protected isAvailable()Z
+    .locals 1
+
+    .prologue
+    .line 74
+    iget-boolean v0, p0, Lcom/android/bluetooth/btservice/ProfileService;->mStartError:Z
+
+    if-nez v0, :cond_0
+
+    iget-boolean v0, p0, Lcom/android/bluetooth/btservice/ProfileService;->mCleaningUp:Z
+
+    if-nez v0, :cond_0
+
+    const/4 v0, 0x1
+
+    :goto_0
+    return v0
+
+    :cond_0
+    const/4 v0, 0x0
+
+    goto :goto_0
+.end method
+.method public onCreate()V
+    .locals 1
+
+    .prologue
+    .line 117
+    const-string v0, "onCreate"
+
+    invoke-virtual {p0, v0}, Lcom/android/bluetooth/btservice/ProfileService;->log(Ljava/lang/String;)V
+
+    .line 118
+    invoke-super {p0}, Landroid/app/Service;->onCreate()V
+
+    .line 119
+    invoke-static {}, Landroid/bluetooth/BluetoothAdapter;->getDefaultAdapter()Landroid/bluetooth/BluetoothAdapter;
+
+    move-result-object v0
+
+    iput-object v0, p0, Lcom/android/bluetooth/btservice/ProfileService;->mAdapter:Landroid/bluetooth/BluetoothAdapter;
+
+    .line 120
+    invoke-virtual {p0}, Lcom/android/bluetooth/btservice/ProfileService;->initBinder()Lcom/android/bluetooth/btservice/ProfileService$IProfileServiceBinder;
+
+    move-result-object v0
+
+    iput-object v0, p0, Lcom/android/bluetooth/btservice/ProfileService;->mBinder:Lcom/android/bluetooth/btservice/ProfileService$IProfileServiceBinder;
+
+    .line 121
+    invoke-static {}, Lcom/android/bluetooth/btservice/AdapterService;->getAdapterService()Lcom/android/bluetooth/btservice/AdapterService;
+
+    move-result-object v0
+
+    iput-object v0, p0, Lcom/android/bluetooth/btservice/ProfileService;->mAdapterService:Lcom/android/bluetooth/btservice/AdapterService;
+
+    .line 122
+    return-void
+.end method
+.method public onStartCommand(Landroid/content/Intent;II)I
+    .locals 5
+    .param p1, "intent"    # Landroid/content/Intent;
+    .param p2, "flags"    # I
+    .param p3, "startId"    # I
+
+    .prologue
+    const/4 v4, 0x2
+
+    .line 125
+    const-string v2, "onStartCommand()"
+
+    invoke-virtual {p0, v2}, Lcom/android/bluetooth/btservice/ProfileService;->log(Ljava/lang/String;)V
+
+    .line 126
+    iget-boolean v2, p0, Lcom/android/bluetooth/btservice/ProfileService;->mStartError:Z
+
+    if-nez v2, :cond_0
+
+    iget-object v2, p0, Lcom/android/bluetooth/btservice/ProfileService;->mAdapter:Landroid/bluetooth/BluetoothAdapter;
+
+    if-nez v2, :cond_2
+
+    .line 127
+    :cond_0
+    iget-object v2, p0, Lcom/android/bluetooth/btservice/ProfileService;->mName:Ljava/lang/String;
+
+    const-string v3, "Stopping profile service: device does not have BT"
+
+    invoke-static {v2, v3}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;)I
+
+    .line 128
+    invoke-direct {p0, p1}, Lcom/android/bluetooth/btservice/ProfileService;->doStop(Landroid/content/Intent;)V
+
+    .line 153
+    :cond_1
+    :goto_0
+    return v4
+
+    .line 132
+    :cond_2
+    const-string v2, "android.permission.BLUETOOTH_ADMIN"
+
+    invoke-virtual {p0, v2}, Lcom/android/bluetooth/btservice/ProfileService;->checkCallingOrSelfPermission(Ljava/lang/String;)I
+
+    move-result v2
+
+    if-eqz v2, :cond_3
+
+    .line 133
+    iget-object v2, p0, Lcom/android/bluetooth/btservice/ProfileService;->mName:Ljava/lang/String;
+
+    const-string v3, "Permission denied!"
+
+    invoke-static {v2, v3}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
+
+    goto :goto_0
+
+    .line 137
+    :cond_3
+    if-nez p1, :cond_4
+
+    .line 138
+    iget-object v2, p0, Lcom/android/bluetooth/btservice/ProfileService;->mName:Ljava/lang/String;
+
+    const-string v3, "Restarting profile service..."
+
+    invoke-static {v2, v3}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+
+    goto :goto_0
+
+    .line 141
+    :cond_4
+    const-string v2, "action"
+
+    invoke-virtual {p1, v2}, Landroid/content/Intent;->getStringExtra(Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object v0
+
+    .line 142
+    .local v0, "action":Ljava/lang/String;
+    const-string v2, "com.android.bluetooth.btservice.action.STATE_CHANGED"
+
+    invoke-virtual {v2, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v2
+
+    if-eqz v2, :cond_1
+
+    .line 143
+    const-string v2, "android.bluetooth.adapter.extra.STATE"
+
+    const/high16 v3, -0x80000000
+
+    invoke-virtual {p1, v2, v3}, Landroid/content/Intent;->getIntExtra(Ljava/lang/String;I)I
+
+    move-result v1
+
+    .line 144
+    .local v1, "state":I
+    const/16 v2, 0xa
+
+    if-ne v1, v2, :cond_5
+
+    .line 145
+    iget-object v2, p0, Lcom/android/bluetooth/btservice/ProfileService;->mName:Ljava/lang/String;
+
+    const-string v3, "Received stop request...Stopping profile..."
+
+    invoke-static {v2, v3}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+
+    .line 146
+    invoke-direct {p0, p1}, Lcom/android/bluetooth/btservice/ProfileService;->doStop(Landroid/content/Intent;)V
+
+    goto :goto_0
+
+    .line 147
+    :cond_5
+    const/16 v2, 0xc
+
+    if-ne v1, v2, :cond_1
+
+    .line 148
+    iget-object v2, p0, Lcom/android/bluetooth/btservice/ProfileService;->mName:Ljava/lang/String;
+
+    const-string v3, "Received start request. Starting profile..."
+
+    invoke-static {v2, v3}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+
+    .line 149
+    invoke-direct {p0, p1}, Lcom/android/bluetooth/btservice/ProfileService;->doStart(Landroid/content/Intent;)V
+
+    goto :goto_0
+.end method
+.method protected abstract start()Z
+.end method
+
+# Selected strings in profile configuration and OPP classes
+smali/com/android/bluetooth/btservice/AdapterService$AdapterServiceBinder.smali:1718: .method public isEnabled()Z
+smali/com/android/bluetooth/btservice/AdapterService$AdapterServiceBinder.smali:1738: invoke-virtual {v0}, Lcom/android/bluetooth/btservice/AdapterService;->isEnabled()Z
+smali/com/android/bluetooth/btservice/AdapterService.smali:1352: const-string v6, "onProfileServiceStateChange() - All profile services stopped..."
+smali/com/android/bluetooth/btservice/AdapterService.smali:1922: const-string v6, "Stopping"
+smali/com/android/bluetooth/btservice/AdapterService.smali:3705: .method isEnabled()Z
+smali/com/android/bluetooth/btservice/AdapterService.smali:5032: .method stopProfileServices()Z
+smali/com/android/bluetooth/btservice/AdapterService.smali:5065: const-string v1, "stopProfileServices() - No profiles services to stop or already stopped."
