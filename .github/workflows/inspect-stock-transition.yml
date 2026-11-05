@@ -1,0 +1,82 @@
+name: Исследование замены системного Navitel и меню Home
+on:
+  push:
+    branches: [arena/b12cc9a8-lifan-x60]
+    paths:
+      - '.github/workflows/inspect-stock-transition.yml'
+      - 'tools/inspect_stock_transition.py'
+      - 'tools/inspect_boot_persistence.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  inspect:
+    if: github.ref_name == 'arena/b12cc9a8-lifan-x60'
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Получить неизменённые системные файлы
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq p7zip-full e2fsprogs cpio
+          mkdir -p "$RUNNER_TEMP/fw" reports
+          gh release download stock -p x60_2021.7z -D "$RUNNER_TEMP/fw"
+          echo "75e7d6cd900fac971b55fec9f59913153bf7a1096bd761f7229c9a1d6d57b540  $RUNNER_TEMP/fw/x60_2021.7z" | sha256sum -c -
+          7z e -y "$RUNNER_TEMP/fw/x60_2021.7z" -o"$RUNNER_TEMP/fw/image" system.img boot.img >/dev/null
+          img="$RUNNER_TEMP/fw/image/system.img"
+          echo "b6bbbe529942ffec250cad993ae9cbb808721c27cf2536fb3fb11120130e8545  $img" | sha256sum -c -
+          echo "060d291a523bbe0d40c86537f070ed0feb90e04e0db0efef2a3e4594e9223b4b  $RUNNER_TEMP/fw/image/boot.img" | sha256sum -c -
+          for spec in 'priv-app/EL830LF01_Home.apk:Home.apk' 'framework/services.jar:services.jar' 'app/Bluetooth.apk:manifest-source.apk'; do
+            src=${spec%%:*}; dest=${spec#*:}
+            debugfs -R "dump /$src $RUNNER_TEMP/$dest" "$img" >/dev/null 2>&1
+            test -s "$RUNNER_TEMP/$dest"
+          done
+          echo "75ee685d5399e4c394146cac593ec2ed4bfbd5f6cc9151f9ae479992c84011a6  $RUNNER_TEMP/Home.apk" | sha256sum -c -
+          echo "998f7b8558e55fa4d40ea676414cb4bf35f9c9b6f0eae3c81f037186229c403c  $RUNNER_TEMP/services.jar" | sha256sum -c -
+          curl -fLsS --retry 3 --max-time 120 -o "$RUNNER_TEMP/apktool.jar" https://github.com/iBotPeaches/Apktool/releases/download/v2.9.3/apktool_2.9.3.jar
+      - name: Прочитать методы Home и PackageManager
+        run: |
+          set -euo pipefail
+          python3 - "$RUNNER_TEMP/services.jar" "$RUNNER_TEMP/manifest-source.apk" "$RUNNER_TEMP/services-wrapper.apk" <<'PY'
+          import re, sys, zipfile
+          with zipfile.ZipFile(sys.argv[1]) as src, zipfile.ZipFile(sys.argv[2]) as manifest, zipfile.ZipFile(sys.argv[3], 'w') as dst:
+              dst.writestr('AndroidManifest.xml', manifest.read('AndroidManifest.xml'))
+              names = [n for n in src.namelist() if re.fullmatch(r'classes(?:[0-9]+)?\.dex', n)]
+              if not names: raise SystemExit('No dex in services.jar')
+              for n in names: dst.writestr(n, src.read(n))
+          PY
+          java -jar "$RUNNER_TEMP/apktool.jar" d -f -r "$RUNNER_TEMP/Home.apk" -o "$RUNNER_TEMP/home-decoded" >/dev/null
+          java -jar "$RUNNER_TEMP/apktool.jar" d -f -r "$RUNNER_TEMP/services-wrapper.apk" -o "$RUNNER_TEMP/services-decoded" >/dev/null
+          {
+            echo 'stock Home SHA-256: 75ee685d5399e4c394146cac593ec2ed4bfbd5f6cc9151f9ae479992c84011a6'
+            echo 'stock services.jar SHA-256: 998f7b8558e55fa4d40ea676414cb4bf35f9c9b6f0eae3c81f037186229c403c'
+            python3 tools/inspect_stock_transition.py "$RUNNER_TEMP/home-decoded" "$RUNNER_TEMP/services-decoded"
+          } > reports/stock-transition-research.txt
+          wc -c reports/stock-transition-research.txt
+      - name: Проверить конфигурацию начальной загрузки
+        run: |
+          set -euo pipefail
+          PYTHONPATH=tools python3 tools/inspect_boot_persistence.py "$RUNNER_TEMP/fw/image/boot.img" > reports/stock-data-mount-research.txt
+          wc -c reports/stock-data-mount-research.txt
+      - name: Сохранить отчёты в ветке, без artifacts
+        run: |
+          set -e
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/stock-transition-research.txt reports/stock-data-mount-research.txt
+          git diff --cached --quiet && exit 0
+          git commit -m 'report: inspect system package transition and startup'
+          for try in 1 2 3 4 5; do
+            if git pull --rebase origin "${{ github.ref_name }}" && git push origin HEAD:"${{ github.ref_name }}"; then exit 0; fi
+            git rebase --abort || true
+            sleep 5
+          done
+          exit 1
