@@ -57,6 +57,8 @@ def main():
             reason = 'pre-hibernate wrapper caller'
         elif '->enablePreHibernateMode()V' in method:
             reason = 'enable pre-hibernate caller'
+        elif 'Ltw/com/elead/el830/home/Disclaimer;->show()V' in method:
+            reason = 'show disclaimer overlay caller'
         if reason:
             selected.append((p, method, reason))
     if not selected:
@@ -66,7 +68,7 @@ def main():
         lines = method.splitlines()
         if len(lines) > 1600:
             print('Method too large to dump fully; 60-line contexts around relevant calls follow.')
-            keywords = ['->sysPreHibernate(', '->enablePreHibernateMode('] + ['->' + w + '(' for w in wrappers]
+            keywords = ['->sysPreHibernate(', '->enablePreHibernateMode(', 'Ltw/com/elead/el830/home/Disclaimer;->show()V'] + ['->' + w + '(' for w in wrappers]
             indices = [i for i, line in enumerate(lines) if any(k in line for k in keywords)]
             for i in indices:
                 print('\n--- context at method line', i + 1)
