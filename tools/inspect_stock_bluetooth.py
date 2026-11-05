@@ -11,6 +11,10 @@ files = sorted(root.rglob('*.smali'))
 if not files:
     raise SystemExit('Bluetooth smali missing')
 print('Smali files:', len(files))
+opp_files = [p for p in files if re.search(r'(^|/)opp/|BluetoothOpp', p.relative_to(root).as_posix(), re.I)]
+print('Paths matching /opp/ or BluetoothOpp:', len(opp_files))
+for path in opp_files:
+    print('  ', path.relative_to(root))
 for path in files:
     if re.search(r'BluetoothOpp|OppService|AdapterService|Config\.smali|ProfileService', path.name):
         print('\n##', path.relative_to(root))
