@@ -1,0 +1,327 @@
+# Boot ramdisk data and hibernation configuration: static, not device state
+kernel=3588212 ramdisk=332703 page=2048
+
+## fstab.el_imx6_solo_v2
+-- 9..12 --
+9: 
+10: 
+11: /dev/block/mmcblk0p3    /system      ext4    rw                                                                               wait
+12: #/dev/block/mmcblk0p5    /data        ext4    nosuid,nodev,nodiratime,noatime,nomblk_io_submit,noauto_da_alloc,errors=panic    wait,encryptable=footer
+
+## init.el_imx6_solo_v2.rc
+-- 111..121 --
+111:     setprop wlan.interface wlan0
+112: 	
+113: 	#GPS
+114: 	mkdir /data/gps 771 system system
+115:     chown gps system /data/gps
+116: 
+117: # mount the debugfs
+118:     mount debugfs none /sys/kernel/debug/
+119: 
+120: # Change ALSA DAPM delay time
+121:     write /sys/devices/platform/soc-audio.1/RT5625/pmdown_time 0
+-- 138..147 --
+138: ## nFore Wi-Fi (station)
+139: 
+140: service wpa_supplicant /system/bin/wpa_supplicant \
+141:     -iwlan0 -Dnl80211 -c/data/misc/wifi/wpa_supplicant.conf \
+142:     -I/system/etc/wifi/wpa_supplicant_overlay.conf \
+143:     -O/data/misc/wifi/sockets \
+144:     -e/data/misc/wifi/entropy.bin -g@android:wpa_wlan0
+145: #   we will start as root and wpa_supplicant will switch to user wifi
+146: #   after setting up the capabilities required for WEXT
+147: #   user wifi
+-- 165..176 --
+165: ## nFore Wi-Fi (p2p)
+166: 
+167: service p2p_supplicant /system/bin/wpa_supplicant \
+168:     -iwlan0 -Dnl80211 -iwlan0 -c/data/misc/wifi/wpa_supplicant.conf \
+169:     -I/system/etc/wifi/wpa_supplicant_overlay.conf -N \
+170:     -ip2p0 -Dnl80211 -c/data/misc/wifi/p2p_supplicant.conf \
+171:     -I/system/etc/wifi/p2p_supplicant_overlay.conf \
+172:     -O/data/misc/wifi/sockets -puse_p2p_group_interface=1 \
+173:     -e/data/misc/wifi/entropy.bin -g@android:wpa_wlan0
+174: #   we will start as root and wpa_supplicant will switch to user wifi
+175: #   after setting up the capabilities required for WEXT
+176: #   user wifi
+-- 180..186 --
+180:     disabled
+181:     oneshot
+182: 
+183: service hostapd_bin /system/bin/logwrapper /system/bin/hostapd -dd /data/misc/wifi/hostapd.conf 
+184:     socket hostapd_wlan0 dgram 0660 wifi wifi
+185:     class main
+186:     disabled
+-- 220..226 --
+220:     disabled
+221:     oneshot
+222: 
+223: service fs_sync /system/bin/fs_sync.sh
+224:     user root
+225:     group root
+226:     disabled
+-- 257..261 --
+257: 
+258: 
+259: on fs
+260: # mount ext4 partitions
+261:     mount_all /fstab.el_imx6_solo_v2
+
+## init.environ.rc
+-- 5..11 --
+5:     export ANDROID_BOOTLOGO 1
+6:     export ANDROID_ROOT /system
+7:     export ANDROID_ASSETS /system/app
+8:     export ANDROID_DATA /data
+9:     export ANDROID_STORAGE /storage
+10:     export ASEC_MOUNTPOINT /mnt/asec
+11:     export LOOP_MOUNTPOINT /mnt/obb
+
+## init.rc
+-- 49..63 --
+49: # but someday that may change.
+50:     symlink /system/vendor /vendor
+51: 
+52: # Create cgroup mount point for cpu accounting
+53:     mkdir /acct
+54:     mount cgroup none /acct cpuacct
+55:     mkdir /acct/uid
+56: 
+57: # Create cgroup mount point for memory
+58:     mount tmpfs none /sys/fs/cgroup mode=0750,uid=0,gid=1000
+59:     mkdir /sys/fs/cgroup/memory 0750 root system
+60:     mount cgroup none /sys/fs/cgroup/memory memory
+61:     write /sys/fs/cgroup/memory/memory.move_charge_at_immigrate 1
+62:     chown root system /sys/fs/cgroup/memory/tasks
+63:     chmod 0660 /sys/fs/cgroup/memory/tasks
+-- 68..74 --
+68:     chmod 0660 /sys/fs/cgroup/memory/sw/tasks
+69: 
+70:     mkdir /system
+71:     mkdir /data 0771 system system
+72:     mkdir /cache 0770 system cache
+73:     mkdir /config 0500 root root
+74: 
+-- 92..98 --
+92:     # Directory for putting things only root should see.
+93:     mkdir /mnt/secure 0700 root root
+94:     # Create private mountpoint so we can MS_MOVE from staging
+95:     mount tmpfs tmpfs /mnt/secure mode=0700,uid=0,gid=0
+96: 
+97:     # Directory for staging bindmounts
+98:     mkdir /mnt/secure/staging 0700 root root
+-- 101..122 --
+101:     # imagefile directory will be bind-mounted
+102:     mkdir /mnt/secure/asec  0700 root root
+103: 
+104:     # Secure container public mount points.
+105:     mkdir /mnt/asec  0700 root system
+106:     mount tmpfs tmpfs /mnt/asec mode=0755,gid=1000
+107: 
+108:     # Filesystem image public mount points.
+109:     mkdir /mnt/obb 0700 root system
+110:     mount tmpfs tmpfs /mnt/obb mode=0755,gid=1000
+111:     
+112:     # Directory for store ELEAD's data
+113:     mkdir /mnt/para_fw 0775 system system
+114:     mount ext4 /dev/block/mmcblk0p6 /mnt/para_fw
+115:     chown system system /mnt/para_fw
+116: 
+117:     # shared memory used by middleware
+118:     mkdir /mnt/shm  0775 system graphics
+119:     mount tmpfs tmpfs /mnt/shm mode=0775,uid=1000,gid=1003,size=1m
+120:     write /proc/sys/kernel/panic_on_oops 1
+121:     write /proc/sys/kernel/hung_task_timeout_secs 0
+122:     write /proc/cpu/alignment 4
+-- 132..140 --
+132:     write /proc/sys/kernel/sched_rt_runtime_us 950000
+133:     write /proc/sys/kernel/sched_rt_period_us 1000000
+134: 
+135: # Create cgroup mount points for process groups
+136:     mkdir /dev/cpuctl
+137:     mount cgroup none /dev/cpuctl cpu
+138:     chown system system /dev/cpuctl
+139:     chown system system /dev/cpuctl/tasks
+140:     chmod 0660 /dev/cpuctl/tasks
+-- 173..184 --
+173: 
+174: on post-fs
+175:     # once everything is setup, no need to modify /
+176:     # mount rootfs rootfs / ro remount
+177:     # mount shared so changes propagate into child namespaces
+178:     mount rootfs rootfs / shared rec
+179:     mount tmpfs tmpfs /mnt/secure private rec
+180: 
+181:     # We chown/chmod /cache again so because mount is run as root + defaults
+182:     chown system cache /cache
+183:     chmod 0770 /cache
+184:     # We restorecon /cache in case the cache partition has been reset.
+-- 209..279 --
+209:     mkdir /cache/lost+found 0770 root root
+210: 
+211: on post-fs-data
+212: 	mount tmpfs tmpfs /data mode=0771,gid=1000
+213:     # We chown/chmod /data again so because mount is run as root + defaults
+214:     chown system system /data
+215:     chmod 0771 /data
+216:     # We restorecon /data in case the userdata partition has been reset.
+217:     restorecon /data
+218: 
+219:     # Avoid predictable entropy pool. Carry over entropy from previous boot.
+220:     copy /data/system/entropy.dat /dev/urandom
+221: 
+222:     # Create dump dir and collect dumps.
+223:     # Do this before we mount cache so eventually we can use cache for
+224:     # storing dumps on platforms which do not have a dedicated dump partition.
+225:     mkdir /data/dontpanic 0750 root log
+226: 
+227:     # Collect apanic data, free resources and re-arm trigger
+228:     copy /proc/apanic_console /data/dontpanic/apanic_console
+229:     chown root log /data/dontpanic/apanic_console
+230:     chmod 0640 /data/dontpanic/apanic_console
+231: 
+232:     copy /proc/apanic_threads /data/dontpanic/apanic_threads
+233:     chown root log /data/dontpanic/apanic_threads
+234:     chmod 0640 /data/dontpanic/apanic_threads
+235: 
+236:     write /proc/apanic_console 1
+237: 
+238:     mkdir /data/media 0770 media_rw media_rw
+239: 
+240:     # create basic filesystem structure
+241:     mkdir /data/misc 01771 system misc
+242:     mkdir /data/misc/adb 02750 system shell
+243:     mkdir /data/misc/bluedroid 0770 bluetooth net_bt_stack
+244:     mkdir /data/misc/bluetooth 0770 system system
+245:     mkdir /data/misc/keystore 0700 keystore keystore
+246:     mkdir /data/misc/keychain 0771 system system
+247:     mkdir /data/misc/radio 0770 system radio
+248:     mkdir /data/misc/sms 0770 system radio
+249:     mkdir /data/misc/zoneinfo 0775 system system
+250:     mkdir /data/misc/vpn 0770 system vpn
+251:     mkdir /data/misc/systemkeys 0700 system system
+252: 
+253: # wi-fi
+254:     # give system access to wpa_supplicant.conf for backup and restore
+255:     mkdir /data/misc/wifi 0770 system wifi
+256:     chown system wifi /data/misc/wifi
+257:     chmod 0770 /data/misc/wifi
+258: 
+259:     mkdir /data/misc/wifi/sockets 0770 system wifi
+260:     chown system wifi /data/misc/wifi/sockets
+261:     chmod 0770 /data/misc/wifi/sockets
+262: 
+263:     mkdir /data/misc/wifi/hostapd 0770 system wifi
+264:     chown system wifi /data/misc/wifi/hostapd
+265:     chmod 0770 /data/misc/wifi/hostapd
+266: 
+267: 
+268:     chown system wifi   /data/misc/wifi/wpa_supplicant.conf
+269:     chown system wifi   /data/misc/wifi/p2p_supplicant.conf
+270:     chown system wifi   /data/misc/wifi/hostapd.conf
+271:     chown system wifi   /data/misc/wifi/softap.conf 
+272: 
+273:     chmod 0660 /data/misc/wifi/wpa_supplicant.conf
+274:     chmod 0660 /data/misc/wifi/p2p_supplicant.conf
+275:     chmod 0660 /data/misc/wifi/hostapd.conf
+276:     chmod 0660 /data/misc/wifi/softap.conf
+277: 
+278:     chown system wifi   /system/etc/wifi/wpa_supplicant_overlay.conf
+279:     chown system wifi   /system/etc/wifi/p2p_supplicant_overlay.conf
+-- 283..339 --
+283:     chmod 0660 /system/etc/wifi/wpa_supplicant.conf
+284: 
+285:     # Setup paths used for socket communication with the wpa supplicant.
+286:     mkdir /data/system 0775 system system
+287:     chown system system /data/system
+288: 
+289:     # Setup paths used for socket communication with the dhcp daemon(dhcpd)
+290:     mkdir /data/misc/dhcp 0770 dhcp dhcp
+291:     chown dhcp dhcp /data/misc/dhcp
+292:     chmod 0770 /data/misc/dhcp
+293: 
+294:     chmod 0775 /data/misc/wifi/ipconfig.txt
+295:     chmod 0775 /system/etc/dhcpcd/dhcpcd-run-hooks
+296: 
+297:     mkdir /data/local 0751 root root
+298:     mkdir /data/misc/media 0700 media media
+299: 
+300:     # For security reasons, /data/local/tmp should always be empty.
+301:     # Do not place files or directories in /data/local/tmp
+302:     mkdir /data/local/tmp 0771 shell shell
+303:     mkdir /data/data 0771 system system
+304:     mkdir /data/app-private 0771 system system
+305:     mkdir /data/app-asec 0700 root root
+306:     mkdir /data/app-lib 0771 system system
+307:     mkdir /data/app 0771 system system
+308:     mkdir /data/app/ing 0771 root root
+309:     mkdir /data/property 0700 root root
+310:     mkdir /data/ssh 0750 root shell
+311:     mkdir /data/ssh/empty 0700 root root
+312: 
+313:     # create dalvik-cache, so as to enforce our permissions
+314:     mkdir /data/dalvik-cache 0771 system system
+315: 
+316:     # create resource-cache and double-check the perms
+317:     mkdir /data/resource-cache 0771 system system
+318:     chown system system /data/resource-cache
+319:     chmod 0771 /data/resource-cache
+320: 
+321:     # create the lost+found directories, so as to enforce our permissions
+322:     mkdir /data/lost+found 0770 root root
+323: 
+324:     # create directory for DRM plug-ins - give drm the read/write access to
+325:     # the following directory.
+326:     mkdir /data/drm 0770 drm drm
+327: 
+328:     # create directory for MediaDrm plug-ins - give drm the read/write access to
+329:     # the following directory.
+330:     mkdir /data/mediadrm 0770 mediadrm mediadrm
+331: 
+332:     # symlink to bugreport storage location
+333:     symlink /data/data/com.android.shell/files/bugreports /data/bugreports
+334: 
+335:     # Separate location for storing security policy files on data
+336:     mkdir /data/security 0711 system system
+337: 
+338:     # If there is no fs-post-data action in the init.<device>.rc file, you
+339:     # must uncomment this line, otherwise encrypted filesystems
+-- 615..621 --
+615: 
+616: service vold /system/bin/vold
+617:     class core
+618:     socket vold stream 0660 root mount
+619:     ioprio be 2
+620: 
+621: service netd /system/bin/netd
+-- 683..689 --
+683:     disabled
+684:     oneshot
+685: 
+686: service keystore /system/bin/keystore /data/misc/keystore
+687:     class main
+688:     user keystore
+689:     group keystore drmrpc
+-- 696..702 --
+696: 
+697: # bugreport is triggered by the VOLUME-DOWN and VOLUME-UP keys
+698: service bugreport /system/bin/dumpstate -d -p -B \
+699:         -o /data/data/com.android.shell/files/bugreports/bugreport \
+700:         -b /system/media/audio/ui/Dock.ogg -e /system/media/audio/ui/Undock.ogg
+701:     class main
+702:     disabled
+-- 761..770 --
+761: 
+762: # virtual sdcard daemon running as media_rw (1023)
+763: # default 4 threads have better performance to 2 threads.
+764: service sdcard /system/bin/sdcard -l -t4 /data/media /mnt/shell/emulated 1023 1023
+765:     class late_start
+766: 
+767: ## hibernate
+768: service hib_image /system/bin/logwrapper /system/bin/sh /system/bin/hib_image_v2.sh
+769:     class late_start
+770:     user root
+
+Matched lines: 114
+Configuration does not prove what ran or why installed apps disappeared.
