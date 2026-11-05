@@ -2128,6 +2128,433 @@ Method too large to dump fully; 60-line contexts around relevant calls follow.
 .end method
 
 
+## Utils.smali locale and timezone application .method private static getSysLocals(Landroid/content/Context;)[Ltw/com/elead/el830/home/Utils$Loc;
+.method private static getSysLocals(Landroid/content/Context;)[Ltw/com/elead/el830/home/Utils$Loc;
+    .locals 16
+    .param p0, "context"    # Landroid/content/Context;
+
+    .prologue
+    .line 273
+    invoke-virtual/range {p0 .. p0}, Landroid/content/Context;->getAssets()Landroid/content/res/AssetManager;
+
+    move-result-object v13
+
+    invoke-virtual {v13}, Landroid/content/res/AssetManager;->getLocales()[Ljava/lang/String;
+
+    move-result-object v8
+
+    .line 274
+    .local v8, "locales":[Ljava/lang/String;
+    invoke-static {v8}, Ljava/util/Arrays;->sort([Ljava/lang/Object;)V
+
+    .line 276
+    array-length v10, v8
+
+    .line 277
+    .local v10, "origSize":I
+    new-array v11, v10, [Ltw/com/elead/el830/home/Utils$Loc;
+
+    .line 278
+    .local v11, "preprocess":[Ltw/com/elead/el830/home/Utils$Loc;
+    const/4 v2, 0x0
+
+    .line 279
+    .local v2, "finalSize":I
+    const/4 v4, 0x0
+
+    .local v4, "i":I
+    move v3, v2
+
+    .end local v2    # "finalSize":I
+    .local v3, "finalSize":I
+    :goto_0
+    if-ge v4, v10, :cond_3
+
+    .line 280
+    aget-object v12, v8, v4
+
+    .line 281
+    .local v12, "s":Ljava/lang/String;
+    invoke-virtual {v12}, Ljava/lang/String;->length()I
+
+    move-result v7
+
+    .line 282
+    .local v7, "len":I
+    const/4 v13, 0x5
+
+    if-ne v7, v13, :cond_5
+
+    .line 283
+    const/4 v13, 0x0
+
+    const/4 v14, 0x2
+
+    invoke-virtual {v12, v13, v14}, Ljava/lang/String;->substring(II)Ljava/lang/String;
+
+    move-result-object v6
+
+    .line 284
+    .local v6, "language":Ljava/lang/String;
+    const/4 v13, 0x3
+
+    const/4 v14, 0x5
+
+    invoke-virtual {v12, v13, v14}, Ljava/lang/String;->substring(II)Ljava/lang/String;
+
+    move-result-object v0
+
+    .line 285
+    .local v0, "country":Ljava/lang/String;
+    new-instance v5, Ljava/util/Locale;
+
+    invoke-direct {v5, v6, v0}, Ljava/util/Locale;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    .line 287
+    .local v5, "l":Ljava/util/Locale;
+    if-nez v3, :cond_0
+
+    .line 288
+    const-string v13, "Home"
+
+    new-instance v14, Ljava/lang/StringBuilder;
+
+    invoke-direct {v14}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v15, "Utils.java adding initial "
+
+    invoke-virtual {v14, v15}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v14
+
+    invoke-virtual {v5, v5}, Ljava/util/Locale;->getDisplayLanguage(Ljava/util/Locale;)Ljava/lang/String;
+
+    move-result-object v15
+
+    invoke-static {v15}, Ltw/com/elead/el830/home/Utils;->toTitleCase(Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object v15
+
+    invoke-virtual {v14, v15}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v14
+
+    invoke-virtual {v14}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v14
+
+    invoke-static {v13, v14}, Landroid/util/Log;->v(Ljava/lang/String;Ljava/lang/String;)I
+
+    .line 289
+    add-int/lit8 v2, v3, 0x1
+
+    .end local v3    # "finalSize":I
+    .restart local v2    # "finalSize":I
+    new-instance v13, Ltw/com/elead/el830/home/Utils$Loc;
+
+    invoke-virtual {v5, v5}, Ljava/util/Locale;->getDisplayLanguage(Ljava/util/Locale;)Ljava/lang/String;
+
+    move-result-object v14
+
+    invoke-static {v14}, Ltw/com/elead/el830/home/Utils;->toTitleCase(Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object v14
+
+    invoke-direct {v13, v14, v5}, Ltw/com/elead/el830/home/Utils$Loc;-><init>(Ljava/lang/String;Ljava/util/Locale;)V
+
+    aput-object v13, v11, v3
+
+    .line 279
+    .end local v0    # "country":Ljava/lang/String;
+    .end local v5    # "l":Ljava/util/Locale;
+    .end local v6    # "language":Ljava/lang/String;
+    :goto_1
+    add-int/lit8 v4, v4, 0x1
+
+    move v3, v2
+
+    .end local v2    # "finalSize":I
+    .restart local v3    # "finalSize":I
+    goto :goto_0
+
+    .line 295
+    .restart local v0    # "country":Ljava/lang/String;
+    .restart local v5    # "l":Ljava/util/Locale;
+    .restart local v6    # "language":Ljava/lang/String;
+    :cond_0
+    add-int/lit8 v13, v3, -0x1
+
+    aget-object v13, v11, v13
+
+    iget-object v13, v13, Ltw/com/elead/el830/home/Utils$Loc;->locale:Ljava/util/Locale;
+
+    invoke-virtual {v13}, Ljava/util/Locale;->getLanguage()Ljava/lang/String;
+
+    move-result-object v13
+
+    invoke-virtual {v13, v6}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v13
+
+    if-eqz v13, :cond_1
+
+    .line 296
+    const-string v13, "Home"
+
+    new-instance v14, Ljava/lang/StringBuilder;
+
+    invoke-direct {v14}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v15, "Utils.java backing up and fixing "
+
+    invoke-virtual {v14, v15}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v14
+
+    add-int/lit8 v15, v3, -0x1
+
+    aget-object v15, v11, v15
+
+    iget-object v15, v15, Ltw/com/elead/el830/home/Utils$Loc;->label:Ljava/lang/String;
+
+    invoke-virtual {v14, v15}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v14
+
+    const-string v15, " to "
+
+    invoke-virtual {v14, v15}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v14
+
+    add-int/lit8 v15, v3, -0x1
+
+    aget-object v15, v11, v15
+
+    iget-object v15, v15, Ltw/com/elead/el830/home/Utils$Loc;->locale:Ljava/util/Locale;
+
+    invoke-static {v15}, Ltw/com/elead/el830/home/Utils;->getDisplayName(Ljava/util/Locale;)Ljava/lang/String;
+
+    move-result-object v15
+
+    invoke-virtual {v14, v15}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v14
+
+    invoke-virtual {v14}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v14
+
+    invoke-static {v13, v14}, Landroid/util/Log;->v(Ljava/lang/String;Ljava/lang/String;)I
+
+    .line 297
+    add-int/lit8 v13, v3, -0x1
+
+    aget-object v13, v11, v13
+
+    add-int/lit8 v14, v3, -0x1
+
+    aget-object v14, v11, v14
+
+    iget-object v14, v14, Ltw/com/elead/el830/home/Utils$Loc;->locale:Ljava/util/Locale;
+
+    invoke-static {v14}, Ltw/com/elead/el830/home/Utils;->getDisplayName(Ljava/util/Locale;)Ljava/lang/String;
+
+    move-result-object v14
+
+    invoke-static {v14}, Ltw/com/elead/el830/home/Utils;->toTitleCase(Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object v14
+
+    iput-object v14, v13, Ltw/com/elead/el830/home/Utils$Loc;->label:Ljava/lang/String;
+
+    .line 298
+    const-string v13, "Home"
+
+    new-instance v14, Ljava/lang/StringBuilder;
+
+    invoke-direct {v14}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v15, "Utils.java   and adding "
+
+    invoke-virtual {v14, v15}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v14
+
+    invoke-static {v5}, Ltw/com/elead/el830/home/Utils;->getDisplayName(Ljava/util/Locale;)Ljava/lang/String;
+
+    move-result-object v15
+
+    invoke-static {v15}, Ltw/com/elead/el830/home/Utils;->toTitleCase(Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object v15
+
+    invoke-virtual {v14, v15}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v14
+
+    invoke-virtual {v14}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v14
+
+    invoke-static {v13, v14}, Landroid/util/Log;->v(Ljava/lang/String;Ljava/lang/String;)I
+
+    .line 300
+    add-int/lit8 v2, v3, 0x1
+
+    .end local v3    # "finalSize":I
+    .restart local v2    # "finalSize":I
+    new-instance v13, Ltw/com/elead/el830/home/Utils$Loc;
+
+    invoke-static {v5}, Ltw/com/elead/el830/home/Utils;->getDisplayName(Ljava/util/Locale;)Ljava/lang/String;
+
+    move-result-object v14
+
+    invoke-static {v14}, Ltw/com/elead/el830/home/Utils;->toTitleCase(Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object v14
+
+    invoke-direct {v13, v14, v5}, Ltw/com/elead/el830/home/Utils$Loc;-><init>(Ljava/lang/String;Ljava/util/Locale;)V
+
+    aput-object v13, v11, v3
+
+    goto/16 :goto_1
+
+    .line 303
+    .end local v2    # "finalSize":I
+    .restart local v3    # "finalSize":I
+    :cond_1
+    const-string v13, "zz_ZZ"
+
+    invoke-virtual {v12, v13}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v13
+
+    if-eqz v13, :cond_2
+
+    .line 304
+    const-string v1, "Pseudo..."
+
+    .line 308
+    .local v1, "displayName":Ljava/lang/String;
+    :goto_2
+    const-string v13, "Home"
+
+    new-instance v14, Ljava/lang/StringBuilder;
+
+    invoke-direct {v14}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v15, "Utils.java adding "
+
+    invoke-virtual {v14, v15}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v14
+
+    invoke-virtual {v14, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v14
+
+    invoke-virtual {v14}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v14
+
+    invoke-static {v13, v14}, Landroid/util/Log;->v(Ljava/lang/String;Ljava/lang/String;)I
+
+    .line 309
+    add-int/lit8 v2, v3, 0x1
+
+    .end local v3    # "finalSize":I
+    .restart local v2    # "finalSize":I
+    new-instance v13, Ltw/com/elead/el830/home/Utils$Loc;
+
+    invoke-direct {v13, v1, v5}, Ltw/com/elead/el830/home/Utils$Loc;-><init>(Ljava/lang/String;Ljava/util/Locale;)V
+
+    aput-object v13, v11, v3
+
+    goto/16 :goto_1
+
+    .line 306
+    .end local v1    # "displayName":Ljava/lang/String;
+    .end local v2    # "finalSize":I
+    .restart local v3    # "finalSize":I
+    :cond_2
+    invoke-virtual {v5, v5}, Ljava/util/Locale;->getDisplayLanguage(Ljava/util/Locale;)Ljava/lang/String;
+
+    move-result-object v13
+
+    invoke-static {v13}, Ltw/com/elead/el830/home/Utils;->toTitleCase(Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object v1
+
+    .restart local v1    # "displayName":Ljava/lang/String;
+    goto :goto_2
+
+    .line 315
+    .end local v0    # "country":Ljava/lang/String;
+    .end local v1    # "displayName":Ljava/lang/String;
+    .end local v5    # "l":Ljava/util/Locale;
+    .end local v6    # "language":Ljava/lang/String;
+    .end local v7    # "len":I
+    .end local v12    # "s":Ljava/lang/String;
+    :cond_3
+    new-array v9, v3, [Ltw/com/elead/el830/home/Utils$Loc;
+
+    .line 316
+    .local v9, "mLocales":[Ltw/com/elead/el830/home/Utils$Loc;
+    const/4 v4, 0x0
+
+    :goto_3
+    if-ge v4, v3, :cond_4
+
+    .line 317
+    aget-object v13, v11, v4
+
+    aput-object v13, v9, v4
+
+    .line 316
+    add-int/lit8 v4, v4, 0x1
+
+    goto :goto_3
+
+    .line 320
+    :cond_4
+    const-string v13, "Home"
+
+    new-instance v14, Ljava/lang/StringBuilder;
+
+    invoke-direct {v14}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v15, "Utils.java   mLocales "
+
+    invoke-virtual {v14, v15}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v14
+
+    invoke-virtual {v14, v9}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
+
+    move-result-object v14
+
+    invoke-virtual {v14}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v14
+
+    invoke-static {v13, v14}, Landroid/util/Log;->v(Ljava/lang/String;Ljava/lang/String;)I
+
+    .line 322
+    return-object v9
+
+    .end local v9    # "mLocales":[Ltw/com/elead/el830/home/Utils$Loc;
+    .restart local v7    # "len":I
+    .restart local v12    # "s":Ljava/lang/String;
+    :cond_5
+    move v2, v3
+
+    .end local v3    # "finalSize":I
+    .restart local v2    # "finalSize":I
+    goto/16 :goto_1
+.end method
+
+
 ## Utils.smali locale and timezone application .method public static setSystemLocale(Landroid/content/Context;I)Z
 .method public static setSystemLocale(Landroid/content/Context;I)Z
     .locals 10
@@ -2494,4 +2921,4 @@ Method too large to dump fully; 60-line contexts around relevant calls follow.
 
     .line 221
 
-## Methods selected: 17
+## Methods selected: 18
