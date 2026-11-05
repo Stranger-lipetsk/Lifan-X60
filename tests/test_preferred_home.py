@@ -18,7 +18,7 @@ class PreferredHomeTests(unittest.TestCase):
             (pm / 'PackageManagerService.smali').write_text('.method public boot()V\n invoke-virtual {v0}, LX;->readDefaultPreferredAppsLPw()V\n.end method\n')
             out = io.StringIO()
             inspect(root, out)
-            self.assertIn('Settings.smali: .method public readDefaultPreferredAppsLPw', out.getvalue())
+            self.assertIn('pm/Settings.smali: .method public readDefaultPreferredAppsLPw', out.getvalue())
             self.assertIn('PreferredComponent.smali: not found', out.getvalue())
             self.assertIn('Methods or contexts selected: 2', out.getvalue())
 

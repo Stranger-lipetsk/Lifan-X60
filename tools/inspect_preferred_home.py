@@ -10,15 +10,15 @@ def inspect(root, out=sys.stdout):
     if not pm.is_dir():
         raise ValueError('PackageManager smali directory missing')
     targets = {
-        'Settings.smali': re.compile(r'\b(readDefaultPreferredAppsLPw|readDefaultPreferredActivitiesLPw|applyDefaultPreferredActivityLPw)\('),
-        'PreferredActivity.smali': re.compile(r'<init>\('),
+        'pm/Settings.smali': re.compile(r'\b(readDefaultPreferredAppsLPw|readDefaultPreferredActivitiesLPw|applyDefaultPreferredActivityLPw)\('),
+        'pm/PreferredActivity.smali': re.compile(r'<init>\('),
         'PreferredComponent.smali': re.compile(r'<init>\('),
     }
     print('# Preferred HOME: stock services.jar static analysis', file=out)
     print('Code presence does not prove activation on this device or on an existing data partition.', file=out)
     total = 0
     for name, wanted in targets.items():
-        path = pm / name
+        path = pm.parent / name
         if not path.exists():
             print(f'\n## {name}: not found', file=out)
             continue
