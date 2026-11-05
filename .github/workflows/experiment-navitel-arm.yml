@@ -46,7 +46,14 @@ jobs:
           pid=$!
           "$adb" wait-for-device &
           waitpid=$!
-          trap 'kill "$pid" "$waitpid" 2>/dev/null || true' EXIT
+          cleanup() {
+            status=$?
+            echo "Emulator exit diagnostics (status $status):"
+            ps -p "$pid" -o pid,stat,cmd || true
+            tail -60 "$RUNNER_TEMP/emulator.txt" || true
+            kill "$pid" "$waitpid" 2>/dev/null || true
+          }
+          trap cleanup EXIT
           connected=no
           for i in $(seq 1 120); do
             if ! kill -0 "$pid" 2>/dev/null; then echo 'Emulator exited early'; break; fi
@@ -62,28 +69,31 @@ jobs:
             sleep 4
           done
           test "$booted" = yes || { tail -40 "$RUNNER_TEMP/emulator.txt"; echo 'Android emulator did not boot'; exit 1; }
+          echo "Phase: check root shell"
           # Avoid restarting adbd unnecessarily: old emulator may go offline during restart.
-          id_output=$("$adb" shell id | tr -d '\r')
+          id_output=$(timeout 60 "$adb" shell id | tr -d '\r')
           echo "Emulator shell identity: $id_output"
           if ! grep -q 'uid=0' <<< "$id_output"; then
-            "$adb" root
+            timeout 60 "$adb" root
             timeout 120 "$adb" wait-for-device
-            id_output=$("$adb" shell id | tr -d '\r')
+            id_output=$(timeout 60 "$adb" shell id | tr -d '\r')
             grep -q 'uid=0' <<< "$id_output" || { echo 'Root shell unavailable'; exit 1; }
           fi
+          echo "Phase: disable network and inspect storage"
           # Prevent the test from using any account, license server or external maps.
-          "$adb" shell settings put global airplane_mode_on 1
-          "$adb" shell am broadcast -a android.intent.action.AIRPLANE_MODE --ez state true >/dev/null
-          "$adb" shell svc wifi disable || true
-          "$adb" shell svc data disable || true
-          "$adb" shell ls -ld /storage/sdcard /storage/sdcard0 /storage/emulated/0 /mnt/shell/emulated > "$RUNNER_TEMP/storage.txt" 2>&1 || true
-          "$adb" shell df > "$RUNNER_TEMP/storage-df.txt" 2>&1 || true
+          timeout 60 "$adb" shell settings put global airplane_mode_on 1
+          timeout 60 "$adb" shell am broadcast -a android.intent.action.AIRPLANE_MODE --ez state true >/dev/null
+          timeout 60 "$adb" shell svc wifi disable || true
+          timeout 60 "$adb" shell svc data disable || true
+          timeout 60 "$adb" shell ls -ld /storage/sdcard /storage/sdcard0 /storage/emulated/0 /mnt/shell/emulated > "$RUNNER_TEMP/storage.txt" 2>&1 || true
+          timeout 60 "$adb" shell df > "$RUNNER_TEMP/storage-df.txt" 2>&1 || true
           set +e
-          "$adb" install "$apk" > "$RUNNER_TEMP/install.txt" 2>&1
+          echo "Phase: install APK (max 5 minutes)"
+          timeout 300 "$adb" install "$apk" > "$RUNNER_TEMP/install.txt" 2>&1
           install_status=$?
           set -e
           if [ "$install_status" -ne 0 ] || ! grep -qF Success "$RUNNER_TEMP/install.txt"; then
-            if grep -qiE 'device offline|device not found|no devices|closed|failed to connect' "$RUNNER_TEMP/install.txt"; then
+            if [ "$install_status" -eq 124 ] || grep -qiE 'device offline|device not found|no devices|closed|failed to connect' "$RUNNER_TEMP/install.txt"; then
               echo 'ADB disconnected during installation; this is not an APK compatibility result.'
               cat "$RUNNER_TEMP/install.txt"; "$adb" devices -l || true
               echo 'Emulator process status:'; ps -p "$pid" -o pid,stat,cmd || true
@@ -99,10 +109,10 @@ jobs:
             } > reports/navitel-emulator-arm.txt
             exit 0
           fi
-          uid=$("$adb" shell dumpsys package com.navitel | tr -d '\r' | sed -n 's/.*userId=\([0-9][0-9]*\).*/\1/p' | head -1)
+          uid=$(timeout 60 "$adb" shell dumpsys package com.navitel | tr -d '\r' | sed -n 's/.*userId=\([0-9][0-9]*\).*/\1/p' | head -1)
           case "$uid" in ''|*[!0-9]*) echo 'Cannot determine app UID; refusing to start'; exit 1;; esac
-          "$adb" shell iptables -I OUTPUT 1 -m owner --uid-owner "$uid" -j REJECT
-          "$adb" shell iptables -C OUTPUT -m owner --uid-owner "$uid" -j REJECT
+          timeout 60 "$adb" shell iptables -I OUTPUT 1 -m owner --uid-owner "$uid" -j REJECT
+          timeout 60 "$adb" shell iptables -C OUTPUT -m owner --uid-owner "$uid" -j REJECT
           "$adb" logcat -c
           "$adb" logcat -v brief > "$RUNNER_TEMP/logcat-stream.txt" 2>&1 &
           logpid=$!
@@ -111,8 +121,8 @@ jobs:
           start_status=$?
           set -e
           sleep 8
-          "$adb" shell dumpsys activity activities > "$RUNNER_TEMP/activities.txt" 2>&1 || true
-          "$adb" shell ps > "$RUNNER_TEMP/processes.txt" 2>&1 || true
+          timeout 60 "$adb" shell dumpsys activity activities > "$RUNNER_TEMP/activities.txt" 2>&1 || true
+          timeout 60 "$adb" shell ps > "$RUNNER_TEMP/processes.txt" 2>&1 || true
           kill "$logpid" 2>/dev/null || true
           wait "$logpid" 2>/dev/null || true
           {
