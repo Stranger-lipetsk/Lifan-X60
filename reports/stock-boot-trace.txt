@@ -2439,6 +2439,57 @@ Method too large to dump fully; 60-line contexts around relevant calls follow.
 .end method
 
 
+## HomeService.smali show disclaimer overlay caller .method public showDisclaimer(Z)V
+.method public showDisclaimer(Z)V
+    .locals 3
+    .param p1, "bEnable"    # Z
+
+    .prologue
+    .line 11893
+    const-string v0, "Home"
+
+    new-instance v1, Ljava/lang/StringBuilder;
+
+    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v2, "HomeService.java  showDisclaimer() ....... bEnable = "
+
+    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v1
+
+    invoke-virtual {v1, p1}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
+
+    move-result-object v1
+
+    invoke-virtual {v1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v1
+
+    invoke-static {v0, v1}, Landroid/util/Log;->v(Ljava/lang/String;Ljava/lang/String;)I
+
+    .line 11894
+    if-eqz p1, :cond_0
+
+    .line 11895
+    sget-object v0, Ltw/com/elead/el830/home/HomeService;->mDisclaimer:Ltw/com/elead/el830/home/Disclaimer;
+
+    invoke-virtual {v0}, Ltw/com/elead/el830/home/Disclaimer;->show()V
+
+    .line 11899
+    :goto_0
+    return-void
+
+    .line 11897
+    :cond_0
+    sget-object v0, Ltw/com/elead/el830/home/HomeService;->mDisclaimer:Ltw/com/elead/el830/home/Disclaimer;
+
+    invoke-virtual {v0}, Ltw/com/elead/el830/home/Disclaimer;->hide()V
+
+    goto :goto_0
+.end method
+
+
 ## Utils.smali locale and timezone application .method private static getSysLocals(Landroid/content/Context;)[Ltw/com/elead/el830/home/Utils$Loc;
 .method private static getSysLocals(Landroid/content/Context;)[Ltw/com/elead/el830/home/Utils$Loc;
     .locals 16
@@ -3451,4 +3502,4 @@ Literal and same-method hits are not proof of control flow or runtime execution.
 
     .line 221
 
-## Methods selected: 22
+## Methods selected: 23
