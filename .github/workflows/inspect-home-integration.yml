@@ -1,0 +1,83 @@
+name: Исследование механизма кольца Home
+on:
+  push:
+    branches: [arena/b12cc9a8-lifan-x60]
+    paths:
+      - '.github/workflows/inspect-home-integration.yml'
+      - 'tools/inspect_home_integration.py'
+      - 'tests/test_inspect_home_integration.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  inspect:
+    if: github.ref_name == 'arena/b12cc9a8-lifan-x60'
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Проверка инструмента анализа
+        run: python3 -m unittest discover -s tests -p test_inspect_home_integration.py -v
+      - name: Получить и проверить оригинальные файлы
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq p7zip-full e2fsprogs
+          mkdir -p "$RUNNER_TEMP/stock" reports
+          gh release download stock -p x60_2021.7z -D "$RUNNER_TEMP/stock"
+          echo "75e7d6cd900fac971b55fec9f59913153bf7a1096bd761f7229c9a1d6d57b540  $RUNNER_TEMP/stock/x60_2021.7z" | sha256sum -c -
+          7z e -y "$RUNNER_TEMP/stock/x60_2021.7z" -o"$RUNNER_TEMP/stock/image" system.img >/dev/null
+          img="$RUNNER_TEMP/stock/image/system.img"
+          echo "b6bbbe529942ffec250cad993ae9cbb808721c27cf2536fb3fb11120130e8545  $img" | sha256sum -c -
+          debugfs -R "dump /priv-app/EL830LF01_Home.apk $RUNNER_TEMP/Home.apk" "$img" >/dev/null 2>&1
+          debugfs -R "dump /framework/services.jar $RUNNER_TEMP/services.jar" "$img" >/dev/null 2>&1
+          echo "75ee685d5399e4c394146cac593ec2ed4bfbd5f6cc9151f9ae479992c84011a6  $RUNNER_TEMP/Home.apk" | sha256sum -c -
+          echo "998f7b8558e55fa4d40ea676414cb4bf35f9c9b6f0eae3c81f037186229c403c  $RUNNER_TEMP/services.jar" | sha256sum -c -
+          curl -fLsS --retry 3 --max-time 120 -o "$RUNNER_TEMP/apktool.jar" https://github.com/iBotPeaches/Apktool/releases/download/v2.9.3/apktool_2.9.3.jar
+          java -jar "$RUNNER_TEMP/apktool.jar" d -f -r "$RUNNER_TEMP/Home.apk" -o "$RUNNER_TEMP/decoded" >/dev/null
+      - name: Исследовать внутренние методы и инфраструктуру
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          img="$RUNNER_TEMP/stock/image/system.img"
+          {
+            echo 'Source: stock Home sha256 75ee685d5399e4c394146cac593ec2ed4bfbd5f6cc9151f9ae479992c84011a6'
+            python3 tools/inspect_home_integration.py "$RUNNER_TEMP/decoded"
+          } > reports/stock-home-integration.txt
+          {
+            echo '# Stock framework inspection (read only; no runtime conclusion)'
+            echo '## /system/framework directory'
+            debugfs -R 'ls -l /framework' "$img" 2>/dev/null
+            echo '## services.jar contents'
+            unzip -l "$RUNNER_TEMP/services.jar"
+            echo '## Home signature verification'
+            jarsigner -verify -verbose "$RUNNER_TEMP/Home.apk" | tail -25
+            echo '## Public Android 4.4 AOSP test certificate fingerprints (not private keys)'
+            for name in platform shared media testkey; do
+              printf '%s: ' "$name"
+              gh api "repos/LineageOS/android_build/contents/target/product/security/$name.x509.pem?ref=cm-11.0" | python3 -c 'import json,base64,sys; sys.stdout.buffer.write(base64.b64decode(json.load(sys.stdin)["content"]))' > "$RUNNER_TEMP/$name.pem"
+              openssl x509 -in "$RUNNER_TEMP/$name.pem" -noout -fingerprint -sha256
+            done
+          } > reports/stock-framework-integrity-research.txt
+          wc -c reports/stock-home-integration.txt reports/stock-framework-integrity-research.txt
+      - name: Сохранить отчёты в ветке, без artifacts
+        run: |
+          set -e
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/stock-home-integration.txt reports/stock-framework-integrity-research.txt
+          git diff --cached --quiet && exit 0
+          git commit -m 'report: investigate stock home integration mechanisms'
+          for try in 1 2 3 4 5; do
+            if git pull --rebase origin "${{ github.ref_name }}" && git push origin HEAD:"${{ github.ref_name }}"; then exit 0; fi
+            git rebase --abort || true
+            sleep 5
+          done
+          exit 1
