@@ -1,0 +1,5 @@
+# Navitel 11: installation failed on clean Android 4.4 ARMv7 emulator
+APK SHA-256: 96876415d8b4342952558fd30d6e11b0ca9355c802060c0a9740b6cc84fc4e1b
+This is a fresh user installation, not the device or a system upgrade.
+adb install exit status: 1
+adb: device offline
