@@ -1,0 +1,65 @@
+name: Исследование HOME-фильтра Android Launcher
+on:
+  push:
+    branches: [arena/b12cc9a8-lifan-x60]
+    paths:
+      - '.github/workflows/inspect-launcher-home-filter.yml'
+      - 'tools/inspect_launcher2_home.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  inspect:
+    if: github.ref_name == 'arena/b12cc9a8-lifan-x60'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Исследовать исходный Launcher2 без изменения прошивки
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq e2fsprogs
+          mkdir -p "$RUNNER_TEMP/input" reports
+          gh release download 'рабочая-с-лаунчером' -p system.img -D "$RUNNER_TEMP/input"
+          img="$RUNNER_TEMP/input/system.img"
+          echo "79df29ec1ea97fd2e1da605c9651c6e5cce9d05d79518ff8e3e7d1dd16553dba  $img" | sha256sum -c -
+          debugfs -R "dump /priv-app/Launcher2.apk $RUNNER_TEMP/Launcher2.apk" "$img" >/dev/null 2>&1
+          echo "82787a6007589a169242f2c1391252342a9824748a8b469d1d522acab83458e6  $RUNNER_TEMP/Launcher2.apk" | sha256sum -c -
+          curl -fLsS --retry 3 --max-time 120 -o "$RUNNER_TEMP/apktool.jar" https://github.com/iBotPeaches/Apktool/releases/download/v2.9.3/apktool_2.9.3.jar
+          java -jar "$RUNNER_TEMP/apktool.jar" d -f -r "$RUNNER_TEMP/Launcher2.apk" -o "$RUNNER_TEMP/decoded" >/dev/null
+          sdk=${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}
+          bt=$(find "$sdk/build-tools" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -1)
+          {
+            echo '# Stock-derived Launcher2: HOME filter investigation'
+            echo 'Source system SHA-256: 79df29ec1ea97fd2e1da605c9651c6e5cce9d05d79518ff8e3e7d1dd16553dba'
+            echo 'Source Launcher2 SHA-256: 82787a6007589a169242f2c1391252342a9824748a8b469d1d522acab83458e6'
+            echo '## Package and launcher information'
+            "$bt/aapt" dump badging "$RUNNER_TEMP/Launcher2.apk"
+            echo '## Full manifest'
+            "$bt/aapt" dump xmltree "$RUNNER_TEMP/Launcher2.apk" AndroidManifest.xml
+            echo '## Signature verification on API 19'
+            "$bt/apksigner" verify --min-sdk-version 19 --max-sdk-version 19 --verbose --print-certs "$RUNNER_TEMP/Launcher2.apk" 2>&1
+            python3 tools/inspect_launcher2_home.py "$RUNNER_TEMP/decoded"
+          } > reports/launcher2-home-filter-research.txt
+          wc -c reports/launcher2-home-filter-research.txt
+      - name: Сохранить отчёт без Actions artifacts
+        run: |
+          set -e
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/launcher2-home-filter-research.txt
+          git diff --cached --quiet && exit 0
+          git commit -m 'report: inspect android launcher home filter'
+          for try in 1 2 3 4 5; do
+            if git pull --rebase origin "${{ github.ref_name }}" && git push origin HEAD:"${{ github.ref_name }}"; then exit 0; fi
+            git rebase --abort || true
+            sleep 5
+          done
+          exit 1
