@@ -2,7 +2,8 @@
 NOT a firmware, not a head-unit test. Home was dynamically loaded, not installed or started normally.
 Real Home.onCreate, HomeService, hardware, audio, boot, preferences and Hibernate were not run.
 Original and patched Home resources and methods were loaded in separate classloaders, using stock framework jars; generic Android services are not vendor services.
-Amaze v3.5.3 and candidate panel were installed only for PackageManager resolution, not launched.
+The harness is signed with the public AOSP emulator platform key and requests INTERACT_ACROSS_USERS_FULL solely to exercise startActivityAsUser; this key is NOT the device platform key.
+Amaze v3.5.3 was network-blocked; the panel and Amaze were launched by the original gotoEleadApplication method on the patched in-memory object.
 ## APK payload comparison
 Non-signature entries compared: 343
 Only changed entry: classes.dex
@@ -10,9 +11,22 @@ Original changed entry SHA-256: d8b41f3b89ce3828022a0780a0aad4e105861c8c4b42636a
 Candidate changed entry SHA-256: c48c4014c5a627c5d00d39d8048046998b74781bac1516180d3e69875e8ff814
 Unchanged AndroidManifest.xml SHA-256: 3e580af0c923307c998db164b1997aa6f74c0cf5f1452dc594e039ae057ec0c6
 ## Harness results
-I/HomeDalvikLab( 2066): UI entries [tw.com.elead.el830.setup]
-I/HomeDalvikLab( 2066): RESULT ORIGINAL PASS
-I/HomeDalvikLab( 2066): ApplicationInfo com.amaze.filemanager -> com.amaze.filemanager/.ui.activities.MainActivity
-I/HomeDalvikLab( 2066): ApplicationInfo ru.lifanx60.panel -> ru.lifanx60.panel/.MainActivity
-I/HomeDalvikLab( 2066): UI entries [tw.com.elead.el830.setup, com.amaze.filemanager, ru.lifanx60.panel]
-I/HomeDalvikLab( 2066): RESULT PATCHED PASS
+I/HomeDalvikLab( 2089): UI entries [tw.com.elead.el830.setup]
+I/HomeDalvikLab( 2089): RESULT ORIGINAL PASS
+I/HomeDalvikLab( 2089): ApplicationInfo com.amaze.filemanager -> com.amaze.filemanager/.ui.activities.MainActivity
+I/HomeDalvikLab( 2089): ApplicationInfo ru.lifanx60.panel -> ru.lifanx60.panel/.MainActivity
+I/HomeDalvikLab( 2089): UI entries [tw.com.elead.el830.setup, com.amaze.filemanager, ru.lifanx60.panel]
+I/HomeDalvikLab( 2089): RESULT PATCHED PASS
+I/HomeDalvikLab( 2089): ApplicationInfo com.amaze.filemanager -> com.amaze.filemanager/.ui.activities.MainActivity
+I/HomeDalvikLab( 2089): ApplicationInfo ru.lifanx60.panel -> ru.lifanx60.panel/.MainActivity
+I/HomeDalvikLab( 2089): UI entries [tw.com.elead.el830.setup, com.amaze.filemanager, ru.lifanx60.panel]
+I/HomeDalvikLab( 2089): LAUNCHED ru.lifanx60.panel PASS
+I/HomeDalvikLab( 2089): RESULT PATCHED PASS
+I/HomeDalvikLab( 2089): ApplicationInfo com.amaze.filemanager -> com.amaze.filemanager/.ui.activities.MainActivity
+I/HomeDalvikLab( 2089): ApplicationInfo ru.lifanx60.panel -> ru.lifanx60.panel/.MainActivity
+I/HomeDalvikLab( 2089): UI entries [tw.com.elead.el830.setup, com.amaze.filemanager, ru.lifanx60.panel]
+I/HomeDalvikLab( 2089): LAUNCHED com.amaze.filemanager PASS
+I/HomeDalvikLab( 2089): RESULT PATCHED PASS
+## Resumed activities after direct method call
+    mResumedActivity: ActivityRecord{afdb0748 u0 com.amaze.filemanager/.ui.activities.MainActivity t9}
+    mResumedActivity: ActivityRecord{afdedba8 u0 ru.lifanx60.panel/.MainActivity t7}
