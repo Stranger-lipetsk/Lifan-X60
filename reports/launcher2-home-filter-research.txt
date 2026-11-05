@@ -1,0 +1,1165 @@
+# Stock-derived Launcher2: HOME filter investigation
+Source system SHA-256: 79df29ec1ea97fd2e1da605c9651c6e5cce9d05d79518ff8e3e7d1dd16553dba
+Source Launcher2 SHA-256: 82787a6007589a169242f2c1391252342a9824748a8b469d1d522acab83458e6
+## Package and launcher information
+package: name='com.android.launcher' versionCode='19' versionName='4.4.2-20140630'
+sdkVersion:'19'
+targetSdkVersion:'19'
+original-package:'com.android.launcher2'
+uses-permission: name='android.permission.CALL_PHONE'
+uses-permission: name='android.permission.SET_WALLPAPER'
+uses-permission: name='android.permission.SET_WALLPAPER_HINTS'
+uses-permission: name='android.permission.VIBRATE'
+uses-permission: name='android.permission.BIND_APPWIDGET'
+uses-permission: name='android.permission.GET_ACCOUNTS'
+uses-permission: name='com.android.launcher.permission.READ_SETTINGS'
+uses-permission: name='com.android.launcher.permission.WRITE_SETTINGS'
+application-label:'Launcher'
+application-label-ar:'المشغل'
+application-label-es:'Launcher'
+application-label-es-US:'Launcher'
+application-label-fa:'راه انداز'
+application-label-fr:'Lanceur d'applications'
+application-label-pt:'Launcher'
+application-label-ru:'Launcher'
+application-label-zh-CN:'启动器'
+application-icon-160:'res/mipmap-mdpi/ic_launcher_home.png'
+application-icon-240:'res/mipmap-hdpi/ic_launcher_home.png'
+application-icon-320:'res/mipmap-xhdpi/ic_launcher_home.png'
+application-icon-480:'res/mipmap-xhdpi/ic_launcher_home.png'
+application-icon-65535:'res/mipmap-xhdpi/ic_launcher_home.png'
+application: label='Launcher' icon='res/mipmap-mdpi/ic_launcher_home.png'
+feature-group: label=''
+  uses-feature: name='android.hardware.faketouch'
+  uses-implied-feature: name='android.hardware.faketouch' reason='default feature for all apps'
+  uses-feature: name='android.hardware.telephony'
+  uses-implied-feature: name='android.hardware.telephony' reason='requested a telephony permission'
+provides-component:'launcher'
+main
+other-activities
+other-receivers
+supports-screens: 'small' 'normal' 'large' 'xlarge'
+supports-any-density: 'true'
+locales: '--_--' 'ar' 'es' 'es-US' 'fa' 'fr' 'pt' 'ru' 'zh-CN'
+densities: '160' '240' '320' '480' '65535'
+## Full manifest
+N: android=http://schemas.android.com/apk/res/android
+  E: manifest (line=20)
+    A: android:versionCode(0x0101021b)=(type 0x10)0x13
+    A: android:versionName(0x0101021c)="4.4.2-20140630" (Raw: "4.4.2-20140630")
+    A: package="com.android.launcher" (Raw: "com.android.launcher")
+    E: uses-sdk (line=0)
+      A: android:minSdkVersion(0x0101020c)=(type 0x10)0x13
+      A: android:targetSdkVersion(0x01010270)=(type 0x10)0x13
+    E: original-package (line=24)
+      A: android:name(0x01010003)="com.android.launcher2" (Raw: "com.android.launcher2")
+    E: permission (line=26)
+      A: android:name(0x01010003)="com.android.launcher.permission.PRELOAD_WORKSPACE" (Raw: "com.android.launcher.permission.PRELOAD_WORKSPACE")
+      A: android:protectionLevel(0x01010009)=(type 0x11)0x12
+      A: android:permissionGroup(0x0101000a)="android.permission-group.SYSTEM_TOOLS" (Raw: "android.permission-group.SYSTEM_TOOLS")
+    E: permission (line=30)
+      A: android:label(0x01010001)=@0x7f0d003b
+      A: android:name(0x01010003)="com.android.launcher.permission.INSTALL_SHORTCUT" (Raw: "com.android.launcher.permission.INSTALL_SHORTCUT")
+      A: android:protectionLevel(0x01010009)=(type 0x11)0x1
+      A: android:permissionGroup(0x0101000a)="android.permission-group.SYSTEM_TOOLS" (Raw: "android.permission-group.SYSTEM_TOOLS")
+      A: android:description(0x01010020)=@0x7f0d003c
+    E: permission (line=36)
+      A: android:label(0x01010001)=@0x7f0d003d
+      A: android:name(0x01010003)="com.android.launcher.permission.UNINSTALL_SHORTCUT" (Raw: "com.android.launcher.permission.UNINSTALL_SHORTCUT")
+      A: android:protectionLevel(0x01010009)=(type 0x11)0x1
+      A: android:permissionGroup(0x0101000a)="android.permission-group.SYSTEM_TOOLS" (Raw: "android.permission-group.SYSTEM_TOOLS")
+      A: android:description(0x01010020)=@0x7f0d003e
+    E: permission (line=42)
+      A: android:label(0x01010001)=@0x7f0d003f
+      A: android:name(0x01010003)="com.android.launcher.permission.READ_SETTINGS" (Raw: "com.android.launcher.permission.READ_SETTINGS")
+      A: android:protectionLevel(0x01010009)=(type 0x11)0x0
+      A: android:permissionGroup(0x0101000a)="android.permission-group.SYSTEM_TOOLS" (Raw: "android.permission-group.SYSTEM_TOOLS")
+      A: android:description(0x01010020)=@0x7f0d0040
+    E: permission (line=48)
+      A: android:label(0x01010001)=@0x7f0d0041
+      A: android:name(0x01010003)="com.android.launcher.permission.WRITE_SETTINGS" (Raw: "com.android.launcher.permission.WRITE_SETTINGS")
+      A: android:protectionLevel(0x01010009)=(type 0x11)0x0
+      A: android:permissionGroup(0x0101000a)="android.permission-group.SYSTEM_TOOLS" (Raw: "android.permission-group.SYSTEM_TOOLS")
+      A: android:description(0x01010020)=@0x7f0d0042
+    E: uses-permission (line=55)
+      A: android:name(0x01010003)="android.permission.CALL_PHONE" (Raw: "android.permission.CALL_PHONE")
+    E: uses-permission (line=56)
+      A: android:name(0x01010003)="android.permission.SET_WALLPAPER" (Raw: "android.permission.SET_WALLPAPER")
+    E: uses-permission (line=57)
+      A: android:name(0x01010003)="android.permission.SET_WALLPAPER_HINTS" (Raw: "android.permission.SET_WALLPAPER_HINTS")
+    E: uses-permission (line=58)
+      A: android:name(0x01010003)="android.permission.VIBRATE" (Raw: "android.permission.VIBRATE")
+    E: uses-permission (line=59)
+      A: android:name(0x01010003)="android.permission.BIND_APPWIDGET" (Raw: "android.permission.BIND_APPWIDGET")
+    E: uses-permission (line=60)
+      A: android:name(0x01010003)="android.permission.GET_ACCOUNTS" (Raw: "android.permission.GET_ACCOUNTS")
+    E: uses-permission (line=61)
+      A: android:name(0x01010003)="com.android.launcher.permission.READ_SETTINGS" (Raw: "com.android.launcher.permission.READ_SETTINGS")
+    E: uses-permission (line=62)
+      A: android:name(0x01010003)="com.android.launcher.permission.WRITE_SETTINGS" (Raw: "com.android.launcher.permission.WRITE_SETTINGS")
+    E: application (line=64)
+      A: android:label(0x01010001)=@0x7f0d0000
+      A: android:icon(0x01010002)=@0x7f030001
+      A: android:name(0x01010003)="com.android.launcher2.LauncherApplication" (Raw: "com.android.launcher2.LauncherApplication")
+      A: android:hardwareAccelerated(0x010102d3)=(type 0x12)0xffffffff
+      A: android:largeHeap(0x0101035a)=@0x7f090000
+      A: android:supportsRtl(0x010103af)=(type 0x12)0xffffffff
+      E: activity (line=71)
+        A: android:theme(0x01010000)=@0x7f0e0001
+        A: android:name(0x01010003)="com.android.launcher2.Launcher" (Raw: "com.android.launcher2.Launcher")
+        A: android:clearTaskOnLaunch(0x01010015)=(type 0x12)0xffffffff
+        A: android:stateNotNeeded(0x01010016)=(type 0x12)0xffffffff
+        A: android:launchMode(0x0101001d)=(type 0x10)0x2
+        A: android:screenOrientation(0x0101001e)=(type 0x10)0x5
+        A: android:windowSoftInputMode(0x0101022b)=(type 0x11)0x20
+        E: intent-filter (line=79)
+          E: action (line=80)
+            A: android:name(0x01010003)="android.intent.action.MAIN" (Raw: "android.intent.action.MAIN")
+          E: category (line=81)
+            A: android:name(0x01010003)="android.intent.category.HOME" (Raw: "android.intent.category.HOME")
+          E: category (line=82)
+            A: android:name(0x01010003)="android.intent.category.DEFAULT" (Raw: "android.intent.category.DEFAULT")
+          E: category (line=83)
+            A: android:name(0x01010003)="android.intent.category.MONKEY" (Raw: "android.intent.category.MONKEY")
+      E: activity (line=87)
+        A: android:theme(0x01010000)=@0x7f0e0000
+        A: android:label(0x01010001)=@0x7f0d0006
+        A: android:icon(0x01010002)=@0x7f030002
+        A: android:name(0x01010003)="com.android.launcher2.WallpaperChooser" (Raw: "com.android.launcher2.WallpaperChooser")
+        A: android:process(0x01010011)=":wallpaper_chooser" (Raw: ":wallpaper_chooser")
+        A: android:finishOnCloseSystemDialogs(0x010102a7)=(type 0x12)0xffffffff
+        E: intent-filter (line=94)
+          E: action (line=95)
+            A: android:name(0x01010003)="android.intent.action.SET_WALLPAPER" (Raw: "android.intent.action.SET_WALLPAPER")
+          E: category (line=96)
+            A: android:name(0x01010003)="android.intent.category.DEFAULT" (Raw: "android.intent.category.DEFAULT")
+        E: meta-data (line=98)
+          A: android:name(0x01010003)="android.wallpaper.preview" (Raw: "android.wallpaper.preview")
+          A: android:resource(0x01010025)=@0x7f060002
+      E: receiver (line=103)
+        A: android:name(0x01010003)="com.android.launcher2.PreloadReceiver" (Raw: "com.android.launcher2.PreloadReceiver")
+        A: android:permission(0x01010006)="com.android.launcher.permission.PRELOAD_WORKSPACE" (Raw: "com.android.launcher.permission.PRELOAD_WORKSPACE")
+        E: intent-filter (line=106)
+          E: action (line=107)
+            A: android:name(0x01010003)="com.android.launcher.action.PRELOAD_WORKSPACE" (Raw: "com.android.launcher.action.PRELOAD_WORKSPACE")
+      E: receiver (line=112)
+        A: android:name(0x01010003)="com.android.launcher2.InstallShortcutReceiver" (Raw: "com.android.launcher2.InstallShortcutReceiver")
+        A: android:permission(0x01010006)="com.android.launcher.permission.INSTALL_SHORTCUT" (Raw: "com.android.launcher.permission.INSTALL_SHORTCUT")
+        E: intent-filter (line=115)
+          E: action (line=116)
+            A: android:name(0x01010003)="com.android.launcher.action.INSTALL_SHORTCUT" (Raw: "com.android.launcher.action.INSTALL_SHORTCUT")
+      E: receiver (line=121)
+        A: android:name(0x01010003)="com.android.launcher2.UninstallShortcutReceiver" (Raw: "com.android.launcher2.UninstallShortcutReceiver")
+        A: android:permission(0x01010006)="com.android.launcher.permission.UNINSTALL_SHORTCUT" (Raw: "com.android.launcher.permission.UNINSTALL_SHORTCUT")
+        E: intent-filter (line=124)
+          E: action (line=125)
+            A: android:name(0x01010003)="com.android.launcher.action.UNINSTALL_SHORTCUT" (Raw: "com.android.launcher.action.UNINSTALL_SHORTCUT")
+      E: receiver (line=130)
+        A: android:name(0x01010003)="com.android.launcher2.UserInitializeReceiver" (Raw: "com.android.launcher2.UserInitializeReceiver")
+        A: android:exported(0x01010010)=(type 0x12)0x0
+        E: intent-filter (line=133)
+          E: action (line=134)
+            A: android:name(0x01010003)="android.intent.action.USER_INITIALIZE" (Raw: "android.intent.action.USER_INITIALIZE")
+      E: receiver (line=138)
+        A: android:name(0x01010003)="com.android.launcher2.PackageChangedReceiver" (Raw: "com.android.launcher2.PackageChangedReceiver")
+        E: intent-filter (line=139)
+          E: action (line=140)
+            A: android:name(0x01010003)="android.intent.action.PACKAGE_CHANGED" (Raw: "android.intent.action.PACKAGE_CHANGED")
+          E: action (line=141)
+            A: android:name(0x01010003)="android.intent.action.PACKAGE_REPLACED" (Raw: "android.intent.action.PACKAGE_REPLACED")
+          E: action (line=142)
+            A: android:name(0x01010003)="android.intent.action.PACKAGE_REMOVED" (Raw: "android.intent.action.PACKAGE_REMOVED")
+          E: data (line=143)
+            A: android:scheme(0x01010027)="package" (Raw: "package")
+      E: provider (line=148)
+        A: android:name(0x01010003)="com.android.launcher2.LauncherProvider" (Raw: "com.android.launcher2.LauncherProvider")
+        A: android:readPermission(0x01010007)="com.android.launcher.permission.READ_SETTINGS" (Raw: "com.android.launcher.permission.READ_SETTINGS")
+        A: android:writePermission(0x01010008)="com.android.launcher.permission.WRITE_SETTINGS" (Raw: "com.android.launcher.permission.WRITE_SETTINGS")
+        A: android:exported(0x01010010)=(type 0x12)0xffffffff
+        A: android:authorities(0x01010018)="com.android.launcher2.settings" (Raw: "com.android.launcher2.settings")
+      E: meta-data (line=155)
+        A: android:name(0x01010003)="android.nfc.disable_beam_default" (Raw: "android.nfc.disable_beam_default")
+        A: android:value(0x01010024)=(type 0x12)0xffffffff
+## Signature verification on API 19
+Verifies
+Verified using v1 scheme (JAR signing): true
+Verified using v2 scheme (APK Signature Scheme v2): false
+Verified using v3 scheme (APK Signature Scheme v3): false
+Verified using v3.1 scheme (APK Signature Scheme v3.1): false
+Verified using v3.2 scheme (APK Signature Scheme v3.2): false
+Verified using v4 scheme (APK Signature Scheme v4): false
+Verified for SourceStamp: false
+Number of signers: 1
+V1 Signer: certificate DN: EMAILADDRESS=android@freescale.com, CN=Android, OU=Android, O=Android, L=Mountain View, ST=California, C=US
+V1 Signer: certificate SHA-256 digest: 212912e875e5077f955c3079b6ceb1151c2b64d9bd9f6673dceff70d312eb2d5
+V1 Signer: certificate SHA-1 digest: 759cdd0e646c6aedd91c9436fa664570fdf285d6
+V1 Signer: certificate MD5 digest: 53f8307d4d7aaa9817b1d38497cf21a7
+V1 Signer: key algorithm: RSA
+V1 Signer: key size (bits): 2048
+V1 Signer: public key SHA-256 digest: bd1f34978c137a333872b9e1f33e3d24e2edb8e080f23d87c2aa52149ace6fa5
+V1 Signer: public key SHA-1 digest: 83e1d23ea12e8af1c7bc4bf59c21067e8b2f79a4
+V1 Signer: public key MD5 digest: 55ba130eeb455c1a9a78d4da3d2ca292
+# Launcher2 HOME intent references: static, not runtime
+Literal hits do not prove a particular intent or execution path.
+
+## smali/com/android/launcher2/Launcher.smali line 5554
+
+    invoke-virtual {p0, v1}, Lcom/android/launcher2/Launcher;->getText(I)Ljava/lang/CharSequence;
+
+    move-result-object v1
+
+    invoke-static {v0, v1}, Landroid/content/Intent;->createChooser(Landroid/content/Intent;Ljava/lang/CharSequence;)Landroid/content/Intent;
+
+    move-result-object v0
+
+    .line 1939
+    const/16 v1, 0xa
+
+    invoke-virtual {p0, v0, v1}, Lcom/android/launcher2/Launcher;->startActivityForResult(Landroid/content/Intent;I)V
+
+    .line 1940
+    return-void
+.end method
+
+.method private updateAppMarketIcon()V
+    .locals 8
+
+    .prologue
+    const v7, 0x7f070008
+
+    const/4 v6, 0x0
+
+    .line 3256
+    invoke-virtual {p0, v7}, Lcom/android/launcher2/Launcher;->findViewById(I)Landroid/view/View;
+
+    move-result-object v0
+
+## smali/com/android/launcher2/Launcher.smali line 5576
+    const v7, 0x7f070008
+
+    const/4 v6, 0x0
+
+    .line 3256
+    invoke-virtual {p0, v7}, Lcom/android/launcher2/Launcher;->findViewById(I)Landroid/view/View;
+
+    move-result-object v0
+
+    .line 3257
+    new-instance v1, Landroid/content/Intent;
+
+    const-string v2, "android.intent.action.MAIN"
+
+    invoke-direct {v1, v2}, Landroid/content/Intent;-><init>(Ljava/lang/String;)V
+
+    const-string v2, "android.intent.category.APP_MARKET"
+
+    invoke-virtual {v1, v2}, Landroid/content/Intent;->addCategory(Ljava/lang/String;)Landroid/content/Intent;
+
+    move-result-object v1
+
+    .line 3260
+    invoke-virtual {p0}, Lcom/android/launcher2/Launcher;->getPackageManager()Landroid/content/pm/PackageManager;
+
+    move-result-object v2
+
+    invoke-virtual {v1, v2}, Landroid/content/Intent;->resolveActivity(Landroid/content/pm/PackageManager;)Landroid/content/ComponentName;
+
+    move-result-object v2
+
+## smali/com/android/launcher2/Launcher.smali line 6954
+    invoke-virtual {v0, v2, v1}, Landroid/content/Intent;->putExtra(Ljava/lang/String;I)Landroid/content/Intent;
+
+    .line 1871
+    const-string v1, "appWidgetProvider"
+
+    iget-object v2, p1, Lcom/android/launcher2/PendingAddWidgetInfo;->componentName:Landroid/content/ComponentName;
+
+    invoke-virtual {v0, v1, v2}, Landroid/content/Intent;->putExtra(Ljava/lang/String;Landroid/os/Parcelable;)Landroid/content/Intent;
+
+    .line 1874
+    const/16 v1, 0xb
+
+    invoke-virtual {p0, v0, v1}, Lcom/android/launcher2/Launcher;->startActivityForResult(Landroid/content/Intent;I)V
+
+    goto :goto_0
+.end method
+
+.method addAppWidgetImpl(ILcom/android/launcher2/ItemInfo;Landroid/appwidget/AppWidgetHostView;Landroid/appwidget/AppWidgetProviderInfo;)V
+    .locals 7
+
+    .prologue
+    .line 1777
+    iget-object v0, p4, Landroid/appwidget/AppWidgetProviderInfo;->configure:Landroid/content/ComponentName;
+
+    if-eqz v0, :cond_0
+
+    .line 1778
+    iput-object p4, p0, Lcom/android/launcher2/Launcher;->mPendingAddWidgetInfo:Landroid/appwidget/AppWidgetProviderInfo;
+
+    .line 1779
+
+## smali/com/android/launcher2/Launcher.smali line 6994
+    iget-object v1, p4, Landroid/appwidget/AppWidgetProviderInfo;->configure:Landroid/content/ComponentName;
+
+    invoke-virtual {v0, v1}, Landroid/content/Intent;->setComponent(Landroid/content/ComponentName;)Landroid/content/Intent;
+
+    .line 1784
+    const-string v1, "appWidgetId"
+
+    invoke-virtual {v0, v1, p1}, Landroid/content/Intent;->putExtra(Ljava/lang/String;I)Landroid/content/Intent;
+
+    .line 1785
+    const/4 v1, 0x5
+
+    invoke-virtual {p0, v0, v1}, Lcom/android/launcher2/Launcher;->startActivityForResultSafely(Landroid/content/Intent;I)V
+
+    .line 1793
+    :goto_0
+    return-void
+
+    .line 1788
+    :cond_0
+    iget-wide v2, p2, Lcom/android/launcher2/ItemInfo;->container:J
+
+    iget v4, p2, Lcom/android/launcher2/ItemInfo;->screen:I
+
+    move-object v0, p0
+
+    move v1, p1
+
+    move-object v5, p3
+
+
+## smali/com/android/launcher2/Launcher.smali line 9921
+
+    invoke-virtual {p1}, Landroid/view/View;->getHeight()I
+
+    move-result v10
+
+    add-int/2addr v9, v10
+
+    invoke-direct {v5, v6, v7, v8, v9}, Landroid/graphics/Rect;-><init>(IIII)V
+
+    invoke-virtual {v1, v5}, Landroid/content/Intent;->setSourceBounds(Landroid/graphics/Rect;)V
+
+    .line 2028
+    invoke-virtual {p0, p1, v1, v4}, Lcom/android/launcher2/Launcher;->startActivitySafely(Landroid/view/View;Landroid/content/Intent;Ljava/lang/Object;)Z
+
+    move-result v3
+
+    .line 2030
+    .local v3, "success":Z
+    if-eqz v3, :cond_0
+
+    instance-of v5, p1, Lcom/android/launcher2/BubbleTextView;
+
+    if-eqz v5, :cond_0
+
+    .line 2031
+    check-cast p1, Lcom/android/launcher2/BubbleTextView;
+
+    .end local p1    # "v":Landroid/view/View;
+    iput-object p1, p0, Lcom/android/launcher2/Launcher;->mWaitingForResume:Lcom/android/launcher2/BubbleTextView;
+
+
+## smali/com/android/launcher2/Launcher.smali line 10026
+
+    .prologue
+    .line 2107
+    iget-object v0, p0, Lcom/android/launcher2/Launcher;->mAppMarketIntent:Landroid/content/Intent;
+
+    if-eqz v0, :cond_0
+
+    .line 2108
+    iget-object v0, p0, Lcom/android/launcher2/Launcher;->mAppMarketIntent:Landroid/content/Intent;
+
+    const-string v1, "app market"
+
+    invoke-virtual {p0, p1, v0, v1}, Lcom/android/launcher2/Launcher;->startActivitySafely(Landroid/view/View;Landroid/content/Intent;Ljava/lang/Object;)Z
+
+    .line 2112
+    :goto_0
+    return-void
+
+    .line 2110
+    :cond_0
+    const-string v0, "Launcher"
+
+    const-string v1, "Invalid app market intent."
+
+    invoke-static {v0, v1}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
+
+    goto :goto_0
+.end method
+
+.method public onClickSearchButton(Landroid/view/View;)V
+
+## smali/com/android/launcher2/Launcher.smali line 10116
+    invoke-virtual {v0}, Landroid/content/ComponentName;->getPackageName()Ljava/lang/String;
+
+    move-result-object v0
+
+    invoke-virtual {v1, v0}, Landroid/content/Intent;->setPackage(Ljava/lang/String;)Landroid/content/Intent;
+
+    .line 2083
+    :cond_0
+    const/4 v0, 0x0
+
+    const-string v2, "onClickVoiceButton"
+
+    invoke-virtual {p0, v0, v1, v2}, Lcom/android/launcher2/Launcher;->startActivity(Landroid/view/View;Landroid/content/Intent;Ljava/lang/Object;)Z
+    :try_end_0
+    .catch Landroid/content/ActivityNotFoundException; {:try_start_0 .. :try_end_0} :catch_0
+
+    .line 2089
+    :goto_0
+    return-void
+
+    .line 2084
+    :catch_0
+    move-exception v0
+
+    .line 2085
+    new-instance v0, Landroid/content/Intent;
+
+    const-string v1, "android.speech.action.WEB_SEARCH"
+
+    invoke-direct {v0, v1}, Landroid/content/Intent;-><init>(Ljava/lang/String;)V
+
+## smali/com/android/launcher2/Launcher.smali line 10141
+    new-instance v0, Landroid/content/Intent;
+
+    const-string v1, "android.speech.action.WEB_SEARCH"
+
+    invoke-direct {v0, v1}, Landroid/content/Intent;-><init>(Ljava/lang/String;)V
+
+    .line 2086
+    invoke-virtual {v0, v3}, Landroid/content/Intent;->setFlags(I)Landroid/content/Intent;
+
+    .line 2087
+    const-string v1, "onClickVoiceButton"
+
+    invoke-virtual {p0, v4, v0, v1}, Lcom/android/launcher2/Launcher;->startActivitySafely(Landroid/view/View;Landroid/content/Intent;Ljava/lang/Object;)Z
+
+    goto :goto_0
+.end method
+
+.method protected onCreate(Landroid/os/Bundle;)V
+    .locals 7
+    .param p1, "savedInstanceState"    # Landroid/os/Bundle;
+
+    .prologue
+    const/4 v6, 0x1
+
+    const/4 v5, 0x0
+
+    .line 361
+    invoke-super {p0, p1}, Landroid/app/Activity;->onCreate(Landroid/os/Bundle;)V
+
+    .line 362
+
+## smali/com/android/launcher2/Launcher.smali line 10146
+
+    .line 2086
+    invoke-virtual {v0, v3}, Landroid/content/Intent;->setFlags(I)Landroid/content/Intent;
+
+    .line 2087
+    const-string v1, "onClickVoiceButton"
+
+    invoke-virtual {p0, v4, v0, v1}, Lcom/android/launcher2/Launcher;->startActivitySafely(Landroid/view/View;Landroid/content/Intent;Ljava/lang/Object;)Z
+
+    goto :goto_0
+.end method
+
+.method protected onCreate(Landroid/os/Bundle;)V
+    .locals 7
+    .param p1, "savedInstanceState"    # Landroid/os/Bundle;
+
+    .prologue
+    const/4 v6, 0x1
+
+    const/4 v5, 0x0
+
+    .line 361
+    invoke-super {p0, p1}, Landroid/app/Activity;->onCreate(Landroid/os/Bundle;)V
+
+    .line 362
+    invoke-virtual {p0}, Lcom/android/launcher2/Launcher;->getApplication()Landroid/app/Application;
+
+    move-result-object v0
+
+    check-cast v0, Lcom/android/launcher2/LauncherApplication;
+
+## smali/com/android/launcher2/Launcher.smali line 10156
+.end method
+
+.method protected onCreate(Landroid/os/Bundle;)V
+    .locals 7
+    .param p1, "savedInstanceState"    # Landroid/os/Bundle;
+
+    .prologue
+    const/4 v6, 0x1
+
+    const/4 v5, 0x0
+
+    .line 361
+    invoke-super {p0, p1}, Landroid/app/Activity;->onCreate(Landroid/os/Bundle;)V
+
+    .line 362
+    invoke-virtual {p0}, Lcom/android/launcher2/Launcher;->getApplication()Landroid/app/Application;
+
+    move-result-object v0
+
+    check-cast v0, Lcom/android/launcher2/LauncherApplication;
+
+    .line 363
+    .local v0, "app":Lcom/android/launcher2/LauncherApplication;
+    invoke-static {}, Lcom/android/launcher2/LauncherApplication;->getSharedPreferencesKey()Ljava/lang/String;
+
+    move-result-object v3
+
+    invoke-virtual {p0, v3, v5}, Lcom/android/launcher2/Launcher;->getSharedPreferences(Ljava/lang/String;I)Landroid/content/SharedPreferences;
+
+    move-result-object v3
+
+## smali/com/android/launcher2/Launcher.smali line 10975
+    instance-of v3, v1, Lcom/android/launcher2/Folder;
+
+    if-nez v3, :cond_5
+
+    .line 2415
+    iget-object v3, p0, Lcom/android/launcher2/Launcher;->mWorkspace:Lcom/android/launcher2/Workspace;
+
+    invoke-virtual {v3, v2}, Lcom/android/launcher2/Workspace;->startDrag(Lcom/android/launcher2/CellLayout$CellInfo;)V
+
+    goto :goto_2
+.end method
+
+.method protected onNewIntent(Landroid/content/Intent;)V
+    .locals 4
+
+    .prologue
+    const/high16 v2, 0x400000
+
+    .line 1457
+    .line 1461
+    invoke-super {p0, p1}, Landroid/app/Activity;->onNewIntent(Landroid/content/Intent;)V
+
+    .line 1464
+    const-string v0, "android.intent.action.MAIN"
+
+    invoke-virtual {p1}, Landroid/content/Intent;->getAction()Ljava/lang/String;
+
+    move-result-object v1
+
+    invoke-virtual {v0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+## smali/com/android/launcher2/Launcher.smali line 10983
+
+    goto :goto_2
+.end method
+
+.method protected onNewIntent(Landroid/content/Intent;)V
+    .locals 4
+
+    .prologue
+    const/high16 v2, 0x400000
+
+    .line 1457
+    .line 1461
+    invoke-super {p0, p1}, Landroid/app/Activity;->onNewIntent(Landroid/content/Intent;)V
+
+    .line 1464
+    const-string v0, "android.intent.action.MAIN"
+
+    invoke-virtual {p1}, Landroid/content/Intent;->getAction()Ljava/lang/String;
+
+    move-result-object v1
+
+    invoke-virtual {v0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v0
+
+    if-eqz v0, :cond_0
+
+    .line 1466
+    invoke-virtual {p0}, Lcom/android/launcher2/Launcher;->closeSystemDialogs()V
+
+
+## smali/com/android/launcher2/Launcher.smali line 10986
+
+.method protected onNewIntent(Landroid/content/Intent;)V
+    .locals 4
+
+    .prologue
+    const/high16 v2, 0x400000
+
+    .line 1457
+    .line 1461
+    invoke-super {p0, p1}, Landroid/app/Activity;->onNewIntent(Landroid/content/Intent;)V
+
+    .line 1464
+    const-string v0, "android.intent.action.MAIN"
+
+    invoke-virtual {p1}, Landroid/content/Intent;->getAction()Ljava/lang/String;
+
+    move-result-object v1
+
+    invoke-virtual {v0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v0
+
+    if-eqz v0, :cond_0
+
+    .line 1466
+    invoke-virtual {p0}, Lcom/android/launcher2/Launcher;->closeSystemDialogs()V
+
+    .line 1468
+    invoke-virtual {p1}, Landroid/content/Intent;->getFlags()I
+
+
+## smali/com/android/launcher2/Launcher.smali line 11246
+    iget-object v2, p0, Lcom/android/launcher2/Launcher;->mWorkspace:Lcom/android/launcher2/Workspace;
+
+    invoke-virtual {v2, v1}, Lcom/android/launcher2/Workspace;->restoreInstanceStateForChild(I)V
+
+    goto :goto_0
+
+    .line 1532
+    .end local v1    # "page":I
+    :cond_0
+    return-void
+.end method
+
+.method protected onResume()V
+    .locals 9
+
+    .prologue
+    const/4 v6, 0x1
+
+    const/4 v7, 0x0
+
+    .line 750
+    const-wide/16 v1, 0x0
+
+    .line 754
+    .local v1, "startTime":J
+    invoke-super {p0}, Landroid/app/Activity;->onResume()V
+
+    .line 757
+    iget-object v5, p0, Lcom/android/launcher2/Launcher;->mOnResumeState:Lcom/android/launcher2/Launcher$State;
+
+
+## smali/com/android/launcher2/Launcher.smali line 11259
+    .locals 9
+
+    .prologue
+    const/4 v6, 0x1
+
+    const/4 v7, 0x0
+
+    .line 750
+    const-wide/16 v1, 0x0
+
+    .line 754
+    .local v1, "startTime":J
+    invoke-super {p0}, Landroid/app/Activity;->onResume()V
+
+    .line 757
+    iget-object v5, p0, Lcom/android/launcher2/Launcher;->mOnResumeState:Lcom/android/launcher2/Launcher$State;
+
+    sget-object v8, Lcom/android/launcher2/Launcher$State;->WORKSPACE:Lcom/android/launcher2/Launcher$State;
+
+    if-ne v5, v8, :cond_4
+
+    .line 758
+    invoke-virtual {p0, v7}, Lcom/android/launcher2/Launcher;->showWorkspace(Z)V
+
+    .line 762
+    :cond_0
+    :goto_0
+    sget-object v5, Lcom/android/launcher2/Launcher$State;->NONE:Lcom/android/launcher2/Launcher$State;
+
+    iput-object v5, p0, Lcom/android/launcher2/Launcher;->mOnResumeState:Lcom/android/launcher2/Launcher$State;
+
+## smali/com/android/launcher2/Launcher.smali line 12027
+    .line 1884
+    if-eqz v0, :cond_0
+
+    invoke-virtual {v0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v0
+
+    if-eqz v0, :cond_0
+
+    .line 1885
+    new-instance v0, Landroid/content/Intent;
+
+    const-string v1, "android.intent.action.MAIN"
+
+    const/4 v2, 0x0
+
+    invoke-direct {v0, v1, v2}, Landroid/content/Intent;-><init>(Ljava/lang/String;Landroid/net/Uri;)V
+
+    .line 1886
+    const-string v1, "android.intent.category.LAUNCHER"
+
+    invoke-virtual {v0, v1}, Landroid/content/Intent;->addCategory(Ljava/lang/String;)Landroid/content/Intent;
+
+    .line 1888
+    new-instance v1, Landroid/content/Intent;
+
+    const-string v2, "android.intent.action.PICK_ACTIVITY"
+
+    invoke-direct {v1, v2}, Landroid/content/Intent;-><init>(Ljava/lang/String;)V
+
+
+## smali/com/android/launcher2/Launcher.smali line 12064
+
+    const v2, 0x7f0d0020
+
+    invoke-virtual {p0, v2}, Lcom/android/launcher2/Launcher;->getText(I)Ljava/lang/CharSequence;
+
+    move-result-object v2
+
+    invoke-virtual {v1, v0, v2}, Landroid/content/Intent;->putExtra(Ljava/lang/String;Ljava/lang/CharSequence;)Landroid/content/Intent;
+
+    .line 1891
+    const/4 v0, 0x6
+
+    invoke-virtual {p0, v1, v0}, Lcom/android/launcher2/Launcher;->startActivityForResultSafely(Landroid/content/Intent;I)V
+
+    .line 1895
+    :goto_0
+    return-void
+
+    .line 1893
+    :cond_0
+    const/4 v0, 0x1
+
+    invoke-virtual {p0, p1, v0}, Lcom/android/launcher2/Launcher;->startActivityForResultSafely(Landroid/content/Intent;I)V
+
+    goto :goto_0
+.end method
+
+.method processShortcutFromDrop(Landroid/content/ComponentName;JI[I[I)V
+    .locals 2
+
+
+## smali/com/android/launcher2/Launcher.smali line 12074
+    const/4 v0, 0x6
+
+    invoke-virtual {p0, v1, v0}, Lcom/android/launcher2/Launcher;->startActivityForResultSafely(Landroid/content/Intent;I)V
+
+    .line 1895
+    :goto_0
+    return-void
+
+    .line 1893
+    :cond_0
+    const/4 v0, 0x1
+
+    invoke-virtual {p0, p1, v0}, Lcom/android/launcher2/Launcher;->startActivityForResultSafely(Landroid/content/Intent;I)V
+
+    goto :goto_0
+.end method
+
+.method processShortcutFromDrop(Landroid/content/ComponentName;JI[I[I)V
+    .locals 2
+
+    .prologue
+    .line 1805
+    invoke-direct {p0}, Lcom/android/launcher2/Launcher;->resetAddInfo()V
+
+    .line 1806
+    iget-object v0, p0, Lcom/android/launcher2/Launcher;->mPendingAddInfo:Lcom/android/launcher2/ItemInfo;
+
+    iput-wide p2, v0, Lcom/android/launcher2/ItemInfo;->container:J
+
+    .line 1807
+
+## smali/com/android/launcher2/Launcher.smali line 12850
+    invoke-virtual {v1, v2}, Landroid/view/View;->sendAccessibilityEvent(I)V
+
+    .line 2897
+    return-void
+
+    :cond_3
+    move v0, v2
+
+    .line 2866
+    goto :goto_0
+.end method
+
+.method startActivity(Landroid/view/View;Landroid/content/Intent;Ljava/lang/Object;)Z
+    .locals 6
+
+    .prologue
+    const/4 v1, 0x1
+
+    const/4 v0, 0x0
+
+    .line 2140
+    const/high16 v2, 0x10000000
+
+    invoke-virtual {p2, v2}, Landroid/content/Intent;->addFlags(I)Landroid/content/Intent;
+
+    .line 2145
+    if-eqz p1, :cond_0
+
+    :try_start_0
+    const-string v2, "com.android.launcher.intent.extra.shortcut.INGORE_LAUNCH_ANIMATION"
+
+## smali/com/android/launcher2/Launcher.smali line 12903
+
+    move-result v5
+
+    invoke-static {p1, v2, v3, v4, v5}, Landroid/app/ActivityOptions;->makeScaleUpAnimation(Landroid/view/View;IIII)Landroid/app/ActivityOptions;
+
+    move-result-object v2
+
+    .line 2151
+    invoke-virtual {v2}, Landroid/app/ActivityOptions;->toBundle()Landroid/os/Bundle;
+
+    move-result-object v2
+
+    invoke-virtual {p0, p2, v2}, Lcom/android/launcher2/Launcher;->startActivity(Landroid/content/Intent;Landroid/os/Bundle;)V
+
+    :goto_1
+    move v0, v1
+
+    .line 2163
+    :goto_2
+    return v0
+
+    :cond_0
+    move v2, v0
+
+    .line 2145
+    goto :goto_0
+
+    .line 2153
+    :cond_1
+    invoke-virtual {p0, p2}, Lcom/android/launcher2/Launcher;->startActivity(Landroid/content/Intent;)V
+
+## smali/com/android/launcher2/Launcher.smali line 12920
+    .line 2163
+    :goto_2
+    return v0
+
+    :cond_0
+    move v2, v0
+
+    .line 2145
+    goto :goto_0
+
+    .line 2153
+    :cond_1
+    invoke-virtual {p0, p2}, Lcom/android/launcher2/Launcher;->startActivity(Landroid/content/Intent;)V
+    :try_end_0
+    .catch Ljava/lang/SecurityException; {:try_start_0 .. :try_end_0} :catch_0
+
+    goto :goto_1
+
+    .line 2156
+    :catch_0
+    move-exception v1
+
+    .line 2157
+    const v2, 0x7f0d0007
+
+    invoke-static {p0, v2, v0}, Landroid/widget/Toast;->makeText(Landroid/content/Context;II)Landroid/widget/Toast;
+
+    move-result-object v2
+
+    invoke-virtual {v2}, Landroid/widget/Toast;->show()V
+
+## smali/com/android/launcher2/Launcher.smali line 12997
+
+    move-result-object v3
+
+    invoke-virtual {v3}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v3
+
+    invoke-static {v2, v3, v1}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
+
+    goto :goto_2
+.end method
+
+.method public startActivityForResult(Landroid/content/Intent;I)V
+    .locals 1
+    .param p1, "intent"    # Landroid/content/Intent;
+    .param p2, "requestCode"    # I
+
+    .prologue
+    .line 1621
+    if-ltz p2, :cond_0
+
+    const/4 v0, 0x1
+
+    iput-boolean v0, p0, Lcom/android/launcher2/Launcher;->mWaitingForResult:Z
+
+    .line 1622
+    :cond_0
+    invoke-super {p0, p1, p2}, Landroid/app/Activity;->startActivityForResult(Landroid/content/Intent;I)V
+
+    .line 1623
+
+## smali/com/android/launcher2/Launcher.smali line 13012
+    .param p2, "requestCode"    # I
+
+    .prologue
+    .line 1621
+    if-ltz p2, :cond_0
+
+    const/4 v0, 0x1
+
+    iput-boolean v0, p0, Lcom/android/launcher2/Launcher;->mWaitingForResult:Z
+
+    .line 1622
+    :cond_0
+    invoke-super {p0, p1, p2}, Landroid/app/Activity;->startActivityForResult(Landroid/content/Intent;I)V
+
+    .line 1623
+    return-void
+.end method
+
+.method startActivityForResultSafely(Landroid/content/Intent;I)V
+    .locals 4
+
+    .prologue
+    const v2, 0x7f0d0007
+
+    const/4 v1, 0x0
+
+    .line 2179
+    :try_start_0
+    invoke-virtual {p0, p1, p2}, Lcom/android/launcher2/Launcher;->startActivityForResult(Landroid/content/Intent;I)V
+    :try_end_0
+
+## smali/com/android/launcher2/Launcher.smali line 13018
+    const/4 v0, 0x1
+
+    iput-boolean v0, p0, Lcom/android/launcher2/Launcher;->mWaitingForResult:Z
+
+    .line 1622
+    :cond_0
+    invoke-super {p0, p1, p2}, Landroid/app/Activity;->startActivityForResult(Landroid/content/Intent;I)V
+
+    .line 1623
+    return-void
+.end method
+
+.method startActivityForResultSafely(Landroid/content/Intent;I)V
+    .locals 4
+
+    .prologue
+    const v2, 0x7f0d0007
+
+    const/4 v1, 0x0
+
+    .line 2179
+    :try_start_0
+    invoke-virtual {p0, p1, p2}, Lcom/android/launcher2/Launcher;->startActivityForResult(Landroid/content/Intent;I)V
+    :try_end_0
+    .catch Landroid/content/ActivityNotFoundException; {:try_start_0 .. :try_end_0} :catch_0
+    .catch Ljava/lang/SecurityException; {:try_start_0 .. :try_end_0} :catch_1
+
+    .line 2188
+    :goto_0
+    return-void
+
+## smali/com/android/launcher2/Launcher.smali line 13028
+.end method
+
+.method startActivityForResultSafely(Landroid/content/Intent;I)V
+    .locals 4
+
+    .prologue
+    const v2, 0x7f0d0007
+
+    const/4 v1, 0x0
+
+    .line 2179
+    :try_start_0
+    invoke-virtual {p0, p1, p2}, Lcom/android/launcher2/Launcher;->startActivityForResult(Landroid/content/Intent;I)V
+    :try_end_0
+    .catch Landroid/content/ActivityNotFoundException; {:try_start_0 .. :try_end_0} :catch_0
+    .catch Ljava/lang/SecurityException; {:try_start_0 .. :try_end_0} :catch_1
+
+    .line 2188
+    :goto_0
+    return-void
+
+    .line 2180
+    :catch_0
+    move-exception v0
+
+    .line 2181
+    invoke-static {p0, v2, v1}, Landroid/widget/Toast;->makeText(Landroid/content/Context;II)Landroid/widget/Toast;
+
+    move-result-object v0
+
+
+## smali/com/android/launcher2/Launcher.smali line 13099
+
+    move-result-object v2
+
+    invoke-virtual {v2}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v2
+
+    invoke-static {v1, v2, v0}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
+
+    goto :goto_0
+.end method
+
+.method startActivitySafely(Landroid/view/View;Landroid/content/Intent;Ljava/lang/Object;)Z
+    .locals 5
+
+    .prologue
+    const/4 v0, 0x0
+
+    .line 2167
+    .line 2169
+    :try_start_0
+    invoke-virtual {p0, p1, p2, p3}, Lcom/android/launcher2/Launcher;->startActivity(Landroid/view/View;Landroid/content/Intent;Ljava/lang/Object;)Z
+    :try_end_0
+    .catch Landroid/content/ActivityNotFoundException; {:try_start_0 .. :try_end_0} :catch_0
+
+    move-result v0
+
+    .line 2174
+    :goto_0
+    return v0
+
+## smali/com/android/launcher2/Launcher.smali line 13108
+    goto :goto_0
+.end method
+
+.method startActivitySafely(Landroid/view/View;Landroid/content/Intent;Ljava/lang/Object;)Z
+    .locals 5
+
+    .prologue
+    const/4 v0, 0x0
+
+    .line 2167
+    .line 2169
+    :try_start_0
+    invoke-virtual {p0, p1, p2, p3}, Lcom/android/launcher2/Launcher;->startActivity(Landroid/view/View;Landroid/content/Intent;Ljava/lang/Object;)Z
+    :try_end_0
+    .catch Landroid/content/ActivityNotFoundException; {:try_start_0 .. :try_end_0} :catch_0
+
+    move-result v0
+
+    .line 2174
+    :goto_0
+    return v0
+
+    .line 2170
+    :catch_0
+    move-exception v1
+
+    .line 2171
+    const v2, 0x7f0d0007
+
+    invoke-static {p0, v2, v0}, Landroid/widget/Toast;->makeText(Landroid/content/Context;II)Landroid/widget/Toast;
+
+## smali/com/android/launcher2/Launcher.smali line 13199
+    move-result-object v0
+
+    invoke-direct {v1, v2, v0}, Landroid/content/Intent;-><init>(Ljava/lang/String;Landroid/net/Uri;)V
+
+    .line 2118
+    const/high16 v0, 0x10800000
+
+    invoke-virtual {v1, v0}, Landroid/content/Intent;->setFlags(I)Landroid/content/Intent;
+
+    .line 2119
+    const-string v0, "startApplicationDetailsActivity"
+
+    invoke-virtual {p0, v4, v1, v0}, Lcom/android/launcher2/Launcher;->startActivitySafely(Landroid/view/View;Landroid/content/Intent;Ljava/lang/Object;)Z
+
+    .line 2120
+    return-void
+.end method
+
+.method startApplicationUninstallActivity(Lcom/android/launcher2/ApplicationInfo;)V
+    .locals 5
+
+    .prologue
+    .line 2123
+    iget v0, p1, Lcom/android/launcher2/ApplicationInfo;->flags:I
+
+    and-int/lit8 v0, v0, 0x1
+
+    if-nez v0, :cond_0
+
+    .line 2126
+
+## smali/com/android/launcher2/Launcher.smali line 13266
+    invoke-static {v4, v0, v1}, Landroid/net/Uri;->fromParts(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Landroid/net/Uri;
+
+    move-result-object v0
+
+    invoke-direct {v2, v3, v0}, Landroid/content/Intent;-><init>(Ljava/lang/String;Landroid/net/Uri;)V
+
+    .line 2133
+    const/high16 v0, 0x10800000
+
+    invoke-virtual {v2, v0}, Landroid/content/Intent;->setFlags(I)Landroid/content/Intent;
+
+    .line 2135
+    invoke-virtual {p0, v2}, Lcom/android/launcher2/Launcher;->startActivity(Landroid/content/Intent;)V
+
+    goto :goto_0
+.end method
+
+.method public startBinding()V
+    .locals 5
+
+    .prologue
+    .line 3401
+    iget-object v4, p0, Lcom/android/launcher2/Launcher;->mOnResumeCallbacks:Ljava/util/ArrayList;
+
+    invoke-virtual {v4}, Ljava/util/ArrayList;->clear()V
+
+    .line 3403
+    iget-object v3, p0, Lcom/android/launcher2/Launcher;->mWorkspace:Lcom/android/launcher2/Workspace;
+
+    .line 3404
+
+## smali/com/android/launcher2/Launcher.smali line 13458
+
+    .line 1682
+    const-string v0, "select_query"
+
+    invoke-virtual {v2, v0, p2}, Landroid/content/Intent;->putExtra(Ljava/lang/String;Z)Landroid/content/Intent;
+
+    .line 1684
+    :cond_3
+    invoke-virtual {v2, p4}, Landroid/content/Intent;->setSourceBounds(Landroid/graphics/Rect;)V
+
+    .line 1686
+    :try_start_0
+    invoke-virtual {p0, v2}, Lcom/android/launcher2/Launcher;->startActivity(Landroid/content/Intent;)V
+    :try_end_0
+    .catch Landroid/content/ActivityNotFoundException; {:try_start_0 .. :try_end_0} :catch_0
+
+    goto :goto_0
+
+    .line 1687
+    :catch_0
+    move-exception v0
+
+    .line 1688
+    const-string v0, "Launcher"
+
+    new-instance v2, Ljava/lang/StringBuilder;
+
+    invoke-direct {v2}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v3, "Global search activity not found: "
+
+Matching contexts: 30
