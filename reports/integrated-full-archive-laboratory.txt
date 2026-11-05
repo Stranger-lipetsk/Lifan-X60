@@ -6,7 +6,7 @@ No device boot, MCU behavior, Hibernate, license, SD maps, actual radio, display
 The six-file archive and image exist only temporarily and are intentionally not published.
 ## Checked extracted file changes
 Entries before: 1344; after: 1345
-app/LifanLauncherPanel.apk: not present -> ('file', 12780, '73c56d4700aa69b572bfb83ded05a6728e4d946eec50a44270e404c44022d06a')
+app/LifanLauncherPanel.apk: not present -> ('file', 12780, '4012790377bdea55d2412dbd95e8b02d6a37035ca42b60ee22d69a06e91bebee')
 priv-app/EL830LF01_Home.apk: ('file', 4580386, '75ee685d5399e4c394146cac593ec2ed4bfbd5f6cc9151f9ae479992c84011a6') -> ('file', 4599659, 'd6d24288a2dbd1dbd98492deeacf2b728297c7dd432a0513b14911f1b50916c9')
 priv-app/Launcher2.apk: ('file', 12267776, '82787a6007589a169242f2c1391252342a9824748a8b469d1d522acab83458e6') -> ('file', 12280896, 'd872fd211606c92e9c94a3cc7897955a8135c9a3a80f719efdc5baf708a068bc')
 priv-app/Navitel-large.apk: ('file', 111095055, '6e216ab39aacaafacda1ebb09f6edc8726e4d1eb6b4985256ccd18aeb5046c44') -> ('file', 99176587, '96876415d8b4342952558fd30d6e11b0ca9355c802060c0a9740b6cc84fc4e1b')
@@ -48,10 +48,10 @@ User:     0   Group:     0   Project:     0   Size: 4599659
 File ACL: 0
 Links: 1   Blockcount: 8984
 Fragment:  Address: 0    Number: 0    Size: 0
- ctime: 0x6aecdf04:00000000 -- Thu Nov  5 19:54:44 2026
- atime: 0x6aecdf04:00000000 -- Thu Nov  5 19:54:44 2026
- mtime: 0x6aecdf04:00000000 -- Thu Nov  5 19:54:44 2026
-crtime: 0x6aecdf04:00000000 -- Thu Nov  5 19:54:44 2026
+ ctime: 0x6aecdfc1:00000000 -- Thu Nov  5 19:57:53 2026
+ atime: 0x6aecdfc1:00000000 -- Thu Nov  5 19:57:53 2026
+ mtime: 0x6aecdfc1:00000000 -- Thu Nov  5 19:57:53 2026
+crtime: 0x6aecdfc1:00000000 -- Thu Nov  5 19:57:53 2026
 Size of extra inode fields: 32
 Extended attributes:
   security.selinux (26) = "u:object_r:system_file:s0\000"
@@ -65,10 +65,10 @@ User:     0   Group:     0   Project:     0   Size: 12280896
 File ACL: 0
 Links: 1   Blockcount: 23992
 Fragment:  Address: 0    Number: 0    Size: 0
- ctime: 0x6aecdf04:00000000 -- Thu Nov  5 19:54:44 2026
- atime: 0x6aecdf04:00000000 -- Thu Nov  5 19:54:44 2026
- mtime: 0x6aecdf04:00000000 -- Thu Nov  5 19:54:44 2026
-crtime: 0x6aecdf04:00000000 -- Thu Nov  5 19:54:44 2026
+ ctime: 0x6aecdfc1:00000000 -- Thu Nov  5 19:57:53 2026
+ atime: 0x6aecdfc1:00000000 -- Thu Nov  5 19:57:53 2026
+ mtime: 0x6aecdfc1:00000000 -- Thu Nov  5 19:57:53 2026
+crtime: 0x6aecdfc1:00000000 -- Thu Nov  5 19:57:53 2026
 Size of extra inode fields: 32
 Extended attributes:
   security.selinux (26) = "u:object_r:system_file:s0\000"
@@ -82,10 +82,10 @@ User:     0   Group:     0   Project:     0   Size: 12780
 File ACL: 0
 Links: 1   Blockcount: 32
 Fragment:  Address: 0    Number: 0    Size: 0
- ctime: 0x6aecdf04:00000000 -- Thu Nov  5 19:54:44 2026
- atime: 0x6aecdf04:00000000 -- Thu Nov  5 19:54:44 2026
- mtime: 0x6aecdf04:00000000 -- Thu Nov  5 19:54:44 2026
-crtime: 0x6aecdf04:00000000 -- Thu Nov  5 19:54:44 2026
+ ctime: 0x6aecdfc1:00000000 -- Thu Nov  5 19:57:53 2026
+ atime: 0x6aecdfc1:00000000 -- Thu Nov  5 19:57:53 2026
+ mtime: 0x6aecdfc1:00000000 -- Thu Nov  5 19:57:53 2026
+crtime: 0x6aecdfc1:00000000 -- Thu Nov  5 19:57:53 2026
 Size of extra inode fields: 32
 Extended attributes:
   security.selinux (26) = "u:object_r:system_file:s0\000"
@@ -99,10 +99,10 @@ User:     0   Group:     0   Project:     0   Size: 99176587
 File ACL: 0
 Links: 1   Blockcount: 193704
 Fragment:  Address: 0    Number: 0    Size: 0
- ctime: 0x6aecdf04:00000000 -- Thu Nov  5 19:54:44 2026
- atime: 0x6aecdf04:00000000 -- Thu Nov  5 19:54:44 2026
- mtime: 0x6aecdf04:00000000 -- Thu Nov  5 19:54:44 2026
-crtime: 0x6aecdf04:00000000 -- Thu Nov  5 19:54:44 2026
+ ctime: 0x6aecdfc0:00000000 -- Thu Nov  5 19:57:52 2026
+ atime: 0x6aecdfc0:00000000 -- Thu Nov  5 19:57:52 2026
+ mtime: 0x6aecdfc0:00000000 -- Thu Nov  5 19:57:52 2026
+crtime: 0x6aecdfc0:00000000 -- Thu Nov  5 19:57:52 2026
 Size of extra inode fields: 32
 Extended attributes:
   security.selinux (26) = "u:object_r:system_file:s0\000"
@@ -113,6 +113,6 @@ MCU_FW.hex bc341c6de95c18babcaa8664c585236ea02828c7de4fba30c97380108bdcb495
 backup/config.ini 0d2481ced64fe652efe0a360df357bc939b9727dd68aa65c6b0121e4ae608fad
 boot.img 060d291a523bbe0d40c86537f070ed0feb90e04e0db0efef2a3e4594e9223b4b
 sd_boot.img 734f6b6442108916df89303ec5f52ceaa0ebb927d3b984a1e8a85ef2a6c12597
-system.img 25295b625ba360e8f022300a68d86be01136ec3c126e2257f469876c0f2ae558
+system.img 952e1f6e94e2892ee447ab19fe80805d7bdac0eb1186a6d70adcb6cfee6676f0
 u-boot.bin 7d1cb6b366dda8ef0ea51c3350689d365032ed47e172c6e23dac7a63ae33f002
-All six ZIP members match local source files; no archive published.
+All six ZIP members match local source files; the five non-system members match the original ZIP. No archive published.
