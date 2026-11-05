@@ -37,6 +37,23 @@ class TraceTests(unittest.TestCase):
             self.assertIn('literal match: Launcher2', out.getvalue())
             self.assertIn('ZIP/APK files scanned: 11', out.getvalue())
 
+    def test_scan_reports_independent_literals_in_secondary_dex(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            for n in range(10):
+                with zipfile.ZipFile(root / f'{n}.apk', 'w') as apk:
+                    apk.writestr('classes.dex', b'ordinary')
+                    if n == 2:
+                        apk.writestr('classes2.dex', b'android.intent.action.GET_CONTENT\x00application/vnd.android.package-archive')
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                scan_apks(root)
+            result = out.getvalue()
+            self.assertIn('### GET_CONTENT: 1 APK(s)\nliteral match: 2.apk', result)
+            self.assertIn('### APK_MIME: 1 APK(s)\nliteral match: 2.apk', result)
+            self.assertIn('### MANAGE_ROOT: 0 APK(s)', result)
+            self.assertIn('### OPEN_DOCUMENT: 0 APK(s)', result)
+
     def test_scan_rejects_missing_apks(self):
         with tempfile.TemporaryDirectory() as temp, self.assertRaises(SystemExit):
             scan_apks(Path(temp))

@@ -62,20 +62,38 @@ def inspect(root):
 
 
 def scan_apks(root):
-    print('\n## APK DEX literal scan: MANAGE_ROOT')
-    print('Only literal strings are searched; obfuscation and dynamic construction are not excluded.')
+    print('\n## APK DEX literal scan: file and installer intents')
+    print('Literal byte hits are leads only: they do not prove a call, a UI path, or runtime availability.')
+    print('Dynamic construction, native code, external packages, data and boot are not scanned.')
+    patterns = {
+        'MANAGE_ROOT': b'android.provider.action.MANAGE_ROOT',
+        'OPEN_DOCUMENT': b'android.intent.action.OPEN_DOCUMENT',
+        'GET_CONTENT': b'android.intent.action.GET_CONTENT',
+        'INSTALL_PACKAGE': b'android.intent.action.INSTALL_PACKAGE',
+        'APK_MIME': b'application/vnd.android.package-archive',
+        'CREATE_SHORTCUT': b'android.intent.action.CREATE_SHORTCUT',
+    }
     count = 0
+    matches = {key: [] for key in patterns}
     for path in sorted(root.rglob('*')):
         if not path.is_file() or not zipfile.is_zipfile(path):
             continue
         count += 1
         with zipfile.ZipFile(path) as apk:
             dexes = [n for n in apk.namelist() if re.fullmatch(r'classes(?:[0-9]+)?\.dex', n)]
-            if any(b'android.provider.action.MANAGE_ROOT' in apk.read(n) for n in dexes):
-                print('literal match:', path.relative_to(root))
+            found = set()
+            for name in dexes:
+                dex = apk.read(name)
+                found.update(key for key, literal in patterns.items() if literal in dex)
+            for key in found:
+                matches[key].append(str(path.relative_to(root)))
     if count < 10:
         raise SystemExit('Too few APKs extracted for scan')
     print('ZIP/APK files scanned:', count)
+    for key, paths in matches.items():
+        print(f'\n### {key}: {len(paths)} APK(s)')
+        for path in paths:
+            print('literal match:', path)
 
 
 if __name__ == '__main__':
