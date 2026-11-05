@@ -1,0 +1,187 @@
+name: Тестовая полная прошивка с файловым менеджером
+on:
+  push:
+    branches:
+      - arena/b12cc9a8-lifan-x60
+    paths:
+      - '.github/workflows/build-file-manager-test.yml'
+      - 'tools/check_file_manager_image.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build:
+    if: github.ref_name == 'arena/b12cc9a8-lifan-x60'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Проверить анализатор и подготовить инструменты
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p 'test_check_file_manager_image.py' -v
+          python3 -m unittest discover -s tests -p 'test_stock_fsck.py' -v
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq p7zip-full e2fsprogs zip unzip
+          mkdir -p "$RUNNER_TEMP/input" "$RUNNER_TEMP/user" "$RUNNER_TEMP/full" "$RUNNER_TEMP/check" reports
+      - name: Скачать и сверить все исходники
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          gh release download stock -p x60_2021.7z -D "$RUNNER_TEMP/input"
+          gh release download 'рабочая-с-лаунчером' -p system.img -D "$RUNNER_TEMP/user"
+          gh release download v3.5.3 --repo TeamAmaze/AmazeFileManager -p app-fdroid-release.apk -D "$RUNNER_TEMP/input"
+          echo "75e7d6cd900fac971b55fec9f59913153bf7a1096bd761f7229c9a1d6d57b540  $RUNNER_TEMP/input/x60_2021.7z" | sha256sum -c -
+          echo "79df29ec1ea97fd2e1da605c9651c6e5cce9d05d79518ff8e3e7d1dd16553dba  $RUNNER_TEMP/user/system.img" | sha256sum -c -
+          echo "2a9bc50c6672b1cb6efdfbd9bd9149bf280274e386305663163cc365abd393f3  $RUNNER_TEMP/input/app-fdroid-release.apk" | sha256sum -c -
+          7z x -y "$RUNNER_TEMP/input/x60_2021.7z" -o"$RUNNER_TEMP/full" >/dev/null
+          echo "b6bbbe529942ffec250cad993ae9cbb808721c27cf2536fb3fb11120130e8545  $RUNNER_TEMP/full/system.img" | sha256sum -c -
+          python3 - "$RUNNER_TEMP/full" <<'PY'
+          from pathlib import Path
+          import sys
+          root = Path(sys.argv[1])
+          actual = {p.relative_to(root).as_posix() for p in root.rglob('*') if p.is_file()}
+          expected = {'system.img', 'boot.img', 'sd_boot.img', 'u-boot.bin', 'MCU_FW.hex', 'backup/config.ini'}
+          if actual != expected:
+              raise SystemExit(f'Unexpected stock archive contents: {sorted(actual)}')
+          PY
+      - name: Добавить только APK в копию system.img
+        run: |
+          set -euo pipefail
+          base="$RUNNER_TEMP/user/system.img"
+          dest="$RUNNER_TEMP/full/system.img"
+          apk="$RUNNER_TEMP/input/app-fdroid-release.apk"
+          check="$RUNNER_TEMP/check"
+          aapt=$(find /usr/local/lib/android/sdk/build-tools -type f -name aapt | sort -V | tail -1)
+          apksigner=$(find /usr/local/lib/android/sdk/build-tools -type f -name apksigner | sort -V | tail -1)
+          test -x "$aapt" && test -x "$apksigner"
+          "$aapt" dump badging "$apk" > "$check/badging.txt"
+          grep -F "package: name='com.amaze.filemanager'" "$check/badging.txt"
+          grep -F "sdkVersion:'14'" "$check/badging.txt"
+          grep -F 'launchable-activity:' "$check/badging.txt"
+          "$apksigner" verify --min-sdk-version 19 --max-sdk-version 19 "$apk" > "$check/signature.txt"
+          e2fsck -fn "$base" > "$check/base-fsck.txt" 2>&1
+          python3 tools/check_stock_fsck.py "$check/base-fsck.txt" 0
+          debugfs -R 'stat /app/AmazeFileManager.apk' "$base" > "$check/absent.txt" 2>&1 || true
+          grep -qiE 'File not found|not found by ext2_lookup' "$check/absent.txt" || { echo 'Target path exists, abort'; exit 1; }
+          cp "$base" "$dest"
+          printf 'u:object_r:system_file:s0\0' > "$check/selinux.bin"
+          debugfs -w -R "write $apk /app/AmazeFileManager.apk" "$dest" > "$check/write.txt" 2>&1
+          grep -q 'Allocated inode:' "$check/write.txt" || { cat "$check/write.txt"; exit 1; }
+          for cmd in 'sif /app/AmazeFileManager.apk mode 0100644' 'sif /app/AmazeFileManager.apk uid 0' 'sif /app/AmazeFileManager.apk gid 0' "ea_set -f $check/selinux.bin /app/AmazeFileManager.apk security.selinux"; do
+            debugfs -w -R "$cmd" "$dest" >> "$check/write.txt" 2>&1
+          done
+          debugfs -R 'stat /app/AmazeFileManager.apk' "$dest" > "$check/stat.txt" 2>&1
+          grep -Eq 'Mode:[[:space:]]+0644' "$check/stat.txt"
+          grep -Eq 'User:[[:space:]]+0[[:space:]]+Group:[[:space:]]+0' "$check/stat.txt"
+          grep -F 'u:object_r:system_file:s0' "$check/stat.txt"
+          debugfs -R "dump /app/AmazeFileManager.apk $check/extracted.apk" "$dest" > "$check/extract.txt" 2>&1
+          cmp "$apk" "$check/extracted.apk"
+          e2fsck -fn "$dest" > "$check/result-fsck.txt" 2>&1
+          python3 tools/check_stock_fsck.py "$check/result-fsck.txt" 0
+          test "$(stat -c %s "$base")" = "$(stat -c %s "$dest")"
+          mkdir -p "$check/base-tree" "$check/result-tree"
+          debugfs -R "rdump / $check/base-tree" "$base" > "$check/base-dump.txt" 2>&1
+          debugfs -R "rdump / $check/result-tree" "$dest" > "$check/result-dump.txt" 2>&1
+          for log in "$check/base-dump.txt" "$check/result-dump.txt"; do
+            if grep -iE 'no space left|input/output error|filesystem not open|failed to open|ext2.* error' "$log"; then exit 1; fi
+          done
+          for dir in "$check/base-tree" "$check/result-tree"; do
+            test -s "$dir/build.prop" && test -d "$dir/app" && test -d "$dir/priv-app"
+            find "$dir" -type d -exec chmod u+rwx {} +
+            find "$dir" -type f -exec chmod u+r {} +
+          done
+          {
+            echo '# File manager test firmware build report'
+            echo 'TEST ONLY: no device boot or APK install test has been performed.'
+            echo 'Previous identical base system hung before Hibernate once; later booted after a Home selection. The new image is untested.'
+            echo 'Base system SHA-256: 79df29ec1ea97fd2e1da605c9651c6e5cce9d05d79518ff8e3e7d1dd16553dba'
+            echo 'Amaze APK SHA-256: 2a9bc50c6672b1cb6efdfbd9bd9149bf280274e386305663163cc365abd393f3'
+            python3 tools/check_file_manager_image.py "$check/base-tree" "$check/result-tree" 2a9bc50c6672b1cb6efdfbd9bd9149bf280274e386305663163cc365abd393f3
+            echo '## Base filesystem check'
+            cat "$check/base-fsck.txt"
+            echo '## Result filesystem check'
+            cat "$check/result-fsck.txt"
+            echo '## Added APK inode'
+            cat "$check/stat.txt"
+            echo '## Result system image'
+            sha256sum "$dest" | sed "s|$RUNNER_TEMP/full/||"
+            stat -c 'system.img bytes: %s' "$dest"
+          } > reports/file-manager-test-build.txt
+      - name: Упаковать полный комплект и проверить каждый файл
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP/full"
+          zip -q -9 "$RUNNER_TEMP/lifan-file-manager-test.zip" system.img boot.img sd_boot.img u-boot.bin MCU_FW.hex backup/config.ini
+          unzip -tq "$RUNNER_TEMP/lifan-file-manager-test.zip"
+          python3 - "$RUNNER_TEMP/full" "$RUNNER_TEMP/lifan-file-manager-test.zip" <<'PY' | tee -a "$GITHUB_WORKSPACE/reports/file-manager-test-build.txt"
+          import hashlib, sys, zipfile
+          from pathlib import Path
+          root, archive = Path(sys.argv[1]), Path(sys.argv[2])
+          expected = {'system.img', 'boot.img', 'sd_boot.img', 'u-boot.bin', 'MCU_FW.hex', 'backup/config.ini'}
+          def hash_stream(stream):
+              h = hashlib.sha256()
+              for chunk in iter(lambda: stream.read(1024 * 1024), b''): h.update(chunk)
+              return h.hexdigest()
+          with zipfile.ZipFile(archive) as z:
+              if len(z.namelist()) != len(expected) or set(z.namelist()) != expected:
+                  raise SystemExit('Unexpected or duplicate ZIP members')
+              for name in sorted(expected):
+                  with (root / name).open('rb') as src, z.open(name) as packed:
+                      left, right = hash_stream(src), hash_stream(packed)
+                  if left != right: raise SystemExit(f'ZIP hash mismatch: {name}')
+                  print(f'ZIP member matches source: {name} sha256={left}')
+          print('Archive SHA-256:', hash_stream(archive.open('rb')))
+          print('Archive bytes:', archive.stat().st_size)
+          PY
+      - name: Опубликовать отдельный непроверенный тестовый релиз
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          tag=file-manager-test-20261105
+          if gh release view "$tag" >/dev/null 2>&1; then
+            echo 'Release already exists: refusing to replace it'; exit 1
+          fi
+          img=$(sha256sum "$RUNNER_TEMP/full/system.img" | cut -d' ' -f1)
+          archive=$(sha256sum "$RUNNER_TEMP/lifan-file-manager-test.zip" | cut -d' ' -f1)
+          cat > "$RUNNER_TEMP/notes.txt" <<EOF
+          ТЕСТОВАЯ ПРОШИВКА — НА МАГНИТОЛЕ НЕ ПРОВЕРЕНА.
+
+          Полный комплект из работающего архива stock/x60_2021.7z, в котором
+          system.img основан на опубликованном пользователем образе
+          рабочая-с-лаунчером (79df29ec1ea97fd2e1da605c9651c6e5cce9d05d79518ff8e3e7d1dd16553dba)
+          и содержит только одно добавление /system/app/AmazeFileManager.apk
+          (Amaze File Manager 3.5.3 из релиза TeamAmaze). Он запрашивает доступ к
+          хранилищу и интернету. APK проверен для Android API 19; работа на ГУ,
+          доступ к USB и установка APK не проверены.
+
+          Быстрое окно выбора Home НЕ исправлено. Ранее идентичный базовый system
+          один раз завис на оптимизации до Hibernate более 15 минут; позднее
+          загрузился после выбора Home. Новый образ может не загрузиться.
+          Русский язык и UTC+3 специально не менялись. Штатные Home и Navitel
+          не модифицированы по содержимому system.img; это не гарантия сохранения
+          данных и разделов во время записи. Не менять и не форматировать SD с картами.
+          Другие файлы комплекта взяты из stock и не подтверждены как текущие разделы ГУ.
+          Перед прошивкой прочитайте docs/37-тест-с-файловым-менеджером.md.
+
+          SHA-256 полного ZIP: $archive
+          SHA-256 system.img: $img
+          SHA-256 Amaze APK: 2a9bc50c6672b1cb6efdfbd9bd9149bf280274e386305663163cc365abd393f3
+          EOF
+          gh release create "$tag" "$RUNNER_TEMP/lifan-file-manager-test.zip" --target "${{ github.ref_name }}" --title 'Тест: рабочая с лаунчером + файловый менеджер' --notes-file "$RUNNER_TEMP/notes.txt" --prerelease
+      - name: Сохранить только отчёт, без Actions artifacts
+        run: |
+          set -e
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/file-manager-test-build.txt
+          git diff --cached --quiet && exit 0
+          git commit -m 'report: file manager test firmware'
+          for try in 1 2 3 4 5; do
+            if git pull --rebase origin "${{ github.ref_name }}" && git push origin HEAD:"${{ github.ref_name }}"; then exit 0; fi
+            git rebase --abort || true
+            sleep 5
+          done
+          exit 1
