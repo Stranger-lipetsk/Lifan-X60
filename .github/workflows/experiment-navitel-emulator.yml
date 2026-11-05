@@ -1,0 +1,126 @@
+name: Лабораторный запуск Navitel на Android 4.4
+on:
+  push:
+    branches: [arena/b12cc9a8-lifan-x60]
+    paths:
+      - '.github/workflows/experiment-navitel-emulator.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  test:
+    if: github.ref_name == 'arena/b12cc9a8-lifan-x60'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Запустить изолированный Android 4.4 x86 и исследовать APK
+        env:
+          ANDROID_AVD_HOME: ${{ runner.temp }}/avd
+        run: |
+          set -euo pipefail
+          exec > >(tee "$RUNNER_TEMP/navitel-emulator-log.txt") 2>&1
+          mkdir -p "$ANDROID_AVD_HOME" reports
+          apk="$GITHUB_WORKSPACE/firmware/apks/com.navitel.apk"
+          echo "96876415d8b4342952558fd30d6e11b0ca9355c802060c0a9740b6cc84fc4e1b  $apk" | sha256sum -c -
+          sdk=${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}
+          manager="$sdk/cmdline-tools/latest/bin/sdkmanager"
+          avdmanager="$sdk/cmdline-tools/latest/bin/avdmanager"
+          emulator="$sdk/emulator/emulator"
+          adb="$sdk/platform-tools/adb"
+          test -x "$manager" && test -x "$avdmanager" && test -x "$emulator" && test -x "$adb"
+          "$manager" --install 'system-images;android-19;default;x86' >/dev/null
+          echo no | "$avdmanager" create avd -f -n navitel_api19 -k 'system-images;android-19;default;x86' >/dev/null
+          "$emulator" -avd navitel_api19 -no-window -no-audio -no-boot-anim -no-snapshot -gpu swiftshader_indirect -no-metrics > "$RUNNER_TEMP/emulator.txt" 2>&1 &
+          pid=$!
+          trap 'kill "$pid" 2>/dev/null || true' EXIT
+          timeout 600 "$adb" wait-for-device
+          booted=no
+          for i in $(seq 1 150); do
+            if [ "$(timeout 5 "$adb" shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')" = 1 ]; then booted=yes; break; fi
+            sleep 4
+          done
+          test "$booted" = yes || { tail -40 "$RUNNER_TEMP/emulator.txt"; echo 'Android emulator did not boot'; exit 1; }
+          "$adb" root >/dev/null || true
+          timeout 90 "$adb" wait-for-device
+          # Prevent the test from using any account, license server or external maps.
+          "$adb" shell settings put global airplane_mode_on 1
+          "$adb" shell am broadcast -a android.intent.action.AIRPLANE_MODE --ez state true >/dev/null
+          "$adb" shell svc wifi disable || true
+          "$adb" shell svc data disable || true
+          set +e
+          "$adb" install "$apk" > "$RUNNER_TEMP/install.txt" 2>&1
+          install_status=$?
+          set -e
+          if [ "$install_status" -ne 0 ] || ! grep -qF Success "$RUNNER_TEMP/install.txt"; then
+            {
+              echo '# Navitel 11: installation failed on clean Android 4.4 x86 emulator'
+              echo 'APK SHA-256: 96876415d8b4342952558fd30d6e11b0ca9355c802060c0a9740b6cc84fc4e1b'
+              echo 'This is a fresh user installation, not the ARM device or a system upgrade.'
+              echo "adb install exit status: $install_status"
+              cat "$RUNNER_TEMP/install.txt"
+            } > reports/navitel-emulator-laboratory.txt
+            exit 0
+          fi
+          uid=$("$adb" shell dumpsys package com.navitel | tr -d '\r' | sed -n 's/.*userId=\([0-9][0-9]*\).*/\1/p' | head -1)
+          case "$uid" in ''|*[!0-9]*) echo 'Cannot determine app UID; refusing to start'; exit 1;; esac
+          "$adb" shell iptables -I OUTPUT 1 -m owner --uid-owner "$uid" -j REJECT
+          "$adb" shell iptables -C OUTPUT -m owner --uid-owner "$uid" -j REJECT
+          "$adb" logcat -c
+          set +e
+          timeout 90 "$adb" shell am start -W -n com.navitel/com.navitel.app.MainActivity > "$RUNNER_TEMP/start.txt" 2>&1
+          start_status=$?
+          set -e
+          sleep 20
+          "$adb" shell dumpsys activity activities > "$RUNNER_TEMP/activities.txt" 2>&1 || true
+          "$adb" shell pidof com.navitel > "$RUNNER_TEMP/pid.txt" 2>&1 || true
+          "$adb" logcat -d -v brief > "$RUNNER_TEMP/logcat.txt" 2>&1 || true
+          {
+            echo '# Navitel 11 on a clean Android 4.4.2 x86 emulator'
+            echo 'APK SHA-256: 96876415d8b4342952558fd30d6e11b0ca9355c802060c0a9740b6cc84fc4e1b'
+            echo 'Fresh user installation in a generic x86 emulator, not the ARM head unit.'
+            echo 'App network blocked by UID; no user account, SD maps, license or GPS tested.'
+            echo 'Does not test system replacement, signature migration, Hibernate, ARM native libraries, display or car hardware.'
+            echo '## Emulator build properties'
+            for prop in ro.build.version.release ro.build.version.sdk ro.product.cpu.abi ro.build.fingerprint; do
+              printf '%s: ' "$prop"; "$adb" shell getprop "$prop" | tr -d '\r'
+            done
+            echo '## Package installation'; cat "$RUNNER_TEMP/install.txt"
+            echo '## am start status'; echo "command exit status: $start_status"; cat "$RUNNER_TEMP/start.txt"
+            echo '## Navitel activities (dumpsys excerpts)'
+            grep -iE 'mResumedActivity|mFocusedActivity|com\.navitel' "$RUNNER_TEMP/activities.txt" | head -40 || true
+            echo '## Selected crash indicators, not an exhaustive log'
+            grep -iE 'FATAL EXCEPTION|Process: com\.navitel|ANR in com\.navitel|UnsatisfiedLinkError|VerifyError|NoClassDefFoundError' "$RUNNER_TEMP/logcat.txt" | tail -40 || true
+          } > reports/navitel-emulator-laboratory.txt
+      - name: Сохранить диагностику при инфраструктурной ошибке
+        if: failure()
+        run: |
+          set -e
+          test -s "$RUNNER_TEMP/navitel-emulator-log.txt" || exit 0
+          mkdir -p reports
+          cp "$RUNNER_TEMP/navitel-emulator-log.txt" reports/navitel-emulator-laboratory-error.txt
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/navitel-emulator-laboratory-error.txt
+          git diff --cached --quiet && exit 0
+          git commit -m 'report: diagnose navitel emulator experiment'
+          git pull --rebase origin "${{ github.ref_name }}"
+          git push origin HEAD:"${{ github.ref_name }}"
+      - name: Сохранить только отчёт без artifacts
+        run: |
+          set -e
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/navitel-emulator-laboratory.txt
+          git diff --cached --quiet && exit 0
+          git commit -m 'report: test navitel on android 4.4 emulator'
+          for try in 1 2 3 4 5; do
+            if git pull --rebase origin "${{ github.ref_name }}" && git push origin HEAD:"${{ github.ref_name }}"; then exit 0; fi
+            git rebase --abort || true
+            sleep 5
+          done
+          exit 1
