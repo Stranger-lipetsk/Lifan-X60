@@ -568,7 +568,76 @@ sysPreHibernate wrappers: access$7500
 .end method
 
 
-## HomeApp.smali first boot and stored state .method public getPreHibernated()Z
+## HomeApp.smali first boot, locale/timezone and stored state .method public getDefaultLocaleIndex()I
+.method public getDefaultLocaleIndex()I
+    .locals 1
+
+    .prologue
+    .line 428
+    const/4 v0, 0x7
+
+    .line 430
+    .local v0, "iLocaleIndex":I
+    return v0
+.end method
+
+
+## HomeApp.smali first boot, locale/timezone and stored state .method public getDefaultTimeZone()Ljava/lang/String;
+.method public getDefaultTimeZone()Ljava/lang/String;
+    .locals 4
+
+    .prologue
+    .line 413
+    const-string v1, "DEFAULT_TIMEZONE"
+
+    invoke-static {v1}, Ljava/lang/System;->getenv(Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object v0
+
+    .line 415
+    .local v0, "strTZ":Ljava/lang/String;
+    const-string v1, "Home"
+
+    new-instance v2, Ljava/lang/StringBuilder;
+
+    invoke-direct {v2}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v3, "HomeApp.java getDefaultTimeZone().............. strTZ = "
+
+    invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v2
+
+    invoke-virtual {v2, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v2
+
+    invoke-virtual {v2}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v2
+
+    invoke-static {v1, v2}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+
+    .line 417
+    if-eqz v0, :cond_0
+
+    invoke-virtual {v0}, Ljava/lang/String;->isEmpty()Z
+
+    move-result v1
+
+    if-eqz v1, :cond_1
+
+    .line 418
+    :cond_0
+    const-string v0, "Asia/Shanghai"
+
+    .line 420
+    :cond_1
+    return-object v0
+.end method
+
+
+## HomeApp.smali first boot, locale/timezone and stored state .method public getPreHibernated()Z
 .method public getPreHibernated()Z
     .locals 1
 
@@ -580,7 +649,7 @@ sysPreHibernate wrappers: access$7500
 .end method
 
 
-## HomeApp.smali first boot and stored state .method public getSysFirstBoot()Z
+## HomeApp.smali first boot, locale/timezone and stored state .method public getSysFirstBoot()Z
 .method public getSysFirstBoot()Z
     .locals 1
 
@@ -592,7 +661,7 @@ sysPreHibernate wrappers: access$7500
 .end method
 
 
-## HomeApp.smali first boot and stored state .method public savePreHibernatePreferences(Landroid/content/Context;)Z
+## HomeApp.smali first boot, locale/timezone and stored state .method public savePreHibernatePreferences(Landroid/content/Context;)Z
 .method public savePreHibernatePreferences(Landroid/content/Context;)Z
     .locals 5
     .param p1, "context"    # Landroid/content/Context;
@@ -2059,4 +2128,370 @@ Method too large to dump fully; 60-line contexts around relevant calls follow.
 .end method
 
 
-## Methods selected: 13
+## Utils.smali locale and timezone application .method public static setSystemLocale(Landroid/content/Context;I)Z
+.method public static setSystemLocale(Landroid/content/Context;I)Z
+    .locals 10
+    .param p0, "context"    # Landroid/content/Context;
+    .param p1, "index"    # I
+
+    .prologue
+    .line 208
+    const-string v7, "Home"
+
+    new-instance v8, Ljava/lang/StringBuilder;
+
+    invoke-direct {v8}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v9, "Utils.java setSystemLocale() ... index = "
+
+    invoke-virtual {v8, v9}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v8
+
+    invoke-virtual {v8, p1}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+
+    move-result-object v8
+
+    invoke-virtual {v8}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v8
+
+    invoke-static {v7, v8}, Landroid/util/Log;->v(Ljava/lang/String;Ljava/lang/String;)I
+
+    .line 210
+    const/4 v1, 0x0
+
+    .line 211
+    .local v1, "bSuccess":Z
+    invoke-static {p0}, Ltw/com/elead/el830/home/Utils;->getSysLocals(Landroid/content/Context;)[Ltw/com/elead/el830/home/Utils$Loc;
+
+    move-result-object v6
+
+    .line 213
+    .local v6, "mLocales":[Ltw/com/elead/el830/home/Utils$Loc;
+    if-nez v6, :cond_0
+
+    move v2, v1
+
+    .line 246
+    .end local v1    # "bSuccess":Z
+    .end local p0    # "context":Landroid/content/Context;
+    .local v2, "bSuccess":I
+    :goto_0
+    return v2
+
+    .line 216
+    .end local v2    # "bSuccess":I
+    .restart local v1    # "bSuccess":Z
+    .restart local p0    # "context":Landroid/content/Context;
+    :cond_0
+    array-length v7, v6
+
+    if-lt p1, v7, :cond_1
+
+    move v2, v1
+
+    .line 217
+    .restart local v2    # "bSuccess":I
+    goto :goto_0
+
+    .line 219
+    .end local v2    # "bSuccess":I
+    :cond_1
+    aget-object v5, v6, p1
+
+    .line 220
+    .local v5, "loc":Ltw/com/elead/el830/home/Utils$Loc;
+    invoke-static {}, Ljava/util/Locale;->getDefault()Ljava/util/Locale;
+
+    move-result-object v4
+
+    .line 221
+    .local v4, "curLocale":Ljava/util/Locale;
+    iget-object v7, v5, Ltw/com/elead/el830/home/Utils$Loc;->locale:Ljava/util/Locale;
+
+    invoke-virtual {v4, v7}, Ljava/util/Locale;->equals(Ljava/lang/Object;)Z
+
+    move-result v7
+
+    if-eqz v7, :cond_2
+
+    .line 222
+    const-string v7, "Home"
+
+    new-instance v8, Ljava/lang/StringBuilder;
+
+    invoke-direct {v8}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v9, "Utils.java setSystemLocale() ... index is the same current !! "
+
+    invoke-virtual {v8, v9}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v8
+
+    invoke-virtual {v8, p1}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+
+    move-result-object v8
+
+    invoke-virtual {v8}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v8
+
+    invoke-static {v7, v8}, Landroid/util/Log;->v(Ljava/lang/String;Ljava/lang/String;)I
+
+    move v2, v1
+
+    .line 223
+    .restart local v2    # "bSuccess":I
+    goto :goto_0
+
+    .line 227
+    .end local v2    # "bSuccess":I
+    :cond_2
+    :try_start_0
+    invoke-static {}, Landroid/app/ActivityManagerNative;->getDefault()Landroid/app/IActivityManager;
+
+    move-result-object v0
+
+    .line 228
+    .local v0, "am":Landroid/app/IActivityManager;
+    invoke-interface {v0}, Landroid/app/IActivityManager;->getConfiguration()Landroid/content/res/Configuration;
+
+    move-result-object v3
+
+    .line 230
+    .local v3, "config":Landroid/content/res/Configuration;
+    iget-object v7, v5, Ltw/com/elead/el830/home/Utils$Loc;->locale:Ljava/util/Locale;
+
+    iput-object v7, v3, Landroid/content/res/Configuration;->locale:Ljava/util/Locale;
+
+    .line 233
+    const/4 v7, 0x1
+
+    iput-boolean v7, v3, Landroid/content/res/Configuration;->userSetLocale:Z
+
+    .line 235
+    invoke-interface {v0, v3}, Landroid/app/IActivityManager;->updateConfiguration(Landroid/content/res/Configuration;)V
+
+    .line 237
+    const-string v7, "com.android.providers.settings"
+
+    invoke-static {v7}, Landroid/app/backup/BackupManager;->dataChanged(Ljava/lang/String;)V
+
+    .line 239
+    check-cast p0, Ltw/com/elead/el830/home/HomeApp;
+
+    .end local p0    # "context":Landroid/content/Context;
+    invoke-virtual {p0, p1}, Ltw/com/elead/el830/home/HomeApp;->setLocaleIndex(I)V
+    :try_end_0
+    .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
+
+    .line 241
+    const/4 v1, 0x1
+
+    .end local v0    # "am":Landroid/app/IActivityManager;
+    .end local v3    # "config":Landroid/content/res/Configuration;
+    :goto_1
+    move v2, v1
+
+    .line 246
+    .restart local v2    # "bSuccess":I
+    goto :goto_0
+
+    .line 242
+    .end local v2    # "bSuccess":I
+    :catch_0
+    move-exception v7
+
+    goto :goto_1
+.end method
+
+
+## Utils.smali locale and timezone application .method public static setSystemTimeZone(Landroid/content/Context;Ljava/lang/String;)V
+.method public static setSystemTimeZone(Landroid/content/Context;Ljava/lang/String;)V
+    .locals 2
+    .param p0, "context"    # Landroid/content/Context;
+    .param p1, "strTimeZone"    # Ljava/lang/String;
+
+    .prologue
+    .line 195
+    const-string v1, "alarm"
+
+    invoke-virtual {p0, v1}, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
+
+    move-result-object v0
+
+    check-cast v0, Landroid/app/AlarmManager;
+
+    .line 196
+    .local v0, "alarm":Landroid/app/AlarmManager;
+    invoke-virtual {v0, p1}, Landroid/app/AlarmManager;->setTimeZone(Ljava/lang/String;)V
+
+    .line 198
+    check-cast p0, Ltw/com/elead/el830/home/HomeApp;
+
+    .end local p0    # "context":Landroid/content/Context;
+    invoke-virtual {p0, p1}, Ltw/com/elead/el830/home/HomeApp;->setTimeZone(Ljava/lang/String;)V
+
+    .line 199
+    return-void
+.end method
+
+
+## Default timezone/locale field references (context only)
+
+### HomeApp.smali line 33
+.field public static final BT_RINGTONE:I = 0x5
+
+.field public static final CANBAS_SUPPORT:Z = false
+
+.field public static final DEFAULT_LOCALE_INDEX:I = 0x7
+
+.field public static final DEFAULT_TIMEZONE:Ljava/lang/String; = "Asia/Shanghai"
+
+.field public static final Debugging:Z = false
+
+### HomeApp.smali line 35
+.field public static final CANBAS_SUPPORT:Z = false
+
+.field public static final DEFAULT_LOCALE_INDEX:I = 0x7
+
+.field public static final DEFAULT_TIMEZONE:Ljava/lang/String; = "Asia/Shanghai"
+
+.field public static final Debugging:Z = false
+
+.field public static final MCU_MIXER_VOL_DEFAULT:I = 0x2d
+
+### HomeApp.smali line 4459
+
+    return v0
+.end method
+
+.method public getDefaultLocaleIndex()I
+    .locals 1
+
+    .prologue
+    .line 428
+
+### HomeApp.smali line 4471
+    .local v0, "iLocaleIndex":I
+    return v0
+.end method
+
+.method public getDefaultTimeZone()Ljava/lang/String;
+    .locals 4
+
+    .prologue
+    .line 413
+
+### HomeApp.smali line 4476
+    .locals 4
+
+    .prologue
+    .line 413
+    const-string v1, "DEFAULT_TIMEZONE"
+
+    invoke-static {v1}, Ljava/lang/System;->getenv(Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object v0
+
+### HomeApp.smali line 4490
+    new-instance v2, Ljava/lang/StringBuilder;
+
+    invoke-direct {v2}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v3, "HomeApp.java getDefaultTimeZone().............. strTZ = "
+
+    invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v2
+
+### HomeService$23.smali line 142
+
+    invoke-virtual {v0, v12, v1, v2}, Landroid/os/Handler;->sendMessageDelayed(Landroid/os/Message;J)Z
+
+    .line 10019
+    invoke-static {}, Ljava/util/TimeZone;->getDefault()Ljava/util/TimeZone;
+
+    move-result-object v9
+
+    .line 10020
+
+### HomeService$3.smali line 3915
+    invoke-static {}, Ltw/com/elead/el830/home/HomeService;->access$000()Ltw/com/elead/el830/home/HomeApp;
+
+    move-result-object v4
+
+    invoke-virtual {v4}, Ltw/com/elead/el830/home/HomeApp;->getDefaultTimeZone()Ljava/lang/String;
+
+    move-result-object v4
+
+    invoke-static {v3, v4}, Ltw/com/elead/el830/home/Utils;->setSystemTimeZone(Landroid/content/Context;Ljava/lang/String;)V
+
+### HomeService$3.smali line 3930
+    invoke-static {}, Ltw/com/elead/el830/home/HomeService;->access$000()Ltw/com/elead/el830/home/HomeApp;
+
+    move-result-object v4
+
+    invoke-virtual {v4}, Ltw/com/elead/el830/home/HomeApp;->getDefaultLocaleIndex()I
+
+    move-result v4
+
+    invoke-static {v3, v4}, Ltw/com/elead/el830/home/Utils;->setSystemLocale(Landroid/content/Context;I)Z
+
+### HomeService.smali line 35599
+
+    invoke-virtual {v0, v2, v3}, Ljava/util/Calendar;->set(II)V
+
+    .line 9373
+    invoke-static {}, Ljava/util/TimeZone;->getDefault()Ljava/util/TimeZone;
+
+    move-result-object v21
+
+    .line 9374
+
+### HomeService.smali line 39380
+    :goto_0
+    invoke-direct {p0}, Ltw/com/elead/el830/home/HomeService;->initDisclaimerWindow()V
+
+    .line 463
+    invoke-static {}, Ljava/util/Locale;->getDefault()Ljava/util/Locale;
+
+    move-result-object v6
+
+    .line 464
+
+### HomeService.smali line 39448
+    sget-object v0, Ltw/com/elead/el830/home/HomeService;->homeApp:Ltw/com/elead/el830/home/HomeApp;
+
+    sget-object v1, Ltw/com/elead/el830/home/HomeService;->homeApp:Ltw/com/elead/el830/home/HomeApp;
+
+    invoke-virtual {v1}, Ltw/com/elead/el830/home/HomeApp;->getDefaultTimeZone()Ljava/lang/String;
+
+    move-result-object v1
+
+    invoke-static {v0, v1}, Ltw/com/elead/el830/home/Utils;->setSystemTimeZone(Landroid/content/Context;Ljava/lang/String;)V
+
+### HomeService.smali line 39459
+    sget-object v0, Ltw/com/elead/el830/home/HomeService;->homeApp:Ltw/com/elead/el830/home/HomeApp;
+
+    sget-object v1, Ltw/com/elead/el830/home/HomeService;->homeApp:Ltw/com/elead/el830/home/HomeApp;
+
+    invoke-virtual {v1}, Ltw/com/elead/el830/home/HomeApp;->getDefaultLocaleIndex()I
+
+    move-result v1
+
+    invoke-static {v0, v1}, Ltw/com/elead/el830/home/Utils;->setSystemLocale(Landroid/content/Context;I)Z
+
+### Utils.smali line 2105
+    aget-object v5, v6, p1
+
+    .line 220
+    .local v5, "loc":Ltw/com/elead/el830/home/Utils$Loc;
+    invoke-static {}, Ljava/util/Locale;->getDefault()Ljava/util/Locale;
+
+    move-result-object v4
+
+    .line 221
+
+## Methods selected: 17
