@@ -1,0 +1,60 @@
+# Navitel 11 image placement test — laboratory only
+No firmware published, no boot, package data, SD, maps, license or runtime tested.
+Base system SHA-256 a660f062716fd42d5a6185faec059f42675b3024304de7b81fac5d705cc88511
+Old entries: 1344 New entries: 1344
+Only changed file/symlink: priv-app/Navitel-large.apk
+Old bytes/SHA: 111095055 6e216ab39aacaafacda1ebb09f6edc8726e4d1eb6b4985256ccd18aeb5046c44
+New bytes/SHA: 99176587 96876415d8b4342952558fd30d6e11b0ca9355c802060c0a9740b6cc84fc4e1b
+File contents and symlink targets only; other inode metadata is not compared.
+## Filesystem and space before
+e2fsck 1.47.0 (5-Feb-2023)
+Pass 1: Checking inodes, blocks, and sizes
+Pass 2: Checking directory structure
+Pass 3: Checking directory connectivity
+Pass 4: Checking reference counts
+Pass 5: Checking group summary information
+/home/runner/work/_temp/original.img: 1401/23040 files (0.0% non-contiguous), 90496/92160 blocks
+## Filesystem and space after
+e2fsck 1.47.0 (5-Feb-2023)
+Pass 1: Checking inodes, blocks, and sizes
+Pass 2: Checking directory structure
+Pass 3: Checking directory connectivity
+Pass 4: Checking reference counts
+Pass 5: Checking group summary information
+/home/runner/work/_temp/candidate.img: 1401/23040 files (0.1% non-contiguous), 87586/92160 blocks
+## Original Navitel inode
+debugfs 1.47.0 (5-Feb-2023)
+Inode: 1301   Type: regular    Mode:  0644   Flags: 0x80080
+Generation: 0    Version: 0x00000000:00000000
+User:     0   Group:     0   Size: 111095055
+File ACL: 0
+Links: 1   Blockcount: 216984
+Fragment:  Address: 0    Number: 0    Size: 0
+ ctime: 0x5fa5277f:00000000 -- Fri Nov  6 10:37:51 2020
+ atime: 0x5fa5277f:00000000 -- Fri Nov  6 10:37:51 2020
+ mtime: 0x5fa5277f:00000000 -- Fri Nov  6 10:37:51 2020
+crtime: 0x00000000:00000000 -- Thu Jan  1 00:00:00 1970
+Size of extra inode fields: 28
+Extended attributes:
+  security.selinux (26) = "u:object_r:system_file:s0\000"
+EXTENTS:
+(0-27122):33275-60397
+## New Navitel inode
+debugfs 1.47.0 (5-Feb-2023)
+Inode: 1301   Type: regular    Mode:  0644   Flags: 0x80000
+Generation: 0    Version: 0x00000000:00000000
+User:     0   Group:     0   Project:     0   Size: 99176587
+File ACL: 0
+Links: 1   Blockcount: 193704
+Fragment:  Address: 0    Number: 0    Size: 0
+ ctime: 0x6aecca16:00000000 -- Thu Nov  5 18:25:26 2026
+ atime: 0x6aecca16:00000000 -- Thu Nov  5 18:25:26 2026
+ mtime: 0x6aecca16:00000000 -- Thu Nov  5 18:25:26 2026
+crtime: 0x6aecca16:00000000 -- Thu Nov  5 18:25:26 2026
+Size of extra inode fields: 32
+Extended attributes:
+  security.selinux (26) = "u:object_r:system_file:s0\000"
+EXTENTS:
+(0-1661):31106-32767, (1662-23748):33275-55361, (23750-24213):55362-55825
+Candidate system SHA-256:
+79e39f6e63fb06fef6065301e87dd0e3c773e2d85cdf9b9e25ff0304ceca8483
