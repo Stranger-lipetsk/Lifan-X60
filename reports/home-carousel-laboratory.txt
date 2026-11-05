@@ -9,9 +9,9 @@ tw/com/elead/el830/home/Home.smali
 tw/com/elead/el830/home/HomeApp.smali
 Non-signature entries compared: 343
 Only changed entry: classes.dex
-Original classes.dex SHA-256: d8b41f3b89ce3828022a0780a0aad4e105861c8c4b42636ac4b8cfae50114f20
-Candidate classes.dex SHA-256: c48c4014c5a627c5d00d39d8048046998b74781bac1516180d3e69875e8ff814
-Manifest unchanged SHA-256: 3e580af0c923307c998db164b1997aa6f74c0cf5f1452dc594e039ae057ec0c6
+Original changed entry SHA-256: d8b41f3b89ce3828022a0780a0aad4e105861c8c4b42636ac4b8cfae50114f20
+Candidate changed entry SHA-256: c48c4014c5a627c5d00d39d8048046998b74781bac1516180d3e69875e8ff814
+Unchanged AndroidManifest.xml SHA-256: 3e580af0c923307c998db164b1997aa6f74c0cf5f1452dc594e039ae057ec0c6
 Verifies
 Verified using v1 scheme (JAR signing): true
 Verified using v2 scheme (APK Signature Scheme v2): false
