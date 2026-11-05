@@ -1,0 +1,111 @@
+name: Тест панели ручного переключения
+on:
+  push:
+    branches: [arena/b12cc9a8-lifan-x60]
+    paths:
+      - 'launcher-panel/**'
+      - 'tests/test_launcher_panel.py'
+      - '.github/workflows/build-panel-probe.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build:
+    if: github.ref_name == 'arena/b12cc9a8-lifan-x60'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Проверить отсутствие автозапуска и HOME-фильтра
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p 'test_launcher_panel.py' -v
+      - name: Собрать отдельное тестовое приложение
+        run: |
+          set -euo pipefail
+          sdk=${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}
+          bt=$(find "$sdk/build-tools" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -1)
+          jar=$(find "$sdk/platforms" -name android.jar | sort -V | tail -1)
+          test -x "$bt/aapt" && test -x "$bt/d8" && test -x "$bt/apksigner" && test -f "$jar"
+          out="$RUNNER_TEMP/panel"
+          mkdir -p "$out/classes" "$out/dex" reports
+          "$bt/aapt" package -f -M launcher-panel/AndroidManifest.xml -I "$jar" -F "$out/unsigned.apk"
+          javac -source 8 -target 8 -bootclasspath "$jar" -d "$out/classes" launcher-panel/src/ru/lifanx60/panelprobe/MainActivity.java
+          find "$out/classes" -name '*.class' > "$out/classes.txt"
+          test -s "$out/classes.txt"
+          "$bt/d8" --lib "$jar" --min-api 19 --output "$out/dex" @"$out/classes.txt"
+          test -s "$out/dex/classes.dex"
+          cp "$out/dex/classes.dex" "$out/classes.dex"
+          (cd "$out" && zip -q -u unsigned.apk classes.dex)
+          "$bt/zipalign" -f 4 "$out/unsigned.apk" "$out/aligned.apk"
+          keytool -genkeypair -keystore "$out/test.keystore" -storepass test-only -keypass test-only \
+            -alias panelprobe -keyalg RSA -keysize 2048 -validity 10000 \
+            -dname 'CN=Lifan X60 Panel Test, O=Community, C=RU' >/dev/null 2>&1
+          "$bt/apksigner" sign --ks "$out/test.keystore" --ks-pass pass:test-only --key-pass pass:test-only \
+            --min-sdk-version 19 --v1-signing-enabled true --out "$out/lifan-panel-probe.apk" "$out/aligned.apk"
+          "$bt/apksigner" verify --min-sdk-version 19 --max-sdk-version 19 --verbose --print-certs "$out/lifan-panel-probe.apk" > "$out/verify.txt"
+          "$bt/aapt" dump xmltree "$out/lifan-panel-probe.apk" AndroidManifest.xml > "$out/manifest.txt"
+          "$bt/aapt" dump badging "$out/lifan-panel-probe.apk" > "$out/badging.txt"
+          grep -F "package: name='ru.lifanx60.panelprobe'" "$out/badging.txt"
+          grep -F "sdkVersion:'19'" "$out/badging.txt"
+          grep -F "launchable-activity: name='ru.lifanx60.panelprobe.MainActivity'" "$out/badging.txt"
+          if grep -E 'android.intent.category.HOME|android.intent.action.BOOT_COMPLETED|android.permission.' "$out/manifest.txt"; then
+            echo 'Unexpected HOME, boot receiver, or permission'; exit 1
+          fi
+          {
+            echo '# Manual launcher panel probe, not tested on device'
+            echo 'Standalone test only; not firmware and no carousel integration.'
+            echo 'Temporary generated signing key is not preserved; use a distinct package for any later system-integrated app.'
+            sha256sum "$out/lifan-panel-probe.apk" | sed "s|$out/||"
+            stat -c 'Bytes: %s' "$out/lifan-panel-probe.apk"
+            cat "$out/badging.txt"
+            cat "$out/verify.txt"
+            echo '## Manifest'
+            cat "$out/manifest.txt"
+          } > reports/launcher-panel-probe.txt
+      - name: Опубликовать отдельный тестовый APK
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          tag=panel-entry-probe-20261105
+          if gh release view "$tag" >/dev/null 2>&1; then
+            echo 'Release already exists; refusing to replace it'; exit 1
+          fi
+          sha=$(sha256sum "$RUNNER_TEMP/panel/lifan-panel-probe.apk" | cut -d' ' -f1)
+          cat > "$RUNNER_TEMP/notes.txt" <<EOF
+          Отдельное НЕПРОВЕРЕННОЕ НА УСТРОЙСТВЕ тестовое приложение, НЕ ПРОШИВКА.
+          Оно не запускается автоматически и не объявляет HOME. Три кнопки
+          намеренно запускают конкретные активности штатного Home, Android
+          Launcher2 и Amaze. Оно не устанавливает выбор по умолчанию и не
+          добавляет кнопки в кольцо штатного Home. Проверка нужна только для
+          отработки ручного входа перед будущими изменениями прошивки.
+
+          Сначала ставить только если текущий Android доступен и понятно, как
+          вернуться в штатный Home. Работа APK не проверена на ГУ; пользовательские
+          приложения ранее исчезли после перезагрузки. Не удалять Navitel и
+          ничего не делать с SD. Исходники launcher-panel/ в репозитории.
+          Подпись сделана временным тестовым ключом; это отдельный пробный пакет
+          ru.lifanx60.panelprobe, не предназначенный как обновляемый финальный APK.
+
+          SHA-256: $sha
+          EOF
+          gh release create "$tag" "$RUNNER_TEMP/panel/lifan-panel-probe.apk" --target "${{ github.ref_name }}" --title 'Тест ручного переключения лаунчеров' --notes-file "$RUNNER_TEMP/notes.txt" --prerelease
+      - name: Сохранить отчёт без Actions artifacts
+        run: |
+          set -e
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/launcher-panel-probe.txt
+          git diff --cached --quiet && exit 0
+          git commit -m 'report: build manual launcher panel probe'
+          for try in 1 2 3 4 5; do
+            if git pull --rebase origin "${{ github.ref_name }}" && git push origin HEAD:"${{ github.ref_name }}"; then exit 0; fi
+            git rebase --abort || true
+            sleep 5
+          done
+          exit 1
