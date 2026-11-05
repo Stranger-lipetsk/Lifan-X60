@@ -34,7 +34,7 @@ jobs:
           adb="$sdk/platform-tools/adb"
           test -x "$manager" && test -x "$avdmanager" && test -x "$emulator" && test -x "$adb"
           "$manager" --install 'emulator' 'platform-tools' 'system-images;android-19;default;x86'
-          echo no | "$avdmanager" create avd -f -n navitel_api19 -k 'system-images;android-19;default;x86' >/dev/null
+          echo no | "$avdmanager" create avd -f -n navitel_api19 -k 'system-images;android-19;default;x86' -c 1024M >/dev/null
           if [ -e /dev/kvm ]; then sudo chmod a+rw /dev/kvm; fi
           "$emulator" -accel-check || true
           "$emulator" -avd navitel_api19 -no-window -no-audio -no-boot-anim -no-snapshot -gpu swiftshader_indirect -no-metrics > "$RUNNER_TEMP/emulator.txt" 2>&1 &
@@ -56,6 +56,8 @@ jobs:
           "$adb" shell am broadcast -a android.intent.action.AIRPLANE_MODE --ez state true >/dev/null
           "$adb" shell svc wifi disable || true
           "$adb" shell svc data disable || true
+          "$adb" shell ls -ld /storage/sdcard /storage/sdcard0 /storage/emulated/0 /mnt/shell/emulated > "$RUNNER_TEMP/storage.txt" 2>&1 || true
+          "$adb" shell df > "$RUNNER_TEMP/storage-df.txt" 2>&1 || true
           set +e
           "$adb" install "$apk" > "$RUNNER_TEMP/install.txt" 2>&1
           install_status=$?
@@ -96,6 +98,7 @@ jobs:
             for prop in ro.build.version.release ro.build.version.sdk ro.product.cpu.abi ro.build.fingerprint; do
               printf '%s: ' "$prop"; "$adb" shell getprop "$prop" | tr -d '\r'
             done
+            echo '## Emulated storage'; cat "$RUNNER_TEMP/storage.txt" "$RUNNER_TEMP/storage-df.txt"
             echo '## Package installation'; cat "$RUNNER_TEMP/install.txt"
             echo '## am start status'; echo "command exit status: $start_status"; cat "$RUNNER_TEMP/start.txt"
             echo '## Navitel activities (dumpsys excerpts)'
@@ -103,7 +106,17 @@ jobs:
             echo '## Matching processes'
             grep -iF 'com.navitel' "$RUNNER_TEMP/processes.txt" || true
             echo '## Selected startup, failure and runtime lines, not an exhaustive log'
-            grep -iE 'com\.navitel|AndroidRuntime|FATAL EXCEPTION|fatal signal|ANR in|UnsatisfiedLinkError|VerifyError|NoClassDefFoundError|dlopen|dexopt|has died' "$RUNNER_TEMP/logcat-stream.txt" | tail -120 || true
+            grep -iE 'com\.navitel|AndroidRuntime|FATAL EXCEPTION|fatal signal|ANR in|UnsatisfiedLinkError|VerifyError|NoClassDefFoundError|dlopen|dexopt|has died|I/DEBUG' "$RUNNER_TEMP/logcat-stream.txt" | tail -180 || true
+            echo '## First app process log lines'
+            apppid=$(sed -n 's/.*Start proc com\.navitel .*pid=\([0-9][0-9]*\).*/\1/p' "$RUNNER_TEMP/logcat-stream.txt" | head -1)
+            if [ -n "$apppid" ]; then grep -E "\\([[:space:]]*$apppid\\):" "$RUNNER_TEMP/logcat-stream.txt" | head -150 || true; fi
+            echo '## x86 native instruction at first reported crash address'
+            pc=$(sed -n 's/.*#00[[:space:]]*pc[[:space:]]*\([0-9a-f]*\).*libnative-lib.so.*/\1/p' "$RUNNER_TEMP/logcat-stream.txt" | head -1)
+            if [ -n "$pc" ]; then
+              unzip -p "$apk" lib/x86/libnative-lib.so > "$RUNNER_TEMP/libnative-x86.so"
+              start=$((16#$pc - 24)); end=$((16#$pc + 24))
+              objdump -d -Mintel --start-address="$start" --stop-address="$end" "$RUNNER_TEMP/libnative-x86.so" || true
+            else echo 'No native program counter found'; fi
           } > reports/navitel-emulator-laboratory.txt
       - name: Сохранить диагностику при инфраструктурной ошибке
         if: failure()
