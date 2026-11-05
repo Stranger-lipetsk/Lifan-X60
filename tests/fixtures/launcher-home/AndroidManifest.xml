@@ -1,0 +1,13 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="tw.com.elead.el830.home">
+    <uses-sdk android:minSdkVersion="19" android:targetSdkVersion="19" />
+    <application android:label="Fake car Home - emulator only">
+        <activity android:name=".Home" android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.HOME" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>
