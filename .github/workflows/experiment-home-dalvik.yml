@@ -1,0 +1,58 @@
+name: Изолированная проверка методов Home на Dalvik
+on:
+  push:
+    branches: [arena/b12cc9a8-lifan-x60]
+    paths:
+      - '.github/workflows/experiment-home-dalvik.yml'
+      - 'tools/experiment_home_dalvik.sh'
+      - 'tests/fixtures/home-dalvik/**'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  test:
+    if: github.ref_name == 'arena/b12cc9a8-lifan-x60'
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Проверить патчер и синтаксис
+        run: |
+          python3 -m unittest discover -s tests -p 'test_experiment_home_carousel.py' -v
+          bash -n tools/experiment_home_dalvik.sh
+      - name: Запустить тестовый стенд без аппаратных сервисов
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bash tools/experiment_home_dalvik.sh
+      - name: Сохранить диагностику при ошибке
+        if: failure()
+        run: |
+          set -e
+          test -s "$RUNNER_TEMP/home-dalvik.log" || exit 0
+          mkdir -p reports
+          tr -d '\r' < "$RUNNER_TEMP/home-dalvik.log" > reports/home-dalvik-laboratory-error.txt
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/home-dalvik-laboratory-error.txt
+          git diff --cached --quiet && exit 0
+          git commit -m 'report: diagnose isolated Home Dalvik test'
+          git pull --rebase origin "${{ github.ref_name }}"
+          git push origin HEAD:"${{ github.ref_name }}"
+      - name: Сохранить текстовый отчёт без artifacts
+        run: |
+          set -e
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/home-dalvik-laboratory.txt
+          git diff --cached --quiet && exit 0
+          git commit -m 'report: isolated Home Dalvik method test'
+          for try in 1 2 3 4 5; do
+            if git pull --rebase origin "${{ github.ref_name }}" && git push origin HEAD:"${{ github.ref_name }}"; then exit 0; fi
+            git rebase --abort || true
+            sleep 5
+          done
+          exit 1
