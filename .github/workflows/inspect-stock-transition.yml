@@ -64,7 +64,19 @@ jobs:
       - name: Проверить конфигурацию начальной загрузки
         run: |
           set -euo pipefail
-          PYTHONPATH=tools python3 tools/inspect_boot_persistence.py "$RUNNER_TEMP/fw/image/boot.img" > reports/stock-data-mount-research.txt
+          img="$RUNNER_TEMP/fw/image/system.img"
+          {
+            PYTHONPATH=tools python3 tools/inspect_boot_persistence.py "$RUNNER_TEMP/fw/image/boot.img"
+            echo; echo '## Read-only stock /system/bin entries related to sync or hibernation'
+            debugfs -R 'ls -l /bin' "$img" 2>/dev/null | grep -iE 'sync|hib|sleep|resume|quick|snapshot' || true
+            for name in fs_sync.sh hib_image_v2.sh; do
+              echo; echo "## /system/bin/$name (read-only extraction, not executed)"
+              debugfs -R "dump /bin/$name $RUNNER_TEMP/$name" "$img" > "$RUNNER_TEMP/$name.log" 2>&1
+              test -s "$RUNNER_TEMP/$name"
+              sha256sum "$RUNNER_TEMP/$name" | sed "s|$RUNNER_TEMP/||"
+              cat "$RUNNER_TEMP/$name"
+            done
+          } > reports/stock-data-mount-research.txt
           wc -c reports/stock-data-mount-research.txt
       - name: Сохранить отчёты в ветке, без artifacts
         run: |
