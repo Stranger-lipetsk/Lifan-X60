@@ -1,0 +1,105 @@
+name: Лабораторная проверка размещения нового Navitel
+on:
+  push:
+    branches: [arena/b12cc9a8-lifan-x60]
+    paths:
+      - '.github/workflows/experiment-navitel-image.yml'
+      - 'tools/check_navitel_candidate_image.py'
+      - 'tests/test_check_navitel_candidate_image.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  inspect:
+    if: github.ref_name == 'arena/b12cc9a8-lifan-x60'
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - name: Тест анализатора
+        run: python3 -m unittest discover -s tests -p test_check_navitel_candidate_image.py -v
+      - name: Проверить замену APK только на временной копии образа
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          exec > >(tee "$RUNNER_TEMP/navitel-experiment.log") 2>&1
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq e2fsprogs unzip
+          mkdir -p "$RUNNER_TEMP/in" "$RUNNER_TEMP/old-tree" "$RUNNER_TEMP/new-tree" reports
+          gh release download file-manager-test-20261105 -p lifan-file-manager-test.zip -D "$RUNNER_TEMP/in"
+          echo "4be81211994221e80e401ce712ce484b5320156902fff3707737b73e3945d17f  $RUNNER_TEMP/in/lifan-file-manager-test.zip" | sha256sum -c -
+          unzip -p "$RUNNER_TEMP/in/lifan-file-manager-test.zip" system.img > "$RUNNER_TEMP/original.img"
+          echo "a660f062716fd42d5a6185faec059f42675b3024304de7b81fac5d705cc88511  $RUNNER_TEMP/original.img" | sha256sum -c -
+          apk="$GITHUB_WORKSPACE/firmware/apks/com.navitel.apk"
+          echo "96876415d8b4342952558fd30d6e11b0ca9355c802060c0a9740b6cc84fc4e1b  $apk" | sha256sum -c -
+          e2fsck -fn "$RUNNER_TEMP/original.img" > "$RUNNER_TEMP/orig-fsck.txt" 2>&1
+          python3 tools/check_stock_fsck.py "$RUNNER_TEMP/orig-fsck.txt" 0
+          debugfs -R 'stat /priv-app/Navitel-large.apk' "$RUNNER_TEMP/original.img" > "$RUNNER_TEMP/orig-stat.txt" 2>&1
+          grep -Eq 'Mode:[[:space:]]+0644' "$RUNNER_TEMP/orig-stat.txt"
+          grep -Eq 'User:[[:space:]]+0[[:space:]]+Group:[[:space:]]+0' "$RUNNER_TEMP/orig-stat.txt"
+          grep -F 'u:object_r:system_file:s0' "$RUNNER_TEMP/orig-stat.txt"
+          python3 tools/inplace_patch.py --system "$RUNNER_TEMP/original.img" --out "$RUNNER_TEMP/candidate.img" \
+            --add-file "$apk:/priv-app/Navitel-large.apk" > "$RUNNER_TEMP/patch-log.txt"
+          printf 'u:object_r:system_file:s0\0' > "$RUNNER_TEMP/selinux.bin"
+          for cmd in 'sif /priv-app/Navitel-large.apk mode 0100644' 'sif /priv-app/Navitel-large.apk uid 0' 'sif /priv-app/Navitel-large.apk gid 0' "ea_set -f $RUNNER_TEMP/selinux.bin /priv-app/Navitel-large.apk security.selinux"; do
+            debugfs -w -R "$cmd" "$RUNNER_TEMP/candidate.img" >> "$RUNNER_TEMP/patch-log.txt" 2>&1
+          done
+          debugfs -R 'stat /priv-app/Navitel-large.apk' "$RUNNER_TEMP/candidate.img" > "$RUNNER_TEMP/new-stat.txt" 2>&1
+          grep -Eq 'Mode:[[:space:]]+0644' "$RUNNER_TEMP/new-stat.txt"
+          grep -Eq 'User:[[:space:]]+0[[:space:]]+Group:[[:space:]]+0' "$RUNNER_TEMP/new-stat.txt"
+          grep -F 'u:object_r:system_file:s0' "$RUNNER_TEMP/new-stat.txt"
+          debugfs -R "dump /priv-app/Navitel-large.apk $RUNNER_TEMP/extracted.apk" "$RUNNER_TEMP/candidate.img" >/dev/null 2>&1
+          cmp "$apk" "$RUNNER_TEMP/extracted.apk"
+          e2fsck -fn "$RUNNER_TEMP/candidate.img" > "$RUNNER_TEMP/new-fsck.txt" 2>&1
+          python3 tools/check_stock_fsck.py "$RUNNER_TEMP/new-fsck.txt" 0
+          test "$(stat -c %s "$RUNNER_TEMP/original.img")" = "$(stat -c %s "$RUNNER_TEMP/candidate.img")"
+          debugfs -R "rdump / $RUNNER_TEMP/old-tree" "$RUNNER_TEMP/original.img" > "$RUNNER_TEMP/old-dump.log" 2>&1
+          debugfs -R "rdump / $RUNNER_TEMP/new-tree" "$RUNNER_TEMP/candidate.img" > "$RUNNER_TEMP/new-dump.log" 2>&1
+          for log in "$RUNNER_TEMP/old-dump.log" "$RUNNER_TEMP/new-dump.log"; do
+            if grep -iE 'no space left|input/output error|filesystem not open|failed to open|ext2.* error' "$log"; then exit 1; fi
+          done
+          for dir in "$RUNNER_TEMP/old-tree" "$RUNNER_TEMP/new-tree"; do
+            test -s "$dir/build.prop" && test -d "$dir/app" && test -d "$dir/priv-app"
+            find "$dir" -type d -exec chmod u+rwx {} +
+            find "$dir" -type f -exec chmod u+r {} +
+          done
+          {
+            echo '# Navitel 11 image placement test — laboratory only'
+            echo 'No firmware published, no boot, package data, SD, maps, license or runtime tested.'
+            echo 'Base system SHA-256 a660f062716fd42d5a6185faec059f42675b3024304de7b81fac5d705cc88511'
+            python3 tools/check_navitel_candidate_image.py "$RUNNER_TEMP/old-tree" "$RUNNER_TEMP/new-tree"
+            echo '## Filesystem and space before'; cat "$RUNNER_TEMP/orig-fsck.txt"
+            echo '## Filesystem and space after'; cat "$RUNNER_TEMP/new-fsck.txt"
+            echo '## Original Navitel inode'; cat "$RUNNER_TEMP/orig-stat.txt"
+            echo '## New Navitel inode'; cat "$RUNNER_TEMP/new-stat.txt"
+            echo 'Candidate system SHA-256:'; sha256sum "$RUNNER_TEMP/candidate.img" | cut -d' ' -f1
+          } > reports/navitel-image-laboratory.txt
+      - name: Сохранить диагностический лог при ошибке
+        if: failure()
+        run: |
+          set -e
+          test -s "$RUNNER_TEMP/navitel-experiment.log" || exit 0
+          mkdir -p reports
+          cp "$RUNNER_TEMP/navitel-experiment.log" reports/navitel-image-laboratory-error.txt
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/navitel-image-laboratory-error.txt
+          git diff --cached --quiet && exit 0
+          git commit -m 'report: diagnose navitel placement experiment'
+          git pull --rebase origin "${{ github.ref_name }}"
+          git push origin HEAD:"${{ github.ref_name }}"
+      - name: Сохранить отчёт без Actions artifacts
+        run: |
+          set -e
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/navitel-image-laboratory.txt
+          git diff --cached --quiet && exit 0
+          git commit -m 'report: verify navitel placement on image copy'
+          for try in 1 2 3 4 5; do
+            if git pull --rebase origin "${{ github.ref_name }}" && git push origin HEAD:"${{ github.ref_name }}"; then exit 0; fi
+            git rebase --abort || true
+            sleep 5
+          done
+          exit 1
