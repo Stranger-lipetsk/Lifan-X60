@@ -9,7 +9,7 @@ ro.build.version.sdk: 19
 ro.product.cpu.abi: x86
 ro.build.fingerprint: generic_x86/sdk_x86/generic_x86:4.4.2/KK/4174703:eng/test-keys
 ## Package installation
-/home/runner/work/Lifan-X60/Lifan-X60/firmware/apks/com.navitel.apk: 1 file pushed, 0 skipped. 242.3 MB/s (99176587 bytes in 0.390s)
+/home/runner/work/Lifan-X60/Lifan-X60/firmware/apks/com.navitel.apk: 1 file pushed, 0 skipped. 266.8 MB/s (99176587 bytes in 0.355s)
 Performing Push Install
 WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
 	pkg: /data/local/tmp/com.navitel.apk
@@ -19,9 +19,130 @@ command exit status: 124
 WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
 Starting: Intent { cmp=com.navitel/.app.MainActivity }
 ## Navitel activities (dumpsys excerpts)
-    mResumedActivity: ActivityRecord{b0384208 u0 com.android.launcher/com.android.launcher2.Launcher t3}
-  * Recent #1: TaskRecord{b04eaea8 #4 A=com.navitel U=0 sz=0}
+    mResumedActivity: ActivityRecord{b018c868 u0 com.android.launcher/com.android.launcher2.Launcher t3}
+  * Recent #1: TaskRecord{b042d0d8 #4 A=com.navitel U=0 sz=0}
     affinity=com.navitel
     intent={flg=0x10000000 cmp=com.navitel/.app.MainActivity}
     realActivity=com.navitel/.app.MainActivity
-## Selected crash indicators, not an exhaustive log
+## Matching processes
+## Selected startup, failure and runtime lines, not an exhaustive log
+D/AndroidRuntime( 2206): >>>>>> AndroidRuntime START com.android.internal.os.RuntimeInit <<<<<<
+D/AndroidRuntime( 2206): CheckJNI is ON
+D/AndroidRuntime( 2206): Calling main entry com.android.commands.am.Am
+I/ActivityManager( 1540): START u0 {flg=0x10000000 cmp=com.navitel/.app.MainActivity} from pid 2206
+I/ActivityManager( 1540): Start proc com.navitel for activity com.navitel/.app.MainActivity: pid=2217 uid=10052 gids={50052, 1028, 1015, 3003}
+W/ContextImpl( 2217): Failed to ensure directory: /storage/sdcard/Android/data/com.navitel/files
+D/dalvikvm( 2217): Trying to load lib /data/app-lib/com.navitel-1/libnative-lib.so 0xafa83948
+I/dalvikvm( 2217): Could not find method android.view.View.requestApplyInsets, referenced from method com.navitel.app.MainActivity.applySystemUiState
+I/dalvikvm( 2217): Could not find method android.widget.FrameLayout.requestApplyInsets, referenced from method com.navitel.app.SidebarController.inflate
+I/dalvikvm( 2217): Could not find method android.view.WindowInsets.getSystemWindowInsetBottom, referenced from method com.navitel.app.SystemBarTintManager.updateNavBarView
+I/dalvikvm( 2217): Could not find method android.view.WindowInsets.getSystemWindowInsetRight, referenced from method com.navitel.app.SystemBarTintManager.updateNavBarView
+I/dalvikvm( 2217): Could not find method android.view.WindowInsets.getSystemWindowInsetTop, referenced from method com.navitel.app.SystemBarTintManager.updateStatusBarView
+E/dalvikvm( 2217): Could not find class 'com.navitel.app.SystemBarTintManager$$ExternalSyntheticLambda0', referenced from method com.navitel.app.SystemBarTintManager.onCreate
+D/dalvikvm( 2217): DexOpt: unable to opt direct call 0x80b3 at 0x52 in Lcom/navitel/app/SystemBarTintManager;.onCreate
+D/dalvikvm( 2217): Added shared lib /data/app-lib/com.navitel-1/libnative-lib.so 0xafa83948
+W/ContextImpl( 2217): Failed to ensure directory: /storage/sdcard/Android/data/com.navitel/files
+W/ContextImpl( 2217): Failed to ensure directory: /storage/sdcard/Android/data/com.navitel/files
+D/dalvikvm( 2217): DexOpt: unable to opt direct call 0x373e at 0x9e in Landroidx/drawerlayout/widget/DrawerLayout;.<init>
+F/libc    ( 2217): Fatal signal 4 (SIGILL) at 0xa31af0e1 (code=2), thread 2230 (NavitelCore-1)
+E/dalvikvm( 2217): Could not find class 'com.navitel.network.NetworkStateReceiver$NetworkStatusCallback', referenced from method com.navitel.network.NetworkStateReceiver.createCallback
+I/dalvikvm( 2217): Could not find method com.navitel.network.NetworkStateReceiver$NetworkStatusCallback.isConnected, referenced from method com.navitel.network.NetworkStateReceiver.isConnected
+D/dalvikvm( 2217): DexOpt: unable to opt direct call 0x9e29 at 0x08 in Lcom/navitel/network/NetworkStateReceiver;.createCallback
+W/GooglePlayServicesUtil( 2217): com.navitel requires the Google Play Store, but it is missing.
+W/System.err( 2217): 	at com.navitel.googleplaybilling.GooglePlayStore.<init>(GooglePlayStore.java:28)
+W/System.err( 2217): 	at com.navitel.Application.createStore(Application.java:60)
+W/System.err( 2217): 	at com.navitel.app.NavitelApplication.getStore(NavitelApplication.java:486)
+W/System.err( 2217): 	at com.navitel.app.NavitelApplication.getBilling(NavitelApplication.java:493)
+W/System.err( 2217): 	at com.navitel.app.MainActivity.onCreate(MainActivity.java:140)
+D/dalvikvm( 2217): DexOpt: unable to opt direct call 0x0183 at 0xd9 in Lcom/google/android/gms/common/GoogleApiAvailability;.zaa
+W/GooglePlayServicesUtil( 2217): com.navitel requires the Google Play Store, but it is missing.
+I/dalvikvm( 2217): Could not find method android.app.NotificationManager.getNotificationChannel, referenced from method com.navitel.notifications.StatusService.createNotificationChannels
+I/dalvikvm( 2217): Could not find method android.content.Context.startForegroundService, referenced from method com.navitel.notifications.StatusService.startService
+I/dalvikvm( 2217): Could not find method android.app.Service.startForeground, referenced from method com.navitel.notifications.StatusService.onStartCommand
+I/dalvikvm( 2217): Could not find method android.app.Service.stopForeground, referenced from method com.navitel.notifications.StatusService.onStartCommand
+D/dalvikvm( 2217): DexOpt: unable to opt direct call 0x0183 at 0x19 in Lcom/navitel/notifications/StatusService;.createNotificationChannels
+I/DEBUG   ( 1124): pid: 2217, tid: 2230, name: NavitelCore-1  >>> com.navitel <<<
+I/DEBUG   ( 1124):     #00  pc 009040e1  /data/app-lib/com.navitel-1/libnative-lib.so
+I/DEBUG   ( 1124):     a28ab000-a45be000 r-x /data/app-lib/com.navitel-1/libnative-lib.so
+I/DEBUG   ( 1124):     a45be000-a4621000 r-- /data/app-lib/com.navitel-1/libnative-lib.so
+I/ActivityManager( 1540): Process com.navitel (pid 2217) has died.
+I/ActivityManager( 1540): Start proc com.navitel for activity com.navitel/.app.MainActivity: pid=2248 uid=10052 gids={50052, 1028, 1015, 3003}
+W/ContextImpl( 2248): Failed to ensure directory: /storage/sdcard/Android/data/com.navitel/files
+D/dalvikvm( 2248): Trying to load lib /data/app-lib/com.navitel-1/libnative-lib.so 0xafa84600
+I/dalvikvm( 2248): Could not find method android.view.View.requestApplyInsets, referenced from method com.navitel.app.MainActivity.applySystemUiState
+I/dalvikvm( 2248): Could not find method android.widget.FrameLayout.requestApplyInsets, referenced from method com.navitel.app.SidebarController.inflate
+I/dalvikvm( 2248): Could not find method android.view.WindowInsets.getSystemWindowInsetBottom, referenced from method com.navitel.app.SystemBarTintManager.updateNavBarView
+I/dalvikvm( 2248): Could not find method android.view.WindowInsets.getSystemWindowInsetRight, referenced from method com.navitel.app.SystemBarTintManager.updateNavBarView
+I/dalvikvm( 2248): Could not find method android.view.WindowInsets.getSystemWindowInsetTop, referenced from method com.navitel.app.SystemBarTintManager.updateStatusBarView
+E/dalvikvm( 2248): Could not find class 'com.navitel.app.SystemBarTintManager$$ExternalSyntheticLambda0', referenced from method com.navitel.app.SystemBarTintManager.onCreate
+D/dalvikvm( 2248): DexOpt: unable to opt direct call 0x80b3 at 0x52 in Lcom/navitel/app/SystemBarTintManager;.onCreate
+D/dalvikvm( 2248): Added shared lib /data/app-lib/com.navitel-1/libnative-lib.so 0xafa84600
+W/ContextImpl( 2248): Failed to ensure directory: /storage/sdcard/Android/data/com.navitel/files
+D/dalvikvm( 2248): DexOpt: unable to opt direct call 0x373e at 0x9e in Landroidx/drawerlayout/widget/DrawerLayout;.<init>
+W/ContextImpl( 2248): Failed to ensure directory: /storage/sdcard/Android/data/com.navitel/files
+F/libc    ( 2248): Fatal signal 4 (SIGILL) at 0xa33b70e1 (code=2), thread 2262 (NavitelCore-1)
+E/dalvikvm( 2248): Could not find class 'com.navitel.network.NetworkStateReceiver$NetworkStatusCallback', referenced from method com.navitel.network.NetworkStateReceiver.createCallback
+I/dalvikvm( 2248): Could not find method com.navitel.network.NetworkStateReceiver$NetworkStatusCallback.isConnected, referenced from method com.navitel.network.NetworkStateReceiver.isConnected
+D/dalvikvm( 2248): DexOpt: unable to opt direct call 0x9e29 at 0x08 in Lcom/navitel/network/NetworkStateReceiver;.createCallback
+W/GooglePlayServicesUtil( 2248): com.navitel requires the Google Play Store, but it is missing.
+W/System.err( 2248): 	at com.navitel.googleplaybilling.GooglePlayStore.<init>(GooglePlayStore.java:28)
+W/System.err( 2248): 	at com.navitel.Application.createStore(Application.java:60)
+W/System.err( 2248): 	at com.navitel.app.NavitelApplication.getStore(NavitelApplication.java:486)
+W/System.err( 2248): 	at com.navitel.app.NavitelApplication.getBilling(NavitelApplication.java:493)
+W/System.err( 2248): 	at com.navitel.app.MainActivity.onCreate(MainActivity.java:140)
+D/dalvikvm( 2248): DexOpt: unable to opt direct call 0x0183 at 0xd9 in Lcom/google/android/gms/common/GoogleApiAvailability;.zaa
+W/GooglePlayServicesUtil( 2248): com.navitel requires the Google Play Store, but it is missing.
+I/dalvikvm( 2248): Could not find method android.app.NotificationManager.getNotificationChannel, referenced from method com.navitel.notifications.StatusService.createNotificationChannels
+I/dalvikvm( 2248): Could not find method android.content.Context.startForegroundService, referenced from method com.navitel.notifications.StatusService.startService
+I/dalvikvm( 2248): Could not find method android.app.Service.startForeground, referenced from method com.navitel.notifications.StatusService.onStartCommand
+I/dalvikvm( 2248): Could not find method android.app.Service.stopForeground, referenced from method com.navitel.notifications.StatusService.onStartCommand
+D/dalvikvm( 2248): DexOpt: unable to opt direct call 0x0183 at 0x19 in Lcom/navitel/notifications/StatusService;.createNotificationChannels
+I/DEBUG   ( 1124): pid: 2248, tid: 2262, name: NavitelCore-1  >>> com.navitel <<<
+I/DEBUG   ( 1124):     #00  pc 009040e1  /data/app-lib/com.navitel-1/libnative-lib.so
+I/DEBUG   ( 1124):     a2ab3000-a47c6000 r-x /data/app-lib/com.navitel-1/libnative-lib.so
+I/DEBUG   ( 1124):     a47c6000-a4829000 r-- /data/app-lib/com.navitel-1/libnative-lib.so
+I/ActivityManager( 1540): Process com.navitel (pid 2248) has died.
+I/ActivityManager( 1540): Start proc com.navitel for activity com.navitel/.app.MainActivity: pid=2279 uid=10052 gids={50052, 1028, 1015, 3003}
+W/ContextImpl( 2279): Failed to ensure directory: /storage/sdcard/Android/data/com.navitel/files
+D/dalvikvm( 2279): Trying to load lib /data/app-lib/com.navitel-1/libnative-lib.so 0xafa853a0
+I/dalvikvm( 2279): Could not find method android.view.View.requestApplyInsets, referenced from method com.navitel.app.MainActivity.applySystemUiState
+I/dalvikvm( 2279): Could not find method android.widget.FrameLayout.requestApplyInsets, referenced from method com.navitel.app.SidebarController.inflate
+I/dalvikvm( 2279): Could not find method android.view.WindowInsets.getSystemWindowInsetBottom, referenced from method com.navitel.app.SystemBarTintManager.updateNavBarView
+I/dalvikvm( 2279): Could not find method android.view.WindowInsets.getSystemWindowInsetRight, referenced from method com.navitel.app.SystemBarTintManager.updateNavBarView
+I/dalvikvm( 2279): Could not find method android.view.WindowInsets.getSystemWindowInsetTop, referenced from method com.navitel.app.SystemBarTintManager.updateStatusBarView
+E/dalvikvm( 2279): Could not find class 'com.navitel.app.SystemBarTintManager$$ExternalSyntheticLambda0', referenced from method com.navitel.app.SystemBarTintManager.onCreate
+D/dalvikvm( 2279): DexOpt: unable to opt direct call 0x80b3 at 0x52 in Lcom/navitel/app/SystemBarTintManager;.onCreate
+D/dalvikvm( 2279): Added shared lib /data/app-lib/com.navitel-1/libnative-lib.so 0xafa853a0
+W/ContextImpl( 2279): Failed to ensure directory: /storage/sdcard/Android/data/com.navitel/files
+W/ContextImpl( 2279): Failed to ensure directory: /storage/sdcard/Android/data/com.navitel/files
+F/libc    ( 2279): Fatal signal 4 (SIGILL) at 0xa33b70e1 (code=2), thread 2293 (NavitelCore-1)
+D/dalvikvm( 2279): DexOpt: unable to opt direct call 0x373e at 0x9e in Landroidx/drawerlayout/widget/DrawerLayout;.<init>
+E/dalvikvm( 2279): Could not find class 'com.navitel.network.NetworkStateReceiver$NetworkStatusCallback', referenced from method com.navitel.network.NetworkStateReceiver.createCallback
+I/dalvikvm( 2279): Could not find method com.navitel.network.NetworkStateReceiver$NetworkStatusCallback.isConnected, referenced from method com.navitel.network.NetworkStateReceiver.isConnected
+D/dalvikvm( 2279): DexOpt: unable to opt direct call 0x9e29 at 0x08 in Lcom/navitel/network/NetworkStateReceiver;.createCallback
+W/GooglePlayServicesUtil( 2279): com.navitel requires the Google Play Store, but it is missing.
+W/System.err( 2279): 	at com.navitel.googleplaybilling.GooglePlayStore.<init>(GooglePlayStore.java:28)
+W/System.err( 2279): 	at com.navitel.Application.createStore(Application.java:60)
+W/System.err( 2279): 	at com.navitel.app.NavitelApplication.getStore(NavitelApplication.java:486)
+W/System.err( 2279): 	at com.navitel.app.NavitelApplication.getBilling(NavitelApplication.java:493)
+W/System.err( 2279): 	at com.navitel.app.MainActivity.onCreate(MainActivity.java:140)
+D/dalvikvm( 2279): DexOpt: unable to opt direct call 0x0183 at 0xd9 in Lcom/google/android/gms/common/GoogleApiAvailability;.zaa
+W/GooglePlayServicesUtil( 2279): com.navitel requires the Google Play Store, but it is missing.
+I/dalvikvm( 2279): Could not find method android.app.NotificationManager.getNotificationChannel, referenced from method com.navitel.notifications.StatusService.createNotificationChannels
+I/dalvikvm( 2279): Could not find method android.content.Context.startForegroundService, referenced from method com.navitel.notifications.StatusService.startService
+I/dalvikvm( 2279): Could not find method android.app.Service.startForeground, referenced from method com.navitel.notifications.StatusService.onStartCommand
+I/dalvikvm( 2279): Could not find method android.app.Service.stopForeground, referenced from method com.navitel.notifications.StatusService.onStartCommand
+D/dalvikvm( 2279): DexOpt: unable to opt direct call 0x0183 at 0x19 in Lcom/navitel/notifications/StatusService;.createNotificationChannels
+I/dalvikvm( 2279): Could not find method android.view.View.getRootWindowInsets, referenced from method com.navitel.controllers.ViewController.applyInsets
+I/DEBUG   ( 1124): pid: 2279, tid: 2293, name: NavitelCore-1  >>> com.navitel <<<
+I/DEBUG   ( 1124):     #00  pc 009040e1  /data/app-lib/com.navitel-1/libnative-lib.so
+I/DEBUG   ( 1124):     a2ab3000-a47c6000 r-x /data/app-lib/com.navitel-1/libnative-lib.so
+I/DEBUG   ( 1124):     a47c6000-a4829000 r-- /data/app-lib/com.navitel-1/libnative-lib.so
+W/InputDispatcher( 1540): channel 'afc94190 com.navitel/com.navitel.app.MainActivity (server)' ~ Consumer closed input channel or an error occurred.  events=0x9
+E/InputDispatcher( 1540): channel 'afc94190 com.navitel/com.navitel.app.MainActivity (server)' ~ Channel is unrecoverably broken and will be disposed!
+I/ActivityManager( 1540): Process com.navitel (pid 2279) has died.
+W/ActivityManager( 1540): Force removing ActivityRecord{afc92e48 u0 com.navitel/.app.MainActivity t4}: app died, no saved state
+W/InputDispatcher( 1540): Attempted to unregister already unregistered input channel 'afc94190 com.navitel/com.navitel.app.MainActivity (server)'
+I/WindowState( 1540): WIN DEATH: Window{afc94190 u0 com.navitel/com.navitel.app.MainActivity}
+W/ActivityManager( 1540): Process com.navitel has crashed too many times: killing!
+I/ActivityManager( 1540): Exiting empty application process com.navitel (null)
