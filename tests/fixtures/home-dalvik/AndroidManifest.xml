@@ -1,5 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="ru.lifanx60.homelab">
   <uses-sdk android:minSdkVersion="19" android:targetSdkVersion="19" />
+  <!-- Emulator-only: allows the stock startActivityAsUser(UserHandle.CURRENT) path. -->
+  <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL" />
   <application android:label="Disposable Home Dalvik test">
     <activity android:name=".MainActivity" android:exported="true" />
   </application>

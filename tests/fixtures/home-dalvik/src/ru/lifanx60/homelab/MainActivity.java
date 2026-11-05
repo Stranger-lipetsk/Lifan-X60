@@ -113,5 +113,13 @@ public final class MainActivity extends Activity {
         }
         for (String pkg : PACKAGES) require(displayed.contains(pkg) == patched, "unexpected UI membership: " + pkg);
         Log.i(TAG, "UI entries " + displayed);
+        String target = getIntent().getStringExtra("open");
+        if (target != null) {
+            require(patched, "launch test requires patched Home");
+            require(target.equals(PACKAGES[0]) || target.equals(PACKAGES[1]), "unexpected target");
+            boolean ok = (Boolean) appClass.getMethod("gotoEleadApplication", String.class).invoke(app, target);
+            require(ok, "gotoEleadApplication returned false for " + target);
+            Log.i(TAG, "LAUNCHED " + target + " PASS");
+        }
     }
 }

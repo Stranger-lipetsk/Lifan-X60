@@ -43,6 +43,13 @@ python3 tools/compare_apk_payload.py "$work/assets/home-original.apk" "$work/ass
 echo 'Phase 2: build isolated harness and target panel (temporary signing key)'
 keytool -genkeypair -keystore "$work/temp.keystore" -storepass test-only -keypass test-only \
   -alias dalvik-test -keyalg RSA -keysize 2048 -validity 1000 -dname 'CN=Disposable Home Dalvik Test' >/dev/null 2>&1
+# Public AOSP platform test key ONLY for the throwaway emulator harness, not firmware.
+ref=54004d146e0532a5d2ded2bbca55d496e081c08b
+for ext in x509.pem pk8; do
+  gh api "repos/aosp-mirror/platform_build/contents/target/product/security/platform.$ext?ref=$ref" --jq .content | base64 -d > "$work/platform.$ext"
+done
+cert=$(openssl x509 -in "$work/platform.x509.pem" -outform DER | sha256sum | cut -d' ' -f1)
+test "$cert" = c8a2e9bccf597c2fb6dc66bee293fc13f2fc47ec77bc6b2b0d52c11f51192ab8
 build_apk() {
   local name=$1 src=$2 java=$3 use_assets=$4
   mkdir -p "$work/$name/classes" "$work/$name/dex"
@@ -56,8 +63,13 @@ build_apk() {
   cp "$work/$name/dex/classes.dex" "$work/$name/classes.dex"
   (cd "$work/$name" && zip -q -u unsigned.apk classes.dex)
   "$bt/zipalign" -f 4 "$work/$name/unsigned.apk" "$work/$name/aligned.apk"
-  "$bt/apksigner" sign --ks "$work/temp.keystore" --ks-pass pass:test-only --key-pass pass:test-only \
-    --min-sdk-version 19 --v1-signing-enabled true --out "$work/$name.apk" "$work/$name/aligned.apk"
+  if [ "$name" = harness ]; then
+    "$bt/apksigner" sign --key "$work/platform.pk8" --cert "$work/platform.x509.pem" \
+      --min-sdk-version 19 --v1-signing-enabled true --out "$work/$name.apk" "$work/$name/aligned.apk"
+  else
+    "$bt/apksigner" sign --ks "$work/temp.keystore" --ks-pass pass:test-only --key-pass pass:test-only \
+      --min-sdk-version 19 --v1-signing-enabled true --out "$work/$name.apk" "$work/$name/aligned.apk"
+  fi
   "$bt/apksigner" verify --min-sdk-version 19 --max-sdk-version 19 "$work/$name.apk"
 }
 build_apk panel launcher-panel-integrated src/ru/lifanx60/panel/MainActivity.java no
@@ -88,10 +100,18 @@ for i in $(seq 1 100); do
   sleep 3
 done
 [ "$booted" = yes ] || { echo 'Emulator not booted'; exit 1; }
+"$adb" root >/dev/null || true
+timeout 90 "$adb" wait-for-device
 "$adb" install "$work/panel.apk" | tee "$work/panel-install.txt"
 "$adb" install "$work/harness.apk" | tee "$work/harness-install.txt"
 "$adb" install "$work/app-fdroid-release.apk" | tee "$work/amaze-install.txt"
 grep -q Success "$work/panel-install.txt"; grep -q Success "$work/harness-install.txt"; grep -q Success "$work/amaze-install.txt"
+"$adb" shell dumpsys package ru.lifanx60.homelab | tr -d '\r' > "$work/harness-package.txt"
+grep -F 'android.permission.INTERACT_ACROSS_USERS_FULL' "$work/harness-package.txt" >/dev/null
+uid=$("$adb" shell dumpsys package com.amaze.filemanager | tr -d '\r' | sed -n 's/.*userId=\([0-9][0-9]*\).*/\1/p' | head -1)
+case "$uid" in ''|*[!0-9]*) echo 'Amaze UID missing'; exit 1;; esac
+"$adb" shell iptables -I OUTPUT 1 -m owner --uid-owner "$uid" -j REJECT
+"$adb" shell iptables -C OUTPUT -m owner --uid-owner "$uid" -j REJECT
 "$adb" logcat -c
 "$adb" logcat -v brief > "$work/logcat.txt" 2>&1 &
 logpid=$!
@@ -104,6 +124,18 @@ for case in original patched; do
   done
   grep -F "RESULT ${case^^} PASS" "$work/logcat.txt" || { echo "Harness case $case did not pass"; exit 1; }
 done
+for spec in 'ru.lifanx60.panel:ru.lifanx60.panel/.MainActivity' 'com.amaze.filemanager:com.amaze.filemanager/.ui.activities.MainActivity'; do
+  pkg=${spec%%:*}; activity=${spec#*:}
+  timeout 30 "$adb" shell am start -n ru.lifanx60.homelab/.MainActivity --ez patched true --es open "$pkg"
+  for i in $(seq 1 60); do
+    if grep -Fq "LAUNCHED $pkg PASS" "$work/logcat.txt"; then break; fi
+    sleep 1
+  done
+  grep -F "LAUNCHED $pkg PASS" "$work/logcat.txt" || { echo "Could not launch $pkg through stock method"; exit 1; }
+  sleep 4
+  "$adb" shell dumpsys activity activities | tr -d '\r' | grep 'mResumedActivity' | tee "$work/resumed-$pkg.txt"
+  grep -F "$activity" "$work/resumed-$pkg.txt" >/dev/null || { echo "Wrong resumed activity for $pkg"; exit 1; }
+done
 kill "$logpid" 2>/dev/null || true
 wait "$logpid" 2>/dev/null || true
 {
@@ -111,7 +143,9 @@ wait "$logpid" 2>/dev/null || true
   echo 'NOT a firmware, not a head-unit test. Home was dynamically loaded, not installed or started normally.'
   echo 'Real Home.onCreate, HomeService, hardware, audio, boot, preferences and Hibernate were not run.'
   echo 'Original and patched Home resources and methods were loaded in separate classloaders, using stock framework jars; generic Android services are not vendor services.'
-  echo 'Amaze v3.5.3 and candidate panel were installed only for PackageManager resolution, not launched.'
+  echo 'The harness is signed with the public AOSP emulator platform key and requests INTERACT_ACROSS_USERS_FULL solely to exercise startActivityAsUser; this key is NOT the device platform key.'
+  echo 'Amaze v3.5.3 was network-blocked; the panel and Amaze were launched by the original gotoEleadApplication method on the patched in-memory object.'
   echo '## APK payload comparison'; cat "$work/compare.txt"
   echo '## Harness results'; grep 'HomeDalvikLab' "$work/logcat.txt" | tr -d '\r'
+  echo '## Resumed activities after direct method call'; cat "$work"/resumed-*.txt
 } > reports/home-dalvik-laboratory.txt
