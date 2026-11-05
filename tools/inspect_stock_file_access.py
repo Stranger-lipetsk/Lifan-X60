@@ -46,6 +46,7 @@ def inspect(root):
             'Settings': ('SecuritySettings.smali', 'CredentialStorage.smali',
                          'StorageVolumePreferenceCategory.smali', 'AdvancedWifiSettings.smali'),
             'Downloads': ('DownloadList.smali', 'OpenHelper.smali'),
+            'PackageInstaller': ('PackageInstallerActivity.smali',),
         }.get(app.name, ())
         for path in files:
             if path.name not in wanted and app.name not in ('Camera2', 'Music'):
@@ -55,7 +56,7 @@ def inspect(root):
                 continue
             for match in re.finditer(r'(?ms)^\.method [^\n]+\n.*?^\.end method', content):
                 method = match.group()
-                if PATTERN.search(method) or (app.name == 'DocumentsUI' and re.search(r'(onDocumentPicked|onDocumentsPicked|onFinished|finishPicking|finishWithResult)', method[:180], re.I)):
+                if PATTERN.search(method) or (app.name == 'DocumentsUI' and re.search(r'(onDocumentPicked|onDocumentsPicked|onFinished|finishPicking|finishWithResult)', method[:180], re.I)) or (app.name == 'PackageInstaller' and re.search(r'\bonCreate\(', method[:180])):
                     print('\n### Full method', path.relative_to(app))
                     lines = method.splitlines()
                     print('\n'.join(lines[:300]))
