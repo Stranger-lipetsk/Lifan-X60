@@ -1,0 +1,52 @@
+# File manager test firmware build report
+TEST ONLY: no device boot or APK install test has been performed.
+Previous identical base system hung before Hibernate once; later booted after a Home selection. The new image is untested.
+Base system SHA-256: 79df29ec1ea97fd2e1da605c9651c6e5cce9d05d79518ff8e3e7d1dd16553dba
+Amaze APK SHA-256: 2a9bc50c6672b1cb6efdfbd9bd9149bf280274e386305663163cc365abd393f3
+Base entries: 1343; result entries: 1344
+Only changed regular file/symlink: app/AmazeFileManager.apk, 8296416 bytes, SHA-256 2a9bc50c6672b1cb6efdfbd9bd9149bf280274e386305663163cc365abd393f3
+File contents and symlink targets checked; other inode/ext4 metadata not compared.
+## Base filesystem check
+e2fsck 1.47.0 (5-Feb-2023)
+Pass 1: Checking inodes, blocks, and sizes
+Pass 2: Checking directory structure
+Pass 3: Checking directory connectivity
+Pass 4: Checking reference counts
+Pass 5: Checking group summary information
+/home/runner/work/_temp/user/system.img: 1400/23040 files (0.0% non-contiguous), 88471/92160 blocks
+## Result filesystem check
+e2fsck 1.47.0 (5-Feb-2023)
+Pass 1: Checking inodes, blocks, and sizes
+Pass 2: Checking directory structure
+Pass 3: Checking directory connectivity
+Pass 4: Checking reference counts
+Pass 5: Checking group summary information
+/home/runner/work/_temp/full/system.img: 1401/23040 files (0.0% non-contiguous), 90496/92160 blocks
+## Added APK inode
+debugfs 1.47.0 (5-Feb-2023)
+Inode: 1401   Type: regular    Mode:  0644   Flags: 0x80000
+Generation: 0    Version: 0x00000000:00000000
+User:     0   Group:     0   Project:     0   Size: 8296416
+File ACL: 0
+Links: 1   Blockcount: 16200
+Fragment:  Address: 0    Number: 0    Size: 0
+ ctime: 0x6aec49fd:00000000 -- Thu Nov  5 09:18:53 2026
+ atime: 0x6aec49fd:00000000 -- Thu Nov  5 09:18:53 2026
+ mtime: 0x6aec49fd:00000000 -- Thu Nov  5 09:18:53 2026
+crtime: 0x6aec49fd:00000000 -- Thu Nov  5 09:18:53 2026
+Size of extra inode fields: 32
+Extended attributes:
+  security.selinux (26) = "u:object_r:system_file:s0\000"
+EXTENTS:
+(0-1429):29081-30510, (1431-2025):30511-31105
+## Result system image
+a660f062716fd42d5a6185faec059f42675b3024304de7b81fac5d705cc88511  system.img
+system.img bytes: 377487360
+ZIP member matches source: MCU_FW.hex sha256=bc341c6de95c18babcaa8664c585236ea02828c7de4fba30c97380108bdcb495
+ZIP member matches source: backup/config.ini sha256=0d2481ced64fe652efe0a360df357bc939b9727dd68aa65c6b0121e4ae608fad
+ZIP member matches source: boot.img sha256=060d291a523bbe0d40c86537f070ed0feb90e04e0db0efef2a3e4594e9223b4b
+ZIP member matches source: sd_boot.img sha256=734f6b6442108916df89303ec5f52ceaa0ebb927d3b984a1e8a85ef2a6c12597
+ZIP member matches source: system.img sha256=a660f062716fd42d5a6185faec059f42675b3024304de7b81fac5d705cc88511
+ZIP member matches source: u-boot.bin sha256=7d1cb6b366dda8ef0ea51c3350689d365032ed47e172c6e23dac7a63ae33f002
+Archive SHA-256: 4be81211994221e80e401ce712ce484b5320156902fff3707737b73e3945d17f
+Archive bytes: 278850943
