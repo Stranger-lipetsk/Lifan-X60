@@ -325,3 +325,146 @@ kernel=3588212 ramdisk=332703 page=2048
 
 Matched lines: 114
 Configuration does not prove what ran or why installed apps disappeared.
+
+## Read-only stock /system/bin entries related to sync or hibernation
+    352  100755 (1)      0   2000      24 28-Mar-2021 11:29 fs_sync.sh
+    364  100755 (1)      0   2000    2662 28-Mar-2021 11:29 hib_image_v2.sh
+    395  100755 (1)      0   2000    5352 28-Mar-2021 11:29 mcusync
+    432  100755 (1)      0   2000     188 28-Mar-2021 11:29 requestsync
+    552  120755 (7)      0   2000       7 28-Mar-2021 11:29 sleep
+    562  120755 (7)      0   2000       7 28-Mar-2021 11:29 sync
+
+## /system/bin/fs_sync.sh (read-only extraction, not executed)
+32180e81f80c14e079b692d992e4630bdedebb493f916c185c77ecdde4efcaaf  fs_sync.sh
+#!/system/bin/sh
+
+sync
+
+
+## /system/bin/hib_image_v2.sh (read-only extraction, not executed)
+86250723b12e39e289cf560d7a96be8a6f6e25b83728a7dd0ac542c0c4f94c27  hib_image_v2.sh
+#!/system/bin/sh
+
+HIBERAGE_IMAGE_SIZE=120000000
+
+KILL_PROCESS_LIST="avin
+dlna
+eznavircs
+hdmi
+internetradio
+ezservice
+ezlife
+dtv
+ezdealer
+eztts
+"
+
+#
+# umount target partition
+#
+function umount_partition
+{
+    chmod 666 /mnt/para_fw/config.ini
+    ## umount /mnt/para_fw
+    # delete backup swap image
+    rm -rf /mnt/para_fw/backup_image/swap.img
+    rm -rf /mnt/para_fw/backup_image/data.tar
+    sync
+    # It is not being used?
+    U_PID=$(fuser -m /mnt/para_fw | awk '{print $1}')
+    if [ "$U_PID" != "" ] ; then
+        echo "ERROR: the PID" $U_PID "using the /mnt/para_fw,please check!!"
+        exit
+    fi
+    # umount
+    umount /mnt/para_fw
+    
+    # umount other.. TODO .. 
+
+}
+
+#
+# backup /data and un-tar to emmc's mmcblk0p5
+#
+function move_android_data
+{
+    /system/bin/mke2fs -t ext4 /dev/block/mmcblk0p5
+    mkdir /tmpdata
+    mount -t ext4 /dev/block/mmcblk0p5 /tmpdata/
+    rm -rf /data/data/com.android.providers.media/databases/*
+    cd /data
+    tar -cf /tmpdata/data.tar ./.
+    cd /tmpdata
+    tar -xvf /tmpdata/data.tar
+    cd /
+    sync
+    umount /tmpdata/
+}
+
+#
+#   Kill low priority porcess and service before hiberate
+#
+function stop_service
+{
+    setprop sys.usb.config none
+    killall android.process.media
+	
+    for PROCESS in $KILL_PROCESS_LIST
+    do
+        PROC=$(ps  | grep $PROCESS | grep -v grep | awk '{print $1}')
+        if [ "$PROC" != "" ] ; then
+        echo $PROC
+            echo "Kill PID:" $PROC		
+            kill $PROC
+        fi
+     done
+
+    /system/bin/adjust_proc_priority.sh&
+    
+    /system/bin/rmmod gt9xx
+    
+}
+
+#
+# resume system
+#
+function leave_hibernation
+{
+    umount -l /data
+    mount -t ext4 -o noauto_da_alloc,commit=100,nodelalloc /dev/block/mmcblk0p5 /data/
+    mount -t ext4 -o noauto_da_alloc,commit=100,nodelalloc /dev/block/mmcblk0p6 /mnt/para_fw
+    mount -t vfat -o fmask=0000,dmask=0000 /dev/block/mmcblk0p7 /mnt/media_rw/emmc_data
+    /system/bin/chown system:system /mnt/para_fw
+    /system/bin/chmod 776 /mnt/para_fw
+    setprop rw.hb_boot_finished 1
+    echo 0 > /proc/sys/vm/drop_caches
+}
+
+#
+#  Enter hibernation
+#
+function enter_hibernation
+{
+    ##echo 7 > /proc/sys/kernel/printk
+    ##sleep 1
+    ##rm -rf /data/*
+    sync
+    mount -o remount,ro /system
+    sync
+    echo "***Start gengerate the hibernation image***"
+    echo 1 > /proc/sys/vm/drop_caches
+    echo 2 > /proc/sys/vm/drop_caches
+    busybox mkswap /dev/block/mmcblk0p2
+    busybox swapon /dev/block/mmcblk0p2
+    echo $HIBERAGE_IMAGE_SIZE > /sys/power/image_size
+    echo disk > /sys/power/state
+}
+
+# main entry point
+umount_partition
+move_android_data
+stop_service
+enter_hibernation
+leave_hibernation
+
+exit
