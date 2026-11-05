@@ -1,0 +1,69 @@
+# Disposable Android 4.4.2 x86 panel and Launcher2 experiment
+Not a head unit test, not firmware, no APK published.
+The real stock-derived Launcher2 has exactly its HOME category removed and is re-signed solely for this AOSP emulator with its matching public AOSP key. This APK is not the Freescale-signed device candidate.
+Car Home is a minimal test double, not the actual E-lead Home. Amaze is the checked v3.5.3 APK and was network-blocked.
+User data, SD maps, Hibernate, radio, MCU and display hardware were not tested.
+Emulator certificate: 28bbfe4a7b97e74681dc55c2fbb6ccb8d6c74963733f6af6ae74d8c3a6e879fd (shared); source launcher SHA-256 82787a6007589a169242f2c1391252342a9824748a8b469d1d522acab83458e6
+## Non-signature payload comparison
+Non-signature entries compared: 291
+Only changed entry: AndroidManifest.xml
+Original changed entry SHA-256: 7c19a39f7186d552b4e27c921ef1aaa89236c6135e7e3acba1b606cb0eec9b9b
+Candidate changed entry SHA-256: d3e8cad240a6920c8dfde008012c9d7fd6efa30965ba1a8b3589e99e48f96595
+Unchanged classes.dex SHA-256: c4f9454699a42e45c82903cae626a59d5138502872ad2accbf1b7bc99bc02d37
+## APK signing (emulator only)
+Verifies
+Verified using v1 scheme (JAR signing): true
+Verified using v2 scheme (APK Signature Scheme v2): false
+Verified using v3 scheme (APK Signature Scheme v3): false
+Verified using v3.1 scheme (APK Signature Scheme v3.1): false
+Verified using v3.2 scheme (APK Signature Scheme v3.2): false
+Verified using v4 scheme (APK Signature Scheme v4): false
+Verified for SourceStamp: false
+Number of signers: 1
+V1 Signer: certificate DN: EMAILADDRESS=android@android.com, CN=Android, OU=Android, O=Android, L=Mountain View, ST=California, C=US
+V1 Signer: certificate SHA-256 digest: 28bbfe4a7b97e74681dc55c2fbb6ccb8d6c74963733f6af6ae74d8c3a6e879fd
+V1 Signer: certificate SHA-1 digest: 5b368cff2da2686996bc95eac190eaa4f5630fe5
+V1 Signer: certificate MD5 digest: 5dc8201f7db1ba4b9c8fc44146c5bcc2
+V1 Signer: key algorithm: RSA
+V1 Signer: key size (bits): 2048
+V1 Signer: public key SHA-256 digest: 2b59625f19b7d0d143a69fb7a02d42b151480ddfe60b0572070ac24afca212a0
+V1 Signer: public key SHA-1 digest: 7950e559460894d1a4d2d340aec307e09e694b24
+V1 Signer: public key MD5 digest: 71cc2aec99a25cb5ace19ff344aa3a46
+## Install results
+/home/runner/work/_temp/panel-lab/fakehome.apk: 1 file pushed, 0 skipped. 27.7 MB/s (8559 bytes in 0.000s)
+Performing Push Install
+WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
+	pkg: /data/local/tmp/fakehome.apk
+Success
+/home/runner/work/_temp/panel-lab/launcher-emulator-only.apk: 1 file pushed, 0 skipped. 324.1 MB/s (12280896 bytes in 0.036s)
+Performing Push Install
+WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
+	pkg: /data/local/tmp/launcher-emulator-only.apk
+Success
+/home/runner/work/_temp/panel-lab/panel.apk: 1 file pushed, 0 skipped. 41.4 MB/s (12786 bytes in 0.000s)
+Performing Push Install
+WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
+	pkg: /data/local/tmp/panel.apk
+Success
+/home/runner/work/_temp/panel-lab/app-fdroid-release.apk: 1 file pushed, 0 skipped. 90.8 MB/s (8296416 bytes in 0.087s)
+Performing Push Install
+WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
+	pkg: /data/local/tmp/app-fdroid-release.apk
+Success
+## Implicit HOME result
+WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
+Starting: Intent { act=android.intent.action.MAIN cat=[android.intent.category.HOME] }
+Warning: Activity not started, its current task has been brought to the front
+Status: ok
+Activity: tw.com.elead.el830.home/.Home
+ThisTime: 0
+TotalTime: 0
+Complete
+## Activities after UI button taps
+    mResumedActivity: ActivityRecord{b0224aa0 u0 tw.com.elead.el830.home/.Home t5}
+  mFocusedActivity: ActivityRecord{afd4d488 u0 ru.lifanx60.panel/.MainActivity t6}
+    mResumedActivity: ActivityRecord{afd4fee0 u0 com.android.launcher/com.android.launcher2.Launcher t7}
+  mFocusedActivity: ActivityRecord{afd4fee0 u0 com.android.launcher/com.android.launcher2.Launcher t7}
+    mResumedActivity: ActivityRecord{afe7ad38 u0 com.amaze.filemanager/.ui.activities.MainActivity t8}
+  mFocusedActivity: ActivityRecord{afe7ad38 u0 com.amaze.filemanager/.ui.activities.MainActivity t8}
+## Selected errors (may include unrelated emulator noise)
