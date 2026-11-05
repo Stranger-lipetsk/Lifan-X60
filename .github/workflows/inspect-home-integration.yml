@@ -47,8 +47,12 @@ jobs:
         run: |
           set -euo pipefail
           img="$RUNNER_TEMP/stock/image/system.img"
+          sdk=${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}
+          bt=$(find "$sdk/build-tools" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -1)
           {
             echo 'Source: stock Home sha256 75ee685d5399e4c394146cac593ec2ed4bfbd5f6cc9151f9ae479992c84011a6'
+            echo '## Manifest (aapt xmltree)'
+            "$bt/aapt" dump xmltree "$RUNNER_TEMP/Home.apk" AndroidManifest.xml
             python3 tools/inspect_home_integration.py "$RUNNER_TEMP/decoded"
           } > reports/stock-home-integration.txt
           {
@@ -57,8 +61,8 @@ jobs:
             debugfs -R 'ls -l /framework' "$img" 2>/dev/null
             echo '## services.jar contents'
             unzip -l "$RUNNER_TEMP/services.jar"
-            echo '## Home signature verification'
-            jarsigner -verify -verbose "$RUNNER_TEMP/Home.apk" | tail -25
+            echo '## Home signature verification with Android API 19 rules'
+            "$bt/apksigner" verify --min-sdk-version 19 --max-sdk-version 19 --verbose --print-certs "$RUNNER_TEMP/Home.apk" 2>&1
             echo '## Public Android 4.4 AOSP test certificate fingerprints (not private keys)'
             for name in platform shared media testkey; do
               printf '%s: ' "$name"

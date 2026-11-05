@@ -40,8 +40,12 @@ def main(root):
     print('# Stock Home extension and UI control flow — static, read-only')
     manifest = root / 'AndroidManifest.xml'
     if manifest.exists():
-        print('\n## Decoded manifest')
-        print(manifest.read_text(encoding='utf8', errors='replace'))
+        content = manifest.read_bytes()
+        print('\n## Manifest availability')
+        if b'\x00' in content:
+            print('Binary manifest: see aapt xmltree output at the start of this report.')
+        else:
+            print(content.decode('utf8', errors='replace'))
     chosen = []
     for path in files:
         text = path.read_text(encoding='utf8', errors='replace')
