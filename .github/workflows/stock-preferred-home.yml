@@ -1,0 +1,72 @@
+name: Исследование выбора Home в штатном framework
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/stock-preferred-home.yml'
+      - 'tools/inspect_preferred_home.py'
+permissions:
+  contents: write
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Получить файлы проверенного stock
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq p7zip-full e2fsprogs curl
+          mkdir -p "$RUNNER_TEMP/fw" reports
+          gh release download stock --pattern x60_2021.7z -D "$RUNNER_TEMP/fw"
+          echo "75e7d6cd900fac971b55fec9f59913153bf7a1096bd761f7229c9a1d6d57b540  $RUNNER_TEMP/fw/x60_2021.7z" | sha256sum -c -
+          7z e -y "$RUNNER_TEMP/fw/x60_2021.7z" -o"$RUNNER_TEMP/fw/image" system.img >/dev/null
+          img="$RUNNER_TEMP/fw/image/system.img"
+          echo "b6bbbe529942ffec250cad993ae9cbb808721c27cf2536fb3fb11120130e8545  $img" | sha256sum -c -
+          debugfs -R "dump /framework/services.jar $RUNNER_TEMP/services.jar" "$img"
+          debugfs -R "dump /app/Bluetooth.apk $RUNNER_TEMP/manifest-source.apk" "$img"
+          test -s "$RUNNER_TEMP/services.jar" && test -s "$RUNNER_TEMP/manifest-source.apk"
+          debugfs -R 'ls -l /etc/preferred-apps' "$img" > "$RUNNER_TEMP/preferred-dir.txt" 2>&1 || true
+          curl -fLsS --retry 3 --max-time 120 -o "$RUNNER_TEMP/apktool.jar" https://github.com/iBotPeaches/Apktool/releases/download/v2.9.3/apktool_2.9.3.jar
+      - name: Прочитать код PackageManager без изменения образа
+        run: |
+          set -euo pipefail
+          python3 - "$RUNNER_TEMP/services.jar" "$RUNNER_TEMP/manifest-source.apk" "$RUNNER_TEMP/services-for-apktool.apk" <<'PY'
+          import re, sys, zipfile
+          with zipfile.ZipFile(sys.argv[1]) as service, zipfile.ZipFile(sys.argv[2]) as source, zipfile.ZipFile(sys.argv[3], 'w') as out:
+              # A temporary manifest supplies apktool's required container; it is not part of services.jar.
+              out.writestr('AndroidManifest.xml', source.read('AndroidManifest.xml'))
+              dex = [n for n in service.namelist() if re.fullmatch(r'classes(?:[0-9]+)?\.dex', n)]
+              if not dex: raise SystemExit('services.jar has no classes.dex; odex requires separate handling')
+              for n in dex: out.writestr(n, service.read(n))
+          PY
+          java -jar "$RUNNER_TEMP/apktool.jar" d -f -r "$RUNNER_TEMP/services-for-apktool.apk" -o "$RUNNER_TEMP/decoded" >/dev/null
+          {
+            echo 'Stock system SHA-256: b6bbbe529942ffec250cad993ae9cbb808721c27cf2536fb3fb11120130e8545'
+            sha256sum "$RUNNER_TEMP/services.jar" | sed "s|$RUNNER_TEMP/||"
+            echo '## /system/etc/preferred-apps directory'
+            cat "$RUNNER_TEMP/preferred-dir.txt"
+            python3 tools/inspect_preferred_home.py "$RUNNER_TEMP/decoded"
+          } > reports/stock-preferred-home.txt
+          wc -c reports/stock-preferred-home.txt
+      - name: Сохранить только отчёт
+        run: |
+          set -e
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/stock-preferred-home.txt
+          git diff --cached --quiet && exit 0
+          git commit -m 'report: inspect stock preferred Home support'
+          for try in 1 2 3 4 5; do
+            if git pull --rebase origin "${{ github.ref_name }}" && git push origin HEAD:"${{ github.ref_name }}"; then exit 0; fi
+            git rebase --abort || true
+            sleep 5
+          done
+          exit 1
