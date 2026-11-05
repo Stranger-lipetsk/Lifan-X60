@@ -37,7 +37,7 @@ jobs:
           echo no | "$avdmanager" create avd -f -n navitel_arm_api19 -k 'system-images;android-19;default;armeabi-v7a' -c 1024M >/dev/null
           # Emulator 37 removed 32-bit ARM; use Google's older classic engine in isolation.
           curl -fL --retry 3 https://dl.google.com/android/repository/tools_r25.2.5-linux.zip -o "$RUNNER_TEMP/legacy-tools.zip"
-          sha256sum "$RUNNER_TEMP/legacy-tools.zip"
+          echo "577516819c8b5fae680f049d39014ff1ba4af870b687cab10595783e6f22d33e  $RUNNER_TEMP/legacy-tools.zip" | sha256sum -c -
           mkdir -p "$RUNNER_TEMP/legacy-sdk"
           unzip -q "$RUNNER_TEMP/legacy-tools.zip" -d "$RUNNER_TEMP/legacy-sdk"
           legacy="$RUNNER_TEMP/legacy-sdk/tools/emulator"
@@ -79,12 +79,9 @@ jobs:
             id_output=$(timeout 60 "$adb" shell id | tr -d '\r')
             grep -q 'uid=0' <<< "$id_output" || { echo 'Root shell unavailable'; exit 1; }
           fi
-          echo "Phase: disable network and inspect storage"
-          # Prevent the test from using any account, license server or external maps.
-          timeout 60 "$adb" shell settings put global airplane_mode_on 1
-          timeout 60 "$adb" shell am broadcast -a android.intent.action.AIRPLANE_MODE --ez state true >/dev/null
-          timeout 60 "$adb" shell svc wifi disable || true
-          timeout 60 "$adb" shell svc data disable || true
+          echo "Phase: inspect storage"
+          # The app is not started until its UID is blocked below. Avoid 'settings'
+          # here: its system-service call hung on the legacy emulator.
           timeout 60 "$adb" shell ls -ld /storage/sdcard /storage/sdcard0 /storage/emulated/0 /mnt/shell/emulated > "$RUNNER_TEMP/storage.txt" 2>&1 || true
           timeout 60 "$adb" shell df > "$RUNNER_TEMP/storage-df.txt" 2>&1 || true
           set +e
