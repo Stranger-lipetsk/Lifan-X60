@@ -35,12 +35,25 @@ jobs:
           test -x "$manager" && test -x "$avdmanager" && test -x "$emulator" && test -x "$adb"
           "$manager" --install 'emulator' 'platform-tools' 'system-images;android-19;default;armeabi-v7a'
           echo no | "$avdmanager" create avd -f -n navitel_arm_api19 -k 'system-images;android-19;default;armeabi-v7a' -c 1024M >/dev/null
-          if [ -e /dev/kvm ]; then sudo chmod a+rw /dev/kvm; fi
-          "$emulator" -accel-check || true
-          "$emulator" -avd navitel_arm_api19 -no-window -no-audio -no-boot-anim -no-snapshot -gpu swiftshader_indirect -no-metrics -accel off > "$RUNNER_TEMP/emulator.txt" 2>&1 &
+          # Emulator 37 removed 32-bit ARM; use Google's older classic engine in isolation.
+          curl -fL --retry 3 https://dl.google.com/android/repository/tools_r25.2.5-linux.zip -o "$RUNNER_TEMP/legacy-tools.zip"
+          sha256sum "$RUNNER_TEMP/legacy-tools.zip"
+          mkdir -p "$RUNNER_TEMP/legacy-sdk"
+          unzip -q "$RUNNER_TEMP/legacy-tools.zip" -d "$RUNNER_TEMP/legacy-sdk"
+          legacy="$RUNNER_TEMP/legacy-sdk/tools/emulator"
+          test -x "$legacy"
+          "$legacy" -avd navitel_arm_api19 -no-window -no-audio -no-boot-anim -no-snapshot -gpu swiftshader -engine classic > "$RUNNER_TEMP/emulator.txt" 2>&1 &
           pid=$!
-          trap 'kill "$pid" 2>/dev/null || true' EXIT
-          if ! timeout 600 "$adb" wait-for-device; then
+          "$adb" wait-for-device &
+          waitpid=$!
+          trap 'kill "$pid" "$waitpid" 2>/dev/null || true' EXIT
+          connected=no
+          for i in $(seq 1 120); do
+            if ! kill -0 "$pid" 2>/dev/null; then echo 'Emulator exited early'; break; fi
+            if ! kill -0 "$waitpid" 2>/dev/null; then wait "$waitpid" && connected=yes; break; fi
+            sleep 5
+          done
+          if [ "$connected" != yes ]; then
             echo 'Emulator did not connect to adb'; cat "$RUNNER_TEMP/emulator.txt"; exit 1
           fi
           booted=no
