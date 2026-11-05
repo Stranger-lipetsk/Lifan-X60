@@ -29,7 +29,7 @@ class TraceTests(unittest.TestCase):
             for n in range(11):
                 path = root / ('Launcher2' if n == 0 else f'{n}.apk')
                 with zipfile.ZipFile(path, 'w') as apk:
-                    data = b'android.provider.action.MANAGE_ROOT' if n == 0 else b'other'
+                    data = b'android.provider.action.MANAGE_ROOT\x00' if n == 0 else b'other'
                     apk.writestr('classes.dex', data)
             out = io.StringIO()
             with contextlib.redirect_stdout(out):
@@ -44,7 +44,7 @@ class TraceTests(unittest.TestCase):
                 with zipfile.ZipFile(root / f'{n}.apk', 'w') as apk:
                     apk.writestr('classes.dex', b'ordinary')
                     if n == 2:
-                        apk.writestr('classes2.dex', b'android.intent.action.GET_CONTENT\x00application/vnd.android.package-archive')
+                        apk.writestr('classes2.dex', b'android.intent.action.GET_CONTENT\x00application/vnd.android.package-archive\x00android.intent.action.OPEN_DOCUMENT_TREE\x00')
             out = io.StringIO()
             with contextlib.redirect_stdout(out):
                 scan_apks(root)

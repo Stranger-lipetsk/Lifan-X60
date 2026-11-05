@@ -30,7 +30,7 @@ jobs:
           7z e -y "$RUNNER_TEMP/fw/x60_2021.7z" -o"$RUNNER_TEMP/fw/image" system.img >/dev/null
           img="$RUNNER_TEMP/fw/image/system.img"
           echo "b6bbbe529942ffec250cad993ae9cbb808721c27cf2536fb3fb11120130e8545  $img" | sha256sum -c -
-          for pair in 'Settings:/priv-app/ElSettings.apk' 'Launcher:/priv-app/Launcher2' 'CertInstaller:/app/CertInstaller.apk' 'DocumentsUI:/app/DocumentsUI.apk' 'Downloads:/app/DownloadProviderUi.apk' 'PackageInstaller:/app/PackageInstaller.apk'; do
+          for pair in 'Settings:/priv-app/ElSettings.apk' 'Launcher:/priv-app/Launcher2' 'CertInstaller:/app/CertInstaller.apk' 'DocumentsUI:/app/DocumentsUI.apk' 'Downloads:/app/DownloadProviderUi.apk' 'PackageInstaller:/app/PackageInstaller.apk' 'Camera2:/app/Camera2.apk' 'Music:/app/Music.apk'; do
             name=${pair%%:*}; path=${pair#*:}
             debugfs -R "dump $path $RUNNER_TEMP/apks/$name.apk" "$img"
             test -s "$RUNNER_TEMP/apks/$name.apk"

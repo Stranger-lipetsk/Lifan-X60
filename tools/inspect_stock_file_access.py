@@ -48,9 +48,11 @@ def inspect(root):
             'Downloads': ('DownloadList.smali', 'OpenHelper.smali'),
         }.get(app.name, ())
         for path in files:
-            if path.name not in wanted:
+            if path.name not in wanted and app.name not in ('Camera2', 'Music'):
                 continue
             content = path.read_text(errors='replace')
+            if app.name in ('Camera2', 'Music') and 'android.intent.action.GET_CONTENT' not in content:
+                continue
             for match in re.finditer(r'(?ms)^\.method [^\n]+\n.*?^\.end method', content):
                 method = match.group()
                 if PATTERN.search(method) or (app.name == 'DocumentsUI' and re.search(r'(onDocumentPicked|onDocumentsPicked|onFinished|finishPicking|finishWithResult)', method[:180], re.I)):
@@ -63,7 +65,7 @@ def inspect(root):
 
 def scan_apks(root):
     print('\n## APK DEX literal scan: file and installer intents')
-    print('Literal byte hits are leads only: they do not prove a call, a UI path, or runtime availability.')
+    print('NUL-terminated literal byte hits are leads only: they do not prove a call, a UI path, or runtime availability.')
     print('Dynamic construction, native code, external packages, data and boot are not scanned.')
     patterns = {
         'MANAGE_ROOT': b'android.provider.action.MANAGE_ROOT',
@@ -84,7 +86,7 @@ def scan_apks(root):
             found = set()
             for name in dexes:
                 dex = apk.read(name)
-                found.update(key for key, literal in patterns.items() if literal in dex)
+                found.update(key for key, literal in patterns.items() if literal + b'\x00' in dex)
             for key in found:
                 matches[key].append(str(path.relative_to(root)))
     if count < 10:
