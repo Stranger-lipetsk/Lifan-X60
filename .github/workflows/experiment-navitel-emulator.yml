@@ -35,10 +35,14 @@ jobs:
           test -x "$manager" && test -x "$avdmanager" && test -x "$emulator" && test -x "$adb"
           "$manager" --install 'emulator' 'platform-tools' 'system-images;android-19;default;x86'
           echo no | "$avdmanager" create avd -f -n navitel_api19 -k 'system-images;android-19;default;x86' >/dev/null
+          if [ -e /dev/kvm ]; then sudo chmod a+rw /dev/kvm; fi
+          "$emulator" -accel-check || true
           "$emulator" -avd navitel_api19 -no-window -no-audio -no-boot-anim -no-snapshot -gpu swiftshader_indirect -no-metrics > "$RUNNER_TEMP/emulator.txt" 2>&1 &
           pid=$!
           trap 'kill "$pid" 2>/dev/null || true' EXIT
-          timeout 600 "$adb" wait-for-device
+          if ! timeout 120 "$adb" wait-for-device; then
+            echo 'Emulator did not connect to adb'; cat "$RUNNER_TEMP/emulator.txt"; exit 1
+          fi
           booted=no
           for i in $(seq 1 150); do
             if [ "$(timeout 5 "$adb" shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')" = 1 ]; then booted=yes; break; fi
