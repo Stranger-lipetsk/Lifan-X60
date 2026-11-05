@@ -1,0 +1,3 @@
+/home/runner/work/Lifan-X60/Lifan-X60/firmware/apks/com.navitel.apk: OK
+Error: "emulator" package must be installed!
+null
