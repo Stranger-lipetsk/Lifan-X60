@@ -27,6 +27,8 @@ jobs:
       - name: Собрать отдельное тестовое приложение
         run: |
           set -euo pipefail
+          exec > >(tee "$RUNNER_TEMP/panel-logs.txt") 2>&1
+          set -x
           sdk=${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}
           bt=$(find "$sdk/build-tools" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -1)
           jar=$(find "$sdk/platforms" -name android.jar | sort -V | tail -1)
@@ -67,6 +69,20 @@ jobs:
             echo '## Manifest'
             cat "$out/manifest.txt"
           } > reports/launcher-panel-probe.txt
+      - name: Сохранить диагностику ошибки сборки
+        if: failure()
+        run: |
+          set -e
+          test -s "$RUNNER_TEMP/panel-logs.txt" || exit 0
+          mkdir -p reports
+          cp "$RUNNER_TEMP/panel-logs.txt" reports/launcher-panel-build-error.txt
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/launcher-panel-build-error.txt
+          git diff --cached --quiet && exit 0
+          git commit -m 'report: debug panel test build'
+          git pull --rebase origin "${{ github.ref_name }}"
+          git push origin HEAD:"${{ github.ref_name }}"
       - name: Опубликовать отдельный тестовый APK
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
