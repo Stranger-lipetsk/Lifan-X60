@@ -1,0 +1,118 @@
+# Integrated full archive rehearsal — NOT A RELEASE, DO NOT FLASH
+Input: previously tested file-manager-test-20261105 ZIP; no physical device, SD or user data accessed.
+Four image modifications: Navitel APK, Home APK, Launcher2 APK, and new panel. Amaze remains unchanged.
+Home and Launcher2 use matching public Freescale test certificates. Panel has a disposable key that is NOT retained; this is NOT a distribution build.
+No device boot, MCU behavior, Hibernate, license, SD maps, actual radio, display or firmware write tested.
+The six-file archive and image exist only temporarily and are intentionally not published.
+## Checked extracted file changes
+Entries before: 1344; after: 1345
+app/LifanLauncherPanel.apk: not present -> ('file', 12780, '73c56d4700aa69b572bfb83ded05a6728e4d946eec50a44270e404c44022d06a')
+priv-app/EL830LF01_Home.apk: ('file', 4580386, '75ee685d5399e4c394146cac593ec2ed4bfbd5f6cc9151f9ae479992c84011a6') -> ('file', 4599659, 'd6d24288a2dbd1dbd98492deeacf2b728297c7dd432a0513b14911f1b50916c9')
+priv-app/Launcher2.apk: ('file', 12267776, '82787a6007589a169242f2c1391252342a9824748a8b469d1d522acab83458e6') -> ('file', 12280896, 'd872fd211606c92e9c94a3cc7897955a8135c9a3a80f719efdc5baf708a068bc')
+priv-app/Navitel-large.apk: ('file', 111095055, '6e216ab39aacaafacda1ebb09f6edc8726e4d1eb6b4985256ccd18aeb5046c44') -> ('file', 99176587, '96876415d8b4342952558fd30d6e11b0ca9355c802060c0a9740b6cc84fc4e1b')
+Amaze and every other extracted file/symlink unchanged. Inode metadata not compared by tree walk.
+## Home APK payload
+Non-signature entries compared: 343
+Only changed entry: classes.dex
+Original changed entry SHA-256: d8b41f3b89ce3828022a0780a0aad4e105861c8c4b42636ac4b8cfae50114f20
+Candidate changed entry SHA-256: c48c4014c5a627c5d00d39d8048046998b74781bac1516180d3e69875e8ff814
+Unchanged AndroidManifest.xml SHA-256: 3e580af0c923307c998db164b1997aa6f74c0cf5f1452dc594e039ae057ec0c6
+## Launcher APK payload
+Non-signature entries compared: 291
+Only changed entry: AndroidManifest.xml
+Original changed entry SHA-256: 7c19a39f7186d552b4e27c921ef1aaa89236c6135e7e3acba1b606cb0eec9b9b
+Candidate changed entry SHA-256: d3e8cad240a6920c8dfde008012c9d7fd6efa30965ba1a8b3589e99e48f96595
+Unchanged classes.dex SHA-256: c4f9454699a42e45c82903cae626a59d5138502872ad2accbf1b7bc99bc02d37
+## Filesystem before
+e2fsck 1.47.0 (5-Feb-2023)
+Pass 1: Checking inodes, blocks, and sizes
+Pass 2: Checking directory structure
+Pass 3: Checking directory connectivity
+Pass 4: Checking reference counts
+Pass 5: Checking group summary information
+/home/runner/work/_temp/integrated-lab/full/system.img: 1401/23040 files (0.0% non-contiguous), 90496/92160 blocks
+## Filesystem after
+e2fsck 1.47.0 (5-Feb-2023)
+Pass 1: Checking inodes, blocks, and sizes
+Pass 2: Checking directory structure
+Pass 3: Checking directory connectivity
+Pass 4: Checking reference counts
+Pass 5: Checking group summary information
+/home/runner/work/_temp/integrated-lab/candidate.img: 1402/23040 files (0.2% non-contiguous), 87597/92160 blocks
+## Written APK metadata
+--- stat-EL830LF01_Home.apk.txt
+debugfs 1.47.0 (5-Feb-2023)
+Inode: 1292   Type: regular    Mode:  0644   Flags: 0x80000
+Generation: 0    Version: 0x00000000:00000000
+User:     0   Group:     0   Project:     0   Size: 4599659
+File ACL: 0
+Links: 1   Blockcount: 8984
+Fragment:  Address: 0    Number: 0    Size: 0
+ ctime: 0x6aecdf04:00000000 -- Thu Nov  5 19:54:44 2026
+ atime: 0x6aecdf04:00000000 -- Thu Nov  5 19:54:44 2026
+ mtime: 0x6aecdf04:00000000 -- Thu Nov  5 19:54:44 2026
+crtime: 0x6aecdf04:00000000 -- Thu Nov  5 19:54:44 2026
+Size of extra inode fields: 32
+Extended attributes:
+  security.selinux (26) = "u:object_r:system_file:s0\000"
+EXTENTS:
+(0-1118):20018-21136, (1119-1122):55826-55829
+--- stat-Launcher2.apk.txt
+debugfs 1.47.0 (5-Feb-2023)
+Inode: 1400   Type: regular    Mode:  0644   Flags: 0x80000
+Generation: 0    Version: 0x00000000:00000000
+User:     0   Group:     0   Project:     0   Size: 12280896
+File ACL: 0
+Links: 1   Blockcount: 23992
+Fragment:  Address: 0    Number: 0    Size: 0
+ ctime: 0x6aecdf04:00000000 -- Thu Nov  5 19:54:44 2026
+ atime: 0x6aecdf04:00000000 -- Thu Nov  5 19:54:44 2026
+ mtime: 0x6aecdf04:00000000 -- Thu Nov  5 19:54:44 2026
+crtime: 0x6aecdf04:00000000 -- Thu Nov  5 19:54:44 2026
+Size of extra inode fields: 32
+Extended attributes:
+  security.selinux (26) = "u:object_r:system_file:s0\000"
+EXTENTS:
+(0-2995):26085-29080, (2996-2998):55830-55832
+--- stat-LifanLauncherPanel.apk.txt
+debugfs 1.47.0 (5-Feb-2023)
+Inode: 1402   Type: regular    Mode:  0644   Flags: 0x80000
+Generation: 0    Version: 0x00000000:00000000
+User:     0   Group:     0   Project:     0   Size: 12780
+File ACL: 0
+Links: 1   Blockcount: 32
+Fragment:  Address: 0    Number: 0    Size: 0
+ ctime: 0x6aecdf04:00000000 -- Thu Nov  5 19:54:44 2026
+ atime: 0x6aecdf04:00000000 -- Thu Nov  5 19:54:44 2026
+ mtime: 0x6aecdf04:00000000 -- Thu Nov  5 19:54:44 2026
+crtime: 0x6aecdf04:00000000 -- Thu Nov  5 19:54:44 2026
+Size of extra inode fields: 32
+Extended attributes:
+  security.selinux (26) = "u:object_r:system_file:s0\000"
+EXTENTS:
+(0-3):55833-55836
+--- stat-Navitel-large.apk.txt
+debugfs 1.47.0 (5-Feb-2023)
+Inode: 1301   Type: regular    Mode:  0644   Flags: 0x80000
+Generation: 0    Version: 0x00000000:00000000
+User:     0   Group:     0   Project:     0   Size: 99176587
+File ACL: 0
+Links: 1   Blockcount: 193704
+Fragment:  Address: 0    Number: 0    Size: 0
+ ctime: 0x6aecdf04:00000000 -- Thu Nov  5 19:54:44 2026
+ atime: 0x6aecdf04:00000000 -- Thu Nov  5 19:54:44 2026
+ mtime: 0x6aecdf04:00000000 -- Thu Nov  5 19:54:44 2026
+crtime: 0x6aecdf04:00000000 -- Thu Nov  5 19:54:44 2026
+Size of extra inode fields: 32
+Extended attributes:
+  security.selinux (26) = "u:object_r:system_file:s0\000"
+EXTENTS:
+(0-1661):31106-32767, (1662-23748):33275-55361, (23750-24213):55362-55825
+## Full archive contents verified
+MCU_FW.hex bc341c6de95c18babcaa8664c585236ea02828c7de4fba30c97380108bdcb495
+backup/config.ini 0d2481ced64fe652efe0a360df357bc939b9727dd68aa65c6b0121e4ae608fad
+boot.img 060d291a523bbe0d40c86537f070ed0feb90e04e0db0efef2a3e4594e9223b4b
+sd_boot.img 734f6b6442108916df89303ec5f52ceaa0ebb927d3b984a1e8a85ef2a6c12597
+system.img 25295b625ba360e8f022300a68d86be01136ec3c126e2257f469876c0f2ae558
+u-boot.bin 7d1cb6b366dda8ef0ea51c3350689d365032ed47e172c6e23dac7a63ae33f002
+All six ZIP members match local source files; no archive published.
