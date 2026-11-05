@@ -1,0 +1,62 @@
+name: Лабораторная репетиция полного архива
+on:
+  push:
+    branches: [arena/b12cc9a8-lifan-x60]
+    paths:
+      - '.github/workflows/experiment-integrated-archive.yml'
+      - 'tools/experiment_integrated_image.sh'
+      - 'tools/check_integrated_laboratory_image.py'
+      - 'tests/test_check_integrated_laboratory_image.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  test:
+    if: github.ref_name == 'arena/b12cc9a8-lifan-x60'
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Проверить состав и сравнение образов
+        run: |
+          python3 -m unittest discover -s tests -p 'test_check_integrated_laboratory_image.py' -v
+          python3 -m unittest discover -s tests -p 'test_integrated_launcher_panel.py' -v
+          python3 -m unittest discover -s tests -p 'test_experiment_home_carousel.py' -v
+          python3 -m unittest discover -s tests -p 'test_experiment_launcher_manifest.py' -v
+          bash -n tools/experiment_integrated_image.sh
+      - name: Собрать и проверить временный архив без публикации
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bash tools/experiment_integrated_image.sh
+      - name: Сохранить диагностику при ошибке
+        if: failure()
+        run: |
+          set -e
+          test -s "$RUNNER_TEMP/integrated-image.log" || exit 0
+          mkdir -p reports
+          tr -d '\r' < "$RUNNER_TEMP/integrated-image.log" > reports/integrated-full-archive-laboratory-error.txt
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/integrated-full-archive-laboratory-error.txt
+          git diff --cached --quiet && exit 0
+          git commit -m 'report: diagnose integrated archive rehearsal'
+          git pull --rebase origin "${{ github.ref_name }}"
+          git push origin HEAD:"${{ github.ref_name }}"
+      - name: Сохранить только текстовый отчёт, без artifacts
+        run: |
+          set -e
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/integrated-full-archive-laboratory.txt
+          git diff --cached --quiet && exit 0
+          git commit -m 'report: integrated full archive rehearsal'
+          for try in 1 2 3 4 5; do
+            if git pull --rebase origin "${{ github.ref_name }}" && git push origin HEAD:"${{ github.ref_name }}"; then exit 0; fi
+            git rebase --abort || true
+            sleep 5
+          done
+          exit 1
