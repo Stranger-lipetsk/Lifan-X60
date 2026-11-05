@@ -1,0 +1,164 @@
+# Offline Launcher2 HOME category experiment — NOT DEVICE TESTED
+Original Launcher2 SHA-256 82787a6007589a169242f2c1391252342a9824748a8b469d1d522acab83458e6
+Exactly one HOME category removed; all other parsed manifest elements unchanged.
+APK signed with matching Freescale development shared certificate.
+Candidate not published or installed; explicit launching and HOME behavior remain untested.
+Non-signature entries compared: 291
+Only changed entry: AndroidManifest.xml
+Original changed entry SHA-256: 7c19a39f7186d552b4e27c921ef1aaa89236c6135e7e3acba1b606cb0eec9b9b
+Candidate changed entry SHA-256: d3e8cad240a6920c8dfde008012c9d7fd6efa30965ba1a8b3589e99e48f96595
+Unchanged classes.dex SHA-256: c4f9454699a42e45c82903cae626a59d5138502872ad2accbf1b7bc99bc02d37
+Verifies
+Verified using v1 scheme (JAR signing): true
+Verified using v2 scheme (APK Signature Scheme v2): false
+Verified using v3 scheme (APK Signature Scheme v3): false
+Verified using v3.1 scheme (APK Signature Scheme v3.1): false
+Verified using v3.2 scheme (APK Signature Scheme v3.2): false
+Verified using v4 scheme (APK Signature Scheme v4): false
+Verified for SourceStamp: false
+Number of signers: 1
+V1 Signer: certificate DN: EMAILADDRESS=android@freescale.com, CN=Android, OU=Android, O=Android, L=Mountain View, ST=California, C=US
+V1 Signer: certificate SHA-256 digest: 212912e875e5077f955c3079b6ceb1151c2b64d9bd9f6673dceff70d312eb2d5
+V1 Signer: certificate SHA-1 digest: 759cdd0e646c6aedd91c9436fa664570fdf285d6
+V1 Signer: certificate MD5 digest: 53f8307d4d7aaa9817b1d38497cf21a7
+V1 Signer: key algorithm: RSA
+V1 Signer: key size (bits): 2048
+V1 Signer: public key SHA-256 digest: bd1f34978c137a333872b9e1f33e3d24e2edb8e080f23d87c2aa52149ace6fa5
+V1 Signer: public key SHA-1 digest: 83e1d23ea12e8af1c7bc4bf59c21067e8b2f79a4
+V1 Signer: public key MD5 digest: 55ba130eeb455c1a9a78d4da3d2ca292
+## Candidate manifest
+N: android=http://schemas.android.com/apk/res/android
+  E: manifest (line=20)
+    A: android:versionCode(0x0101021b)=(type 0x10)0x13
+    A: android:versionName(0x0101021c)="4.4.2-20140630" (Raw: "4.4.2-20140630")
+    A: package="com.android.launcher" (Raw: "com.android.launcher")
+    E: uses-sdk (line=0)
+      A: android:minSdkVersion(0x0101020c)=(type 0x10)0x13
+      A: android:targetSdkVersion(0x01010270)=(type 0x10)0x13
+    E: original-package (line=24)
+      A: android:name(0x01010003)="com.android.launcher2" (Raw: "com.android.launcher2")
+    E: permission (line=26)
+      A: android:name(0x01010003)="com.android.launcher.permission.PRELOAD_WORKSPACE" (Raw: "com.android.launcher.permission.PRELOAD_WORKSPACE")
+      A: android:protectionLevel(0x01010009)=(type 0x11)0x12
+      A: android:permissionGroup(0x0101000a)="android.permission-group.SYSTEM_TOOLS" (Raw: "android.permission-group.SYSTEM_TOOLS")
+    E: permission (line=30)
+      A: android:label(0x01010001)=@0x7f0d003b
+      A: android:name(0x01010003)="com.android.launcher.permission.INSTALL_SHORTCUT" (Raw: "com.android.launcher.permission.INSTALL_SHORTCUT")
+      A: android:protectionLevel(0x01010009)=(type 0x11)0x1
+      A: android:permissionGroup(0x0101000a)="android.permission-group.SYSTEM_TOOLS" (Raw: "android.permission-group.SYSTEM_TOOLS")
+      A: android:description(0x01010020)=@0x7f0d003c
+    E: permission (line=36)
+      A: android:label(0x01010001)=@0x7f0d003d
+      A: android:name(0x01010003)="com.android.launcher.permission.UNINSTALL_SHORTCUT" (Raw: "com.android.launcher.permission.UNINSTALL_SHORTCUT")
+      A: android:protectionLevel(0x01010009)=(type 0x11)0x1
+      A: android:permissionGroup(0x0101000a)="android.permission-group.SYSTEM_TOOLS" (Raw: "android.permission-group.SYSTEM_TOOLS")
+      A: android:description(0x01010020)=@0x7f0d003e
+    E: permission (line=42)
+      A: android:label(0x01010001)=@0x7f0d003f
+      A: android:name(0x01010003)="com.android.launcher.permission.READ_SETTINGS" (Raw: "com.android.launcher.permission.READ_SETTINGS")
+      A: android:protectionLevel(0x01010009)=(type 0x11)0x0
+      A: android:permissionGroup(0x0101000a)="android.permission-group.SYSTEM_TOOLS" (Raw: "android.permission-group.SYSTEM_TOOLS")
+      A: android:description(0x01010020)=@0x7f0d0040
+    E: permission (line=48)
+      A: android:label(0x01010001)=@0x7f0d0041
+      A: android:name(0x01010003)="com.android.launcher.permission.WRITE_SETTINGS" (Raw: "com.android.launcher.permission.WRITE_SETTINGS")
+      A: android:protectionLevel(0x01010009)=(type 0x11)0x0
+      A: android:permissionGroup(0x0101000a)="android.permission-group.SYSTEM_TOOLS" (Raw: "android.permission-group.SYSTEM_TOOLS")
+      A: android:description(0x01010020)=@0x7f0d0042
+    E: uses-permission (line=55)
+      A: android:name(0x01010003)="android.permission.CALL_PHONE" (Raw: "android.permission.CALL_PHONE")
+    E: uses-permission (line=56)
+      A: android:name(0x01010003)="android.permission.SET_WALLPAPER" (Raw: "android.permission.SET_WALLPAPER")
+    E: uses-permission (line=57)
+      A: android:name(0x01010003)="android.permission.SET_WALLPAPER_HINTS" (Raw: "android.permission.SET_WALLPAPER_HINTS")
+    E: uses-permission (line=58)
+      A: android:name(0x01010003)="android.permission.VIBRATE" (Raw: "android.permission.VIBRATE")
+    E: uses-permission (line=59)
+      A: android:name(0x01010003)="android.permission.BIND_APPWIDGET" (Raw: "android.permission.BIND_APPWIDGET")
+    E: uses-permission (line=60)
+      A: android:name(0x01010003)="android.permission.GET_ACCOUNTS" (Raw: "android.permission.GET_ACCOUNTS")
+    E: uses-permission (line=61)
+      A: android:name(0x01010003)="com.android.launcher.permission.READ_SETTINGS" (Raw: "com.android.launcher.permission.READ_SETTINGS")
+    E: uses-permission (line=62)
+      A: android:name(0x01010003)="com.android.launcher.permission.WRITE_SETTINGS" (Raw: "com.android.launcher.permission.WRITE_SETTINGS")
+    E: application (line=64)
+      A: android:label(0x01010001)=@0x7f0d0000
+      A: android:icon(0x01010002)=@0x7f030001
+      A: android:name(0x01010003)="com.android.launcher2.LauncherApplication" (Raw: "com.android.launcher2.LauncherApplication")
+      A: android:hardwareAccelerated(0x010102d3)=(type 0x12)0xffffffff
+      A: android:largeHeap(0x0101035a)=@0x7f090000
+      A: android:supportsRtl(0x010103af)=(type 0x12)0xffffffff
+      E: activity (line=71)
+        A: android:theme(0x01010000)=@0x7f0e0001
+        A: android:name(0x01010003)="com.android.launcher2.Launcher" (Raw: "com.android.launcher2.Launcher")
+        A: android:clearTaskOnLaunch(0x01010015)=(type 0x12)0xffffffff
+        A: android:stateNotNeeded(0x01010016)=(type 0x12)0xffffffff
+        A: android:launchMode(0x0101001d)=(type 0x10)0x2
+        A: android:screenOrientation(0x0101001e)=(type 0x10)0x5
+        A: android:windowSoftInputMode(0x0101022b)=(type 0x11)0x20
+        E: intent-filter (line=79)
+          E: action (line=80)
+            A: android:name(0x01010003)="android.intent.action.MAIN" (Raw: "android.intent.action.MAIN")
+          E: category (line=82)
+            A: android:name(0x01010003)="android.intent.category.DEFAULT" (Raw: "android.intent.category.DEFAULT")
+          E: category (line=83)
+            A: android:name(0x01010003)="android.intent.category.MONKEY" (Raw: "android.intent.category.MONKEY")
+      E: activity (line=87)
+        A: android:theme(0x01010000)=@0x7f0e0000
+        A: android:label(0x01010001)=@0x7f0d0006
+        A: android:icon(0x01010002)=@0x7f030002
+        A: android:name(0x01010003)="com.android.launcher2.WallpaperChooser" (Raw: "com.android.launcher2.WallpaperChooser")
+        A: android:process(0x01010011)=":wallpaper_chooser" (Raw: ":wallpaper_chooser")
+        A: android:finishOnCloseSystemDialogs(0x010102a7)=(type 0x12)0xffffffff
+        E: intent-filter (line=94)
+          E: action (line=95)
+            A: android:name(0x01010003)="android.intent.action.SET_WALLPAPER" (Raw: "android.intent.action.SET_WALLPAPER")
+          E: category (line=96)
+            A: android:name(0x01010003)="android.intent.category.DEFAULT" (Raw: "android.intent.category.DEFAULT")
+        E: meta-data (line=98)
+          A: android:name(0x01010003)="android.wallpaper.preview" (Raw: "android.wallpaper.preview")
+          A: android:resource(0x01010025)=@0x7f060002
+      E: receiver (line=103)
+        A: android:name(0x01010003)="com.android.launcher2.PreloadReceiver" (Raw: "com.android.launcher2.PreloadReceiver")
+        A: android:permission(0x01010006)="com.android.launcher.permission.PRELOAD_WORKSPACE" (Raw: "com.android.launcher.permission.PRELOAD_WORKSPACE")
+        E: intent-filter (line=106)
+          E: action (line=107)
+            A: android:name(0x01010003)="com.android.launcher.action.PRELOAD_WORKSPACE" (Raw: "com.android.launcher.action.PRELOAD_WORKSPACE")
+      E: receiver (line=112)
+        A: android:name(0x01010003)="com.android.launcher2.InstallShortcutReceiver" (Raw: "com.android.launcher2.InstallShortcutReceiver")
+        A: android:permission(0x01010006)="com.android.launcher.permission.INSTALL_SHORTCUT" (Raw: "com.android.launcher.permission.INSTALL_SHORTCUT")
+        E: intent-filter (line=115)
+          E: action (line=116)
+            A: android:name(0x01010003)="com.android.launcher.action.INSTALL_SHORTCUT" (Raw: "com.android.launcher.action.INSTALL_SHORTCUT")
+      E: receiver (line=121)
+        A: android:name(0x01010003)="com.android.launcher2.UninstallShortcutReceiver" (Raw: "com.android.launcher2.UninstallShortcutReceiver")
+        A: android:permission(0x01010006)="com.android.launcher.permission.UNINSTALL_SHORTCUT" (Raw: "com.android.launcher.permission.UNINSTALL_SHORTCUT")
+        E: intent-filter (line=124)
+          E: action (line=125)
+            A: android:name(0x01010003)="com.android.launcher.action.UNINSTALL_SHORTCUT" (Raw: "com.android.launcher.action.UNINSTALL_SHORTCUT")
+      E: receiver (line=130)
+        A: android:name(0x01010003)="com.android.launcher2.UserInitializeReceiver" (Raw: "com.android.launcher2.UserInitializeReceiver")
+        A: android:exported(0x01010010)=(type 0x12)0x0
+        E: intent-filter (line=133)
+          E: action (line=134)
+            A: android:name(0x01010003)="android.intent.action.USER_INITIALIZE" (Raw: "android.intent.action.USER_INITIALIZE")
+      E: receiver (line=138)
+        A: android:name(0x01010003)="com.android.launcher2.PackageChangedReceiver" (Raw: "com.android.launcher2.PackageChangedReceiver")
+        E: intent-filter (line=139)
+          E: action (line=140)
+            A: android:name(0x01010003)="android.intent.action.PACKAGE_CHANGED" (Raw: "android.intent.action.PACKAGE_CHANGED")
+          E: action (line=141)
+            A: android:name(0x01010003)="android.intent.action.PACKAGE_REPLACED" (Raw: "android.intent.action.PACKAGE_REPLACED")
+          E: action (line=142)
+            A: android:name(0x01010003)="android.intent.action.PACKAGE_REMOVED" (Raw: "android.intent.action.PACKAGE_REMOVED")
+          E: data (line=143)
+            A: android:scheme(0x01010027)="package" (Raw: "package")
+      E: provider (line=148)
+        A: android:name(0x01010003)="com.android.launcher2.LauncherProvider" (Raw: "com.android.launcher2.LauncherProvider")
+        A: android:readPermission(0x01010007)="com.android.launcher.permission.READ_SETTINGS" (Raw: "com.android.launcher.permission.READ_SETTINGS")
+        A: android:writePermission(0x01010008)="com.android.launcher.permission.WRITE_SETTINGS" (Raw: "com.android.launcher.permission.WRITE_SETTINGS")
+        A: android:exported(0x01010010)=(type 0x12)0xffffffff
+        A: android:authorities(0x01010018)="com.android.launcher2.settings" (Raw: "com.android.launcher2.settings")
+      E: meta-data (line=155)
+        A: android:name(0x01010003)="android.nfc.disable_beam_default" (Raw: "android.nfc.disable_beam_default")
+        A: android:value(0x01010024)=(type 0x12)0xffffffff
