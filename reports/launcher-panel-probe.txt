@@ -1,0 +1,64 @@
+# Manual launcher panel probe, not tested on device
+Standalone test only; not firmware and no carousel integration.
+Temporary generated signing key is not preserved; use a distinct package for any later system-integrated app.
+e0d8a40ac8ab8a7cb9fe080d2deb434705ebabe3f8de1f1e4625ebca81fb0e1d  lifan-panel-probe.apk
+Bytes: 12786
+package: name='ru.lifanx60.panelprobe' versionCode='1' versionName='0.1-test' platformBuildVersionName='17' platformBuildVersionCode='37' compileSdkVersion='37' compileSdkVersionCodename='17'
+sdkVersion:'19'
+targetSdkVersion:'19'
+application-label:'Панель Lifan (тест)'
+application-icon-160:'res/drawable/ic_panel.xml'
+application: label='Панель Lifan (тест)' icon='res/drawable/ic_panel.xml'
+launchable-activity: name='ru.lifanx60.panelprobe.MainActivity'  label='Панель Lifan (тест)' icon=''
+feature-group: label=''
+  uses-feature: name='android.hardware.faketouch'
+  uses-implied-feature: name='android.hardware.faketouch' reason='default feature for all apps'
+main
+supports-screens: 'small' 'normal' 'large' 'xlarge'
+supports-any-density: 'true'
+locales: '--_--'
+densities: '160'
+Verifies
+Verified using v1 scheme (JAR signing): true
+Verified using v2 scheme (APK Signature Scheme v2): false
+Verified using v3 scheme (APK Signature Scheme v3): false
+Verified using v3.1 scheme (APK Signature Scheme v3.1): false
+Verified using v3.2 scheme (APK Signature Scheme v3.2): false
+Verified using v4 scheme (APK Signature Scheme v4): false
+Verified for SourceStamp: false
+Number of signers: 1
+V1 Signer: certificate DN: CN=Lifan X60 Panel Test, O=Community, C=RU
+V1 Signer: certificate SHA-256 digest: 63e796311c5f71f9903fc4ece924f0ed707d12988d5da1e45d96a522c96a4645
+V1 Signer: certificate SHA-1 digest: 216973e4f767807b23f7725116539fb90d201d85
+V1 Signer: certificate MD5 digest: 048255f017db3042d5363f5d4f28310d
+V1 Signer: key algorithm: RSA
+V1 Signer: key size (bits): 2048
+V1 Signer: public key SHA-256 digest: eb916fa5a547d4411e4777fe04226f37b750948f63aeb3ab89784e02584fcc0b
+V1 Signer: public key SHA-1 digest: 35a303c6a297eafe4e64009ff6d1cfdc8302868b
+V1 Signer: public key MD5 digest: fb6dc481986b1f11804079663ecb0204
+## Manifest
+N: android=http://schemas.android.com/apk/res/android
+  E: manifest (line=2)
+    A: android:versionCode(0x0101021b)=(type 0x10)0x1
+    A: android:versionName(0x0101021c)="0.1-test" (Raw: "0.1-test")
+    A: android:compileSdkVersion(0x01010572)=(type 0x10)0x25
+    A: android:compileSdkVersionCodename(0x01010573)="17" (Raw: "17")
+    A: package="ru.lifanx60.panelprobe" (Raw: "ru.lifanx60.panelprobe")
+    A: platformBuildVersionCode=(type 0x10)0x25 (Raw: "37")
+    A: platformBuildVersionName=(type 0x10)0x11 (Raw: "17")
+    E: uses-sdk (line=6)
+      A: android:minSdkVersion(0x0101020c)=(type 0x10)0x13
+      A: android:targetSdkVersion(0x01010270)=(type 0x10)0x13
+    E: application (line=7)
+      A: android:label(0x01010001)="Панель Lifan (тест)" (Raw: "Панель Lifan (тест)")
+      A: android:icon(0x01010002)=@0x7f020000
+      A: android:allowBackup(0x01010280)=(type 0x12)0x0
+      E: activity (line=10)
+        A: android:label(0x01010001)="Панель Lifan (тест)" (Raw: "Панель Lifan (тест)")
+        A: android:name(0x01010003)=".MainActivity" (Raw: ".MainActivity")
+        A: android:exported(0x01010010)=(type 0x12)0xffffffff
+        E: intent-filter (line=12)
+          E: action (line=13)
+            A: android:name(0x01010003)="android.intent.action.MAIN" (Raw: "android.intent.action.MAIN")
+          E: category (line=14)
+            A: android:name(0x01010003)="android.intent.category.LAUNCHER" (Raw: "android.intent.category.LAUNCHER")
