@@ -1,0 +1,142 @@
+name: Лабораторный запуск Navitel на Android 4.4 ARM
+on:
+  push:
+    branches: [arena/b12cc9a8-lifan-x60]
+    paths:
+      - '.github/workflows/experiment-navitel-arm.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  test:
+    if: github.ref_name == 'arena/b12cc9a8-lifan-x60'
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Запустить изолированный Android 4.4 ARMv7 и исследовать APK
+        env:
+          ANDROID_AVD_HOME: ${{ runner.temp }}/avd
+        run: |
+          set -euo pipefail
+          exec > >(tee "$RUNNER_TEMP/navitel-emulator-log.txt") 2>&1
+          mkdir -p "$ANDROID_AVD_HOME" reports
+          apk="$GITHUB_WORKSPACE/firmware/apks/com.navitel.apk"
+          echo "96876415d8b4342952558fd30d6e11b0ca9355c802060c0a9740b6cc84fc4e1b  $apk" | sha256sum -c -
+          sdk=${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}
+          manager="$sdk/cmdline-tools/latest/bin/sdkmanager"
+          avdmanager="$sdk/cmdline-tools/latest/bin/avdmanager"
+          emulator="$sdk/emulator/emulator"
+          adb="$sdk/platform-tools/adb"
+          test -x "$manager" && test -x "$avdmanager" && test -x "$emulator" && test -x "$adb"
+          "$manager" --install 'emulator' 'platform-tools' 'system-images;android-19;default;armeabi-v7a'
+          echo no | "$avdmanager" create avd -f -n navitel_arm_api19 -k 'system-images;android-19;default;armeabi-v7a' -c 1024M >/dev/null
+          if [ -e /dev/kvm ]; then sudo chmod a+rw /dev/kvm; fi
+          "$emulator" -accel-check || true
+          "$emulator" -avd navitel_arm_api19 -no-window -no-audio -no-boot-anim -no-snapshot -gpu swiftshader_indirect -no-metrics -accel off > "$RUNNER_TEMP/emulator.txt" 2>&1 &
+          pid=$!
+          trap 'kill "$pid" 2>/dev/null || true' EXIT
+          if ! timeout 600 "$adb" wait-for-device; then
+            echo 'Emulator did not connect to adb'; cat "$RUNNER_TEMP/emulator.txt"; exit 1
+          fi
+          booted=no
+          for i in $(seq 1 150); do
+            if [ "$(timeout 5 "$adb" shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')" = 1 ]; then booted=yes; break; fi
+            sleep 4
+          done
+          test "$booted" = yes || { tail -40 "$RUNNER_TEMP/emulator.txt"; echo 'Android emulator did not boot'; exit 1; }
+          "$adb" root >/dev/null || true
+          timeout 90 "$adb" wait-for-device
+          # Prevent the test from using any account, license server or external maps.
+          "$adb" shell settings put global airplane_mode_on 1
+          "$adb" shell am broadcast -a android.intent.action.AIRPLANE_MODE --ez state true >/dev/null
+          "$adb" shell svc wifi disable || true
+          "$adb" shell svc data disable || true
+          "$adb" shell ls -ld /storage/sdcard /storage/sdcard0 /storage/emulated/0 /mnt/shell/emulated > "$RUNNER_TEMP/storage.txt" 2>&1 || true
+          "$adb" shell df > "$RUNNER_TEMP/storage-df.txt" 2>&1 || true
+          set +e
+          "$adb" install "$apk" > "$RUNNER_TEMP/install.txt" 2>&1
+          install_status=$?
+          set -e
+          if [ "$install_status" -ne 0 ] || ! grep -qF Success "$RUNNER_TEMP/install.txt"; then
+            {
+              echo '# Navitel 11: installation failed on clean Android 4.4 ARMv7 emulator'
+              echo 'APK SHA-256: 96876415d8b4342952558fd30d6e11b0ca9355c802060c0a9740b6cc84fc4e1b'
+              echo 'This is a fresh user installation, not the device or a system upgrade.'
+              echo "adb install exit status: $install_status"
+              cat "$RUNNER_TEMP/install.txt"
+            } > reports/navitel-emulator-arm.txt
+            exit 0
+          fi
+          uid=$("$adb" shell dumpsys package com.navitel | tr -d '\r' | sed -n 's/.*userId=\([0-9][0-9]*\).*/\1/p' | head -1)
+          case "$uid" in ''|*[!0-9]*) echo 'Cannot determine app UID; refusing to start'; exit 1;; esac
+          "$adb" shell iptables -I OUTPUT 1 -m owner --uid-owner "$uid" -j REJECT
+          "$adb" shell iptables -C OUTPUT -m owner --uid-owner "$uid" -j REJECT
+          "$adb" logcat -c
+          "$adb" logcat -v brief > "$RUNNER_TEMP/logcat-stream.txt" 2>&1 &
+          logpid=$!
+          set +e
+          timeout 45 "$adb" shell am start -W -n com.navitel/com.navitel.app.MainActivity > "$RUNNER_TEMP/start.txt" 2>&1
+          start_status=$?
+          set -e
+          sleep 8
+          "$adb" shell dumpsys activity activities > "$RUNNER_TEMP/activities.txt" 2>&1 || true
+          "$adb" shell ps > "$RUNNER_TEMP/processes.txt" 2>&1 || true
+          kill "$logpid" 2>/dev/null || true
+          wait "$logpid" 2>/dev/null || true
+          {
+            echo '# Navitel 11 on a clean Android 4.4.2 ARMv7 emulator'
+            echo 'APK SHA-256: 96876415d8b4342952558fd30d6e11b0ca9355c802060c0a9740b6cc84fc4e1b'
+            echo 'Fresh user installation in a generic ARMv7 emulator, not the head unit.'
+            echo 'App network blocked by UID; no user account, SD maps, license or GPS tested.'
+            echo 'Does not test system replacement, signature migration, Hibernate, real CPU behavior, display or car hardware.'
+            echo '## Emulator build properties'
+            for prop in ro.build.version.release ro.build.version.sdk ro.product.cpu.abi ro.build.fingerprint; do
+              printf '%s: ' "$prop"; "$adb" shell getprop "$prop" | tr -d '\r'
+            done
+            echo '## Emulated storage'; cat "$RUNNER_TEMP/storage.txt" "$RUNNER_TEMP/storage-df.txt"
+            echo '## Package installation'; cat "$RUNNER_TEMP/install.txt"
+            echo '## am start status'; echo "command exit status: $start_status"; cat "$RUNNER_TEMP/start.txt"
+            echo '## Navitel activities (dumpsys excerpts)'
+            grep -iE 'mResumedActivity|mFocusedActivity|com\.navitel' "$RUNNER_TEMP/activities.txt" | head -40 || true
+            echo '## Matching processes'
+            grep -iF 'com.navitel' "$RUNNER_TEMP/processes.txt" || true
+            echo '## Selected startup, failure and runtime lines, not an exhaustive log'
+            grep -iE 'com\.navitel|AndroidRuntime|FATAL EXCEPTION|fatal signal|ANR in|UnsatisfiedLinkError|VerifyError|NoClassDefFoundError|dlopen|dexopt|has died|I/DEBUG' "$RUNNER_TEMP/logcat-stream.txt" | tail -180 || true
+            echo '## First app process log lines'
+            apppid=$(sed -n 's/.*Start proc com\.navitel .*pid=\([0-9][0-9]*\).*/\1/p' "$RUNNER_TEMP/logcat-stream.txt" | head -1)
+            if [ -n "$apppid" ]; then grep -E "\\([[:space:]]*$apppid\\):" "$RUNNER_TEMP/logcat-stream.txt" | head -150 || true; fi
+            echo 'Native ARM failure details, if any, appear in the captured debug lines above.'
+          } > reports/navitel-emulator-arm.txt
+      - name: Сохранить диагностику при инфраструктурной ошибке
+        if: failure()
+        run: |
+          set -e
+          test -s "$RUNNER_TEMP/navitel-emulator-log.txt" || exit 0
+          mkdir -p reports
+          cp "$RUNNER_TEMP/navitel-emulator-log.txt" reports/navitel-emulator-arm-error.txt
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/navitel-emulator-arm-error.txt
+          git diff --cached --quiet && exit 0
+          git commit -m 'report: diagnose navitel emulator experiment'
+          git pull --rebase origin "${{ github.ref_name }}"
+          git push origin HEAD:"${{ github.ref_name }}"
+      - name: Сохранить только отчёт без artifacts
+        run: |
+          set -e
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/navitel-emulator-arm.txt
+          git diff --cached --quiet && exit 0
+          git commit -m 'report: test navitel on android 4.4 ARM emulator'
+          for try in 1 2 3 4 5; do
+            if git pull --rebase origin "${{ github.ref_name }}" && git push origin HEAD:"${{ github.ref_name }}"; then exit 0; fi
+            git rebase --abort || true
+            sleep 5
+          done
+          exit 1
