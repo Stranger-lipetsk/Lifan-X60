@@ -1,0 +1,138 @@
+name: Лабораторная проверка двух пунктов Home
+on:
+  push:
+    branches: [arena/b12cc9a8-lifan-x60]
+    paths:
+      - '.github/workflows/experiment-home-carousel.yml'
+      - 'tools/experiment_home_carousel.py'
+      - 'tools/compare_apk_payload.py'
+      - 'tests/test_experiment_home_carousel.py'
+      - 'tests/test_compare_apk_payload.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  inspect:
+    if: github.ref_name == 'arena/b12cc9a8-lifan-x60'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Тесты ограниченного изменения
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_experiment_home_carousel.py -v
+          python3 -m unittest discover -s tests -p test_compare_apk_payload.py -v
+      - name: Эксперимент на копии APK вне прошивки
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          exec > >(tee "$RUNNER_TEMP/home-experiment.log") 2>&1
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq p7zip-full e2fsprogs
+          mkdir -p "$RUNNER_TEMP/stock" reports
+          gh release download stock -p x60_2021.7z -D "$RUNNER_TEMP/stock"
+          echo "75e7d6cd900fac971b55fec9f59913153bf7a1096bd761f7229c9a1d6d57b540  $RUNNER_TEMP/stock/x60_2021.7z" | sha256sum -c -
+          7z e -y "$RUNNER_TEMP/stock/x60_2021.7z" -o"$RUNNER_TEMP/stock/image" system.img >/dev/null
+          img="$RUNNER_TEMP/stock/image/system.img"
+          echo "b6bbbe529942ffec250cad993ae9cbb808721c27cf2536fb3fb11120130e8545  $img" | sha256sum -c -
+          debugfs -R "dump /priv-app/EL830LF01_Home.apk $RUNNER_TEMP/Home.apk" "$img" >/dev/null 2>&1
+          echo "75ee685d5399e4c394146cac593ec2ed4bfbd5f6cc9151f9ae479992c84011a6  $RUNNER_TEMP/Home.apk" | sha256sum -c -
+          curl -fLsS --retry 3 --max-time 120 -o "$RUNNER_TEMP/apktool.jar" https://github.com/iBotPeaches/Apktool/releases/download/v2.9.3/apktool_2.9.3.jar
+          java -jar "$RUNNER_TEMP/apktool.jar" d -f -r "$RUNNER_TEMP/Home.apk" -o "$RUNNER_TEMP/decoded" >/dev/null
+          cp -a "$RUNNER_TEMP/decoded/smali" "$RUNNER_TEMP/original-smali"
+          python3 tools/experiment_home_carousel.py "$RUNNER_TEMP/decoded"
+          python3 - "$RUNNER_TEMP/original-smali" "$RUNNER_TEMP/decoded/smali" > "$RUNNER_TEMP/smali-compare.txt" <<'PY'
+          import hashlib, sys
+          from pathlib import Path
+          a, b = map(Path, sys.argv[1:])
+          def files(root):
+              return {p.relative_to(root).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
+                      for p in root.rglob('*') if p.is_file()}
+          x, y = files(a), files(b)
+          if set(x) != set(y): raise SystemExit('Smali paths differ')
+          changed = sorted(n for n in x if x[n] != y[n])
+          expected = ['tw/com/elead/el830/home/Home.smali', 'tw/com/elead/el830/home/HomeApp.smali']
+          if changed != expected: raise SystemExit(f'Unexpected smali changes: {changed}')
+          print('Smali files compared:', len(x))
+          print('Only two modified source classes:', *changed, sep='\n')
+          PY
+          # Rebuild the dex with apktool; package it into the original APK to preserve all other payload bytes.
+          java -jar "$RUNNER_TEMP/apktool.jar" b -f "$RUNNER_TEMP/decoded" -o "$RUNNER_TEMP/rebuilt.apk" >/dev/null
+          unzip -p "$RUNNER_TEMP/rebuilt.apk" classes.dex > "$RUNNER_TEMP/new.dex"
+          test -s "$RUNNER_TEMP/new.dex"
+          python3 - "$RUNNER_TEMP/Home.apk" "$RUNNER_TEMP/new.dex" "$RUNNER_TEMP/unsigned.apk" <<'PY'
+          import sys, zipfile
+          with zipfile.ZipFile(sys.argv[1]) as old, zipfile.ZipFile(sys.argv[3], 'w') as out:
+              entries = old.infolist()
+              if len({e.filename for e in entries}) != len(entries): raise SystemExit('Duplicate source ZIP entry')
+              if sum(e.filename == 'classes.dex' for e in entries) != 1: raise SystemExit('Expected one classes.dex')
+              for entry in entries:
+                  if entry.filename.upper().startswith('META-INF/'): continue
+                  out.writestr(entry, open(sys.argv[2], 'rb').read() if entry.filename == 'classes.dex' else old.read(entry))
+          PY
+          repo=Avnet/android-imx-device-fsl
+          ref=495a2e2f50ecbd6d97922aeaf0224a90d1ed6d94
+          for name in platform.x509.pem platform.pk8; do
+            gh api "repos/$repo/contents/common/security/$name?ref=$ref" --jq .content | base64 -d > "$RUNNER_TEMP/$name"
+            test -s "$RUNNER_TEMP/$name"
+          done
+          cert_sha=$(openssl x509 -in "$RUNNER_TEMP/platform.x509.pem" -outform DER | sha256sum | cut -d' ' -f1)
+          pub_sha=$(openssl pkey -inform DER -in "$RUNNER_TEMP/platform.pk8" -pubout -outform DER | sha256sum | cut -d' ' -f1)
+          test "$cert_sha" = 7fbae817b7db24642d8959c347b561c003c6cfde2cb10f909c932f21a4d6d804
+          test "$pub_sha" = 3510803bae3da5f072e443c590c9c97b992f428ed7a3c79802071364ad9d8d5c
+          sdk=${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}
+          bt=$(find "$sdk/build-tools" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -1)
+          "$bt/zipalign" -f 4 "$RUNNER_TEMP/unsigned.apk" "$RUNNER_TEMP/aligned.apk"
+          "$bt/apksigner" sign --key "$RUNNER_TEMP/platform.pk8" --cert "$RUNNER_TEMP/platform.x509.pem" \
+            --min-sdk-version 19 --v1-signing-enabled true --out "$RUNNER_TEMP/experimental-home.apk" "$RUNNER_TEMP/aligned.apk"
+          "$bt/apksigner" verify --min-sdk-version 19 --max-sdk-version 19 --verbose --print-certs "$RUNNER_TEMP/experimental-home.apk" > "$RUNNER_TEMP/verify.txt" 2>&1
+          grep -F 'Verified using v1 scheme (JAR signing): true' "$RUNNER_TEMP/verify.txt"
+          grep -F "certificate SHA-256 digest: $cert_sha" "$RUNNER_TEMP/verify.txt"
+          python3 tools/compare_apk_payload.py "$RUNNER_TEMP/Home.apk" "$RUNNER_TEMP/experimental-home.apk" > "$RUNNER_TEMP/payload-compare.txt"
+          java -jar "$RUNNER_TEMP/apktool.jar" d -f -r "$RUNNER_TEMP/experimental-home.apk" -o "$RUNNER_TEMP/redecoded" >/dev/null
+          grep -F 'com.amaze.filemanager' "$RUNNER_TEMP/redecoded/smali/tw/com/elead/el830/home/HomeApp.smali" >/dev/null
+          grep -F 'ru.lifanx60.panel' "$RUNNER_TEMP/redecoded/smali/tw/com/elead/el830/home/HomeApp.smali" >/dev/null
+          grep -F 'com.amaze.filemanager' "$RUNNER_TEMP/redecoded/smali/tw/com/elead/el830/home/Home.smali" >/dev/null
+          grep -F 'ru.lifanx60.panel' "$RUNNER_TEMP/redecoded/smali/tw/com/elead/el830/home/Home.smali" >/dev/null
+          {
+            echo '# Offline Home carousel experiment — NOT A FIRMWARE AND NOT DEVICE TESTED'
+            echo 'Original Home SHA-256: 75ee685d5399e4c394146cac593ec2ed4bfbd5f6cc9151f9ae479992c84011a6'
+            echo 'APK assembled, resigned with matching public Freescale development key and decoded again.'
+            echo 'The candidate APK is intentionally not published or installed.'
+            echo 'Correct rendering, launch behavior, persistent settings and startup remain untested.'
+            cat "$RUNNER_TEMP/smali-compare.txt" "$RUNNER_TEMP/payload-compare.txt" "$RUNNER_TEMP/verify.txt"
+          } > reports/home-carousel-laboratory.txt
+      - name: Диагностика ошибки лабораторной сборки
+        if: failure()
+        run: |
+          set -e
+          test -s "$RUNNER_TEMP/home-experiment.log" || exit 0
+          mkdir -p reports
+          cp "$RUNNER_TEMP/home-experiment.log" reports/home-carousel-laboratory-error.txt
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/home-carousel-laboratory-error.txt
+          git diff --cached --quiet && exit 0
+          git commit -m 'report: diagnose offline home experiment'
+          git pull --rebase origin "${{ github.ref_name }}"
+          git push origin HEAD:"${{ github.ref_name }}"
+      - name: Сохранить текстовый отчёт, без artifacts
+        run: |
+          set -e
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/home-carousel-laboratory.txt
+          git diff --cached --quiet && exit 0
+          git commit -m 'report: offline signed home carousel experiment'
+          for try in 1 2 3 4 5; do
+            if git pull --rebase origin "${{ github.ref_name }}" && git push origin HEAD:"${{ github.ref_name }}"; then exit 0; fi
+            git rebase --abort || true
+            sleep 5
+          done
+          exit 1
