@@ -37,8 +37,10 @@ def main():
     for p, method in found:
         sig = signature(method)
         reason = None
-        if p.name == 'Disclaimer.smali' and re.search(r'\b(show|hide|enablePreHibernateMode)\(', sig):
-            reason = 'disclaimer display'
+        if p.name == 'Disclaimer.smali' and (re.search(r'\b(show|hide|enablePreHibernateMode|fade)\(', sig) or '<init>(' in sig):
+            reason = 'disclaimer display and overlay construction'
+        elif p.name == 'HomeService.smali' and 'initDisclaimerWindow(' in sig:
+            reason = 'disclaimer window setup'
         elif p.name == 'Disclaimer$2.smali' and 'handleMessage(' in sig:
             reason = 'disclaimer message handler'
         elif p.name.startswith('Disclaimer$') and 'onClick(' in sig:
@@ -83,6 +85,16 @@ def main():
                         break
         else:
             print(method)
+    print('\n## Possible pre-hibernate message 0x3e8 senders (context only)')
+    print('Literal and same-method hits are not proof of control flow or runtime execution.')
+    for p, method in found:
+        if '0x3e8' not in method or not re.search(r'send(?:Empty)?Message(?:Delayed|AtTime)?\(', method):
+            continue
+        lines = method.splitlines()
+        for i, line in enumerate(lines):
+            if re.search(r'\b0x3e8\b', line):
+                print('\n###', p.name, signature(method), 'line', i + 1)
+                print('\n'.join(lines[max(0, i - 12):i + 18]))
     print('\n## Default timezone/locale field references (context only)')
     pattern = re.compile(r'default.*(?:locale|timezone)|(?:locale|timezone).*default', re.I)
     for p in files:
