@@ -1,0 +1,32 @@
+# Offline Home carousel experiment — NOT A FIRMWARE AND NOT DEVICE TESTED
+Original Home SHA-256: 75ee685d5399e4c394146cac593ec2ed4bfbd5f6cc9151f9ae479992c84011a6
+APK assembled, resigned with matching public Freescale development key and decoded again.
+The candidate APK is intentionally not published or installed.
+Correct rendering, launch behavior, persistent settings and startup remain untested.
+Smali files compared: 1158
+Only two modified source classes:
+tw/com/elead/el830/home/Home.smali
+tw/com/elead/el830/home/HomeApp.smali
+Non-signature entries compared: 343
+Only changed entry: classes.dex
+Original classes.dex SHA-256: d8b41f3b89ce3828022a0780a0aad4e105861c8c4b42636ac4b8cfae50114f20
+Candidate classes.dex SHA-256: c48c4014c5a627c5d00d39d8048046998b74781bac1516180d3e69875e8ff814
+Manifest unchanged SHA-256: 3e580af0c923307c998db164b1997aa6f74c0cf5f1452dc594e039ae057ec0c6
+Verifies
+Verified using v1 scheme (JAR signing): true
+Verified using v2 scheme (APK Signature Scheme v2): false
+Verified using v3 scheme (APK Signature Scheme v3): false
+Verified using v3.1 scheme (APK Signature Scheme v3.1): false
+Verified using v3.2 scheme (APK Signature Scheme v3.2): false
+Verified using v4 scheme (APK Signature Scheme v4): false
+Verified for SourceStamp: false
+Number of signers: 1
+V1 Signer: certificate DN: EMAILADDRESS=android@freescale.com, CN=Android, OU=Android, O=Android, L=Mountain View, ST=California, C=US
+V1 Signer: certificate SHA-256 digest: 7fbae817b7db24642d8959c347b561c003c6cfde2cb10f909c932f21a4d6d804
+V1 Signer: certificate SHA-1 digest: 3e0caf3d799fbaec566facbe1a67fb250bdefd93
+V1 Signer: certificate MD5 digest: 748a35b8c2e489de57f2d360315efe3d
+V1 Signer: key algorithm: RSA
+V1 Signer: key size (bits): 2048
+V1 Signer: public key SHA-256 digest: 3510803bae3da5f072e443c590c9c97b992f428ed7a3c79802071364ad9d8d5c
+V1 Signer: public key SHA-1 digest: 8805271ca5707ffe5fad7d3f9bbd678b64934f27
+V1 Signer: public key MD5 digest: fe83cafd976a3081dda32d4fc47c8da2
