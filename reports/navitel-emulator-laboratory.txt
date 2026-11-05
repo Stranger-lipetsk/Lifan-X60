@@ -8,141 +8,258 @@ ro.build.version.release: 4.4.2
 ro.build.version.sdk: 19
 ro.product.cpu.abi: x86
 ro.build.fingerprint: generic_x86/sdk_x86/generic_x86:4.4.2/KK/4174703:eng/test-keys
+## Emulated storage
+drwxrwx--x root     sdcard_r          2026-11-05 18:50 sdcard
+/storage/sdcard0: No such file or directory
+/storage/emulated/0: No such file or directory
+/mnt/shell/emulated: No such file or directory
+Filesystem               Size     Used     Free   Blksize
+/dev                   164.5M   164.0K   164.4M   4096
+/mnt/asec              164.5M     0.0K   164.5M   4096
+/mnt/obb               164.5M     0.0K   164.5M   4096
+/system                532.8M   333.7M   199.1M   4096
+/cache                  61.0M    44.0K    60.9M   4096
+/data                  753.9M    29.7M   724.3M   4096
+/mnt/media_rw/sdcard  1020.0M    24.0K  1020.0M   2048
+/mnt/secure/asec      1020.0M    24.0K  1020.0M   2048
+/storage/sdcard       1020.0M    24.0K  1020.0M   2048
 ## Package installation
-/home/runner/work/Lifan-X60/Lifan-X60/firmware/apks/com.navitel.apk: 1 file pushed, 0 skipped. 266.8 MB/s (99176587 bytes in 0.355s)
+/home/runner/work/Lifan-X60/Lifan-X60/firmware/apks/com.navitel.apk: 1 file pushed, 0 skipped. 237.9 MB/s (99176587 bytes in 0.398s)
 Performing Push Install
 WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
 	pkg: /data/local/tmp/com.navitel.apk
 Success
 ## am start status
-command exit status: 124
+command exit status: 0
 WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
 Starting: Intent { cmp=com.navitel/.app.MainActivity }
+Status: ok
+Activity: com.navitel/.app.MainActivity
+ThisTime: 1094
+TotalTime: 1094
+Complete
 ## Navitel activities (dumpsys excerpts)
-    mResumedActivity: ActivityRecord{b018c868 u0 com.android.launcher/com.android.launcher2.Launcher t3}
-  * Recent #1: TaskRecord{b042d0d8 #4 A=com.navitel U=0 sz=0}
+    * TaskRecord{b01a2238 #4 A=com.navitel U=0 sz=1}
+      affinity=com.navitel
+      intent={flg=0x10000000 cmp=com.navitel/.app.MainActivity}
+      realActivity=com.navitel/.app.MainActivity
+      Activities=[ActivityRecord{afca0d48 u0 com.navitel/.app.MainActivity t4}]
+      * Hist #0: ActivityRecord{afca0d48 u0 com.navitel/.app.MainActivity t4}
+          packageName=com.navitel processName=com.navitel
+          app=ProcessRecord{b007d9e0 2242:com.navitel/u0a52}
+          Intent { flg=0x10000000 cmp=com.navitel/.app.MainActivity }
+          frontOfTask=true task=TaskRecord{b01a2238 #4 A=com.navitel U=0 sz=1}
+          taskAffinity=com.navitel
+          realActivity=com.navitel/.app.MainActivity
+          baseDir=/data/app/com.navitel-1.apk
+          dataDir=/data/data/com.navitel
+      TaskRecord{b01a2238 #4 A=com.navitel U=0 sz=1}
+        Run #0: ActivityRecord{afca0d48 u0 com.navitel/.app.MainActivity t4}
+    mResumedActivity: ActivityRecord{afca0d48 u0 com.navitel/.app.MainActivity t4}
+  mFocusedActivity: ActivityRecord{afca0d48 u0 com.navitel/.app.MainActivity t4}
+  * Recent #0: TaskRecord{b01a2238 #4 A=com.navitel U=0 sz=1}
     affinity=com.navitel
     intent={flg=0x10000000 cmp=com.navitel/.app.MainActivity}
     realActivity=com.navitel/.app.MainActivity
+    Activities=[ActivityRecord{afca0d48 u0 com.navitel/.app.MainActivity t4}]
 ## Matching processes
+u0_a52    2242  1135  387744 69968 ffffffff b76f0f1b S com.navitel
 ## Selected startup, failure and runtime lines, not an exhaustive log
-D/AndroidRuntime( 2206): >>>>>> AndroidRuntime START com.android.internal.os.RuntimeInit <<<<<<
-D/AndroidRuntime( 2206): CheckJNI is ON
-D/AndroidRuntime( 2206): Calling main entry com.android.commands.am.Am
-I/ActivityManager( 1540): START u0 {flg=0x10000000 cmp=com.navitel/.app.MainActivity} from pid 2206
-I/ActivityManager( 1540): Start proc com.navitel for activity com.navitel/.app.MainActivity: pid=2217 uid=10052 gids={50052, 1028, 1015, 3003}
-W/ContextImpl( 2217): Failed to ensure directory: /storage/sdcard/Android/data/com.navitel/files
-D/dalvikvm( 2217): Trying to load lib /data/app-lib/com.navitel-1/libnative-lib.so 0xafa83948
-I/dalvikvm( 2217): Could not find method android.view.View.requestApplyInsets, referenced from method com.navitel.app.MainActivity.applySystemUiState
-I/dalvikvm( 2217): Could not find method android.widget.FrameLayout.requestApplyInsets, referenced from method com.navitel.app.SidebarController.inflate
-I/dalvikvm( 2217): Could not find method android.view.WindowInsets.getSystemWindowInsetBottom, referenced from method com.navitel.app.SystemBarTintManager.updateNavBarView
-I/dalvikvm( 2217): Could not find method android.view.WindowInsets.getSystemWindowInsetRight, referenced from method com.navitel.app.SystemBarTintManager.updateNavBarView
-I/dalvikvm( 2217): Could not find method android.view.WindowInsets.getSystemWindowInsetTop, referenced from method com.navitel.app.SystemBarTintManager.updateStatusBarView
-E/dalvikvm( 2217): Could not find class 'com.navitel.app.SystemBarTintManager$$ExternalSyntheticLambda0', referenced from method com.navitel.app.SystemBarTintManager.onCreate
-D/dalvikvm( 2217): DexOpt: unable to opt direct call 0x80b3 at 0x52 in Lcom/navitel/app/SystemBarTintManager;.onCreate
-D/dalvikvm( 2217): Added shared lib /data/app-lib/com.navitel-1/libnative-lib.so 0xafa83948
-W/ContextImpl( 2217): Failed to ensure directory: /storage/sdcard/Android/data/com.navitel/files
-W/ContextImpl( 2217): Failed to ensure directory: /storage/sdcard/Android/data/com.navitel/files
-D/dalvikvm( 2217): DexOpt: unable to opt direct call 0x373e at 0x9e in Landroidx/drawerlayout/widget/DrawerLayout;.<init>
-F/libc    ( 2217): Fatal signal 4 (SIGILL) at 0xa31af0e1 (code=2), thread 2230 (NavitelCore-1)
-E/dalvikvm( 2217): Could not find class 'com.navitel.network.NetworkStateReceiver$NetworkStatusCallback', referenced from method com.navitel.network.NetworkStateReceiver.createCallback
-I/dalvikvm( 2217): Could not find method com.navitel.network.NetworkStateReceiver$NetworkStatusCallback.isConnected, referenced from method com.navitel.network.NetworkStateReceiver.isConnected
-D/dalvikvm( 2217): DexOpt: unable to opt direct call 0x9e29 at 0x08 in Lcom/navitel/network/NetworkStateReceiver;.createCallback
-W/GooglePlayServicesUtil( 2217): com.navitel requires the Google Play Store, but it is missing.
-W/System.err( 2217): 	at com.navitel.googleplaybilling.GooglePlayStore.<init>(GooglePlayStore.java:28)
-W/System.err( 2217): 	at com.navitel.Application.createStore(Application.java:60)
-W/System.err( 2217): 	at com.navitel.app.NavitelApplication.getStore(NavitelApplication.java:486)
-W/System.err( 2217): 	at com.navitel.app.NavitelApplication.getBilling(NavitelApplication.java:493)
-W/System.err( 2217): 	at com.navitel.app.MainActivity.onCreate(MainActivity.java:140)
-D/dalvikvm( 2217): DexOpt: unable to opt direct call 0x0183 at 0xd9 in Lcom/google/android/gms/common/GoogleApiAvailability;.zaa
-W/GooglePlayServicesUtil( 2217): com.navitel requires the Google Play Store, but it is missing.
-I/dalvikvm( 2217): Could not find method android.app.NotificationManager.getNotificationChannel, referenced from method com.navitel.notifications.StatusService.createNotificationChannels
-I/dalvikvm( 2217): Could not find method android.content.Context.startForegroundService, referenced from method com.navitel.notifications.StatusService.startService
-I/dalvikvm( 2217): Could not find method android.app.Service.startForeground, referenced from method com.navitel.notifications.StatusService.onStartCommand
-I/dalvikvm( 2217): Could not find method android.app.Service.stopForeground, referenced from method com.navitel.notifications.StatusService.onStartCommand
-D/dalvikvm( 2217): DexOpt: unable to opt direct call 0x0183 at 0x19 in Lcom/navitel/notifications/StatusService;.createNotificationChannels
-I/DEBUG   ( 1124): pid: 2217, tid: 2230, name: NavitelCore-1  >>> com.navitel <<<
-I/DEBUG   ( 1124):     #00  pc 009040e1  /data/app-lib/com.navitel-1/libnative-lib.so
-I/DEBUG   ( 1124):     a28ab000-a45be000 r-x /data/app-lib/com.navitel-1/libnative-lib.so
-I/DEBUG   ( 1124):     a45be000-a4621000 r-- /data/app-lib/com.navitel-1/libnative-lib.so
-I/ActivityManager( 1540): Process com.navitel (pid 2217) has died.
-I/ActivityManager( 1540): Start proc com.navitel for activity com.navitel/.app.MainActivity: pid=2248 uid=10052 gids={50052, 1028, 1015, 3003}
-W/ContextImpl( 2248): Failed to ensure directory: /storage/sdcard/Android/data/com.navitel/files
-D/dalvikvm( 2248): Trying to load lib /data/app-lib/com.navitel-1/libnative-lib.so 0xafa84600
-I/dalvikvm( 2248): Could not find method android.view.View.requestApplyInsets, referenced from method com.navitel.app.MainActivity.applySystemUiState
-I/dalvikvm( 2248): Could not find method android.widget.FrameLayout.requestApplyInsets, referenced from method com.navitel.app.SidebarController.inflate
-I/dalvikvm( 2248): Could not find method android.view.WindowInsets.getSystemWindowInsetBottom, referenced from method com.navitel.app.SystemBarTintManager.updateNavBarView
-I/dalvikvm( 2248): Could not find method android.view.WindowInsets.getSystemWindowInsetRight, referenced from method com.navitel.app.SystemBarTintManager.updateNavBarView
-I/dalvikvm( 2248): Could not find method android.view.WindowInsets.getSystemWindowInsetTop, referenced from method com.navitel.app.SystemBarTintManager.updateStatusBarView
-E/dalvikvm( 2248): Could not find class 'com.navitel.app.SystemBarTintManager$$ExternalSyntheticLambda0', referenced from method com.navitel.app.SystemBarTintManager.onCreate
-D/dalvikvm( 2248): DexOpt: unable to opt direct call 0x80b3 at 0x52 in Lcom/navitel/app/SystemBarTintManager;.onCreate
-D/dalvikvm( 2248): Added shared lib /data/app-lib/com.navitel-1/libnative-lib.so 0xafa84600
-W/ContextImpl( 2248): Failed to ensure directory: /storage/sdcard/Android/data/com.navitel/files
-D/dalvikvm( 2248): DexOpt: unable to opt direct call 0x373e at 0x9e in Landroidx/drawerlayout/widget/DrawerLayout;.<init>
-W/ContextImpl( 2248): Failed to ensure directory: /storage/sdcard/Android/data/com.navitel/files
-F/libc    ( 2248): Fatal signal 4 (SIGILL) at 0xa33b70e1 (code=2), thread 2262 (NavitelCore-1)
-E/dalvikvm( 2248): Could not find class 'com.navitel.network.NetworkStateReceiver$NetworkStatusCallback', referenced from method com.navitel.network.NetworkStateReceiver.createCallback
-I/dalvikvm( 2248): Could not find method com.navitel.network.NetworkStateReceiver$NetworkStatusCallback.isConnected, referenced from method com.navitel.network.NetworkStateReceiver.isConnected
-D/dalvikvm( 2248): DexOpt: unable to opt direct call 0x9e29 at 0x08 in Lcom/navitel/network/NetworkStateReceiver;.createCallback
-W/GooglePlayServicesUtil( 2248): com.navitel requires the Google Play Store, but it is missing.
-W/System.err( 2248): 	at com.navitel.googleplaybilling.GooglePlayStore.<init>(GooglePlayStore.java:28)
-W/System.err( 2248): 	at com.navitel.Application.createStore(Application.java:60)
-W/System.err( 2248): 	at com.navitel.app.NavitelApplication.getStore(NavitelApplication.java:486)
-W/System.err( 2248): 	at com.navitel.app.NavitelApplication.getBilling(NavitelApplication.java:493)
-W/System.err( 2248): 	at com.navitel.app.MainActivity.onCreate(MainActivity.java:140)
-D/dalvikvm( 2248): DexOpt: unable to opt direct call 0x0183 at 0xd9 in Lcom/google/android/gms/common/GoogleApiAvailability;.zaa
-W/GooglePlayServicesUtil( 2248): com.navitel requires the Google Play Store, but it is missing.
-I/dalvikvm( 2248): Could not find method android.app.NotificationManager.getNotificationChannel, referenced from method com.navitel.notifications.StatusService.createNotificationChannels
-I/dalvikvm( 2248): Could not find method android.content.Context.startForegroundService, referenced from method com.navitel.notifications.StatusService.startService
-I/dalvikvm( 2248): Could not find method android.app.Service.startForeground, referenced from method com.navitel.notifications.StatusService.onStartCommand
-I/dalvikvm( 2248): Could not find method android.app.Service.stopForeground, referenced from method com.navitel.notifications.StatusService.onStartCommand
-D/dalvikvm( 2248): DexOpt: unable to opt direct call 0x0183 at 0x19 in Lcom/navitel/notifications/StatusService;.createNotificationChannels
-I/DEBUG   ( 1124): pid: 2248, tid: 2262, name: NavitelCore-1  >>> com.navitel <<<
-I/DEBUG   ( 1124):     #00  pc 009040e1  /data/app-lib/com.navitel-1/libnative-lib.so
-I/DEBUG   ( 1124):     a2ab3000-a47c6000 r-x /data/app-lib/com.navitel-1/libnative-lib.so
-I/DEBUG   ( 1124):     a47c6000-a4829000 r-- /data/app-lib/com.navitel-1/libnative-lib.so
-I/ActivityManager( 1540): Process com.navitel (pid 2248) has died.
-I/ActivityManager( 1540): Start proc com.navitel for activity com.navitel/.app.MainActivity: pid=2279 uid=10052 gids={50052, 1028, 1015, 3003}
-W/ContextImpl( 2279): Failed to ensure directory: /storage/sdcard/Android/data/com.navitel/files
-D/dalvikvm( 2279): Trying to load lib /data/app-lib/com.navitel-1/libnative-lib.so 0xafa853a0
-I/dalvikvm( 2279): Could not find method android.view.View.requestApplyInsets, referenced from method com.navitel.app.MainActivity.applySystemUiState
-I/dalvikvm( 2279): Could not find method android.widget.FrameLayout.requestApplyInsets, referenced from method com.navitel.app.SidebarController.inflate
-I/dalvikvm( 2279): Could not find method android.view.WindowInsets.getSystemWindowInsetBottom, referenced from method com.navitel.app.SystemBarTintManager.updateNavBarView
-I/dalvikvm( 2279): Could not find method android.view.WindowInsets.getSystemWindowInsetRight, referenced from method com.navitel.app.SystemBarTintManager.updateNavBarView
-I/dalvikvm( 2279): Could not find method android.view.WindowInsets.getSystemWindowInsetTop, referenced from method com.navitel.app.SystemBarTintManager.updateStatusBarView
-E/dalvikvm( 2279): Could not find class 'com.navitel.app.SystemBarTintManager$$ExternalSyntheticLambda0', referenced from method com.navitel.app.SystemBarTintManager.onCreate
-D/dalvikvm( 2279): DexOpt: unable to opt direct call 0x80b3 at 0x52 in Lcom/navitel/app/SystemBarTintManager;.onCreate
-D/dalvikvm( 2279): Added shared lib /data/app-lib/com.navitel-1/libnative-lib.so 0xafa853a0
-W/ContextImpl( 2279): Failed to ensure directory: /storage/sdcard/Android/data/com.navitel/files
-W/ContextImpl( 2279): Failed to ensure directory: /storage/sdcard/Android/data/com.navitel/files
-F/libc    ( 2279): Fatal signal 4 (SIGILL) at 0xa33b70e1 (code=2), thread 2293 (NavitelCore-1)
-D/dalvikvm( 2279): DexOpt: unable to opt direct call 0x373e at 0x9e in Landroidx/drawerlayout/widget/DrawerLayout;.<init>
-E/dalvikvm( 2279): Could not find class 'com.navitel.network.NetworkStateReceiver$NetworkStatusCallback', referenced from method com.navitel.network.NetworkStateReceiver.createCallback
-I/dalvikvm( 2279): Could not find method com.navitel.network.NetworkStateReceiver$NetworkStatusCallback.isConnected, referenced from method com.navitel.network.NetworkStateReceiver.isConnected
-D/dalvikvm( 2279): DexOpt: unable to opt direct call 0x9e29 at 0x08 in Lcom/navitel/network/NetworkStateReceiver;.createCallback
-W/GooglePlayServicesUtil( 2279): com.navitel requires the Google Play Store, but it is missing.
-W/System.err( 2279): 	at com.navitel.googleplaybilling.GooglePlayStore.<init>(GooglePlayStore.java:28)
-W/System.err( 2279): 	at com.navitel.Application.createStore(Application.java:60)
-W/System.err( 2279): 	at com.navitel.app.NavitelApplication.getStore(NavitelApplication.java:486)
-W/System.err( 2279): 	at com.navitel.app.NavitelApplication.getBilling(NavitelApplication.java:493)
-W/System.err( 2279): 	at com.navitel.app.MainActivity.onCreate(MainActivity.java:140)
-D/dalvikvm( 2279): DexOpt: unable to opt direct call 0x0183 at 0xd9 in Lcom/google/android/gms/common/GoogleApiAvailability;.zaa
-W/GooglePlayServicesUtil( 2279): com.navitel requires the Google Play Store, but it is missing.
-I/dalvikvm( 2279): Could not find method android.app.NotificationManager.getNotificationChannel, referenced from method com.navitel.notifications.StatusService.createNotificationChannels
-I/dalvikvm( 2279): Could not find method android.content.Context.startForegroundService, referenced from method com.navitel.notifications.StatusService.startService
-I/dalvikvm( 2279): Could not find method android.app.Service.startForeground, referenced from method com.navitel.notifications.StatusService.onStartCommand
-I/dalvikvm( 2279): Could not find method android.app.Service.stopForeground, referenced from method com.navitel.notifications.StatusService.onStartCommand
-D/dalvikvm( 2279): DexOpt: unable to opt direct call 0x0183 at 0x19 in Lcom/navitel/notifications/StatusService;.createNotificationChannels
-I/dalvikvm( 2279): Could not find method android.view.View.getRootWindowInsets, referenced from method com.navitel.controllers.ViewController.applyInsets
-I/DEBUG   ( 1124): pid: 2279, tid: 2293, name: NavitelCore-1  >>> com.navitel <<<
-I/DEBUG   ( 1124):     #00  pc 009040e1  /data/app-lib/com.navitel-1/libnative-lib.so
-I/DEBUG   ( 1124):     a2ab3000-a47c6000 r-x /data/app-lib/com.navitel-1/libnative-lib.so
-I/DEBUG   ( 1124):     a47c6000-a4829000 r-- /data/app-lib/com.navitel-1/libnative-lib.so
-W/InputDispatcher( 1540): channel 'afc94190 com.navitel/com.navitel.app.MainActivity (server)' ~ Consumer closed input channel or an error occurred.  events=0x9
-E/InputDispatcher( 1540): channel 'afc94190 com.navitel/com.navitel.app.MainActivity (server)' ~ Channel is unrecoverably broken and will be disposed!
-I/ActivityManager( 1540): Process com.navitel (pid 2279) has died.
-W/ActivityManager( 1540): Force removing ActivityRecord{afc92e48 u0 com.navitel/.app.MainActivity t4}: app died, no saved state
-W/InputDispatcher( 1540): Attempted to unregister already unregistered input channel 'afc94190 com.navitel/com.navitel.app.MainActivity (server)'
-I/WindowState( 1540): WIN DEATH: Window{afc94190 u0 com.navitel/com.navitel.app.MainActivity}
-W/ActivityManager( 1540): Process com.navitel has crashed too many times: killing!
-I/ActivityManager( 1540): Exiting empty application process com.navitel (null)
+D/AndroidRuntime( 2231): 
+D/AndroidRuntime( 2231): >>>>>> AndroidRuntime START com.android.internal.os.RuntimeInit <<<<<<
+D/AndroidRuntime( 2231): CheckJNI is ON
+D/AndroidRuntime( 2231): Calling main entry com.android.commands.am.Am
+I/ActivityManager( 1553): START u0 {flg=0x10000000 cmp=com.navitel/.app.MainActivity} from pid 2231
+I/ActivityManager( 1553): Start proc com.navitel for activity com.navitel/.app.MainActivity: pid=2242 uid=10052 gids={50052, 1028, 1015, 3003}
+D/dalvikvm( 2242): Trying to load lib /data/app-lib/com.navitel-1/libnative-lib.so 0xafad6738
+I/dalvikvm( 2242): Could not find method android.view.View.requestApplyInsets, referenced from method com.navitel.app.MainActivity.applySystemUiState
+I/dalvikvm( 2242): Could not find method android.widget.FrameLayout.requestApplyInsets, referenced from method com.navitel.app.SidebarController.inflate
+I/dalvikvm( 2242): Could not find method android.view.WindowInsets.getSystemWindowInsetBottom, referenced from method com.navitel.app.SystemBarTintManager.updateNavBarView
+I/dalvikvm( 2242): Could not find method android.view.WindowInsets.getSystemWindowInsetRight, referenced from method com.navitel.app.SystemBarTintManager.updateNavBarView
+I/dalvikvm( 2242): Could not find method android.view.WindowInsets.getSystemWindowInsetTop, referenced from method com.navitel.app.SystemBarTintManager.updateStatusBarView
+E/dalvikvm( 2242): Could not find class 'com.navitel.app.SystemBarTintManager$$ExternalSyntheticLambda0', referenced from method com.navitel.app.SystemBarTintManager.onCreate
+D/dalvikvm( 2242): DexOpt: unable to opt direct call 0x80b3 at 0x52 in Lcom/navitel/app/SystemBarTintManager;.onCreate
+D/dalvikvm( 2242): Added shared lib /data/app-lib/com.navitel-1/libnative-lib.so 0xafad6738
+D/dalvikvm( 2242): DexOpt: unable to opt direct call 0x373e at 0x9e in Landroidx/drawerlayout/widget/DrawerLayout;.<init>
+E/dalvikvm( 2242): Could not find class 'com.navitel.network.NetworkStateReceiver$NetworkStatusCallback', referenced from method com.navitel.network.NetworkStateReceiver.createCallback
+I/dalvikvm( 2242): Could not find method com.navitel.network.NetworkStateReceiver$NetworkStatusCallback.isConnected, referenced from method com.navitel.network.NetworkStateReceiver.isConnected
+D/dalvikvm( 2242): DexOpt: unable to opt direct call 0x9e29 at 0x08 in Lcom/navitel/network/NetworkStateReceiver;.createCallback
+W/GooglePlayServicesUtil( 2242): com.navitel requires the Google Play Store, but it is missing.
+W/System.err( 2242): 	at com.navitel.googleplaybilling.GooglePlayStore.<init>(GooglePlayStore.java:28)
+W/System.err( 2242): 	at com.navitel.Application.createStore(Application.java:60)
+W/System.err( 2242): 	at com.navitel.app.NavitelApplication.getStore(NavitelApplication.java:486)
+W/System.err( 2242): 	at com.navitel.app.NavitelApplication.getBilling(NavitelApplication.java:493)
+W/System.err( 2242): 	at com.navitel.app.MainActivity.onCreate(MainActivity.java:140)
+D/dalvikvm( 2242): DexOpt: unable to opt direct call 0x0183 at 0xd9 in Lcom/google/android/gms/common/GoogleApiAvailability;.zaa
+W/GooglePlayServicesUtil( 2242): com.navitel requires the Google Play Store, but it is missing.
+I/dalvikvm( 2242): Could not find method android.app.NotificationManager.getNotificationChannel, referenced from method com.navitel.notifications.StatusService.createNotificationChannels
+I/dalvikvm( 2242): Could not find method android.content.Context.startForegroundService, referenced from method com.navitel.notifications.StatusService.startService
+I/dalvikvm( 2242): Could not find method android.app.Service.startForeground, referenced from method com.navitel.notifications.StatusService.onStartCommand
+I/dalvikvm( 2242): Could not find method android.app.Service.stopForeground, referenced from method com.navitel.notifications.StatusService.onStartCommand
+D/dalvikvm( 2242): DexOpt: unable to opt direct call 0x0183 at 0x19 in Lcom/navitel/notifications/StatusService;.createNotificationChannels
+I/dalvikvm( 2242): Could not find method android.view.View.getRootWindowInsets, referenced from method com.navitel.controllers.ViewController.applyInsets
+I/ActivityManager( 1553): Displayed com.navitel/.app.MainActivity: +1s94ms
+D/AndroidRuntime( 2231): Shutting down VM
+E/dalvikvm( 2242): Could not find class 'android.media.AudioAttributes$Builder', referenced from method com.navitel.notifications.AudioTrackSychronizedWrapper.initializeTrack
+D/dalvikvm( 2242): DexOpt: unable to opt direct call 0x0547 at 0x6c in Lcom/navitel/notifications/AudioTrackSychronizedWrapper;.initializeTrack
+D/dalvikvm( 2242): DexOpt: unable to opt direct call 0x0555 at 0x7d in Lcom/navitel/notifications/AudioTrackSychronizedWrapper;.initializeTrack
+D/dalvikvm( 2242): DexOpt: unable to opt direct call 0x0564 at 0x97 in Lcom/navitel/notifications/AudioTrackSychronizedWrapper;.initializeTrack
+E/dalvikvm( 2242): Could not find class 'com.navitel.map.LocationService$GnssStatusCallback', referenced from method com.navitel.map.LocationService.<init>
+I/dalvikvm( 2242): Could not find method android.location.LocationManager.registerGnssStatusCallback, referenced from method com.navitel.map.LocationService.startLocationUpdates
+I/dalvikvm( 2242): Could not find method android.location.LocationManager.unregisterGnssStatusCallback, referenced from method com.navitel.map.LocationService.stopLocationUpdates
+D/dalvikvm( 2242): DexOpt: unable to opt direct call 0x9a12 at 0x3b in Lcom/navitel/map/LocationService;.<init>
+D/dalvikvm( 2242): DexOpt: unable to opt direct call 0x04f8 at 0x6f in Lcom/google/android/material/button/MaterialButtonHelper;.createBackground
+D/dalvikvm( 2242): DexOpt: unable to opt direct call 0x0dc5 at 0x11 in Landroidx/core/view/accessibility/AccessibilityNodeInfoCompat$AccessibilityActionCompat;.<init>
+## First app process log lines
+I/dalvikvm( 2242): Could not find method android.os.Trace.isEnabled, referenced from method androidx.tracing.Trace.isEnabled
+W/dalvikvm( 2242): VFY: unable to resolve static method 1760: Landroid/os/Trace;.isEnabled ()Z
+D/dalvikvm( 2242): VFY: replacing opcode 0x71 at 0x0004
+I/dalvikvm( 2242): Could not find method android.os.Handler.createAsync, referenced from method androidx.arch.core.executor.DefaultTaskExecutor.createAsync
+W/dalvikvm( 2242): VFY: unable to resolve static method 1605: Landroid/os/Handler;.createAsync (Landroid/os/Looper;)Landroid/os/Handler;
+D/dalvikvm( 2242): VFY: replacing opcode 0x71 at 0x0006
+E/dalvikvm( 2242): Could not find class 'android.view.autofill.AutofillManager', referenced from method com.facebook.internal.Utility.isAutofillAvailable
+W/dalvikvm( 2242): VFY: unable to resolve const-class 604 (Landroid/view/autofill/AutofillManager;) in Lcom/facebook/internal/Utility;
+D/dalvikvm( 2242): VFY: replacing opcode 0x1c at 0x0008
+D/dalvikvm( 2242): GC_CONCURRENT freed 235K, 10% free 2805K/3100K, paused 1ms+0ms, total 3ms
+W/com.facebook.UserSettingsManager( 2242): The value for AdvertiserIDCollectionEnabled is currently set to FALSE so you're sending app events without collecting Advertiser ID. This can affect the quality of your advertising and analytics results.
+I/Navitel ( 2242): ==================================================================
+I/Navitel ( 2242): onCreate (): GOOGLE_PLAY full v11.11.1128 Android SDK built for x86
+I/Navitel ( 2242): ==================================================================
+D/dalvikvm( 2242): Trying to load lib /data/app-lib/com.navitel-1/libnative-lib.so 0xafad6738
+I/dalvikvm( 2242): Could not find method android.view.View.requestApplyInsets, referenced from method com.navitel.app.MainActivity.applySystemUiState
+W/dalvikvm( 2242): VFY: unable to resolve virtual method 3011: Landroid/view/View;.requestApplyInsets ()V
+D/dalvikvm( 2242): VFY: replacing opcode 0x6e at 0x0039
+E/GraphResponse( 2242): GraphRequest can't be used when Facebook SDK isn't fully initialized
+E/GraphResponse( 2242): GraphRequest can't be used when Facebook SDK isn't fully initialized
+D/dalvikvm( 2242): GC_CONCURRENT freed 191K, 8% free 2998K/3252K, paused 2ms+1ms, total 4ms
+E/GraphResponse( 2242): GraphRequest can't be used when Facebook SDK isn't fully initialized
+I/dalvikvm( 2242): Could not find method android.app.Activity.onRequestPermissionsResult, referenced from method androidx.activity.ComponentActivity.onRequestPermissionsResult
+W/dalvikvm( 2242): VFY: unable to resolve virtual method 190: Landroid/app/Activity;.onRequestPermissionsResult (I[Ljava/lang/String;[I)V
+D/dalvikvm( 2242): VFY: replacing opcode 0x6f at 0x0020
+I/dalvikvm( 2242): Could not find method android.widget.FrameLayout.requestApplyInsets, referenced from method com.navitel.app.SidebarController.inflate
+W/dalvikvm( 2242): VFY: unable to resolve virtual method 4295: Landroid/widget/FrameLayout;.requestApplyInsets ()V
+D/dalvikvm( 2242): VFY: replacing opcode 0x6e at 0x0049
+W/dalvikvm( 2242): VFY: unable to find class referenced in signature (Landroid/view/WindowInsets;)
+W/dalvikvm( 2242): VFY: unable to find class referenced in signature (Landroid/view/WindowInsets;)
+W/dalvikvm( 2242): VFY: unable to find class referenced in signature (Landroid/view/WindowInsets;)
+W/dalvikvm( 2242): VFY: unable to find class referenced in signature (Landroid/view/WindowInsets;)
+W/dalvikvm( 2242): VFY: unable to find class referenced in signature (Landroid/view/WindowInsets;)
+W/dalvikvm( 2242): VFY: unable to find class referenced in signature (Landroid/view/WindowInsets;)
+W/dalvikvm( 2242): VFY: unable to find class referenced in signature (Landroid/view/WindowInsets;)
+W/dalvikvm( 2242): VFY: unable to find class referenced in signature (Landroid/view/WindowInsets;)
+W/dalvikvm( 2242): VFY: unable to find class referenced in signature (Landroid/view/WindowInsets;)
+I/dalvikvm( 2242): Could not find method android.view.WindowInsets.getSystemWindowInsetBottom, referenced from method com.navitel.app.SystemBarTintManager.updateNavBarView
+W/dalvikvm( 2242): VFY: unable to resolve virtual method 3485: Landroid/view/WindowInsets;.getSystemWindowInsetBottom ()I
+D/dalvikvm( 2242): VFY: replacing opcode 0x6e at 0x000b
+I/dalvikvm( 2242): Could not find method android.view.WindowInsets.getSystemWindowInsetRight, referenced from method com.navitel.app.SystemBarTintManager.updateNavBarView
+W/dalvikvm( 2242): VFY: unable to resolve virtual method 3487: Landroid/view/WindowInsets;.getSystemWindowInsetRight ()I
+D/dalvikvm( 2242): VFY: replacing opcode 0x6e at 0x0017
+W/dalvikvm( 2242): VFY: unable to find class referenced in signature (Landroid/view/WindowInsets;)
+I/dalvikvm( 2242): Could not find method android.view.WindowInsets.getSystemWindowInsetTop, referenced from method com.navitel.app.SystemBarTintManager.updateStatusBarView
+W/dalvikvm( 2242): VFY: unable to resolve virtual method 3488: Landroid/view/WindowInsets;.getSystemWindowInsetTop ()I
+D/dalvikvm( 2242): VFY: replacing opcode 0x6e at 0x0007
+I/dalvikvm( 2242): Failed resolving Lcom/navitel/app/SystemBarTintManager$$ExternalSyntheticLambda0; interface 536 'Landroid/view/View$OnApplyWindowInsetsListener;'
+W/dalvikvm( 2242): Link of class 'Lcom/navitel/app/SystemBarTintManager$$ExternalSyntheticLambda0;' failed
+E/dalvikvm( 2242): Could not find class 'com.navitel.app.SystemBarTintManager$$ExternalSyntheticLambda0', referenced from method com.navitel.app.SystemBarTintManager.onCreate
+W/dalvikvm( 2242): VFY: unable to resolve new-instance 4914 (Lcom/navitel/app/SystemBarTintManager$$ExternalSyntheticLambda0;) in Lcom/navitel/app/SystemBarTintManager;
+D/dalvikvm( 2242): VFY: replacing opcode 0x22 at 0x0050
+I/dalvikvm( 2242): Failed resolving Lcom/navitel/app/SystemBarTintManager$$ExternalSyntheticLambda0; interface 536 'Landroid/view/View$OnApplyWindowInsetsListener;'
+W/dalvikvm( 2242): Link of class 'Lcom/navitel/app/SystemBarTintManager$$ExternalSyntheticLambda0;' failed
+D/dalvikvm( 2242): DexOpt: unable to opt direct call 0x80b3 at 0x52 in Lcom/navitel/app/SystemBarTintManager;.onCreate
+I/dalvikvm( 2242): Could not find method android.view.Window$Callback.onPointerCaptureChanged, referenced from method androidx.appcompat.view.WindowCallbackWrapper.onPointerCaptureChanged
+W/dalvikvm( 2242): VFY: unable to resolve interface method 3426: Landroid/view/Window$Callback;.onPointerCaptureChanged (Z)V
+D/dalvikvm( 2242): VFY: replacing opcode 0x72 at 0x0002
+I/dalvikvm( 2242): Could not find method android.view.Window$Callback.onProvideKeyboardShortcuts, referenced from method androidx.appcompat.view.WindowCallbackWrapper.onProvideKeyboardShortcuts
+W/dalvikvm( 2242): VFY: unable to resolve interface method 3428: Landroid/view/Window$Callback;.onProvideKeyboardShortcuts (Ljava/util/List;Landroid/view/Menu;I)V
+D/dalvikvm( 2242): VFY: replacing opcode 0x72 at 0x0002
+W/dalvikvm( 2242): VFY: unable to find class referenced in signature (Landroid/view/SearchEvent;)
+I/dalvikvm( 2242): Could not find method android.view.Window$Callback.onSearchRequested, referenced from method androidx.appcompat.view.WindowCallbackWrapper.onSearchRequested
+W/dalvikvm( 2242): VFY: unable to resolve interface method 3430: Landroid/view/Window$Callback;.onSearchRequested (Landroid/view/SearchEvent;)Z
+D/dalvikvm( 2242): VFY: replacing opcode 0x72 at 0x0002
+I/dalvikvm( 2242): Could not find method android.view.Window$Callback.onWindowStartingActionMode, referenced from method androidx.appcompat.view.WindowCallbackWrapper.onWindowStartingActionMode
+W/dalvikvm( 2242): VFY: unable to resolve interface method 3434: Landroid/view/Window$Callback;.onWindowStartingActionMode (Landroid/view/ActionMode$Callback;I)Landroid/view/ActionMode;
+D/dalvikvm( 2242): VFY: replacing opcode 0x72 at 0x0002
+D/dalvikvm( 2242): Added shared lib /data/app-lib/com.navitel-1/libnative-lib.so 0xafad6738
+D/dalvikvm( 2242): GC_FOR_ALLOC freed 269K, 10% free 3111K/3440K, paused 4ms, total 4ms
+D/dalvikvm( 2242): GC_CONCURRENT freed 325K, 14% free 3173K/3672K, paused 1ms+0ms, total 3ms
+D/dalvikvm( 2242): GC_FOR_ALLOC freed 86K, 11% free 3268K/3672K, paused 1ms, total 1ms
+I/dalvikvm-heap( 2242): Grow heap (frag case) to 3.471MB for 234732-byte allocation
+D/dalvikvm( 2242): GC_FOR_ALLOC freed <1K, 11% free 3497K/3904K, paused 4ms, total 4ms
+W/dalvikvm( 2242): VFY: unable to find class referenced in signature (Landroid/view/WindowInsets;)
+W/dalvikvm( 2242): VFY: unable to find class referenced in signature (Landroid/view/WindowInsets;)
+W/dalvikvm( 2242): VFY: unable to find class referenced in signature (Landroid/view/WindowInsets;)
+I/dalvikvm( 2242): Could not find method android.view.WindowInsets.equals, referenced from method androidx.core.view.ViewCompat.dispatchApplyWindowInsets
+W/dalvikvm( 2242): VFY: unable to resolve virtual method 3476: Landroid/view/WindowInsets;.equals (Ljava/lang/Object;)Z
+D/dalvikvm( 2242): VFY: replacing opcode 0x6e at 0x0010
+W/dalvikvm( 2242): VFY: unable to find class referenced in signature (Landroid/view/WindowInsets;)
+W/dalvikvm( 2242): VFY: unable to find class referenced in signature (Landroid/view/WindowInsets;)
+W/dalvikvm( 2242): VFY: unable to find class referenced in signature (Landroid/view/WindowInsets;)
+I/dalvikvm( 2242): Could not find method android.view.WindowInsets.equals, referenced from method androidx.core.view.ViewCompat.onApplyWindowInsets
+W/dalvikvm( 2242): VFY: unable to resolve virtual method 3476: Landroid/view/WindowInsets;.equals (Ljava/lang/Object;)Z
+D/dalvikvm( 2242): VFY: replacing opcode 0x6e at 0x0010
+I/dalvikvm( 2242): Failed resolving Landroidx/drawerlayout/widget/DrawerLayout$2; interface 536 'Landroid/view/View$OnApplyWindowInsetsListener;'
+W/dalvikvm( 2242): Link of class 'Landroidx/drawerlayout/widget/DrawerLayout$2;' failed
+E/dalvikvm( 2242): Could not find class 'androidx.drawerlayout.widget.DrawerLayout$2', referenced from method androidx.drawerlayout.widget.DrawerLayout.<init>
+W/dalvikvm( 2242): VFY: unable to resolve new-instance 1848 (Landroidx/drawerlayout/widget/DrawerLayout$2;) in Landroidx/drawerlayout/widget/DrawerLayout;
+D/dalvikvm( 2242): VFY: replacing opcode 0x22 at 0x009c
+E/dalvikvm( 2242): Could not find class 'android.view.WindowInsets', referenced from method androidx.drawerlayout.widget.DrawerLayout.onDraw
+W/dalvikvm( 2242): VFY: unable to resolve check-cast 573 (Landroid/view/WindowInsets;) in Landroidx/drawerlayout/widget/DrawerLayout;
+D/dalvikvm( 2242): VFY: replacing opcode 0x1f at 0x0016
+I/dalvikvm( 2242): Could not find method android.view.ViewGroup.getRootWindowInsets, referenced from method androidx.drawerlayout.widget.DrawerLayout.onLayout
+W/dalvikvm( 2242): VFY: unable to resolve virtual method 3230: Landroid/view/ViewGroup;.getRootWindowInsets ()Landroid/view/WindowInsets;
+D/dalvikvm( 2242): VFY: replacing opcode 0x74 at 0x00d3
+E/dalvikvm( 2242): Could not find class 'android.view.WindowInsets', referenced from method androidx.drawerlayout.widget.DrawerLayout.onMeasure
+W/dalvikvm( 2242): VFY: unable to resolve check-cast 573 (Landroid/view/WindowInsets;) in Landroidx/drawerlayout/widget/DrawerLayout;
+D/dalvikvm( 2242): VFY: replacing opcode 0x1f at 0x0071
+E/dalvikvm( 2242): Could not find class 'android.view.WindowInsets', referenced from method androidx.drawerlayout.widget.DrawerLayout.onMeasure
+W/dalvikvm( 2242): VFY: unable to resolve check-cast 573 (Landroid/view/WindowInsets;) in Landroidx/drawerlayout/widget/DrawerLayout;
+D/dalvikvm( 2242): VFY: replacing opcode 0x1f at 0x00a3
+I/dalvikvm( 2242): Failed resolving Landroidx/drawerlayout/widget/DrawerLayout$2; interface 536 'Landroid/view/View$OnApplyWindowInsetsListener;'
+W/dalvikvm( 2242): Link of class 'Landroidx/drawerlayout/widget/DrawerLayout$2;' failed
+D/dalvikvm( 2242): DexOpt: unable to opt direct call 0x373e at 0x9e in Landroidx/drawerlayout/widget/DrawerLayout;.<init>
+E/dalvikvm( 2242): Could not find class 'android.graphics.drawable.RippleDrawable', referenced from method androidx.appcompat.widget.AppCompatImageHelper.hasOverlappingRendering
+W/dalvikvm( 2242): VFY: unable to resolve instanceof 203 (Landroid/graphics/drawable/RippleDrawable;) in Landroidx/appcompat/widget/AppCompatImageHelper;
+D/dalvikvm( 2242): VFY: replacing opcode 0x20 at 0x000c
+D/dalvikvm( 2242): GC_FOR_ALLOC freed 131K, 7% free 3655K/3904K, paused 4ms, total 4ms
+D/dalvikvm( 2242): GC_FOR_ALLOC freed 13K, 5% free 4012K/4216K, paused 5ms, total 5ms
+I/dalvikvm( 2242): Could not find method android.widget.TextView.getAutoSizeMaxTextSize, referenced from method androidx.appcompat.widget.AppCompatTextView.getAutoSizeMaxTextSize
+W/dalvikvm( 2242): VFY: unable to resolve virtual method 5040: Landroid/widget/TextView;.getAutoSizeMaxTextSize ()I
+D/dalvikvm( 2242): VFY: replacing opcode 0x6f at 0x0004
+I/dalvikvm( 2242): Could not find method android.widget.TextView.getAutoSizeMinTextSize, referenced from method androidx.appcompat.widget.AppCompatTextView.getAutoSizeMinTextSize
+W/dalvikvm( 2242): VFY: unable to resolve virtual method 5041: Landroid/widget/TextView;.getAutoSizeMinTextSize ()I
+D/dalvikvm( 2242): VFY: replacing opcode 0x6f at 0x0004
+I/dalvikvm( 2242): Could not find method android.widget.TextView.getAutoSizeStepGranularity, referenced from method androidx.appcompat.widget.AppCompatTextView.getAutoSizeStepGranularity
+W/dalvikvm( 2242): VFY: unable to resolve virtual method 5042: Landroid/widget/TextView;.getAutoSizeStepGranularity ()I
+D/dalvikvm( 2242): VFY: replacing opcode 0x6f at 0x0004
+I/dalvikvm( 2242): Could not find method android.widget.TextView.getAutoSizeTextAvailableSizes, referenced from method androidx.appcompat.widget.AppCompatTextView.getAutoSizeTextAvailableSizes
+W/dalvikvm( 2242): VFY: unable to resolve virtual method 5043: Landroid/widget/TextView;.getAutoSizeTextAvailableSizes ()[I
+D/dalvikvm( 2242): VFY: replacing opcode 0x6f at 0x0004
+I/dalvikvm( 2242): Could not find method android.widget.TextView.getAutoSizeTextType, referenced from method androidx.appcompat.widget.AppCompatTextView.getAutoSizeTextType
+W/dalvikvm( 2242): VFY: unable to resolve virtual method 5044: Landroid/widget/TextView;.getAutoSizeTextType ()I
+D/dalvikvm( 2242): VFY: replacing opcode 0x6f at 0x0005
+I/dalvikvm( 2242): Could not find method android.widget.TextView.getTextClassifier, referenced from method androidx.appcompat.widget.AppCompatTextView.getTextClassifier
+W/dalvikvm( 2242): VFY: unable to resolve virtual method 5087: Landroid/widget/TextView;.getTextClassifier ()Landroid/view/textclassifier/TextClassifier;
+D/dalvikvm( 2242): VFY: replacing opcode 0x6f at 0x0010
+W/dalvikvm( 2242): VFY: unable to find class referenced in signature (Landroid/view/textclassifier/TextClassifier;)
+W/dalvikvm( 2242): VFY: unable to find class referenced in signature (Landroid/view/textclassifier/TextClassifier;)
+I/dalvikvm( 2242): Could not find method android.widget.TextView.setAutoSizeTextTypeUniformWithConfiguration, referenced from method androidx.appcompat.widget.AppCompatTextView.setAutoSizeTextTypeUniformWithConfiguration
+W/dalvikvm( 2242): VFY: unable to resolve virtual method 5119: Landroid/widget/TextView;.setAutoSizeTextTypeUniformWithConfiguration (IIII)V
+D/dalvikvm( 2242): VFY: replacing opcode 0x6f at 0x0004
+I/dalvikvm( 2242): Could not find method android.widget.TextView.setAutoSizeTextTypeUniformWithPresetSizes, referenced from method androidx.appcompat.widget.AppCompatTextView.setAutoSizeTextTypeUniformWithPresetSizes
+W/dalvikvm( 2242): VFY: unable to resolve virtual method 5120: Landroid/widget/TextView;.setAutoSizeTextTypeUniformWithPresetSizes ([II)V
+D/dalvikvm( 2242): VFY: replacing opcode 0x6f at 0x0004
+I/dalvikvm( 2242): Could not find method android.widget.TextView.setAutoSizeTextTypeWithDefaults, referenced from method androidx.appcompat.widget.AppCompatTextView.setAutoSizeTextTypeWithDefaults
+W/dalvikvm( 2242): VFY: unable to resolve virtual method 5121: Landroid/widget/TextView;.setAutoSizeTextTypeWithDefaults (I)V
+D/dalvikvm( 2242): VFY: replacing opcode 0x6f at 0x0004
+I/dalvikvm( 2242): Could not find method android.widget.TextView.setFirstBaselineToTopHeight, referenced from method androidx.appcompat.widget.AppCompatTextView.setFirstBaselineToTopHeight
+W/dalvikvm( 2242): VFY: unable to resolve virtual method 5137: Landroid/widget/TextView;.setFirstBaselineToTopHeight (I)V
+D/dalvikvm( 2242): VFY: replacing opcode 0x6f at 0x0006
+I/dalvikvm( 2242): Could not find method android.widget.TextView.setLastBaselineToBottomHeight, referenced from method androidx.appcompat.widget.AppCompatTextView.setLastBaselineToBottomHeight
+W/dalvikvm( 2242): VFY: unable to resolve virtual method 5144: Landroid/widget/TextView;.setLastBaselineToBottomHeight (I)V
+D/dalvikvm( 2242): VFY: replacing opcode 0x6f at 0x0006
+W/dalvikvm( 2242): VFY: unable to find class referenced in signature (Landroid/view/textclassifier/TextClassifier;)
+I/dalvikvm( 2242): Could not find method android.widget.TextView.setTextClassifier, referenced from method androidx.appcompat.widget.AppCompatTextView.setTextClassifier
+W/dalvikvm( 2242): VFY: unable to resolve virtual method 5168: Landroid/widget/TextView;.setTextClassifier (Landroid/view/textclassifier/TextClassifier;)V
+D/dalvikvm( 2242): VFY: replacing opcode 0x6f at 0x000f
+## x86 native instruction at first reported crash address
+No native program counter found
