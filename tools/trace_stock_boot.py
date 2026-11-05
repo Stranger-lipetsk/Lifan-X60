@@ -47,7 +47,7 @@ def main():
             reason = 'activity observer'
         elif p.name == 'HomeApp.smali' and re.search(r'\b(getSysFirstBoot|getPreHibernated|savePreHibernatePreferences|getDefaultTimeZone|getDefaultLocaleIndex)\(', sig):
             reason = 'first boot, locale/timezone and stored state'
-        elif p.name == 'Utils.smali' and re.search(r'\b(setSystemLocale|setSystemTimeZone)\(', sig):
+        elif p.name == 'Utils.smali' and re.search(r'\b(setSystemLocale|setSystemTimeZone|getSysLocals)\(', sig):
             reason = 'locale and timezone application'
         elif p.name == 'HomeService.smali' and ('sysPreHibernate(' in sig or '->sysPreHibernate()V' in method):
             reason = 'pre-hibernate and wrappers'
