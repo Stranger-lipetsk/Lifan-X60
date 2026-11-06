@@ -267,6 +267,7 @@ timeout -k 5 30 "$adb" shell input keyevent 82 || true
 timeout -k 5 60 "$adb" shell am start -n com.amaze.filemanager/.ui.activities.MainActivity --es path /sdcard/Download > "$work/amaze-start.txt" 2>&1
 cat "$work/amaze-start.txt"
 clicked=no
+entered_download=no
 for attempt in $(seq 1 30); do
   timeout -k 5 40 "$adb" shell uiautomator dump /sdcard/amaze-lab-ui.xml >/dev/null 2>&1 || { sleep 2; continue; }
   timeout -k 5 15 "$adb" shell cat /sdcard/amaze-lab-ui.xml > "$work/amaze-ui.xml" 2>/dev/null || continue
@@ -276,6 +277,13 @@ for attempt in $(seq 1 30); do
   if [ -n "$coords" ]; then
     read -r x y <<< "$coords"; echo "Tap exact APK filename in virtual Amaze at $x,$y"
     timeout -k 5 20 "$adb" shell input tap "$x" "$y"; clicked=yes; break
+  fi
+  if [ "$entered_download" = no ]; then
+    coords=$(python3 tools/emulator_ui_clickable.py "$work/amaze-ui.xml" Download 2>/dev/null || true)
+    if [ -n "$coords" ]; then
+      read -r x y <<< "$coords"; echo "Open virtual Download folder at $x,$y"
+      timeout -k 5 20 "$adb" shell input tap "$x" "$y"; entered_download=yes; sleep 2; continue
+    fi
   fi
   sleep 3
 done
