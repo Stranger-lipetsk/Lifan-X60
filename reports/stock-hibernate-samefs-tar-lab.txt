@@ -1,0 +1,18 @@
+# Synthetic same-filesystem tar scenario with stock-derived BusyBox
+CI-only 64 MiB file-backed ext4 with two mounts of the same loop device, restricted offline ARM/QEMU container; no physical GU or actual Hibernate.
+The output data.tar already existed on that same synthetic filesystem. Same device and inode were verified from both mountpoints.
+tar -cf DEST/data.tar ./. exit: 0; resulting archive size bytes: 3072.
+Previous synthetic data.tar SHA-256 before: b1f6d15329094eb1f79e12163d7852707831ff6cb09f3292130316af46c73af6
+After archive creation SHA-256: e97587478d3825c225c9df745ed373345bcc56302f5fc8bd74323f89512274ec
+Create diagnostics:
+tar: ././data.tar: file is the archive; skipping
+Archive parseable: yes
+Archive includes output data.tar: False
+Archive includes marker.txt: True
+Archive member count: 3
+Same-filesystem extraction exit (when archive creation succeeded and was parseable): 0; marker: present.
+Extract diagnostics:
+././
+././lost+found/
+././marker.txt
+This is a hypothetical repeated-copy setup, not evidence that the GU reaches this state or that its mount or format behaves identically.
