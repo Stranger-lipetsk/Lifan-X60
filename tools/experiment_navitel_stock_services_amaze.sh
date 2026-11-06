@@ -408,7 +408,7 @@ done
 echo 'Verify stock services.jar and loaded services dex after the full virtual reboot'
 timeout -k 10 120 "$adb" pull /system/framework/services.jar "$work/services-after-fullreboot.jar" >/dev/null
 cmp "$work/stock-services.jar" "$work/services-after-fullreboot.jar"
-server_pid=$(timeout -k 5 30 "$adb" shell ps | tr -d '\r' | awk '$NF == "system_server" { print $2; exit }')
+server_pid=$(timeout -k 5 30 "$adb" shell ps | tr -d '\r' | awk '$NF == "system_server" && !seen++ { print $2 }')
 case "$server_pid" in ''|*[!0-9]*) echo 'System server PID missing after reboot'; exit 1;; esac
 timeout -k 5 30 "$adb" shell "cat /proc/$server_pid/maps" | tr -d '\r' | grep -F 'system@framework@services.jar@classes.dex' > "$work/services-maps-fullreboot.txt"
 query_package fullreboot

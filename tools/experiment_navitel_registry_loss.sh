@@ -407,7 +407,7 @@ done
 [ "$rebooted" = yes ] || { echo 'Did not observe completed full emulator reboot with changed boot ID'; exit 1; }
 timeout -k 10 120 "$adb" pull /system/framework/services.jar "$work/services-after-fullreboot.jar" >/dev/null
 cmp "$work/stock-services.jar" "$work/services-after-fullreboot.jar"
-server_pid=$(timeout -k 5 30 "$adb" shell ps | tr -d '\r' | awk '$NF == "system_server" { print $2; exit }')
+server_pid=$(timeout -k 5 30 "$adb" shell ps | tr -d '\r' | awk '$NF == "system_server" && !seen++ { print $2 }')
 case "$server_pid" in ''|*[!0-9]*) echo 'System server PID missing after reboot'; exit 1;; esac
 timeout -k 5 30 "$adb" shell "cat /proc/$server_pid/maps" | tr -d '\r' | grep -F 'system@framework@services.jar@classes.dex' > "$work/services-maps-fullreboot.txt"
 query_package fullreboot
@@ -451,7 +451,7 @@ done
 [ "$ready" = yes ] || { echo 'Emulator did not restart after synthetic registry loss'; exit 1; }
 timeout -k 10 120 "$adb" pull /system/framework/services.jar "$work/services-after-loss.jar" >/dev/null
 cmp "$work/stock-services.jar" "$work/services-after-loss.jar"
-server_pid=$(timeout -k 5 30 "$adb" shell ps | tr -d '\r' | awk '$NF == "system_server" { print $2; exit }')
+server_pid=$(timeout -k 5 30 "$adb" shell ps | tr -d '\r' | awk '$NF == "system_server" && !seen++ { print $2 }')
 case "$server_pid" in ''|*[!0-9]*) echo 'System server PID missing after registry loss'; exit 1;; esac
 timeout -k 5 30 "$adb" shell "cat /proc/$server_pid/maps" | tr -d '\r' | grep -F 'system@framework@services.jar@classes.dex' > "$work/services-maps-after-loss.txt"
 for package in com.navitel ru.lifanx60.backupfixture; do
