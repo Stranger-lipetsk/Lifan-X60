@@ -1,0 +1,275 @@
+Phase 1: obtain two real Navitel APKs; no user files or license
+/tmp/navitel-registry-loss-lab.KluNCC/lifan-file-manager-test.zip: OK
+/tmp/navitel-registry-loss-lab.KluNCC/system.img: OK
+/tmp/navitel-registry-loss-lab.KluNCC/old.apk: OK
+/tmp/navitel-registry-loss-lab.KluNCC/amaze.apk: OK
+/tmp/navitel-registry-loss-lab.KluNCC/installer.apk: OK
+package: name='com.android.packageinstaller' versionCode='19' versionName='4.4.2-20140630'
+package: name='com.amaze.filemanager' versionCode='92' versionName='3.5.3' platformBuildVersionName='10' platformBuildVersionCode='29' compileSdkVersion='29' compileSdkVersionCodename='10'
+/home/runner/work/Lifan-X60/Lifan-X60/firmware/apks/com.navitel.apk: OK
+V1 Signer: certificate SHA-256 digest: a40da80a59d170caa950cf15c18c454d47a39b26989d8b640ecd745ba71bf5dc
+package: name='com.navitel' versionCode='201103033' versionName='9.13.73' platformBuildVersionName='9' platformBuildVersionCode='28' compileSdkVersion='23' compileSdkVersionCodename='6.0-2438415'
+V1 Signer: certificate SHA-256 digest: 5358662d39856446c7391c699878e0509f7ed0657d7634c0083e07b08ad2f035
+package: name='com.navitel' versionCode='360622024' versionName='v11.11.1128' platformBuildVersionName='13' platformBuildVersionCode='33' compileSdkVersion='33' compileSdkVersionCodename='13'
+Verify public AOSP test key matches the stock Navitel certificate
+V1 Signer: certificate SHA-256 digest: a40da80a59d170caa950cf15c18c454d47a39b26989d8b640ecd745ba71bf5dc
+Uncompressed payload entries identical, excluding JAR signing records: 5019
+This does not verify ZIP offsets, metadata, V2/V3 signing block or runtime signature checks.
+Loading package information...                                                  Loading local repository...                                                     [                                       ] 3% Loading local repository...        [                                       ] 3% Fetch remote repository...         [=                                      ] 3% Fetch remote repository...         [=                                      ] 4% Fetch remote repository...         [=                                      ] 5% Fetch remote repository...         [==                                     ] 5% Fetch remote repository...         [==                                     ] 6% Fetch remote repository...         [==                                     ] 7% Fetch remote repository...         [==                                     ] 7% Computing updates...               [===                                    ] 8% Computing updates...               [===                                    ] 10% Computing updates...              [===                                    ] 10% Installing Intel x86 Atom System I[===                                    ] 10% Downloading x86-19_r06.zip...     [====                                   ] 10% Downloading x86-19_r06.zip...     [====                                   ] 11% Downloading x86-19_r06.zip...     [====                                   ] 12% Downloading x86-19_r06.zip...     [=====                                  ] 13% Downloading x86-19_r06.zip...     [=====                                  ] 14% Downloading x86-19_r06.zip...     [=====                                  ] 15% Downloading x86-19_r06.zip...     [======                                 ] 15% Downloading x86-19_r06.zip...     [======                                 ] 16% Downloading x86-19_r06.zip...     [======                                 ] 17% Downloading x86-19_r06.zip...     [=======                                ] 18% Downloading x86-19_r06.zip...     [=======                                ] 18% Unzipping...                      [=======                                ] 18% Unzipping... x86/                 [=======                                ] 18% Unzipping... x86/ramdisk.img      [=======                                ] 18% Unzipping... x86/source.properties[=======                                ] 18% Unzipping... x86/kernel-ranchu    [=======                                ] 18% Unzipping... x86/system.img       [=======                                ] 19% Unzipping... x86/system.img       [=======                                ] 20% Unzipping... x86/system.img       [========                               ] 20% Unzipping... x86/system.img       [========                               ] 21% Unzipping... x86/system.img       [========                               ] 22% Unzipping... x86/system.img       [=========                              ] 23% Unzipping... x86/system.img       [=========                              ] 24% Unzipping... x86/system.img       [=========                              ] 25% Unzipping... x86/system.img       [=========                              ] 25% Unzipping... x86/NOTICE.txt       [=========                              ] 25% Unzipping... x86/build.prop       [=========                              ] 25% Unzipping... x86/userdata.img     [=========                              ] 25% Unzipping... x86/advancedFeatures.[=========                              ] 25% Unzipping... x86/kernel-qemu      [===============                        ] 40% Unzipping... x86/kernel-qemu      [===============                        ] 40% Installing Android SDK Platform 19[===============                        ] 40% Downloading android-19_r04.zip... [================                       ] 40% Downloading android-19_r04.zip... [================                       ] 41% Downloading android-19_r04.zip... [================                       ] 42% Downloading android-19_r04.zip... [=================                      ] 43% Downloading android-19_r04.zip... [=================                      ] 44% Downloading android-19_r04.zip... [=================                      ] 45% Downloading android-19_r04.zip... [==================                     ] 45% Downloading android-19_r04.zip... [==================                     ] 46% Downloading android-19_r04.zip... [==================                     ] 47% Downloading android-19_r04.zip... [==================                     ] 48% Downloading android-19_r04.zip... [==================                     ] 48% Unzipping... x86/kernel-qemu      [==================                     ] 48% Unzipping... android-4.4.2/       [==================                     ] 48% Unzipping... android-4.4.2/templat[===================                    ] 48% Unzipping... android-4.4.2/templat[===================                    ] 48% Unzipping... android-4.4.2/build.p[===================                    ] 48% Unzipping... android-4.4.2/sdk.pro[===================                    ] 48% Unzipping... android-4.4.2/android[===================                    ] 49% Unzipping... android-4.4.2/android[===================                    ] 49% Unzipping... android-4.4.2/uiautom[===================                    ] 49% Unzipping... android-4.4.2/skins/ [===================                    ] 49% Unzipping... android-4.4.2/skins/Q[===================                    ] 49% Unzipping... android-4.4.2/skins/W[===================                    ] 49% Unzipping... android-4.4.2/skins/N[===================                    ] 49% Unzipping... android-4.4.2/skins/W[===================                    ] 49% Unzipping... android-4.4.2/skins/H[===================                    ] 49% Unzipping... android-4.4.2/skins/W[===================                    ] 49% Unzipping... android-4.4.2/source.[===================                    ] 49% Unzipping... android-4.4.2/data/  [===================                    ] 49% Unzipping... android-4.4.2/data/fe[===================                    ] 49% Unzipping... android-4.4.2/data/ic[===================                    ] 50% Unzipping... android-4.4.2/data/ic[====================                   ] 50% Unzipping... android-4.4.2/data/ic[====================                   ] 50% Unzipping... android-4.4.2/data/br[====================                   ] 50% Unzipping... android-4.4.2/data/re[====================                   ] 51% Unzipping... android-4.4.2/data/re[====================                   ] 52% Unzipping... android-4.4.2/data/re[====================                   ] 52% Unzipping... android-4.4.2/data/NO[====================                   ] 52% Unzipping... android-4.4.2/data/la[=====================                  ] 53% Unzipping... android-4.4.2/data/la[=====================                  ] 53% Unzipping... android-4.4.2/data/wi[=====================                  ] 53% Unzipping... android-4.4.2/data/ca[=====================                  ] 53% Unzipping... android-4.4.2/data/ac[=====================                  ] 53% Unzipping... android-4.4.2/data/fo[=====================                  ] 54% Unzipping... android-4.4.2/data/fo[=====================                  ] 55% Unzipping... android-4.4.2/data/fo[=====================                  ] 55% Unzipping... android-4.4.2/data/se[=====================                  ] 55% Unzipping... android-4.4.2/framewo[===========================            ] 70% Unzipping... android-4.4.2/framewo[===========================            ] 70% Installing Android Emulator androi[===========================            ] 70% Downloading emulator-linux_x64-167[============================           ] 70% Downloading emulator-linux_x64-167[============================           ] 71% Downloading emulator-linux_x64-167[============================           ] 72% Downloading emulator-linux_x64-167[=============================          ] 73% Downloading emulator-linux_x64-167[=============================          ] 74% Downloading emulator-linux_x64-167[=============================          ] 75% Downloading emulator-linux_x64-167[==============================         ] 75% Downloading emulator-linux_x64-167[==============================         ] 76% Downloading emulator-linux_x64-167[==============================         ] 77% Downloading emulator-linux_x64-167[==============================         ] 77% Unzipping... android-4.4.2/framewo[==============================         ] 77% Unzipping... emulator/            [==============================         ] 77% Unzipping... emulator/resources/  [==============================         ] 77% Unzipping... emulator/qsn         [===============================        ] 78% Unzipping... emulator/qsn         [===============================        ] 78% Unzipping... emulator/emulator    [===============================        ] 78% Unzipping... emulator/netsimd     [===============================        ] 78% Unzipping... emulator/bin64/      [===============================        ] 78% Unzipping... emulator/qemu/       [===============================        ] 78% Unzipping... emulator/NOTICE.txt  [===============================        ] 78% Unzipping... emulator/crashpad_han[===============================        ] 78% Unzipping... emulator/source.prope[===============================        ] 78% Unzipping... emulator/nimble_bridg[===============================        ] 78% Unzipping... emulator/LICENSE     [===============================        ] 78% Unzipping... emulator/lib/        [===============================        ] 78% Unzipping... emulator/qemu-img    [===============================        ] 78% Unzipping... emulator/include/    [===============================        ] 78% Unzipping... emulator/NOTICE.csv  [===============================        ] 78% Unzipping... emulator/lib64/      [===============================        ] 78% Unzipping... emulator/emulator-che[===============================        ] 78% Unzipping... emulator/crashreport [===============================        ] 78% Unzipping... emulator/mksdcard    [===============================        ] 78% Unzipping... emulator/resources/To[===============================        ] 78% Unzipping... emulator/resources/de[===============================        ] 78% Unzipping... emulator/resources/To[===============================        ] 78% Unzipping... emulator/resources/de[===============================        ] 78% Unzipping... emulator/resources/To[===============================        ] 78% Unzipping... emulator/resources/ma[===============================        ] 78% Unzipping... emulator/resources/de[===============================        ] 78% Unzipping... emulator/resources/sk[===============================        ] 78% Unzipping... emulator/resources/de[===============================        ] 78% Unzipping... emulator/resources/ma[===============================        ] 78% Unzipping... emulator/resources/po[===============================        ] 78% Unzipping... emulator/resources/ma[===============================        ] 78% Unzipping... emulator/resources/sk[===============================        ] 78% Unzipping... emulator/resources/ma[===============================        ] 78% Unzipping... emulator/bin64/e2fsck[===============================        ] 78% Unzipping... emulator/bin64/fsck.e[===============================        ] 78% Unzipping... emulator/bin64/tune2f[===============================        ] 78% Unzipping... emulator/bin64/resize[===============================        ] 78% Unzipping... emulator/bin64/mkfs.e[===============================        ] 78% Unzipping... emulator/qemu/linux-x[===============================        ] 79% Unzipping... emulator/qemu/linux-x[===============================        ] 80% Unzipping... emulator/qemu/linux-x[================================       ] 80% Unzipping... emulator/qemu/linux-x[================================       ] 80% Unzipping... emulator/lib/emulator[================================       ] 80% Unzipping... emulator/lib/rtc_serv[================================       ] 80% Unzipping... emulator/lib/advanced[================================       ] 80% Unzipping... emulator/lib/cmake/  [================================       ] 80% Unzipping... emulator/lib/emulator[================================       ] 80% Unzipping... emulator/lib/control_[================================       ] 80% Unzipping... emulator/lib/emulated[================================       ] 80% Unzipping... emulator/lib/rtc_serv[================================       ] 80% Unzipping... emulator/lib/emu-orig[================================       ] 80% Unzipping... emulator/lib/hardware[================================       ] 80% Unzipping... emulator/lib/pkgconfi[================================       ] 80% Unzipping... emulator/lib/pc-bios/[================================       ] 80% Unzipping... emulator/lib/snapshot[================================       ] 80% Unzipping... emulator/lib/adb_serv[================================       ] 80% Unzipping... emulator/lib/hostapd.[================================       ] 80% Unzipping... emulator/lib/grpc_end[================================       ] 80% Unzipping... emulator/lib/ca-bundl[================================       ] 80% Unzipping... emulator/lib/ui_contr[================================       ] 80% Unzipping... emulator/lib/snapshot[================================       ] 80% Unzipping... emulator/lib/ice_conf[================================       ] 80% Unzipping... emulator/lib/libflatb[================================       ] 80% Unzipping... emulator/lib/emulator[================================       ] 80% Unzipping... emulator/lib/waterfal[================================       ] 80% Unzipping... emulator/lib/emulated[================================       ] 80% Unzipping... emulator/lib/cmake/fl[================================       ] 80% Unzipping... emulator/lib/pkgconfi[================================       ] 80% Unzipping... emulator/lib/pc-bios/[================================       ] 80% Unzipping... emulator/include/flat[================================       ] 80% Unzipping... emulator/lib64/libgli[================================       ] 80% Unzipping... emulator/lib64/libpro[================================       ] 80% Unzipping... emulator/lib64/qt/   [================================       ] 80% Unzipping... emulator/lib64/liband[================================       ] 80% Unzipping... emulator/lib64/libgfx[================================       ] 81% Unzipping... emulator/lib64/libgfx[================================       ] 81% Unzipping... emulator/lib64/gles_l[================================       ] 81% Unzipping... emulator/lib64/liband[================================       ] 81% Unzipping... emulator/lib64/vulkan[================================       ] 81% Unzipping... emulator/lib64/gles_s[================================       ] 81% Unzipping... emulator/lib64/libemu[================================       ] 81% Unzipping... emulator/lib64/libpro[================================       ] 81% Unzipping... emulator/lib64/liband[================================       ] 81% Unzipping... emulator/lib64/libtcm[================================       ] 81% Unzipping... emulator/lib64/libima[================================       ] 81% Unzipping... emulator/lib64/libc++[================================       ] 81% Unzipping... emulator/lib64/liband[================================       ] 81% Unzipping... emulator/lib64/libabs[================================       ] 81% Unzipping... emulator/lib64/gles_a[================================       ] 81% Unzipping... emulator/lib64/libsha[================================       ] 81% Unzipping... emulator/lib64/libc++[================================       ] 81% Unzipping... emulator/lib64/qt/res[================================       ] 81% Unzipping... emulator/lib64/qt/lib[================================       ] 81% Unzipping... emulator/lib64/qt/tra[================================       ] 81% Unzipping... emulator/lib64/qt/plu[================================       ] 81% Unzipping... emulator/lib64/qt/res[================================       ] 81% Unzipping... emulator/lib64/qt/lib[================================       ] 82% Unzipping... emulator/lib64/qt/lib[=================================      ] 83% Unzipping... emulator/lib64/qt/lib[=================================      ] 83% Unzipping... emulator/lib64/qt/tra[=================================      ] 84% Unzipping... emulator/lib64/qt/tra[=================================      ] 84% Unzipping... emulator/lib64/qt/plu[=================================      ] 84% Unzipping... emulator/lib64/gles_l[=================================      ] 84% Unzipping... emulator/lib64/vulkan[=================================      ] 85% Unzipping... emulator/lib64/vulkan[=================================      ] 85% Unzipping... emulator/lib64/gles_s[=================================      ] 85% Unzipping... emulator/lib64/gles_a[=======================================] 100% Unzipping... emulator/lib64/gles_
+
+Emulator host UID 999: non-loopback IPv4/IPv6 blocked
+* daemon not running; starting now at tcp:5037
+* daemon started successfully
+Fingerprint: generic_x86/sdk_x86/generic_x86:4.4.2/KK/4174703:eng/test-keys; hardware: ranchu; qemu: 1
+adbd is already running as root
+remount succeeded
+Phase 3: stop disposable emulator userspace before installing fixture system APK
+Filesystem               Size     Used     Free   Blksize
+/system                532.8M   333.7M   199.1M   4096
+rm failed for /system/priv-app/PackageInstaller.apk, No such file or directory
+/tmp/navitel-registry-loss-lab.KluNCC/installer.apk: 1 file pushed, 0 skipped. 203.2 MB/s (124968 bytes in 0.001s)
+/tmp/navitel-registry-loss-lab.KluNCC/amaze.apk: 1 file pushed, 0 skipped. 371.0 MB/s (8296416 bytes in 0.021s)
+Could not get context of /system/priv-app/PackageInstaller.apk:  No data available
+Could not get context of /system/app/AmazeFileManager.apk:  No data available
+/tmp/navitel-registry-loss-lab.KluNCC/old.apk: 1 file pushed, 0 skipped. 277.0 MB/s (111095055 bytes in 0.382s)
+Could not get context of /system/priv-app/Navitel-large.apk:  No data available
+LAB ONLY: replace generic services.jar with stock-derived services.jar while userspace is stopped
+/tmp/navitel-registry-loss-lab.KluNCC/stock-services.jar: OK
+  3139616  2016-11-30 00:57   classes.dex
+-rw-r--r-- root     root      1423509 2017-07-12 19:41 services.jar
+-rw-r--r-- root     root      3509072 2017-07-12 19:41 services.odex
+/tmp/navitel-registry-loss-lab.KluNCC/stock-services.jar: 1 file pushed, 0 skipped. 3465.6 MB/s (1424358 bytes in 0.000s)
+Could not get context of /system/framework/services.jar:  No data available
+/system/framework/services.jar: 1 file pulled, 0 skipped. 235.3 MB/s (1424358 bytes in 0.006s)
+Phase 3a: start Android userspace with old package
+Check stock services.jar still matches after userspace start
+/system/framework/services.jar: 1 file pulled, 0 skipped. 216.3 MB/s (1424358 bytes in 0.006s)
+system    2047  2030  356336 43624 ffffffff b774cf1b S system_server
+ab159000-ab21e000 r--p 00000000 fd:20 90152      /data/dalvik-cache/system@framework@services.jar@classes.dex
+ab21e000-ab21f000 r--p 000c5000 fd:20 90152      /data/dalvik-cache/system@framework@services.jar@classes.dex
+ab21f000-ab220000 r--p 000c6000 fd:20 90152      /data/dalvik-cache/system@framework@services.jar@classes.dex
+ab220000-ab222000 r--p 000c7000 fd:20 90152      /data/dalvik-cache/system@framework@services.jar@classes.dex
+ab222000-ab251000 r--p 000c9000 fd:20 90152      /data/dalvik-cache/system@framework@services.jar@classes.dex
+ab251000-ab252000 r--p 000f8000 fd:20 90152      /data/dalvik-cache/system@framework@services.jar@classes.dex
+ab252000-ab4ac000 r--p 000f9000 fd:20 90152      /data/dalvik-cache/system@framework@services.jar@classes.dex
+No pre-optimized system services.odex
+Phase 3b: verify old system APK is unchanged and query package
+WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
+package:/system/priv-app/PackageInstaller.apk
+package:/system/priv-app/PackageInstaller.apk
+WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
+package:/system/app/AmazeFileManager.apk
+package:/system/app/AmazeFileManager.apk
+/system/priv-app/PackageInstaller.apk: 1 file pulled, 0 skipped. 120.7 MB/s (124968 bytes in 0.001s)
+/system/app/AmazeFileManager.apk: 1 file pulled, 0 skipped. 231.5 MB/s (8296416 bytes in 0.034s)
+/system/priv-app/Navitel-large.apk: 1 file pulled, 0 skipped. 245.9 MB/s (111095055 bytes in 0.431s)
+Initial package path: WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
+package:/system/priv-app/Navitel-large.apk
+package:/system/priv-app/Navitel-large.apk
+/tmp/navitel-registry-loss-lab.KluNCC/lab-pref.xml: 1 file pushed, 0 skipped. 2.9 MB/s (132 bytes in 0.000s)
+Create a second independent synthetic app to check unrelated data
+Success
+/data/data/com.navitel/shared_prefs/x60_lab_probe.xml: 1 file pulled, 0 skipped. 0.0 MB/s (132 bytes in 0.041s)
+/data/data/ru.lifanx60.backupfixture/files/lab-marker.txt: 1 file pulled, 0 skipped. 0.0 MB/s (24 bytes in 0.041s)
+/data/data/ru.lifanx60.backupfixture/shared_prefs/lab_probe.xml: 1 file pulled, 0 skipped. 0.0 MB/s (132 bytes in 0.041s)
+Independent synthetic app marker and preferences verified
+Remount disposable emulator system read-only before testing update
+/dev/block/vda /system ext4 ro,relatime,data=ordered 0 0
+Device-side md5 after read-only remount:
+a5a34cf38cf4d58f70ad8e23c934a15b  /tmp/navitel-registry-loss-lab.KluNCC/old.apk
+a5a34cf38cf4d58f70ad8e23c934a15b  /system/priv-app/Navitel-large.apk
+Negative control: unmodified candidate must be rejected as a differently signed update
+/home/runner/work/Lifan-X60/Lifan-X60/firmware/apks/com.navitel.apk: 1 file pushed, 0 skipped. 286.7 MB/s (99176587 bytes in 0.330s)
+Performing Push Install
+WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
+	pkg: /data/local/tmp/com.navitel.apk
+Failure [INSTALL_PARSE_FAILED_INCONSISTENT_CERTIFICATES]
+Failure [INSTALL_PARSE_FAILED_INCONSISTENT_CERTIFICATES]
+package:/system/priv-app/Navitel-large.apk
+/data/data/com.navitel/shared_prefs/x60_lab_probe.xml: 1 file pulled, 0 skipped. 0.0 MB/s (132 bytes in 0.041s)
+/data/data/ru.lifanx60.backupfixture/files/lab-marker.txt: 1 file pulled, 0 skipped. 0.0 MB/s (24 bytes in 0.041s)
+/data/data/ru.lifanx60.backupfixture/shared_prefs/lab_probe.xml: 1 file pulled, 0 skipped. 0.0 MB/s (132 bytes in 0.041s)
+Independent synthetic app marker and preferences verified
+/system/priv-app/Navitel-large.apk: 1 file pulled, 0 skipped. 233.8 MB/s (111095055 bytes in 0.453s)
+System APK read-back still matched after negative control
+Emulate file-manager ACTION_VIEW and Android PackageInstaller in disposable emulator
+WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
+WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
+1
+/tmp/navitel-registry-loss-lab.KluNCC/new-resigned.apk: 1 file pushed, 0 skipped. 74.0 MB/s (99156773 bytes in 1.278s)
+WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
+WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
+Starting: Intent { cmp=com.amaze.filemanager/.ui.activities.MainActivity (has extras) }
+Open virtual Download folder at 160,457
+WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
+Tap exact APK filename in virtual Amaze at 160,238
+WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
+Tap virtual Amaze Install at 240,408
+WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
+Tap virtual Install at 240,616
+WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
+Navitel crash dialog observed during installation on the emulator
+WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
+Virtual installer confirmed App installed
+package:/data/app/com.navitel-1.apk
+    versionCode=360622024 targetSdk=33
+/data/data/com.navitel/shared_prefs/x60_lab_probe.xml: 1 file pulled, 0 skipped. 0.0 MB/s (132 bytes in 0.041s)
+/data/data/ru.lifanx60.backupfixture/files/lab-marker.txt: 1 file pulled, 0 skipped. 0.0 MB/s (24 bytes in 0.042s)
+/data/data/ru.lifanx60.backupfixture/shared_prefs/lab_probe.xml: 1 file pulled, 0 skipped. 0.0 MB/s (132 bytes in 0.041s)
+Independent synthetic app marker and preferences verified
+/system/priv-app/Navitel-large.apk: 1 file pulled, 0 skipped. 203.2 MB/s (111095055 bytes in 0.521s)
+Restart Android userspace, not the emulator, and repeat checks
+package:/data/app/com.navitel-1.apk
+    versionCode=360622024 targetSdk=33
+/data/data/com.navitel/shared_prefs/x60_lab_probe.xml: 1 file pulled, 0 skipped. 0.0 MB/s (132 bytes in 0.041s)
+/data/data/ru.lifanx60.backupfixture/files/lab-marker.txt: 1 file pulled, 0 skipped. 0.0 MB/s (24 bytes in 0.041s)
+/data/data/ru.lifanx60.backupfixture/shared_prefs/lab_probe.xml: 1 file pulled, 0 skipped. 0.0 MB/s (132 bytes in 0.041s)
+Independent synthetic app marker and preferences verified
+Launch new activity with empty virtual SD and isolated network; no license or account
+/data/data/com.navitel/shared_prefs/x60_lab_probe.xml: 1 file pulled, 0 skipped. 0.0 MB/s (132 bytes in 0.041s)
+/data/data/ru.lifanx60.backupfixture/files/lab-marker.txt: 1 file pulled, 0 skipped. 0.0 MB/s (24 bytes in 0.042s)
+/data/data/ru.lifanx60.backupfixture/shared_prefs/lab_probe.xml: 1 file pulled, 0 skipped. 0.0 MB/s (132 bytes in 0.041s)
+Independent synthetic app marker and preferences verified
+Full reboot of disposable x86 virtual device, then verify package and synthetic data
+8b7932b0-76a7-406a-9b3f-6c4d17c2e07f
+/system/framework/services.jar: 1 file pulled, 0 skipped. 25.1 MB/s (1424358 bytes in 0.054s)
+tr: write error: Broken pipe
+Lab failed (1); emulator diagnostics:
+USER_WARNING | AVD 'backup_x86' will run more smoothly with 4 CPU cores (currently using 2).
+WARNING      | Feature QuickbootFileBacked is disabled due to stability issues, if you really want that, the environment variable ANDROID_EMU_FORCE_QUICKBOOT_FILE_BACKED need to set to 1
+WARNING      | encryption is off
+WARNING      | FeatureControl is requesting a non existing feature.
+INFO         | Storing crashdata in: /tmp/android-signedupdatex86/emu-crash-37.2.13.db, detection is enabled for process: 2796
+INFO         | Initializing gfxstream backend
+INFO         | startOpenglesRendererImpl: gpu info
+INFO         | 
+INFO         | SharedLibrary::open for [libX11]
+WARNING      | Could not open libX11.so, try libX11.so.6
+INFO         | SharedLibrary::open for [libX11.so.6]
+INFO         | SharedLibrary::open for [libX11-xcb]
+WARNING      | Could not open libX11-xcb.so, try libX11-xcb.so.1
+INFO         | SharedLibrary::open for [libX11-xcb.so.1]
+INFO         | Graphics Adapter Vendor Google (Google Inc.)
+INFO         | Graphics Adapter Android Emulator OpenGL ES Translator (Google SwiftShader)
+INFO         | Graphics API Version OpenGL ES 3.0 (OpenGL ES 3.0 SwiftShader 4.0.0.1)
+INFO         | Graphics API Extensions GL_OES_EGL_sync GL_OES_EGL_image GL_OES_EGL_image_external GL_OES_depth24 GL_OES_depth32 GL_OES_element_index_uint GL_OES_texture_float GL_OES_texture_float_linear GL_OES_compressed_paletted_texture GL_OES_compressed_ETC1_RGB8_texture GL_OES_depth_texture GL_OES_texture_half_float GL_OES_texture_half_float_linear GL_OES_packed_depth_stencil GL_OES_vertex_half_float GL_OES_standard_derivatives GL_OES_texture_npot GL_OES_rgb8_rgba8 GL_EXT_color_buffer_float GL_EXT_color_buffer_half_float GL_EXT_texture_format_BGRA8888 GL_APPLE_texture_format_BGRA8888 
+INFO         | Graphics Device Extensions N/A
+INFO         | Userspace boot properties:
+INFO         |   android.bootanim=0
+INFO         |   android.qemud=1
+INFO         |   androidboot.android_dt_dir=/sys/bus/platform/devices/ANDR0001:00/properties/android/
+INFO         |   androidboot.hardware=ranchu
+INFO         |   androidboot.serialno=EMULATOR37X2X13X0
+INFO         |   qemu=1
+INFO         |   qemu.avd_name=backup_x86
+INFO         |   qemu.camera_hq_edge_processing=0
+INFO         |   qemu.dalvik.vm.heapsize=85m
+INFO         |   qemu.gles=1
+INFO         |   qemu.gltransport=pipe
+INFO         |   qemu.gltransport.drawFlushInterval=800
+INFO         |   qemu.opengles.version=196608
+INFO         |   qemu.settings.system.screen_off_timeout=2147483647
+INFO         |   qemu.skin=320x640
+INFO         |   qemu.uirenderer=skiagl
+INFO         |   qemu.vsync=60
+INFO         | Monitoring duration of emulator setup.
+INFO         | Setting display: 0 configuration to: 320x640, dpi: 160x160 
+INFO         | setDisplayActiveConfig: id:0, 320x640
+INFO         | emulatorSetupEnvironment: Environment scene is not required
+USER_INFO    | Emulator is performing a full startup. This may take upto two minutes, or more.
+WARNING      | Failed to process .ini file /home/signedupdatex86/.android/emu-update-last-check.ini for reading.
+WARNING      | UpdateCheck: Failure: Error
+WARNING      | UpdateCheck: failed to get the latest version, skipping check (current version '37.2.13-16740729')
+List of devices attached
+emulator-5554          device product:sdk_x86 model:Android_SDK_built_for_x86 device:generic_x86 transport_id:2
+
+W/PackageManager( 1406): Unknown permission com.android.vending.BILLING in package com.amaze.filemanager
+I/PackageManager( 1406): No secure containers on sdcard
+W/PackageManager( 1406): Not granting permission android.permission.GLOBAL_SEARCH to package com.android.quicksearchbox (protectionLevel=18 flags=0x8be45)
+W/PackageManager( 1406): Unknown permission com.android.smspush.WAPPUSH_MANAGER_BIND in package com.android.phone
+W/PackageManager( 1406): Unknown permission com.google.android.googleapps.permission.GOOGLE_AUTH in package com.android.providers.calendar
+W/PackageManager( 1406): Unknown permission com.google.android.googleapps.permission.GOOGLE_AUTH.cl in package com.android.providers.calendar
+W/PackageManager( 1406): Unknown permission com.google.android.googleapps.permission.GOOGLE_AUTH.mail in package com.android.calendar
+W/PackageManager( 1406): Not granting permission android.permission.ACCESS_DOWNLOAD_MANAGER to package com.android.browser (protectionLevel=18 flags=0x9be45)
+W/PackageManager( 1406): Not granting permission android.permission.SEND_DOWNLOAD_COMPLETED_INTENTS to package com.android.browser (protectionLevel=2 flags=0x9be45)
+W/PackageManager( 1406): Not granting permission android.permission.BIND_APPWIDGET to package com.android.widgetpreview (protectionLevel=18 flags=0x8be44)
+W/PackageManager( 1406): Unknown permission android.permission.INSTALL_DRM in package com.android.mms
+W/PackageManager( 1406): Unknown permission com.google.android.googleapps.permission.GOOGLE_AUTH in package com.android.settings
+W/PackageManager( 1406): Unknown permission android.permission.FOREGROUND_SERVICE in package com.navitel
+W/PackageManager( 1406): Unknown permission android.permission.POST_NOTIFICATIONS in package com.navitel
+W/PackageManager( 1406): Unknown permission com.android.vending.BILLING in package com.navitel
+W/PackageManager( 1406): Unknown permission com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE in package com.navitel
+W/PackageManager( 1406): Unknown permission com.google.android.googleapps.permission.ACCESS_GOOGLE_PASSWORD in package com.android.development
+W/PackageManager( 1406): Unknown permission com.google.android.googleapps.permission.GOOGLE_AUTH in package com.android.development
+W/PackageManager( 1406): Unknown permission com.google.android.googleapps.permission.GOOGLE_AUTH.ALL_SERVICES in package com.android.development
+W/PackageManager( 1406): Unknown permission com.google.android.googleapps.permission.GOOGLE_AUTH.YouTubeUser in package com.android.development
+W/PackageManager( 1406): Not granting permission android.permission.CLEAR_APP_USER_DATA to package com.android.packageinstaller (protectionLevel=2 flags=0x40483e45)
+W/PackageManager( 1406): Not granting permission android.permission.GRANT_REVOKE_PERMISSIONS to package com.android.packageinstaller (protectionLevel=2 flags=0x40483e45)
+W/PackageManager( 1406): Not granting permission android.permission.DELETE_PACKAGES to package com.svox.pico (protectionLevel=18 flags=0x8be45)
+W/PackageManager( 1406): Not granting permission android.permission.DEVICE_POWER to package com.android.deskclock (protectionLevel=2 flags=0x48be45)
+W/PackageManager( 1406): Unknown permission com.amaze.cloud.permission.ACCESS_PROVIDER in package com.amaze.filemanager
+W/PackageManager( 1406): Unknown permission android.permission.USE_FINGERPRINT in package com.amaze.filemanager
+W/PackageManager( 1406): Unknown permission android.permission.REQUEST_INSTALL_PACKAGES in package com.amaze.filemanager
+W/PackageManager( 1406): Unknown permission android.permission.FOREGROUND_SERVICE in package com.amaze.filemanager
+W/PackageManager( 1406): Unknown permission android.permission.REQUEST_DELETE_PACKAGES in package com.amaze.filemanager
+W/PackageManager( 1406): Unknown permission com.android.vending.BILLING in package com.amaze.filemanager
+I/BackupManagerService( 1406): Scheduling backup for new app com.navitel
+D/BackupManagerService( 1406): Now staging backup of com.navitel
+I/BackupManagerService( 1406):   com.navitel
+I/PackageManager( 1406): Updating external media status from unmounted to mounted
+I/PackageManager( 1406): No secure containers on sdcard
+W/PackageManager( 1406): Not granting permission android.permission.GLOBAL_SEARCH to package com.android.quicksearchbox (protectionLevel=18 flags=0x88be45)
+W/PackageManager( 1406): Unknown permission com.android.smspush.WAPPUSH_MANAGER_BIND in package com.android.phone
+W/PackageManager( 1406): Unknown permission com.google.android.googleapps.permission.GOOGLE_AUTH in package com.android.providers.calendar
+W/PackageManager( 1406): Unknown permission com.google.android.googleapps.permission.GOOGLE_AUTH.cl in package com.android.providers.calendar
+W/PackageManager( 1406): Unknown permission com.google.android.googleapps.permission.GOOGLE_AUTH.mail in package com.android.calendar
+W/PackageManager( 1406): Not granting permission android.permission.ACCESS_DOWNLOAD_MANAGER to package com.android.browser (protectionLevel=18 flags=0x89be45)
+W/PackageManager( 1406): Not granting permission android.permission.SEND_DOWNLOAD_COMPLETED_INTENTS to package com.android.browser (protectionLevel=2 flags=0x89be45)
+W/PackageManager( 1406): Not granting permission android.permission.BIND_APPWIDGET to package com.android.widgetpreview (protectionLevel=18 flags=0x8be44)
+W/PackageManager( 1406): Unknown permission android.permission.INSTALL_DRM in package com.android.mms
+W/PackageManager( 1406): Unknown permission com.google.android.googleapps.permission.GOOGLE_AUTH in package com.android.settings
+W/PackageManager( 1406): Unknown permission android.permission.FOREGROUND_SERVICE in package com.navitel
+W/PackageManager( 1406): Unknown permission android.permission.POST_NOTIFICATIONS in package com.navitel
+W/PackageManager( 1406): Unknown permission com.android.vending.BILLING in package com.navitel
+W/PackageManager( 1406): Unknown permission com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE in package com.navitel
+W/PackageManager( 1406): Unknown permission com.google.android.googleapps.permission.ACCESS_GOOGLE_PASSWORD in package com.android.development
+W/PackageManager( 1406): Unknown permission com.google.android.googleapps.permission.GOOGLE_AUTH in package com.android.development
+W/PackageManager( 1406): Unknown permission com.google.android.googleapps.permission.GOOGLE_AUTH.ALL_SERVICES in package com.android.development
+W/PackageManager( 1406): Unknown permission com.google.android.googleapps.permission.GOOGLE_AUTH.YouTubeUser in package com.android.development
+W/PackageManager( 1406): Not granting permission android.permission.CLEAR_APP_USER_DATA to package com.android.packageinstaller (protectionLevel=2 flags=0x40c83e45)
+W/PackageManager( 1406): Not granting permission android.permission.GRANT_REVOKE_PERMISSIONS to package com.android.packageinstaller (protectionLevel=2 flags=0x40c83e45)
+W/PackageManager( 1406): Not granting permission android.permission.DELETE_PACKAGES to package com.svox.pico (protectionLevel=18 flags=0x88be45)
+W/PackageManager( 1406): Not granting permission android.permission.DEVICE_POWER to package com.android.deskclock (protectionLevel=2 flags=0xc8be45)
+W/PackageManager( 1406): Unknown permission com.amaze.cloud.permission.ACCESS_PROVIDER in package com.amaze.filemanager
+W/PackageManager( 1406): Unknown permission android.permission.USE_FINGERPRINT in package com.amaze.filemanager
+W/PackageManager( 1406): Unknown permission android.permission.REQUEST_INSTALL_PACKAGES in package com.amaze.filemanager
+W/PackageManager( 1406): Unknown permission android.permission.FOREGROUND_SERVICE in package com.amaze.filemanager
+W/PackageManager( 1406): Unknown permission android.permission.REQUEST_DELETE_PACKAGES in package com.amaze.filemanager
+W/PackageManager( 1406): Unknown permission com.android.vending.BILLING in package com.amaze.filemanager
+I/PackageManager( 1406): Running dexopt on: com.android.externalstorage
+I/PackageManager( 1406):   Action: "android.intent.action.SENDTO"
+I/PackageManager( 1406):   Category: "android.intent.category.DEFAULT"
+I/PackageManager( 1406):   Scheme: "sms"
+I/PackageManager( 1406): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager( 1406):   Action: "android.intent.action.SENDTO"
+I/PackageManager( 1406):   Category: "android.intent.category.DEFAULT"
+I/PackageManager( 1406):   Scheme: "smsto"
+I/PackageManager( 1406):   Action: "android.intent.action.SENDTO"
+I/PackageManager( 1406):   Category: "android.intent.category.DEFAULT"
+I/PackageManager( 1406):   Scheme: "mms"
+I/PackageManager( 1406): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager( 1406): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager( 1406):   Action: "android.intent.action.SENDTO"
+I/PackageManager( 1406):   Category: "android.intent.category.DEFAULT"
+I/PackageManager( 1406):   Scheme: "mmsto"
+I/PackageManager( 1406): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+<6>[    0.622925] Write protecting the kernel read-only data: 1868k
+<6>[    0.703246] EXT4-fs (vda): mounted filesystem with ordered data mode. Opts: (null)
+<4>[    0.704662] EXT4-fs (vdb): Ignoring removed nomblk_io_submit option
+<6>[    0.706346] EXT4-fs (vdb): mounted filesystem with ordered data mode. Opts: nomblk_io_submit,errors=panic
+<4>[    0.708155] EXT4-fs (vdc): Ignoring removed nomblk_io_submit option
+<6>[    0.710571] EXT4-fs (vdc): mounted filesystem with ordered data mode. Opts: nomblk_io_submit,errors=remount-ro
+<4>[    0.723286] EXT4-fs (vdc): Ignoring removed nomblk_io_submit option
+<6>[    0.725190] EXT4-fs (vdc): mounted filesystem with ordered data mode. Opts: nomblk_io_submit,errors=panic
+Filesystem               Size     Used     Free   Blksize
+/system                532.8M   444.3M    88.5M   4096
