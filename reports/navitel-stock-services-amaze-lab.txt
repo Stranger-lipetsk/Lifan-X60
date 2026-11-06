@@ -36,9 +36,11 @@ package:/data/app/com.navitel-1.apk
     versionCode=201103033 targetSdk=28
     versionName=9.13.73
 Synthetic marker and preferences for Navitel and one independent fixture app survived install, userspace restart, launch attempt, and full emulator reboot: yes.
+## Crash dialog during installation
+No Navitel crash dialog observed during installer UI polling (other failures may still occur).
 ## Launch attempt (no activation asserted)
 WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
 Starting: Intent { cmp=com.navitel/.app.MainActivity }
-    mResumedActivity: ActivityRecord{afd94d38 u0 com.navitel/.app.MainActivity t2}
-  mFocusedActivity: ActivityRecord{afd94d38 u0 com.navitel/.app.MainActivity t2}
+    mResumedActivity: ActivityRecord{afd4dd28 u0 com.navitel/.app.MainActivity t2}
+  mFocusedActivity: ActivityRecord{afd4dd28 u0 com.navitel/.app.MainActivity t2}
 Generic emulator full reboot is not real-device hibernate. Real device vendor libraries, app behavior, rollback, settings and all data preservation remain unverified.
