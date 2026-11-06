@@ -12,6 +12,14 @@ PREFIX = 'apps/ru.lifanx60.backupfixture/'
 EXPECTED = {PREFIX + 'f/lab-marker.txt', PREFIX + 'sp/lab_probe.xml'}
 
 
+def verify_contents(marker, preferences):
+    if marker != b'X60_BACKUP_ONLY_FIXTURE\n':
+        raise ValueError('Synthetic marker differs')
+    xml = ET.fromstring(preferences)
+    if xml.tag != 'map' or len(xml) != 1 or xml[0].tag != 'string' or xml[0].get('name') != 'lab_probe' or xml[0].text != 'X60_ONLY_SYNTHETIC_PREF':
+        raise ValueError('Synthetic SharedPreferences differ')
+
+
 def inspect(path):
     raw = Path(path).read_bytes()
     if len(raw) > MAX_BYTES:
@@ -43,11 +51,7 @@ def inspect(path):
                 found[entry.name] = archive.extractfile(entry).read()
     if set(found) != EXPECTED:
         raise ValueError('Both synthetic entries are required')
-    if found[PREFIX + 'f/lab-marker.txt'] != b'X60_BACKUP_ONLY_FIXTURE\n':
-        raise ValueError('Synthetic marker differs')
-    xml = ET.fromstring(found[PREFIX + 'sp/lab_probe.xml'])
-    if xml.tag != 'map' or len(xml) != 1 or xml[0].tag != 'string' or xml[0].get('name') != 'lab_probe' or xml[0].text != 'X60_ONLY_SYNTHETIC_PREF':
-        raise ValueError('Synthetic SharedPreferences differ')
+    verify_contents(found[PREFIX + 'f/lab-marker.txt'], found[PREFIX + 'sp/lab_probe.xml'])
     return names
 
 

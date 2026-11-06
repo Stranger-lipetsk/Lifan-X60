@@ -29,7 +29,7 @@ cleanup() {
     echo "Lab failed ($status); emulator diagnostics:"
     tail -45 "$work/emulator.log" 2>/dev/null || true
     timeout -k 5 10 "$adb" devices -l || true
-    timeout -k 5 20 "$adb" logcat -d -v brief 2>/dev/null | grep -iE 'X60BackupCaller|X60SyntheticTarget|BackupManagerService|FATAL EXCEPTION' | tail -80 || true
+    timeout -k 5 20 "$adb" logcat -d -v brief 2>/dev/null | grep -iE 'X60BackupCaller|X60RestoreCaller|X60SyntheticTarget|BackupManagerService|FATAL EXCEPTION' | tail -80 || true
   fi
   sudo pkill -TERM -u backupcallerlab 2>/dev/null || true
   [ "$blocked4" != yes ] || sudo iptables -D OUTPUT -m owner --uid-owner "$emu_uid" ! -d 127.0.0.0/8 -j REJECT || true
@@ -183,8 +183,42 @@ timeout -k 5 30 "$adb" logcat -c
 timeout -k 5 60 "$adb" shell am start -n ru.lifanx60.backupfixture/.MainActivity > "$work/system-target-start.txt" 2>&1
 wait_log FIXTURE_READY
 request_synthetic_backup system
+
+echo 'Restore synthetic system target via the app in the disposable emulator only'
+timeout -k 5 30 "$adb" shell rm /data/data/ru.lifanx60.backupfixture/files/lab-marker.txt /data/data/ru.lifanx60.backupfixture/shared_prefs/lab_probe.xml
+state=$(timeout -k 5 30 "$adb" shell 'if [ -e /data/data/ru.lifanx60.backupfixture/files/lab-marker.txt ] || [ -e /data/data/ru.lifanx60.backupfixture/shared_prefs/lab_probe.xml ]; then echo present; else echo absent; fi' | tr -d '\r')
+[ "$state" = absent ] || { echo "Could not verify synthetic files absent: $state"; exit 1; }
+timeout -k 5 30 "$adb" logcat -c
+timeout -k 5 60 "$adb" shell am start -n ru.lifanx60.backupcallerfixture/.RestoreActivity > "$work/restore-start.txt" 2>&1
+wait_log STARTING_SYNTHETIC_RESTORE
+confirmed=no
+for attempt in $(seq 1 8); do
+  if timeout -k 5 50 "$adb" shell uiautomator dump /sdcard/no-adb-lab-ui.xml >/dev/null 2>&1 &&
+     timeout -k 5 15 "$adb" shell cat /sdcard/no-adb-lab-ui.xml > "$work/ui.xml"; then
+    coords=$(python3 tools/emulator_backup_confirmation.py "$work/ui.xml" 'Restore my data' 2>/dev/null || true)
+    if [ -n "$coords" ]; then
+      read -r x y <<< "$coords"
+      timeout -k 5 20 "$adb" shell input tap "$x" "$y"
+      echo "Emulator restore confirmation tapped at $x,$y"
+      confirmed=yes; break
+    fi
+  fi
+  sleep 3
+done
+[ "$confirmed" = yes ] || { echo 'Restore confirmation UI not found'; exit 1; }
+wait_log RESTORE_CALL_RETURNED
+if grep -Fq RESTORE_CALL_FAILED "$work/current-log.txt"; then echo 'Restore call failed'; exit 1; fi
+timeout -k 5 60 "$adb" pull /data/data/ru.lifanx60.backupfixture/files/lab-marker.txt "$work/restored-marker.txt" >/dev/null
+timeout -k 5 60 "$adb" pull /data/data/ru.lifanx60.backupfixture/shared_prefs/lab_probe.xml "$work/restored-pref.xml" >/dev/null
+python3 - "$work/restored-marker.txt" "$work/restored-pref.xml" <<'PY'
+import sys
+from pathlib import Path
+from tools.check_no_adb_lab_backup import verify_contents
+verify_contents(Path(sys.argv[1]).read_bytes(), Path(sys.argv[2]).read_bytes())
+print('Both synthetic files restored and contents verified')
+PY
 {
-  echo '# Application-initiated synthetic backup, no ADB backup transport'
+  echo '# Application-initiated synthetic backup and restore, no ADB backup transport'
   echo 'Disposable generic Android 4.4.2 x86 emulator; no real device, Navitel, license, maps or real SD.'
   echo 'ADB was used only for laboratory install, observation, virtual UI and pulling the synthetic result; the app called the backup service itself.'
   echo 'Emulator-only AOSP platform signature; no shared UID; this is not a device APK or instructions.'
@@ -194,7 +228,9 @@ request_synthetic_backup system
   echo 'Platform-signed app: BACKUP_PERMISSION=true; confirmation tapped in virtual UI; backup call returned.'
   echo '## Ordinary synthetic target'; cat "$work/ordinary-check.txt"
   echo '## System synthetic target with a backup agent'; cat "$work/system-target-path.txt"; cat "$work/system-check.txt"
+  echo 'Both synthetic files were deleted and verified absent before an app-initiated, user-confirmed restore.'
+  echo 'Both restored synthetic file contents verified: yes.'
   echo 'Android userspace restarted before the system target test; not a full emulator reboot.'
-  echo 'No restore, real applications, real media, full partition image, or real head-unit behavior tested.'
+  echo 'No real applications, real media, full partition image, or real head-unit behavior tested. Restore can modify data; never apply this fixture to a real device.'
 } > reports/no-adb-backup-emulator.txt
 cat reports/no-adb-backup-emulator.txt

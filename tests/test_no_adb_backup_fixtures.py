@@ -18,6 +18,11 @@ class FixtureGuardTest(unittest.TestCase):
         self.assertNotIn('com.navitel', java)
         self.assertNotIn('fullRestore', java)
         self.assertIn('Build.FINGERPRINT.startsWith("generic")', java)
+        restore = (FIXTURES / 'no-adb-backup-caller/src/ru/lifanx60/backupcallerfixture/RestoreActivity.java').read_text()
+        self.assertIn('Build.FINGERPRINT.startsWith("generic")', restore)
+        self.assertIn('new File(dir, "synthetic.ab")', restore)
+        self.assertIn('"fullRestore"', restore)
+        self.assertNotIn('com.navitel', restore)
 
     def test_target_has_no_permissions(self):
         manifest = ET.parse(FIXTURES / 'no-adb-backup-target/AndroidManifest.xml').getroot()
