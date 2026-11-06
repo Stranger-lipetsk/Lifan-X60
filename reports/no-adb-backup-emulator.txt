@@ -1,4 +1,4 @@
-# Application-initiated synthetic backup, no ADB backup transport
+# Application-initiated synthetic backup and restore, no ADB backup transport
 Disposable generic Android 4.4.2 x86 emulator; no real device, Navitel, license, maps or real SD.
 ADB was used only for laboratory install, observation, virtual UI and pulling the synthetic result; the app called the backup service itself.
 Emulator-only AOSP platform signature; no shared UID; this is not a device APK or instructions.
@@ -18,5 +18,7 @@ Lab archive entry: apps/ru.lifanx60.backupfixture/_manifest
 Lab archive entry: apps/ru.lifanx60.backupfixture/f/lab-marker.txt
 Lab archive entry: apps/ru.lifanx60.backupfixture/sp/lab_probe.xml
 Both synthetic files verified: yes
+Both synthetic files were deleted and verified absent before an app-initiated, user-confirmed restore.
+Both restored synthetic file contents verified: yes.
 Android userspace restarted before the system target test; not a full emulator reboot.
-No restore, real applications, real media, full partition image, or real head-unit behavior tested.
+No real applications, real media, full partition image, or real head-unit behavior tested. Restore can modify data; never apply this fixture to a real device.
