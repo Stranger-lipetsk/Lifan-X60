@@ -33,6 +33,8 @@ cleanup() {
   if [ "$status" != 0 ]; then
     echo "Failure ($status): emulator log"; tail -50 "$work/emulator.txt" 2>/dev/null || true
     timeout -k 5 10 "$adb" devices -l || true
+    timeout -k 5 30 "$adb" logcat -d -v brief 2>/dev/null | grep -iE 'PackageManager|installd|X60SuLab|install|FATAL EXCEPTION' | tail -120 || true
+    timeout -k 5 30 "$adb" shell dmesg 2>/dev/null | grep -iE 'ext4|read.only|error' | tail -30 || true
   fi
   [ -z "$pid" ] || kill "$pid" 2>/dev/null || true
   sudo pkill -TERM -u sulabuser 2>/dev/null || true
