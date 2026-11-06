@@ -1,7 +1,7 @@
 Phase 1: obtain two real Navitel APKs; no user files or license
-/tmp/navitel-backup-lab.HlNa9M/lifan-file-manager-test.zip: OK
-/tmp/navitel-backup-lab.HlNa9M/system.img: OK
-/tmp/navitel-backup-lab.HlNa9M/old.apk: OK
+/tmp/navitel-backup-lab.TwVNe9/lifan-file-manager-test.zip: OK
+/tmp/navitel-backup-lab.TwVNe9/system.img: OK
+/tmp/navitel-backup-lab.TwVNe9/old.apk: OK
 /home/runner/work/Lifan-X60/Lifan-X60/firmware/apks/com.navitel.apk: OK
 V1 Signer: certificate SHA-256 digest: a40da80a59d170caa950cf15c18c454d47a39b26989d8b640ecd745ba71bf5dc
 package: name='com.navitel' versionCode='201103033' versionName='9.13.73' platformBuildVersionName='9' platformBuildVersionCode='28' compileSdkVersion='23' compileSdkVersionCodename='6.0-2438415'
@@ -10,8 +10,223 @@ package: name='com.navitel' versionCode='360622024' versionName='v11.11.1128' pl
 Phase 2: boot isolated Android 4.4.2 ARMv7
 Loading package information...                                                  Loading local repository...                                                     [                                       ] 3% Loading local repository...        [                                       ] 3% Fetch remote repository...         [=                                      ] 3% Fetch remote repository...         [=                                      ] 4% Fetch remote repository...         [=                                      ] 5% Fetch remote repository...         [==                                     ] 5% Fetch remote repository...         [==                                     ] 6% Fetch remote repository...         [==                                     ] 7% Fetch remote repository...         [==                                     ] 7% Computing updates...               [===                                    ] 8% Computing updates...               [===                                    ] 10% Computing updates...              [===                                    ] 10% Installing ARM EABI v7a System Ima[===                                    ] 10% Downloading armeabi-v7a-19_r05.zip[====                                   ] 10% Downloading armeabi-v7a-19_r05.zip[====                                   ] 11% Downloading armeabi-v7a-19_r05.zip[====                                   ] 12% Downloading armeabi-v7a-19_r05.zip[=====                                  ] 13% Downloading armeabi-v7a-19_r05.zip[=====                                  ] 14% Downloading armeabi-v7a-19_r05.zip[=====                                  ] 15% Downloading armeabi-v7a-19_r05.zip[======                                 ] 15% Downloading armeabi-v7a-19_r05.zip[======                                 ] 16% Downloading armeabi-v7a-19_r05.zip[======                                 ] 17% Downloading armeabi-v7a-19_r05.zip[=======                                ] 18% Downloading armeabi-v7a-19_r05.zip[=======                                ] 19% Downloading armeabi-v7a-19_r05.zip[=======                                ] 20% Downloading armeabi-v7a-19_r05.zip[========                               ] 20% Downloading armeabi-v7a-19_r05.zip[========                               ] 21% Downloading armeabi-v7a-19_r05.zip[========                               ] 21% Unzipping...                      [========                               ] 21% Unzipping... armeabi-v7a/         [========                               ] 21% Unzipping... armeabi-v7a/userdata.[========                               ] 22% Unzipping... armeabi-v7a/userdata.[========                               ] 22% Unzipping... armeabi-v7a/system.im[=========                              ] 23% Unzipping... armeabi-v7a/system.im[=========                              ] 24% Unzipping... armeabi-v7a/system.im[=========                              ] 25% Unzipping... armeabi-v7a/system.im[==========                             ] 25% Unzipping... armeabi-v7a/system.im[==========                             ] 26% Unzipping... armeabi-v7a/system.im[==========                             ] 27% Unzipping... armeabi-v7a/system.im[===========                            ] 28% Unzipping... armeabi-v7a/system.im[===========                            ] 29% Unzipping... armeabi-v7a/system.im[===========                            ] 30% Unzipping... armeabi-v7a/system.im[============                           ] 30% Unzipping... armeabi-v7a/system.im[============                           ] 31% Unzipping... armeabi-v7a/system.im[============                           ] 32% Unzipping... armeabi-v7a/system.im[============                           ] 32% Unzipping... armeabi-v7a/ramdisk.i[============                           ] 32% Unzipping... armeabi-v7a/build.pro[============                           ] 32% Unzipping... armeabi-v7a/NOTICE.tx[============                           ] 32% Unzipping... armeabi-v7a/source.pr[============                           ] 32% Unzipping... armeabi-v7a/kernel-qe[=============                          ] 33% Unzipping... armeabi-v7a/kernel-qe[=====================                  ] 55% Unzipping... armeabi-v7a/kernel-qe[=====================                  ] 55% Installing Android Emulator armeab[=====================                  ] 55% Downloading emulator-linux_x64-167[======================                 ] 55% Downloading emulator-linux_x64-167[======================                 ] 56% Downloading emulator-linux_x64-167[======================                 ] 57% Downloading emulator-linux_x64-167[=======================                ] 58% Downloading emulator-linux_x64-167[=======================                ] 59% Downloading emulator-linux_x64-167[=======================                ] 60% Downloading emulator-linux_x64-167[========================               ] 60% Downloading emulator-linux_x64-167[========================               ] 61% Downloading emulator-linux_x64-167[========================               ] 62% Downloading emulator-linux_x64-167[=========================              ] 63% Downloading emulator-linux_x64-167[=========================              ] 64% Downloading emulator-linux_x64-167[=========================              ] 65% Downloading emulator-linux_x64-167[==========================             ] 65% Downloading emulator-linux_x64-167[==========================             ] 66% Downloading emulator-linux_x64-167[==========================             ] 66% Unzipping... armeabi-v7a/kernel-qe[==========================             ] 66% Unzipping... emulator/            [==========================             ] 66% Unzipping... emulator/resources/  [==========================             ] 66% Unzipping... emulator/qsn         [==========================             ] 66% Unzipping... emulator/emulator    [==========================             ] 66% Unzipping... emulator/netsimd     [==========================             ] 67% Unzipping... emulator/netsimd     [==========================             ] 67% Unzipping... emulator/bin64/      [==========================             ] 67% Unzipping... emulator/qemu/       [==========================             ] 67% Unzipping... emulator/NOTICE.txt  [==========================             ] 67% Unzipping... emulator/crashpad_han[==========================             ] 67% Unzipping... emulator/source.prope[==========================             ] 67% Unzipping... emulator/nimble_bridg[==========================             ] 67% Unzipping... emulator/LICENSE     [==========================             ] 67% Unzipping... emulator/lib/        [==========================             ] 67% Unzipping... emulator/qemu-img    [==========================             ] 67% Unzipping... emulator/include/    [==========================             ] 67% Unzipping... emulator/NOTICE.csv  [==========================             ] 67% Unzipping... emulator/lib64/      [==========================             ] 67% Unzipping... emulator/emulator-che[==========================             ] 67% Unzipping... emulator/crashreport [==========================             ] 67% Unzipping... emulator/mksdcard    [==========================             ] 67% Unzipping... emulator/resources/To[==========================             ] 67% Unzipping... emulator/resources/de[==========================             ] 67% Unzipping... emulator/resources/To[==========================             ] 67% Unzipping... emulator/resources/de[==========================             ] 67% Unzipping... emulator/resources/To[==========================             ] 67% Unzipping... emulator/resources/ma[==========================             ] 67% Unzipping... emulator/resources/de[==========================             ] 67% Unzipping... emulator/resources/sk[==========================             ] 67% Unzipping... emulator/resources/de[==========================             ] 67% Unzipping... emulator/resources/ma[==========================             ] 67% Unzipping... emulator/resources/po[==========================             ] 67% Unzipping... emulator/resources/ma[===========================            ] 68% Unzipping... emulator/resources/ma[===========================            ] 68% Unzipping... emulator/resources/sk[===========================            ] 68% Unzipping... emulator/resources/ma[===========================            ] 68% Unzipping... emulator/bin64/e2fsck[===========================            ] 68% Unzipping... emulator/bin64/fsck.e[===========================            ] 68% Unzipping... emulator/bin64/tune2f[===========================            ] 68% Unzipping... emulator/bin64/resize[===========================            ] 68% Unzipping... emulator/bin64/mkfs.e[===========================            ] 68% Unzipping... emulator/qemu/linux-x[===========================            ] 69% Unzipping... emulator/qemu/linux-x[===========================            ] 70% Unzipping... emulator/qemu/linux-x[============================           ] 70% Unzipping... emulator/qemu/linux-x[============================           ] 70% Unzipping... emulator/lib/emulator[============================           ] 70% Unzipping... emulator/lib/rtc_serv[============================           ] 70% Unzipping... emulator/lib/advanced[============================           ] 70% Unzipping... emulator/lib/cmake/  [============================           ] 70% Unzipping... emulator/lib/emulator[============================           ] 70% Unzipping... emulator/lib/control_[============================           ] 70% Unzipping... emulator/lib/emulated[============================           ] 70% Unzipping... emulator/lib/rtc_serv[============================           ] 70% Unzipping... emulator/lib/emu-orig[============================           ] 70% Unzipping... emulator/lib/hardware[============================           ] 70% Unzipping... emulator/lib/pkgconfi[============================           ] 70% Unzipping... emulator/lib/pc-bios/[============================           ] 70% Unzipping... emulator/lib/snapshot[============================           ] 70% Unzipping... emulator/lib/adb_serv[============================           ] 70% Unzipping... emulator/lib/hostapd.[============================           ] 70% Unzipping... emulator/lib/grpc_end[============================           ] 70% Unzipping... emulator/lib/ca-bundl[============================           ] 70% Unzipping... emulator/lib/ui_contr[============================           ] 70% Unzipping... emulator/lib/snapshot[============================           ] 70% Unzipping... emulator/lib/ice_conf[============================           ] 70% Unzipping... emulator/lib/libflatb[============================           ] 71% Unzipping... emulator/lib/libflatb[============================           ] 71% Unzipping... emulator/lib/emulator[============================           ] 71% Unzipping... emulator/lib/waterfal[============================           ] 71% Unzipping... emulator/lib/emulated[============================           ] 71% Unzipping... emulator/lib/cmake/fl[============================           ] 71% Unzipping... emulator/lib/pkgconfi[============================           ] 71% Unzipping... emulator/lib/pc-bios/[============================           ] 71% Unzipping... emulator/include/flat[============================           ] 71% Unzipping... emulator/lib64/libgli[============================           ] 71% Unzipping... emulator/lib64/libpro[============================           ] 71% Unzipping... emulator/lib64/qt/   [============================           ] 71% Unzipping... emulator/lib64/liband[============================           ] 71% Unzipping... emulator/lib64/libgfx[============================           ] 71% Unzipping... emulator/lib64/gles_l[============================           ] 71% Unzipping... emulator/lib64/liband[============================           ] 71% Unzipping... emulator/lib64/vulkan[============================           ] 71% Unzipping... emulator/lib64/gles_s[============================           ] 71% Unzipping... emulator/lib64/libemu[============================           ] 71% Unzipping... emulator/lib64/libpro[============================           ] 71% Unzipping... emulator/lib64/liband[============================           ] 71% Unzipping... emulator/lib64/libtcm[============================           ] 71% Unzipping... emulator/lib64/libima[============================           ] 71% Unzipping... emulator/lib64/libc++[============================           ] 71% Unzipping... emulator/lib64/liband[============================           ] 71% Unzipping... emulator/lib64/libabs[============================           ] 71% Unzipping... emulator/lib64/gles_a[============================           ] 71% Unzipping... emulator/lib64/libsha[============================           ] 71% Unzipping... emulator/lib64/libc++[============================           ] 71% Unzipping... emulator/lib64/qt/res[============================           ] 71% Unzipping... emulator/lib64/qt/lib[============================           ] 71% Unzipping... emulator/lib64/qt/tra[============================           ] 71% Unzipping... emulator/lib64/qt/plu[============================           ] 71% Unzipping... emulator/lib64/qt/res[============================           ] 72% Unzipping... emulator/lib64/qt/res[============================           ] 72% Unzipping... emulator/lib64/qt/lib[=============================          ] 73% Unzipping... emulator/lib64/qt/lib[=============================          ] 74% Unzipping... emulator/lib64/qt/lib[=============================          ] 75% Unzipping... emulator/lib64/qt/lib[==============================         ] 75% Unzipping... emulator/lib64/qt/lib[==============================         ] 75% Unzipping... emulator/lib64/qt/tra[==============================         ] 75% Unzipping... emulator/lib64/qt/plu[==============================         ] 75% Unzipping... emulator/lib64/gles_l[==============================         ] 76% Unzipping... emulator/lib64/gles_l[==============================         ] 76% Unzipping... emulator/lib64/vulkan[==============================         ] 77% Unzipping... emulator/lib64/vulkan[==============================         ] 77% Unzipping... emulator/lib64/gles_s[==============================         ] 77% Unzipping... emulator/lib64/gles_a[==============================         ] 78% Unzipping... emulator/lib64/gles_a[=======================================] 100% Unzipping... emulator/lib64/gles_
 
-/tmp/navitel-backup-lab.HlNa9M/legacy.zip: OK
+/tmp/navitel-backup-lab.TwVNe9/legacy.zip: OK
 Emulator host UID 999: non-loopback IPv4 and IPv6 blocked
-Emulator exited before adb
 * daemon not running; starting now at tcp:5037
 * daemon started successfully
+Shell identity: uid=0(root) gid=0(root) context=u:r:shell:s0
+Trying remount of emulator system only
+remount succeeded
+Filesystem               Size     Used     Free   Blksize
+/system                541.3M   261.1M   280.2M   4096
+Phase 3: push old system APK on disposable emulator
+/tmp/navitel-backup-lab.TwVNe9/old.apk: 1 file pushed, 0 skipped. 7.3 MB/s (111095055 bytes in 14.430s)
+Phase 3a: restart Android userspace with old package
+Phase 3b: verify old system APK is unchanged and query package
+/system/priv-app/Navitel-large.apk: 1 file pulled, 0 skipped. 14.2 MB/s (111095055 bytes in 7.471s)
+Initial package path: package:/system/priv-app/Navitel-large.apk
+package:/system/priv-app/Navitel-large.apk
+Phase 4: Android backup of synthetic marker only
+Expected confirmation button was not found: Back up my data
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?><hierarchy rotation="0"><node index="0" text="" resource-id="" class="android.widget.FrameLayout" package="com.android.launcher" content-desc="" checkable="false" checked="false" clickable="false" enabled="true" focusable="false" focused="false" scrollable="false" long-clickable="false" password="false" selected="false" bounds="[27,326][293,480]"><node index="0" text="" resource-id="android:id/expanded_menu" class="android.widget.ListView" package="com.android.launcher" content-desc="" checkable="false" checked="false" clickable="true" enabled="true" focusable="true" focused="true" scrollable="false" long-clickable="false" password="false" selected="false" bounds="[35,334][285,480]"><node index="0" text="" resource-id="" class="android.widget.LinearLayout" package="com.android.launcher" content-desc="" checkable="false" checked="false" clickable="false" enabled="true" focusable="false" focused="false" scrollable="false" long-clickable="false" password="false" selected="false" bounds="[35,334][285,382]"><node index="0" text="" resource-id="" class="android.widget.RelativeLayout" package="com.android.launcher" content-desc="" checkable="false" checked="false" clickable="false" enabled="true" focusable="false" focused="false" scrollable="false" long-clickable="false" password="false" selected="false" bounds="[43,345][277,370]"><node index="0" text="Wallpaper" resource-id="android:id/title" class="android.widget.TextView" package="com.android.launcher" content-desc="" checkable="false" checked="false" clickable="false" enabled="true" focusable="false" focused="false" scrollable="false" long-clickable="false" password="false" selected="false" bounds="[43,345][277,370]" /></node></node><node index="1" text="" resource-id="" class="android.widget.LinearLayout" package="com.android.launcher" content-desc="" checkable="false" checked="false" clickable="false" enabled="true" focusable="false" focused="false" scrollable="false" long-clickable="false" password="false" selected="false" bounds="[35,383][285,431]"><node index="0" text="" resource-id="" class="android.widget.RelativeLayout" package="com.android.launcher" content-desc="" checkable="false" checked="false" clickable="false" enabled="true" focusable="false" focused="false" scrollable="false" long-clickable="false" password="false" selected="false" bounds="[43,394][277,419]"><node index="0" text="Manage apps" resource-id="android:id/title" class="android.widget.TextView" package="com.android.launcher" content-desc="" checkable="false" checked="false" clickable="false" enabled="true" focusable="false" focused="false" scrollable="false" long-clickable="false" password="false" selected="false" bounds="[43,394][277,419]" /></node></node><node index="2" text="" resource-id="" class="android.widget.LinearLayout" package="com.android.launcher" content-desc="" checkable="false" checked="false" clickable="false" enabled="true" focusable="false" focused="false" scrollable="false" long-clickable="false" password="false" selected="false" bounds="[35,432][285,480]"><node index="0" text="" resource-id="" class="android.widget.RelativeLayout" package="com.android.launcher" content-desc="" checkable="false" checked="false" clickable="false" enabled="true" focusable="false" focused="false" scrollable="false" long-clickable="false" password="false" selected="false" bounds="[43,443][277,468]"><node index="0" text="System settings" resource-id="android:id/title" class="android.widget.TextView" package="com.android.launcher" content-desc="" checkable="false" checked="false" clickable="false" enabled="true" focusable="false" focused="false" scrollable="false" long-clickable="false" password="false" selected="false" bounds="[43,443][277,468]" /></node></node></node></node></hierarchy>Backup command output:
+Device processes:
+USER     PID   PPID  VSIZE  RSS     WCHAN    PC         NAME
+root      1     0     640    496   c00be88c 0001a098 S /init
+root      2     0     0      0     c0033c60 00000000 S kthreadd
+root      3     2     0      0     c001e74c 00000000 S ksoftirqd/0
+root      4     2     0      0     c002f068 00000000 S kworker/0:0
+root      5     2     0      0     c002f068 00000000 S kworker/u:0
+root      6     2     0      0     c002e978 00000000 S khelper
+root      7     2     0      0     c0094d38 00000000 S sync_supers
+root      8     2     0      0     c00953e0 00000000 S bdi-default
+root      9     2     0      0     c002e978 00000000 S kblockd
+root      10    2     0      0     c002e978 00000000 S rpciod
+root      11    2     0      0     c002f068 00000000 S kworker/0:1
+root      12    2     0      0     c008e784 00000000 S kswapd0
+root      13    2     0      0     c00e428c 00000000 S fsnotify_mark
+root      14    2     0      0     c002e978 00000000 S crypto
+root      25    2     0      0     c021764c 00000000 S mtdblock0
+root      26    2     0      0     c021764c 00000000 S mtdblock1
+root      27    2     0      0     c021764c 00000000 S mtdblock2
+root      28    2     0      0     c002f068 00000000 S kworker/u:1
+root      29    2     0      0     c002e978 00000000 S binder
+root      30    2     0      0     c002e978 00000000 S deferwq
+root      31    2     0      0     c002f068 00000000 S kworker/u:2
+root      32    2     0      0     c0244d88 00000000 S mmcqd/0
+root      33    1     588    312   c00be88c 0001a098 S /sbin/ueventd
+root      35    2     0      0     c0144430 00000000 S jbd2/mtdblock0-
+root      36    2     0      0     c002e978 00000000 S ext4-dio-unwrit
+root      40    2     0      0     c00d0d8c 00000000 S flush-31:1
+root      42    2     0      0     c0144430 00000000 S jbd2/mtdblock1-
+root      43    2     0      0     c002e978 00000000 S ext4-dio-unwrit
+root      45    1     1428   140   c00e7644 0001120c S /sbin/healthd
+system    46    1     1000   348   c025622c b6ec841c S /system/bin/servicemanager
+root      47    1     4660   1172  ffffffff b6eadd14 S /system/bin/vold
+root      49    1     9772   1268  ffffffff b6f66d14 S /system/bin/netd
+root      50    1     1028   424   c02653fc b6ead110 S /system/bin/debuggerd
+radio     51    1     5504   860   ffffffff b6f4bd14 S /system/bin/rild
+drm       54    1     6924   2528  ffffffff b6ee841c S /system/bin/drmserver
+media     55    1     20520  5728  ffffffff b6f5741c S /system/bin/mediaserver
+install   56    1     992    500   c02f9e5c b6f54158 S /system/bin/installd
+keystore  57    1     3340   1204  c025622c b6ecd41c S /system/bin/keystore
+shell     61    1     924    464   c01ec2e0 b6f0f158 S /system/bin/sh
+root      62    1     4832   212   ffffffff 000190ac D /sbin/adbd
+root      99    2     0      0     00000000 00000000 R kworker/0:2
+media_rw  527   1     3508   460   ffffffff b6f69158 S /system/bin/sdcard
+root      684   2     0      0     c00d0dd8 00000000 S flush-179:0
+root      789   2     0      0     c00d0d8c 00000000 S flush-31:0
+root      875   2     0      0     c00d0d8c 00000000 S flush-0:17
+system    882   1     30524  2292  ffffffff b6f525cc S /system/bin/surfaceflinger
+root      883   1     225200 39724 ffffffff b6f52568 S zygote
+system    899   883   290840 37392 ffffffff b6f535cc S system_server
+u0_a7     951   883   251352 28260 ffffffff b6f535cc S com.android.systemui
+u0_a2     1008  883   240184 22312 ffffffff b6f535cc S android.process.acore
+u0_a29    1036  883   243836 24064 ffffffff b6f535cc S com.android.inputmethod.latin
+system    1047  883   242572 19080 ffffffff b6f535cc S com.android.settings
+radio     1063  883   256600 25120 ffffffff b6f535cc S com.android.phone
+u0_a8     1073  883   251300 32484 ffffffff b6f535cc S com.android.launcher
+u0_a39    1113  883   235376 17424 ffffffff b6f535cc S com.android.printspooler
+u0_a32    1159  883   235716 18588 ffffffff b6f535cc S com.android.music
+u0_a20    1181  883   237844 20288 ffffffff b6f535cc S com.android.deskclock
+u0_a5     1196  883   240124 22712 ffffffff b6f535cc S android.process.media
+u0_a4     1281  883   238816 18248 ffffffff b6f535cc S com.android.dialer
+u0_a1     1299  883   236088 20000 ffffffff b6f535cc S com.android.providers.calendar
+u0_a9     1336  883   242048 20728 ffffffff b6f535cc S com.android.mms
+u0_a52    1401  883   238372 17968 ffffffff b6f535cc S com.navitel:remote
+u0_a16    1423  883   239124 19936 ffffffff b6f535cc S com.android.calendar
+root      1491  62    1236   460   00000000 b6ee2158 R ps
+Selected backup logs:
+D/AndroidRuntime( 1258): Shutting down VM
+D/AndroidRuntime( 1256): Shutting down VM
+D/AndroidRuntime( 1323): 
+D/AndroidRuntime( 1323): >>>>>> AndroidRuntime START com.android.internal.os.RuntimeInit <<<<<<
+D/AndroidRuntime( 1323): CheckJNI is ON
+D/AndroidRuntime( 1323): Calling main entry com.android.commands.uiautomator.Launcher
+D/AndroidRuntime( 1323): Shutting down VM
+D/dalvikvm( 1416): DexOpt: 'Lorg/apache/http/ConnectionClosedException;' has an earlier definition; blocking out
+D/dalvikvm( 1416): DexOpt: 'Lorg/apache/http/HttpException;' has an earlier definition; blocking out
+D/dalvikvm( 1416): DexOpt: 'Lorg/apache/http/MalformedChunkCodingException;' has an earlier definition; blocking out
+D/dalvikvm( 1416): DexOpt: 'Lorg/apache/http/NoHttpResponseException;' has an earlier definition; blocking out
+D/dalvikvm( 1416): DexOpt: 'Lorg/apache/http/ParseException;' has an earlier definition; blocking out
+D/dalvikvm( 1416): DexOpt: 'Lorg/apache/http/client/ClientProtocolException;' has an earlier definition; blocking out
+D/dalvikvm( 1416): DexOpt: 'Lorg/apache/http/conn/ConnectTimeoutException;' has an earlier definition; blocking out
+D/dalvikvm( 1416): DexOpt: 'Lorg/apache/http/conn/HttpHostConnectException;' has an earlier definition; blocking out
+D/dalvikvm( 1416): DexOpt: 'Lorg/apache/http/impl/auth/UnsupportedDigestAlgorithmException;' has an earlier definition; blocking out
+D/dalvikvm( 1416): DexOpt: 'Lorg/apache/http/impl/cookie/DateParseException;' has an earlier definition; blocking out
+D/dalvikvm( 1416): DexOpt: 'Lorg/apache/http/util/ExceptionUtils;' has an earlier definition; blocking out
+D/dalvikvm( 1416): DexOpt: 'Lorg/apache/http/MethodNotSupportedException;' has an earlier definition; blocking out
+D/dalvikvm( 1416): DexOpt: 'Lorg/apache/http/ProtocolException;' has an earlier definition; blocking out
+D/dalvikvm( 1416): DexOpt: 'Lorg/apache/http/client/HttpResponseException;' has an earlier definition; blocking out
+D/dalvikvm( 1416): DexOpt: 'Lorg/apache/http/conn/ConnectionPoolTimeoutException;' has an earlier definition; blocking out
+D/dalvikvm( 1416): DexOpt: 'Lorg/apache/http/impl/client/TunnelRefusedException;' has an earlier definition; blocking out
+D/dalvikvm( 1416): DexOpt: 'Lorg/apache/http/UnsupportedHttpVersionException;' has an earlier definition; blocking out
+D/dalvikvm( 1416): DexOpt: 'Lorg/apache/http/auth/AuthenticationException;' has an earlier definition; blocking out
+D/dalvikvm( 1416): DexOpt: 'Lorg/apache/http/auth/MalformedChallengeException;' has an earlier definition; blocking out
+D/dalvikvm( 1416): DexOpt: 'Lorg/apache/http/client/NonRepeatableRequestException;' has an earlier definition; blocking out
+D/dalvikvm( 1416): DexOpt: 'Lorg/apache/http/client/RedirectException;' has an earlier definition; blocking out
+D/dalvikvm( 1416): DexOpt: 'Lorg/apache/http/cookie/MalformedCookieException;' has an earlier definition; blocking out
+D/dalvikvm( 1416): DexOpt: 'Lorg/apache/http/auth/InvalidCredentialsException;' has an earlier definition; blocking out
+D/dalvikvm( 1416): DexOpt: 'Lorg/apache/http/client/CircularRedirectException;' has an earlier definition; blocking out
+D/dalvikvm( 1416): DexOpt: 'Lorg/apache/http/impl/auth/NTLMEngineException;' has an earlier definition; blocking out
+D/dalvikvm( 1416): DexOpt: not verifying/optimizing 'Lorg/apache/http/ConnectionClosedException;': multiple definitions
+D/dalvikvm( 1416): DexOpt: not verifying/optimizing 'Lorg/apache/http/HttpException;': multiple definitions
+D/dalvikvm( 1416): DexOpt: not verifying/optimizing 'Lorg/apache/http/MalformedChunkCodingException;': multiple definitions
+D/dalvikvm( 1416): DexOpt: not verifying/optimizing 'Lorg/apache/http/NoHttpResponseException;': multiple definitions
+D/dalvikvm( 1416): DexOpt: not verifying/optimizing 'Lorg/apache/http/ParseException;': multiple definitions
+D/dalvikvm( 1416): DexOpt: not verifying/optimizing 'Lorg/apache/http/client/ClientProtocolException;': multiple definitions
+D/dalvikvm( 1416): DexOpt: not verifying/optimizing 'Lorg/apache/http/conn/ConnectTimeoutException;': multiple definitions
+D/dalvikvm( 1416): DexOpt: not verifying/optimizing 'Lorg/apache/http/conn/HttpHostConnectException;': multiple definitions
+I/dalvikvm( 1416): DexOpt: not resolving ambiguous class 'Lorg/apache/http/impl/auth/NTLMEngineException;'
+D/dalvikvm( 1416): DexOpt: not verifying/optimizing 'Lorg/apache/http/impl/auth/UnsupportedDigestAlgorithmException;': multiple definitions
+D/dalvikvm( 1416): DexOpt: not verifying/optimizing 'Lorg/apache/http/impl/cookie/DateParseException;': multiple definitions
+D/dalvikvm( 1416): DexOpt: not verifying/optimizing 'Lorg/apache/http/util/ExceptionUtils;': multiple definitions
+D/dalvikvm( 1416): DexOpt: not verifying/optimizing 'Lorg/apache/http/MethodNotSupportedException;': multiple definitions
+D/dalvikvm( 1416): DexOpt: not verifying/optimizing 'Lorg/apache/http/ProtocolException;': multiple definitions
+I/dalvikvm( 1416): DexOpt: not resolving ambiguous class 'Lorg/apache/http/MalformedChunkCodingException;'
+D/dalvikvm( 1416): DexOpt: not verifying/optimizing 'Lorg/apache/http/client/HttpResponseException;': multiple definitions
+D/dalvikvm( 1416): DexOpt: not verifying/optimizing 'Lorg/apache/http/conn/ConnectionPoolTimeoutException;': multiple definitions
+I/dalvikvm( 1416): DexOpt: not resolving ambiguous class 'Lorg/apache/http/impl/auth/NTLMEngineException;'
+I/dalvikvm( 1416): DexOpt: not resolving ambiguous class 'Lorg/apache/http/impl/auth/NTLMEngineException;'
+I/dalvikvm( 1416): DexOpt: not resolving ambiguous class 'Lorg/apache/http/impl/auth/NTLMEngineException;'
+I/dalvikvm( 1416): DexOpt: not resolving ambiguous class 'Lorg/apache/http/ProtocolException;'
+D/dalvikvm( 1416): DexOpt: not verifying/optimizing 'Lorg/apache/http/impl/client/TunnelRefusedException;': multiple definitions
+D/dalvikvm( 1416): DexOpt: not verifying/optimizing 'Lorg/apache/http/UnsupportedHttpVersionException;': multiple definitions
+D/dalvikvm( 1416): DexOpt: not verifying/optimizing 'Lorg/apache/http/auth/AuthenticationException;': multiple definitions
+D/dalvikvm( 1416): DexOpt: not verifying/optimizing 'Lorg/apache/http/auth/MalformedChallengeException;': multiple definitions
+D/dalvikvm( 1416): DexOpt: not verifying/optimizing 'Lorg/apache/http/client/NonRepeatableRequestException;': multiple definitions
+D/dalvikvm( 1416): DexOpt: not verifying/optimizing 'Lorg/apache/http/client/RedirectException;': multiple definitions
+D/dalvikvm( 1416): DexOpt: not verifying/optimizing 'Lorg/apache/http/cookie/MalformedCookieException;': multiple definitions
+D/dalvikvm( 1416): DexOpt: not verifying/optimizing 'Lorg/apache/http/auth/InvalidCredentialsException;': multiple definitions
+D/dalvikvm( 1416): DexOpt: not verifying/optimizing 'Lorg/apache/http/client/CircularRedirectException;': multiple definitions
+I/dalvikvm( 1416): DexOpt: not resolving ambiguous class 'Lorg/apache/http/cookie/MalformedCookieException;'
+D/dalvikvm( 1416): DexOpt: not verifying/optimizing 'Lorg/apache/http/impl/auth/NTLMEngineException;': multiple definitions
+D/AndroidRuntime( 1438): 
+D/AndroidRuntime( 1438): >>>>>> AndroidRuntime START com.android.internal.os.RuntimeInit <<<<<<
+D/AndroidRuntime( 1438): CheckJNI is ON
+D/AndroidRuntime( 1438): Calling main entry com.android.commands.uiautomator.Launcher
+D/AndroidRuntime( 1438): Shutting down VM
+D/AndroidRuntime( 1459): 
+D/AndroidRuntime( 1459): >>>>>> AndroidRuntime START com.android.internal.os.RuntimeInit <<<<<<
+D/AndroidRuntime( 1459): CheckJNI is ON
+D/AndroidRuntime( 1459): Calling main entry com.android.commands.uiautomator.Launcher
+D/AndroidRuntime( 1459): Shutting down VM
+D/AndroidRuntime( 1473): 
+D/AndroidRuntime( 1473): >>>>>> AndroidRuntime START com.android.internal.os.RuntimeInit <<<<<<
+D/AndroidRuntime( 1473): CheckJNI is ON
+D/AndroidRuntime( 1473): Calling main entry com.android.commands.uiautomator.Launcher
+D/AndroidRuntime( 1473): Shutting down VM
+W/BackupManagerService(  899): dataChanged but no participant pkg='com.android.providers.settings' uid=10020
+Failure (1): emulator log
+  hw.dPad = true
+  hw.gsmModem = true
+  hw.gps = true
+  hw.battery = true
+  hw.accelerometer = true
+  hw.audioInput = true
+  hw.audioOutput = true
+  hw.sdCard = true
+  hw.sdCard.path = /tmp/navitel-backup-lab.TwVNe9/avd/migration_arm.avd/sdcard.img
+  disk.cachePartition = true
+  disk.cachePartition.path = /tmp/navitel-backup-lab.TwVNe9/avd/migration_arm.avd/cache.img
+  disk.cachePartition.size = 66m
+  hw.lcd.width = 320
+  hw.lcd.height = 480
+  hw.lcd.depth = 32
+  hw.lcd.density = 160
+  hw.lcd.backlight = true
+  hw.gpu.enabled = true
+  hw.gpu.mode = swiftshader
+  hw.gpu.blacklisted = no
+  hw.initialOrientation = portrait
+  hw.camera.back = emulated
+  hw.camera.front = none
+  vm.heapSize = 64
+  hw.sensors.light = true
+  hw.sensors.pressure = true
+  hw.sensors.humidity = true
+  hw.sensors.proximity = true
+  hw.sensors.magnetic_field = true
+  hw.sensors.orientation = true
+  hw.sensors.temperature = true
+  hw.useext4 = true
+  kernel.path = /usr/local/lib/android/sdk/system-images/android-19/default/armeabi-v7a//kernel-qemu
+  kernel.newDeviceNaming = no
+  kernel.supportsYaffs2 = yes
+  disk.ramdisk.path = /usr/local/lib/android/sdk/system-images/android-19/default/armeabi-v7a//ramdisk.img
+  disk.systemPartition.initPath = /usr/local/lib/android/sdk/system-images/android-19/default/armeabi-v7a//system.img
+  disk.systemPartition.size = 550m
+  disk.dataPartition.path = /tmp/navitel-backup-lab.TwVNe9/avd/migration_arm.avd/userdata-qemu.img
+  disk.dataPartition.initPath = /tmp/navitel-backup-lab.TwVNe9/avd/migration_arm.avd/userdata.img
+  disk.dataPartition.size = 800m
+  avd.name = migration_arm
+.
+emulator: WARNING: CPU acceleration only works with x86/x86_64 system images.
+QEMU options list:
+emulator: argv[00] = "/tmp/navitel-backup-lab.TwVNe9/legacy/tools/emulator64-arm"
+emulator: argv[01] = "-audio"
+emulator: argv[02] = "none"
+emulator: argv[03] = "-dns-server"
+emulator: argv[04][139705779746496]:WARNING:./android/base/files/IniFile.cpp:158:Failed to process .ini file /home/emulatorlab/.android/emu-update-last-check.ini for reading.
+List of devices attached
+emulator-5554          device product:sdk model:sdk device:generic transport_id:1
+
