@@ -56,7 +56,7 @@ loop=$(timeout -k 5 30 sudo losetup --find --show "$w/target.img")
 backing=$(sudo losetup -n -O BACK-FILE "$loop")
 [ "$(realpath -e "$backing")" = "$(realpath -e "$w/target.img")" ] || { echo 'Loop is not the new synthetic image'; exit 1; }
 run_in_lab() {
-  timeout -k 5 90 docker run --rm --name "$container_name" --network none --read-only --cap-drop ALL --cap-add DAC_OVERRIDE \
+  timeout -k 5 30 docker run --rm --name "$container_name" --network none --read-only --cap-drop ALL --cap-add DAC_OVERRIDE -e QEMU_STRACE=1 \
     --security-opt no-new-privileges --memory 256m --pids-limit 32 \
     --device "$loop:$loop:rwm" \
     --mount "type=bind,source=$w/mounted,target=/fixture/mounted" \
