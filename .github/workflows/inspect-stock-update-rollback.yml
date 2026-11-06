@@ -1,0 +1,69 @@
+name: Статическая проверка отката системного приложения
+on:
+  push:
+    branches: [arena/b12cc9a8-lifan-x60]
+    paths:
+      - '.github/workflows/inspect-stock-update-rollback.yml'
+      - 'tools/inspect_stock_update_rollback.py'
+      - 'tests/test_inspect_stock_update_rollback.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  inspect:
+    if: github.ref_name == 'arena/b12cc9a8-lifan-x60'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Проверить анализатор
+        run: python3 -m unittest discover -s tests -p 'test_inspect_stock_update_rollback.py' -v
+      - name: Прочитать файлы штатной системы без запуска прошивки
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq e2fsprogs unzip openssl
+          w="$RUNNER_TEMP/backup-signature"
+          mkdir -p "$w" reports
+          gh release download file-manager-test-20261105 -p lifan-file-manager-test.zip -D "$w"
+          echo "4be81211994221e80e401ce712ce484b5320156902fff3707737b73e3945d17f  $w/lifan-file-manager-test.zip" | sha256sum -c -
+          unzip -p "$w/lifan-file-manager-test.zip" system.img > "$w/system.img"
+          echo "a660f062716fd42d5a6185faec059f42675b3024304de7b81fac5d705cc88511  $w/system.img" | sha256sum -c -
+          for item in framework-res.apk services.jar; do
+            debugfs -R "dump /framework/$item $w/$item" "$w/system.img" >/dev/null 2>&1
+            test -s "$w/$item"
+          done
+          echo "998f7b8558e55fa4d40ea676414cb4bf35f9c9b6f0eae3c81f037186229c403c  $w/services.jar" | sha256sum -c -
+          bt=$(find "$ANDROID_HOME/build-tools" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -1)
+          "$bt/apksigner" verify --min-sdk-version 19 --max-sdk-version 19 --print-certs "$w/framework-res.apk" > "$w/cert.txt"
+          grep -F '7fbae817b7db24642d8959c347b561c003c6cfde2cb10f909c932f21a4d6d804' "$w/cert.txt"
+          "$bt/aapt" dump xmltree "$w/framework-res.apk" AndroidManifest.xml > "$w/framework.xmltree"
+          python3 - "$w" <<'PY'
+          import re, sys, zipfile
+          from pathlib import Path
+          w = Path(sys.argv[1])
+          with zipfile.ZipFile(w/'services.jar') as jar, zipfile.ZipFile(w/'framework-res.apk') as framework, zipfile.ZipFile(w/'services-wrapper.apk', 'w') as out:
+              out.writestr('AndroidManifest.xml', framework.read('AndroidManifest.xml'))
+              names = [name for name in jar.namelist() if re.fullmatch(r'classes(?:[0-9]+)?\.dex', name)]
+              if not names: raise SystemExit('No DEX in services.jar')
+              for name in names: out.writestr(name, jar.read(name))
+          PY
+          curl -fLsS --retry 3 --max-time 120 -o "$w/apktool.jar" https://github.com/iBotPeaches/Apktool/releases/download/v2.9.3/apktool_2.9.3.jar
+          java -jar "$w/apktool.jar" d -f -r "$w/services-wrapper.apk" -o "$w/decoded" >/dev/null
+          python3 tools/inspect_stock_update_rollback.py "$w/decoded/smali/com/android/server/pm/PackageManagerService.smali" > reports/stock-update-rollback-static.txt
+      - name: Сохранить только текстовый отчёт
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/stock-update-rollback-static.txt
+          git diff --cached --quiet && exit 0
+          git commit -m 'report: inspect stock system update rollback flags'
+          git pull --rebase origin "${{ github.ref_name }}"
+          git push origin HEAD:"${{ github.ref_name }}"
