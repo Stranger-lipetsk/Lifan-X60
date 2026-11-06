@@ -62,7 +62,10 @@ file "$generic"
 magic=$(od -An -tx1 -N4 "$generic" | tr -d ' \n')
 if [ "$magic" = '3aff26ed' ]; then simg2img "$generic" "$work/offline-system.img"; else cp --sparse=always "$generic" "$work/offline-system.img"; fi
 file "$work/offline-system.img"
-e2fsck -fy "$work/offline-system.img"
+# e2fsck returns 1 when it corrected the disposable SDK image, which is expected.
+fsck_rc=0
+e2fsck -fy "$work/offline-system.img" || fsck_rc=$?
+[ "$fsck_rc" -le 1 ] || { echo "SDK image fsck failed: $fsck_rc"; exit 1; }
 resize2fs "$work/offline-system.img" 1024M
 e2fsck -fn "$work/offline-system.img"
 debugfs -R "dump /framework/services.jar $work/stock-services.jar" "$work/system.img" >/dev/null 2>&1
