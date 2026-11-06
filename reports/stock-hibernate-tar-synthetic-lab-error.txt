@@ -1,0 +1,32 @@
+Selecting previously unselected package qemu-user-static.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 215960 files and directories currently installed.)
+Preparing to unpack .../qemu-user-static_1%3a8.2.2+ds-0ubuntu1.18_amd64.deb ...
+Unpacking qemu-user-static (1:8.2.2+ds-0ubuntu1.18) ...
+Setting up qemu-user-static (1:8.2.2+ds-0ubuntu1.18) ...
+Processing triggers for man-db (2.12.0-4build2) ...
+Not building database; man-db/auto-update is not 'true'.
+Processing triggers for systemd (255.4-1ubuntu8.18) ...
+
+Running kernel seems to be up-to-date.
+
+No services need to be restarted.
+
+No containers need to be restarted.
+
+No user sessions are running outdated binaries.
+
+No VM guests are running outdated hypervisor (qemu) binaries on this host.
+/home/runner/work/_temp/hibernate-tar-model.oS7u8aKC/lifan-file-manager-test.zip: OK
+/home/runner/work/_temp/hibernate-tar-model.oS7u8aKC/system.img: OK
+Fast link dest: "busybox"
+/home/runner/work/_temp/hibernate-tar-model.oS7u8aKC/image/busybox: OK
+sha256:fafed9a7a12a61bccda90bb92bb4ee2ca7a7bde4cfcd1502082a7f81a266c9e6
+after-archive
+Traceback (most recent call last):
+  File "/home/runner/work/Lifan-X60/Lifan-X60/tools/hibernate_tar_lab.py", line 63, in <module>
+    main()
+  File "/home/runner/work/Lifan-X60/Lifan-X60/tools/hibernate_tar_lab.py", line 59, in main
+    compare(Path(sys.argv[1]), Path(sys.argv[2]))
+  File "/home/runner/work/Lifan-X60/Lifan-X60/tools/hibernate_tar_lab.py", line 46, in compare
+    raise AssertionError(f'{relative}: {left} != {right}')
+AssertionError: data/com.navitel/files/link-to-marker: {'mode': 511, 'uid': 10013, 'gid': 10013, 'kind': 'symlink', 'target': 'lab-marker.txt'} != {'mode': 511, 'uid': 0, 'gid': 0, 'kind': 'symlink', 'target': 'lab-marker.txt'}
