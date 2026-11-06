@@ -6,9 +6,12 @@ Exact command options: tar -cf DEST/data.tar ./. and tar -xvf DEST/data.tar.
 MATCH data/com.navitel/files/lab-marker.txt: {'mode': 384, 'uid': 10013, 'gid': 10013, 'kind': 'file', 'sha256': '228b231c38de1b90014fe278b047143e25e327f99b377be65c96ff996a80ed46'}
 MATCH data/com.navitel/shared_prefs/probe.xml: {'mode': 384, 'uid': 10013, 'gid': 10013, 'kind': 'file', 'sha256': 'a6b0011b39066bc22a91467e3679f46d0f6e1e499f78d7931d23e7a03ae8bdc5'}
 MATCH data/ru.lifanx60.fixture/files/marker.txt: {'mode': 384, 'uid': 10055, 'gid': 10055, 'kind': 'file', 'sha256': '0ebcaec33812cf530e9e20d3b2295f3369752fa6010552708678fd21cccf65a4'}
-MATCH system/packages.xml: {'mode': 420, 'uid': 1000, 'gid': 1000, 'kind': 'file', 'sha256': '03ffaa6f6078b9dc291e52ce227ddde723e51ea977d7d912571e72b63b3d748c'}
+MATCH system/packages.xml: {'mode': 432, 'uid': 1000, 'gid': 1000, 'kind': 'file', 'sha256': '03ffaa6f6078b9dc291e52ce227ddde723e51ea977d7d912571e72b63b3d748c'}
 MATCH app/com.navitel-1.apk: {'mode': 420, 'uid': 1000, 'gid': 1000, 'kind': 'file', 'sha256': '93c50c006a8803a3fb9c14b364f9a02e70c1b20a7431e8cb672ea957c2a528fc'}
+MATCH data: {'mode': 505, 'uid': 1000, 'gid': 1000, 'kind': 'directory'}
 MATCH data/com.navitel: {'mode': 448, 'uid': 10013, 'gid': 10013, 'kind': 'directory'}
+MATCH data/com.navitel/files: {'mode': 504, 'uid': 10013, 'gid': 10013, 'kind': 'directory'}
+MATCH data/ru.lifanx60.fixture: {'mode': 448, 'uid': 10055, 'gid': 10055, 'kind': 'directory'}
 SYMLINK before: {'mode': 511, 'uid': 10013, 'gid': 10013, 'kind': 'symlink', 'target': 'lab-marker.txt'}; after: {'mode': 511, 'uid': 0, 'gid': 0, 'kind': 'symlink', 'target': 'lab-marker.txt'}; all listed fields match: False
 Hardlink relationship retained: True
 Test user xattr on source: ['user.x60_test']
@@ -21,14 +24,14 @@ Symlink archive header numeric UID/GID: 10013 10013 ; target: lab-marker.txt
 Create diagnostics:
 tar: write error: No space left on device
 Extract diagnostics:
-tar: write error: No space left on device
 ././
 ././synthetic-large.bin
+tar: write error: No space left on device
 Same 24 MiB file, separate 40 MiB ext4 image: tar creation succeeded; extraction exit 1; no complete copy.
 Tight-image extract diagnostics:
+tar: write error: No space left on device
 ././
 ././synthetic-large.bin
-tar: write error: No space left on device
 The archive and extracted files occupy the destination at the same time. This models insufficient space, not the actual capacity or free space of the GU partition.
 ## Deliberately scheduled late write
 Source was modified after archive finished and before extraction. Extracted file contained the earlier snapshot; late source change did not appear.
