@@ -12,10 +12,13 @@ Failure [INSTALL_PARSE_FAILED_INCONSISTENT_CERTIFICATES]
 Matching certificate candidate installed as data update; original emulator system APK unchanged: yes.
 Emulator system mounted read-only during update:
 /dev/block/vda /system ext4 ro,relatime,data=ordered 0 0
-UID before/after/userspace restart: 10052/10052/10052
+UID before/after/userspace restart/full emulator reboot: 10052/10052/10052/10052
+Full virtual device reboot confirmed via changed kernel boot ID; system APK still matched afterward.
 ## Package paths and selected version
 WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
 package:/system/priv-app/Navitel-large.apk
+WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
+package:/data/app/com.navitel-1.apk
 WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
 package:/data/app/com.navitel-1.apk
 WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
@@ -26,10 +29,10 @@ package:/data/app/com.navitel-1.apk
     codePath=/system/priv-app/Navitel-large.apk
     versionCode=201103033 targetSdk=28
     versionName=9.13.73
-Synthetic marker and preferences survived install, userspace restart, and launch attempt: yes.
+Synthetic marker and preferences for Navitel and one independent fixture app survived install, userspace restart, launch attempt, and full emulator reboot: yes.
 ## Launch attempt (no activation asserted)
 WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
 Starting: Intent { cmp=com.navitel/.app.MainActivity }
-    mResumedActivity: ActivityRecord{afdea328 u0 com.navitel/.app.MainActivity t2}
-  mFocusedActivity: ActivityRecord{afdea328 u0 com.navitel/.app.MainActivity t2}
-Userspace restart is not a full reboot or real-device hibernate. App behavior, rollback, settings and all data preservation remain unverified.
+    mResumedActivity: ActivityRecord{afd5a2a0 u0 com.navitel/.app.MainActivity t2}
+  mFocusedActivity: ActivityRecord{afd5a2a0 u0 com.navitel/.app.MainActivity t2}
+Generic emulator full reboot is not real-device hibernate. App behavior, rollback, settings and all data preservation remain unverified.
