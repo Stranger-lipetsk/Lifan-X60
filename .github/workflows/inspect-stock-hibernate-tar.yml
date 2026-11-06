@@ -1,0 +1,57 @@
+name: Анализ tar для штатного Hibernate
+on:
+  push:
+    branches: [arena/b12cc9a8-lifan-x60]
+    paths: ['.github/workflows/inspect-stock-hibernate-tar.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  inspect:
+    if: github.ref_name == 'arena/b12cc9a8-lifan-x60'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Изучить штатный образ без запуска скрипта
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq e2fsprogs unzip file binutils
+          w="$RUNNER_TEMP/stock-hibernate-tar"
+          mkdir -p "$w" reports
+          gh release download file-manager-test-20261105 -p lifan-file-manager-test.zip -D "$w"
+          echo "4be81211994221e80e401ce712ce484b5320156902fff3707737b73e3945d17f  $w/lifan-file-manager-test.zip" | sha256sum -c -
+          unzip -p "$w/lifan-file-manager-test.zip" system.img > "$w/system.img"
+          echo "a660f062716fd42d5a6185faec059f42675b3024304de7b81fac5d705cc88511  $w/system.img" | sha256sum -c -
+          {
+            echo '# Static inspection of stock-derived tar utilities, not head-unit runtime'
+            echo 'Read-only ext4 inspection; no executable run and no device accessed.'
+            for p in /bin/tar /xbin/tar /bin/busybox /xbin/busybox /bin/toolbox /bin/hib_image_v2.sh /bin/sh; do
+              echo "## $p"
+              debugfs -R "stat $p" "$w/system.img" 2>&1
+            done
+            for p in /bin/busybox /xbin/busybox /bin/toolbox; do
+              out="$w/$(echo "$p" | tr / _)"
+              debugfs -R "dump $p $out" "$w/system.img" >/dev/null 2>&1 || true
+              if [ -s "$out" ]; then
+                echo "## File $p"; sha256sum "$out" | awk '{print $1}'
+                file "$out"
+                readelf -h "$out" | grep -E 'Class:|Machine:|Type:' || true
+                readelf -d "$out" | grep -E 'NEEDED' || true
+                strings "$out" | grep -xE 'tar|busybox|toolbox' | sort -u || true
+              fi
+            done
+          } > reports/stock-hibernate-tar-static.txt
+      - name: Сохранить текстовый отчёт
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/stock-hibernate-tar-static.txt
+          git diff --cached --quiet && exit 0
+          git commit -m 'report: inspect stock hibernate tar utilities'
+          git pull --rebase origin "${{ github.ref_name }}"
+          git push origin HEAD:"${{ github.ref_name }}"
