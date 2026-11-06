@@ -293,7 +293,17 @@ for attempt in $(seq 1 30); do
   timeout -k 5 40 "$adb" shell uiautomator dump /sdcard/navitel-lab-ui.xml > /dev/null 2>&1 || { sleep 2; continue; }
   timeout -k 5 15 "$adb" shell cat /sdcard/navitel-lab-ui.xml > "$work/installer-ui.xml" 2>/dev/null || continue
   timeout -k 5 20 "$adb" shell dumpsys activity activities > "$work/installer-activities.txt" 2>/dev/null || true
-  # Only tap buttons when the Android PackageInstaller is the foreground activity.
+  # Amaze first asks whether to view or install the APK. Only act on its
+  # explicit package-installer dialog, never arbitrary Amaze buttons.
+  if grep -E 'mResumedActivity.*com.amaze.filemanager' "$work/installer-activities.txt" >/dev/null &&
+     grep -Fq 'This is a package installer.' "$work/installer-ui.xml"; then
+    coords=$(python3 tools/emulator_backup_confirmation.py "$work/installer-ui.xml" 'Install' 2>/dev/null || true)
+    if [ -n "$coords" ]; then
+      read -r x y <<< "$coords"; echo "Tap virtual Amaze Install at $x,$y"
+      timeout -k 5 20 "$adb" shell input tap "$x" "$y"; sleep 3; continue
+    fi
+  fi
+  # Otherwise only tap buttons when Android PackageInstaller is foreground.
   grep -E 'mResumedActivity.*com.android.packageinstaller' "$work/installer-activities.txt" >/dev/null || { sleep 2; continue; }
   if grep -iq 'App installed' "$work/installer-ui.xml"; then installed=yes; break; fi
   coords=$(python3 tools/emulator_backup_confirmation.py "$work/installer-ui.xml" 'Install' 2>/dev/null || true)
