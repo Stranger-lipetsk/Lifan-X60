@@ -58,12 +58,20 @@ jobs:
           test -s "$w/root/xbin/su"
           debugfs -R 'stat /xbin/su' "$w/system.img" > reports/su-static.txt 2>&1
           python3 tools/inspect_su_static.py "$w/root/xbin/su" >> reports/su-static.txt
+          for path in /bin/su /bin/bin/su /app/Superuser.apk /app/SuperSU.apk; do
+            echo "## /system$path" >> reports/su-static.txt
+            debugfs -R "stat $path" "$w/system.img" >> reports/su-static.txt 2>&1
+          done
+          aapt=$(find "$ANDROID_HOME/build-tools" -type f -name aapt | sort -V | tail -1)
+          test -x "$aapt" && test -s "$w/root/app/AmazeFileManager.apk"
+          "$aapt" dump xmltree "$w/root/app/AmazeFileManager.apk" AndroidManifest.xml > "$w/amaze-manifest.txt"
+          { echo '# Amaze manifest header (offline)'; sed -n '1,28p' "$w/amaze-manifest.txt"; } > reports/amaze-security-static.txt
       - name: Сохранить только текстовый отчёт
         run: |
           set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add reports/usb-debug-callers-static.txt reports/systemui-network-adb-static.txt reports/su-static.txt
+          git add reports/usb-debug-callers-static.txt reports/systemui-network-adb-static.txt reports/su-static.txt reports/amaze-security-static.txt
           git diff --cached --quiet && exit 0
           git commit -m 'report: search system for USB debug entry points'
           git pull --rebase origin "${{ github.ref_name }}"
