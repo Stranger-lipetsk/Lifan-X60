@@ -50,7 +50,7 @@ Before update:
 28	/data/data/com.navitel
 X60_SIZE_DONE
 After update:
-171468	/data
+171464	/data
 103308	/data/app
 19528	/data/app-lib
 41808	/data/dalvik-cache
@@ -60,11 +60,11 @@ After update:
 6800	/data/dalvik-cache/data@app@com.navitel-1.apk@classes.dex
 X60_SIZE_DONE
 After host-triggered cold start:
-238324	/data
+239576	/data
 103308	/data/app
 19528	/data/app-lib
 41808	/data/dalvik-cache
-66852	/data/data/com.navitel
+68112	/data/data/com.navitel
 96836	/data/app/com.navitel-1.apk
 19484	/data/app-lib/com.navitel-1
 6800	/data/dalvik-cache/data@app@com.navitel-1.apk@classes.dex
@@ -83,19 +83,23 @@ Synthetic data/com.navitel/shared_prefs/x60_lab_probe.xml content, uid, gid and 
 Synthetic data/ru.lifanx60.backupfixture/files/lab-marker.txt content, uid, gid and mode match: 10054:10054 600
 Synthetic data/ru.lifanx60.backupfixture/shared_prefs/lab_probe.xml content, uid, gid and mode match: 10054:10054 600
 Allocated KiB on the CI host (destination includes the archive; source ext4, not GU tmpfs):
-238336	/tmp/navitel-arm-data-copy-lab.s23yFY/copy-source
-474404	/tmp/navitel-arm-data-copy-lab.s23yFY/copy-dest
-236056	/tmp/navitel-arm-data-copy-lab.s23yFY/copy-dest/data.tar
+239588	/tmp/navitel-arm-data-copy-lab.QdP3FS/copy-source
+476888	/tmp/navitel-arm-data-copy-lab.QdP3FS/copy-dest
+237288	/tmp/navitel-arm-data-copy-lab.QdP3FS/copy-dest/data.tar
 Destination filesystem usage:
 Filesystem     1K-blocks   Used Available Use% Mounted on
-/dev/loop1        498900 474408         0 100% /tmp/navitel-arm-data-copy-lab.s23yFY/copy-dest
+/dev/loop1        498900 476892         0 100% /tmp/navitel-arm-data-copy-lab.QdP3FS/copy-dest
+Filesystem blocks free including reserved (KiB): 22008
+Filesystem blocks available to unprivileged users (KiB): 0
+Negative control on fresh 512 MiB image: copied baseline snapshot plus one synthetic 32 MiB file, tar create exit 0, extraction exit 1 with No space left on device.
+This artificial addition is not a claim about installed apps or capacity on the head unit.
 Only listed files and metadata were compared; tar exit 0 is not proof all app data, xattrs, SELinux labels, sparse data, or timestamps were preserved.
 The stock updater declares DATA_SIZE=512 with sfdisk -uM for logical p5; actual head-unit size, free space, other apps and runtime sequence remain unknown.
 ## Emulator crash dialog while installing
 No Navitel crash dialog observed during installer polling; other failures may still occur
 ## Launch attempt (no activation asserted)
 Starting: Intent { cmp=com.navitel/.app.MainActivity }
-    mResumedActivity: ActivityRecord{b1fee790 u0 com.navitel/.app.MainActivity t2}
-  mFocusedActivity: ActivityRecord{b1fee790 u0 com.navitel/.app.MainActivity t2}
+    mResumedActivity: ActivityRecord{b1f80ac8 u0 com.navitel/.app.MainActivity t2}
+  mFocusedActivity: ActivityRecord{b1f80ac8 u0 com.navitel/.app.MainActivity t2}
 Kernel boot ID changed after host stopped and restarted the same disposable emulator. This is a virtual cold start after sync, not real-device hibernate or graceful car shutdown.
 Real device app behavior, USB, rollback, settings and all data preservation remain unverified.
