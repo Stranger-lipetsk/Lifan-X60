@@ -19,7 +19,13 @@ class CopyCheck(unittest.TestCase):
             (dst/FILES[1]).write_text('different')
             with self.assertRaises(AssertionError): compare(src, dst)
             (dst/FILES[1]).write_text('synthetic\n')
-            (dst/FILES[1]).chmod(0o600)
+            original_mode = (dst/FILES[1]).stat().st_mode & 0o777
+            (dst/FILES[1]).chmod(original_mode ^ 0o100)
+            with self.assertRaises(AssertionError): compare(src, dst)
+            (dst/FILES[1]).chmod(original_mode)
+            link = dst/'data/com.navitel/files/link-to-marker'
+            link.unlink()
+            link.symlink_to('wrong-target')
             with self.assertRaises(AssertionError): compare(src, dst)
 
     def test_symlink_is_not_followed(self):

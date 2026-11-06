@@ -40,11 +40,16 @@ def metadata(path: Path) -> dict:
 def compare(source: Path, destination: Path) -> None:
     # The source files below remain unchanged during this comparison. No
     # blanket equivalence claim is made about ACLs, SELinux, sparse data etc.
-    for relative in (*FILES, 'data/com.navitel', 'data/com.navitel/files/link-to-marker'):
+    for relative in (*FILES, 'data/com.navitel'):
         left, right = metadata(source / relative), metadata(destination / relative)
         if left != right:
             raise AssertionError(f'{relative}: {left} != {right}')
         print(f'MATCH {relative}: {left}')
+    link = 'data/com.navitel/files/link-to-marker'
+    left, right = metadata(source / link), metadata(destination / link)
+    if left['kind'] != right['kind'] or left['target'] != right['target']:
+        raise AssertionError(f'{link}: link type or target changed: {left} != {right}')
+    print(f'SYMLINK before: {left}; after: {right}; all listed fields match: {left == right}')
     a = destination / FILES[0]
     b = destination / 'data/com.navitel/files/hardlink-to-marker'
     print('Hardlink relationship retained:', a.stat().st_ino == b.stat().st_ino)

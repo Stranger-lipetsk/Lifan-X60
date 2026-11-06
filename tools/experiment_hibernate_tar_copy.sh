@@ -84,6 +84,15 @@ grep -Fx after-archive "$w/source/race/late-write.txt"
   echo 'Exact command options: tar -cf DEST/data.tar ./. and tar -xvf DEST/data.tar.'
   echo '## Synthetic content and selected numeric metadata'
   sudo python3 tools/hibernate_tar_lab.py "$w/source" "$w/dest"
+  sudo python3 - "$w/dest/data.tar" <<'PY'
+import sys, tarfile
+with tarfile.open(sys.argv[1]) as archive:
+    matches = [m for m in archive.getmembers() if m.name.endswith('/link-to-marker')]
+    if len(matches) != 1 or not matches[0].issym():
+        raise SystemExit('Unexpected archive symlink metadata')
+    m = matches[0]
+    print('Symlink archive header numeric UID/GID:', m.uid, m.gid, '; target:', m.linkname)
+PY
   echo '## Deliberately scheduled late write'
   echo 'Source was modified after archive finished and before extraction. Extracted file contained the earlier snapshot; late source change did not appear.'
   echo 'This illustrates a possible consistency window only. Real script timing and concurrent writes, app descriptors, actual Hibernate, ext4, ACLs and SELinux were not tested.'
