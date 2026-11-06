@@ -148,7 +148,7 @@ uid_after=$(tr -d '\r' < "$work/new-package.txt" | sed -n 's/.*userId=\([0-9][0-
 {
   echo '# Navitel system package migration in a disposable Android 4.4.2 ARM emulator'
   echo 'Generic AOSP PackageManager, NOT the vendor framework or head unit. Never use these operations on a physical unit.'
-  echo 'Two real Navitel APKs were placed as system APKs. No interactive launch, real user account, license, maps or SD were used.'
+  echo 'Two real Navitel APKs were placed as system APKs. No interactive launch, real user account, license, maps or real SD were used; the AVD had an empty virtual SD.'
   echo 'Android userspace was restarted between APK replacements; the emulator VM was not rebooted.'
   echo 'Host firewall blocks non-loopback IPv4 and IPv6 for the emulator process, including during boot; receiver or service activity was not separately traced.'
   echo "Fingerprint: $(cat "$work/fingerprint.txt"), ABI: $(cat "$work/abi.txt")"
