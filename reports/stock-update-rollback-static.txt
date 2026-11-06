@@ -445,4 +445,247 @@ No device or APK executed; see control flow and flag logic, not a runtime test.
     return v0
 .end method
 
+## removePackageDataLI
+.method private removePackageDataLI(Lcom/android/server/pm/PackageSetting;[I[ZLcom/android/server/pm/PackageManagerService$PackageRemovedInfo;IZ)V
+    .locals 8
+    .param p1, "ps"    # Lcom/android/server/pm/PackageSetting;
+    .param p2, "allUserHandles"    # [I
+    .param p3, "perUserInstalled"    # [Z
+    .param p4, "outInfo"    # Lcom/android/server/pm/PackageManagerService$PackageRemovedInfo;
+    .param p5, "flags"    # I
+    .param p6, "writeSettings"    # Z
+
+    .prologue
+    const/4 v5, 0x0
+
+    const/4 v3, 0x0
+
+    const/4 v4, 0x1
+
+    const/4 v7, -0x1
+
+    .line 9356
+    iget-object v2, p1, Lcom/android/server/pm/PackageSetting;->name:Ljava/lang/String;
+
+    .line 9358
+    .local v2, "packageName":Ljava/lang/String;
+    const/high16 v6, 0x10000
+
+    and-int/2addr v6, p5
+
+    if-eqz v6, :cond_0
+
+    move v3, v4
+
+    :cond_0
+    invoke-virtual {p0, p1, v3}, Lcom/android/server/pm/PackageManagerService;->removePackageLI(Lcom/android/server/pm/PackageSetting;Z)V
+
+    .line 9362
+    iget-object v6, p0, Lcom/android/server/pm/PackageManagerService;->mPackages:Ljava/util/HashMap;
+
+    monitor-enter v6
+
+    .line 9363
+    :try_start_0
+    iget-object v3, p0, Lcom/android/server/pm/PackageManagerService;->mSettings:Lcom/android/server/pm/Settings;
+
+    iget-object v3, v3, Lcom/android/server/pm/Settings;->mPackages:Ljava/util/HashMap;
+
+    invoke-virtual {v3, v2}, Ljava/util/HashMap;->get(Ljava/lang/Object;)Ljava/lang/Object;
+
+    move-result-object v0
+
+    check-cast v0, Lcom/android/server/pm/PackageSetting;
+
+    .line 9364
+    .local v0, "deletedPs":Lcom/android/server/pm/PackageSetting;
+    if-eqz p4, :cond_1
+
+    .line 9365
+    iput-object v2, p4, Lcom/android/server/pm/PackageManagerService$PackageRemovedInfo;->removedPackage:Ljava/lang/String;
+
+    .line 9366
+    if-eqz v0, :cond_6
+
+    sget-object v3, Lcom/android/server/pm/PackageManagerService;->sUserManager:Lcom/android/server/pm/UserManagerService;
+
+    invoke-virtual {v3}, Lcom/android/server/pm/UserManagerService;->getUserIds()[I
+
+    move-result-object v3
+
+    const/4 v5, 0x1
+
+    invoke-virtual {v0, v3, v5}, Lcom/android/server/pm/PackageSetting;->queryInstalledUsers([IZ)[I
+
+    move-result-object v3
+
+    :goto_0
+    iput-object v3, p4, Lcom/android/server/pm/PackageManagerService$PackageRemovedInfo;->removedUsers:[I
+
+    .line 9370
+    :cond_1
+    monitor-exit v6
+    :try_end_0
+    .catchall {:try_start_0 .. :try_end_0} :catchall_0
+
+    .line 9371
+    and-int/lit8 v3, p5, 0x1
+
+    if-nez v3, :cond_2
+
+    .line 9372
+    invoke-direct {p0, v2}, Lcom/android/server/pm/PackageManagerService;->removeDataDirsLI(Ljava/lang/String;)I
+
+    .line 9373
+    invoke-virtual {p0, v2, v7, v4}, Lcom/android/server/pm/PackageManagerService;->schedulePackageCleaning(Ljava/lang/String;IZ)V
+
+    .line 9376
+    :cond_2
+    iget-object v4, p0, Lcom/android/server/pm/PackageManagerService;->mPackages:Ljava/util/HashMap;
+
+    monitor-enter v4
+
+    .line 9377
+    if-eqz v0, :cond_7
+
+    .line 9378
+    and-int/lit8 v3, p5, 0x1
+
+    if-nez v3, :cond_5
+
+    .line 9379
+    if-eqz p4, :cond_3
+
+    .line 9380
+    :try_start_1
+    iget-object v3, p0, Lcom/android/server/pm/PackageManagerService;->mSettings:Lcom/android/server/pm/Settings;
+
+    invoke-virtual {v3, v2}, Lcom/android/server/pm/Settings;->removePackageLPw(Ljava/lang/String;)I
+
+    move-result v3
+
+    iput v3, p4, Lcom/android/server/pm/PackageManagerService$PackageRemovedInfo;->removedAppId:I
+
+    .line 9382
+    :cond_3
+    if-eqz v0, :cond_4
+
+    .line 9383
+    iget-object v3, v0, Lcom/android/server/pm/PackageSetting;->name:Ljava/lang/String;
+
+    const/4 v5, 0x0
+
+    const/4 v6, 0x0
+
+    invoke-direct {p0, v3, v5, v6}, Lcom/android/server/pm/PackageManagerService;->updatePermissionsLPw(Ljava/lang/String;Landroid/content/pm/PackageParser$Package;I)V
+
+    .line 9384
+    iget-object v3, v0, Lcom/android/server/pm/PackageSetting;->sharedUser:Lcom/android/server/pm/SharedUserSetting;
+
+    if-eqz v3, :cond_4
+
+    .line 9386
+    iget-object v3, p0, Lcom/android/server/pm/PackageManagerService;->mSettings:Lcom/android/server/pm/Settings;
+
+    iget-object v5, p0, Lcom/android/server/pm/PackageManagerService;->mGlobalGids:[I
+
+    invoke-virtual {v3, v0, v5}, Lcom/android/server/pm/Settings;->updateSharedUserPermsLPw(Lcom/android/server/pm/PackageSetting;[I)V
+
+    .line 9389
+    :cond_4
+    iget-object v3, v0, Lcom/android/server/pm/PackageSetting;->name:Ljava/lang/String;
+
+    const/4 v5, -0x1
+
+    invoke-virtual {p0, v3, v5}, Lcom/android/server/pm/PackageManagerService;->clearPackagePreferredActivitiesLPw(Ljava/lang/String;I)Z
+
+    .line 9393
+    :cond_5
+    if-eqz p2, :cond_7
+
+    if-eqz p3, :cond_7
+
+    .line 9397
+    const/4 v1, 0x0
+
+    .local v1, "i":I
+    :goto_1
+    array-length v3, p2
+
+    if-ge v1, v3, :cond_7
+
+    .line 9402
+    aget-boolean v3, p3, v1
+
+    aget v5, p2, v1
+
+    invoke-virtual {p1, v3, v5}, Lcom/android/server/pm/PackageSetting;->setInstalled(ZI)V
+    :try_end_1
+    .catchall {:try_start_1 .. :try_end_1} :catchall_1
+
+    .line 9397
+    add-int/lit8 v1, v1, 0x1
+
+    goto :goto_1
+
+    .end local v1    # "i":I
+    :cond_6
+    move-object v3, v5
+
+    .line 9366
+    goto :goto_0
+
+    .line 9370
+    .end local v0    # "deletedPs":Lcom/android/server/pm/PackageSetting;
+    :catchall_0
+    move-exception v3
+
+    :try_start_2
+    monitor-exit v6
+    :try_end_2
+    .catchall {:try_start_2 .. :try_end_2} :catchall_0
+
+    throw v3
+
+    .line 9407
+    .restart local v0    # "deletedPs":Lcom/android/server/pm/PackageSetting;
+    :cond_7
+    if-eqz p6, :cond_8
+
+    .line 9409
+    :try_start_3
+    iget-object v3, p0, Lcom/android/server/pm/PackageManagerService;->mSettings:Lcom/android/server/pm/Settings;
+
+    invoke-virtual {v3}, Lcom/android/server/pm/Settings;->writeLPr()V
+
+    .line 9411
+    :cond_8
+    monitor-exit v4
+    :try_end_3
+    .catchall {:try_start_3 .. :try_end_3} :catchall_1
+
+    .line 9412
+    if-eqz p4, :cond_9
+
+    .line 9415
+    iget v3, p4, Lcom/android/server/pm/PackageManagerService$PackageRemovedInfo;->removedAppId:I
+
+    invoke-static {v7, v3}, Lcom/android/server/pm/PackageManagerService;->removeKeystoreDataIfNeeded(II)V
+
+    .line 9417
+    :cond_9
+    return-void
+
+    .line 9411
+    :catchall_1
+    move-exception v3
+
+    :try_start_4
+    monitor-exit v4
+    :try_end_4
+    .catchall {:try_start_4 .. :try_end_4} :catchall_1
+
+    throw v3
+.end method
+
 An app update or its rollback is not a full data backup. Actual device state and behavior remain untested.
