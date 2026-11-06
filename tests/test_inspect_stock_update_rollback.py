@@ -16,8 +16,11 @@ invoke-virtual {}, Lx;->enableSystemPackageLPw()V
 .method private deleteInstalledPackageLI()V
 return-void
 .end method
+.method private removePackageDataLI()V
+invoke-virtual {}, Lx;->removeDataDirsLI()V
+.end method
 ''')
-            a, b = report(p)
+            a, b, c = report(p)
             self.assertIn('versionCode', a)
             self.assertIn('return-void', b)
             p.write_text(p.read_text().replace('versionCode:I', 'other:I'))
