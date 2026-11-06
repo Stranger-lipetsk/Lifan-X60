@@ -2,7 +2,7 @@
 Generic x86 emulator with stock-derived services.jar, not the device; host emulator network blocked.
 Stock-derived services.jar was installed only into the disposable emulator and compared byte-for-byte; generic remaining framework and kernel are not the head unit.
 No real maps, license, accounts, user data or SD; no APKs published. Empty virtual SD only.
-ADB prepared and observed the emulator and tapped its virtual UI; update was initiated by the stock-derived Amaze app and installed by the stock-derived PackageInstaller; generic emulator framework and virtual storage only.
+ADB prepared and observed the emulator and tapped its virtual UI; update was initiated by the stock-derived Amaze app and installed by the stock-derived PackageInstaller; remaining framework and virtual storage are generic emulator components.
 Initial stock-derived Navitel certificate equals the verified AOSP testkey certificate:
 a40da80a59d170caa950cf15c18c454d47a39b26989d8b640ecd745ba71bf5dc
 Candidate re-signed in disposable CI only; not an installation recommendation.
@@ -14,7 +14,7 @@ Matching certificate candidate installed via Amaze and PackageInstaller as data 
 Emulator system mounted read-only during update:
 /dev/block/vda /system ext4 ro,relatime,data=ordered 0 0
 UID before/after/userspace restart/full emulator reboot: 10052/10052/10052/10052
-Full virtual device reboot confirmed via changed kernel boot ID; system APK still matched afterward.
+Full virtual device reboot confirmed via changed kernel boot ID; original system APK and stock services.jar still matched afterward; system_server mapped services.jar dex before and after simulated registry loss.
 Stock-derived PackageInstaller and Amaze paths:
 WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
 package:/system/priv-app/PackageInstaller.apk
@@ -41,8 +41,8 @@ No Navitel crash dialog observed during installer UI polling (other failures may
 ## Launch attempt (no activation asserted)
 WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
 Starting: Intent { cmp=com.navitel/.app.MainActivity }
-    mResumedActivity: ActivityRecord{afd4bbf0 u0 com.navitel/.app.MainActivity t2}
-  mFocusedActivity: ActivityRecord{afd4bbf0 u0 com.navitel/.app.MainActivity t2}
+    mResumedActivity: ActivityRecord{afd48838 u0 com.navitel/.app.MainActivity t2}
+  mFocusedActivity: ActivityRecord{afd48838 u0 com.navitel/.app.MainActivity t2}
 ## After simulated loss of packages.xml and packages-backup.xml; APK and data dirs intentionally left in place
 Package com.navitel before loss
 WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
@@ -53,14 +53,14 @@ package:/data/app/com.navitel-1.apk
     userId=10052 gids=[]
     codePath=/system/priv-app/Navitel-large.apk
     versionCode=201103033 targetSdk=28
-drwxr-x--x 10052    10052             2026-11-06 12:44 com.navitel
+drwxr-x--x 10052    10052             2026-11-06 12:56 com.navitel
 Package ru.lifanx60.backupfixture before loss
 WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
 package:/data/app/ru.lifanx60.backupfixture-1.apk
     userId=10054 gids=[]
     codePath=/data/app/ru.lifanx60.backupfixture-1.apk
     versionCode=0 targetSdk=19
-drwxr-x--x 10054    10054             2026-11-06 12:44 ru.lifanx60.backupfixture
+drwxr-x--x 10054    10054             2026-11-06 12:56 ru.lifanx60.backupfixture
 UPDATE_APK_PRESENT_BEFORE
 Package com.navitel after loss
 WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
@@ -68,51 +68,51 @@ package:/system/priv-app/Navitel-large.apk
     userId=10014 gids=[3003, 1028, 1015]
     codePath=/system/priv-app/Navitel-large.apk
     versionCode=201103033 targetSdk=28
-drwxr-x--x 10014    10014             2026-11-06 12:44 com.navitel
+drwxr-x--x 10014    10014             2026-11-06 12:56 com.navitel
 Package ru.lifanx60.backupfixture after loss
 WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
 package:/data/app/ru.lifanx60.backupfixture-1.apk
     userId=10054 gids=[]
     codePath=/data/app/ru.lifanx60.backupfixture-1.apk
     versionCode=0 targetSdk=19
-drwxr-x--x 10054    10054             2026-11-06 12:44 ru.lifanx60.backupfixture
+drwxr-x--x 10054    10054             2026-11-06 12:56 ru.lifanx60.backupfixture
 UPDATE_APK_PRESENT_AFTER
 Synthetic nav-marker: missing_or_unreadable
 Synthetic nav-pref: missing_or_unreadable
 Synthetic canary-marker: matches
 Synthetic canary-pref: matches
 ## Selected PackageManager log, disposable emulator only
-W/PackageManager( 1977): Couldn't delete native library directory /data/app-lib/com.navitel
-W/PackageManager( 1977): System package com.navitel has changed from uid: 10052 to 10014; old data erased
-I/PackageManager( 1977): /data/app/ru.lifanx60.backupfixture-1.apk changed; collecting certs
-I/PackageManager( 1977): /data/app/com.navitel-1.apk changed; collecting certs
-W/PackageManager( 1977): Application package com.navitel already installed.  Skipping duplicate.
-W/PackageManager( 1977): Package com.navitel desires unavailable shared library org.apache.http.legacy; ignoring!
-W/PackageManager( 1977): Unknown permission android.permission.FOREGROUND_SERVICE in package com.navitel
-W/PackageManager( 1977): Unknown permission com.android.vending.BILLING in package com.navitel
-W/PackageManager( 1977): Unknown permission com.android.vending.CHECK_LICENSE in package com.navitel
-W/PackageManager( 1977): Unknown permission pioneer.permission.appradio.ADVANCED_APPMODE in package com.navitel
-W/PackageManager( 1977): Unknown permission pioneer.permission.appradio.AAM2 in package com.navitel
-W/PackageManager( 1977): Unknown permission com.sec.android.provider.badge.permission.READ in package com.navitel
-W/PackageManager( 1977): Unknown permission com.sec.android.provider.badge.permission.WRITE in package com.navitel
-W/PackageManager( 1977): Unknown permission com.sonyericsson.home.permission.BROADCAST_BADGE in package com.navitel
-W/PackageManager( 1977): Unknown permission com.google.android.c2dm.permission.RECEIVE in package com.navitel
-W/PackageManager( 1977): Unknown permission android.permission.FOREGROUND_SERVICE in package com.navitel
-W/PackageManager( 1977): Unknown permission com.android.vending.BILLING in package com.navitel
-W/PackageManager( 1977): Unknown permission com.android.vending.CHECK_LICENSE in package com.navitel
-W/PackageManager( 1977): Unknown permission pioneer.permission.appradio.ADVANCED_APPMODE in package com.navitel
-W/PackageManager( 1977): Unknown permission pioneer.permission.appradio.AAM2 in package com.navitel
-W/PackageManager( 1977): Unknown permission com.sec.android.provider.badge.permission.READ in package com.navitel
-W/PackageManager( 1977): Unknown permission com.sec.android.provider.badge.permission.WRITE in package com.navitel
-W/PackageManager( 1977): Unknown permission com.sonyericsson.home.permission.BROADCAST_BADGE in package com.navitel
-W/PackageManager( 1977): Unknown permission com.google.android.c2dm.permission.RECEIVE in package com.navitel
-W/PackageManager( 1977): Unknown permission android.permission.FOREGROUND_SERVICE in package com.navitel
-W/PackageManager( 1977): Unknown permission com.android.vending.BILLING in package com.navitel
-W/PackageManager( 1977): Unknown permission com.android.vending.CHECK_LICENSE in package com.navitel
-W/PackageManager( 1977): Unknown permission pioneer.permission.appradio.ADVANCED_APPMODE in package com.navitel
-W/PackageManager( 1977): Unknown permission pioneer.permission.appradio.AAM2 in package com.navitel
-W/PackageManager( 1977): Unknown permission com.sec.android.provider.badge.permission.READ in package com.navitel
-W/PackageManager( 1977): Unknown permission com.sec.android.provider.badge.permission.WRITE in package com.navitel
-W/PackageManager( 1977): Unknown permission com.sonyericsson.home.permission.BROADCAST_BADGE in package com.navitel
-W/PackageManager( 1977): Unknown permission com.google.android.c2dm.permission.RECEIVE in package com.navitel
+W/PackageManager( 1963): Couldn't delete native library directory /data/app-lib/com.navitel
+W/PackageManager( 1963): System package com.navitel has changed from uid: 10052 to 10014; old data erased
+I/PackageManager( 1963): /data/app/ru.lifanx60.backupfixture-1.apk changed; collecting certs
+I/PackageManager( 1963): /data/app/com.navitel-1.apk changed; collecting certs
+W/PackageManager( 1963): Application package com.navitel already installed.  Skipping duplicate.
+W/PackageManager( 1963): Package com.navitel desires unavailable shared library org.apache.http.legacy; ignoring!
+W/PackageManager( 1963): Unknown permission android.permission.FOREGROUND_SERVICE in package com.navitel
+W/PackageManager( 1963): Unknown permission com.android.vending.BILLING in package com.navitel
+W/PackageManager( 1963): Unknown permission com.android.vending.CHECK_LICENSE in package com.navitel
+W/PackageManager( 1963): Unknown permission pioneer.permission.appradio.ADVANCED_APPMODE in package com.navitel
+W/PackageManager( 1963): Unknown permission pioneer.permission.appradio.AAM2 in package com.navitel
+W/PackageManager( 1963): Unknown permission com.sec.android.provider.badge.permission.READ in package com.navitel
+W/PackageManager( 1963): Unknown permission com.sec.android.provider.badge.permission.WRITE in package com.navitel
+W/PackageManager( 1963): Unknown permission com.sonyericsson.home.permission.BROADCAST_BADGE in package com.navitel
+W/PackageManager( 1963): Unknown permission com.google.android.c2dm.permission.RECEIVE in package com.navitel
+W/PackageManager( 1963): Unknown permission android.permission.FOREGROUND_SERVICE in package com.navitel
+W/PackageManager( 1963): Unknown permission com.android.vending.BILLING in package com.navitel
+W/PackageManager( 1963): Unknown permission com.android.vending.CHECK_LICENSE in package com.navitel
+W/PackageManager( 1963): Unknown permission pioneer.permission.appradio.ADVANCED_APPMODE in package com.navitel
+W/PackageManager( 1963): Unknown permission pioneer.permission.appradio.AAM2 in package com.navitel
+W/PackageManager( 1963): Unknown permission com.sec.android.provider.badge.permission.READ in package com.navitel
+W/PackageManager( 1963): Unknown permission com.sec.android.provider.badge.permission.WRITE in package com.navitel
+W/PackageManager( 1963): Unknown permission com.sonyericsson.home.permission.BROADCAST_BADGE in package com.navitel
+W/PackageManager( 1963): Unknown permission com.google.android.c2dm.permission.RECEIVE in package com.navitel
+W/PackageManager( 1963): Unknown permission android.permission.FOREGROUND_SERVICE in package com.navitel
+W/PackageManager( 1963): Unknown permission com.android.vending.BILLING in package com.navitel
+W/PackageManager( 1963): Unknown permission com.android.vending.CHECK_LICENSE in package com.navitel
+W/PackageManager( 1963): Unknown permission pioneer.permission.appradio.ADVANCED_APPMODE in package com.navitel
+W/PackageManager( 1963): Unknown permission pioneer.permission.appradio.AAM2 in package com.navitel
+W/PackageManager( 1963): Unknown permission com.sec.android.provider.badge.permission.READ in package com.navitel
+W/PackageManager( 1963): Unknown permission com.sec.android.provider.badge.permission.WRITE in package com.navitel
+W/PackageManager( 1963): Unknown permission com.sonyericsson.home.permission.BROADCAST_BADGE in package com.navitel
+W/PackageManager( 1963): Unknown permission com.google.android.c2dm.permission.RECEIVE in package com.navitel
 This synthetic failure is not evidence that real registries disappeared. It does not model or test real-device hibernate or all recovery conditions.
