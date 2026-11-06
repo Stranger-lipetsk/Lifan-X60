@@ -50,6 +50,16 @@ echo 'Build isolated formatter container'
 timeout -k 5 240 docker build -q -t x60-disposable-mke2fs "$w/root"
 truncate -s 64M "$w/target.img"
 [ -f "$w/target.img" ] && [ ! -L "$w/target.img" ]
+# Android bionic expects a property area even for a standalone tool. Provide
+# a deliberately empty Android 4.4-format fixture; no device properties used.
+python3 - "$w/properties" <<'PY'
+import struct, sys
+b = bytearray(128 * 1024)
+struct.pack_into('<IIII', b, 0, 20, 0, 0x504f5250, 0xfc6ed0ab)
+open(sys.argv[1], 'wb').write(b)
+PY
+sudo chown 0:0 "$w/properties"
+sudo chmod 0444 "$w/properties"
 echo 'Attach dedicated synthetic file as loop device'
 loop=$(timeout -k 5 30 sudo losetup --find --show "$w/target.img")
 [[ "$loop" =~ ^/dev/loop[0-9]+$ ]] || { echo 'Unexpected loop device'; exit 1; }
@@ -59,6 +69,7 @@ run_in_lab() {
   timeout -k 5 30 docker run --rm --name "$container_name" --network none --read-only --cap-drop ALL --cap-add DAC_OVERRIDE -e QEMU_STRACE=1 \
     --security-opt no-new-privileges --memory 256m --pids-limit 32 \
     --device "$loop:$loop:rwm" \
+    --mount "type=bind,source=$w/properties,target=/dev/__properties__,readonly" \
     --mount "type=bind,source=$w/mounted,target=/fixture/mounted" \
     x60-disposable-mke2fs /qemu-arm-static "$@"
 }
