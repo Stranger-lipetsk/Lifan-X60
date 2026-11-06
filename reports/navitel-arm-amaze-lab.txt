@@ -1,0 +1,35 @@
+# Same-signature Navitel data-update on disposable Android 4.4.2 ARM
+Generic ARM emulator with stock-derived services.jar preloaded offline, not the head unit; host emulator network blocked.
+Disposable generic ARM system image built and fsck-checked offline. Stock Navitel and services.jar matched byte-for-byte; services dex mapped by system_server.
+No real maps, license, accounts, user data or SD; no APKs published. Empty virtual SD only.
+ADB prepared and observed the disposable emulator and tapped UI; update installed by stock-derived Amaze and PackageInstaller. Physical GU and USB were not tested.
+Stock-derived Amaze and installer were preloaded offline and matched byte-for-byte.
+Initial stock-derived Navitel certificate equals the verified AOSP testkey certificate:
+a40da80a59d170caa950cf15c18c454d47a39b26989d8b640ecd745ba71bf5dc
+Candidate re-signed in disposable CI only; not an installation recommendation.
+Uncompressed payload entries identical, excluding JAR signing records: 5019
+This does not verify ZIP offsets, metadata, V2/V3 signing block or runtime signature checks.
+Negative control: original differently signed candidate rejected; installer result:
+Failure [INSTALL_PARSE_FAILED_INCONSISTENT_CERTIFICATES]
+Matching certificate candidate installed through Amaze/PackageInstaller UI as data update; original emulator system APK unchanged: yes.
+Emulator system mounted read-only from initial boot through update (no system write or remount during emulator run):
+/dev/block/mtdblock0 /system ext4 ro,seclabel,relatime,data=ordered 0 0
+UID before/after/userspace restart: 10013/10013/10013
+## Package paths and selected version
+package:/system/priv-app/Navitel-large.apk
+package:/data/app/com.navitel-1.apk
+package:/data/app/com.navitel-1.apk
+    codePath=/data/app/com.navitel-1.apk
+    versionCode=360622024 targetSdk=33
+    versionName=v11.11.1128
+    codePath=/system/priv-app/Navitel-large.apk
+    versionCode=201103033 targetSdk=28
+    versionName=9.13.73
+Synthetic marker and preferences for Navitel and an unrelated test app, including both UIDs, survived install, userspace restart, and launch attempt: yes.
+## Emulator crash dialog while installing
+No Navitel crash dialog observed during installer polling; other failures may still occur
+## Launch attempt (no activation asserted)
+Starting: Intent { cmp=com.navitel/.app.MainActivity }
+    mResumedActivity: ActivityRecord{b1f8de78 u0 com.navitel/.app.MainActivity t2}
+  mFocusedActivity: ActivityRecord{b1f8de78 u0 com.navitel/.app.MainActivity t2}
+Userspace restart is not a full reboot or real-device hibernate. App behavior, rollback, settings and all data preservation remain unverified.
