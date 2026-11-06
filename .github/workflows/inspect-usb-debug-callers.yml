@@ -6,6 +6,8 @@ on:
       - '.github/workflows/inspect-usb-debug-callers.yml'
       - 'tools/inspect_usb_debug_callers.py'
       - 'tests/test_inspect_usb_debug_callers.py'
+      - 'tools/inspect_systemui_network_adb.py'
+      - 'tests/test_inspect_systemui_network_adb.py'
   workflow_dispatch:
 permissions:
   contents: write
@@ -16,8 +18,14 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
-      - name: Проверить анализатор
-        run: python3 -m unittest discover -s tests -p 'test_inspect_usb_debug_callers.py' -v
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Проверить анализаторы
+        run: |
+          python3 -m unittest discover -s tests -p 'test_inspect_usb_debug_callers.py' -v
+          python3 -m unittest discover -s tests -p 'test_inspect_systemui_network_adb.py' -v
       - name: Проверить исходный образ без запуска программ прошивки
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -38,12 +46,18 @@ jobs:
           echo >> reports/usb-debug-callers-static.txt
           echo '## Potential extraction diagnostics' >> reports/usb-debug-callers-static.txt
           grep -iE 'error|fail|not found|no such file|permission denied' "$w/rdump.log" >> reports/usb-debug-callers-static.txt || true
+          # APKTool decodes DEX only; the device APK is not executed.
+          test -s "$w/root/priv-app/SystemUI.apk"
+          sha256sum "$w/root/priv-app/SystemUI.apk"
+          curl -fLsS --retry 3 --max-time 120 -o "$w/apktool.jar" https://github.com/iBotPeaches/Apktool/releases/download/v2.9.3/apktool_2.9.3.jar
+          java -jar "$w/apktool.jar" d -f -r "$w/root/priv-app/SystemUI.apk" -o "$w/systemui" >/dev/null
+          python3 tools/inspect_systemui_network_adb.py "$w/systemui" > reports/systemui-network-adb-static.txt
       - name: Сохранить только текстовый отчёт
         run: |
           set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add reports/usb-debug-callers-static.txt
+          git add reports/usb-debug-callers-static.txt reports/systemui-network-adb-static.txt
           git diff --cached --quiet && exit 0
           git commit -m 'report: search system for USB debug entry points'
           git pull --rebase origin "${{ github.ref_name }}"
