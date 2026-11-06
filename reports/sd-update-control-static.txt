@@ -7,7 +7,7 @@ Input: system/app/fw_launcher_2016.08.12.01.apk size: 155787 sha256: 37cac01aeb6
 
 ## ARM ELF header and selected native symbols
 
-$ readelf -h /tmp/tmp4wgkvvpm/ramdisk/system/bin/fw_upgrade
+$ readelf -h /tmp/tmpbw8a0b42/ramdisk/system/bin/fw_upgrade
 exit: 0
 ELF Header:
   Magic:   7f 45 4c 46 01 01 01 00 00 00 00 00 00 00 00 00 
@@ -31,10 +31,10 @@ ELF Header:
   Section header string table index: 35
 0000a1f0 T main
 
-$ arm-linux-gnueabihf-objdump -d --disassemble=main /tmp/tmp4wgkvvpm/ramdisk/system/bin/fw_upgrade
+$ arm-linux-gnueabihf-objdump -d --disassemble=main /tmp/tmpbw8a0b42/ramdisk/system/bin/fw_upgrade
 exit: 0
 
-/tmp/tmp4wgkvvpm/ramdisk/system/bin/fw_upgrade:     file format elf32-littlearm
+/tmp/tmpbw8a0b42/ramdisk/system/bin/fw_upgrade:     file format elf32-littlearm
 
 
 Disassembly of section .init:
@@ -672,9 +672,476 @@ Inline instances referencing <0x14c9>: 1
     <196b>   DW_AT_call_line   : (data2) 364
     <196d>   DW_AT_sibling     : (ref4) <0x1988>
 
+## Selected ELF string addresses
+'/system/bin/build_emmc.sh': file offset 0x77e94, virtual address 0x7fe94
+'OPCODE_START_FW_UPGRADE': file offset 0x77e38, virtual address 0x7fe38
+'exec_fw_upgrade error': file offset 0x77ee4, virtual address 0x7fee4
+
+## Code around inlined native update handler
+
+$ arm-linux-gnueabihf-objdump -d --start-address=0x8b00 --stop-address=0x9200 /tmp/tmpbw8a0b42/ramdisk/system/bin/fw_upgrade
+exit: 0
+
+/tmp/tmpbw8a0b42/ramdisk/system/bin/fw_upgrade:     file format elf32-littlearm
+
+
+Disassembly of section .text:
+
+00008b00 <handle_get_app_version_info+0xc>:
+    8b00:	e1a05000 	mov	r5, r0
+    8b04:	e1a07001 	mov	r7, r1
+    8b08:	e8be000f 	ldm	lr!, {r0, r1, r2, r3}
+    8b0c:	e28d6004 	add	r6, sp, #4
+    8b10:	e286900c 	add	r9, r6, #12
+    8b14:	e2854a46 	add	r4, r5, #286720	@ 0x46000
+    8b18:	e8a9000f 	stmia	r9!, {r0, r1, r2, r3}
+    8b1c:	e2844f4e 	add	r4, r4, #312	@ 0x138
+    8b20:	e59ec000 	ldr	ip, [lr]
+    8b24:	e3a08000 	mov	r8, #0
+    8b28:	e5c9c000 	strb	ip, [r9]
+    8b2c:	e59f314c 	ldr	r3, [pc, #332]	@ 8c80 <handle_get_app_version_info+0x18c>
+    8b30:	e1a01008 	mov	r1, r8
+    8b34:	e3a02040 	mov	r2, #64	@ 0x40
+    8b38:	e3a0941d 	mov	r9, #486539264	@ 0x1d000000
+    8b3c:	e3a0e080 	mov	lr, #128	@ 0x80
+    8b40:	e1a00004 	mov	r0, r4
+    8b44:	e98d4208 	stmib	sp, {r3, r9, lr}
+    8b48:	eb0095e8 	bl	2e2f0 <memset>
+    8b4c:	e8b6000f 	ldm	r6!, {r0, r1, r2, r3}
+    8b50:	e1a0a004 	mov	sl, r4
+    8b54:	e8aa000f 	stmia	sl!, {r0, r1, r2, r3}
+    8b58:	e8b6000f 	ldm	r6!, {r0, r1, r2, r3}
+    8b5c:	e1a0c387 	lsl	ip, r7, #7
+    8b60:	e1a0900a 	mov	r9, sl
+    8b64:	e8a9000f 	stmia	r9!, {r0, r1, r2, r3}
+    8b68:	e28c3a26 	add	r3, ip, #155648	@ 0x26000
+    8b6c:	e8960007 	ldm	r6, {r0, r1, r2}
+    8b70:	e283cf4a 	add	ip, r3, #296	@ 0x128
+    8b74:	e085c00c 	add	ip, r5, ip
+    8b78:	e1a03008 	mov	r3, r8
+    8b7c:	e8890007 	stm	r9, {r0, r1, r2}
+    8b80:	e2888002 	add	r8, r8, #2
+    8b84:	e1a0200c 	mov	r2, ip
+    8b88:	e3580020 	cmp	r8, #32
+    8b8c:	e4823004 	str	r3, [r2], #4
+    8b90:	e58c3004 	str	r3, [ip, #4]
+    8b94:	e282c004 	add	ip, r2, #4
+    8b98:	1afffff8 	bne	8b80 <handle_get_app_version_info+0x8c>
+    8b9c:	e2876048 	add	r6, r7, #72	@ 0x48
+    8ba0:	e7950106 	ldr	r0, [r5, r6, lsl #2]
+    8ba4:	e1a07287 	lsl	r7, r7, #5
+    8ba8:	e1a082a0 	lsr	r8, r0, #5
+    8bac:	e0879008 	add	r9, r7, r8
+    8bb0:	e289cb26 	add	ip, r9, #38912	@ 0x9800
+    8bb4:	e28c204a 	add	r2, ip, #74	@ 0x4a
+    8bb8:	e7951102 	ldr	r1, [r5, r2, lsl #2]
+    8bbc:	e200c01f 	and	ip, r0, #31
+    8bc0:	e3a0a001 	mov	sl, #1
+    8bc4:	e181ac1a 	orr	sl, r1, sl, lsl ip
+    8bc8:	e1a09c5a 	asr	r9, sl, ip
+    8bcc:	e3190001 	tst	r9, #1
+    8bd0:	e1a0100a 	mov	r1, sl
+    8bd4:	e785a102 	str	sl, [r5, r2, lsl #2]
+    8bd8:	1a000007 	bne	8bfc <handle_get_app_version_info+0x108>
+    8bdc:	e0870008 	add	r0, r7, r8
+    8be0:	e3a03001 	mov	r3, #1
+    8be4:	e1c11c13 	bic	r1, r1, r3, lsl ip
+    8be8:	e2807b26 	add	r7, r0, #38912	@ 0x9800
+    8bec:	e287704a 	add	r7, r7, #74	@ 0x4a
+    8bf0:	e7851107 	str	r1, [r5, r7, lsl #2]
+    8bf4:	e28dd030 	add	sp, sp, #48	@ 0x30
+    8bf8:	e8bd87f0 	pop	{r4, r5, r6, r7, r8, r9, sl, pc}
+    8bfc:	e1a01004 	mov	r1, r4
+    8c00:	e3a0201d 	mov	r2, #29
+    8c04:	eb001bd5 	bl	fb60 <__libc_send>
+    8c08:	e3700001 	cmn	r0, #1
+    8c0c:	0a000007 	beq	8c30 <handle_get_app_version_info+0x13c>
+    8c10:	e7950106 	ldr	r0, [r5, r6, lsl #2]
+    8c14:	e1a082a0 	lsr	r8, r0, #5
+    8c18:	e0872008 	add	r2, r7, r8
+    8c1c:	e282eb26 	add	lr, r2, #38912	@ 0x9800
+    8c20:	e28e304a 	add	r3, lr, #74	@ 0x4a
+    8c24:	e7951103 	ldr	r1, [r5, r3, lsl #2]
+    8c28:	e200c01f 	and	ip, r0, #31
+    8c2c:	eaffffea 	b	8bdc <handle_get_app_version_info+0xe8>
+    8c30:	eb001d83 	bl	10244 <__errno_location>
+    8c34:	e1a04000 	mov	r4, r0
+    8c38:	e5900000 	ldr	r0, [r0]
+    8c3c:	eb008ebb 	bl	2c730 <strerror>
+    8c40:	e59f103c 	ldr	r1, [pc, #60]	@ 8c84 <handle_get_app_version_info+0x190>
+    8c44:	e59f203c 	ldr	r2, [pc, #60]	@ 8c88 <handle_get_app_version_info+0x194>
+    8c48:	e1a03000 	mov	r3, r0
+    8c4c:	e59f0038 	ldr	r0, [pc, #56]	@ 8c8c <handle_get_app_version_info+0x198>
+    8c50:	eb004bc5 	bl	1bb6c <_IO_printf>
+    8c54:	e3500000 	cmp	r0, #0
+    8c58:	0affffe5 	beq	8bf4 <handle_get_app_version_info+0x100>
+    8c5c:	e5940000 	ldr	r0, [r4]
+    8c60:	eb008eb2 	bl	2c730 <strerror>
+    8c64:	e59f1018 	ldr	r1, [pc, #24]	@ 8c84 <handle_get_app_version_info+0x190>
+    8c68:	e59f2018 	ldr	r2, [pc, #24]	@ 8c88 <handle_get_app_version_info+0x194>
+    8c6c:	e1a03000 	mov	r3, r0
+    8c70:	e59f0014 	ldr	r0, [pc, #20]	@ 8c8c <handle_get_app_version_info+0x198>
+    8c74:	eb004bbc 	bl	1bb6c <_IO_printf>
+    8c78:	eaffffdd 	b	8bf4 <handle_get_app_version_info+0x100>
+    8c7c:	0007fd74 	.word	0x0007fd74
+    8c80:	26886086 	.word	0x26886086
+    8c84:	0007f9e4 	.word	0x0007f9e4
+    8c88:	00000286 	.word	0x00000286
+    8c8c:	0007fd88 	.word	0x0007fd88
+
+00008c90 <handle_op_code>:
+    8c90:	e92d47f0 	push	{r4, r5, r6, r7, r8, r9, sl, lr}
+    8c94:	e59f5f58 	ldr	r5, [pc, #3928]	@ 9bf4 <handle_op_code+0xf64>
+    8c98:	e24dd040 	sub	sp, sp, #64	@ 0x40
+    8c9c:	e0851101 	add	r1, r5, r1, lsl #2
+    8ca0:	e5913094 	ldr	r3, [r1, #148]	@ 0x94
+    8ca4:	e1a04000 	mov	r4, r0
+    8ca8:	e3530020 	cmp	r3, #32
+    8cac:	e1a06002 	mov	r6, r2
+    8cb0:	0a0002e6 	beq	9850 <handle_op_code+0xbc0>
+    8cb4:	9a00000c 	bls	8cec <handle_op_code+0x5c>
+    8cb8:	e3530a02 	cmp	r3, #8192	@ 0x2000
+    8cbc:	0a00011e 	beq	913c <handle_op_code+0x4ac>
+    8cc0:	8a0000c1 	bhi	8fcc <handle_op_code+0x33c>
+    8cc4:	e3530040 	cmp	r3, #64	@ 0x40
+    8cc8:	0a000274 	beq	96a0 <handle_op_code+0xa10>
+    8ccc:	e3530a01 	cmp	r3, #4096	@ 0x1000
+    8cd0:	0a00021a 	beq	9540 <handle_op_code+0x8b0>
+    8cd4:	e59f1f1c 	ldr	r1, [pc, #3868]	@ 9bf8 <handle_op_code+0xf68>
+    8cd8:	e59f2f1c 	ldr	r2, [pc, #3868]	@ 9bfc <handle_op_code+0xf6c>
+    8cdc:	e59f0f1c 	ldr	r0, [pc, #3868]	@ 9c00 <handle_op_code+0xf70>
+    8ce0:	eb004ba1 	bl	1bb6c <_IO_printf>
+    8ce4:	e28dd040 	add	sp, sp, #64	@ 0x40
+    8ce8:	e8bd87f0 	pop	{r4, r5, r6, r7, r8, r9, sl, pc}
+    8cec:	e3530004 	cmp	r3, #4
+    8cf0:	0a00028b 	beq	9724 <handle_op_code+0xa94>
+    8cf4:	9a000107 	bls	9118 <handle_op_code+0x488>
+    8cf8:	e3530008 	cmp	r3, #8
+    8cfc:	0a00015b 	beq	9270 <handle_op_code+0x5e0>
+    8d00:	e3530010 	cmp	r3, #16
+    8d04:	1afffff2 	bne	8cd4 <handle_op_code+0x44>
+    8d08:	e28510d0 	add	r1, r5, #208	@ 0xd0
+    8d0c:	e3a02faa 	mov	r2, #680	@ 0x2a8
+    8d10:	e59f0eec 	ldr	r0, [pc, #3820]	@ 9c04 <handle_op_code+0xf74>
+    8d14:	eb004b94 	bl	1bb6c <_IO_printf>
+    8d18:	e59f0ee8 	ldr	r0, [pc, #3816]	@ 9c08 <handle_op_code+0xf78>
+    8d1c:	eb009e63 	bl	306b0 <__unlink>
+    8d20:	eb001d46 	bl	10240 <__fork>
+    8d24:	e2507000 	subs	r7, r0, #0
+    8d28:	0a000314 	beq	9980 <handle_op_code+0xcf0>
+    8d2c:	e5943000 	ldr	r3, [r4]
+    8d30:	e59f1ed4 	ldr	r1, [pc, #3796]	@ 9c0c <handle_op_code+0xf7c>
+    8d34:	e5935000 	ldr	r5, [r3]
+    8d38:	e59f2ed0 	ldr	r2, [pc, #3792]	@ 9c10 <handle_op_code+0xf80>
+    8d3c:	e59f0ed0 	ldr	r0, [pc, #3792]	@ 9c14 <handle_op_code+0xf84>
+    8d40:	eb004b89 	bl	1bb6c <_IO_printf>
+    8d44:	e59f1ec0 	ldr	r1, [pc, #3776]	@ 9c0c <handle_op_code+0xf7c>
+    8d48:	e59f2ec8 	ldr	r2, [pc, #3784]	@ 9c18 <handle_op_code+0xf88>
+    8d4c:	e59531a4 	ldr	r3, [r5, #420]	@ 0x1a4
+    8d50:	e59f0ec4 	ldr	r0, [pc, #3780]	@ 9c1c <handle_op_code+0xf8c>
+    8d54:	eb004b84 	bl	1bb6c <_IO_printf>
+    8d58:	e59501a4 	ldr	r0, [r5, #420]	@ 0x1a4
+    8d5c:	eb00999b 	bl	2f3d0 <__sleep>
+    8d60:	e59f0ea0 	ldr	r0, [pc, #3744]	@ 9c08 <handle_op_code+0xf78>
+    8d64:	e3a01000 	mov	r1, #0
+    8d68:	eb009d94 	bl	303c0 <__access>
+    8d6c:	e3500000 	cmp	r0, #0
+    8d70:	aa00034e 	bge	9ab0 <handle_op_code+0xe20>
+    8d74:	eb001d32 	bl	10244 <__errno_location>
+    8d78:	e5907000 	ldr	r7, [r0]
+    8d7c:	e1a05000 	mov	r5, r0
+    8d80:	e3570002 	cmp	r7, #2
+    8d84:	1a000349 	bne	9ab0 <handle_op_code+0xe20>
+    8d88:	e59f0e90 	ldr	r0, [pc, #3728]	@ 9c20 <handle_op_code+0xf90>
+    8d8c:	eb004bba 	bl	1bc7c <perror>
+    8d90:	e5951000 	ldr	r1, [r5]
+    8d94:	e59f0e88 	ldr	r0, [pc, #3720]	@ 9c24 <handle_op_code+0xf94>
+    8d98:	eb004b73 	bl	1bb6c <_IO_printf>
+    8d9c:	e3a00003 	mov	r0, #3
+    8da0:	eb00998a 	bl	2f3d0 <__sleep>
+    8da4:	e59f0e5c 	ldr	r0, [pc, #3676]	@ 9c08 <handle_op_code+0xf78>
+    8da8:	e3a01000 	mov	r1, #0
+    8dac:	eb009d83 	bl	303c0 <__access>
+    8db0:	e3500000 	cmp	r0, #0
+    8db4:	aa00033d 	bge	9ab0 <handle_op_code+0xe20>
+    8db8:	e5950000 	ldr	r0, [r5]
+    8dbc:	e3500002 	cmp	r0, #2
+    8dc0:	1a00033a 	bne	9ab0 <handle_op_code+0xe20>
+    8dc4:	e59f0e54 	ldr	r0, [pc, #3668]	@ 9c20 <handle_op_code+0xf90>
+    8dc8:	eb004bab 	bl	1bc7c <perror>
+    8dcc:	e5951000 	ldr	r1, [r5]
+    8dd0:	e59f0e4c 	ldr	r0, [pc, #3660]	@ 9c24 <handle_op_code+0xf94>
+    8dd4:	eb004b64 	bl	1bb6c <_IO_printf>
+    8dd8:	e3a00003 	mov	r0, #3
+    8ddc:	eb00997b 	bl	2f3d0 <__sleep>
+    8de0:	e59f0e20 	ldr	r0, [pc, #3616]	@ 9c08 <handle_op_code+0xf78>
+    8de4:	e3a01000 	mov	r1, #0
+    8de8:	eb009d74 	bl	303c0 <__access>
+    8dec:	e3500000 	cmp	r0, #0
+    8df0:	aa00032e 	bge	9ab0 <handle_op_code+0xe20>
+    8df4:	e595c000 	ldr	ip, [r5]
+    8df8:	e35c0002 	cmp	ip, #2
+    8dfc:	1a00032b 	bne	9ab0 <handle_op_code+0xe20>
+    8e00:	e59f0e18 	ldr	r0, [pc, #3608]	@ 9c20 <handle_op_code+0xf90>
+    8e04:	eb004b9c 	bl	1bc7c <perror>
+    8e08:	e5951000 	ldr	r1, [r5]
+    8e0c:	e59f0e10 	ldr	r0, [pc, #3600]	@ 9c24 <handle_op_code+0xf94>
+    8e10:	eb004b55 	bl	1bb6c <_IO_printf>
+    8e14:	e3a00003 	mov	r0, #3
+    8e18:	eb00996c 	bl	2f3d0 <__sleep>
+    8e1c:	e59f0de4 	ldr	r0, [pc, #3556]	@ 9c08 <handle_op_code+0xf78>
+    8e20:	e3a01000 	mov	r1, #0
+    8e24:	eb009d65 	bl	303c0 <__access>
+    8e28:	e3500000 	cmp	r0, #0
+    8e2c:	aa00031f 	bge	9ab0 <handle_op_code+0xe20>
+    8e30:	e5952000 	ldr	r2, [r5]
+    8e34:	e3520002 	cmp	r2, #2
+    8e38:	1a00031c 	bne	9ab0 <handle_op_code+0xe20>
+    8e3c:	e59f0ddc 	ldr	r0, [pc, #3548]	@ 9c20 <handle_op_code+0xf90>
+    8e40:	eb004b8d 	bl	1bc7c <perror>
+    8e44:	e5951000 	ldr	r1, [r5]
+    8e48:	e59f0dd4 	ldr	r0, [pc, #3540]	@ 9c24 <handle_op_code+0xf94>
+    8e4c:	eb004b46 	bl	1bb6c <_IO_printf>
+    8e50:	e3a00003 	mov	r0, #3
+    8e54:	eb00995d 	bl	2f3d0 <__sleep>
+    8e58:	e59f0da8 	ldr	r0, [pc, #3496]	@ 9c08 <handle_op_code+0xf78>
+    8e5c:	e3a01000 	mov	r1, #0
+    8e60:	eb009d56 	bl	303c0 <__access>
+    8e64:	e3500000 	cmp	r0, #0
+    8e68:	aa000310 	bge	9ab0 <handle_op_code+0xe20>
+    8e6c:	e5958000 	ldr	r8, [r5]
+    8e70:	e3580002 	cmp	r8, #2
+    8e74:	1a00030d 	bne	9ab0 <handle_op_code+0xe20>
+    8e78:	e59f0da0 	ldr	r0, [pc, #3488]	@ 9c20 <handle_op_code+0xf90>
+    8e7c:	eb004b7e 	bl	1bc7c <perror>
+    8e80:	e5951000 	ldr	r1, [r5]
+    8e84:	e59f0d98 	ldr	r0, [pc, #3480]	@ 9c24 <handle_op_code+0xf94>
+    8e88:	eb004b37 	bl	1bb6c <_IO_printf>
+    8e8c:	e3a00003 	mov	r0, #3
+    8e90:	eb00994e 	bl	2f3d0 <__sleep>
+    8e94:	e59f0d6c 	ldr	r0, [pc, #3436]	@ 9c08 <handle_op_code+0xf78>
+    8e98:	e3a01000 	mov	r1, #0
+    8e9c:	eb009d47 	bl	303c0 <__access>
+    8ea0:	e3500000 	cmp	r0, #0
+    8ea4:	aa000301 	bge	9ab0 <handle_op_code+0xe20>
+    8ea8:	e595a000 	ldr	sl, [r5]
+    8eac:	e35a0002 	cmp	sl, #2
+    8eb0:	1a0002fe 	bne	9ab0 <handle_op_code+0xe20>
+    8eb4:	e59f0d64 	ldr	r0, [pc, #3428]	@ 9c20 <handle_op_code+0xf90>
+    8eb8:	eb004b6f 	bl	1bc7c <perror>
+    8ebc:	e5951000 	ldr	r1, [r5]
+    8ec0:	e59f0d5c 	ldr	r0, [pc, #3420]	@ 9c24 <handle_op_code+0xf94>
+    8ec4:	eb004b28 	bl	1bb6c <_IO_printf>
+    8ec8:	e59f0d58 	ldr	r0, [pc, #3416]	@ 9c28 <handle_op_code+0xf98>
+    8ecc:	e59f1d34 	ldr	r1, [pc, #3380]	@ 9c08 <handle_op_code+0xf78>
+    8ed0:	eb004b25 	bl	1bb6c <_IO_printf>
+    8ed4:	e3e03000 	mvn	r3, #0
+    8ed8:	e3530000 	cmp	r3, #0
+    8edc:	e59f5dfc 	ldr	r5, [pc, #3580]	@ 9ce0 <handle_op_code+0x1050>
+    8ee0:	e3a0e40d 	mov	lr, #218103808	@ 0xd000000
+    8ee4:	e3a01201 	mov	r1, #268435456	@ 0x10000000
+    8ee8:	13a030ff 	movne	r3, #255	@ 0xff
+    8eec:	e58d5008 	str	r5, [sp, #8]
+    8ef0:	e58de00c 	str	lr, [sp, #12]
+    8ef4:	e58d1010 	str	r1, [sp, #16]
+    8ef8:	e2840a46 	add	r0, r4, #286720	@ 0x46000
+    8efc:	e2805f4e 	add	r5, r0, #312	@ 0x138
+    8f00:	e3a01000 	mov	r1, #0
+    8f04:	e3a02040 	mov	r2, #64	@ 0x40
+    8f08:	e1a00005 	mov	r0, r5
+    8f0c:	e28d7008 	add	r7, sp, #8
+    8f10:	e5cd3014 	strb	r3, [sp, #20]
+    8f14:	eb0094f5 	bl	2e2f0 <memset>
+    8f18:	e8b7000f 	ldm	r7!, {r0, r1, r2, r3}
+    8f1c:	e1a08005 	mov	r8, r5
+    8f20:	e8a8000f 	stmia	r8!, {r0, r1, r2, r3}
+    8f24:	e8b7000f 	ldm	r7!, {r0, r1, r2, r3}
+    8f28:	e1a0c386 	lsl	ip, r6, #7
+    8f2c:	e1a0a008 	mov	sl, r8
+    8f30:	e8aa000f 	stmia	sl!, {r0, r1, r2, r3}
+    8f34:	e28cca26 	add	ip, ip, #155648	@ 0x26000
+    8f38:	e8970007 	ldm	r7, {r0, r1, r2}
+    8f3c:	e28c3f4a 	add	r3, ip, #296	@ 0x128
+    8f40:	e3a07000 	mov	r7, #0
+    8f44:	e084c003 	add	ip, r4, r3
+    8f48:	e1a03007 	mov	r3, r7
+    8f4c:	e88a0007 	stm	sl, {r0, r1, r2}
+    8f50:	e2877002 	add	r7, r7, #2
+    8f54:	e1a0200c 	mov	r2, ip
+    8f58:	e3570020 	cmp	r7, #32
+    8f5c:	e4823004 	str	r3, [r2], #4
+    8f60:	e58c3004 	str	r3, [ip, #4]
+    8f64:	e282c004 	add	ip, r2, #4
+    8f68:	1afffff8 	bne	8f50 <handle_op_code+0x2c0>
+    8f6c:	e2867048 	add	r7, r6, #72	@ 0x48
+    8f70:	e7940107 	ldr	r0, [r4, r7, lsl #2]
+    8f74:	e1a06286 	lsl	r6, r6, #5
+    8f78:	e1a0c2a0 	lsr	ip, r0, #5
+    8f7c:	e086200c 	add	r2, r6, ip
+    8f80:	e2821b26 	add	r1, r2, #38912	@ 0x9800
+    8f84:	e281e04a 	add	lr, r1, #74	@ 0x4a
+    8f88:	e794810e 	ldr	r8, [r4, lr, lsl #2]
+    8f8c:	e200101f 	and	r1, r0, #31
+    8f90:	e3a0a001 	mov	sl, #1
+    8f94:	e188811a 	orr	r8, r8, sl, lsl r1
+    8f98:	e1a0a158 	asr	sl, r8, r1
+    8f9c:	e31a0001 	tst	sl, #1
+    8fa0:	e784810e 	str	r8, [r4, lr, lsl #2]
+    8fa4:	0a0000a9 	beq	9250 <handle_op_code+0x5c0>
+    8fa8:	e1a01005 	mov	r1, r5
+    8fac:	e3a0200d 	mov	r2, #13
+    8fb0:	eb001aea 	bl	fb60 <__libc_send>
+    8fb4:	e3700001 	cmn	r0, #1
+    8fb8:	0a0002d4 	beq	9b10 <handle_op_code+0xe80>
+    8fbc:	e7943107 	ldr	r3, [r4, r7, lsl #2]
+    8fc0:	e203101f 	and	r1, r3, #31
+    8fc4:	e1a0c2a3 	lsr	ip, r3, #5
+    8fc8:	ea0000a0 	b	9250 <handle_op_code+0x5c0>
+    8fcc:	e3530701 	cmp	r3, #262144	@ 0x40000
+    8fd0:	0a00010a 	beq	9400 <handle_op_code+0x770>
+    8fd4:	e3530102 	cmp	r3, #-2147483648	@ 0x80000000
+    8fd8:	0a000100 	beq	93e0 <handle_op_code+0x750>
+    8fdc:	e3530901 	cmp	r3, #16384	@ 0x4000
+    8fe0:	1affff3b 	bne	8cd4 <handle_op_code+0x44>
+    8fe4:	e2807a46 	add	r7, r0, #286720	@ 0x46000
+    8fe8:	e28510d0 	add	r1, r5, #208	@ 0xd0
+    8fec:	e2877f4e 	add	r7, r7, #312	@ 0x138
+    8ff0:	e3a05000 	mov	r5, #0
+    8ff4:	e3a02faf 	mov	r2, #700	@ 0x2bc
+    8ff8:	e59f0c2c 	ldr	r0, [pc, #3116]	@ 9c2c <handle_op_code+0xf9c>
+    8ffc:	eb004ada 	bl	1bb6c <_IO_printf>
+    9000:	e3a0a501 	mov	sl, #4194304	@ 0x400000
+    9004:	e59fccd4 	ldr	ip, [pc, #3284]	@ 9ce0 <handle_op_code+0x1050>
+    9008:	e3a0340d 	mov	r3, #218103808	@ 0xd000000
+    900c:	e1a01005 	mov	r1, r5
+    9010:	e3a02040 	mov	r2, #64	@ 0x40
+    9014:	e28d8008 	add	r8, sp, #8
+    9018:	e1a00007 	mov	r0, r7
+    901c:	e58dc008 	str	ip, [sp, #8]
+    9020:	e58d300c 	str	r3, [sp, #12]
+    9024:	e58da010 	str	sl, [sp, #16]
+    9028:	e5cd5014 	strb	r5, [sp, #20]
+    902c:	eb0094af 	bl	2e2f0 <memset>
+    9030:	e8b8000f 	ldm	r8!, {r0, r1, r2, r3}
+    9034:	e1a0c007 	mov	ip, r7
+    9038:	e8ac000f 	stmia	ip!, {r0, r1, r2, r3}
+    903c:	e8b8000f 	ldm	r8!, {r0, r1, r2, r3}
+    9040:	e1a0e386 	lsl	lr, r6, #7
+    9044:	e1a0a00c 	mov	sl, ip
+    9048:	e8aa000f 	stmia	sl!, {r0, r1, r2, r3}
+    904c:	e28e3a26 	add	r3, lr, #155648	@ 0x26000
+    9050:	e8980007 	ldm	r8, {r0, r1, r2}
+    9054:	e2838f4a 	add	r8, r3, #296	@ 0x128
+    9058:	e084e008 	add	lr, r4, r8
+    905c:	e1a03005 	mov	r3, r5
+    9060:	e88a0007 	stm	sl, {r0, r1, r2}
+    9064:	e2855002 	add	r5, r5, #2
+    9068:	e1a0100e 	mov	r1, lr
+    906c:	e3550020 	cmp	r5, #32
+    9070:	e4813004 	str	r3, [r1], #4
+    9074:	e58e3004 	str	r3, [lr, #4]
+    9078:	e281e004 	add	lr, r1, #4
+    907c:	1afffff8 	bne	9064 <handle_op_code+0x3d4>
+    9080:	e2865048 	add	r5, r6, #72	@ 0x48
+    9084:	e7940105 	ldr	r0, [r4, r5, lsl #2]
+    9088:	e1a06286 	lsl	r6, r6, #5
+    908c:	e1a0e2a0 	lsr	lr, r0, #5
+    9090:	e086100e 	add	r1, r6, lr
+    9094:	e281cb26 	add	ip, r1, #38912	@ 0x9800
+    9098:	e28c104a 	add	r1, ip, #74	@ 0x4a
+    909c:	e7942101 	ldr	r2, [r4, r1, lsl #2]
+    90a0:	e200c01f 	and	ip, r0, #31
+    90a4:	e3a08001 	mov	r8, #1
+    90a8:	e1828c18 	orr	r8, r2, r8, lsl ip
+    90ac:	e1a02c58 	asr	r2, r8, ip
+    90b0:	e3120001 	tst	r2, #1
+    90b4:	e7848101 	str	r8, [r4, r1, lsl #2]
+    90b8:	0a000007 	beq	90dc <handle_op_code+0x44c>
+    90bc:	e1a01007 	mov	r1, r7
+    90c0:	e3a0200d 	mov	r2, #13
+    90c4:	eb001aa5 	bl	fb60 <__libc_send>
+    90c8:	e3700001 	cmn	r0, #1
+    90cc:	0a00027c 	beq	9ac4 <handle_op_code+0xe34>
+    90d0:	e7940105 	ldr	r0, [r4, r5, lsl #2]
+    90d4:	e200c01f 	and	ip, r0, #31
+    90d8:	e1a0e2a0 	lsr	lr, r0, #5
+    90dc:	e086200e 	add	r2, r6, lr
+    90e0:	e2826b26 	add	r6, r2, #38912	@ 0x9800
+    90e4:	e286604a 	add	r6, r6, #74	@ 0x4a
+    90e8:	e7943106 	ldr	r3, [r4, r6, lsl #2]
+    90ec:	e5940000 	ldr	r0, [r4]
+    90f0:	e3a01001 	mov	r1, #1
+    90f4:	e1c32c11 	bic	r2, r3, r1, lsl ip
+    90f8:	e5903000 	ldr	r3, [r0]
+    90fc:	e284ea46 	add	lr, r4, #286720	@ 0x46000
+    9100:	e7842106 	str	r2, [r4, r6, lsl #2]
+    9104:	e28e1f61 	add	r1, lr, #388	@ 0x184
+    9108:	e1a00003 	mov	r0, r3
+    910c:	e1a0e00f 	mov	lr, pc
+    9110:	e593f234 	ldr	pc, [r3, #564]	@ 0x234
+    9114:	eafffef2 	b	8ce4 <handle_op_code+0x54>
+    9118:	e3530001 	cmp	r3, #1
+    911c:	0a0000aa 	beq	93cc <handle_op_code+0x73c>
+    9120:	e3530002 	cmp	r3, #2
+    9124:	1afffeea 	bne	8cd4 <handle_op_code+0x44>
+    9128:	e28510d0 	add	r1, r5, #208	@ 0xd0
+    912c:	e59f2afc 	ldr	r2, [pc, #2812]	@ 9c30 <handle_op_code+0xfa0>
+    9130:	e59f0afc 	ldr	r0, [pc, #2812]	@ 9c34 <handle_op_code+0xfa4>
+    9134:	eb004a8c 	bl	1bb6c <_IO_printf>
+    9138:	eafffee9 	b	8ce4 <handle_op_code+0x54>
+    913c:	e28510d0 	add	r1, r5, #208	@ 0xd0
+    9140:	e3a02fae 	mov	r2, #696	@ 0x2b8
+    9144:	e59f0aec 	ldr	r0, [pc, #2796]	@ 9c38 <handle_op_code+0xfa8>
+    9148:	eb004a87 	bl	1bb6c <_IO_printf>
+    914c:	e5949000 	ldr	r9, [r4]
+    9150:	e28d8008 	add	r8, sp, #8
+    9154:	e599a000 	ldr	sl, [r9]
+    9158:	e2845a46 	add	r5, r4, #286720	@ 0x46000
+    915c:	e1a0000a 	mov	r0, sl
+    9160:	e1a0e00f 	mov	lr, pc
+    9164:	e59af230 	ldr	pc, [sl, #560]	@ 0x230
+    9168:	e594c000 	ldr	ip, [r4]
+    916c:	e59f3b6c 	ldr	r3, [pc, #2924]	@ 9ce0 <handle_op_code+0x1050>
+    9170:	e59c0000 	ldr	r0, [ip]
+    9174:	e3a0141d 	mov	r1, #486539264	@ 0x1d000000
+    9178:	e2807e1f 	add	r7, r0, #496	@ 0x1f0
+    917c:	e3a02602 	mov	r2, #2097152	@ 0x200000
+    9180:	e1a00007 	mov	r0, r7
+    9184:	e58d3008 	str	r3, [sp, #8]
+    9188:	e58d100c 	str	r1, [sp, #12]
+    918c:	e58d2010 	str	r2, [sp, #16]
+    9190:	eb008dd2 	bl	2c8e0 <strlen>
+    9194:	e2855f4e 	add	r5, r5, #312	@ 0x138
+    9198:	e1a01007 	mov	r1, r7
+    919c:	e3a07000 	mov	r7, #0
+    91a0:	e1a09008 	mov	r9, r8
+    91a4:	e1a0a005 	mov	sl, r5
+    91a8:	e1a02000 	mov	r2, r0
+    91ac:	e288000c 	add	r0, r8, #12
+    91b0:	eb008e3f 	bl	2cab4 <strncpy>
+    91b4:	e1a01007 	mov	r1, r7
+    91b8:	e3a02040 	mov	r2, #64	@ 0x40
+    91bc:	e1a00005 	mov	r0, r5
+    91c0:	eb00944a 	bl	2e2f0 <memset>
+    91c4:	e8b9000f 	ldm	r9!, {r0, r1, r2, r3}
+    91c8:	e1a08009 	mov	r8, r9
+    91cc:	e8aa000f 	stmia	sl!, {r0, r1, r2, r3}
+    91d0:	e8b8000f 	ldm	r8!, {r0, r1, r2, r3}
+    91d4:	e1a0c386 	lsl	ip, r6, #7
+    91d8:	e1a0900a 	mov	r9, sl
+    91dc:	e8a9000f 	stmia	r9!, {r0, r1, r2, r3}
+    91e0:	e28cca26 	add	ip, ip, #155648	@ 0x26000
+    91e4:	e8980007 	ldm	r8, {r0, r1, r2}
+    91e8:	e28c3f4a 	add	r3, ip, #296	@ 0x128
+    91ec:	e084c003 	add	ip, r4, r3
+    91f0:	e1a03007 	mov	r3, r7
+    91f4:	e8890007 	stm	r9, {r0, r1, r2}
+    91f8:	e2877002 	add	r7, r7, #2
+    91fc:	e1a0e00c 	mov	lr, ip
+
 ## Firmware app manifest: binary AXML as decoded by aapt
 
-$ /usr/local/lib/android/sdk/build-tools/37.0.0/aapt dump badging /tmp/tmp4wgkvvpm/ramdisk/system/app/fw_launcher_2016.08.12.01.apk
+$ /usr/local/lib/android/sdk/build-tools/37.0.0/aapt dump badging /tmp/tmpbw8a0b42/ramdisk/system/app/fw_launcher_2016.08.12.01.apk
 exit: 0
 package: name='tw.com.elead.el830.fw_upgrade' versionCode='1' versionName='2016.08.12.01' platformBuildVersionName='4.4.2-1456859' platformBuildVersionCode='19'
 sdkVersion:'9'
@@ -697,7 +1164,7 @@ supports-any-density: 'true'
 locales: '--_--'
 densities: '120' '160' '240' '320'
 
-$ /usr/local/lib/android/sdk/build-tools/37.0.0/aapt dump xmltree /tmp/tmp4wgkvvpm/ramdisk/system/app/fw_launcher_2016.08.12.01.apk AndroidManifest.xml
+$ /usr/local/lib/android/sdk/build-tools/37.0.0/aapt dump xmltree /tmp/tmpbw8a0b42/ramdisk/system/app/fw_launcher_2016.08.12.01.apk AndroidManifest.xml
 exit: 0
 N: android=http://schemas.android.com/apk/res/android
   E: manifest (line=1)
@@ -727,7 +1194,7 @@ N: android=http://schemas.android.com/apk/res/android
           E: category (line=24)
             A: android:name(0x01010003)="android.intent.category.DEFAULT" (Raw: "android.intent.category.DEFAULT")
 
-$ java -jar /home/runner/work/_temp/apktool.jar d -f -r /tmp/tmp4wgkvvpm/ramdisk/system/app/fw_launcher_2016.08.12.01.apk -o /tmp/tmp4wgkvvpm/decoded
+$ java -jar /home/runner/work/_temp/apktool.jar d -f -r /tmp/tmpbw8a0b42/ramdisk/system/app/fw_launcher_2016.08.12.01.apk -o /tmp/tmpbw8a0b42/decoded
 exit: 0
 I: Using Apktool 2.9.3 on fw_launcher_2016.08.12.01.apk
 I: Copying raw resources...
