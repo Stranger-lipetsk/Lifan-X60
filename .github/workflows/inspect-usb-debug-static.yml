@@ -1,0 +1,44 @@
+name: Статическая проверка USB debug
+on:
+  push:
+    branches: [arena/b12cc9a8-lifan-x60]
+    paths:
+      - '.github/workflows/inspect-usb-debug-static.yml'
+      - 'tools/inspect_usb_debug_static.py'
+      - 'tests/test_inspect_usb_debug_static.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  inspect:
+    if: github.ref_name == 'arena/b12cc9a8-lifan-x60'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Проверить анализатор
+        run: python3 -m unittest discover -s tests -p 'test_inspect_usb_debug_static.py' -v
+      - name: Прочитать образ без запуска его программ
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq e2fsprogs unzip
+          w="$RUNNER_TEMP/usb-static"
+          mkdir -p "$w" reports
+          gh release download file-manager-test-20261105 -p lifan-file-manager-test.zip -D "$w"
+          echo "4be81211994221e80e401ce712ce484b5320156902fff3707737b73e3945d17f  $w/lifan-file-manager-test.zip" | sha256sum -c -
+          unzip -p "$w/lifan-file-manager-test.zip" system.img > "$w/system.img"
+          echo "a660f062716fd42d5a6185faec059f42675b3024304de7b81fac5d705cc88511  $w/system.img" | sha256sum -c -
+          python3 tools/inspect_usb_debug_static.py "$w/system.img" > reports/usb-debug-static.txt
+      - name: Сохранить текстовый отчёт
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/usb-debug-static.txt
+          git diff --cached --quiet && exit 0
+          git commit -m 'report: inspect USB debug helper offline'
+          git pull --rebase origin "${{ github.ref_name }}"
+          git push origin HEAD:"${{ github.ref_name }}"
