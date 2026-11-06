@@ -4,8 +4,19 @@
 set -euo pipefail
 [ "${GITHUB_ACTIONS:-}" = true ] || { echo 'Disposable CI runner only'; exit 1; }
 : "${RUNNER_TEMP:?}"
+exec > >(tee "$RUNNER_TEMP/hibernate-tar-model.log") 2>&1
 w=$(mktemp -d "$RUNNER_TEMP/hibernate-tar-model.XXXXXXXX")
 mkdir -p "$w"/{source,dest,image} reports
+cleanup() {
+  status=$?
+  if [ "$status" != 0 ]; then
+    echo "Synthetic lab failed: $status"
+    for log in "$w/create.log" "$w/extract.log"; do
+      if [ -f "$log" ]; then echo "## $(basename "$log")"; cat "$log"; fi
+    done
+  fi
+}
+trap cleanup EXIT
 chmod 0755 "$w"
 sudo apt-get update -qq
 sudo apt-get install -y -qq e2fsprogs unzip qemu-user-static
