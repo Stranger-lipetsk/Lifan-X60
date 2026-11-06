@@ -189,7 +189,15 @@ echo 'Phase 5: replace system package only in disposable emulator'
 timeout -k 5 60 "$adb" remount | tee "$work/remount2.txt"
 grep -iq 'remount succeeded' "$work/remount2.txt"
 timeout -k 5 30 "$adb" shell rm /system/priv-app/Navitel-large.apk
-timeout -k 10 300 "$adb" push "$new" /system/priv-app/Navitel-large.apk
+echo 'Emulator filesystem before APK replacement:'
+timeout -k 5 30 "$adb" shell df /system || true
+if ! timeout -k 10 300 "$adb" push "$new" /system/priv-app/Navitel-large.apk; then
+  echo 'Emulator filesystem after failed replacement:'
+  timeout -k 5 30 "$adb" shell df /system || true
+  timeout -k 5 30 "$adb" shell mount || true
+  timeout -k 5 30 "$adb" shell dmesg | grep -iE 'ext4|error|read.only|I/O' | tail -80 || true
+  exit 1
+fi
 timeout -k 5 30 "$adb" shell chmod 0644 /system/priv-app/Navitel-large.apk
 timeout -k 5 30 "$adb" shell restorecon /system/priv-app/Navitel-large.apk || true
 restart_android_runtime
