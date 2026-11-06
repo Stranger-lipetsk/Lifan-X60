@@ -146,7 +146,6 @@ confirm_emulator_dialog() {
       if [ -n "$coords" ]; then
         read -r x y <<< "$coords"
         echo "Located confirmation UI at $x,$y: $expected"
-        cat "$work/ui.xml"
         timeout 20 "$adb" shell input tap "$x" "$y"
         echo "Tapped virtual UI: $expected"
         return 0
@@ -162,7 +161,9 @@ confirm_emulator_dialog() {
 echo 'Phase 4: Android backup of synthetic marker only'
 timeout 30 "$adb" logcat -c
 timeout 15 "$adb" shell input keyevent 82 || true
-timeout 300 "$adb" backup -f "$work/synthetic.ab" -noapk com.navitel > "$work/backup-command.txt" 2>&1 &
+# Modern adb backup quotes legacy bu's arguments incompatibly on this API 19
+# image. Pass one fixed, lab-only command string to the shell service instead.
+timeout 300 "$adb" exec-out 'bu backup -noapk com.navitel' > "$work/synthetic.ab" 2> "$work/backup-command.txt" &
 backup_pid=$!
 confirm_emulator_dialog 'Back up my data' || { kill "$backup_pid" 2>/dev/null || true; exit 1; }
 wait "$backup_pid" || { echo 'ADB backup command failed'; cat "$work/backup-command.txt"; exit 1; }
@@ -206,7 +207,7 @@ uid_after=$(sed -n 's/.*userId=\([0-9][0-9]*\).*/\1/p' "$work/new-package.txt" |
   echo '# Synthetic Android backup and cross-signature restore in disposable ARM emulator'
   echo 'Generic Android 4.4.2 emulator only; do not apply these operations to a head unit.'
   echo 'No real license, maps, user data or SD; empty virtual SD; emulator network blocked before boot.'
-  echo 'System package replacement used Android userspace restart, not full VM reboot.'
+  echo 'Backup used legacy bu via adb exec-out; system replacement used Android userspace restart, not full VM reboot.'
   echo "Fingerprint: $(cat "$work/fingerprint.txt"); ABI: $(cat "$work/abi.txt")"
   echo "Old UID: $uid_before; new UID: ${uid_after:-unavailable}"
   echo 'Old certificate: a40da80a59d170caa950cf15c18c454d47a39b26989d8b640ecd745ba71bf5dc'
