@@ -30,6 +30,7 @@ def inspect(path):
     found = []
     with tarfile.open(fileobj=io.BytesIO(payload), mode='r:') as tar:
         for entry in tar:
+            print('Lab archive entry:', entry.name, 'bytes:', entry.size)
             if entry.name.startswith('apps/com.navitel/') and entry.name.endswith('/lab-marker.txt') and entry.isfile():
                 if entry.size > 1024:
                     raise ValueError('Marker unexpectedly large')

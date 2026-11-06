@@ -158,12 +158,18 @@ confirm_emulator_dialog() {
 }
 
 echo 'Phase 4: Android backup of synthetic marker only'
+timeout 30 "$adb" logcat -c
 timeout 15 "$adb" shell input keyevent 82 || true
 timeout 300 "$adb" backup -f "$work/synthetic.ab" -noapk com.navitel > "$work/backup-command.txt" 2>&1 &
 backup_pid=$!
 confirm_emulator_dialog 'Back up my data' || { kill "$backup_pid" 2>/dev/null || true; exit 1; }
 wait "$backup_pid" || { echo 'ADB backup command failed'; cat "$work/backup-command.txt"; exit 1; }
-python3 tools/check_synthetic_adb_backup.py "$work/synthetic.ab" | tee "$work/backup-check.txt"
+if ! python3 tools/check_synthetic_adb_backup.py "$work/synthetic.ab" | tee "$work/backup-check.txt"; then
+  echo 'Backup command output:'; cat "$work/backup-command.txt"
+  echo 'Selected backup and application logs:'
+  timeout 60 "$adb" logcat -d -v brief | grep -iE 'BackupManagerService|AndroidRuntime|com\.navitel|backup agent' | tail -100 || true
+  exit 1
+fi
 
 echo 'Phase 5: replace system package only in disposable emulator'
 timeout 60 "$adb" remount | tee "$work/remount2.txt"
