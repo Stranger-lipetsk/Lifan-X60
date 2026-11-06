@@ -78,11 +78,15 @@ restart_android_runtime() {
   boot
 }
 start_emulator
+# sudo's launcher may be root-owned; kill -0 can fail with EPERM while alive.
+launcher_running() {
+  ps -o stat= -p "$1" | awk '$1 !~ /^Z/ {alive=1} END {exit !alive}'
+}
 boot() {
   "$adb" wait-for-device &
   local waitpid=$! connected=no
   for i in $(seq 1 60); do
-    if ! kill -0 "$pid" 2>/dev/null; then
+    if ! launcher_running "$pid"; then
       echo 'Emulator exited before adb'
       local emulator_status=0
       wait "$pid" || emulator_status=$?
