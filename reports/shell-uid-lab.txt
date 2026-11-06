@@ -1,0 +1,18 @@
+# Shared shell UID: disposable generic Android 4.4.2 x86
+Emulator only. Fixture reports its own UID; it does not execute su, read app data, or write to other apps.
+ADB prepared and observed emulator. No real head unit, real user data, or real storage used.
+Fingerprint: generic_x86/sdk_x86/generic_x86:4.4.2/KK/4174703:eng/test-keys; hardware: ranchu; emulator platform and shell cert match: c8a2e9bccf597c2fb6dc66bee293fc13f2fc47ec77bc6b2b0d52c11f51192ab8
+Incorrectly signed shared UID fixture rejected: yes.
+Platform-signed shared UID fixture installed and reported:
+I/X60ShellUidLab( 2061): OWN_UID=2000
+This does not test stock firmware, SELinux, su, remounting, storage access, data backup, or update.
+
+## Stock-derived Shell.apk static check, no firmware execution
+a48d7c4435523d00a38d3f16e8884bdda5607c97eac16f29b56b564a81e54898  Shell.apk
+V1 Signer: certificate DN: EMAILADDRESS=android@freescale.com, CN=Android, OU=Android, O=Android, L=Mountain View, ST=California, C=US
+V1 Signer: certificate SHA-256 digest: 7fbae817b7db24642d8959c347b561c003c6cfde2cb10f909c932f21a4d6d804
+V1 Signer: certificate SHA-1 digest: 3e0caf3d799fbaec566facbe1a67fb250bdefd93
+V1 Signer: certificate MD5 digest: 748a35b8c2e489de57f2d360315efe3d
+    A: android:sharedUserId(0x0101000b)="android.uid.shell" (Raw: "android.uid.shell")
+Compare certificate with stock framework-res SHA-256 7fbae817b7db24642d8959c347b561c003c6cfde2cb10f909c932f21a4d6d804.
+Certificate similarity does not prove installation, runtime UID, su access, or safety on the real head unit.
