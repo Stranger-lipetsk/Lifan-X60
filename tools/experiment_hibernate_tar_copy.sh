@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# CI-only host-side synthetic fixture. Never runs the hibernate script, mounts
-# partitions, or connects to Android/ADB; no real data/device/media involved.
+# CI-only host-side synthetic fixture. Never runs the hibernate script, touches
+# physical partitions, or connects to Android/ADB; no real data/device involved.
 set -euo pipefail
 [ "${GITHUB_ACTIONS:-}" = true ] || { echo 'Disposable CI runner only'; exit 1; }
 : "${RUNNER_TEMP:?}"
@@ -15,6 +15,8 @@ cleanup() {
       if [ -f "$log" ]; then echo "## $(basename "$log")"; cat "$log"; fi
     done
   fi
+  if mountpoint -q "$w/dest"; then sudo umount "$w/dest" || echo 'Disposable destination unmount failed'; fi
+  if mountpoint -q "$w/source"; then sudo umount "$w/source" || echo 'Disposable source unmount failed'; fi
 }
 trap cleanup EXIT
 chmod 0755 "$w"
@@ -39,6 +41,16 @@ DOCKER
 # No internet and only the synthetic temp directory is visible to the ARM
 # binary. No host devices, Android partitions, or Docker socket are mounted.
 docker build -q -t x60-disposable-hibernate-tar "$w/image"
+# These mounts exist only in this short-lived CI VM. The ext4 target is a NEW
+# regular file created in the private temp directory, never a block device.
+sudo mount -t tmpfs -o size=128m,mode=0755 tmpfs "$w/source"
+truncate -s 128M "$w/synthetic-dest.img"
+[ -f "$w/synthetic-dest.img" ] && [ ! -L "$w/synthetic-dest.img" ]
+sudo mkfs.ext4 -q -F "$w/synthetic-dest.img"
+sudo mount -t ext4 -o loop "$w/synthetic-dest.img" "$w/dest"
+[ "$(findmnt -n -o FSTYPE --target "$w/source")" = tmpfs ]
+[ "$(findmnt -n -o FSTYPE --target "$w/dest")" = ext4 ]
+sudo chown "$(id -u):$(id -g)" "$w/source" "$w/dest"
 mkdir -p "$w/source/data/com.navitel/files" "$w/source/data/com.navitel/shared_prefs" \
   "$w/source/data/ru.lifanx60.fixture/files" "$w/source/system" "$w/source/app" "$w/source/race"
 printf 'SYNTHETIC_NAVITEL_MARKER\n' > "$w/source/data/com.navitel/files/lab-marker.txt"
@@ -98,7 +110,7 @@ grep -Fx after-archive "$w/source/race/late-write.txt"
 {
   echo '# Synthetic stock-derived BusyBox tar copy; not a hibernation test'
   echo 'ARM BusyBox b40cc88591ddbe851e0d37e41990e7e0a7e19b6ab195dac827e1f952efe51613, run under QEMU user mode in an offline restricted container.'
-  echo 'Only synthetic files in CI temp. Host filesystem, not GU tmpfs/ext4; no device, stock script, mount, partition formatting or kernel hibernate.'
+  echo 'Only synthetic files in CI temp. Source: host tmpfs; destination: ext4 on a newly created disposable regular-file loop image. This is not the GU, its partitions, its kernel, stock script or hibernation.'
   echo 'Exact command options: tar -cf DEST/data.tar ./. and tar -xvf DEST/data.tar.'
   echo '## Synthetic content and selected numeric metadata'
   sudo python3 tools/hibernate_tar_lab.py "$w/source" "$w/dest"
@@ -114,5 +126,5 @@ with tarfile.open(sys.argv[1]) as archive:
 PY
   echo '## Deliberately scheduled late write'
   echo 'Source was modified after archive finished and before extraction. Extracted file contained the earlier snapshot; late source change did not appear.'
-  echo 'This illustrates a possible consistency window only. Real script timing and concurrent writes, app descriptors, actual Hibernate, ext4, ACLs and SELinux were not tested.'
+  echo 'This illustrates a possible consistency window only. Real script timing and concurrent writes, app descriptors, actual Hibernate, the GU ext4 implementation, ACLs and SELinux were not tested.'
 } > reports/stock-hibernate-tar-synthetic-lab.txt
