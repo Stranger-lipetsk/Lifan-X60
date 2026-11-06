@@ -421,6 +421,10 @@ for package in com.navitel ru.lifanx60.backupfixture; do
   timeout -k 5 40 "$adb" shell dumpsys package "$package" | tr -d '\r' | grep -E 'userId=|versionCode=|codePath=' | head -6 | tee -a "$work/loss-observations.txt" || true
   timeout -k 5 20 "$adb" shell ls -ldn "/data/data/$package" | tr -d '\r' | tee -a "$work/loss-observations.txt" || true
 done
+# Confirm the update APK really exists before the failure; check for it afterward too.
+timeout -k 5 30 "$adb" shell 'if [ -f /data/app/com.navitel-1.apk ]; then echo UPDATE_APK_PRESENT_BEFORE; else echo UPDATE_APK_MISSING_BEFORE; fi' | tr -d '\r' | tee -a "$work/loss-observations.txt"
+grep -Fx UPDATE_APK_PRESENT_BEFORE "$work/loss-observations.txt"
+timeout -k 5 30 "$adb" logcat -c
 # This is a deliberately broken synthetic scenario, not a device repair or backup.
 # Stop Android first so the package manager cannot rewrite files concurrently.
 timeout -k 5 30 "$adb" shell setprop sys.boot_completed 0
@@ -446,6 +450,8 @@ for package in com.navitel ru.lifanx60.backupfixture; do
   timeout -k 5 40 "$adb" shell dumpsys package "$package" | tr -d '\r' | grep -E 'userId=|versionCode=|codePath=' | head -6 | tee -a "$work/loss-observations.txt" || true
   timeout -k 5 20 "$adb" shell ls -ldn "/data/data/$package" | tr -d '\r' | tee -a "$work/loss-observations.txt" || true
 done
+timeout -k 5 30 "$adb" shell 'if [ -f /data/app/com.navitel-1.apk ]; then echo UPDATE_APK_PRESENT_AFTER; else echo UPDATE_APK_MISSING_AFTER; fi' | tr -d '\r' | tee -a "$work/loss-observations.txt"
+timeout -k 5 40 "$adb" logcat -d -v brief | tr -d '\r' | grep -iE 'PackageManager.*(com.navitel|backupfixture|uid mismatch|uid changed|permissions.*data)' | tail -40 > "$work/loss-package-log.txt" || true
 for spec in 'com.navitel/files/lab-marker.txt:nav-marker' 'com.navitel/shared_prefs/x60_lab_probe.xml:nav-pref' 'ru.lifanx60.backupfixture/files/lab-marker.txt:canary-marker' 'ru.lifanx60.backupfixture/shared_prefs/lab_probe.xml:canary-pref'; do
   src=${spec%%:*}; name=${spec#*:}
   if timeout -k 5 40 "$adb" pull "/data/data/$src" "$work/loss-$name" >/dev/null 2>&1 && [ -f "$work/loss-$name" ]; then
@@ -493,5 +499,7 @@ done
   tr -d '\r' < "$work/app-log.txt" | grep -iE 'FATAL EXCEPTION|Fatal signal|com.navitel.*(crash|died)' | tail -10 || true
   echo '## After simulated loss of packages.xml and packages-backup.xml; APK and data dirs intentionally left in place'
   cat "$work/loss-observations.txt"
+  echo '## Selected PackageManager log, disposable emulator only'
+  cat "$work/loss-package-log.txt"
   echo 'This synthetic failure is not evidence that real registries disappeared. It does not model or test real-device hibernate or all recovery conditions.'
 } > reports/navitel-registry-loss-lab.txt
