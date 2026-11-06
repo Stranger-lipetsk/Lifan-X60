@@ -161,12 +161,13 @@ confirm_emulator_dialog() {
 echo 'Phase 4: Android backup of synthetic marker only'
 timeout 30 "$adb" logcat -c
 timeout 15 "$adb" shell input keyevent 82 || true
-# Modern adb backup quotes legacy bu's arguments incompatibly on this API 19
-# image. Pass one fixed, lab-only command string to the shell service instead.
-timeout 300 "$adb" exec-out 'bu backup -noapk com.navitel' > "$work/synthetic.ab" 2> "$work/backup-command.txt" &
+# Modern adb backup quotes legacy bu's arguments incompatibly on API 19.
+# Only this disposable emulator's empty virtual SD holds the temporary archive.
+timeout 300 "$adb" shell 'bu backup -noapk com.navitel > /sdcard/synthetic.ab' > "$work/backup-command.txt" 2>&1 &
 backup_pid=$!
-confirm_emulator_dialog 'Back up my data' || { kill "$backup_pid" 2>/dev/null || true; exit 1; }
-wait "$backup_pid" || { echo 'ADB backup command failed'; cat "$work/backup-command.txt"; exit 1; }
+confirm_emulator_dialog 'Back up my data' || { kill "$backup_pid" 2>/dev/null || true; cat "$work/backup-command.txt"; exit 1; }
+wait "$backup_pid" || { echo 'Backup command failed'; cat "$work/backup-command.txt"; exit 1; }
+timeout 60 "$adb" pull /sdcard/synthetic.ab "$work/synthetic.ab" >/dev/null
 if ! python3 tools/check_synthetic_adb_backup.py "$work/synthetic.ab" | tee "$work/backup-check.txt"; then
   echo 'Backup command output:'; cat "$work/backup-command.txt"
   echo 'Selected backup and application logs:'
@@ -194,7 +195,7 @@ fi
 
 echo 'Phase 6: restore synthetic archive into new system package'
 timeout 30 "$adb" logcat -c
-timeout 300 "$adb" restore "$work/synthetic.ab" > "$work/restore-command.txt" 2>&1 &
+timeout 300 "$adb" shell 'bu restore < /sdcard/synthetic.ab' > "$work/restore-command.txt" 2>&1 &
 restore_pid=$!
 confirm_emulator_dialog 'Restore my data' || { kill "$restore_pid" 2>/dev/null || true; exit 1; }
 set +e
@@ -207,7 +208,7 @@ uid_after=$(sed -n 's/.*userId=\([0-9][0-9]*\).*/\1/p' "$work/new-package.txt" |
   echo '# Synthetic Android backup and cross-signature restore in disposable ARM emulator'
   echo 'Generic Android 4.4.2 emulator only; do not apply these operations to a head unit.'
   echo 'No real license, maps, user data or SD; empty virtual SD; emulator network blocked before boot.'
-  echo 'Backup used legacy bu via adb exec-out; system replacement used Android userspace restart, not full VM reboot.'
+  echo 'Backup and restore used legacy bu via adb shell and temporary virtual SD; replacement used Android userspace restart, not full VM reboot.'
   echo "Fingerprint: $(cat "$work/fingerprint.txt"); ABI: $(cat "$work/abi.txt")"
   echo "Old UID: $uid_before; new UID: ${uid_after:-unavailable}"
   echo 'Old certificate: a40da80a59d170caa950cf15c18c454d47a39b26989d8b640ecd745ba71bf5dc'
