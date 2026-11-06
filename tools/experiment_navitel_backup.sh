@@ -166,8 +166,9 @@ echo 'Phase 4: Android backup of synthetic marker only'
 timeout -k 5 30 "$adb" logcat -c
 timeout -k 5 15 "$adb" shell input keyevent 82 || true
 # Modern adb backup quotes legacy bu's arguments incompatibly on API 19.
+# Android 4.4 bu takes an inherited file descriptor before the operation.
 # Only this disposable emulator's empty virtual SD holds the temporary archive.
-timeout -k 10 300 "$adb" shell 'bu backup -noapk com.navitel > /sdcard/synthetic.ab' > "$work/backup-command.txt" 2>&1 &
+timeout -k 10 300 "$adb" shell 'bu 1 backup -noapk com.navitel > /sdcard/synthetic.ab' > "$work/backup-command.txt" 2>&1 &
 backup_pid=$!
 confirm_emulator_dialog 'Back up my data' || {
   echo 'Backup command output:'; cat "$work/backup-command.txt"
@@ -204,7 +205,7 @@ fi
 
 echo 'Phase 6: restore synthetic archive into new system package'
 timeout -k 5 30 "$adb" logcat -c
-timeout -k 10 300 "$adb" shell 'bu restore < /sdcard/synthetic.ab' > "$work/restore-command.txt" 2>&1 &
+timeout -k 10 300 "$adb" shell 'bu 0 restore < /sdcard/synthetic.ab' > "$work/restore-command.txt" 2>&1 &
 restore_pid=$!
 confirm_emulator_dialog 'Restore my data' || { kill "$restore_pid" 2>/dev/null || true; exit 1; }
 set +e
