@@ -1,5 +1,39 @@
 # Static inspection of stock-derived tar utilities, not head-unit runtime
 Read-only ext4 inspection; no executable run and no device accessed.
+Boot ramdisk init.environ.rc exports PATH=/system/bin/bin:/sbin:/vendor/bin:/system/sbin:/system/bin:/system/xbin.
+## /bin/bin/tar
+debugfs 1.47.0 (5-Feb-2023)
+Inode: 260   Type: symlink    Mode:  0755   Flags: 0x80
+Generation: 0    Version: 0x00000000:00000000
+User:     0   Group:  2000   Size: 7
+File ACL: 0
+Links: 1   Blockcount: 0
+Fragment:  Address: 0    Number: 0    Size: 0
+ ctime: 0x6060689f:00000000 -- Sun Mar 28 11:29:35 2021
+ atime: 0x6060689f:00000000 -- Sun Mar 28 11:29:35 2021
+ mtime: 0x6060689f:00000000 -- Sun Mar 28 11:29:35 2021
+crtime: 0x00000000:00000000 -- Thu Jan  1 00:00:00 1970
+Size of extra inode fields: 28
+Extended attributes:
+  security.selinux (26) = "u:object_r:system_file:s0\000"
+Fast link dest: "busybox"
+## /bin/bin/busybox
+debugfs 1.47.0 (5-Feb-2023)
+Inode: 65   Type: regular    Mode:  0755   Flags: 0x80080
+Generation: 0    Version: 0x00000000:00000000
+User:     0   Group:  2000   Size: 1953008
+File ACL: 0
+Links: 1   Blockcount: 3816
+Fragment:  Address: 0    Number: 0    Size: 0
+ ctime: 0x60606892:00000000 -- Sun Mar 28 11:29:22 2021
+ atime: 0x60606892:00000000 -- Sun Mar 28 11:29:22 2021
+ mtime: 0x60606892:00000000 -- Sun Mar 28 11:29:22 2021
+crtime: 0x00000000:00000000 -- Thu Jan  1 00:00:00 1970
+Size of extra inode fields: 28
+Extended attributes:
+  security.selinux (26) = "u:object_r:system_file:s0\000"
+EXTENTS:
+(0-476):74269-74745
 ## /bin/tar
 debugfs 1.47.0 (5-Feb-2023)
 /bin/tar: File not found by ext2_lookup 
@@ -62,6 +96,13 @@ Size of extra inode fields: 28
 Extended attributes:
   security.selinux (26) = "u:object_r:system_file:s0\000"
 Fast link dest: "mksh"
+## File /bin/bin/busybox
+b40cc88591ddbe851e0d37e41990e7e0a7e19b6ab195dac827e1f952efe51613
+/home/runner/work/_temp/stock-hibernate-tar/_bin_bin_busybox: ELF 32-bit LSB executable, ARM, EABI5 version 1 (SYSV), statically linked, for GNU/Linux 2.6.14, stripped
+  Class:                             ELF32
+  Type:                              EXEC (Executable file)
+  Machine:                           ARM
+busybox
 ## File /bin/toolbox
 e7d5a0ac1bee227a3a65dfd23451c8ad4427e3e931f7e922e4ad6757fcb817f1
 /home/runner/work/_temp/stock-hibernate-tar/_bin_toolbox: ELF 32-bit LSB shared object, ARM, EABI5 version 1 (SYSV), dynamically linked, interpreter /system/bin/linker, stripped
