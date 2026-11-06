@@ -1,0 +1,49 @@
+name: Статическая проверка прав доступа к накопителю
+on:
+  push:
+    branches: [arena/b12cc9a8-lifan-x60]
+    paths:
+      - '.github/workflows/inspect-stock-storage-permissions.yml'
+      - 'tools/inspect_stock_storage_permissions.py'
+      - 'tests/test_inspect_stock_storage_permissions.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  inspect:
+    if: github.ref_name == 'arena/b12cc9a8-lifan-x60'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Проверить анализатор
+        run: python3 -m unittest discover -s tests -p 'test_inspect_stock_storage_permissions.py' -v
+      - name: Только чтение извлечённого образа
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq e2fsprogs unzip
+          w="$RUNNER_TEMP/stock-storage-permission"
+          mkdir -p "$w" reports
+          gh release download file-manager-test-20261105 -p lifan-file-manager-test.zip -D "$w"
+          echo "4be81211994221e80e401ce712ce484b5320156902fff3707737b73e3945d17f  $w/lifan-file-manager-test.zip" | sha256sum -c -
+          unzip -p "$w/lifan-file-manager-test.zip" system.img > "$w/system.img"
+          echo "a660f062716fd42d5a6185faec059f42675b3024304de7b81fac5d705cc88511  $w/system.img" | sha256sum -c -
+          debugfs -R "dump /framework/framework-res.apk $w/framework-res.apk" "$w/system.img" >/dev/null 2>&1
+          debugfs -R "rdump /etc/permissions $w" "$w/system.img" >/dev/null 2>&1
+          test -s "$w/framework-res.apk" && test -s "$w/permissions/platform.xml"
+          bt=$(find "$ANDROID_HOME/build-tools" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -1)
+          "$bt/aapt" dump xmltree "$w/framework-res.apk" AndroidManifest.xml > "$w/framework.xmltree"
+          python3 tools/inspect_stock_storage_permissions.py "$w/framework.xmltree" "$w/permissions" > reports/stock-storage-permissions-static.txt
+      - name: Сохранить текстовый отчёт
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/stock-storage-permissions-static.txt
+          git diff --cached --quiet && exit 0
+          git commit -m 'report: inspect stock storage permissions and groups'
+          git pull --rebase origin "${{ github.ref_name }}"
+          git push origin HEAD:"${{ github.ref_name }}"
