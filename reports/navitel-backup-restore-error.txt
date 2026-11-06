@@ -1,7 +1,7 @@
 Phase 1: obtain two real Navitel APKs; no user files or license
-/tmp/navitel-backup-lab.8SFwM4/lifan-file-manager-test.zip: OK
-/tmp/navitel-backup-lab.8SFwM4/system.img: OK
-/tmp/navitel-backup-lab.8SFwM4/old.apk: OK
+/tmp/navitel-backup-lab.0gqnBa/lifan-file-manager-test.zip: OK
+/tmp/navitel-backup-lab.0gqnBa/system.img: OK
+/tmp/navitel-backup-lab.0gqnBa/old.apk: OK
 /home/runner/work/Lifan-X60/Lifan-X60/firmware/apks/com.navitel.apk: OK
 V1 Signer: certificate SHA-256 digest: a40da80a59d170caa950cf15c18c454d47a39b26989d8b640ecd745ba71bf5dc
 package: name='com.navitel' versionCode='201103033' versionName='9.13.73' platformBuildVersionName='9' platformBuildVersionCode='28' compileSdkVersion='23' compileSdkVersionCodename='6.0-2438415'
@@ -10,7 +10,7 @@ package: name='com.navitel' versionCode='360622024' versionName='v11.11.1128' pl
 Phase 2: boot isolated Android 4.4.2 ARMv7
 Loading package information...                                                  Loading local repository...                                                     [                                       ] 3% Loading local repository...        [                                       ] 3% Fetch remote repository...         [=                                      ] 3% Fetch remote repository...         [=                                      ] 4% Fetch remote repository...         [=                                      ] 5% Fetch remote repository...         [==                                     ] 5% Fetch remote repository...         [==                                     ] 6% Fetch remote repository...         [==                                     ] 7% Fetch remote repository...         [==                                     ] 7% Computing updates...               [===                                    ] 8% Computing updates...               [===                                    ] 10% Computing updates...              [===                                    ] 10% Installing ARM EABI v7a System Ima[===                                    ] 10% Downloading armeabi-v7a-19_r05.zip[====                                   ] 10% Downloading armeabi-v7a-19_r05.zip[====                                   ] 11% Downloading armeabi-v7a-19_r05.zip[====                                   ] 12% Downloading armeabi-v7a-19_r05.zip[=====                                  ] 13% Downloading armeabi-v7a-19_r05.zip[=====                                  ] 14% Downloading armeabi-v7a-19_r05.zip[=====                                  ] 15% Downloading armeabi-v7a-19_r05.zip[======                                 ] 15% Downloading armeabi-v7a-19_r05.zip[======                                 ] 16% Downloading armeabi-v7a-19_r05.zip[======                                 ] 17% Downloading armeabi-v7a-19_r05.zip[=======                                ] 18% Downloading armeabi-v7a-19_r05.zip[=======                                ] 19% Downloading armeabi-v7a-19_r05.zip[=======                                ] 20% Downloading armeabi-v7a-19_r05.zip[========                               ] 20% Downloading armeabi-v7a-19_r05.zip[========                               ] 21% Downloading armeabi-v7a-19_r05.zip[========                               ] 21% Unzipping...                      [========                               ] 21% Unzipping... armeabi-v7a/         [========                               ] 21% Unzipping... armeabi-v7a/userdata.[========                               ] 22% Unzipping... armeabi-v7a/userdata.[========                               ] 22% Unzipping... armeabi-v7a/system.im[=========                              ] 23% Unzipping... armeabi-v7a/system.im[=========                              ] 24% Unzipping... armeabi-v7a/system.im[=========                              ] 25% Unzipping... armeabi-v7a/system.im[==========                             ] 25% Unzipping... armeabi-v7a/system.im[==========                             ] 26% Unzipping... armeabi-v7a/system.im[==========                             ] 27% Unzipping... armeabi-v7a/system.im[===========                            ] 28% Unzipping... armeabi-v7a/system.im[===========                            ] 29% Unzipping... armeabi-v7a/system.im[===========                            ] 30% Unzipping... armeabi-v7a/system.im[============                           ] 30% Unzipping... armeabi-v7a/system.im[============                           ] 31% Unzipping... armeabi-v7a/system.im[============                           ] 32% Unzipping... armeabi-v7a/system.im[============                           ] 32% Unzipping... armeabi-v7a/ramdisk.i[============                           ] 32% Unzipping... armeabi-v7a/build.pro[============                           ] 32% Unzipping... armeabi-v7a/NOTICE.tx[============                           ] 32% Unzipping... armeabi-v7a/source.pr[============                           ] 32% Unzipping... armeabi-v7a/kernel-qe[=============                          ] 33% Unzipping... armeabi-v7a/kernel-qe[=====================                  ] 55% Unzipping... armeabi-v7a/kernel-qe[=====================                  ] 55% Installing Android Emulator armeab[=====================                  ] 55% Downloading emulator-linux_x64-167[======================                 ] 55% Downloading emulator-linux_x64-167[======================                 ] 56% Downloading emulator-linux_x64-167[======================                 ] 57% Downloading emulator-linux_x64-167[=======================                ] 58% Downloading emulator-linux_x64-167[=======================                ] 59% Downloading emulator-linux_x64-167[=======================                ] 60% Downloading emulator-linux_x64-167[========================               ] 60% Downloading emulator-linux_x64-167[========================               ] 61% Downloading emulator-linux_x64-167[========================               ] 62% Downloading emulator-linux_x64-167[=========================              ] 63% Downloading emulator-linux_x64-167[=========================              ] 64% Downloading emulator-linux_x64-167[=========================              ] 65% Downloading emulator-linux_x64-167[==========================             ] 65% Downloading emulator-linux_x64-167[==========================             ] 66% Downloading emulator-linux_x64-167[==========================             ] 66% Unzipping... armeabi-v7a/kernel-qe[==========================             ] 66% Unzipping... emulator/            [==========================             ] 66% Unzipping... emulator/resources/  [==========================             ] 66% Unzipping... emulator/qsn         [==========================             ] 66% Unzipping... emulator/emulator    [==========================             ] 66% Unzipping... emulator/netsimd     [==========================             ] 67% Unzipping... emulator/netsimd     [==========================             ] 67% Unzipping... emulator/bin64/      [==========================             ] 67% Unzipping... emulator/qemu/       [==========================             ] 67% Unzipping... emulator/NOTICE.txt  [==========================             ] 67% Unzipping... emulator/crashpad_han[==========================             ] 67% Unzipping... emulator/source.prope[==========================             ] 67% Unzipping... emulator/nimble_bridg[==========================             ] 67% Unzipping... emulator/LICENSE     [==========================             ] 67% Unzipping... emulator/lib/        [==========================             ] 67% Unzipping... emulator/qemu-img    [==========================             ] 67% Unzipping... emulator/include/    [==========================             ] 67% Unzipping... emulator/NOTICE.csv  [==========================             ] 67% Unzipping... emulator/lib64/      [==========================             ] 67% Unzipping... emulator/emulator-che[==========================             ] 67% Unzipping... emulator/crashreport [==========================             ] 67% Unzipping... emulator/mksdcard    [==========================             ] 67% Unzipping... emulator/resources/To[==========================             ] 67% Unzipping... emulator/resources/de[==========================             ] 67% Unzipping... emulator/resources/To[==========================             ] 67% Unzipping... emulator/resources/de[==========================             ] 67% Unzipping... emulator/resources/To[==========================             ] 67% Unzipping... emulator/resources/ma[==========================             ] 67% Unzipping... emulator/resources/de[==========================             ] 67% Unzipping... emulator/resources/sk[==========================             ] 67% Unzipping... emulator/resources/de[==========================             ] 67% Unzipping... emulator/resources/ma[==========================             ] 67% Unzipping... emulator/resources/po[==========================             ] 67% Unzipping... emulator/resources/ma[===========================            ] 68% Unzipping... emulator/resources/ma[===========================            ] 68% Unzipping... emulator/resources/sk[===========================            ] 68% Unzipping... emulator/resources/ma[===========================            ] 68% Unzipping... emulator/bin64/e2fsck[===========================            ] 68% Unzipping... emulator/bin64/fsck.e[===========================            ] 68% Unzipping... emulator/bin64/tune2f[===========================            ] 68% Unzipping... emulator/bin64/resize[===========================            ] 68% Unzipping... emulator/bin64/mkfs.e[===========================            ] 68% Unzipping... emulator/qemu/linux-x[===========================            ] 69% Unzipping... emulator/qemu/linux-x[===========================            ] 70% Unzipping... emulator/qemu/linux-x[============================           ] 70% Unzipping... emulator/qemu/linux-x[============================           ] 70% Unzipping... emulator/lib/emulator[============================           ] 70% Unzipping... emulator/lib/rtc_serv[============================           ] 70% Unzipping... emulator/lib/advanced[============================           ] 70% Unzipping... emulator/lib/cmake/  [============================           ] 70% Unzipping... emulator/lib/emulator[============================           ] 70% Unzipping... emulator/lib/control_[============================           ] 70% Unzipping... emulator/lib/emulated[============================           ] 70% Unzipping... emulator/lib/rtc_serv[============================           ] 70% Unzipping... emulator/lib/emu-orig[============================           ] 70% Unzipping... emulator/lib/hardware[============================           ] 70% Unzipping... emulator/lib/pkgconfi[============================           ] 70% Unzipping... emulator/lib/pc-bios/[============================           ] 70% Unzipping... emulator/lib/snapshot[============================           ] 70% Unzipping... emulator/lib/adb_serv[============================           ] 70% Unzipping... emulator/lib/hostapd.[============================           ] 70% Unzipping... emulator/lib/grpc_end[============================           ] 70% Unzipping... emulator/lib/ca-bundl[============================           ] 70% Unzipping... emulator/lib/ui_contr[============================           ] 70% Unzipping... emulator/lib/snapshot[============================           ] 70% Unzipping... emulator/lib/ice_conf[============================           ] 70% Unzipping... emulator/lib/libflatb[============================           ] 71% Unzipping... emulator/lib/libflatb[============================           ] 71% Unzipping... emulator/lib/emulator[============================           ] 71% Unzipping... emulator/lib/waterfal[============================           ] 71% Unzipping... emulator/lib/emulated[============================           ] 71% Unzipping... emulator/lib/cmake/fl[============================           ] 71% Unzipping... emulator/lib/pkgconfi[============================           ] 71% Unzipping... emulator/lib/pc-bios/[============================           ] 71% Unzipping... emulator/include/flat[============================           ] 71% Unzipping... emulator/lib64/libgli[============================           ] 71% Unzipping... emulator/lib64/libpro[============================           ] 71% Unzipping... emulator/lib64/qt/   [============================           ] 71% Unzipping... emulator/lib64/liband[============================           ] 71% Unzipping... emulator/lib64/libgfx[============================           ] 71% Unzipping... emulator/lib64/gles_l[============================           ] 71% Unzipping... emulator/lib64/liband[============================           ] 71% Unzipping... emulator/lib64/vulkan[============================           ] 71% Unzipping... emulator/lib64/gles_s[============================           ] 71% Unzipping... emulator/lib64/libemu[============================           ] 71% Unzipping... emulator/lib64/libpro[============================           ] 71% Unzipping... emulator/lib64/liband[============================           ] 71% Unzipping... emulator/lib64/libtcm[============================           ] 71% Unzipping... emulator/lib64/libima[============================           ] 71% Unzipping... emulator/lib64/libc++[============================           ] 71% Unzipping... emulator/lib64/liband[============================           ] 71% Unzipping... emulator/lib64/libabs[============================           ] 71% Unzipping... emulator/lib64/gles_a[============================           ] 71% Unzipping... emulator/lib64/libsha[============================           ] 71% Unzipping... emulator/lib64/libc++[============================           ] 71% Unzipping... emulator/lib64/qt/res[============================           ] 71% Unzipping... emulator/lib64/qt/lib[============================           ] 71% Unzipping... emulator/lib64/qt/tra[============================           ] 71% Unzipping... emulator/lib64/qt/plu[============================           ] 71% Unzipping... emulator/lib64/qt/res[============================           ] 72% Unzipping... emulator/lib64/qt/res[============================           ] 72% Unzipping... emulator/lib64/qt/lib[=============================          ] 73% Unzipping... emulator/lib64/qt/lib[=============================          ] 74% Unzipping... emulator/lib64/qt/lib[=============================          ] 75% Unzipping... emulator/lib64/qt/lib[==============================         ] 75% Unzipping... emulator/lib64/qt/lib[==============================         ] 75% Unzipping... emulator/lib64/qt/tra[==============================         ] 75% Unzipping... emulator/lib64/qt/plu[==============================         ] 75% Unzipping... emulator/lib64/gles_l[==============================         ] 76% Unzipping... emulator/lib64/gles_l[==============================         ] 76% Unzipping... emulator/lib64/vulkan[==============================         ] 77% Unzipping... emulator/lib64/vulkan[==============================         ] 77% Unzipping... emulator/lib64/gles_s[==============================         ] 77% Unzipping... emulator/lib64/gles_a[==============================         ] 78% Unzipping... emulator/lib64/gles_a[=======================================] 100% Unzipping... emulator/lib64/gles_
 
-/tmp/navitel-backup-lab.8SFwM4/legacy.zip: OK
+/tmp/navitel-backup-lab.0gqnBa/legacy.zip: OK
 Emulator host UID 999: non-loopback IPv4 and IPv6 blocked
 * daemon not running; starting now at tcp:5037
 * daemon started successfully
@@ -20,31 +20,130 @@ remount succeeded
 Filesystem               Size     Used     Free   Blksize
 /system                541.3M   261.1M   280.2M   4096
 Phase 3: push old system APK on disposable emulator
-/tmp/navitel-backup-lab.8SFwM4/old.apk: 1 file pushed, 0 skipped. 7.9 MB/s (111095055 bytes in 13.425s)
+/tmp/navitel-backup-lab.0gqnBa/old.apk: 1 file pushed, 0 skipped. 8.1 MB/s (111095055 bytes in 13.130s)
 Phase 3a: restart Android userspace with old package
 Phase 3b: verify old system APK is unchanged and query package
-/system/priv-app/Navitel-large.apk: 1 file pulled, 0 skipped. 4.9 MB/s (111095055 bytes in 21.570s)
+/system/priv-app/Navitel-large.apk: 1 file pulled, 0 skipped. 6.1 MB/s (111095055 bytes in 17.463s)
 Initial package path: package:/system/priv-app/Navitel-large.apk
 package:/system/priv-app/Navitel-large.apk
+/tmp/navitel-backup-lab.0gqnBa/lab-pref.xml: 1 file pushed, 0 skipped. 2.1 MB/s (132 bytes in 0.000s)
 Phase 4: Android backup of synthetic marker only
 Located confirmation UI at 240,456: Back up my data
 Tapped virtual UI: Back up my data
-/sdcard/synthetic.ab: 1 file pulled, 0 skipped. 0.0 MB/s (1240 bytes in 0.045s)
+/sdcard/synthetic.ab: 1 file pulled, 0 skipped. 0.0 MB/s (1386 bytes in 0.044s)
 Lab archive entry: apps/com.navitel/_manifest bytes: 2425
 Lab archive entry: apps/com.navitel/r/monitor.ini bytes: 59
 Lab archive entry: apps/com.navitel/f/lab-marker.txt bytes: 30
-Synthetic marker entries: 1
+Lab archive entry: apps/com.navitel/sp/x60_lab_probe.xml bytes: 132
+Synthetic test entries: 2
 Path: apps/com.navitel/f/lab-marker.txt matches: True
+Path: apps/com.navitel/sp/x60_lab_probe.xml matches: True
 Phase 5: replace system package only in disposable emulator
 remount succeeded
 Emulator filesystem before APK replacement:
 Filesystem               Size     Used     Free   Blksize
 /system                541.3M   367.1M   174.3M   4096
-/home/runner/work/Lifan-X60/Lifan-X60/firmware/apks/com.navitel.apk: 1 file pushed, 0 skipped. 6.3 MB/s (99176587 bytes in 14.908s)
-/system/priv-app/Navitel-large.apk: 1 file pulled, 0 skipped. 6.8 MB/s (99176587 bytes in 13.957s)
-Marker unexpectedly still exists before restore
+adb: error: failed to copy '/home/runner/work/Lifan-X60/Lifan-X60/firmware/apks/com.navitel.apk' to '/system/priv-app/Navitel-large.apk': remote Read-only file system
+/home/runner/work/Lifan-X60/Lifan-X60/firmware/apks/com.navitel.apk: 1 file pushed, 0 skipped. 7.8 MB/s (99176587 bytes in 12.072s)
+Emulator filesystem after failed replacement:
+Filesystem               Size     Used     Free   Blksize
+/system                541.3M   285.6M   255.7M   4096
+rootfs / rootfs ro,seclabel,relatime 0 0
+tmpfs /dev tmpfs rw,seclabel,nosuid,relatime,mode=755 0 0
+devpts /dev/pts devpts rw,seclabel,relatime,mode=600 0 0
+proc /proc proc rw,relatime 0 0
+sysfs /sys sysfs rw,seclabel,relatime 0 0
+selinuxfs /sys/fs/selinux selinuxfs rw,relatime 0 0
+debugfs /sys/kernel/debug debugfs rw,relatime 0 0
+none /acct cgroup rw,relatime,cpuacct 0 0
+none /sys/fs/cgroup tmpfs rw,seclabel,relatime,mode=750,gid=1000 0 0
+tmpfs /mnt/obb tmpfs rw,seclabel,relatime,mode=755,gid=1000 0 0
+none /dev/cpuctl cgroup rw,relatime,cpu 0 0
+/dev/block/mtdblock0 /system ext4 ro,seclabel,relatime,data=ordered 0 0
+/dev/block/mtdblock1 /data ext4 rw,seclabel,nosuid,nodev,noatime,nomblk_io_submit,data=ordered 0 0
+/dev/block/vold/179:0 /mnt/media_rw/sdcard vfat rw,dirsync,nosuid,nodev,noexec,relatime,uid=1023,gid=1023,fmask=0007,dmask=0007,allow_utime=0020,codepage=cp437,iocharset=iso8859-1,shortname=mixed,utf8,errors=remount-ro 0 0
+/dev/fuse /storage/sdcard fuse rw,nosuid,nodev,relatime,user_id=1023,group_id=1023,default_permissions,allow_other 0 0
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65456:freeing already freed block (bit 32688)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65457:freeing already freed block (bit 32689)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65458:freeing already freed block (bit 32690)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65459:freeing already freed block (bit 32691)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65460:freeing already freed block (bit 32692)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65461:freeing already freed block (bit 32693)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65462:freeing already freed block (bit 32694)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65463:freeing already freed block (bit 32695)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65464:freeing already freed block (bit 32696)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65465:freeing already freed block (bit 32697)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65466:freeing already freed block (bit 32698)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65467:freeing already freed block (bit 32699)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65468:freeing already freed block (bit 32700)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65469:freeing already freed block (bit 32701)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65470:freeing already freed block (bit 32702)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65471:freeing already freed block (bit 32703)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65472:freeing already freed block (bit 32704)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65473:freeing already freed block (bit 32705)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65474:freeing already freed block (bit 32706)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65475:freeing already freed block (bit 32707)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65476:freeing already freed block (bit 32708)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65477:freeing already freed block (bit 32709)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65478:freeing already freed block (bit 32710)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65479:freeing already freed block (bit 32711)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65480:freeing already freed block (bit 32712)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65481:freeing already freed block (bit 32713)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65482:freeing already freed block (bit 32714)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65483:freeing already freed block (bit 32715)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65484:freeing already freed block (bit 32716)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65485:freeing already freed block (bit 32717)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65486:freeing already freed block (bit 32718)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65487:freeing already freed block (bit 32719)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65488:freeing already freed block (bit 32720)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65489:freeing already freed block (bit 32721)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65490:freeing already freed block (bit 32722)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65491:freeing already freed block (bit 32723)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65492:freeing already freed block (bit 32724)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65493:freeing already freed block (bit 32725)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65494:freeing already freed block (bit 32726)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65495:freeing already freed block (bit 32727)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65496:freeing already freed block (bit 32728)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65497:freeing already freed block (bit 32729)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65498:freeing already freed block (bit 32730)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65499:freeing already freed block (bit 32731)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65500:freeing already freed block (bit 32732)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65501:freeing already freed block (bit 32733)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65502:freeing already freed block (bit 32734)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65503:freeing already freed block (bit 32735)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65504:freeing already freed block (bit 32736)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65505:freeing already freed block (bit 32737)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65506:freeing already freed block (bit 32738)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65507:freeing already freed block (bit 32739)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65508:freeing already freed block (bit 32740)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65509:freeing already freed block (bit 32741)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65510:freeing already freed block (bit 32742)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65511:freeing already freed block (bit 32743)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65512:freeing already freed block (bit 32744)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65513:freeing already freed block (bit 32745)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65514:freeing already freed block (bit 32746)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65515:freeing already freed block (bit 32747)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65516:freeing already freed block (bit 32748)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65517:freeing already freed block (bit 32749)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65518:freeing already freed block (bit 32750)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65519:freeing already freed block (bit 32751)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65520:freeing already freed block (bit 32752)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65521:freeing already freed block (bit 32753)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65522:freeing already freed block (bit 32754)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65523:freeing already freed block (bit 32755)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65524:freeing already freed block (bit 32756)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65525:freeing already freed block (bit 32757)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65526:freeing already freed block (bit 32758)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65527:freeing already freed block (bit 32759)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65528:freeing already freed block (bit 32760)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65529:freeing already freed block (bit 32761)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65530:freeing already freed block (bit 32762)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65531:freeing already freed block (bit 32763)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65532:freeing already freed block (bit 32764)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65533:freeing already freed block (bit 32765)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65534:freeing already freed block (bit 32766)
+<2>EXT4-fs error (device mtdblock0): mb_free_blocks:1301: group 1, block 65535:freeing already freed block (bit 32767)
 Failure (1): emulator log
-  hw.keyboard.charmap = qwerty2
   hw.dPad = true
   hw.gsmModem = true
   hw.gps = true
@@ -53,9 +152,9 @@ Failure (1): emulator log
   hw.audioInput = true
   hw.audioOutput = true
   hw.sdCard = true
-  hw.sdCard.path = /tmp/navitel-backup-lab.8SFwM4/avd/migration_arm.avd/sdcard.img
+  hw.sdCard.path = /tmp/navitel-backup-lab.0gqnBa/avd/migration_arm.avd/sdcard.img
   disk.cachePartition = true
-  disk.cachePartition.path = /tmp/navitel-backup-lab.8SFwM4/avd/migration_arm.avd/cache.img
+  disk.cachePartition.path = /tmp/navitel-backup-lab.0gqnBa/avd/migration_arm.avd/cache.img
   disk.cachePartition.size = 66m
   hw.lcd.width = 320
   hw.lcd.height = 480
@@ -83,17 +182,18 @@ Failure (1): emulator log
   disk.ramdisk.path = /usr/local/lib/android/sdk/system-images/android-19/default/armeabi-v7a//ramdisk.img
   disk.systemPartition.initPath = /usr/local/lib/android/sdk/system-images/android-19/default/armeabi-v7a//system.img
   disk.systemPartition.size = 550m
-  disk.dataPartition.path = /tmp/navitel-backup-lab.8SFwM4/avd/migration_arm.avd/userdata-qemu.img
-  disk.dataPartition.initPath = /tmp/navitel-backup-lab.8SFwM4/avd/migration_arm.avd/userdata.img
+  disk.dataPartition.path = /tmp/navitel-backup-lab.0gqnBa/avd/migration_arm.avd/userdata-qemu.img
+  disk.dataPartition.initPath = /tmp/navitel-backup-lab.0gqnBa/avd/migration_arm.avd/userdata.img
   disk.dataPartition.size = 800m
   avd.name = migration_arm
 .
 emulator: WARNING: CPU acceleration only works with x86/x86_64 system images.
 QEMU options list:
-emulator: argv[00] = "/tmp/navitel-backup-lab.8SFwM4/legacy/tools/emulator64-arm"
+emulator: argv[00] = "/tmp/navitel-backup-lab.0gqnBa/legacy/tools/emulator64-arm"
 emulator: argv[01] = "-audio"
 emulator: argv[02] = "none"
-e[139728869025472]:WARNING:./android/base/files/IniFile.cpp:158:Failed to process .ini file /home/emulatorlab/.android/emu-update-last-check.ini for reading.
+emulator: argv[03] = "-dns-server"
+emulator: argv[04][140531912931008]:WARNING:./android/base/files/IniFile.cpp:158:Failed to process .ini file /home/emulatorlab/.android/emu-update-last-check.ini for reading.
 List of devices attached
 emulator-5554          device product:sdk model:sdk device:generic transport_id:1
 
