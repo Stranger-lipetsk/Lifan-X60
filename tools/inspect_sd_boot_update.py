@@ -12,12 +12,14 @@ from compare_firmware_releases import unpack_ramdisk
 PATTERN = re.compile(
     r'(?i)(?:mmcblk\d|/dev/block|system\.img|boot\.img|u-boot|mcu_fw|'
     r'config\.ini|\b(?:mkfs|mke2fs|format|flash|updat(?:e|er|ing)|recovery)\b|'
-    r'/data\b|\b(?:mount|mount_all|service|exec|import)\b)'
+    r'/data\b|build_emmc|boot_mode_check|fw_upgrade|para_fw|data\.tar|'
+    r'\b(?:mount|mount_all|service|exec|import)\b)'
 )
 BINARY_PATTERN = re.compile(
     r'(?i)(?:mmcblk\d|/dev/block|system\.img|sd_boot\.img|boot\.img|'
     r'u-boot\.bin|mcu_fw\.hex|config\.ini|mke2fs|mkfs\.|updater-script|'
-    r'recovery\.fstab|formatting|writing system|update\.zip)'
+    r'recovery\.fstab|formatting|writing system|update\.zip|build_emmc|'
+    r'boot_mode_check|fw_upgrade|para_fw|data\.tar|system/bin/[^ ]+\.sh)'
 )
 
 
@@ -74,7 +76,13 @@ def inspect(root):
                 if len(matches) > 80:
                     print('... further matches omitted')
     print(f'\nText matched lines: {text_hits}; binary matched strings: {binary_hits}')
-    print('Static search only: no guarantee of complete coverage, control flow, runtime device state, or data preservation.')
+    for name in ('system/bin/build_emmc.sh', 'system/bin/boot_mode_check.sh', 'init.rc'):
+        p = root / name
+        if p.is_file() and not p.is_symlink():
+            print(f'\n## Full text for control flow: {name}')
+            for number, line in enumerate(p.read_text(encoding='utf-8', errors='replace').splitlines(), 1):
+                print(f'{number}: {line}')
+    print('\nStatic search only: no guarantee of complete coverage, control flow, runtime device state, or data preservation.')
 
 
 def main():
