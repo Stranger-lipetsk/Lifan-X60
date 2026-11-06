@@ -16,7 +16,7 @@ jobs:
   test:
     if: github.ref_name == 'arena/b12cc9a8-lifan-x60'
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 28
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -29,6 +29,7 @@ jobs:
           python3 -m unittest discover -s tests -p 'test_check_synthetic_adb_backup.py' -v
           python3 -m unittest discover -s tests -p 'test_emulator_backup_confirmation.py' -v
       - name: Резервирование только фиктивного маркера в одноразовом эмуляторе
+        timeout-minutes: 22
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: bash tools/experiment_navitel_backup.sh

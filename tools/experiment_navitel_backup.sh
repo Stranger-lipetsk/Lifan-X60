@@ -48,7 +48,7 @@ cleanup() {
   status=$?
   if [ "$status" != 0 ]; then
     echo "Failure ($status): emulator log"; tail -50 "$work/emulator.txt" 2>/dev/null || true
-    timeout 10 "$adb" devices -l || true
+    timeout -k 5 10 "$adb" devices -l || true
   fi
   [ -z "$pid" ] || kill "$pid" 2>/dev/null || true
   sudo pkill -TERM -u emulatorlab 2>/dev/null || true
@@ -71,10 +71,10 @@ start_emulator() {
 restart_android_runtime() {
   # Restart Android userspace, not the VM: legacy QEMU hangs on adb reboot and
   # SIGTERM. This reinitializes system_server/PackageManager but is not a reboot.
-  timeout 30 "$adb" shell sync
-  timeout 30 "$adb" shell setprop sys.boot_completed 0
-  timeout 30 "$adb" shell stop
-  timeout 30 "$adb" shell start
+  timeout -k 5 30 "$adb" shell sync
+  timeout -k 5 30 "$adb" shell setprop sys.boot_completed 0
+  timeout -k 5 30 "$adb" shell stop
+  timeout -k 5 30 "$adb" shell start
   boot
 }
 start_emulator
@@ -97,42 +97,42 @@ boot() {
   [ "$connected" = yes ] || { echo 'ADB connection timeout'; return 1; }
   local booted=no
   for i in $(seq 1 100); do
-    if [ "$(timeout 3 "$adb" shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')" = 1 ]; then booted=yes; break; fi
+    if [ "$(timeout -k 5 3 "$adb" shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')" = 1 ]; then booted=yes; break; fi
     kill -0 "$pid" 2>/dev/null || { echo 'Emulator exited'; exit 1; }
     sleep 3
   done
   [ "$booted" = yes ] || { echo 'Emulator boot timeout'; exit 1; }
 }
 boot
-id=$(timeout 60 "$adb" shell id | tr -d '\r')
+id=$(timeout -k 5 60 "$adb" shell id | tr -d '\r')
 echo "Shell identity: $id"
 grep -q 'uid=0' <<< "$id" || { echo 'Root shell unavailable; abort'; exit 1; }
-timeout 30 "$adb" shell getprop ro.build.fingerprint | tr -d '\r' > "$work/fingerprint.txt"
+timeout -k 5 30 "$adb" shell getprop ro.build.fingerprint | tr -d '\r' > "$work/fingerprint.txt"
 test "$(cat "$work/fingerprint.txt")" = 'generic/sdk/generic:4.4.2/KK/3462041:eng/test-keys' || { echo 'Unexpected emulator; abort'; exit 1; }
-timeout 30 "$adb" shell getprop ro.product.cpu.abi | tr -d '\r' > "$work/abi.txt"
+timeout -k 5 30 "$adb" shell getprop ro.product.cpu.abi | tr -d '\r' > "$work/abi.txt"
 echo 'Trying remount of emulator system only'
-timeout 60 "$adb" remount | tee "$work/remount.txt"
+timeout -k 5 60 "$adb" remount | tee "$work/remount.txt"
 grep -iq 'remount succeeded' "$work/remount.txt" || { echo 'Cannot remount emulator system'; exit 1; }
-timeout 30 "$adb" shell df /system | tr -d '\r'
+timeout -k 5 30 "$adb" shell df /system | tr -d '\r'
 
 echo 'Phase 3: push old system APK on disposable emulator'
-timeout 300 "$adb" push "$work/old.apk" /system/priv-app/Navitel-large.apk
-timeout 30 "$adb" shell chmod 0644 /system/priv-app/Navitel-large.apk
-timeout 30 "$adb" shell restorecon /system/priv-app/Navitel-large.apk || true
+timeout -k 10 300 "$adb" push "$work/old.apk" /system/priv-app/Navitel-large.apk
+timeout -k 5 30 "$adb" shell chmod 0644 /system/priv-app/Navitel-large.apk
+timeout -k 5 30 "$adb" shell restorecon /system/priv-app/Navitel-large.apk || true
 echo "Phase 3a: restart Android userspace with old package"
 restart_android_runtime
 echo "Phase 3b: verify old system APK is unchanged and query package"
-timeout 300 "$adb" pull /system/priv-app/Navitel-large.apk "$work/old-after-restart.apk" >/dev/null
+timeout -k 10 300 "$adb" pull /system/priv-app/Navitel-large.apk "$work/old-after-restart.apk" >/dev/null
 cmp "$work/old.apk" "$work/old-after-restart.apk" || { echo 'Old system file changed'; exit 1; }
-path=$(timeout 60 "$adb" shell pm path com.navitel | tr -d '\r')
+path=$(timeout -k 5 60 "$adb" shell pm path com.navitel | tr -d '\r')
 echo "Initial package path: $path"
 grep -F 'package:/system/priv-app/Navitel-large.apk' <<< "$path" || { echo 'Old system app not registered'; exit 1; }
-timeout 60 "$adb" shell dumpsys package com.navitel | tr -d '\r' > "$work/old-package.txt"
+timeout -k 5 60 "$adb" shell dumpsys package com.navitel | tr -d '\r' > "$work/old-package.txt"
 uid_before=$(sed -n 's/.*userId=\([0-9][0-9]*\).*/\1/p' "$work/old-package.txt" | head -1)
 case "$uid_before" in ''|*[!0-9]*) echo 'Initial app UID missing'; exit 1;; esac
-timeout 30 "$adb" shell 'mkdir -p /data/data/com.navitel/files && echo X60_DISPOSABLE_MIGRATION_TEST > /data/data/com.navitel/files/lab-marker.txt'
-timeout 30 "$adb" shell chown "$uid_before:$uid_before" /data/data/com.navitel/files/lab-marker.txt
-before_marker=$(timeout 30 "$adb" shell cat /data/data/com.navitel/files/lab-marker.txt | tr -d '\r')
+timeout -k 5 30 "$adb" shell 'mkdir -p /data/data/com.navitel/files && echo X60_DISPOSABLE_MIGRATION_TEST > /data/data/com.navitel/files/lab-marker.txt'
+timeout -k 5 30 "$adb" shell chown "$uid_before:$uid_before" /data/data/com.navitel/files/lab-marker.txt
+before_marker=$(timeout -k 5 30 "$adb" shell cat /data/data/com.navitel/files/lab-marker.txt | tr -d '\r')
 test "$before_marker" = X60_DISPOSABLE_MIGRATION_TEST
 
 # An empty virtual SD exists in this AVD; no real card or account is used.
@@ -140,13 +140,13 @@ test "$before_marker" = X60_DISPOSABLE_MIGRATION_TEST
 confirm_emulator_dialog() {
   local expected="$1" coords=''
   for attempt in 1 2 3 4 5; do
-    if timeout 50 "$adb" shell uiautomator dump /sdcard/lab-confirm.xml >/dev/null 2>&1 &&
-       timeout 15 "$adb" shell cat /sdcard/lab-confirm.xml > "$work/ui.xml"; then
+    if timeout -k 5 50 "$adb" shell uiautomator dump /sdcard/lab-confirm.xml >/dev/null 2>&1 &&
+       timeout -k 5 15 "$adb" shell cat /sdcard/lab-confirm.xml > "$work/ui.xml"; then
       coords=$(python3 tools/emulator_backup_confirmation.py "$work/ui.xml" "$expected" 2>/dev/null || true)
       if [ -n "$coords" ]; then
         read -r x y <<< "$coords"
         echo "Located confirmation UI at $x,$y: $expected"
-        timeout 20 "$adb" shell input tap "$x" "$y"
+        timeout -k 5 20 "$adb" shell input tap "$x" "$y"
         echo "Tapped virtual UI: $expected"
         return 0
       fi
@@ -159,49 +159,49 @@ confirm_emulator_dialog() {
 }
 
 echo 'Phase 4: Android backup of synthetic marker only'
-timeout 30 "$adb" logcat -c
-timeout 15 "$adb" shell input keyevent 82 || true
+timeout -k 5 30 "$adb" logcat -c
+timeout -k 5 15 "$adb" shell input keyevent 82 || true
 # Modern adb backup quotes legacy bu's arguments incompatibly on API 19.
 # Only this disposable emulator's empty virtual SD holds the temporary archive.
-timeout 300 "$adb" shell 'bu backup -noapk com.navitel > /sdcard/synthetic.ab' > "$work/backup-command.txt" 2>&1 &
+timeout -k 10 300 "$adb" shell 'bu backup -noapk com.navitel > /sdcard/synthetic.ab' > "$work/backup-command.txt" 2>&1 &
 backup_pid=$!
 confirm_emulator_dialog 'Back up my data' || { kill "$backup_pid" 2>/dev/null || true; cat "$work/backup-command.txt"; exit 1; }
 wait "$backup_pid" || { echo 'Backup command failed'; cat "$work/backup-command.txt"; exit 1; }
-timeout 60 "$adb" pull /sdcard/synthetic.ab "$work/synthetic.ab" >/dev/null
+timeout -k 5 60 "$adb" pull /sdcard/synthetic.ab "$work/synthetic.ab" >/dev/null
 if ! python3 tools/check_synthetic_adb_backup.py "$work/synthetic.ab" | tee "$work/backup-check.txt"; then
   echo 'Backup command output:'; cat "$work/backup-command.txt"
   echo 'Selected backup and application logs:'
-  timeout 60 "$adb" logcat -d -v brief | grep -iE 'BackupManagerService|AndroidRuntime|com\.navitel|backup agent' | tail -100 || true
+  timeout -k 5 60 "$adb" logcat -d -v brief | grep -iE 'BackupManagerService|AndroidRuntime|com\.navitel|backup agent' | tail -100 || true
   exit 1
 fi
 
 echo 'Phase 5: replace system package only in disposable emulator'
-timeout 60 "$adb" remount | tee "$work/remount2.txt"
+timeout -k 5 60 "$adb" remount | tee "$work/remount2.txt"
 grep -iq 'remount succeeded' "$work/remount2.txt"
-timeout 30 "$adb" shell rm /system/priv-app/Navitel-large.apk
-timeout 300 "$adb" push "$new" /system/priv-app/Navitel-large.apk
-timeout 30 "$adb" shell chmod 0644 /system/priv-app/Navitel-large.apk
-timeout 30 "$adb" shell restorecon /system/priv-app/Navitel-large.apk || true
+timeout -k 5 30 "$adb" shell rm /system/priv-app/Navitel-large.apk
+timeout -k 10 300 "$adb" push "$new" /system/priv-app/Navitel-large.apk
+timeout -k 5 30 "$adb" shell chmod 0644 /system/priv-app/Navitel-large.apk
+timeout -k 5 30 "$adb" shell restorecon /system/priv-app/Navitel-large.apk || true
 restart_android_runtime
-timeout 300 "$adb" pull /system/priv-app/Navitel-large.apk "$work/new-after-restart.apk" >/dev/null
+timeout -k 10 300 "$adb" pull /system/priv-app/Navitel-large.apk "$work/new-after-restart.apk" >/dev/null
 cmp "$new" "$work/new-after-restart.apk"
-timeout 60 "$adb" shell dumpsys package com.navitel | tr -d '\r' > "$work/new-package.txt"
+timeout -k 5 60 "$adb" shell dumpsys package com.navitel | tr -d '\r' > "$work/new-package.txt"
 grep -q 'versionCode=360622024' "$work/new-package.txt" || { echo 'Replacement not registered'; exit 1; }
 # Delete only the synthetic marker, so seeing it after restore is meaningful.
-timeout 30 "$adb" shell rm /data/data/com.navitel/files/lab-marker.txt
-if timeout 30 "$adb" shell test -e /data/data/com.navitel/files/lab-marker.txt; then
+timeout -k 5 30 "$adb" shell rm /data/data/com.navitel/files/lab-marker.txt
+if timeout -k 5 30 "$adb" shell test -e /data/data/com.navitel/files/lab-marker.txt; then
   echo 'Marker unexpectedly still exists before restore'; exit 1
 fi
 
 echo 'Phase 6: restore synthetic archive into new system package'
-timeout 30 "$adb" logcat -c
-timeout 300 "$adb" shell 'bu restore < /sdcard/synthetic.ab' > "$work/restore-command.txt" 2>&1 &
+timeout -k 5 30 "$adb" logcat -c
+timeout -k 10 300 "$adb" shell 'bu restore < /sdcard/synthetic.ab' > "$work/restore-command.txt" 2>&1 &
 restore_pid=$!
 confirm_emulator_dialog 'Restore my data' || { kill "$restore_pid" 2>/dev/null || true; exit 1; }
 set +e
 wait "$restore_pid"; restore_status=$?
-timeout 30 "$adb" shell cat /data/data/com.navitel/files/lab-marker.txt > "$work/restored-marker.txt" 2>&1; marker_status=$?
-timeout 60 "$adb" logcat -d -v brief > "$work/restore-log.txt" 2>&1
+timeout -k 5 30 "$adb" shell cat /data/data/com.navitel/files/lab-marker.txt > "$work/restored-marker.txt" 2>&1; marker_status=$?
+timeout -k 5 60 "$adb" logcat -d -v brief > "$work/restore-log.txt" 2>&1
 set -e
 uid_after=$(sed -n 's/.*userId=\([0-9][0-9]*\).*/\1/p' "$work/new-package.txt" | head -1 || true)
 {
