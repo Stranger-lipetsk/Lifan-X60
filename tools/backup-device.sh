@@ -1,4 +1,10 @@
 #!/system/bin/sh
+# DISABLED: historical, unvalidated device-backup script. Do not run on a head unit.
+# It assumes block mapping, SD location, sizes and privileges, mounts p6 read-write,
+# may report success after a partial read, and cannot ensure a consistent snapshot.
+# The code below is retained for historical inspection only.
+printf '%s\n' 'DISABLED: unsafe, unverified legacy backup; see docs/42-резервное-копирование-ограничения.md' >&2
+exit 1
 # ============================================================================
 #  Резервная копия разделов ГУ Lifan X60 FL (Elead EL-830C-LF01)
 #
