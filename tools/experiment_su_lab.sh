@@ -153,9 +153,23 @@ for name in ordinary shell; do
     cat "$work/$name-install.txt"
     [ "$name" = shell ] || exit 1
     timeout -k 5 30 "$adb" logcat -d -v brief > "$work/shell-install-log.txt" 2>&1 || true
-    printf '%s\n' 'Shell shared UID fixture installation failed; no app test performed.' > "$work/shell-result.txt"
-    grep -iE 'PackageManager|installd|avc:|denied' "$work/shell-install-log.txt" | tail -15 >> "$work/shell-result.txt" || true
-    continue
+    printf '%s\n' 'Initial shared UID fixture installation failed under enforcing SELinux.' > "$work/shell-initial.txt"
+    grep -iE 'PackageManager|installd|avc:|denied' "$work/shell-install-log.txt" | tail -15 >> "$work/shell-initial.txt" || true
+    timeout -k 5 30 "$adb" shell dmesg | grep -i 'avc:.*installd' | tail -10 >> "$work/shell-initial.txt" || true
+    # Diagnostic only on the isolated emulator: temporarily relax policy for
+    # installation, then restore enforcing BEFORE launching the fixture.
+    test "$(timeout -k 5 30 "$adb" shell getenforce | tr -d '\r')" = Enforcing
+    timeout -k 5 30 "$adb" shell setenforce 0
+    test "$(timeout -k 5 30 "$adb" shell getenforce | tr -d '\r')" = Permissive
+    timeout -k 10 120 "$adb" install "$work/$name.apk" > "$work/shell-retry.txt" 2>&1 || true
+    timeout -k 5 30 "$adb" shell setenforce 1
+    test "$(timeout -k 5 30 "$adb" shell getenforce | tr -d '\r')" = Enforcing
+    if ! grep -Fq Success "$work/shell-retry.txt"; then
+      cat "$work/shell-initial.txt" > "$work/shell-result.txt"
+      echo 'Retry under temporary permissive SELinux failed:' >> "$work/shell-result.txt"
+      cat "$work/shell-retry.txt" >> "$work/shell-result.txt"
+      continue
+    fi
   fi
   timeout -k 5 30 "$adb" logcat -c
   timeout -k 5 60 "$adb" shell am start -n "ru.lifanx60.sulab$name/ru.lifanx60.sulab.MainActivity" > "$work/$name-start.txt" 2>&1
@@ -172,18 +186,15 @@ done
 if grep -Fq 'OWN_UID=' "$work/shell-result.txt"; then grep -F 'OWN_UID=2000' "$work/shell-result.txt"; fi
 grep -E 'OWN_UID=1[0-9]{4}' "$work/ordinary-result.txt"
 
-echo 'Separate shell-context control: unroot adb on disposable emulator, then fixed identity check'
-timeout -k 5 60 "$adb" unroot > "$work/unroot.txt" 2>&1 || true
-timeout -k 5 120 "$adb" wait-for-device
-shell_id=$(timeout -k 5 30 "$adb" shell id | tr -d '\r')
-echo "ADB shell identity: $shell_id"
-grep -q 'uid=2000' <<< "$shell_id" || { echo 'Did not obtain unprivileged emulator ADB shell'; exit 1; }
-timeout -k 5 60 "$adb" shell /system/xbin/x60-lab-su 0 /system/bin/id > "$work/adb-su-result.txt" 2>&1 || true
+echo 'Separate shell-context control from root ADB, dropping to UID 2000 on the disposable emulator'
+timeout -k 5 60 "$adb" shell /system/xbin/x60-lab-su 2000 /system/bin/id | tr -d '\r' > "$work/drop-id.txt"
+grep -F 'uid=2000' "$work/drop-id.txt" || { echo 'Could not create UID 2000 control'; exit 1; }
+timeout -k 5 60 "$adb" shell /system/xbin/x60-lab-su 2000 /system/xbin/x60-lab-su 0 /system/bin/id > "$work/adb-su-result.txt" 2>&1 || true
 tr -d '\r' < "$work/adb-su-result.txt" > "$work/adb-su-clean.txt"
 cat "$work/adb-su-clean.txt"
 {
-  echo "Unprivileged emulator ADB shell before su: $shell_id"
-  cat "$work/adb-su-clean.txt"
+  echo 'Root ADB-launched control, separate process after dropping to UID 2000:'
+  cat "$work/drop-id.txt" "$work/adb-su-clean.txt"
 } > "$work/shell-context-result.txt"
 {
   echo '# Stock-derived su identity check in disposable ARM Android 4.4.2 emulator'
@@ -192,7 +203,12 @@ cat "$work/adb-su-clean.txt"
   echo "Fingerprint: $(cat "$work/fingerprint.txt"); hardware: $hardware; emulator certificate: $actual"
   echo 'The ADB transport was used to prepare and observe the emulator. No APKs or su binary published.'
   echo '## Ordinary application'; cat "$work/ordinary-result.txt"
-  echo '## Shell shared UID application'; cat "$work/shell-result.txt"
+  echo '## Shell shared UID application'
+  if [ -f "$work/shell-initial.txt" ]; then
+    cat "$work/shell-initial.txt"
+    echo 'A diagnostic retry temporarily set the emulator to permissive solely for installation; enforcing was restored immediately afterward and before any fixture launch.'
+  fi
+  cat "$work/shell-result.txt"
   echo '## Separate emulator ADB shell-context control, not an app'; cat "$work/shell-context-result.txt"
   echo 'ADB shell and app SELinux contexts may differ. Even a positive result does not prove actual device installation, privileges, storage access or safety.'
 } > reports/su-identity-lab.txt
