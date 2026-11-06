@@ -231,7 +231,7 @@ fi
 
 echo 'Emulate file-manager ACTION_VIEW and Android PackageInstaller in disposable emulator'
 timeout -k 5 30 "$adb" shell settings put secure install_non_market_apps 1
-allowed=$(timeout -k 5 30 "$adb" shell settings get secure install_non_market_apps | tr -d '\r')
+allowed=$(timeout -k 5 30 "$adb" shell settings get secure install_non_market_apps | tr -d '\r' | tail -1)
 [ "$allowed" = 1 ] || { echo 'Unknown sources not enabled on emulator'; exit 1; }
 timeout -k 5 30 "$adb" shell mkdir -p /sdcard/Download
 timeout -k 10 300 "$adb" push "$work/new-resigned.apk" /sdcard/Download/navitel-lab.apk
