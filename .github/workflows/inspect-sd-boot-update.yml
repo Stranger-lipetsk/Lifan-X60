@@ -1,0 +1,42 @@
+name: Статический анализ загрузчика обновления
+on:
+  push:
+    branches: [arena/b12cc9a8-lifan-x60]
+    paths:
+      - '.github/workflows/inspect-sd-boot-update.yml'
+      - 'tools/inspect_sd_boot_update.py'
+      - 'tests/test_inspect_sd_boot_update.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  inspect:
+    if: github.ref_name == 'arena/b12cc9a8-lifan-x60'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Тесты анализа
+        run: python3 -m unittest discover -s tests -p 'test_inspect_sd_boot_update.py' -v
+      - name: Прочитать только временную копию проверенного образа
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq cpio binutils unzip
+          mkdir -p "$RUNNER_TEMP/source" reports
+          gh release download file-manager-test-20261105 -p lifan-file-manager-test.zip -D "$RUNNER_TEMP/source"
+          echo "4be81211994221e80e401ce712ce484b5320156902fff3707737b73e3945d17f  $RUNNER_TEMP/source/lifan-file-manager-test.zip" | sha256sum -c -
+          unzip -p "$RUNNER_TEMP/source/lifan-file-manager-test.zip" sd_boot.img > "$RUNNER_TEMP/source/sd_boot.img"
+          python3 tools/inspect_sd_boot_update.py "$RUNNER_TEMP/source/sd_boot.img" > reports/sd-boot-update-static.txt
+      - name: Сохранить только текстовый отчёт
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/sd-boot-update-static.txt
+          git diff --cached --quiet && exit 0
+          git commit -m 'report: inspect sd boot update ramdisk'
+          git pull --rebase origin "${{ github.ref_name }}"
+          git push origin HEAD:"${{ github.ref_name }}"
