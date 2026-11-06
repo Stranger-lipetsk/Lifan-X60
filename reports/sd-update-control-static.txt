@@ -7,7 +7,7 @@ Input: system/app/fw_launcher_2016.08.12.01.apk size: 155787 sha256: 37cac01aeb6
 
 ## ARM ELF header and selected native symbols
 
-$ readelf -h /tmp/tmp2a3r003j/ramdisk/system/bin/fw_upgrade
+$ readelf -h /tmp/tmp4wgkvvpm/ramdisk/system/bin/fw_upgrade
 exit: 0
 ELF Header:
   Magic:   7f 45 4c 46 01 01 01 00 00 00 00 00 00 00 00 00 
@@ -31,10 +31,10 @@ ELF Header:
   Section header string table index: 35
 0000a1f0 T main
 
-$ arm-linux-gnueabihf-objdump -d --disassemble=main /tmp/tmp2a3r003j/ramdisk/system/bin/fw_upgrade
+$ arm-linux-gnueabihf-objdump -d --disassemble=main /tmp/tmp4wgkvvpm/ramdisk/system/bin/fw_upgrade
 exit: 0
 
-/tmp/tmp2a3r003j/ramdisk/system/bin/fw_upgrade:     file format elf32-littlearm
+/tmp/tmp4wgkvvpm/ramdisk/system/bin/fw_upgrade:     file format elf32-littlearm
 
 
 Disassembly of section .init:
@@ -645,9 +645,36 @@ Matching debug records: 4
     <14d5>   DW_AT_inline      : (data1) 1	(inlined)
     <14d6>   DW_AT_sibling     : (ref4) <0x14f5>
 
+Inline instances referencing <0xd80>: 1
+ <2><2123>: Abbrev Number: 58 (DW_TAG_inlined_subroutine)
+    <2124>   DW_AT_abstract_origin: (ref4) <0xd80>
+    <2128>   DW_AT_entry_pc    : (addr) 0xa214
+    <212c>   DW_AT_ranges      : (data4) 0x440
+    <2130>   DW_AT_call_file   : (data1) 1
+    <2131>   DW_AT_call_line   : (data2) 1366
+    <2133>   DW_AT_sibling     : (ref4) <0x213d>
+
+Inline instances referencing <0x1435>: 1
+ <2><1905>: Abbrev Number: 58 (DW_TAG_inlined_subroutine)
+    <1906>   DW_AT_abstract_origin: (ref4) <0x1435>
+    <190a>   DW_AT_entry_pc    : (addr) 0x8d18
+    <190e>   DW_AT_ranges      : (data4) 0x58
+    <1912>   DW_AT_call_file   : (data1) 1
+    <1913>   DW_AT_call_line   : (data2) 681
+    <1915>   DW_AT_sibling     : (ref4) <0x19dc>
+
+Inline instances referencing <0x14c9>: 1
+ <4><195d>: Abbrev Number: 58 (DW_TAG_inlined_subroutine)
+    <195e>   DW_AT_abstract_origin: (ref4) <0x14c9>
+    <1962>   DW_AT_entry_pc    : (addr) 0x8d20
+    <1966>   DW_AT_ranges      : (data4) 0xb8
+    <196a>   DW_AT_call_file   : (data1) 1
+    <196b>   DW_AT_call_line   : (data2) 364
+    <196d>   DW_AT_sibling     : (ref4) <0x1988>
+
 ## Firmware app manifest: binary AXML as decoded by aapt
 
-$ /usr/local/lib/android/sdk/build-tools/37.0.0/aapt dump badging /tmp/tmp2a3r003j/ramdisk/system/app/fw_launcher_2016.08.12.01.apk
+$ /usr/local/lib/android/sdk/build-tools/37.0.0/aapt dump badging /tmp/tmp4wgkvvpm/ramdisk/system/app/fw_launcher_2016.08.12.01.apk
 exit: 0
 package: name='tw.com.elead.el830.fw_upgrade' versionCode='1' versionName='2016.08.12.01' platformBuildVersionName='4.4.2-1456859' platformBuildVersionCode='19'
 sdkVersion:'9'
@@ -670,7 +697,7 @@ supports-any-density: 'true'
 locales: '--_--'
 densities: '120' '160' '240' '320'
 
-$ /usr/local/lib/android/sdk/build-tools/37.0.0/aapt dump xmltree /tmp/tmp2a3r003j/ramdisk/system/app/fw_launcher_2016.08.12.01.apk AndroidManifest.xml
+$ /usr/local/lib/android/sdk/build-tools/37.0.0/aapt dump xmltree /tmp/tmp4wgkvvpm/ramdisk/system/app/fw_launcher_2016.08.12.01.apk AndroidManifest.xml
 exit: 0
 N: android=http://schemas.android.com/apk/res/android
   E: manifest (line=1)
@@ -700,7 +727,7 @@ N: android=http://schemas.android.com/apk/res/android
           E: category (line=24)
             A: android:name(0x01010003)="android.intent.category.DEFAULT" (Raw: "android.intent.category.DEFAULT")
 
-$ java -jar /home/runner/work/_temp/apktool.jar d -f -r /tmp/tmp2a3r003j/ramdisk/system/app/fw_launcher_2016.08.12.01.apk -o /tmp/tmp2a3r003j/decoded
+$ java -jar /home/runner/work/_temp/apktool.jar d -f -r /tmp/tmp4wgkvvpm/ramdisk/system/app/fw_launcher_2016.08.12.01.apk -o /tmp/tmp4wgkvvpm/decoded
 exit: 0
 I: Using Apktool 2.9.3 on fw_launcher_2016.08.12.01.apk
 I: Copying raw resources...
