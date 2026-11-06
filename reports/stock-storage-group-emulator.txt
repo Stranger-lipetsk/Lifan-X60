@@ -1,0 +1,35 @@
+# Synthetic DAC storage group probe on disposable Android 4.4.2 x86
+The simulated target is an ordinary mode 0770 directory, not a USB, VFAT mount, SD or real head unit.
+Generic platform.xml WRITE_EXTERNAL_STORAGE group mapping replaced with the mapping read from the checked stock image; other framework, kernel and SELinux are emulator only.
+Unprivileged app signed with public testkey, no shared UID; ADB only prepared and observed the emulator.
+Fingerprint: generic_x86/sdk_x86/generic_x86:4.4.2/KK/4174703:eng/test-keys; hardware: ranchu
+Mock directory:
+drwxrwx--- 1023     1023              2026-11-06 13:34 usb1
+MOCK_DIR_READY
+## Negative app without WRITE_EXTERNAL_STORAGE
+I/X60StorageGroupLab( 2382): Groups:	50052 
+I/X60StorageGroupLab( 2382): UID=10052
+E/X60StorageGroupLab( 2382): SYNTHETIC_WRITE_READ_FAILED
+E/X60StorageGroupLab( 2382): java.io.FileNotFoundException: /data/local/tmp/x60-synthetic-usb/usb1/x60-synthetic-probe.txt: open failed: EACCES (Permission denied)
+E/X60StorageGroupLab( 2382): 	at libcore.io.IoBridge.open(IoBridge.java:409)
+E/X60StorageGroupLab( 2382): 	at java.io.FileOutputStream.<init>(FileOutputStream.java:88)
+E/X60StorageGroupLab( 2382): 	at java.io.FileOutputStream.<init>(FileOutputStream.java:73)
+E/X60StorageGroupLab( 2382): 	at ru.lifanx60.storagegrouplab.MainActivity.onCreate(MainActivity.java:35)
+E/X60StorageGroupLab( 2382): 	at android.app.Activity.performCreate(Activity.java:5231)
+E/X60StorageGroupLab( 2382): 	at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1087)
+E/X60StorageGroupLab( 2382): 	at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2159)
+E/X60StorageGroupLab( 2382): 	at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:2245)
+E/X60StorageGroupLab( 2382): 	at android.app.ActivityThread.access$800(ActivityThread.java:135)
+E/X60StorageGroupLab( 2382): 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1196)
+E/X60StorageGroupLab( 2382): 	at android.os.Handler.dispatchMessage(Handler.java:102)
+E/X60StorageGroupLab( 2382): 	at android.os.Looper.loop(Looper.java:136)
+E/X60StorageGroupLab( 2382): 	at android.app.ActivityThread.main(ActivityThread.java:5017)
+E/X60StorageGroupLab( 2382): 	at java.lang.reflect.Method.invokeNative(Native Method)
+E/X60StorageGroupLab( 2382): 	at java.lang.reflect.Method.invoke(Method.java:515)
+E/X60StorageGroupLab( 2382): 	at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:779)
+## Positive app with WRITE_EXTERNAL_STORAGE
+I/X60StorageGroupLab( 2412): Groups:	1015 1023 1028 50053 
+I/X60StorageGroupLab( 2412): UID=10053
+I/X60StorageGroupLab( 2412): SYNTHETIC_WRITE_READ_OK
+Synthetic bytes fsynced, read by app and compared again by host: yes.
+Result does not prove actual USB mount flags, DAC, SELinux, mount lifetime, free space or successful writing on the head unit.
