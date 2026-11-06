@@ -7,7 +7,7 @@ Input: system/app/fw_launcher_2016.08.12.01.apk size: 155787 sha256: 37cac01aeb6
 
 ## ARM ELF header and selected native symbols
 
-$ readelf -h /tmp/tmpjqq9id7c/ramdisk/system/bin/fw_upgrade
+$ readelf -h /tmp/tmpxa7olv86/ramdisk/system/bin/fw_upgrade
 exit: 0
 ELF Header:
   Magic:   7f 45 4c 46 01 01 01 00 00 00 00 00 00 00 00 00 
@@ -60,10 +60,10 @@ ELF Header:
 000a4e88 b release_handle
 000a51dc B __fork_handlers
 
-$ arm-linux-gnueabihf-objdump -d --disassemble=main /tmp/tmpjqq9id7c/ramdisk/system/bin/fw_upgrade
+$ arm-linux-gnueabihf-objdump -d --disassemble=main /tmp/tmpxa7olv86/ramdisk/system/bin/fw_upgrade
 exit: 0
 
-/tmp/tmpjqq9id7c/ramdisk/system/bin/fw_upgrade:     file format elf32-littlearm
+/tmp/tmpxa7olv86/ramdisk/system/bin/fw_upgrade:     file format elf32-littlearm
 
 
 Disassembly of section .init:
@@ -706,12 +706,30 @@ Inline instances referencing <0x14c9>: 1
 'OPCODE_START_FW_UPGRADE': file offset 0x77e38, virtual address 0x7fe38
 'exec_fw_upgrade error': file offset 0x77ee4, virtual address 0x7fee4
 
+## Opcode dispatch table words from the file-backed load segment
+handle_op_code uses table base 0x7f96c + 0x94 + index * 4
+index 0: 0x00000001
+index 1: 0x00000002
+index 2: 0x00000004
+index 3: 0x00000008
+index 4: 0x00000010
+index 5: 0x00000020
+index 6: 0x00000040
+index 7: 0x00000080
+index 8: 0x00001000
+index 9: 0x00002000
+index 10: 0x00004000
+index 11: 0x00010000
+index 12: 0x00020000
+index 13: 0x00040000
+index 14: 0x80000000
+
 ## Code around inlined native update handler
 
-$ arm-linux-gnueabihf-objdump -d --start-address=0x8b00 --stop-address=0x9200 /tmp/tmpjqq9id7c/ramdisk/system/bin/fw_upgrade
+$ arm-linux-gnueabihf-objdump -d --start-address=0x8b00 --stop-address=0x9200 /tmp/tmpxa7olv86/ramdisk/system/bin/fw_upgrade
 exit: 0
 
-/tmp/tmpjqq9id7c/ramdisk/system/bin/fw_upgrade:     file format elf32-littlearm
+/tmp/tmpxa7olv86/ramdisk/system/bin/fw_upgrade:     file format elf32-littlearm
 
 
 Disassembly of section .text:
@@ -1168,10 +1186,10 @@ Disassembly of section .text:
     91f8:	e2877002 	add	r7, r7, #2
     91fc:	e1a0e00c 	mov	lr, ip
 
-$ arm-linux-gnueabihf-objdump -d --start-address=0x9900 --stop-address=0x9d00 /tmp/tmpjqq9id7c/ramdisk/system/bin/fw_upgrade
+$ arm-linux-gnueabihf-objdump -d --start-address=0x9900 --stop-address=0x9d00 /tmp/tmpxa7olv86/ramdisk/system/bin/fw_upgrade
 exit: 0
 
-/tmp/tmpjqq9id7c/ramdisk/system/bin/fw_upgrade:     file format elf32-littlearm
+/tmp/tmpxa7olv86/ramdisk/system/bin/fw_upgrade:     file format elf32-littlearm
 
 
 Disassembly of section .text:
@@ -1436,10 +1454,10 @@ Disassembly of section .text:
 
 ## Vendor code leading into opcode handler
 
-$ arm-linux-gnueabihf-objdump -d --start-address=0x8120 --stop-address=0xa1f0 /tmp/tmpjqq9id7c/ramdisk/system/bin/fw_upgrade
+$ arm-linux-gnueabihf-objdump -d --start-address=0x8120 --stop-address=0xa1f0 /tmp/tmpxa7olv86/ramdisk/system/bin/fw_upgrade
 exit: 0
 
-/tmp/tmpjqq9id7c/ramdisk/system/bin/fw_upgrade:     file format elf32-littlearm
+/tmp/tmpxa7olv86/ramdisk/system/bin/fw_upgrade:     file format elf32-littlearm
 
 
 Disassembly of section .text:
@@ -3580,7 +3598,7 @@ Disassembly of section .text:
 
 ## Firmware app manifest: binary AXML as decoded by aapt
 
-$ /usr/local/lib/android/sdk/build-tools/37.0.0/aapt dump badging /tmp/tmpjqq9id7c/ramdisk/system/app/fw_launcher_2016.08.12.01.apk
+$ /usr/local/lib/android/sdk/build-tools/37.0.0/aapt dump badging /tmp/tmpxa7olv86/ramdisk/system/app/fw_launcher_2016.08.12.01.apk
 exit: 0
 package: name='tw.com.elead.el830.fw_upgrade' versionCode='1' versionName='2016.08.12.01' platformBuildVersionName='4.4.2-1456859' platformBuildVersionCode='19'
 sdkVersion:'9'
@@ -3603,7 +3621,7 @@ supports-any-density: 'true'
 locales: '--_--'
 densities: '120' '160' '240' '320'
 
-$ /usr/local/lib/android/sdk/build-tools/37.0.0/aapt dump xmltree /tmp/tmpjqq9id7c/ramdisk/system/app/fw_launcher_2016.08.12.01.apk AndroidManifest.xml
+$ /usr/local/lib/android/sdk/build-tools/37.0.0/aapt dump xmltree /tmp/tmpxa7olv86/ramdisk/system/app/fw_launcher_2016.08.12.01.apk AndroidManifest.xml
 exit: 0
 N: android=http://schemas.android.com/apk/res/android
   E: manifest (line=1)
@@ -3633,7 +3651,7 @@ N: android=http://schemas.android.com/apk/res/android
           E: category (line=24)
             A: android:name(0x01010003)="android.intent.category.DEFAULT" (Raw: "android.intent.category.DEFAULT")
 
-$ java -jar /home/runner/work/_temp/apktool.jar d -f -r /tmp/tmpjqq9id7c/ramdisk/system/app/fw_launcher_2016.08.12.01.apk -o /tmp/tmpjqq9id7c/decoded
+$ java -jar /home/runner/work/_temp/apktool.jar d -f -r /tmp/tmpxa7olv86/ramdisk/system/app/fw_launcher_2016.08.12.01.apk -o /tmp/tmpxa7olv86/decoded
 exit: 0
 I: Using Apktool 2.9.3 on fw_launcher_2016.08.12.01.apk
 I: Copying raw resources...
