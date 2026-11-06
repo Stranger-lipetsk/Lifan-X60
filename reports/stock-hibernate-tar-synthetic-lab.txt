@@ -21,10 +21,15 @@ Symlink archive header numeric UID/GID: 10013 10013 ; target: lab-marker.txt
 Create diagnostics:
 tar: write error: No space left on device
 Extract diagnostics:
+tar: write error: No space left on device
+././
+././synthetic-large.bin
+Same 24 MiB file, separate 40 MiB ext4 image: tar creation succeeded; extraction exit 1; no complete copy.
+Tight-image extract diagnostics:
 ././
 ././synthetic-large.bin
 tar: write error: No space left on device
-This models insufficient space, not the actual capacity or free space of the GU partition.
+The archive and extracted files occupy the destination at the same time. This models insufficient space, not the actual capacity or free space of the GU partition.
 ## Deliberately scheduled late write
 Source was modified after archive finished and before extraction. Extracted file contained the earlier snapshot; late source change did not appear.
 This illustrates a possible consistency window only. Real script timing and concurrent writes, app descriptors, actual Hibernate, the GU ext4 implementation, ACLs and SELinux were not tested.
