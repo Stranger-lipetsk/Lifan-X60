@@ -73,18 +73,19 @@ echo "Emulator platform cert: $actual"
 keytool -genkeypair -keystore "$work/negative.keystore" -storepass test-only -keypass test-only -alias negative -keyalg RSA -keysize 2048 -validity 10 -dname 'CN=Disposable negative control' >/dev/null 2>&1
 
 build_unsigned() {
-  local name=$1 src=$2 java=$3
+  local name=$1 src=$2
   mkdir -p "$work/$name/classes" "$work/$name/dex"
   "$bt/aapt" package -f -M "$src/AndroidManifest.xml" -I "$jar" -F "$work/$name/unsigned.apk"
-  javac -source 8 -target 8 -bootclasspath "$jar" -d "$work/$name/classes" "$src/$java"
+  find "$src/src" -name '*.java' | sort > "$work/$name/sources.txt"
+  javac -source 8 -target 8 -bootclasspath "$jar" -d "$work/$name/classes" @"$work/$name/sources.txt"
   find "$work/$name/classes" -name '*.class' > "$work/$name/classes.txt"
   "$bt/d8" --lib "$jar" --min-api 19 --output "$work/$name/dex" @"$work/$name/classes.txt"
   cp "$work/$name/dex/classes.dex" "$work/$name/classes.dex"
   (cd "$work/$name" && zip -q -u unsigned.apk classes.dex)
   "$bt/zipalign" -f 4 "$work/$name/unsigned.apk" "$work/$name/aligned.apk"
 }
-build_unsigned target tests/fixtures/no-adb-backup-target src/ru/lifanx60/backupfixture/MainActivity.java
-build_unsigned caller tests/fixtures/no-adb-backup-caller src/ru/lifanx60/backupcallerfixture/MainActivity.java
+build_unsigned target tests/fixtures/no-adb-backup-target
+build_unsigned caller tests/fixtures/no-adb-backup-caller
 for name in target caller; do
   "$bt/apksigner" sign --ks "$work/negative.keystore" --ks-pass pass:test-only --key-pass pass:test-only \
     --min-sdk-version 19 --v1-signing-enabled true --out "$work/$name-negative.apk" "$work/$name/aligned.apk"
@@ -126,30 +127,62 @@ timeout -k 5 60 "$adb" shell dumpsys package ru.lifanx60.backupcallerfixture > "
 caller_uid=$(tr -d '\r' < "$work/caller-package.txt" | sed -n 's/.*userId=\([0-9][0-9]*\).*/\1/p' | head -1)
 case "$caller_uid" in ''|*[!0-9]*) echo 'Caller UID missing'; exit 1;; esac
 [ "$caller_uid" -ge 10000 ] || { echo "Unexpected shared/system caller UID: $caller_uid"; exit 1; }
-timeout -k 5 30 "$adb" logcat -c
-timeout -k 5 15 "$adb" shell input keyevent 82 || true
-timeout -k 5 60 "$adb" shell am start -n ru.lifanx60.backupcallerfixture/.MainActivity > "$work/positive-start.txt" 2>&1
-wait_log 'BACKUP_PERMISSION=true'
-wait_log 'STARTING_SYNTHETIC_BACKUP'
-confirmed=no
-for attempt in $(seq 1 8); do
-  if timeout -k 5 50 "$adb" shell uiautomator dump /sdcard/no-adb-lab-ui.xml >/dev/null 2>&1 &&
-     timeout -k 5 15 "$adb" shell cat /sdcard/no-adb-lab-ui.xml > "$work/ui.xml"; then
-    coords=$(python3 tools/emulator_backup_confirmation.py "$work/ui.xml" 'Back up my data' 2>/dev/null || true)
-    if [ -n "$coords" ]; then
-      read -r x y <<< "$coords"
-      timeout -k 5 20 "$adb" shell input tap "$x" "$y"
-      echo "Emulator confirmation tapped at $x,$y"
-      confirmed=yes; break
+request_synthetic_backup() {
+  local label=$1 confirmed=no coords x y
+  timeout -k 5 30 "$adb" logcat -c
+  timeout -k 5 15 "$adb" shell input keyevent 82 || true
+  timeout -k 5 60 "$adb" shell am start -n ru.lifanx60.backupcallerfixture/.MainActivity > "$work/$label-start.txt" 2>&1
+  wait_log 'BACKUP_PERMISSION=true'
+  wait_log 'STARTING_SYNTHETIC_BACKUP'
+  for attempt in $(seq 1 8); do
+    if timeout -k 5 50 "$adb" shell uiautomator dump /sdcard/no-adb-lab-ui.xml >/dev/null 2>&1 &&
+       timeout -k 5 15 "$adb" shell cat /sdcard/no-adb-lab-ui.xml > "$work/ui.xml"; then
+      coords=$(python3 tools/emulator_backup_confirmation.py "$work/ui.xml" 'Back up my data' 2>/dev/null || true)
+      if [ -n "$coords" ]; then
+        read -r x y <<< "$coords"
+        timeout -k 5 20 "$adb" shell input tap "$x" "$y"
+        echo "Emulator confirmation tapped at $x,$y"
+        confirmed=yes; break
+      fi
     fi
-  fi
+    sleep 3
+  done
+  [ "$confirmed" = yes ] || { echo 'Confirmation UI not found'; return 1; }
+  wait_log BACKUP_CALL_RETURNED
+  if grep -Fq BACKUP_CALL_FAILED "$work/current-log.txt"; then echo 'Backup call failed'; return 1; fi
+  timeout -k 5 60 "$adb" pull /sdcard/Android/data/ru.lifanx60.backupcallerfixture/files/synthetic.ab "$work/$label.ab" >/dev/null
+  python3 tools/check_no_adb_lab_backup.py "$work/$label.ab" > "$work/$label-check.txt"
+}
+request_synthetic_backup ordinary
+
+echo 'Repeat with the synthetic package as a system app with its own backup agent'
+timeout -k 5 60 "$adb" shell pm uninstall ru.lifanx60.backupfixture > "$work/uninstall-target.txt" 2>&1
+grep -F Success "$work/uninstall-target.txt"
+timeout -k 5 60 "$adb" root || true
+timeout -k 5 90 "$adb" wait-for-device
+id=$(timeout -k 5 30 "$adb" shell id | tr -d '\r')
+grep -q 'uid=0' <<< "$id" || { echo 'Root adb unavailable on disposable emulator'; exit 1; }
+timeout -k 5 60 "$adb" remount | tee "$work/remount.txt"
+grep -iq 'remount succeeded' "$work/remount.txt" || { echo 'Cannot remount emulator'; exit 1; }
+timeout -k 10 120 "$adb" push "$work/target-negative.apk" /system/priv-app/BackupFixture.apk
+timeout -k 5 30 "$adb" shell chmod 0644 /system/priv-app/BackupFixture.apk
+timeout -k 5 30 "$adb" shell restorecon /system/priv-app/BackupFixture.apk || true
+timeout -k 5 30 "$adb" shell sync
+timeout -k 5 30 "$adb" shell setprop sys.boot_completed 0
+timeout -k 5 30 "$adb" shell stop
+timeout -k 5 30 "$adb" shell start
+booted=no
+for i in $(seq 1 100); do
+  if [ "$(timeout -k 5 5 "$adb" shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')" = 1 ]; then booted=yes; break; fi
   sleep 3
 done
-[ "$confirmed" = yes ] || { echo 'Confirmation UI not found'; exit 1; }
-wait_log BACKUP_CALL_RETURNED
-if grep -Fq BACKUP_CALL_FAILED "$work/current-log.txt"; then echo 'Backup call failed'; exit 1; fi
-timeout -k 5 60 "$adb" pull /sdcard/Android/data/ru.lifanx60.backupcallerfixture/files/synthetic.ab "$work/synthetic.ab" >/dev/null
-python3 tools/check_no_adb_lab_backup.py "$work/synthetic.ab" > "$work/archive-check.txt"
+[ "$booted" = yes ] || { echo 'Userspace restart timeout'; exit 1; }
+timeout -k 5 60 "$adb" shell pm path ru.lifanx60.backupfixture | tr -d '\r' > "$work/system-target-path.txt"
+grep -F 'package:/system/priv-app/BackupFixture.apk' "$work/system-target-path.txt"
+timeout -k 5 30 "$adb" logcat -c
+timeout -k 5 60 "$adb" shell am start -n ru.lifanx60.backupfixture/.MainActivity > "$work/system-target-start.txt" 2>&1
+wait_log FIXTURE_READY
+request_synthetic_backup system
 {
   echo '# Application-initiated synthetic backup, no ADB backup transport'
   echo 'Disposable generic Android 4.4.2 x86 emulator; no real device, Navitel, license, maps or real SD.'
@@ -159,7 +192,9 @@ python3 tools/check_no_adb_lab_backup.py "$work/synthetic.ab" > "$work/archive-c
   echo "Emulator platform certificate: $actual"
   echo 'Negative control: unsigned-to-platform app BACKUP_PERMISSION=false.'
   echo 'Platform-signed app: BACKUP_PERMISSION=true; confirmation tapped in virtual UI; backup call returned.'
-  cat "$work/archive-check.txt"
-  echo 'No restore, other applications, real media, full partition image, or real head-unit behavior tested.'
+  echo '## Ordinary synthetic target'; cat "$work/ordinary-check.txt"
+  echo '## System synthetic target with a backup agent'; cat "$work/system-target-path.txt"; cat "$work/system-check.txt"
+  echo 'Android userspace restarted before the system target test; not a full emulator reboot.'
+  echo 'No restore, real applications, real media, full partition image, or real head-unit behavior tested.'
 } > reports/no-adb-backup-emulator.txt
 cat reports/no-adb-backup-emulator.txt

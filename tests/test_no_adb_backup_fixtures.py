@@ -23,6 +23,7 @@ class FixtureGuardTest(unittest.TestCase):
         manifest = ET.parse(FIXTURES / 'no-adb-backup-target/AndroidManifest.xml').getroot()
         self.assertFalse(manifest.findall('uses-permission'))
         self.assertEqual(manifest.get('package'), 'ru.lifanx60.backupfixture')
+        self.assertEqual(manifest.find('application').get(A + 'backupAgent'), '.SyntheticBackupAgent')
 
 
 if __name__ == '__main__':

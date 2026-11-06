@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="ru.lifanx60.backupfixture">
     <uses-sdk android:minSdkVersion="19" android:targetSdkVersion="19" />
-    <application android:label="Disposable backup fixture" android:allowBackup="true">
+    <application android:label="Disposable backup fixture" android:allowBackup="true" android:backupAgent=".SyntheticBackupAgent">
         <activity android:name=".MainActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
