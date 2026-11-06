@@ -109,13 +109,13 @@ wait_log() {
 echo 'Create synthetic target data in the disposable emulator'
 install_apk "$work/target-negative.apk"
 timeout -k 5 30 "$adb" logcat -c
-timeout -k 5 60 "$adb" shell am start -W -n ru.lifanx60.backupfixture/.MainActivity > "$work/target-start.txt" 2>&1
+timeout -k 5 60 "$adb" shell am start -n ru.lifanx60.backupfixture/.MainActivity > "$work/target-start.txt" 2>&1
 wait_log FIXTURE_READY
 
 echo 'Negative control: ordinary signed caller should not receive BACKUP'
 install_apk "$work/caller-negative.apk"
 timeout -k 5 30 "$adb" logcat -c
-timeout -k 5 60 "$adb" shell am start -W -n ru.lifanx60.backupcallerfixture/.MainActivity > "$work/negative-start.txt" 2>&1
+timeout -k 5 60 "$adb" shell am start -n ru.lifanx60.backupcallerfixture/.MainActivity > "$work/negative-start.txt" 2>&1
 wait_log 'BACKUP_PERMISSION=false'
 timeout -k 5 60 "$adb" shell pm uninstall ru.lifanx60.backupcallerfixture > "$work/uninstall.txt" 2>&1
 grep -F Success "$work/uninstall.txt"
@@ -128,7 +128,7 @@ case "$caller_uid" in ''|*[!0-9]*) echo 'Caller UID missing'; exit 1;; esac
 [ "$caller_uid" -ge 10000 ] || { echo "Unexpected shared/system caller UID: $caller_uid"; exit 1; }
 timeout -k 5 30 "$adb" logcat -c
 timeout -k 5 15 "$adb" shell input keyevent 82 || true
-timeout -k 5 60 "$adb" shell am start -W -n ru.lifanx60.backupcallerfixture/.MainActivity > "$work/positive-start.txt" 2>&1
+timeout -k 5 60 "$adb" shell am start -n ru.lifanx60.backupcallerfixture/.MainActivity > "$work/positive-start.txt" 2>&1
 wait_log 'BACKUP_PERMISSION=true'
 wait_log 'STARTING_SYNTHETIC_BACKUP'
 confirmed=no
