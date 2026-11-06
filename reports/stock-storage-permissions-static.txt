@@ -1,0 +1,40 @@
+# Stock-derived storage permissions and supplementary GID mappings (static)
+Not a runtime permission grant, USB mount or write test; no device modified.
+
+## android.permission.READ_EXTERNAL_STORAGE
+    E: permission (line=1155)
+      A: android:label(0x01010001)=@0x01040284
+      A: android:name(0x01010003)="android.permission.READ_EXTERNAL_STORAGE" (Raw: "android.permission.READ_EXTERNAL_STORAGE")
+      A: android:protectionLevel(0x01010009)=(type 0x11)0x0
+      A: android:permissionGroup(0x0101000a)="android.permission-group.STORAGE" (Raw: "android.permission-group.STORAGE")
+      A: android:description(0x01010020)=@0x01040285
+Mapping: platform.xml groups: sdcard_r
+
+## android.permission.WRITE_EXTERNAL_STORAGE
+    E: permission (line=1174)
+      A: android:label(0x01010001)=@0x01040286
+      A: android:name(0x01010003)="android.permission.WRITE_EXTERNAL_STORAGE" (Raw: "android.permission.WRITE_EXTERNAL_STORAGE")
+      A: android:protectionLevel(0x01010009)=(type 0x11)0x1
+      A: android:permissionGroup(0x0101000a)="android.permission-group.STORAGE" (Raw: "android.permission-group.STORAGE")
+      A: android:description(0x01010020)=@0x01040287
+Mapping: platform.xml groups: sdcard_r, sdcard_rw, media_rw
+
+## android.permission.WRITE_MEDIA_STORAGE
+    E: permission (line=1182)
+      A: android:label(0x01010001)=@0x01040288
+      A: android:name(0x01010003)="android.permission.WRITE_MEDIA_STORAGE" (Raw: "android.permission.WRITE_MEDIA_STORAGE")
+      A: android:protectionLevel(0x01010009)=(type 0x11)0x12
+      A: android:permissionGroup(0x0101000a)="android.permission-group.STORAGE" (Raw: "android.permission-group.STORAGE")
+      A: android:description(0x01010020)=@0x01040289
+Mapping: platform.xml groups: media_rw, sdcard_rw
+
+## android.permission.MOUNT_UNMOUNT_FILESYSTEMS
+    E: permission (line=1602)
+      A: android:label(0x01010001)=@0x01040212
+      A: android:name(0x01010003)="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" (Raw: "android.permission.MOUNT_UNMOUNT_FILESYSTEMS")
+      A: android:protectionLevel(0x01010009)=(type 0x11)0x12
+      A: android:permissionGroup(0x0101000a)="android.permission-group.SYSTEM_TOOLS" (Raw: "android.permission-group.SYSTEM_TOOLS")
+      A: android:description(0x01010020)=@0x01040213
+No explicit group mapping in extracted permission XML files.
+
+Access also depends on actual USB mounts, modes, groups and SELinux at runtime.
