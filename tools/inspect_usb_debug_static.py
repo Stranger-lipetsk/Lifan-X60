@@ -18,6 +18,15 @@ def relevant_strings(data):
     return [s.decode('ascii') for s in strings if INTERESTING.search(s.decode('ascii'))]
 
 
+def nearby_strings(data, needle, radius=3):
+    strings = [s.decode('ascii') for s in re.findall(rb'[\x20-\x7e]{3,}', data)]
+    nearby = set()
+    for index, text in enumerate(strings):
+        if needle in text:
+            nearby.update(range(max(0, index - radius), min(len(strings), index + radius + 1)))
+    return [strings[index] for index in sorted(nearby)]
+
+
 def main():
     if len(sys.argv) != 2:
         raise SystemExit('usage: inspect_usb_debug_static.py SYSTEM_IMAGE')
@@ -44,6 +53,21 @@ def main():
             print('Selected printable strings (not execution evidence):')
             for line in relevant_strings(data)[:200]:
                 print(line)
+            if data.startswith(b'\x7fELF'):
+                for needle in ('service.adb.tcp.port', '/system/bin/ifconfig'):
+                    print('\nStrings near:', needle)
+                    for line in nearby_strings(data, needle):
+                        print(line)
+                print('\nSelected ELF symbols:')
+                symbols = subprocess.run(['readelf', '-sW', str(target)], capture_output=True, text=True, check=False)
+                print('\n'.join(line for line in symbols.stdout.splitlines()
+                                if re.search(r'\b(main|__system_property_set|system|execve)\b', line)))
+                print('\nDisassembly of main if symbols are available:')
+                obj = subprocess.run(['arm-linux-gnueabihf-objdump', '-d', '--disassemble=main', str(target)],
+                                     capture_output=True, text=True, check=False)
+                print('\n'.join(obj.stdout.splitlines()[:300]))
+                if obj.returncode:
+                    print('objdump error:', obj.stderr.strip())
     print('\nNo conclusion about physical USB connector wiring, runtime properties,')
     print('availability of root, network transport, or access to user data is implied.')
 

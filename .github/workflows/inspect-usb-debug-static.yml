@@ -24,7 +24,7 @@ jobs:
         run: |
           set -euo pipefail
           sudo apt-get update -qq
-          sudo apt-get install -y -qq e2fsprogs unzip
+          sudo apt-get install -y -qq e2fsprogs unzip binutils-arm-linux-gnueabihf
           w="$RUNNER_TEMP/usb-static"
           mkdir -p "$w" reports
           gh release download file-manager-test-20261105 -p lifan-file-manager-test.zip -D "$w"
