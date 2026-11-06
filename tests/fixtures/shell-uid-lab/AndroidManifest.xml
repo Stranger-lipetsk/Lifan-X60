@@ -1,0 +1,7 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="ru.lifanx60.shelluidfixture" android:sharedUserId="android.uid.shell">
+    <uses-sdk android:minSdkVersion="19" android:targetSdkVersion="19" />
+    <application android:label="Disposable UID fixture" android:allowBackup="false">
+        <activity android:name=".MainActivity" android:exported="true" />
+    </application>
+</manifest>
