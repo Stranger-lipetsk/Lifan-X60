@@ -43,6 +43,9 @@ class UpdateControlTest(unittest.TestCase):
             path = Path(temp) / 'binary'
             path.write_bytes(data)
             self.assertEqual(module.literal_addresses(path, ('hello',)), [('hello', 120, 0x8078)])
+            self.assertEqual(module.read_elf32_vaddr(path, 0x8078, 5), b'hello')
+            with self.assertRaises(ValueError):
+                module.read_elf32_vaddr(path, 0x80ff, 2)
 
     def test_refuses_missing_smali(self):
         with tempfile.TemporaryDirectory() as temp:

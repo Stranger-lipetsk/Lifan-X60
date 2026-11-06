@@ -58,6 +58,20 @@ def literal_addresses(path, needles):
     return results
 
 
+def read_elf32_vaddr(path, address, size):
+    data = path.read_bytes()
+    if data[:6] != b'\x7fELF\x01\x01':
+        raise ValueError('Expected little-endian ELF32')
+    phoff = struct.unpack_from('<I', data, 28)[0]
+    entsize, count = struct.unpack_from('<HH', data, 42)
+    for n in range(count):
+        ptype, offset, vaddr, _, filesz, _, _, _ = struct.unpack_from('<8I', data, phoff + n * entsize)
+        if ptype == 1 and vaddr <= address and address + size <= vaddr + filesz:
+            begin = offset + address - vaddr
+            return data[begin:begin + size]
+    raise ValueError('Address is not in a file-backed load segment')
+
+
 def inspect_smali(root):
     paths = sorted(root.rglob('*.smali'))
     if not paths:
@@ -147,6 +161,11 @@ def main():
         for needle, offset, address in literal_addresses(binary, (
                 '/system/bin/build_emmc.sh', 'OPCODE_START_FW_UPGRADE', 'exec_fw_upgrade error')):
             print(f'{needle!r}: file offset {offset:#x}, virtual address {address:#x}')
+        print('\n## Opcode dispatch table words from the file-backed load segment')
+        print('handle_op_code uses table base 0x7f96c + 0x94 + index * 4')
+        table = struct.unpack('<15I', read_elf32_vaddr(binary, 0x7f96c + 0x94, 60))
+        for index, word in enumerate(table):
+            print(f'index {index}: {word:#010x}')
         print('\n## Code around inlined native update handler')
         command('arm-linux-gnueabihf-objdump', '-d', '--start-address=0x8b00',
                 '--stop-address=0x9200', str(binary))
