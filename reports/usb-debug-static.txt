@@ -65,6 +65,37 @@ Key was rejected by service
 el_debug_tool
 .gnu_debuglink
 
+Strings near: service.adb.tcp.port
+/system/bin/ifconfig
+192.168.88.1
+/system/bin/setprop
+service.adb.tcp.port
+9478
+/system/bin/stop
+adbd
+
+Strings near: /system/bin/ifconfig
+netlink packet too small or truncated
+/system/bin/insmod
+/system/lib/modules/asix.ko
+/system/bin/ifconfig
+192.168.88.1
+/system/bin/setprop
+service.adb.tcp.port
+
+Selected ELF symbols:
+    91: 0000f054    32 FUNC    GLOBAL DEFAULT    8 execve
+   160: 00009e59   288 FUNC    GLOBAL DEFAULT    8 __system_property_set
+
+Disassembly of main if symbols are available:
+
+/tmp/tmpsh9qmocz/extracted:     file format elf32-littlearm
+
+
+Disassembly of section .plt:
+
+Disassembly of section .text:
+
 ## /system/bin/check_usb_iface.sh
 debugfs stat: 0
 Inode: 323   Type: regular    Mode:  0755   Flags: 0x80080
