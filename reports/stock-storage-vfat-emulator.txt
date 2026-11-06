@@ -1,0 +1,49 @@
+# Synthetic virtual VFAT and modeled parent permissions on disposable Android 4.4.2 x86
+The target is the disposable emulator virtual SD FAT filesystem, not real USB or the head unit.
+Generic platform.xml WRITE_EXTERNAL_STORAGE group mapping replaced with the mapping read from the checked stock image; other framework, kernel and SELinux are emulator only.
+Unprivileged app signed with public testkey, no shared UID; ADB only prepared and observed the emulator.
+Fingerprint: generic_x86/sdk_x86/generic_x86:4.4.2/KK/4174703:eng/test-keys; hardware: ranchu
+Virtual SD mount options:
+/dev/block/vold/253:48 /mnt/media_rw/sdcard vfat rw,dirsync,nosuid,nodev,noexec,relatime,uid=1023,gid=1023,fmask=0007,dmask=0007,allow_utime=0020,codepage=437,iocharset=iso8859-1,shortname=mixed,utf8,errors=remount-ro 0 0
+Generic parent directory and emulator SELinux mode before adjustment:
+drwxrwxr-x 0        1000              2026-11-06 13:52 mnt
+drwx------ 1023     1023              2026-11-06 13:52 media_rw
+drwxrwx--- 1023     1023              2026-11-06 13:52 sdcard
+Disabled
+## Baseline: app has media_rw group but generic parent mode 0700 blocks access
+I/X60StorageGroupLab( 2385): Groups:	1015 1023 1028 50053 
+I/X60StorageGroupLab( 2385): UID=10053
+E/X60StorageGroupLab( 2385): SYNTHETIC_WRITE_READ_FAILED
+E/X60StorageGroupLab( 2385): java.io.FileNotFoundException: /mnt/media_rw/sdcard/x60-synthetic-probe.txt: open failed: EACCES (Permission denied)
+E/X60StorageGroupLab( 2385): Caused by: libcore.io.ErrnoException: open failed: EACCES (Permission denied)
+## FAT bind mount below emulator-only parent permission model matching stock init.rc
+drwxr-x--x 1023     1023              2026-11-06 13:53 x60-vfat-model
+STOCK_PARENT_MODEL_SET
+/dev/block/vold/253:48 /data/local/tmp/x60-vfat-model/sdcard vfat rw,dirsync,nosuid,nodev,noexec,relatime,uid=1023,gid=1023,fmask=0007,dmask=0007,allow_utime=0020,codepage=437,iocharset=iso8859-1,shortname=mixed,utf8,errors=remount-ro 0 0
+## Negative app without WRITE_EXTERNAL_STORAGE
+I/X60StorageGroupLab( 2422): Groups:	50052 
+I/X60StorageGroupLab( 2422): UID=10052
+E/X60StorageGroupLab( 2422): SYNTHETIC_WRITE_READ_FAILED
+E/X60StorageGroupLab( 2422): java.io.FileNotFoundException: /data/local/tmp/x60-vfat-model/sdcard/x60-synthetic-probe.txt: open failed: EACCES (Permission denied)
+E/X60StorageGroupLab( 2422): 	at libcore.io.IoBridge.open(IoBridge.java:409)
+E/X60StorageGroupLab( 2422): 	at java.io.FileOutputStream.<init>(FileOutputStream.java:88)
+E/X60StorageGroupLab( 2422): 	at java.io.FileOutputStream.<init>(FileOutputStream.java:73)
+E/X60StorageGroupLab( 2422): 	at ru.lifanx60.storagegrouplab.ModelActivity.onCreate(ModelActivity.java:35)
+E/X60StorageGroupLab( 2422): 	at android.app.Activity.performCreate(Activity.java:5231)
+E/X60StorageGroupLab( 2422): 	at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1087)
+E/X60StorageGroupLab( 2422): 	at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2159)
+E/X60StorageGroupLab( 2422): 	at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:2245)
+E/X60StorageGroupLab( 2422): 	at android.app.ActivityThread.access$800(ActivityThread.java:135)
+E/X60StorageGroupLab( 2422): 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1196)
+E/X60StorageGroupLab( 2422): 	at android.os.Handler.dispatchMessage(Handler.java:102)
+E/X60StorageGroupLab( 2422): 	at android.os.Looper.loop(Looper.java:136)
+E/X60StorageGroupLab( 2422): 	at android.app.ActivityThread.main(ActivityThread.java:5017)
+E/X60StorageGroupLab( 2422): 	at java.lang.reflect.Method.invokeNative(Native Method)
+E/X60StorageGroupLab( 2422): 	at java.lang.reflect.Method.invoke(Method.java:515)
+E/X60StorageGroupLab( 2422): 	at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:779)
+## Positive app with WRITE_EXTERNAL_STORAGE
+I/X60StorageGroupLab( 2385): Groups:	1015 1023 1028 50053 
+I/X60StorageGroupLab( 2385): UID=10053
+I/X60StorageGroupLab( 2385): SYNTHETIC_WRITE_READ_OK
+Synthetic bytes fsynced, read by app and compared again by host: yes.
+Result does not prove actual USB mount flags, DAC, SELinux, mount lifetime, free space or successful writing on the head unit.
