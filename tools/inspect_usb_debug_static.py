@@ -62,10 +62,12 @@ def main():
                 symbols = subprocess.run(['readelf', '-sW', str(target)], capture_output=True, text=True, check=False)
                 print('\n'.join(line for line in symbols.stdout.splitlines()
                                 if re.search(r'\b(main|__system_property_set|system|execve)\b', line)))
-                print('\nDisassembly of main if symbols are available:')
-                obj = subprocess.run(['arm-linux-gnueabihf-objdump', '-d', '--disassemble=main', str(target)],
+                header = subprocess.run(['readelf', '-h', str(target)], capture_output=True, text=True, check=False)
+                print('\nELF header:', header.stdout.strip())
+                print('\nBeginning of static disassembly (not execution):')
+                obj = subprocess.run(['arm-linux-gnueabihf-objdump', '-d', str(target)],
                                      capture_output=True, text=True, check=False)
-                print('\n'.join(obj.stdout.splitlines()[:300]))
+                print('\n'.join(obj.stdout.splitlines()[:800]))
                 if obj.returncode:
                     print('objdump error:', obj.stderr.strip())
     print('\nNo conclusion about physical USB connector wiring, runtime properties,')
