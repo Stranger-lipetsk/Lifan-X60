@@ -1,0 +1,7 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="ru.lifanx60.storagegroupwith">
+  <uses-sdk android:minSdkVersion="19" android:targetSdkVersion="19" />
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+  <application android:label="Disposable storage group probe" android:allowBackup="false">
+    <activity android:name="ru.lifanx60.storagegrouplab.MainActivity" android:exported="true" />
+  </application>
+</manifest>
