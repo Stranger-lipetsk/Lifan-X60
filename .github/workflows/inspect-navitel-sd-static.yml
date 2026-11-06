@@ -1,0 +1,47 @@
+name: Проверка путей Navitel без карты
+on:
+  push:
+    branches: [arena/b12cc9a8-lifan-x60]
+    paths:
+      - '.github/workflows/inspect-navitel-sd-static.yml'
+      - 'tools/inspect_navitel_sd_static.py'
+      - 'tests/test_inspect_navitel_sd_static.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  inspect:
+    if: github.ref_name == 'arena/b12cc9a8-lifan-x60'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Проверить анализатор
+        run: python3 -m unittest discover -s tests -p 'test_inspect_navitel_sd_static.py' -v
+      - name: Сравнить APK без запуска и без пользовательских файлов
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq e2fsprogs unzip
+          w="$RUNNER_TEMP/navitel-sd-static"
+          mkdir -p "$w" reports
+          gh release download file-manager-test-20261105 -p lifan-file-manager-test.zip -D "$w"
+          echo "4be81211994221e80e401ce712ce484b5320156902fff3707737b73e3945d17f  $w/lifan-file-manager-test.zip" | sha256sum -c -
+          unzip -p "$w/lifan-file-manager-test.zip" system.img > "$w/system.img"
+          echo "a660f062716fd42d5a6185faec059f42675b3024304de7b81fac5d705cc88511  $w/system.img" | sha256sum -c -
+          debugfs -R "dump /priv-app/Navitel-large.apk $w/old.apk" "$w/system.img" >/dev/null 2>&1
+          echo "6e216ab39aacaafacda1ebb09f6edc8726e4d1eb6b4985256ccd18aeb5046c44  $w/old.apk" | sha256sum -c -
+          echo "96876415d8b4342952558fd30d6e11b0ca9355c802060c0a9740b6cc84fc4e1b  firmware/apks/com.navitel.apk" | sha256sum -c -
+          python3 tools/inspect_navitel_sd_static.py "$w/old.apk" firmware/apks/com.navitel.apk > reports/navitel-sd-paths-static.txt
+      - name: Сохранить только текстовый отчёт
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/navitel-sd-paths-static.txt
+          git diff --cached --quiet && exit 0
+          git commit -m 'report: compare Navitel SD hints offline'
+          git pull --rebase origin "${{ github.ref_name }}"
+          git push origin HEAD:"${{ github.ref_name }}"
