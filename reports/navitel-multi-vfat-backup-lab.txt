@@ -5,7 +5,7 @@ No real maps, license, accounts, user data or SD; no APKs published. Initially e
 Stock WRITE_EXTERNAL_STORAGE group mapping modeled on the emulator; the virtual FAT is bind-mounted below a modeled 0751 media_rw parent.
 Virtual FAT options and modeled parent:
 /dev/block/vold/253:48 /mnt/media_rw/sdcard vfat rw,dirsync,nosuid,nodev,noexec,relatime,uid=1023,gid=1023,fmask=0007,dmask=0007,allow_utime=0020,codepage=437,iocharset=iso8859-1,shortname=mixed,utf8,errors=remount-ro 0 0
-drwxr-x--x 1023     1023              2026-11-06 14:03 x60-vfat-model
+drwxr-x--x 1023     1023              2026-11-06 14:08 x60-vfat-model
 VIRTUAL_FAT_READY
 /dev/block/vold/253:48 /data/local/tmp/x60-vfat-model/sdcard vfat rw,dirsync,nosuid,nodev,noexec,relatime,uid=1023,gid=1023,fmask=0007,dmask=0007,allow_utime=0020,codepage=437,iocharset=iso8859-1,shortname=mixed,utf8,errors=remount-ro 0 0
 After full emulator reboot the FAT archive was compared byte-for-byte and modeled bind recreated.
@@ -46,6 +46,7 @@ Synthetic marker and preferences for Navitel and one independent fixture app sur
 Caller signed with generic emulator platform cert c8a2e9bccf597c2fb6dc66bee293fc13f2fc47ec77bc6b2b0d52c11f51192ab8, UID 10056; called backup service itself with virtual confirmation.
 ## Synthetic archive created before upgrade
 Lab archive entry: apps/com.navitel/_manifest
+Lab archive entry: apps/com.navitel/r/monitor.ini
 Lab archive entry: apps/com.navitel/f/lab-marker.txt
 Lab archive entry: apps/com.navitel/sp/x60_lab_probe.xml
 Lab archive entry: apps/ru.lifanx60.backupfixture/_manifest
@@ -53,7 +54,7 @@ Lab archive entry: apps/ru.lifanx60.backupfixture/f/lab-marker.txt
 Lab archive entry: apps/ru.lifanx60.backupfixture/sp/lab_probe.xml
 Navitel and independent synthetic files matched; allowBackup=false target absent: yes
 After upgrade and full reboot, both synthetic Navitel files AND both independent target synthetic files were deliberately deleted in the emulator; then app-initiated restore was confirmed via emulator UI.
-All four deliberately removed synthetic files in the two included packages were restored; excluded synthetic target files also still match, without being deleted.
+All four deliberately removed synthetic files in the two included packages were restored byte-for-byte; excluded synthetic target files also still match, without being deleted.
 UID after restore: 10052; updated Navitel remains registered.
 Full restore is destructive and can clear app data. This fixture is not for real devices.
 ## Crash dialog during installation
@@ -61,6 +62,6 @@ No Navitel crash dialog observed during installer UI polling (other failures may
 ## Launch attempt (no activation asserted)
 WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
 Starting: Intent { cmp=com.navitel/.app.MainActivity }
-    mResumedActivity: ActivityRecord{afd1f200 u0 com.navitel/.app.MainActivity t2}
-  mFocusedActivity: ActivityRecord{afd1f200 u0 com.navitel/.app.MainActivity t2}
+    mResumedActivity: ActivityRecord{afd94db0 u0 com.navitel/.app.MainActivity t2}
+  mFocusedActivity: ActivityRecord{afd94db0 u0 com.navitel/.app.MainActivity t2}
 Generic emulator full reboot is not real-device hibernate. Real device USB mounts and vendor libraries, app behavior, rollback, settings and all data preservation remain unverified.
