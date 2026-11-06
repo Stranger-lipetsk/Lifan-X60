@@ -63,19 +63,25 @@ sudo ip6tables -C OUTPUT -m owner --uid-owner "$emu_uid" ! -d ::1/128 -j REJECT
 echo "Emulator host UID $emu_uid: non-loopback IPv4 and IPv6 blocked"
 start_emulator() {
   sudo -u emulatorlab env HOME=/home/emulatorlab ANDROID_HOME="$sdk" ANDROID_AVD_HOME="$ANDROID_AVD_HOME" \
-    "$work/legacy/tools/emulator" -avd migration_arm -no-window -no-audio -no-boot-anim -no-snapshot -gpu swiftshader -engine classic >> "$work/emulator.txt" 2>&1 &
+    "$work/legacy/tools/emulator" -avd migration_arm -no-window -no-audio -no-boot-anim -no-snapshot -gpu swiftshader -engine classic -verbose >> "$work/emulator.txt" 2>&1 &
   pid=$!
 }
 restart_emulator() {
   # Use a process restart rather than the legacy emulator's hanging adb reboot.
   timeout 30 "$adb" shell sync || true
   sudo pkill -TERM -u emulatorlab 2>/dev/null || true
-  for i in $(seq 1 20); do
-    if ! kill -0 "$pid" 2>/dev/null; then break; fi
+  # The sudo wrapper can exit before the QEMU child releases the AVD locks.
+  for i in $(seq 1 30); do
+    if ! pgrep -u "$emu_uid" >/dev/null; then break; fi
     sleep 1
   done
-  if kill -0 "$pid" 2>/dev/null; then sudo pkill -KILL -u emulatorlab 2>/dev/null || true; fi
+  if pgrep -u "$emu_uid" >/dev/null; then
+    echo 'Emulator child did not exit after SIGTERM; aborting rather than risking disk corruption'
+    ps -fu emulatorlab || true
+    return 1
+  fi
   wait "$pid" 2>/dev/null || true
+  timeout 15 "$adb" kill-server || true
   start_emulator
   boot
 }
