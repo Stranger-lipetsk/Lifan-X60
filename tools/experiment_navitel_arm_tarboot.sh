@@ -799,7 +799,15 @@ for i in $(seq 1 60); do
   if grep -Fq FIXTURE_READY "$work/canary-tarboot-log.txt"; then ready=yes; break; fi
   sleep 2
 done
-[ "$ready" = yes ] || { echo 'Synthetic independent app failed to start after copied-image boot'; tail -60 "$work/canary-tarboot-log.txt"; exit 1; }
+[ "$ready" = yes ] || {
+  echo 'Synthetic independent app did not emit FIXTURE_READY after copied-image boot'
+  echo 'am start result:'; cat "$work/canary-tarboot-start.txt"
+  echo 'Relevant activity and error log lines:'
+  grep -iE 'backupfixture|FIXTURE_READY|FATAL EXCEPTION|AndroidRuntime|No space|ENOSPC|permission denied|dexopt|Error:' "$work/canary-tarboot-log.txt" | tail -100 || true
+  echo 'Filesystem space:'; timeout -k 5 30 "$adb" shell df /data || true
+  echo 'Current activities:'; timeout -k 5 30 "$adb" shell dumpsys activity activities | grep -iE 'backupfixture|mResumedActivity|Hist #' | tail -30 || true
+  exit 1
+}
 check_synthetic tarbootlaunch
 # Observe activity launch, without asserting real activation or navigation.
 timeout -k 5 30 "$adb" logcat -c
