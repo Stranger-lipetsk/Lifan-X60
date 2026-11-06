@@ -207,9 +207,12 @@ timeout -k 5 60 "$adb" shell dumpsys package com.navitel | tr -d '\r' > "$work/n
 grep -q 'versionCode=360622024' "$work/new-package.txt" || { echo 'Replacement not registered'; exit 1; }
 # Delete only the synthetic marker, so seeing it after restore is meaningful.
 timeout -k 5 30 "$adb" shell rm /data/data/com.navitel/files/lab-marker.txt
-if timeout -k 5 30 "$adb" shell test -e /data/data/com.navitel/files/lab-marker.txt; then
-  echo 'Marker unexpectedly still exists before restore'; exit 1
+# API 19's legacy adb shell does not propagate the remote command exit status.
+marker_state=$(timeout -k 5 30 "$adb" shell 'if [ -e /data/data/com.navitel/files/lab-marker.txt ]; then echo present; else echo absent; fi' | tr -d '\r')
+if [ "$marker_state" != absent ]; then
+  echo "Cannot verify marker removal before restore: $marker_state"; exit 1
 fi
+echo 'Verified synthetic marker absent before restore.'
 
 echo 'Phase 6: restore synthetic archive into new system package'
 timeout -k 5 30 "$adb" logcat -c
@@ -232,9 +235,14 @@ uid_after=$(sed -n 's/.*userId=\([0-9][0-9]*\).*/\1/p' "$work/new-package.txt" |
   echo 'Old certificate: a40da80a59d170caa950cf15c18c454d47a39b26989d8b640ecd745ba71bf5dc'
   echo 'New certificate: 5358662d39856446c7391c699878e0509f7ed0657d7634c0083e07b08ad2f035'
   echo '## Before restore'; cat "$work/backup-check.txt"; echo 'Synthetic marker explicitly removed before restore.'
-  echo '## Restore result'; echo "adb restore exit: $restore_status; marker read exit: $marker_status"
+  echo '## Restore result'; echo "adb shell transport exit: $restore_status; marker read transport exit: $marker_status (legacy shell does not report remote exit status)"
   tr -d '\r' < "$work/restored-marker.txt"
   echo '## Selected backup manager logs'
   grep -iE 'BackupManagerService.*(com\.navitel|signature|restore|backup)|BackupManagerService.*error' "$work/restore-log.txt" | tail -60 | tr -d '\r' || true
   echo 'This is not evidence of real app settings, license, maps, actual head-unit behavior or a safe restoration procedure.'
 } > reports/navitel-backup-restore-emulator.txt
+cat reports/navitel-backup-restore-emulator.txt
+restored_marker=$(tr -d '\r' < "$work/restored-marker.txt")
+if [ "$restore_status" -ne 0 ] || [ "$marker_status" -ne 0 ] || [ "$restored_marker" != X60_DISPOSABLE_MIGRATION_TEST ]; then
+  echo 'Synthetic marker restoration not verified.'; exit 1
+fi
