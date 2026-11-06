@@ -46,9 +46,10 @@ cleanup() {
   status=$?
   if [ "$status" != 0 ]; then
     echo "Failure ($status): emulator log"; tail -50 "$work/emulator.txt" 2>/dev/null || true
-    "$adb" devices -l || true
+    timeout 10 "$adb" devices -l || true
   fi
   [ -z "$pid" ] || kill "$pid" 2>/dev/null || true
+  sudo pkill -TERM -u emulatorlab 2>/dev/null || true
   [ "$blocked4" != yes ] || sudo iptables -D OUTPUT -m owner --uid-owner "$emu_uid" ! -d 127.0.0.0/8 -j REJECT || true
   [ "$blocked6" != yes ] || sudo ip6tables -D OUTPUT -m owner --uid-owner "$emu_uid" ! -d ::1/128 -j REJECT || true
 }
@@ -74,10 +75,10 @@ boot() {
   kill "$waitpid" 2>/dev/null || true
   [ "$connected" = yes ] || { echo 'ADB connection timeout'; return 1; }
   local booted=no
-  for i in $(seq 1 150); do
-    if [ "$(timeout 5 "$adb" shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')" = 1 ]; then booted=yes; break; fi
+  for i in $(seq 1 100); do
+    if [ "$(timeout 3 "$adb" shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')" = 1 ]; then booted=yes; break; fi
     kill -0 "$pid" 2>/dev/null || { echo 'Emulator exited'; exit 1; }
-    sleep 4
+    sleep 3
   done
   [ "$booted" = yes ] || { echo 'Emulator boot timeout'; exit 1; }
 }
@@ -85,42 +86,46 @@ boot
 id=$(timeout 60 "$adb" shell id | tr -d '\r')
 echo "Shell identity: $id"
 grep -q 'uid=0' <<< "$id" || { echo 'Root shell unavailable; abort'; exit 1; }
-"$adb" shell getprop ro.build.fingerprint | tr -d '\r' > "$work/fingerprint.txt"
-"$adb" shell getprop ro.product.cpu.abi | tr -d '\r' > "$work/abi.txt"
+timeout 30 "$adb" shell getprop ro.build.fingerprint | tr -d '\r' > "$work/fingerprint.txt"
+timeout 30 "$adb" shell getprop ro.product.cpu.abi | tr -d '\r' > "$work/abi.txt"
 echo 'Trying remount of emulator system only'
 timeout 60 "$adb" remount | tee "$work/remount.txt"
 grep -iq 'remount succeeded' "$work/remount.txt" || { echo 'Cannot remount emulator system'; exit 1; }
-"$adb" shell df /system | tr -d '\r'
+timeout 30 "$adb" shell df /system | tr -d '\r'
 
-echo 'Phase 3: old system APK on disposable emulator, then reboot'
+echo 'Phase 3: push old system APK on disposable emulator'
 timeout 300 "$adb" push "$work/old.apk" /system/priv-app/Navitel-large.apk
-"$adb" shell chmod 0644 /system/priv-app/Navitel-large.apk
-"$adb" shell restorecon /system/priv-app/Navitel-large.apk || true
-"$adb" reboot
+timeout 30 "$adb" shell chmod 0644 /system/priv-app/Navitel-large.apk
+timeout 30 "$adb" shell restorecon /system/priv-app/Navitel-large.apk || true
+echo "Phase 3a: reboot emulator with old package"
+timeout 60 "$adb" reboot
 timeout 60 "$adb" wait-for-disconnect || true
 boot
+echo "Phase 3b: query old package"
 path=$(timeout 60 "$adb" shell pm path com.navitel | tr -d '\r')
 echo "Initial package path: $path"
 grep -F 'package:/system/priv-app/Navitel-large.apk' <<< "$path" || { echo 'Old system app not registered'; exit 1; }
 timeout 60 "$adb" shell dumpsys package com.navitel | tr -d '\r' > "$work/old-package.txt"
 uid_before=$(sed -n 's/.*userId=\([0-9][0-9]*\).*/\1/p' "$work/old-package.txt" | head -1)
 case "$uid_before" in ''|*[!0-9]*) echo 'Initial app UID missing'; exit 1;; esac
-"$adb" shell 'mkdir -p /data/data/com.navitel/files && echo X60_DISPOSABLE_MIGRATION_TEST > /data/data/com.navitel/files/lab-marker.txt'
-"$adb" shell chown "$uid_before:$uid_before" /data/data/com.navitel/files/lab-marker.txt
-before_marker=$("$adb" shell cat /data/data/com.navitel/files/lab-marker.txt | tr -d '\r')
+timeout 30 "$adb" shell 'mkdir -p /data/data/com.navitel/files && echo X60_DISPOSABLE_MIGRATION_TEST > /data/data/com.navitel/files/lab-marker.txt'
+timeout 30 "$adb" shell chown "$uid_before:$uid_before" /data/data/com.navitel/files/lab-marker.txt
+before_marker=$(timeout 30 "$adb" shell cat /data/data/com.navitel/files/lab-marker.txt | tr -d '\r')
 test "$before_marker" = X60_DISPOSABLE_MIGRATION_TEST
 
-echo 'Phase 4: replace system APK in disposable emulator and reboot'
+echo 'Phase 4: replace system APK in disposable emulator'
 timeout 60 "$adb" remount | tee "$work/remount2.txt"
 grep -iq 'remount succeeded' "$work/remount2.txt"
-"$adb" shell rm /system/priv-app/Navitel-large.apk
+timeout 30 "$adb" shell rm /system/priv-app/Navitel-large.apk
 timeout 300 "$adb" push "$new" /system/priv-app/Navitel-large.apk
-"$adb" shell chmod 0644 /system/priv-app/Navitel-large.apk
-"$adb" shell restorecon /system/priv-app/Navitel-large.apk || true
-"$adb" logcat -c
-"$adb" reboot
+timeout 30 "$adb" shell chmod 0644 /system/priv-app/Navitel-large.apk
+timeout 30 "$adb" shell restorecon /system/priv-app/Navitel-large.apk || true
+timeout 30 "$adb" logcat -c
+echo "Phase 4a: reboot emulator with new package"
+timeout 60 "$adb" reboot
 timeout 60 "$adb" wait-for-disconnect || true
 boot
+echo "Phase 4b: query new package and synthetic marker"
 set +e
 timeout 60 "$adb" shell pm path com.navitel > "$work/new-path.txt" 2>&1; path_status=$?
 timeout 60 "$adb" shell dumpsys package com.navitel > "$work/new-package.txt" 2>&1; dump_status=$?
