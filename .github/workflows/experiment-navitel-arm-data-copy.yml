@@ -1,0 +1,67 @@
+name: Модель копирования данных ARM-эмулятора
+on:
+  push:
+    branches: [arena/b12cc9a8-lifan-x60]
+    paths:
+      - '.github/workflows/experiment-navitel-arm-data-copy.yml'
+      - 'tools/experiment_navitel_arm_data_copy.sh'
+      - 'tools/compare_resigned_apk.py'
+      - 'tests/test_compare_resigned_apk.py'
+      - 'tools/emulator_ui_clickable.py'
+      - 'tools/emulator_backup_confirmation.py'
+      - 'tools/check_no_adb_lab_backup.py'
+      - 'tests/fixtures/no-adb-backup-target/**'
+      - 'tests/fixtures/no-adb-navitel-arm-caller/**'
+      - 'tests/fixtures/backup-disallowed-target/**'
+      - 'tools/check_multi_navitel_lab_backup.py'
+      - 'tests/test_no_adb_navitel_arm_fixture.py'
+      - 'tests/test_multi_navitel_lab_backup.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  test:
+    if: github.ref_name == 'arena/b12cc9a8-lifan-x60'
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Проверить лабораторные инструменты
+        run: |
+          bash -n tools/experiment_navitel_arm_data_copy.sh
+          python3 -m unittest discover -s tests -p 'test_compare_resigned_apk.py' -v
+          python3 -m unittest discover -s tests -p 'test_no_adb_navitel_arm_fixture.py' -v
+          python3 -m unittest discover -s tests -p 'test_multi_navitel_lab_backup.py' -v
+      - name: Только одноразовый ARM-эмулятор
+        timeout-minutes: 65
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bash tools/experiment_navitel_arm_data_copy.sh
+      - name: Сохранить диагностику при ошибке
+        if: failure()
+        run: |
+          set -euo pipefail
+          test -s "$RUNNER_TEMP/navitel-arm-data-copy-lab.log" || exit 0
+          mkdir -p reports
+          tr -d '\r' < "$RUNNER_TEMP/navitel-arm-data-copy-lab.log" > reports/navitel-arm-data-copy-lab-error.txt
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/navitel-arm-data-copy-lab-error.txt
+          git diff --cached --quiet && exit 0
+          git commit -m 'report: diagnose same-signature Navitel update lab'
+          git pull --rebase origin "${{ github.ref_name }}"
+          git push origin HEAD:"${{ github.ref_name }}"
+      - name: Сохранить только текстовый отчёт
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/navitel-arm-data-copy-lab.txt
+          git diff --cached --quiet && exit 0
+          git commit -m 'report: same-signature Navitel update lab'
+          git pull --rebase origin "${{ github.ref_name }}"
+          git push origin HEAD:"${{ github.ref_name }}"
