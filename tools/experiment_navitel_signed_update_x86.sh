@@ -62,7 +62,9 @@ cleanup() {
     echo "Lab failed ($status); emulator diagnostics:"
     tail -45 "$work/emulator.log" 2>/dev/null || true
     timeout -k 5 10 "$adb" devices -l || true
-    timeout -k 5 20 "$adb" logcat -d -v brief 2>/dev/null | grep -iE 'PackageManager|installd|com.navitel|FATAL EXCEPTION|FATAL EXCEPTION' | tail -80 || true
+    timeout -k 5 20 "$adb" logcat -d -v brief 2>/dev/null | grep -iE 'PackageManager|installd|com.navitel|FATAL EXCEPTION' | tail -80 || true
+    timeout -k 5 30 "$adb" shell dmesg 2>/dev/null | grep -iE 'ext4|read.only|error' | tail -50 || true
+    timeout -k 5 30 "$adb" shell df /system 2>/dev/null || true
   fi
   sudo pkill -TERM -u signedupdatex86 2>/dev/null || true
   [ "$blocked4" != yes ] || sudo iptables -D OUTPUT -m owner --uid-owner "$emu_uid" ! -d 127.0.0.0/8 -j REJECT || true
@@ -75,7 +77,7 @@ sudo iptables -C OUTPUT -m owner --uid-owner "$emu_uid" ! -d 127.0.0.0/8 -j REJE
 sudo ip6tables -C OUTPUT -m owner --uid-owner "$emu_uid" ! -d ::1/128 -j REJECT
 echo "Emulator host UID $emu_uid: non-loopback IPv4/IPv6 blocked"
 sudo -u signedupdatex86 env HOME=/home/signedupdatex86 ANDROID_HOME="$sdk" ANDROID_AVD_HOME="$ANDROID_AVD_HOME" \
-  "$sdk/emulator/emulator" -avd backup_x86 -port 5554 -no-window -no-audio -no-boot-anim -no-snapshot -gpu swiftshader_indirect -no-metrics > "$work/emulator.log" 2>&1 &
+  "$sdk/emulator/emulator" -avd backup_x86 -port 5554 -no-window -no-audio -no-boot-anim -no-snapshot -writable-system -partition-size 1536 -gpu swiftshader_indirect -no-metrics > "$work/emulator.log" 2>&1 &
 pid=$!
 timeout -k 5 180 "$adb" wait-for-device
 booted=no
@@ -114,12 +116,21 @@ grep -q 'uid=0' <<< "$id" || { echo 'Root unavailable for emulator preparation';
 timeout -k 5 60 "$adb" remount | tee "$work/remount.txt"
 grep -iq 'remount succeeded' "$work/remount.txt" || { echo 'Cannot remount emulator system'; exit 1; }
 
-echo 'Phase 3: push old system APK on disposable emulator'
+echo 'Phase 3: stop disposable emulator userspace before installing fixture system APK'
+timeout -k 5 30 "$adb" shell df /system
+timeout -k 5 30 "$adb" shell setprop sys.boot_completed 0
+timeout -k 5 30 "$adb" shell stop
 timeout -k 10 300 "$adb" push "$work/old.apk" /system/priv-app/Navitel-large.apk
 timeout -k 5 30 "$adb" shell chmod 0644 /system/priv-app/Navitel-large.apk
 timeout -k 5 30 "$adb" shell restorecon /system/priv-app/Navitel-large.apk || true
-echo "Phase 3a: restart Android userspace with old package"
-restart_android_runtime
+echo "Phase 3a: start Android userspace with old package"
+timeout -k 5 30 "$adb" shell start
+ready=no
+for i in $(seq 1 100); do
+  if [ "$(timeout -k 5 5 "$adb" shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')" = 1 ]; then ready=yes; break; fi
+  sleep 3
+done
+[ "$ready" = yes ] || { echo 'Userspace start timeout'; exit 1; }
 echo "Phase 3b: verify old system APK is unchanged and query package"
 timeout -k 10 300 "$adb" pull /system/priv-app/Navitel-large.apk "$work/old-after-restart.apk" >/dev/null
 cmp "$work/old.apk" "$work/old-after-restart.apk" || { echo 'Old system file changed'; exit 1; }
