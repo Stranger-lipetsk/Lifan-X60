@@ -1,0 +1,106 @@
+# Offline inspection of USB debug helper in a release system image
+No helper executed; no device or network interfaces were accessed.
+
+## /system/bin/el_debug_tool
+debugfs stat: 0
+Inode: 349   Type: regular    Mode:  0755   Flags: 0x80080
+Generation: 0    Version: 0x00000000:00000000
+User:     0   Group:  2000   Size: 96320
+File ACL: 0
+Links: 1   Blockcount: 192
+Fragment:  Address: 0    Number: 0    Size: 0
+ ctime: 0x606068a2:00000000 -- Sun Mar 28 11:29:38 2021
+ atime: 0x606068a2:00000000 -- Sun Mar 28 11:29:38 2021
+ mtime: 0x606068a2:00000000 -- Sun Mar 28 11:29:38 2021
+crtime: 0x00000000:00000000 -- Thu Jan  1 00:00:00 1970
+Size of extra inode fields: 28
+Extended attributes:
+  security.selinux (26) = "u:object_r:system_file:s0\000"
+EXTENTS:
+(0-23):74986-75009
+debugfs 1.47.0 (5-Feb-2023)
+Size: 96320 SHA-256: 43153248a5bdaa566dd0d425c7a13509100a900b3aeaaeec72939182aa7285b8
+ELF: True
+Selected printable strings (not execution evidence):
+socket
+__system_property_set_filename
+__system_property_area_init
+__system_property_find
+__system_property_find_compat
+__system_property_read
+__system_property_read_compat
+__system_property_get
+__system_property_set
+__system_property_wait
+__system_property_update
+__system_property_add
+__system_property_serial
+__system_property_wait_any
+__system_property_foreach
+__system_property_foreach_compat
+__system_property_find_nth
+__system_property_area__
+/system/bin/ifconfig
+/system/bin/setprop
+service.adb.tcp.port
+adbd
+conversion specifier unsupported
+sign/precision unsupported
+ANDROID_PROPERTY_WORKSPACE
+Exec format error
+Bad font file format
+Srmount error
+Socket operation on non-socket
+Protocol wrong type for socket
+Protocol not supported
+Socket type not supported
+Operation not supported on transport endpoint
+Protocol family not supported
+Address family not supported by protocol
+Transport endpoint is already connected
+Transport endpoint is not connected
+Cannot send after transport endpoint shutdown
+Key was rejected by service
+/dev/socket/property_service
+el_debug_tool
+.gnu_debuglink
+
+## /system/bin/check_usb_iface.sh
+debugfs stat: 0
+Inode: 323   Type: regular    Mode:  0755   Flags: 0x80080
+Generation: 0    Version: 0x00000000:00000000
+User:     0   Group:  2000   Size: 1521
+File ACL: 0
+Links: 1   Blockcount: 8
+Fragment:  Address: 0    Number: 0    Size: 0
+ ctime: 0x606068a2:00000000 -- Sun Mar 28 11:29:38 2021
+ atime: 0x606068a2:00000000 -- Sun Mar 28 11:29:38 2021
+ mtime: 0x606068a2:00000000 -- Sun Mar 28 11:29:38 2021
+crtime: 0x00000000:00000000 -- Thu Jan  1 00:00:00 1970
+Size of extra inode fields: 28
+Extended attributes:
+  security.selinux (26) = "u:object_r:system_file:s0\000"
+EXTENTS:
+(0):74790
+debugfs 1.47.0 (5-Feb-2023)
+Size: 1521 SHA-256: c10a7dd9f3ae4ce9c4dbedfaa738800dac4404fe190a67a9dba31939fd0be7f3
+ELF: False
+Selected printable strings (not execution evidence):
+# This script periodically check for the existence of a USB network interface.
+# IP address using dhcpcd. This script assumes that the name of the network
+# interface is "usb0".
+# Notifications will be broadcast when the USB network interface has been
+NOTIFICATION_USB_IFACE_READY=vn.com.fsoft.UsbIfaceReady
+NOTIFICATION_USB_IFACE_DOWN=vn.com.fsoft.UsbIfaceDown
+    if [ -e /sys/class/net/usbH0 ];
+            netcfg usbH0 up
+                # call the dhcpcd twice to avoid the "flock: Try again" error
+                dhcpcd usbH0
+                dhcpcd usbH0
+                # notify the registered applications that the USB network
+                am broadcast -a $NOTIFICATION_USB_IFACE_READY
+            # The USB network interface has just been taken down, notify the
+            am broadcast -a $NOTIFICATION_USB_IFACE_DOWN
+
+No conclusion about physical USB connector wiring, runtime properties,
+availability of root, network transport, or access to user data is implied.
