@@ -1,0 +1,50 @@
+name: Модель открытых файлов при ленивом перемонтировании
+on:
+  push:
+    branches: [arena/b12cc9a8-lifan-x60]
+    paths:
+      - '.github/workflows/experiment-lazy-mount-model.yml'
+      - 'tools/experiment_lazy_mount_model.sh'
+      - 'tools/experiment_lazy_mount_inner.sh'
+      - 'tools/lazy_mount_fixture_writer.py'
+      - 'tests/test_lazy_mount_fixture_writer.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  test:
+    if: github.ref_name == 'arena/b12cc9a8-lifan-x60'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Проверить сценарий и фикстуру
+        run: |
+          bash -n tools/experiment_lazy_mount_model.sh tools/experiment_lazy_mount_inner.sh
+          python3 -m unittest discover -s tests -p 'test_lazy_mount_fixture_writer.py' -v
+      - name: Модель только в изолированном пространстве монтирования CI
+        run: bash tools/experiment_lazy_mount_model.sh
+      - name: Сохранить диагностику
+        if: failure()
+        run: |
+          set -euo pipefail
+          test -s "$RUNNER_TEMP/lazy-mount-model.log" || exit 0
+          mkdir -p reports
+          cp "$RUNNER_TEMP/lazy-mount-model.log" reports/stock-hibernate-lazy-mount-model-error.txt
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/stock-hibernate-lazy-mount-model-error.txt
+          git diff --cached --quiet && exit 0
+          git commit -m 'report: diagnose lazy mount model'
+          git pull --rebase origin "${{ github.ref_name }}"
+          git push origin HEAD:"${{ github.ref_name }}"
+      - name: Сохранить текстовый отчёт
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/stock-hibernate-lazy-mount-model.txt
+          git diff --cached --quiet && exit 0
+          git commit -m 'report: synthetic lazy mount model'
+          git pull --rebase origin "${{ github.ref_name }}"
+          git push origin HEAD:"${{ github.ref_name }}"
