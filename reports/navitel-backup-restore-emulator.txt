@@ -1,0 +1,40 @@
+# Synthetic Android backup and cross-signature restore in disposable ARM emulator
+Generic Android 4.4.2 emulator only; do not apply these operations to a head unit.
+No real license, maps, user data or SD; empty virtual SD; emulator network blocked before boot.
+Backup and restore used legacy bu via adb shell and temporary virtual SD; replacement used Android userspace restart, not full VM reboot.
+Fingerprint: generic/sdk/generic:4.4.2/KK/3462041:eng/test-keys; ABI: armeabi-v7a
+Old UID: 10052; new UID: 10052
+Old certificate: a40da80a59d170caa950cf15c18c454d47a39b26989d8b640ecd745ba71bf5dc
+New certificate: 5358662d39856446c7391c699878e0509f7ed0657d7634c0083e07b08ad2f035
+## Before restore
+Lab archive entry: apps/com.navitel/_manifest bytes: 2425
+Lab archive entry: apps/com.navitel/r/monitor.ini bytes: 59
+Lab archive entry: apps/com.navitel/f/lab-marker.txt bytes: 30
+Synthetic marker entries: 1
+Path: apps/com.navitel/f/lab-marker.txt matches: True
+Synthetic marker explicitly removed before restore.
+## Restore result
+adb shell transport exit: 0; marker read transport exit: 0 (legacy shell does not report remote exit status)
+X60_DISPOSABLE_MIGRATION_TEST
+## Selected backup manager logs
+I/BackupManagerService( 1679): Beginning full restore...
+D/BackupManagerService( 1679): Starting restore confirmation UI, token=1070175822
+W/ContextImpl( 1679): Calling a method in the system process without a qualified user: android.app.ContextImpl.startActivity:1020 com.android.server.BackupManagerService.startConfirmationUi:5376 com.android.server.BackupManagerService.fullRestore:5343 android.app.backup.IBackupManager$Stub.onTransact:204 android.os.Binder.execTransact:404 
+W/ContextImpl( 1679): Calling a method in the system process without a qualified user: android.app.ContextImpl.startActivity:1032 android.app.ContextImpl.startActivity:1021 com.android.server.BackupManagerService.startConfirmationUi:5376 com.android.server.BackupManagerService.fullRestore:5343 android.app.backup.IBackupManager$Stub.onTransact:204 
+D/BackupManagerService( 1679): Waiting for full restore completion...
+D/BackupManagerService( 1679): acknowledgeFullBackupOrRestore : token=1070175822 allow=true
+I/BackupManagerService( 1679): --- Performing full-dataset restore ---
+I/BackupManagerService( 1679): Initiating bind of OBB service on com.android.server.BackupManagerService$FullBackupObbConnection@b23bad88
+W/ContextImpl( 1679): Calling a method in the system process without a qualified user: android.app.ContextImpl.bindService:1543 com.android.server.BackupManagerService$FullBackupObbConnection.establish:2443 com.android.server.BackupManagerService$PerformFullRestoreTask.run:3219 java.lang.Thread.run:841 <bottom of call stack> 
+V/BackupManagerService( 1679): System app com.navitel - skipping sig check
+D/BackupManagerService( 1679): Need to launch agent for com.navitel
+D/BackupManagerService( 1679): backup agent (com.navitel.utils.SharedInfoBackupAgent) => no clear
+D/BackupManagerService( 1679): awaiting agent for ApplicationInfo{b1e0ba70 com.navitel}
+I/BackupManagerService( 1679): OBB service connection com.android.internal.backup.IObbBackupService$Stub$Proxy@b2485fc0 connected on com.android.server.BackupManagerService$FullBackupObbConnection@b23bad88
+D/BackupManagerService( 1679): agentConnected pkg=com.navitel agent=android.os.BinderProxy@b24920e0
+I/BackupManagerService( 1679): got agent android.app.IBackupAgent$Stub$Proxy@b2494aa0
+D/BackupManagerService( 1679): Invoking agent to restore file monitor.ini
+D/BackupManagerService( 1679): Invoking agent to restore file lab-marker.txt
+I/BackupManagerService( 1679): Full restore processing complete.
+D/BackupManagerService( 1679): Full restore pass complete.
+This is not evidence of real app settings, license, maps, actual head-unit behavior or a safe restoration procedure.
