@@ -6,8 +6,17 @@ Fingerprint: generic_x86/sdk_x86/generic_x86:4.4.2/KK/4174703:eng/test-keys; har
 Emulator platform certificate: c8a2e9bccf597c2fb6dc66bee293fc13f2fc47ec77bc6b2b0d52c11f51192ab8
 Negative control: unsigned-to-platform app BACKUP_PERMISSION=false.
 Platform-signed app: BACKUP_PERMISSION=true; confirmation tapped in virtual UI; backup call returned.
+## Ordinary synthetic target
 Lab archive entry: apps/ru.lifanx60.backupfixture/_manifest
 Lab archive entry: apps/ru.lifanx60.backupfixture/f/lab-marker.txt
 Lab archive entry: apps/ru.lifanx60.backupfixture/sp/lab_probe.xml
 Both synthetic files verified: yes
-No restore, other applications, real media, full partition image, or real head-unit behavior tested.
+## System synthetic target with a backup agent
+WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
+package:/system/priv-app/BackupFixture.apk
+Lab archive entry: apps/ru.lifanx60.backupfixture/_manifest
+Lab archive entry: apps/ru.lifanx60.backupfixture/f/lab-marker.txt
+Lab archive entry: apps/ru.lifanx60.backupfixture/sp/lab_probe.xml
+Both synthetic files verified: yes
+Android userspace restarted before the system target test; not a full emulator reboot.
+No restore, real applications, real media, full partition image, or real head-unit behavior tested.
