@@ -5,83 +5,60 @@ Emulator host UID 999: non-loopback IPv4/IPv6 blocked
 * daemon started successfully
 Fingerprint: generic_x86/sdk_x86/generic_x86:4.4.2/KK/4174703:eng/test-keys; hardware: ranchu; qemu: 1
 Obtain checked stock image, extract only permission map for comparison
-/tmp/storage-vfat-probe.qFvaYr/lifan-file-manager-test.zip: OK
-/tmp/storage-vfat-probe.qFvaYr/system.img: OK
+/tmp/storage-vfat-probe.SuDXX8/lifan-file-manager-test.zip: OK
+/tmp/storage-vfat-probe.SuDXX8/system.img: OK
 adbd is already running as root
 uid=0(root) gid=0(root)
 remount succeeded
 /system/etc/permissions/platform.xml: 1 file pulled, 0 skipped. 0.1 MB/s (5658 bytes in 0.041s)
 Stock groups: ['sdcard_r', 'sdcard_rw', 'media_rw']
 Only generic emulator WRITE_EXTERNAL_STORAGE groups changed to match stock mapping
-/tmp/storage-vfat-probe.qFvaYr/emulator-platform.xml: 1 file pushed, 0 skipped. 37.5 MB/s (2849 bytes in 0.000s)
+/tmp/storage-vfat-probe.SuDXX8/emulator-platform.xml: 1 file pushed, 0 skipped. 40.3 MB/s (2849 bytes in 0.000s)
 Could not get context of /system/etc/permissions/platform.xml:  No data available
-/system/etc/permissions/platform.xml: 1 file pulled, 0 skipped. 0.1 MB/s (2849 bytes in 0.041s)
+/system/etc/permissions/platform.xml: 1 file pulled, 0 skipped. 0.1 MB/s (2849 bytes in 0.042s)
 Wait for and verify the AVD virtual FAT filesystem and its actual mount options
 /dev/block/vold/253:48 /mnt/media_rw/sdcard vfat rw,dirsync,nosuid,nodev,noexec,relatime,uid=1023,gid=1023,fmask=0007,dmask=0007,allow_utime=0020,codepage=437,iocharset=iso8859-1,shortname=mixed,utf8,errors=remount-ro 0 0
 /dev/block/vold/253:48 /mnt/media_rw/sdcard vfat rw,dirsync,nosuid,nodev,noexec,relatime,uid=1023,gid=1023,fmask=0007,dmask=0007,allow_utime=0020,codepage=437,iocharset=iso8859-1,shortname=mixed,utf8,errors=remount-ro 0 0
 /dev/block/vold/253:48 /mnt/media_rw/sdcard vfat rw,dirsync,nosuid,nodev,noexec,relatime,uid=1023,gid=1023,fmask=0007,dmask=0007,allow_utime=0020,codepage=437,iocharset=iso8859-1,shortname=mixed,utf8,errors=remount-ro 0 0
-drwxrwxr-x 0        1000              2026-11-06 13:45 mnt
-drwx------ 1023     1023              2026-11-06 13:45 media_rw
-drwxrwx--- 1023     1023              2026-11-06 13:46 sdcard
+drwxrwxr-x 0        1000              2026-11-06 13:49 mnt
+drwx------ 1023     1023              2026-11-06 13:49 media_rw
+drwxrwx--- 1023     1023              2026-11-06 13:49 sdcard
 Disabled
 SYNTHETIC_PATH_EMPTY
 Build two test-key-signed apps, same code, with/without external storage permission
 Success
 Success
-I/X60StorageGroupLab( 2366): Groups:	50052 
-I/X60StorageGroupLab( 2366): UID=10052
-E/X60StorageGroupLab( 2366): SYNTHETIC_WRITE_READ_FAILED
-E/X60StorageGroupLab( 2366): java.io.FileNotFoundException: /mnt/media_rw/sdcard/x60-synthetic-probe.txt: open failed: EACCES (Permission denied)
-E/X60StorageGroupLab( 2366): 	at libcore.io.IoBridge.open(IoBridge.java:409)
-E/X60StorageGroupLab( 2366): 	at java.io.FileOutputStream.<init>(FileOutputStream.java:88)
-E/X60StorageGroupLab( 2366): 	at java.io.FileOutputStream.<init>(FileOutputStream.java:73)
-E/X60StorageGroupLab( 2366): 	at ru.lifanx60.storagegrouplab.MainActivity.onCreate(MainActivity.java:35)
-E/X60StorageGroupLab( 2366): 	at android.app.Activity.performCreate(Activity.java:5231)
-E/X60StorageGroupLab( 2366): 	at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1087)
-E/X60StorageGroupLab( 2366): 	at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2159)
-E/X60StorageGroupLab( 2366): 	at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:2245)
-E/X60StorageGroupLab( 2366): 	at android.app.ActivityThread.access$800(ActivityThread.java:135)
-E/X60StorageGroupLab( 2366): 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1196)
-E/X60StorageGroupLab( 2366): 	at android.os.Handler.dispatchMessage(Handler.java:102)
-E/X60StorageGroupLab( 2366): 	at android.os.Looper.loop(Looper.java:136)
-E/X60StorageGroupLab( 2366): 	at android.app.ActivityThread.main(ActivityThread.java:5017)
-E/X60StorageGroupLab( 2366): 	at java.lang.reflect.Method.invokeNative(Native Method)
-E/X60StorageGroupLab( 2366): 	at java.lang.reflect.Method.invoke(Method.java:515)
-E/X60StorageGroupLab( 2366): 	at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:779)
-E/X60StorageGroupLab( 2366): 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:595)
-E/X60StorageGroupLab( 2366): 	at dalvik.system.NativeStart.main(Native Method)
-E/X60StorageGroupLab( 2366): Caused by: libcore.io.ErrnoException: open failed: EACCES (Permission denied)
-E/X60StorageGroupLab( 2366): 	at libcore.io.Posix.open(Native Method)
-E/X60StorageGroupLab( 2366): 	at libcore.io.BlockGuardOs.open(BlockGuardOs.java:110)
-E/X60StorageGroupLab( 2366): SYNTHETIC_WRITE_READ_FAILED
-E/X60StorageGroupLab( 2366): java.io.FileNotFoundException: /mnt/media_rw/sdcard/x60-synthetic-probe.txt: open failed: EACCES (Permission denied)
-E/X60StorageGroupLab( 2366): Caused by: libcore.io.ErrnoException: open failed: EACCES (Permission denied)
-SYNTHETIC_PATH_EMPTY
-I/X60StorageGroupLab( 2396): Groups:	1015 1023 1028 50053 
-I/X60StorageGroupLab( 2396): UID=10053
-E/X60StorageGroupLab( 2396): SYNTHETIC_WRITE_READ_FAILED
-E/X60StorageGroupLab( 2396): java.io.FileNotFoundException: /mnt/media_rw/sdcard/x60-synthetic-probe.txt: open failed: EACCES (Permission denied)
-E/X60StorageGroupLab( 2396): 	at libcore.io.IoBridge.open(IoBridge.java:409)
-E/X60StorageGroupLab( 2396): 	at java.io.FileOutputStream.<init>(FileOutputStream.java:88)
-E/X60StorageGroupLab( 2396): 	at java.io.FileOutputStream.<init>(FileOutputStream.java:73)
-E/X60StorageGroupLab( 2396): 	at ru.lifanx60.storagegrouplab.MainActivity.onCreate(MainActivity.java:35)
-E/X60StorageGroupLab( 2396): 	at android.app.Activity.performCreate(Activity.java:5231)
-E/X60StorageGroupLab( 2396): 	at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1087)
-E/X60StorageGroupLab( 2396): 	at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2159)
-E/X60StorageGroupLab( 2396): 	at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:2245)
-E/X60StorageGroupLab( 2396): 	at android.app.ActivityThread.access$800(ActivityThread.java:135)
-E/X60StorageGroupLab( 2396): 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1196)
-E/X60StorageGroupLab( 2396): 	at android.os.Handler.dispatchMessage(Handler.java:102)
-E/X60StorageGroupLab( 2396): 	at android.os.Looper.loop(Looper.java:136)
-E/X60StorageGroupLab( 2396): 	at android.app.ActivityThread.main(ActivityThread.java:5017)
-E/X60StorageGroupLab( 2396): 	at java.lang.reflect.Method.invokeNative(Native Method)
-E/X60StorageGroupLab( 2396): 	at java.lang.reflect.Method.invoke(Method.java:515)
-E/X60StorageGroupLab( 2396): 	at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:779)
-E/X60StorageGroupLab( 2396): 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:595)
-E/X60StorageGroupLab( 2396): 	at dalvik.system.NativeStart.main(Native Method)
-E/X60StorageGroupLab( 2396): Caused by: libcore.io.ErrnoException: open failed: EACCES (Permission denied)
-E/X60StorageGroupLab( 2396): 	at libcore.io.Posix.open(Native Method)
-E/X60StorageGroupLab( 2396): 	at libcore.io.BlockGuardOs.open(BlockGuardOs.java:110)
+Baseline generic emulator parent is mode 0700: record access before changing anything
+I/X60StorageGroupLab( 2372): Groups:	1015 1023 1028 50053 
+I/X60StorageGroupLab( 2372): UID=10053
+E/X60StorageGroupLab( 2372): SYNTHETIC_WRITE_READ_FAILED
+E/X60StorageGroupLab( 2372): java.io.FileNotFoundException: /mnt/media_rw/sdcard/x60-synthetic-probe.txt: open failed: EACCES (Permission denied)
+E/X60StorageGroupLab( 2372): 	at libcore.io.IoBridge.open(IoBridge.java:409)
+E/X60StorageGroupLab( 2372): 	at java.io.FileOutputStream.<init>(FileOutputStream.java:88)
+E/X60StorageGroupLab( 2372): 	at java.io.FileOutputStream.<init>(FileOutputStream.java:73)
+E/X60StorageGroupLab( 2372): 	at ru.lifanx60.storagegrouplab.MainActivity.onCreate(MainActivity.java:35)
+E/X60StorageGroupLab( 2372): 	at android.app.Activity.performCreate(Activity.java:5231)
+E/X60StorageGroupLab( 2372): 	at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1087)
+E/X60StorageGroupLab( 2372): 	at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2159)
+E/X60StorageGroupLab( 2372): 	at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:2245)
+E/X60StorageGroupLab( 2372): 	at android.app.ActivityThread.access$800(ActivityThread.java:135)
+E/X60StorageGroupLab( 2372): 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1196)
+E/X60StorageGroupLab( 2372): 	at android.os.Handler.dispatchMessage(Handler.java:102)
+E/X60StorageGroupLab( 2372): 	at android.os.Looper.loop(Looper.java:136)
+E/X60StorageGroupLab( 2372): 	at android.app.ActivityThread.main(ActivityThread.java:5017)
+E/X60StorageGroupLab( 2372): 	at java.lang.reflect.Method.invokeNative(Native Method)
+E/X60StorageGroupLab( 2372): 	at java.lang.reflect.Method.invoke(Method.java:515)
+E/X60StorageGroupLab( 2372): 	at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:779)
+E/X60StorageGroupLab( 2372): 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:595)
+E/X60StorageGroupLab( 2372): 	at dalvik.system.NativeStart.main(Native Method)
+E/X60StorageGroupLab( 2372): Caused by: libcore.io.ErrnoException: open failed: EACCES (Permission denied)
+E/X60StorageGroupLab( 2372): 	at libcore.io.Posix.open(Native Method)
+E/X60StorageGroupLab( 2372): 	at libcore.io.BlockGuardOs.open(BlockGuardOs.java:110)
+E/X60StorageGroupLab( 2372): SYNTHETIC_WRITE_READ_FAILED
+E/X60StorageGroupLab( 2372): java.io.FileNotFoundException: /mnt/media_rw/sdcard/x60-synthetic-probe.txt: open failed: EACCES (Permission denied)
+E/X60StorageGroupLab( 2372): Caused by: libcore.io.ErrnoException: open failed: EACCES (Permission denied)
+I/X60StorageGroupLab( 2372): Groups:	1015 1023 1028 50053 
+Unable to chown /mnt/media_rw: Read-only file system
 Lab failed (1); emulator diagnostics:
 WARNING      | Downloaded protobuf file is corrupt.
 WARNING      | encryption is off
