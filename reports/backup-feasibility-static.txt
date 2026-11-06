@@ -15344,6 +15344,22 @@ Attribute absence requires applying Android API 19 defaults; it is not proof of 
     return-void
 .end method
 
+## BackupManagerService.smali .method static synthetic access$1900(Lcom/android/server/BackupManagerService;[Landroid/content/pm/Signature;Landroid/content/pm/PackageInfo;)Z
+.method static synthetic access$1900(Lcom/android/server/BackupManagerService;[Landroid/content/pm/Signature;Landroid/content/pm/PackageInfo;)Z
+    .locals 1
+    .param p0, "x0"    # Lcom/android/server/BackupManagerService;
+    .param p1, "x1"    # [Landroid/content/pm/Signature;
+    .param p2, "x2"    # Landroid/content/pm/PackageInfo;
+
+    .prologue
+    .line 138
+    invoke-direct {p0, p1, p2}, Lcom/android/server/BackupManagerService;->signaturesMatch([Landroid/content/pm/Signature;Landroid/content/pm/PackageInfo;)Z
+
+    move-result v0
+
+    return v0
+.end method
+
 ## BackupManagerService.smali .method private routeSocketDataToOutput(Landroid/os/ParcelFileDescriptor;Ljava/io/OutputStream;)V
 .method private routeSocketDataToOutput(Landroid/os/ParcelFileDescriptor;Ljava/io/OutputStream;)V
     .locals 8
@@ -15428,6 +15444,156 @@ Attribute absence requires applying Android API 19 defaults; it is not proof of 
     .line 2540
     :cond_2
     return-void
+.end method
+
+## BackupManagerService.smali .method private signaturesMatch([Landroid/content/pm/Signature;Landroid/content/pm/PackageInfo;)Z
+.method private signaturesMatch([Landroid/content/pm/Signature;Landroid/content/pm/PackageInfo;)Z
+    .locals 10
+    .param p1, "storedSigs"    # [Landroid/content/pm/Signature;
+    .param p2, "target"    # Landroid/content/pm/PackageInfo;
+
+    .prologue
+    const/4 v7, 0x0
+
+    const/4 v6, 0x1
+
+    .line 4331
+    iget-object v8, p2, Landroid/content/pm/PackageInfo;->applicationInfo:Landroid/content/pm/ApplicationInfo;
+
+    iget v8, v8, Landroid/content/pm/ApplicationInfo;->flags:I
+
+    and-int/lit8 v8, v8, 0x1
+
+    if-eqz v8, :cond_1
+
+    .line 4332
+    const-string v7, "BackupManagerService"
+
+    new-instance v8, Ljava/lang/StringBuilder;
+
+    invoke-direct {v8}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v9, "System app "
+
+    invoke-virtual {v8, v9}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v8
+
+    iget-object v9, p2, Landroid/content/pm/PackageInfo;->packageName:Ljava/lang/String;
+
+    invoke-virtual {v8, v9}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v8
+
+    const-string v9, " - skipping sig check"
+
+    invoke-virtual {v8, v9}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v8
+
+    invoke-virtual {v8}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v8
+
+    invoke-static {v7, v8}, Landroid/util/Slog;->v(Ljava/lang/String;Ljava/lang/String;)I
+
+    .line 4367
+    :cond_0
+    :goto_0
+    return v6
+
+    .line 4338
+    :cond_1
+    iget-object v0, p2, Landroid/content/pm/PackageInfo;->signatures:[Landroid/content/pm/Signature;
+
+    .line 4341
+    .local v0, "deviceSigs":[Landroid/content/pm/Signature;
+    if-eqz p1, :cond_2
+
+    array-length v8, p1
+
+    if-nez v8, :cond_3
+
+    :cond_2
+    if-eqz v0, :cond_0
+
+    array-length v8, v0
+
+    if-eqz v8, :cond_0
+
+    .line 4345
+    :cond_3
+    if-eqz p1, :cond_4
+
+    if-nez v0, :cond_5
+
+    :cond_4
+    move v6, v7
+
+    .line 4346
+    goto :goto_0
+
+    .line 4352
+    :cond_5
+    array-length v5, p1
+
+    .line 4353
+    .local v5, "nStored":I
+    array-length v4, v0
+
+    .line 4355
+    .local v4, "nDevice":I
+    const/4 v1, 0x0
+
+    .local v1, "i":I
+    :goto_1
+    if-ge v1, v5, :cond_0
+
+    .line 4356
+    const/4 v3, 0x0
+
+    .line 4357
+    .local v3, "match":Z
+    const/4 v2, 0x0
+
+    .local v2, "j":I
+    :goto_2
+    if-ge v2, v4, :cond_6
+
+    .line 4358
+    aget-object v8, p1, v1
+
+    aget-object v9, v0, v2
+
+    invoke-virtual {v8, v9}, Landroid/content/pm/Signature;->equals(Ljava/lang/Object;)Z
+
+    move-result v8
+
+    if-eqz v8, :cond_7
+
+    .line 4359
+    const/4 v3, 0x1
+
+    .line 4363
+    :cond_6
+    if-nez v3, :cond_8
+
+    move v6, v7
+
+    .line 4364
+    goto :goto_0
+
+    .line 4357
+    :cond_7
+    add-int/lit8 v2, v2, 0x1
+
+    goto :goto_2
+
+    .line 4355
+    :cond_8
+    add-int/lit8 v1, v1, 0x1
+
+    goto :goto_1
 .end method
 
 ## BackupManagerService.smali .method public acknowledgeFullBackupOrRestore(IZLjava/lang/String;Ljava/lang/String;Landroid/app/backup/IFullBackupRestoreObserver;)V
@@ -17005,5 +17171,124 @@ Attribute absence requires applying Android API 19 defaults; it is not proof of 
     goto :goto_1
 .end method
 
-Selected methods: 68
+Selected methods: 70
 No Android command or firmware code was run. Static eligibility is not a tested recovery.
+
+# Declared Navitel backup agent: old-decoded
+Path: smali/com/oslib/utils/SharedInfoBackupAgent.smali
+.class public final Lcom/oslib/utils/SharedInfoBackupAgent;
+.super Landroid/app/backup/BackupAgentHelper;
+.source ""
+
+
+# static fields
+.field public static final PREFERENCES_NAME:Ljava/lang/String; = "com.navitel.ih_shpr"
+
+.field private static final PREFS_BACKUP_KEY:Ljava/lang/String; = "ids"
+
+
+# direct methods
+.method public constructor <init>()V
+    .locals 0
+
+    invoke-direct {p0}, Landroid/app/backup/BackupAgentHelper;-><init>()V
+
+    return-void
+.end method
+
+.method public static requestBackup(Landroid/content/Context;)V
+    .locals 1
+
+    new-instance v0, Landroid/app/backup/BackupManager;
+
+    invoke-direct {v0, p0}, Landroid/app/backup/BackupManager;-><init>(Landroid/content/Context;)V
+
+    invoke-virtual {v0}, Landroid/app/backup/BackupManager;->dataChanged()V
+
+    return-void
+.end method
+
+
+# virtual methods
+.method public onCreate()V
+    .locals 4
+
+    new-instance v0, Landroid/app/backup/SharedPreferencesBackupHelper;
+
+    const/4 v1, 0x1
+
+    new-array v1, v1, [Ljava/lang/String;
+
+    const/4 v2, 0x0
+
+    const-string v3, "com.navitel.ih_shpr"
+
+    aput-object v3, v1, v2
+
+    invoke-direct {v0, p0, v1}, Landroid/app/backup/SharedPreferencesBackupHelper;-><init>(Landroid/content/Context;[Ljava/lang/String;)V
+
+    const-string v1, "ids"
+
+    invoke-virtual {p0, v1, v0}, Landroid/app/backup/BackupAgentHelper;->addHelper(Ljava/lang/String;Landroid/app/backup/BackupHelper;)V
+
+    return-void
+.end method
+
+Agent name or implementation alone does not prove backup contents or restoration.
+
+# Declared Navitel backup agent: new-decoded
+Path: smali/com/navitel/utils/SharedInfoBackupAgent.smali
+.class public final Lcom/navitel/utils/SharedInfoBackupAgent;
+.super Landroid/app/backup/BackupAgentHelper;
+.source "SharedInfoBackupAgent.java"
+
+
+# direct methods
+.method public constructor <init>()V
+    .locals 0
+
+    .line 8
+    invoke-direct {p0}, Landroid/app/backup/BackupAgentHelper;-><init>()V
+
+    return-void
+.end method
+
+.method public static requestBackup(Landroid/content/Context;)V
+    .locals 1
+
+    .line 20
+    new-instance v0, Landroid/app/backup/BackupManager;
+
+    invoke-direct {v0, p0}, Landroid/app/backup/BackupManager;-><init>(Landroid/content/Context;)V
+
+    .line 21
+    invoke-virtual {v0}, Landroid/app/backup/BackupManager;->dataChanged()V
+
+    return-void
+.end method
+
+
+# virtual methods
+.method public onCreate()V
+    .locals 2
+
+    .line 15
+    new-instance v0, Landroid/app/backup/SharedPreferencesBackupHelper;
+
+    const-string v1, "com.navitel.ih_shpr"
+
+    filled-new-array {v1}, [Ljava/lang/String;
+
+    move-result-object v1
+
+    invoke-direct {v0, p0, v1}, Landroid/app/backup/SharedPreferencesBackupHelper;-><init>(Landroid/content/Context;[Ljava/lang/String;)V
+
+    const-string v1, "ids"
+
+    .line 16
+    invoke-virtual {p0, v1, v0}, Landroid/app/backup/BackupAgentHelper;->addHelper(Ljava/lang/String;Landroid/app/backup/BackupHelper;)V
+
+    return-void
+.end method
+
+Agent name or implementation alone does not prove backup contents or restoration.
