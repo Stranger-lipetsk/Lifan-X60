@@ -1,0 +1,52 @@
+# USB network debug callers: offline search of extracted system
+No firmware code was executed, no device was accessed.
+Files: 924; ZIP/APK/JAR archives: 95; archive entries: 12718
+Direct ASCII and UTF-16LE string search; nested archives, split/encrypted or dynamically constructed strings may be missed.
+
+## Matches
+bin/el_debug_tool | raw file | el_debug_tool
+bin/el_debug_tool | raw file | service.adb.tcp.port
+priv-app/SystemUI.apk | classes.dex | service.adb.tcp.port
+
+## Skipped or failed files and entries: 3
+bin/adb | BadZipFile
+lib/libandroidfw.so | BadZipFile
+xbin/dexdump | BadZipFile
+
+## ASIX module embedded metadata (not runtime compatibility)
+alias=usb:v0B95p7E2Bd*dc*dsc*dp*ic*isc*ip*
+alias=usb:v0DB0pA877d*dc*dsc*dp*ic*isc*ip*
+alias=usb:v14EApAB11d*dc*dsc*dp*ic*isc*ip*
+alias=usb:v0B95p772Ad*dc*dsc*dp*ic*isc*ip*
+alias=usb:v05ACp1402d*dc*dsc*dp*ic*isc*ip*
+alias=usb:v050Dp5055d*dc*dsc*dp*ic*isc*ip*
+alias=usb:v04BBp0930d*dc*dsc*dp*ic*isc*ip*
+alias=usb:v1737p0039d*dc*dsc*dp*ic*isc*ip*
+alias=usb:v2001p3C05d*dc*dsc*dp*ic*isc*ip*
+alias=usb:v07D1p3C05d*dc*dsc*dp*ic*isc*ip*
+alias=usb:v1557p7720d*dc*dsc*dp*ic*isc*ip*
+alias=usb:v13B1p0018d*dc*dsc*dp*ic*isc*ip*
+alias=usb:v0789p0160d*dc*dsc*dp*ic*isc*ip*
+alias=usb:v0B95p1780d*dc*dsc*dp*ic*isc*ip*
+alias=usb:v0B95p7720d*dc*dsc*dp*ic*isc*ip*
+alias=usb:v0B95p772Bd*dc*dsc*dp*ic*isc*ip*
+alias=usb:v04F1p3008d*dc*dsc*dp*ic*isc*ip*
+alias=usb:v1631p6200d*dc*dsc*dp*ic*isc*ip*
+alias=usb:v1189p0893d*dc*dsc*dp*ic*isc*ip*
+alias=usb:v07AAp0017d*dc*dsc*dp*ic*isc*ip*
+alias=usb:v0DF6p0056d*dc*dsc*dp*ic*isc*ip*
+alias=usb:v6189p182Dd*dc*dsc*dp*ic*isc*ip*
+alias=usb:v0411p006Ed*dc*dsc*dp*ic*isc*ip*
+alias=usb:v0411p003Dd*dc*dsc*dp*ic*isc*ip*
+alias=usb:v0557p2009d*dc*dsc*dp*ic*isc*ip*
+alias=usb:v08DDp90FFd*dc*dsc*dp*ic*isc*ip*
+alias=usb:v07B8p420Ad*dc*dsc*dp*ic*isc*ip*
+alias=usb:v0B95p1720d*dc*dsc*dp*ic*isc*ip*
+alias=usb:v2001p1A00d*dc*dsc*dp*ic*isc*ip*
+alias=usb:v0846p1040d*dc*dsc*dp*ic*isc*ip*
+alias=usb:v077Bp2226d*dc*dsc*dp*ic*isc*ip*
+vermagic=3.0.35 SMP preempt mod_unload modversions ARMv7 
+
+Absence of matches does not prove a property cannot be set through another path.
+
+## Potential extraction diagnostics
