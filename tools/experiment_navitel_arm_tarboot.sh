@@ -706,15 +706,19 @@ grep -F 'No space left on device' "$work/plus-extract.log" > "$work/plus-error.t
 echo 'LAB ONLY: start same disposable ARM AVD from the extracted synthetic image'
 # A fixed synthetic witness exists only on the extracted image. It proves
 # the emulator did not silently fall back to the original AVD userdata.
-sudo test ! -e "$work/copy-source/local/tmp/x60-copied-image-witness"
+witness_rel='data/ru.lifanx60.backupfixture/files/x60-copied-image-witness'
+sudo test ! -e "$work/copy-source/$witness_rel"
 printf 'X60_COPIED_IMAGE_ONLY\n' > "$work/tarboot-witness.txt"
-sudo install -m 0644 "$work/tarboot-witness.txt" "$work/copy-dest/local/tmp/x60-copied-image-witness"
+sudo install -m 0600 "$work/tarboot-witness.txt" "$work/copy-dest/$witness_rel"
+witness_owner=$(sudo stat -c '%u:%g' "$work/copy-dest/data/ru.lifanx60.backupfixture/files/lab-marker.txt")
+sudo chown "$witness_owner" "$work/copy-dest/$witness_rel"
 sudo umount "$work/copy-dest"
 e2fsck -fn "$work/synthetic-p5.img" > "$work/tarboot-fsck.txt" 2>&1
 dumpe2fs -h "$work/synthetic-p5.img" 2>/dev/null | grep -E '^Block count:|^Block size:' > "$work/tarboot-super-before.txt"
-# The legacy emulator silently replaces/expands shorter -data files when its
-# configured partition is 1 GiB. Pad the host backing file to 1 GiB without
-# resizing the ext4 filesystem; the pre-boot filesystem remains 512 MiB.
+# The legacy emulator expanded the shorter backing file in an earlier run.
+# Pad it to the configured 1 GiB without resizing ext4; the pre-boot
+# filesystem remains 512 MiB. This is a workaround, not proof of the cause
+# of that earlier run's missing temporary-directory witness.
 image_fs_bytes_before=$(stat -c %s "$work/synthetic-p5.img")
 [ "$image_fs_bytes_before" = 536870912 ]
 truncate -s 1073741824 "$work/synthetic-p5.img"
@@ -732,8 +736,14 @@ bootid_tarboot=$(timeout -k 5 30 "$adb" shell cat /proc/sys/kernel/random/boot_i
 [[ "$bootid_tarboot" =~ ^[0-9a-f-]{36}$ ]] && [ "$bootid_tarboot" != "$newid" ] || { echo 'New kernel boot ID not confirmed'; exit 1; }
 timeout -k 5 60 "$adb" shell id | tr -d '\r' | grep -q 'uid=0'
 timeout -k 5 30 "$adb" shell getprop ro.build.fingerprint | tr -d '\r' | grep -Fx 'generic/sdk/generic:4.4.2/KK/3462041:eng/test-keys'
-timeout -k 5 30 "$adb" shell cat /data/local/tmp/x60-copied-image-witness | tr -d '\r' | tee "$work/tarboot-witness-readback.txt"
-grep -Fx X60_COPIED_IMAGE_ONLY "$work/tarboot-witness-readback.txt" || { echo 'Copied-image witness missing; do not claim boot from copy'; exit 1; }
+timeout -k 5 30 "$adb" shell cat /data/data/ru.lifanx60.backupfixture/files/x60-copied-image-witness | tr -d '\r' | tee "$work/tarboot-witness-readback.txt"
+grep -Fx X60_COPIED_IMAGE_ONLY "$work/tarboot-witness-readback.txt" || {
+  echo 'Copied-image witness missing; do not claim boot from copy'
+  timeout -k 5 30 "$adb" shell pm path com.navitel || true
+  timeout -k 5 30 "$adb" shell pm path ru.lifanx60.backupfixture || true
+  timeout -k 5 30 "$adb" shell ls -l /data/app /data/system/packages.xml /data/data/ru.lifanx60.backupfixture/files || true
+  exit 1
+}
 timeout -k 5 30 "$adb" shell df /data | tr -d '\r' > "$work/tarboot-df.txt"
 timeout -k 5 30 "$adb" shell cat /proc/mounts | tr -d '\r' | grep -E ' /data | /system ' > "$work/mounts-tarboot.txt"
 grep -E ' /system [^ ]+ ro[, ]' "$work/mounts-tarboot.txt"
