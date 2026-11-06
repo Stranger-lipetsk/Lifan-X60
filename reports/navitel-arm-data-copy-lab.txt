@@ -1,0 +1,101 @@
+# App-initiated multi-package synthetic backup and Navitel update on disposable Android 4.4.2 ARM
+Generic ARM emulator with stock-derived services.jar preloaded offline, not the head unit; host emulator network blocked.
+Disposable generic ARM system image built and fsck-checked offline. Stock Navitel, services.jar and measurement-only BusyBox matched byte-for-byte; services dex mapped by system_server.
+No real maps, license, accounts, user data or SD; no APKs published. Virtual SD initially empty.
+ADB prepared and observed the disposable emulator and tapped UI; update installed by stock-derived Amaze and PackageInstaller. Physical GU and USB were not tested.
+Stock-derived Amaze and installer were preloaded offline and matched byte-for-byte.
+Initial stock-derived Navitel certificate equals the verified AOSP testkey certificate:
+a40da80a59d170caa950cf15c18c454d47a39b26989d8b640ecd745ba71bf5dc
+Candidate re-signed in disposable CI only; not an installation recommendation.
+Uncompressed payload entries identical, excluding JAR signing records: 5019
+This does not verify ZIP offsets, metadata, V2/V3 signing block or runtime signature checks.
+Negative control: original differently signed candidate rejected; installer result:
+Failure [INSTALL_PARSE_FAILED_INCONSISTENT_CERTIFICATES]
+Matching certificate candidate installed through Amaze/PackageInstaller UI as data update; original emulator system APK unchanged: yes.
+Emulator system mounted read-only from initial boot through update (no system write or remount during emulator run):
+/dev/block/mtdblock0 /system ext4 ro,seclabel,relatime,data=ordered 0 0
+UID before/after/userspace restart/cold start: 10013/10013/10013/10013
+## Package paths and selected version
+package:/system/priv-app/Navitel-large.apk
+package:/data/app/com.navitel-1.apk
+package:/data/app/com.navitel-1.apk
+    codePath=/data/app/com.navitel-1.apk
+    versionCode=360622024 targetSdk=33
+    versionName=v11.11.1128
+    codePath=/system/priv-app/Navitel-large.apk
+    versionCode=201103033 targetSdk=28
+    versionName=9.13.73
+Synthetic marker and preferences for Navitel and an unrelated test app, including both UIDs, survived install, userspace restart, launch attempt, and host-triggered virtual ARM cold start: yes.
+App with generic emulator platform signature and ordinary UID called backup/restore service itself; confirmations were tapped on emulator UI.
+Backup archive on emulator virtual external storage survived ARM cold start byte-for-byte.
+## Multi-package synthetic archive before update
+Lab archive entry: apps/com.navitel/_manifest
+Lab archive entry: apps/com.navitel/r/monitor.ini
+Lab archive entry: apps/com.navitel/f/lab-marker.txt
+Lab archive entry: apps/com.navitel/sp/x60_lab_probe.xml
+Lab archive entry: apps/ru.lifanx60.backupfixture/_manifest
+Lab archive entry: apps/ru.lifanx60.backupfixture/f/lab-marker.txt
+Lab archive entry: apps/ru.lifanx60.backupfixture/sp/lab_probe.xml
+Navitel and independent synthetic files matched; allowBackup=false target absent: yes
+After cold start, four synthetic files in the two included packages were deliberately removed on the emulator and then restored byte-for-byte.
+The allowBackup=false synthetic package was absent from archive; its files were not deleted and still matched.
+Restore can clear data and this fixture must not be used on a real device.
+## Allocated emulator storage (KiB, BusyBox du -sk)
+Generic ARM image, emulator data/apps/cache and synthetic fixtures, not physical GU sizes; emulator usage changes and overlapping categories must not be added.
+Before update:
+38720	/data
+6472	/data/app
+44	/data/app-lib
+25632	/data/dalvik-cache
+28	/data/data/com.navitel
+X60_SIZE_DONE
+After update:
+171468	/data
+103308	/data/app
+19528	/data/app-lib
+41808	/data/dalvik-cache
+28	/data/data/com.navitel
+96836	/data/app/com.navitel-1.apk
+19484	/data/app-lib/com.navitel-1
+6800	/data/dalvik-cache/data@app@com.navitel-1.apk@classes.dex
+X60_SIZE_DONE
+After host-triggered cold start:
+238324	/data
+103308	/data/app
+19528	/data/app-lib
+41808	/data/dalvik-cache
+66852	/data/data/com.navitel
+96836	/data/app/com.navitel-1.apk
+19484	/data/app-lib/com.navitel-1
+6800	/data/dalvik-cache/data@app@com.navitel-1.apk@classes.dex
+X60_SIZE_DONE
+The update is a CI-only re-signed version of the 99176587-byte original APK; the actual GU install footprint and free space remain unknown.
+## Offline copy model based on synthetic ARM userdata
+The emulator was synced and stopped; a copy of its 1 GiB userdata image was fsck-checked offline and mounted read-only. No physical device or user data.
+Offline fsck correction status: 1 (0 clean, 1 corrected); a subsequent read-only fsck passed.
+Stock-derived ARM BusyBox tar was run through QEMU in a restricted container against the copy. Destination was a new empty 512 MiB ext4 regular-file image, not the real GU partition.
+Archive exit: 0; extraction exit: 0; archive remains on destination.
+Selected synthetic files checked after extraction:
+Synthetic system/packages.xml content, uid, gid and mode match: 1000:1000 660
+Synthetic app/com.navitel-1.apk content, uid, gid and mode match: 1000:1000 644
+Synthetic data/com.navitel/files/lab-marker.txt content, uid, gid and mode match: 10013:10013 600
+Synthetic data/com.navitel/shared_prefs/x60_lab_probe.xml content, uid, gid and mode match: 10013:10013 600
+Synthetic data/ru.lifanx60.backupfixture/files/lab-marker.txt content, uid, gid and mode match: 10054:10054 600
+Synthetic data/ru.lifanx60.backupfixture/shared_prefs/lab_probe.xml content, uid, gid and mode match: 10054:10054 600
+Allocated KiB on the CI host (destination includes the archive; source ext4, not GU tmpfs):
+238336	/tmp/navitel-arm-data-copy-lab.s23yFY/copy-source
+474404	/tmp/navitel-arm-data-copy-lab.s23yFY/copy-dest
+236056	/tmp/navitel-arm-data-copy-lab.s23yFY/copy-dest/data.tar
+Destination filesystem usage:
+Filesystem     1K-blocks   Used Available Use% Mounted on
+/dev/loop1        498900 474408         0 100% /tmp/navitel-arm-data-copy-lab.s23yFY/copy-dest
+Only listed files and metadata were compared; tar exit 0 is not proof all app data, xattrs, SELinux labels, sparse data, or timestamps were preserved.
+The stock updater declares DATA_SIZE=512 with sfdisk -uM for logical p5; actual head-unit size, free space, other apps and runtime sequence remain unknown.
+## Emulator crash dialog while installing
+No Navitel crash dialog observed during installer polling; other failures may still occur
+## Launch attempt (no activation asserted)
+Starting: Intent { cmp=com.navitel/.app.MainActivity }
+    mResumedActivity: ActivityRecord{b1fee790 u0 com.navitel/.app.MainActivity t2}
+  mFocusedActivity: ActivityRecord{b1fee790 u0 com.navitel/.app.MainActivity t2}
+Kernel boot ID changed after host stopped and restarted the same disposable emulator. This is a virtual cold start after sync, not real-device hibernate or graceful car shutdown.
+Real device app behavior, USB, rollback, settings and all data preservation remain unverified.
