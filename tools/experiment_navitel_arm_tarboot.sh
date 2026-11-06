@@ -706,6 +706,7 @@ grep -F 'No space left on device' "$work/plus-extract.log" > "$work/plus-error.t
 echo 'LAB ONLY: start same disposable ARM AVD from the extracted synthetic image'
 # A fixed synthetic witness exists only on the extracted image. It proves
 # the emulator did not silently fall back to the original AVD userdata.
+sudo sha256sum "$work/copy-dest/data.tar" | awk '{print $1}' > "$work/tarboot-archive-sha256.txt"
 witness_rel='data/ru.lifanx60.backupfixture/files/x60-copied-image-witness'
 sudo test ! -e "$work/copy-source/$witness_rel"
 printf 'X60_COPIED_IMAGE_ONLY\n' > "$work/tarboot-witness.txt"
@@ -797,17 +798,46 @@ ready=no
 for i in $(seq 1 60); do
   timeout -k 5 30 "$adb" logcat -d -v brief > "$work/canary-tarboot-log.txt" 2>&1 || true
   if grep -Fq FIXTURE_READY "$work/canary-tarboot-log.txt"; then ready=yes; break; fi
+  if grep -Fq FIXTURE_FAILURE "$work/canary-tarboot-log.txt"; then break; fi
   sleep 2
 done
-[ "$ready" = yes ] || {
+initial_fixture_result=ready
+archive_removed=no
+if [ "$ready" != yes ]; then
   echo 'Synthetic independent app did not emit FIXTURE_READY after copied-image boot'
   echo 'am start result:'; cat "$work/canary-tarboot-start.txt"
   echo 'Relevant activity and error log lines:'
-  grep -iE 'backupfixture|FIXTURE_READY|FATAL EXCEPTION|AndroidRuntime|No space|ENOSPC|permission denied|dexopt|Error:' "$work/canary-tarboot-log.txt" | tail -100 || true
+  grep -iE 'backupfixture|FIXTURE_READY|FIXTURE_FAILURE|FATAL EXCEPTION|AndroidRuntime|No space|ENOSPC|permission denied|dexopt|Error:' "$work/canary-tarboot-log.txt" | tail -100 || true
   echo 'Filesystem space:'; timeout -k 5 30 "$adb" shell df /data || true
-  echo 'Current activities:'; timeout -k 5 30 "$adb" shell dumpsys activity activities | grep -iE 'backupfixture|mResumedActivity|Hist #' | tail -30 || true
-  exit 1
-}
+  grep -Fq FIXTURE_FAILURE "$work/canary-tarboot-log.txt" || { echo 'Unexpected launch failure'; exit 1; }
+  grep -Fq 'ENOSPC (No space left on device)' "$work/canary-tarboot-log.txt" || { echo 'Unexpected launch failure: ENOSPC not observed'; exit 1; }
+  initial_fixture_result=ENOSPC
+  # A failing write may truncate the fixture's existing file. Record its exact
+  # post-failure bytes before any retry, rather than calling them preserved.
+  timeout -k 5 60 "$adb" pull /data/data/ru.lifanx60.backupfixture/files/lab-marker.txt "$work/canary-marker-after-failure.txt" >/dev/null
+  wc -c "$work/canary-marker-before.txt" "$work/canary-marker-after-failure.txt" > "$work/canary-failure-sizes.txt"
+  cat "$work/canary-failure-sizes.txt"
+  # Separate diagnostic intervention, ONLY in this throwaway emulator: verify
+  # the redundant synthetic tar's exact bytes, remove it, and retry. This is
+  # not stock Hibernate behavior or an instruction for a physical device.
+  timeout -k 10 300 "$adb" pull /data/data.tar "$work/tarboot-archive-readback.tar" >/dev/null
+  sha256sum "$work/tarboot-archive-readback.tar" | awk '{print $1}' > "$work/tarboot-archive-readback-sha256.txt"
+  cmp "$work/tarboot-archive-sha256.txt" "$work/tarboot-archive-readback-sha256.txt"
+  timeout -k 5 30 "$adb" shell rm /data/data.tar
+  timeout -k 5 30 "$adb" shell 'test ! -e /data/data.tar && echo SYNTHETIC_ARCHIVE_REMOVED' | tr -d '\r' | grep -Fx SYNTHETIC_ARCHIVE_REMOVED
+  archive_removed=yes
+  timeout -k 5 30 "$adb" shell df /data | tr -d '\r' > "$work/tarboot-df-after-intervention.txt"
+  timeout -k 5 30 "$adb" shell am force-stop ru.lifanx60.backupfixture
+  timeout -k 5 30 "$adb" logcat -c
+  timeout -k 5 60 "$adb" shell am start -n ru.lifanx60.backupfixture/.MainActivity > "$work/canary-retry-start.txt" 2>&1
+  for i in $(seq 1 60); do
+    timeout -k 5 30 "$adb" logcat -d -v brief > "$work/canary-retry-log.txt" 2>&1 || true
+    if grep -Fq FIXTURE_READY "$work/canary-retry-log.txt"; then ready=yes; break; fi
+    if grep -Fq FIXTURE_FAILURE "$work/canary-retry-log.txt"; then break; fi
+    sleep 2
+  done
+  [ "$ready" = yes ] || { echo 'Synthetic fixture retry failed'; cat "$work/canary-retry-start.txt"; grep -iE 'FIXTURE_|ENOSPC|FATAL EXCEPTION' "$work/canary-retry-log.txt" | tail -30 || true; exit 1; }
+fi
 check_synthetic tarbootlaunch
 # Observe activity launch, without asserting real activation or navigation.
 timeout -k 5 30 "$adb" logcat -c
@@ -869,7 +899,17 @@ check_synthetic tarbootnav
   echo 'A synthetic witness added only to the extracted image was readable after boot, excluding silent fallback to original AVD userdata.'
   echo 'df /data after boot:'; cat "$work/tarboot-df.txt"
   echo 'After boot, Navitel remained registered as the data update, with the same UID; synthetic files and UIDs of Navitel and independent fixture matched before starting the fixture. Blocked fixture files matched too.'
-  echo 'Independent fixture started and emitted FIXTURE_READY. System Navitel APK and services.jar matched originals; system_server mapped the services dex.'
+  echo "Initial independent-fixture launch result: $initial_fixture_result. Synthetic archive removed in a separate CI-only intervention: $archive_removed."
+  if [ "$archive_removed" = yes ]; then
+    echo 'Fixture first failed with ENOSPC, despite free blocks visible to root. Before retry the synthetic archive was pulled and its SHA-256 matched the pre-boot file; then it was deleted ONLY in the disposable emulator.'
+    echo 'Fixture marker byte counts before first launch and after its failed write:'; cat "$work/canary-failure-sizes.txt"
+    echo 'The retry emitted FIXTURE_READY and recreated its marker; this does not prove that marker survived the failed write.'
+    echo 'df /data after synthetic-only intervention:'; cat "$work/tarboot-df-after-intervention.txt"
+    echo 'This intervention does not model stock Hibernate and is not an instruction for a real device.'
+  else
+    echo 'Independent fixture emitted FIXTURE_READY without the intervention.'
+  fi
+  echo 'System Navitel APK and services.jar matched originals; system_server mapped the services dex.'
   echo 'Mounts:'; cat "$work/mounts-tarboot.txt"
   echo 'Synthetic emulator storage after copied-image boot:'; cat "$work/du-tarboot.txt"
   echo 'Navitel launch observation (not activation):'; cat "$work/navitel-tarboot-start.txt"
