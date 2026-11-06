@@ -1,0 +1,4 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="ru.lifanx60.sulabordinary">
+    <uses-sdk android:minSdkVersion="19" android:targetSdkVersion="19" />
+    <application android:label="Disposable su lab control" android:allowBackup="false"><activity android:name="ru.lifanx60.sulab.MainActivity" android:exported="true" /></application>
+</manifest>
