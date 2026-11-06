@@ -1,6 +1,6 @@
 # Navitel system package migration in a disposable Android 4.4.2 ARM emulator
 Generic AOSP PackageManager, NOT the vendor framework or head unit. Never use these operations on a physical unit.
-Two real Navitel APKs were placed as system APKs. No interactive launch, real user account, license, maps or SD were used.
+Two real Navitel APKs were placed as system APKs. No interactive launch, real user account, license, maps or real SD were used; the AVD had an empty virtual SD.
 Android userspace was restarted between APK replacements; the emulator VM was not rebooted.
 Host firewall blocks non-loopback IPv4 and IPv6 for the emulator process, including during boot; receiver or service activity was not separately traced.
 Fingerprint: generic/sdk/generic:4.4.2/KK/3462041:eng/test-keys, ABI: armeabi-v7a
@@ -25,21 +25,21 @@ package:/system/priv-app/Navitel-large.apk
 read status: 0
 X60_DISPOSABLE_MIGRATION_TEST
 ## Selected PackageManager logs, if still present
-E/PackageManager( 1742): Package com.navitel signatures do not match the previously installed version; ignoring!
-W/PackageManager( 1742): System package com.navitel signature changed; retaining data.
-W/PackageManager( 1742): Unknown permission android.permission.FOREGROUND_SERVICE in package com.navitel
-W/PackageManager( 1742): Unknown permission android.permission.POST_NOTIFICATIONS in package com.navitel
-W/PackageManager( 1742): Unknown permission com.android.vending.BILLING in package com.navitel
-W/PackageManager( 1742): Unknown permission com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE in package com.navitel
-W/PackageManager( 1742): Unknown permission android.permission.FOREGROUND_SERVICE in package com.navitel
-W/PackageManager( 1742): Unknown permission android.permission.POST_NOTIFICATIONS in package com.navitel
-W/PackageManager( 1742): Unknown permission com.android.vending.BILLING in package com.navitel
-W/PackageManager( 1742): Unknown permission com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE in package com.navitel
-W/PackageManager( 1742): Unknown permission android.permission.FOREGROUND_SERVICE in package com.navitel
-W/PackageManager( 1742): Unknown permission android.permission.POST_NOTIFICATIONS in package com.navitel
-W/PackageManager( 1742): Unknown permission com.android.vending.BILLING in package com.navitel
-W/PackageManager( 1742): Unknown permission com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE in package com.navitel
-I/BackupManagerService( 1742): Scheduling backup for new app com.navitel
-D/BackupManagerService( 1742): Now staging backup of com.navitel
-I/BackupManagerService( 1742):   com.navitel
+E/PackageManager( 1458): Package com.navitel signatures do not match the previously installed version; ignoring!
+W/PackageManager( 1458): System package com.navitel signature changed; retaining data.
+W/PackageManager( 1458): Unknown permission android.permission.FOREGROUND_SERVICE in package com.navitel
+W/PackageManager( 1458): Unknown permission android.permission.POST_NOTIFICATIONS in package com.navitel
+W/PackageManager( 1458): Unknown permission com.android.vending.BILLING in package com.navitel
+W/PackageManager( 1458): Unknown permission com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE in package com.navitel
+W/PackageManager( 1458): Unknown permission android.permission.FOREGROUND_SERVICE in package com.navitel
+W/PackageManager( 1458): Unknown permission android.permission.POST_NOTIFICATIONS in package com.navitel
+W/PackageManager( 1458): Unknown permission com.android.vending.BILLING in package com.navitel
+W/PackageManager( 1458): Unknown permission com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE in package com.navitel
+W/PackageManager( 1458): Unknown permission android.permission.FOREGROUND_SERVICE in package com.navitel
+W/PackageManager( 1458): Unknown permission android.permission.POST_NOTIFICATIONS in package com.navitel
+W/PackageManager( 1458): Unknown permission com.android.vending.BILLING in package com.navitel
+W/PackageManager( 1458): Unknown permission com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE in package com.navitel
+I/BackupManagerService( 1458): Scheduling backup for new app com.navitel
+D/BackupManagerService( 1458): Now staging backup of com.navitel
+I/BackupManagerService( 1458):   com.navitel
 Observation is limited to a fresh, generic emulator data state; no inference of preservation of real Navitel settings or licenses is justified.
