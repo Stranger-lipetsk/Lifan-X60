@@ -2,6 +2,7 @@
 """Extract static evidence from trusted update ramdisk; execute no firmware code."""
 import hashlib
 import re
+import struct
 import subprocess
 import sys
 import tempfile
@@ -32,6 +33,29 @@ def sha256(path):
         for chunk in iter(lambda: f.read(1024 * 1024), b''):
             h.update(chunk)
     return h.hexdigest()
+
+
+def literal_addresses(path, needles):
+    """Resolve file strings through ELF32 PT_LOAD segments without executing ELF."""
+    data = path.read_bytes()
+    if data[:6] != b'\x7fELF\x01\x01':
+        raise ValueError('Expected little-endian ELF32')
+    phoff = struct.unpack_from('<I', data, 28)[0]
+    phentsize, phnum = struct.unpack_from('<HH', data, 42)
+    segments = [struct.unpack_from('<8I', data, phoff + n * phentsize)
+                for n in range(phnum)]
+    results = []
+    for needle in needles:
+        start = 0
+        while True:
+            pos = data.find(needle.encode(), start)
+            if pos < 0:
+                break
+            for ptype, offset, vaddr, _, filesz, _, _, _ in segments:
+                if ptype == 1 and offset <= pos < offset + filesz:
+                    results.append((needle, pos, vaddr + pos - offset))
+            start = pos + 1
+    return results
 
 
 def inspect_smali(root):
@@ -117,6 +141,13 @@ def main():
             print(f'\nInline instances referencing <0x{offset}>: {len(instances)}')
             for record in instances:
                 print(record.rstrip())
+        print('\n## Selected ELF string addresses')
+        for needle, offset, address in literal_addresses(binary, (
+                '/system/bin/build_emmc.sh', 'OPCODE_START_FW_UPGRADE', 'exec_fw_upgrade error')):
+            print(f'{needle!r}: file offset {offset:#x}, virtual address {address:#x}')
+        print('\n## Code around inlined native update handler')
+        command('arm-linux-gnueabihf-objdump', '-d', '--start-address=0x8b00',
+                '--stop-address=0x9200', str(binary))
         print('\n## Firmware app manifest: binary AXML as decoded by aapt')
         command(str(aapt), 'dump', 'badging', str(apk))
         command(str(aapt), 'dump', 'xmltree', str(apk), 'AndroidManifest.xml')

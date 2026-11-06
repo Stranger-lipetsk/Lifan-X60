@@ -1,6 +1,7 @@
 import contextlib
 import importlib.util
 import io
+import struct
 import sys
 import tempfile
 import unittest
@@ -30,6 +31,18 @@ class UpdateControlTest(unittest.TestCase):
             self.assertIn('FW_UPGRADE', output.getvalue())
             self.assertNotIn('other()V', output.getvalue())
             self.assertIn('Selected methods: 1', output.getvalue())
+
+    def test_elf32_load_segment_maps_string_to_virtual_address(self):
+        data = bytearray(256)
+        data[:6] = b'\x7fELF\x01\x01'
+        struct.pack_into('<I', data, 28, 52)
+        struct.pack_into('<HH', data, 42, 32, 1)
+        struct.pack_into('<8I', data, 52, 1, 0, 0x8000, 0, 256, 256, 5, 4096)
+        data[120:126] = b'hello\0'
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / 'binary'
+            path.write_bytes(data)
+            self.assertEqual(module.literal_addresses(path, ('hello',)), [('hello', 120, 0x8078)])
 
     def test_refuses_missing_smali(self):
         with tempfile.TemporaryDirectory() as temp:
