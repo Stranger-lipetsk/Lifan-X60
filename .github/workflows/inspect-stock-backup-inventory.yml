@@ -1,0 +1,50 @@
+name: Статический состав штатных приложений для backup
+on:
+  push:
+    branches: [arena/b12cc9a8-lifan-x60]
+    paths:
+      - '.github/workflows/inspect-stock-backup-inventory.yml'
+      - 'tools/inspect_stock_backup_inventory.py'
+      - 'tests/test_inspect_stock_backup_inventory.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  inspect:
+    if: github.ref_name == 'arena/b12cc9a8-lifan-x60'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Проверить разбор manifest
+        run: python3 -m unittest discover -s tests -p 'test_inspect_stock_backup_inventory.py' -v
+      - name: Считать только APK из системного образа
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq e2fsprogs unzip
+          w="$RUNNER_TEMP/backup-inventory"
+          mkdir -p "$w" reports
+          gh release download file-manager-test-20261105 -p lifan-file-manager-test.zip -D "$w"
+          echo "4be81211994221e80e401ce712ce484b5320156902fff3707737b73e3945d17f  $w/lifan-file-manager-test.zip" | sha256sum -c -
+          unzip -p "$w/lifan-file-manager-test.zip" system.img > "$w/system.img"
+          echo "a660f062716fd42d5a6185faec059f42675b3024304de7b81fac5d705cc88511  $w/system.img" | sha256sum -c -
+          for d in app priv-app; do
+            debugfs -R "rdump /$d $w" "$w/system.img" > "$w/debugfs-$d.log" 2>&1
+            test -d "$w/$d"
+          done
+          aapt=$(find "$ANDROID_HOME/build-tools" -type f -name aapt | sort -V | tail -1)
+          test -x "$aapt"
+          python3 tools/inspect_stock_backup_inventory.py "$aapt" "$w/app" "$w/priv-app" > reports/stock-backup-inventory.txt
+      - name: Сохранить только отчёт о manifest
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/stock-backup-inventory.txt
+          git diff --cached --quiet && exit 0
+          git commit -m 'report: static stock backup manifest inventory'
+          git pull --rebase origin "${{ github.ref_name }}"
+          git push origin HEAD:"${{ github.ref_name }}"
