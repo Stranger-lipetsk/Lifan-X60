@@ -405,6 +405,12 @@ for i in $(seq 1 120); do
   sleep 3
 done
 [ "$rebooted" = yes ] || { echo 'Did not observe completed full emulator reboot with changed boot ID'; exit 1; }
+echo 'Verify stock services.jar and loaded services dex after the full virtual reboot'
+timeout -k 10 120 "$adb" pull /system/framework/services.jar "$work/services-after-fullreboot.jar" >/dev/null
+cmp "$work/stock-services.jar" "$work/services-after-fullreboot.jar"
+server_pid=$(timeout -k 5 30 "$adb" shell ps | tr -d '\r' | awk '$NF == "system_server" { print $2; exit }')
+case "$server_pid" in ''|*[!0-9]*) echo 'System server PID missing after reboot'; exit 1;; esac
+timeout -k 5 30 "$adb" shell "cat /proc/$server_pid/maps" | tr -d '\r' | grep -F 'system@framework@services.jar@classes.dex' > "$work/services-maps-fullreboot.txt"
 query_package fullreboot
 grep -E '^package:/data/app/com\.navitel[^/]*\.apk$' "$work/path-fullreboot.txt"
 grep -F 'versionCode=360622024' "$work/package-fullreboot.txt"
@@ -418,7 +424,7 @@ cmp "$work/old.apk" "$work/stock-after-fullreboot.apk"
   echo 'Generic x86 emulator with stock-derived services.jar, not the device; host emulator network blocked.'
   echo 'Stock-derived services.jar was installed only into the disposable emulator and compared byte-for-byte; generic remaining framework and kernel are not the head unit.'
   echo 'No real maps, license, accounts, user data or SD; no APKs published. Empty virtual SD only.'
-  echo 'ADB prepared and observed the emulator and tapped its virtual UI; update was initiated by the stock-derived Amaze app and installed by the stock-derived PackageInstaller; generic emulator framework and virtual storage only.'
+  echo 'ADB prepared and observed the emulator and tapped its virtual UI; update was initiated by the stock-derived Amaze app and installed by the stock-derived PackageInstaller; remaining framework and virtual storage are generic emulator components.'
   echo 'Initial stock-derived Navitel certificate equals the verified AOSP testkey certificate:'
   echo "$keycert"
   echo 'Candidate re-signed in disposable CI only; not an installation recommendation.'
@@ -428,7 +434,7 @@ cmp "$work/old.apk" "$work/stock-after-fullreboot.apk"
   echo 'Matching certificate candidate installed via Amaze and PackageInstaller as data update; original emulator system APK unchanged: yes.'
   echo 'Emulator system mounted read-only during update:'; cat "$work/mount-system.txt"
   echo "UID before/after/userspace restart/full emulator reboot: $uid_before/$uid_after/$uid_restart/$uid_reboot"
-  echo 'Full virtual device reboot confirmed via changed kernel boot ID; system APK still matched afterward.'
+  echo 'Full virtual device reboot confirmed via changed kernel boot ID; original system APK and stock services.jar still matched afterward; system_server mapped services.jar dex.'
   echo 'Stock-derived PackageInstaller and Amaze paths:'; cat "$work/installer-path.txt" "$work/amaze-path.txt"
   echo '## Package paths and selected version'
   cat "$work/path-before.txt" "$work/path-after.txt" "$work/path-restart.txt" "$work/path-fullreboot.txt"
