@@ -60,12 +60,15 @@ sudo chown 1000:1000 "$w/source/system/packages.xml"
 sudo chown 1000:1000 "$w/source/app/com.navitel-1.apk"
 sudo chmod 0700 "$w/source/data/com.navitel" "$w/source/data/ru.lifanx60.fixture"
 sudo chmod 0600 "$w/source/data/com.navitel/files/lab-marker.txt" "$w/source/data/com.navitel/shared_prefs/probe.xml" "$w/source/data/ru.lifanx60.fixture/files/marker.txt"
-run_tar() {
+run_busybox() {
   docker run --rm --network none --read-only --cap-drop ALL --cap-add CHOWN \
     --cap-add DAC_OVERRIDE --cap-add FOWNER --security-opt no-new-privileges \
-    --memory 256m --pids-limit 32 --mount "type=bind,source=$w,target=/fixture" \
-    --workdir "$1" x60-disposable-hibernate-tar /qemu-arm-static /busybox tar "${@:2}"
+    --memory 256m --pids-limit 32 \
+    --mount "type=bind,source=$w/source,target=/fixture/source,readonly" \
+    --mount "type=bind,source=$w/dest,target=/fixture/dest" \
+    --workdir "$1" x60-disposable-hibernate-tar /qemu-arm-static /busybox "${@:2}"
 }
+run_tar() { local wd=$1; shift; run_busybox "$wd" tar "$@"; }
 # These options and source spelling match the copy commands in the script;
 # destination is a host directory, not the real ext4 partition or Hibernate.
 run_tar /fixture/source -cf /fixture/dest/data.tar ./. > "$w/create.log" 2>&1
@@ -74,6 +77,21 @@ test -s "$w/dest/data.tar"
 # actual GU process writes at this point or retains descriptors after resume.
 printf 'after-archive\n' > "$w/source/race/late-write.txt"
 run_tar /fixture/dest -xvf /fixture/dest/data.tar > "$w/extract.log" 2>&1
+# Positive controls: destination permits both lchown in the same container
+# and user xattrs. These controls do not change the copied test files.
+ln -s nonexistent "$w/dest/chown-control"
+run_busybox /fixture/dest chown -h 10013:10013 /fixture/dest/chown-control
+python3 - "$w/dest" <<'PY'
+from pathlib import Path
+import os, sys
+p = Path(sys.argv[1])
+st = (p / 'chown-control').lstat()
+assert (st.st_uid, st.st_gid) == (10013, 10013), (st.st_uid, st.st_gid)
+probe = p / 'xattr-control'
+probe.write_bytes(b'synthetic')
+os.setxattr(probe, 'user.x60_test', b'control')
+assert os.getxattr(probe, 'user.x60_test') == b'control'
+PY
 printf 'before-archive\n' > "$w/race-expected.txt"
 cmp "$w/race-expected.txt" "$w/dest/race/late-write.txt"
 grep -Fx after-archive "$w/source/race/late-write.txt"
@@ -84,6 +102,7 @@ grep -Fx after-archive "$w/source/race/late-write.txt"
   echo 'Exact command options: tar -cf DEST/data.tar ./. and tar -xvf DEST/data.tar.'
   echo '## Synthetic content and selected numeric metadata'
   sudo python3 tools/hibernate_tar_lab.py "$w/source" "$w/dest"
+  echo 'Positive controls passed: same container can lchown a symlink; destination supports user xattrs.'
   sudo python3 - "$w/dest/data.tar" <<'PY'
 import sys, tarfile
 with tarfile.open(sys.argv[1]) as archive:
