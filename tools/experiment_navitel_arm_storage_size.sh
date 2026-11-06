@@ -474,8 +474,14 @@ for attempt in $(seq 1 30); do
       timeout -k 5 20 "$adb" shell input tap "$x" "$y"; sleep 3; continue
     fi
   fi
-  # Otherwise only tap buttons when Android PackageInstaller is foreground.
+  # A stale Amaze XML can race with the activity transition. Require the dump
+  # itself to belong to PackageInstaller as well as the resumed activity.
   grep -E 'mResumedActivity.*com.android.packageinstaller' "$work/installer-activities.txt" >/dev/null || { sleep 2; continue; }
+  grep -Fq 'package="com.android.packageinstaller"' "$work/installer-ui.xml" || { sleep 3; continue; }
+  if grep -Fq 'text="Your location"' "$work/installer-ui.xml" && grep -Fq 'id/alertTitle' "$work/installer-ui.xml"; then
+    echo 'Dismiss emulator permission-detail dialog before continuing install'
+    timeout -k 5 20 "$adb" shell input keyevent 4; sleep 2; continue
+  fi
   if grep -iq 'App installed' "$work/installer-ui.xml"; then installed=yes; break; fi
   coords=$(python3 tools/emulator_backup_confirmation.py "$work/installer-ui.xml" 'Install' 2>/dev/null || true)
   if [ -n "$coords" ]; then
