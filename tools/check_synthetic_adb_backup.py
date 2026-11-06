@@ -7,6 +7,10 @@ import zlib
 from pathlib import Path
 
 MARKER = b'X60_DISPOSABLE_MIGRATION_TEST\n'
+PREFS = (b'<?xml version="1.0" encoding="utf-8" standalone="yes" ?>\n'
+         b'<map>\n    <string name="lab_probe">X60_SYNTHETIC_PREF_ONLY</string>\n</map>\n')
+EXPECTED = {'apps/com.navitel/f/lab-marker.txt': MARKER,
+            'apps/com.navitel/sp/x60_lab_probe.xml': PREFS}
 MAX_ARCHIVE = 32 * 1024 * 1024
 
 
@@ -31,22 +35,26 @@ def inspect(path):
     with tarfile.open(fileobj=io.BytesIO(payload), mode='r:') as tar:
         for entry in tar:
             print('Lab archive entry:', entry.name, 'bytes:', entry.size)
-            if entry.name.startswith('apps/com.navitel/') and entry.name.endswith('/lab-marker.txt') and entry.isfile():
+            if entry.name in EXPECTED and entry.isfile():
                 if entry.size > 1024:
-                    raise ValueError('Marker unexpectedly large')
+                    raise ValueError('Synthetic file unexpectedly large')
                 found.append((entry.name, tar.extractfile(entry).read()))
     return found
+
+
+def verify(found):
+    if len(found) != len(EXPECTED) or dict(found) != EXPECTED:
+        raise ValueError('Synthetic test files not found intact in Android backup')
 
 
 def main():
     if len(sys.argv) != 2:
         raise SystemExit('usage: check_synthetic_adb_backup.py TEMPORARY_EMULATOR_ARCHIVE')
     found = inspect(sys.argv[1])
-    print('Synthetic marker entries:', len(found))
+    print('Synthetic test entries:', len(found))
     for name, data in found:
-        print('Path:', name, 'matches:', data == MARKER)
-    if len(found) != 1 or found[0][1] != MARKER:
-        raise SystemExit('Synthetic marker not found intact in Android backup')
+        print('Path:', name, 'matches:', data == EXPECTED[name])
+    verify(found)
 
 
 if __name__ == '__main__':

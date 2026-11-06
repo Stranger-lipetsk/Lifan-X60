@@ -16,9 +16,10 @@ class SyntheticBackupTest(unittest.TestCase):
     def make_archive(self, path, encrypted=False):
         data = io.BytesIO()
         with tarfile.open(fileobj=data, mode='w') as tar:
-            item = tarfile.TarInfo('apps/com.navitel/f/lab-marker.txt')
-            item.size = len(module.MARKER)
-            tar.addfile(item, io.BytesIO(module.MARKER))
+            for name, content in module.EXPECTED.items():
+                item = tarfile.TarInfo(name)
+                item.size = len(content)
+                tar.addfile(item, io.BytesIO(content))
         name = b'AES-256' if encrypted else b'none'
         path.write_bytes(b'ANDROID BACKUP\n1\n1\n' + name + b'\n' + zlib.compress(data.getvalue()))
 
@@ -26,7 +27,14 @@ class SyntheticBackupTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / 'lab.ab'
             self.make_archive(path)
-            self.assertEqual(module.inspect(path), [('apps/com.navitel/f/lab-marker.txt', module.MARKER)])
+            self.assertEqual(dict(module.inspect(path)), module.EXPECTED)
+
+    def test_requires_both_distinct_intact_test_files(self):
+        entries = list(module.EXPECTED.items())
+        module.verify(entries)
+        for bad in (entries[:1], [entries[0], entries[0]], [entries[0], (entries[1][0], b'changed')]):
+            with self.assertRaises(ValueError):
+                module.verify(bad)
 
     def test_refuses_encrypted_or_truncated_backup(self):
         with tempfile.TemporaryDirectory() as tmp:

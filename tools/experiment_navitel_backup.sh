@@ -138,6 +138,13 @@ timeout -k 5 30 "$adb" shell 'mkdir -p /data/data/com.navitel/files && echo X60_
 timeout -k 5 30 "$adb" shell chown "$uid_before:$uid_before" /data/data/com.navitel/files/lab-marker.txt
 before_marker=$(timeout -k 5 30 "$adb" shell cat /data/data/com.navitel/files/lab-marker.txt | tr -d '\r')
 test "$before_marker" = X60_DISPOSABLE_MIGRATION_TEST
+# A synthetic, separate SharedPreferences XML; never a license or real app data.
+python3 -c 'from tools.check_synthetic_adb_backup import PREFS; import sys; sys.stdout.buffer.write(PREFS)' > "$work/lab-pref.xml"
+timeout -k 5 30 "$adb" shell mkdir -p /data/data/com.navitel/shared_prefs
+timeout -k 10 300 "$adb" push "$work/lab-pref.xml" /data/data/com.navitel/shared_prefs/x60_lab_probe.xml
+timeout -k 5 30 "$adb" shell chown "$uid_before:$uid_before" /data/data/com.navitel/shared_prefs /data/data/com.navitel/shared_prefs/x60_lab_probe.xml
+timeout -k 5 30 "$adb" shell cat /data/data/com.navitel/shared_prefs/x60_lab_probe.xml | tr -d '\r' > "$work/pref-before.txt"
+cmp "$work/lab-pref.xml" "$work/pref-before.txt" || { echo 'Synthetic preferences were not created intact'; exit 1; }
 
 # An empty virtual SD exists in this AVD; no real card or account is used.
 # Android's confirmation UI is handled only inside this disposable emulator.
@@ -205,14 +212,14 @@ timeout -k 10 300 "$adb" pull /system/priv-app/Navitel-large.apk "$work/new-afte
 cmp "$new" "$work/new-after-restart.apk"
 timeout -k 5 60 "$adb" shell dumpsys package com.navitel | tr -d '\r' > "$work/new-package.txt"
 grep -q 'versionCode=360622024' "$work/new-package.txt" || { echo 'Replacement not registered'; exit 1; }
-# Delete only the synthetic marker, so seeing it after restore is meaningful.
-timeout -k 5 30 "$adb" shell rm /data/data/com.navitel/files/lab-marker.txt
+# Delete only the synthetic test files, so seeing them after restore is meaningful.
+timeout -k 5 30 "$adb" shell rm /data/data/com.navitel/files/lab-marker.txt /data/data/com.navitel/shared_prefs/x60_lab_probe.xml
 # API 19's legacy adb shell does not propagate the remote command exit status.
-marker_state=$(timeout -k 5 30 "$adb" shell 'if [ -e /data/data/com.navitel/files/lab-marker.txt ]; then echo present; else echo absent; fi' | tr -d '\r')
-if [ "$marker_state" != absent ]; then
-  echo "Cannot verify marker removal before restore: $marker_state"; exit 1
+test_state=$(timeout -k 5 30 "$adb" shell 'if [ -e /data/data/com.navitel/files/lab-marker.txt ] || [ -e /data/data/com.navitel/shared_prefs/x60_lab_probe.xml ]; then echo present; else echo absent; fi' | tr -d '\r')
+if [ "$test_state" != absent ]; then
+  echo "Cannot verify removal of synthetic files before restore: $test_state"; exit 1
 fi
-echo 'Verified synthetic marker absent before restore.'
+echo 'Verified both synthetic files absent before restore.'
 
 echo 'Phase 6: restore synthetic archive into new system package'
 timeout -k 5 30 "$adb" logcat -c
@@ -222,6 +229,8 @@ confirm_emulator_dialog 'Restore my data' || { kill "$restore_pid" 2>/dev/null |
 set +e
 wait "$restore_pid"; restore_status=$?
 timeout -k 5 30 "$adb" shell cat /data/data/com.navitel/files/lab-marker.txt > "$work/restored-marker.txt" 2>&1; marker_status=$?
+timeout -k 5 30 "$adb" shell cat /data/data/com.navitel/shared_prefs/x60_lab_probe.xml | tr -d '\r' > "$work/restored-pref.xml"; prefs_status=$?
+cmp -s "$work/lab-pref.xml" "$work/restored-pref.xml"; prefs_match=$?
 timeout -k 5 60 "$adb" logcat -d -v brief > "$work/restore-log.txt" 2>&1
 set -e
 uid_after=$(sed -n 's/.*userId=\([0-9][0-9]*\).*/\1/p' "$work/new-package.txt" | head -1 || true)
@@ -234,15 +243,16 @@ uid_after=$(sed -n 's/.*userId=\([0-9][0-9]*\).*/\1/p' "$work/new-package.txt" |
   echo "Old UID: $uid_before; new UID: ${uid_after:-unavailable}"
   echo 'Old certificate: a40da80a59d170caa950cf15c18c454d47a39b26989d8b640ecd745ba71bf5dc'
   echo 'New certificate: 5358662d39856446c7391c699878e0509f7ed0657d7634c0083e07b08ad2f035'
-  echo '## Before restore'; cat "$work/backup-check.txt"; echo 'Synthetic marker explicitly removed before restore.'
-  echo '## Restore result'; echo "adb shell transport exit: $restore_status; marker read transport exit: $marker_status (legacy shell does not report remote exit status)"
+  echo '## Before restore'; cat "$work/backup-check.txt"; echo 'Both synthetic files explicitly removed and verified absent before restore.'
+  echo '## Restore result'; echo "adb shell transport exit: $restore_status; marker read transport exit: $marker_status; prefs read transport exit: $prefs_status (legacy shell does not report remote exit status)"
   tr -d '\r' < "$work/restored-marker.txt"
+  if [ "$prefs_match" -eq 0 ]; then echo 'Synthetic SharedPreferences XML matches exactly: yes'; else echo 'Synthetic SharedPreferences XML matches exactly: no'; fi
   echo '## Selected backup manager logs'
   grep -iE 'BackupManagerService.*(com\.navitel|signature|restore|backup)|BackupManagerService.*error' "$work/restore-log.txt" | tail -60 | tr -d '\r' || true
   echo 'This is not evidence of real app settings, license, maps, actual head-unit behavior or a safe restoration procedure.'
 } > reports/navitel-backup-restore-emulator.txt
 cat reports/navitel-backup-restore-emulator.txt
 restored_marker=$(tr -d '\r' < "$work/restored-marker.txt")
-if [ "$restore_status" -ne 0 ] || [ "$marker_status" -ne 0 ] || [ "$restored_marker" != X60_DISPOSABLE_MIGRATION_TEST ]; then
-  echo 'Synthetic marker restoration not verified.'; exit 1
+if [ "$restore_status" -ne 0 ] || [ "$marker_status" -ne 0 ] || [ "$prefs_status" -ne 0 ] || [ "$prefs_match" -ne 0 ] || [ "$restored_marker" != X60_DISPOSABLE_MIGRATION_TEST ]; then
+  echo 'Restoration of both synthetic files not verified.'; exit 1
 fi
