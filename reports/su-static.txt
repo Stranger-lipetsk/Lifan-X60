@@ -1129,3 +1129,28 @@ Disassembly of section .text:
 
 
 Static evidence does not establish execution rights, SELinux behavior, data access, or a safe backup.
+## /system/bin/su
+debugfs 1.47.0 (5-Feb-2023)
+/bin/su: File not found by ext2_lookup 
+## /system/bin/bin/su
+debugfs 1.47.0 (5-Feb-2023)
+Inode: 254   Type: symlink    Mode:  0755   Flags: 0x80
+Generation: 0    Version: 0x00000000:00000000
+User:     0   Group:  2000   Size: 7
+File ACL: 0
+Links: 1   Blockcount: 0
+Fragment:  Address: 0    Number: 0    Size: 0
+ ctime: 0x6060689e:00000000 -- Sun Mar 28 11:29:34 2021
+ atime: 0x6060689e:00000000 -- Sun Mar 28 11:29:34 2021
+ mtime: 0x6060689e:00000000 -- Sun Mar 28 11:29:34 2021
+crtime: 0x00000000:00000000 -- Thu Jan  1 00:00:00 1970
+Size of extra inode fields: 28
+Extended attributes:
+  security.selinux (26) = "u:object_r:system_file:s0\000"
+Fast link dest: "busybox"
+## /system/app/Superuser.apk
+debugfs 1.47.0 (5-Feb-2023)
+/app/Superuser.apk: File not found by ext2_lookup 
+## /system/app/SuperSU.apk
+debugfs 1.47.0 (5-Feb-2023)
+/app/SuperSU.apk: File not found by ext2_lookup 
