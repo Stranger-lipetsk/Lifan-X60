@@ -148,6 +148,8 @@ def main():
         print('\n## Code around inlined native update handler')
         command('arm-linux-gnueabihf-objdump', '-d', '--start-address=0x8b00',
                 '--stop-address=0x9200', str(binary))
+        command('arm-linux-gnueabihf-objdump', '-d', '--start-address=0x9900',
+                '--stop-address=0x9d00', str(binary))
         print('\n## Firmware app manifest: binary AXML as decoded by aapt')
         command(str(aapt), 'dump', 'badging', str(apk))
         command(str(aapt), 'dump', 'xmltree', str(apk), 'AndroidManifest.xml')
