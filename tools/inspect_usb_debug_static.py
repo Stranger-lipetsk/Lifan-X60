@@ -93,7 +93,7 @@ def main():
                     print('thumb disassembly error:', thumb.stderr.strip())
                 if hashlib.sha256(data).hexdigest() == '43153248a5bdaa566dd0d425c7a13509100a900b3aeaaeec72939182aa7285b8':
                     print('\nCandidate argv tables from PC-relative Thumb addresses:')
-                    for address in (0x17044, 0x1700c, 0x1702c, 0x17038):
+                    for address in (0x17000, 0x17044, 0x1700c, 0x1702c, 0x17038):
                         print('Table at', hex(address))
                         for index in range(8):
                             ptr = struct.unpack('<I', elf32_bytes_at(data, address + index * 4, 4))[0]
