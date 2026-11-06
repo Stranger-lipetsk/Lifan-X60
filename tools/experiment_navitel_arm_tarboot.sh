@@ -714,7 +714,7 @@ witness_owner=$(sudo stat -c '%u:%g' "$work/copy-dest/data/ru.lifanx60.backupfix
 sudo chown "$witness_owner" "$work/copy-dest/$witness_rel"
 sudo umount "$work/copy-dest"
 e2fsck -fn "$work/synthetic-p5.img" > "$work/tarboot-fsck.txt" 2>&1
-dumpe2fs -h "$work/synthetic-p5.img" 2>/dev/null | grep -E '^Block count:|^Block size:' > "$work/tarboot-super-before.txt"
+dumpe2fs -h "$work/synthetic-p5.img" 2>/dev/null | grep -E '^Filesystem UUID:|^Filesystem features:|^Block count:|^Block size:' > "$work/tarboot-super-before.txt"
 # The legacy emulator expanded the shorter backing file in an earlier run.
 # Pad it to the configured 1 GiB without resizing ext4; the pre-boot
 # filesystem remains 512 MiB. This is a workaround, not proof of the cause
@@ -723,7 +723,7 @@ image_fs_bytes_before=$(stat -c %s "$work/synthetic-p5.img")
 [ "$image_fs_bytes_before" = 536870912 ]
 truncate -s 1073741824 "$work/synthetic-p5.img"
 e2fsck -fn "$work/synthetic-p5.img" > "$work/tarboot-padded-fsck.txt" 2>&1
-dumpe2fs -h "$work/synthetic-p5.img" 2>/dev/null | grep -E '^Block count:|^Block size:' > "$work/tarboot-super-padded.txt"
+dumpe2fs -h "$work/synthetic-p5.img" 2>/dev/null | grep -E '^Filesystem UUID:|^Filesystem features:|^Block count:|^Block size:' > "$work/tarboot-super-padded.txt"
 cmp "$work/tarboot-super-before.txt" "$work/tarboot-super-padded.txt"
 image_size_before=$(stat -c %s "$work/synthetic-p5.img")
 sudo chown emulatorlab:emulatorlab "$work/synthetic-p5.img"
@@ -739,6 +739,16 @@ timeout -k 5 30 "$adb" shell getprop ro.build.fingerprint | tr -d '\r' | grep -F
 timeout -k 5 30 "$adb" shell cat /data/data/ru.lifanx60.backupfixture/files/x60-copied-image-witness | tr -d '\r' | tee "$work/tarboot-witness-readback.txt"
 grep -Fx X60_COPIED_IMAGE_ONLY "$work/tarboot-witness-readback.txt" || {
   echo 'Copied-image witness missing; do not claim boot from copy'
+  echo 'Host image superblock before and after boot (diagnostic only):'
+  cat "$work/tarboot-super-padded.txt"
+  dumpe2fs -h "$work/synthetic-p5.img" 2>/dev/null | grep -E '^Filesystem UUID:|^Filesystem features:|^Block count:|^Block size:' || true
+  echo 'Android mounts:'
+  timeout -k 5 30 "$adb" shell cat /proc/mounts || true
+  echo 'Android block devices:'
+  timeout -k 5 30 "$adb" shell cat /proc/partitions || true
+  echo 'Android boot and mount diagnostics:'
+  timeout -k 5 30 "$adb" shell dmesg 2>/dev/null | grep -iE 'mtdblock|ext4|mount|fs_mgr|format|userdata|data' | tail -100 || true
+  timeout -k 5 30 "$adb" logcat -d -v brief 2>/dev/null | grep -iE 'fs_mgr|mount|format|userdata|installd' | tail -80 || true
   timeout -k 5 30 "$adb" shell pm path com.navitel || true
   timeout -k 5 30 "$adb" shell pm path ru.lifanx60.backupfixture || true
   timeout -k 5 30 "$adb" shell ls -l /data/app /data/system/packages.xml /data/data/ru.lifanx60.backupfixture/files || true
