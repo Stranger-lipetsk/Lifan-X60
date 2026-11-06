@@ -139,7 +139,8 @@ find "$work/classes" -name '*.class' > "$work/classes.txt"
 "$bt/d8" --lib "$jar" --min-api 19 --output "$work/dex" @"$work/classes.txt"
 for name in ordinary shell; do
   mkdir -p "$work/$name"
-  "$bt/aapt" package -f -M "$src/manifests/$name.xml" -I "$jar" -F "$work/$name/unsigned.apk"
+  cp "$src/manifests/$name.xml" "$work/$name/AndroidManifest.xml"
+  "$bt/aapt" package -f -M "$work/$name/AndroidManifest.xml" -I "$jar" -F "$work/$name/unsigned.apk"
   cp "$work/dex/classes.dex" "$work/$name/classes.dex"
   (cd "$work/$name" && zip -q -u unsigned.apk classes.dex)
   "$bt/zipalign" -f 4 "$work/$name/unsigned.apk" "$work/$name/aligned.apk"
