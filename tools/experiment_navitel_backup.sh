@@ -193,6 +193,11 @@ if ! python3 tools/check_synthetic_adb_backup.py "$work/synthetic.ab" | tee "$wo
 fi
 
 echo 'Phase 5: replace system package only in disposable emulator'
+# Stop Android userspace first so the old APK is no longer open; some runs of
+# this legacy emulator hit EXT4 errors when unlinking an in-use system APK.
+timeout -k 5 30 "$adb" shell sync
+timeout -k 5 30 "$adb" shell setprop sys.boot_completed 0
+timeout -k 5 30 "$adb" shell stop
 timeout -k 5 60 "$adb" remount | tee "$work/remount2.txt"
 grep -iq 'remount succeeded' "$work/remount2.txt"
 timeout -k 5 30 "$adb" shell rm /system/priv-app/Navitel-large.apk
@@ -207,7 +212,9 @@ if ! timeout -k 10 300 "$adb" push "$new" /system/priv-app/Navitel-large.apk; th
 fi
 timeout -k 5 30 "$adb" shell chmod 0644 /system/priv-app/Navitel-large.apk
 timeout -k 5 30 "$adb" shell restorecon /system/priv-app/Navitel-large.apk || true
-restart_android_runtime
+timeout -k 5 30 "$adb" shell sync
+timeout -k 5 30 "$adb" shell start
+boot
 timeout -k 10 300 "$adb" pull /system/priv-app/Navitel-large.apk "$work/new-after-restart.apk" >/dev/null
 cmp "$new" "$work/new-after-restart.apk"
 timeout -k 5 60 "$adb" shell dumpsys package com.navitel | tr -d '\r' > "$work/new-package.txt"
