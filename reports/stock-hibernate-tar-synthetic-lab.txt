@@ -1,6 +1,6 @@
 # Synthetic stock-derived BusyBox tar copy; not a hibernation test
 ARM BusyBox b40cc88591ddbe851e0d37e41990e7e0a7e19b6ab195dac827e1f952efe51613, run under QEMU user mode in an offline restricted container.
-Only synthetic files in CI temp. Host filesystem, not GU tmpfs/ext4; no device, stock script, mount, partition formatting or kernel hibernate.
+Only synthetic files in CI temp. Source: host tmpfs; destination: ext4 on a newly created disposable regular-file loop image. This is not the GU, its partitions, its kernel, stock script or hibernation.
 Exact command options: tar -cf DEST/data.tar ./. and tar -xvf DEST/data.tar.
 ## Synthetic content and selected numeric metadata
 MATCH data/com.navitel/files/lab-marker.txt: {'mode': 384, 'uid': 10013, 'gid': 10013, 'kind': 'file', 'sha256': '228b231c38de1b90014fe278b047143e25e327f99b377be65c96ff996a80ed46'}
@@ -18,4 +18,4 @@ Positive controls passed: same container can lchown a symlink; destination suppo
 Symlink archive header numeric UID/GID: 10013 10013 ; target: lab-marker.txt
 ## Deliberately scheduled late write
 Source was modified after archive finished and before extraction. Extracted file contained the earlier snapshot; late source change did not appear.
-This illustrates a possible consistency window only. Real script timing and concurrent writes, app descriptors, actual Hibernate, ext4, ACLs and SELinux were not tested.
+This illustrates a possible consistency window only. Real script timing and concurrent writes, app descriptors, actual Hibernate, the GU ext4 implementation, ACLs and SELinux were not tested.
