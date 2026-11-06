@@ -7,6 +7,8 @@ on:
       - 'tools/experiment_navitel_signed_update_x86.sh'
       - 'tools/compare_resigned_apk.py'
       - 'tests/test_compare_resigned_apk.py'
+      - 'tools/check_no_adb_lab_backup.py'
+      - 'tests/fixtures/no-adb-backup-target/**'
   workflow_dispatch:
 permissions:
   contents: write

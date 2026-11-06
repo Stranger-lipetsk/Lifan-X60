@@ -137,12 +137,16 @@ timeout -k 5 60 "$adb" remount | tee "$work/remount.txt"
 grep -iq 'remount succeeded' "$work/remount.txt" || { echo 'Cannot remount emulator system'; exit 1; }
 timeout -k 5 30 "$adb" shell df /system | tr -d '\r'
 
-echo 'Phase 3: push old system APK on disposable emulator'
+echo 'Phase 3: stop disposable emulator userspace before installing fixture system APK'
+timeout -k 5 30 "$adb" shell sync
+timeout -k 5 30 "$adb" shell setprop sys.boot_completed 0
+timeout -k 5 30 "$adb" shell stop
 timeout -k 10 300 "$adb" push "$work/old.apk" /system/priv-app/Navitel-large.apk
 timeout -k 5 30 "$adb" shell chmod 0644 /system/priv-app/Navitel-large.apk
 timeout -k 5 30 "$adb" shell restorecon /system/priv-app/Navitel-large.apk || true
-echo "Phase 3a: restart Android userspace with old package"
-restart_android_runtime
+echo "Phase 3a: start Android userspace with old package"
+timeout -k 5 30 "$adb" shell start
+boot
 echo "Phase 3b: verify old system APK is unchanged and query package"
 timeout -k 10 300 "$adb" pull /system/priv-app/Navitel-large.apk "$work/old-after-restart.apk" >/dev/null
 cmp "$work/old.apk" "$work/old-after-restart.apk" || { echo 'Old system file changed'; exit 1; }

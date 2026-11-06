@@ -152,12 +152,46 @@ timeout -k 5 30 "$adb" shell chown "$uid_before:$uid_before" /data/data/com.navi
 timeout -k 5 30 "$adb" shell cat /data/data/com.navitel/shared_prefs/x60_lab_probe.xml | tr -d '\r' > "$work/pref-before.txt"
 cmp "$work/lab-pref.xml" "$work/pref-before.txt" || { echo 'Synthetic preferences were not created intact'; exit 1; }
 
+echo 'Create a second independent synthetic app to check unrelated data'
+src=tests/fixtures/no-adb-backup-target
+jar="$sdk/platforms/android-19/android.jar"
+mkdir -p "$work/canary/classes" "$work/canary/dex"
+"$bt/aapt" package -f -M "$src/AndroidManifest.xml" -I "$jar" -F "$work/canary/unsigned.apk"
+find "$src/src" -name '*.java' | sort > "$work/canary/sources.txt"
+javac -source 8 -target 8 -bootclasspath "$jar" -d "$work/canary/classes" @"$work/canary/sources.txt"
+find "$work/canary/classes" -name '*.class' > "$work/canary/classes.txt"
+"$bt/d8" --lib "$jar" --min-api 19 --output "$work/canary/dex" @"$work/canary/classes.txt"
+cp "$work/canary/dex/classes.dex" "$work/canary/classes.dex"
+(cd "$work/canary" && zip -q -u unsigned.apk classes.dex)
+"$bt/zipalign" -f 4 "$work/canary/unsigned.apk" "$work/canary/aligned.apk"
+"$bt/apksigner" sign --key "$work/testkey.pk8" --cert "$work/testkey.x509.pem" --min-sdk-version 19 --v1-signing-enabled true --out "$work/canary.apk" "$work/canary/aligned.apk"
+timeout -k 10 120 "$adb" install "$work/canary.apk" > "$work/canary-install.txt" 2>&1
+grep -F Success "$work/canary-install.txt"
+timeout -k 5 30 "$adb" logcat -c
+timeout -k 5 60 "$adb" shell am start -n ru.lifanx60.backupfixture/.MainActivity > "$work/canary-start.txt" 2>&1
+ready=no
+for i in $(seq 1 30); do
+  timeout -k 5 20 "$adb" logcat -d -v brief > "$work/canary-log.txt" 2>&1 || true
+  if grep -Fq FIXTURE_READY "$work/canary-log.txt"; then ready=yes; break; fi
+  sleep 2
+done
+[ "$ready" = yes ] || { echo 'Unrelated synthetic app not ready'; exit 1; }
+
 check_synthetic() {
   local phase=$1
   timeout -k 5 60 "$adb" shell cat /data/data/com.navitel/files/lab-marker.txt | tr -d '\r' > "$work/marker-$phase.txt"
   test "$(cat "$work/marker-$phase.txt")" = X60_DISPOSABLE_MIGRATION_TEST
   timeout -k 5 60 "$adb" pull /data/data/com.navitel/shared_prefs/x60_lab_probe.xml "$work/pref-$phase.xml" >/dev/null
   cmp "$work/lab-pref.xml" "$work/pref-$phase.xml"
+  timeout -k 5 60 "$adb" pull /data/data/ru.lifanx60.backupfixture/files/lab-marker.txt "$work/canary-marker-$phase.txt" >/dev/null
+  timeout -k 5 60 "$adb" pull /data/data/ru.lifanx60.backupfixture/shared_prefs/lab_probe.xml "$work/canary-pref-$phase.xml" >/dev/null
+  python3 - "$work/canary-marker-$phase.txt" "$work/canary-pref-$phase.xml" <<'PY'
+import sys
+from pathlib import Path
+from tools.check_no_adb_lab_backup import verify_contents
+verify_contents(Path(sys.argv[1]).read_bytes(), Path(sys.argv[2]).read_bytes())
+print('Independent synthetic app marker and preferences verified')
+PY
 }
 query_package() {
   local phase=$1
@@ -240,6 +274,29 @@ sleep 12
 timeout -k 5 60 "$adb" shell dumpsys activity activities > "$work/activities.txt" 2>&1 || true
 timeout -k 5 60 "$adb" logcat -d -v brief > "$work/app-log.txt" 2>&1 || true
 check_synthetic launch
+
+echo 'Full reboot of disposable x86 virtual device, then verify package and synthetic data'
+timeout -k 5 30 "$adb" shell cat /proc/sys/kernel/random/boot_id | tr -d '\r' > "$work/boot-id-before.txt"
+grep -E '^[0-9a-f-]{36}$' "$work/boot-id-before.txt"
+timeout -k 10 60 "$adb" reboot
+rebooted=no
+for i in $(seq 1 120); do
+  current_id=$(timeout -k 2 5 "$adb" shell cat /proc/sys/kernel/random/boot_id 2>/dev/null | tr -d '\r' || true)
+  state=$(timeout -k 2 5 "$adb" shell getprop sys.boot_completed 2>/dev/null | tr -d '\r' || true)
+  if [[ "$current_id" =~ ^[0-9a-f-]{36}$ ]] && [ "$current_id" != "$(cat "$work/boot-id-before.txt")" ] && [ "$state" = 1 ]; then
+    printf '%s\n' "$current_id" > "$work/boot-id-after.txt"; rebooted=yes; break
+  fi
+  sleep 3
+done
+[ "$rebooted" = yes ] || { echo 'Did not observe completed full emulator reboot with changed boot ID'; exit 1; }
+query_package fullreboot
+grep -E '^package:/data/app/com\.navitel[^/]*\.apk$' "$work/path-fullreboot.txt"
+grep -F 'versionCode=360622024' "$work/package-fullreboot.txt"
+uid_reboot=$(sed -n 's/.*userId=\([0-9][0-9]*\).*/\1/p' "$work/package-fullreboot.txt" | head -1)
+test "$uid_before" = "$uid_reboot"
+check_synthetic fullreboot
+timeout -k 10 300 "$adb" pull /system/priv-app/Navitel-large.apk "$work/stock-after-fullreboot.apk" >/dev/null
+cmp "$work/old.apk" "$work/stock-after-fullreboot.apk"
 {
   echo '# Same-signature Navitel data-update on disposable Android 4.4.2 x86'
   echo 'Generic emulator, not the device or vendor PackageManager; host emulator network blocked.'
@@ -253,14 +310,15 @@ check_synthetic launch
   grep -E 'Failure \[' "$work/negative.txt" | tr -d '\r'
   echo 'Matching certificate candidate installed as data update; original emulator system APK unchanged: yes.'
   echo 'Emulator system mounted read-only during update:'; cat "$work/mount-system.txt"
-  echo "UID before/after/userspace restart: $uid_before/$uid_after/$uid_restart"
+  echo "UID before/after/userspace restart/full emulator reboot: $uid_before/$uid_after/$uid_restart/$uid_reboot"
+  echo 'Full virtual device reboot confirmed via changed kernel boot ID; system APK still matched afterward.'
   echo '## Package paths and selected version'
-  cat "$work/path-before.txt" "$work/path-after.txt" "$work/path-restart.txt"
+  cat "$work/path-before.txt" "$work/path-after.txt" "$work/path-restart.txt" "$work/path-fullreboot.txt"
   grep -E 'versionCode=|versionName=|codePath=' "$work/package-restart.txt" | head -10
-  echo 'Synthetic marker and preferences survived install, userspace restart, and launch attempt: yes.'
+  echo 'Synthetic marker and preferences for Navitel and one independent fixture app survived install, userspace restart, launch attempt, and full emulator reboot: yes.'
   echo '## Launch attempt (no activation asserted)'
   tr -d '\r' < "$work/start.txt"
   tr -d '\r' < "$work/activities.txt" | grep -E 'mResumedActivity|mFocusedActivity' | head -5 || true
   tr -d '\r' < "$work/app-log.txt" | grep -iE 'FATAL EXCEPTION|Fatal signal|com.navitel.*(crash|died)' | tail -10 || true
-  echo 'Userspace restart is not a full reboot or real-device hibernate. App behavior, rollback, settings and all data preservation remain unverified.'
+  echo 'Generic emulator full reboot is not real-device hibernate. App behavior, rollback, settings and all data preservation remain unverified.'
 } > reports/navitel-matched-update-x86.txt
