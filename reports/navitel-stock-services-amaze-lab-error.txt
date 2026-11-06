@@ -1,9 +1,9 @@
 Phase 1: obtain two real Navitel APKs; no user files or license
-/tmp/navitel-stock-services-amaze-lab.wMkp2C/lifan-file-manager-test.zip: OK
-/tmp/navitel-stock-services-amaze-lab.wMkp2C/system.img: OK
-/tmp/navitel-stock-services-amaze-lab.wMkp2C/old.apk: OK
-/tmp/navitel-stock-services-amaze-lab.wMkp2C/amaze.apk: OK
-/tmp/navitel-stock-services-amaze-lab.wMkp2C/installer.apk: OK
+/tmp/navitel-stock-services-amaze-lab.blMHNE/lifan-file-manager-test.zip: OK
+/tmp/navitel-stock-services-amaze-lab.blMHNE/system.img: OK
+/tmp/navitel-stock-services-amaze-lab.blMHNE/old.apk: OK
+/tmp/navitel-stock-services-amaze-lab.blMHNE/amaze.apk: OK
+/tmp/navitel-stock-services-amaze-lab.blMHNE/installer.apk: OK
 package: name='com.android.packageinstaller' versionCode='19' versionName='4.4.2-20140630'
 package: name='com.amaze.filemanager' versionCode='92' versionName='3.5.3' platformBuildVersionName='10' platformBuildVersionCode='29' compileSdkVersion='29' compileSdkVersionCodename='10'
 /home/runner/work/Lifan-X60/Lifan-X60/firmware/apks/com.navitel.apk: OK
@@ -27,31 +27,31 @@ Phase 3: stop disposable emulator userspace before installing fixture system APK
 Filesystem               Size     Used     Free   Blksize
 /system                532.8M   333.7M   199.1M   4096
 rm failed for /system/priv-app/PackageInstaller.apk, No such file or directory
-/tmp/navitel-stock-services-amaze-lab.wMkp2C/installer.apk: 1 file pushed, 0 skipped. 210.2 MB/s (124968 bytes in 0.001s)
-/tmp/navitel-stock-services-amaze-lab.wMkp2C/amaze.apk: 1 file pushed, 0 skipped. 319.9 MB/s (8296416 bytes in 0.025s)
+/tmp/navitel-stock-services-amaze-lab.blMHNE/installer.apk: 1 file pushed, 0 skipped. 290.6 MB/s (124968 bytes in 0.000s)
+/tmp/navitel-stock-services-amaze-lab.blMHNE/amaze.apk: 1 file pushed, 0 skipped. 244.5 MB/s (8296416 bytes in 0.032s)
 Could not get context of /system/priv-app/PackageInstaller.apk:  No data available
 Could not get context of /system/app/AmazeFileManager.apk:  No data available
-/tmp/navitel-stock-services-amaze-lab.wMkp2C/old.apk: 1 file pushed, 0 skipped. 272.7 MB/s (111095055 bytes in 0.389s)
+/tmp/navitel-stock-services-amaze-lab.blMHNE/old.apk: 1 file pushed, 0 skipped. 353.4 MB/s (111095055 bytes in 0.300s)
 Could not get context of /system/priv-app/Navitel-large.apk:  No data available
 LAB ONLY: replace generic services.jar with stock-derived services.jar while userspace is stopped
-/tmp/navitel-stock-services-amaze-lab.wMkp2C/stock-services.jar: OK
+/tmp/navitel-stock-services-amaze-lab.blMHNE/stock-services.jar: OK
   3139616  2016-11-30 00:57   classes.dex
 -rw-r--r-- root     root      1423509 2017-07-12 19:41 services.jar
 -rw-r--r-- root     root      3509072 2017-07-12 19:41 services.odex
-/tmp/navitel-stock-services-amaze-lab.wMkp2C/stock-services.jar: 1 file pushed, 0 skipped. 4326.2 MB/s (1424358 bytes in 0.000s)
+/tmp/navitel-stock-services-amaze-lab.blMHNE/stock-services.jar: 1 file pushed, 0 skipped. 4542.0 MB/s (1424358 bytes in 0.000s)
 Could not get context of /system/framework/services.jar:  No data available
-/system/framework/services.jar: 1 file pulled, 0 skipped. 232.1 MB/s (1424358 bytes in 0.006s)
+/system/framework/services.jar: 1 file pulled, 0 skipped. 276.4 MB/s (1424358 bytes in 0.005s)
 Phase 3a: start Android userspace with old package
 Check stock services.jar still matches after userspace start
-/system/framework/services.jar: 1 file pulled, 0 skipped. 217.9 MB/s (1424358 bytes in 0.006s)
-system    2038  2021  358352 43676 ffffffff b7692f1b S system_server
-ab09f000-ab164000 r--p 00000000 fd:20 90156      /data/dalvik-cache/system@framework@services.jar@classes.dex
-ab164000-ab165000 r--p 000c5000 fd:20 90156      /data/dalvik-cache/system@framework@services.jar@classes.dex
-ab165000-ab166000 r--p 000c6000 fd:20 90156      /data/dalvik-cache/system@framework@services.jar@classes.dex
-ab166000-ab168000 r--p 000c7000 fd:20 90156      /data/dalvik-cache/system@framework@services.jar@classes.dex
-ab168000-ab197000 r--p 000c9000 fd:20 90156      /data/dalvik-cache/system@framework@services.jar@classes.dex
-ab197000-ab198000 r--p 000f8000 fd:20 90156      /data/dalvik-cache/system@framework@services.jar@classes.dex
-ab198000-ab3f2000 r--p 000f9000 fd:20 90156      /data/dalvik-cache/system@framework@services.jar@classes.dex
+/system/framework/services.jar: 1 file pulled, 0 skipped. 121.9 MB/s (1424358 bytes in 0.011s)
+system    2054  2037  356224 43424 ffffffff b7666f1b S system_server
+ab073000-ab138000 r--p 00000000 fd:20 90152      /data/dalvik-cache/system@framework@services.jar@classes.dex
+ab138000-ab139000 r--p 000c5000 fd:20 90152      /data/dalvik-cache/system@framework@services.jar@classes.dex
+ab139000-ab13a000 r--p 000c6000 fd:20 90152      /data/dalvik-cache/system@framework@services.jar@classes.dex
+ab13a000-ab13c000 r--p 000c7000 fd:20 90152      /data/dalvik-cache/system@framework@services.jar@classes.dex
+ab13c000-ab16b000 r--p 000c9000 fd:20 90152      /data/dalvik-cache/system@framework@services.jar@classes.dex
+ab16b000-ab16c000 r--p 000f8000 fd:20 90152      /data/dalvik-cache/system@framework@services.jar@classes.dex
+ab16c000-ab3c6000 r--p 000f9000 fd:20 90152      /data/dalvik-cache/system@framework@services.jar@classes.dex
 No pre-optimized system services.odex
 Phase 3b: verify old system APK is unchanged and query package
 WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
@@ -60,13 +60,13 @@ package:/system/priv-app/PackageInstaller.apk
 WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
 package:/system/app/AmazeFileManager.apk
 package:/system/app/AmazeFileManager.apk
-/system/priv-app/PackageInstaller.apk: 1 file pulled, 0 skipped. 106.7 MB/s (124968 bytes in 0.001s)
-/system/app/AmazeFileManager.apk: 1 file pulled, 0 skipped. 198.6 MB/s (8296416 bytes in 0.040s)
-/system/priv-app/Navitel-large.apk: 1 file pulled, 0 skipped. 239.1 MB/s (111095055 bytes in 0.443s)
+/system/priv-app/PackageInstaller.apk: 1 file pulled, 0 skipped. 111.8 MB/s (124968 bytes in 0.001s)
+/system/app/AmazeFileManager.apk: 1 file pulled, 0 skipped. 209.5 MB/s (8296416 bytes in 0.038s)
+/system/priv-app/Navitel-large.apk: 1 file pulled, 0 skipped. 269.7 MB/s (111095055 bytes in 0.393s)
 Initial package path: WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
 package:/system/priv-app/Navitel-large.apk
 package:/system/priv-app/Navitel-large.apk
-/tmp/navitel-stock-services-amaze-lab.wMkp2C/lab-pref.xml: 1 file pushed, 0 skipped. 2.9 MB/s (132 bytes in 0.000s)
+/tmp/navitel-stock-services-amaze-lab.blMHNE/lab-pref.xml: 1 file pushed, 0 skipped. 3.5 MB/s (132 bytes in 0.000s)
 Create a second independent synthetic app to check unrelated data
 Success
 /data/data/com.navitel/shared_prefs/x60_lab_probe.xml: 1 file pulled, 0 skipped. 0.0 MB/s (132 bytes in 0.041s)
@@ -76,10 +76,10 @@ Independent synthetic app marker and preferences verified
 Remount disposable emulator system read-only before testing update
 /dev/block/vda /system ext4 ro,relatime,data=ordered 0 0
 Device-side md5 after read-only remount:
-a5a34cf38cf4d58f70ad8e23c934a15b  /tmp/navitel-stock-services-amaze-lab.wMkp2C/old.apk
+a5a34cf38cf4d58f70ad8e23c934a15b  /tmp/navitel-stock-services-amaze-lab.blMHNE/old.apk
 a5a34cf38cf4d58f70ad8e23c934a15b  /system/priv-app/Navitel-large.apk
 Negative control: unmodified candidate must be rejected as a differently signed update
-/home/runner/work/Lifan-X60/Lifan-X60/firmware/apks/com.navitel.apk: 1 file pushed, 0 skipped. 285.6 MB/s (99176587 bytes in 0.331s)
+/home/runner/work/Lifan-X60/Lifan-X60/firmware/apks/com.navitel.apk: 1 file pushed, 0 skipped. 328.7 MB/s (99176587 bytes in 0.288s)
 Performing Push Install
 WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
 	pkg: /data/local/tmp/com.navitel.apk
@@ -87,16 +87,16 @@ Failure [INSTALL_PARSE_FAILED_INCONSISTENT_CERTIFICATES]
 Failure [INSTALL_PARSE_FAILED_INCONSISTENT_CERTIFICATES]
 package:/system/priv-app/Navitel-large.apk
 /data/data/com.navitel/shared_prefs/x60_lab_probe.xml: 1 file pulled, 0 skipped. 0.0 MB/s (132 bytes in 0.041s)
-/data/data/ru.lifanx60.backupfixture/files/lab-marker.txt: 1 file pulled, 0 skipped. 0.0 MB/s (24 bytes in 0.040s)
+/data/data/ru.lifanx60.backupfixture/files/lab-marker.txt: 1 file pulled, 0 skipped. 0.0 MB/s (24 bytes in 0.041s)
 /data/data/ru.lifanx60.backupfixture/shared_prefs/lab_probe.xml: 1 file pulled, 0 skipped. 0.0 MB/s (132 bytes in 0.041s)
 Independent synthetic app marker and preferences verified
-/system/priv-app/Navitel-large.apk: 1 file pulled, 0 skipped. 231.8 MB/s (111095055 bytes in 0.457s)
+/system/priv-app/Navitel-large.apk: 1 file pulled, 0 skipped. 244.3 MB/s (111095055 bytes in 0.434s)
 System APK read-back still matched after negative control
 Emulate file-manager ACTION_VIEW and Android PackageInstaller in disposable emulator
 WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
 WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
 1
-/tmp/navitel-stock-services-amaze-lab.wMkp2C/new-resigned.apk: 1 file pushed, 0 skipped. 67.1 MB/s (99156773 bytes in 1.410s)
+/tmp/navitel-stock-services-amaze-lab.blMHNE/new-resigned.apk: 1 file pushed, 0 skipped. 197.2 MB/s (99156773 bytes in 0.480s)
 WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
 WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
 Starting: Intent { cmp=com.amaze.filemanager/.ui.activities.MainActivity (has extras) }
@@ -108,15 +108,39 @@ Tap virtual Amaze Install at 240,408
 WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
 Tap virtual Install at 240,616
 WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
-Virtual installer did not report App installed
-<?xml version='1.0' encoding='UTF-8' standalone='yes' ?><hierarchy rotation="0"><node index="0" text="" resource-id="" class="android.widget.FrameLayout" package="android" content-desc="" checkable="false" checked="false" clickable="false" enabled="true" focusable="false" focused="false" scrollable="false" long-clickable="false" password="false" selected="false" bounds="[0,269][320,396]"><node index="0" text="" resource-id="" class="android.widget.FrameLayout" package="android" content-desc="" checkable="false" checked="false" clickable="false" enabled="true" focusable="false" focused="false" scrollable="false" long-clickable="false" password="false" selected="false" bounds="[0,269][320,396]"><node index="0" text="" resource-id="android:id/content" class="android.widget.FrameLayout" package="android" content-desc="" checkable="false" checked="false" clickable="false" enabled="true" focusable="false" focused="false" scrollable="false" long-clickable="false" password="false" selected="false" bounds="[0,269][320,396]"><node index="0" text="" resource-id="android:id/parentPanel" class="android.widget.LinearLayout" package="android" content-desc="" checkable="false" checked="false" clickable="false" enabled="true" focusable="false" focused="false" scrollable="false" long-clickable="false" password="false" selected="false" bounds="[8,269][312,396]"><node index="0" text="" resource-id="android:id/contentPanel" class="android.widget.LinearLayout" package="android" content-desc="" checkable="false" checked="false" clickable="false" enabled="true" focusable="false" focused="false" scrollable="false" long-clickable="false" password="false" selected="false" bounds="[8,269][312,339]"><node index="0" text="" resource-id="android:id/scrollView" class="android.widget.ScrollView" package="android" content-desc="" checkable="false" checked="false" clickable="false" enabled="true" focusable="false" focused="false" scrollable="false" long-clickable="false" password="false" selected="false" bounds="[16,277][304,339]"><node index="0" text="Unfortunately, Navitel has stopped." resource-id="android:id/message" class="android.widget.TextView" package="android" content-desc="" checkable="false" checked="false" clickable="false" enabled="true" focusable="false" focused="false" scrollable="false" long-clickable="false" password="false" selected="false" bounds="[16,277][304,339]" /></node></node><node index="1" text="" resource-id="android:id/buttonPanel" class="android.widget.LinearLayout" package="android" content-desc="" checkable="false" checked="false" clickable="false" enabled="true" focusable="false" focused="false" scrollable="false" long-clickable="false" password="false" selected="false" bounds="[8,339][312,396]"><node index="0" text="" resource-id="" class="android.widget.LinearLayout" package="android" content-desc="" checkable="false" checked="false" clickable="false" enabled="true" focusable="false" focused="false" scrollable="false" long-clickable="false" password="false" selected="false" bounds="[16,340][304,388]"><node index="0" text="OK" resource-id="android:id/button1" class="android.widget.Button" package="android" content-desc="" checkable="false" checked="false" clickable="true" enabled="true" focusable="true" focused="false" scrollable="false" long-clickable="false" password="false" selected="false" bounds="[16,340][304,388]" /></node></node></node></node></node></node></hierarchy>    mResumedActivity: ActivityRecord{afb01240 u0 com.android.packageinstaller/.InstallAppProgress t4}
-  mFocusedActivity: ActivityRecord{afb01240 u0 com.android.packageinstaller/.InstallAppProgress t4}
+Navitel crash dialog observed during installation on the emulator
+WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
+Virtual installer confirmed App installed
+package:/data/app/com.navitel-1.apk
+    versionCode=360622024 targetSdk=33
+/data/data/com.navitel/shared_prefs/x60_lab_probe.xml: 1 file pulled, 0 skipped. 0.0 MB/s (132 bytes in 0.041s)
+/data/data/ru.lifanx60.backupfixture/files/lab-marker.txt: 1 file pulled, 0 skipped. 0.0 MB/s (24 bytes in 0.041s)
+/data/data/ru.lifanx60.backupfixture/shared_prefs/lab_probe.xml: 1 file pulled, 0 skipped. 0.0 MB/s (132 bytes in 0.042s)
+Independent synthetic app marker and preferences verified
+/system/priv-app/Navitel-large.apk: 1 file pulled, 0 skipped. 214.3 MB/s (111095055 bytes in 0.494s)
+Restart Android userspace, not the emulator, and repeat checks
+package:/data/app/com.navitel-1.apk
+    versionCode=360622024 targetSdk=33
+/data/data/com.navitel/shared_prefs/x60_lab_probe.xml: 1 file pulled, 0 skipped. 0.0 MB/s (132 bytes in 0.041s)
+/data/data/ru.lifanx60.backupfixture/files/lab-marker.txt: 1 file pulled, 0 skipped. 0.0 MB/s (24 bytes in 0.041s)
+/data/data/ru.lifanx60.backupfixture/shared_prefs/lab_probe.xml: 1 file pulled, 0 skipped. 0.0 MB/s (132 bytes in 0.041s)
+Independent synthetic app marker and preferences verified
+Launch new activity with empty virtual SD and isolated network; no license or account
+/data/data/com.navitel/shared_prefs/x60_lab_probe.xml: 1 file pulled, 0 skipped. 0.0 MB/s (132 bytes in 0.041s)
+/data/data/ru.lifanx60.backupfixture/files/lab-marker.txt: 1 file pulled, 0 skipped. 0.0 MB/s (24 bytes in 0.041s)
+/data/data/ru.lifanx60.backupfixture/shared_prefs/lab_probe.xml: 1 file pulled, 0 skipped. 0.0 MB/s (132 bytes in 0.041s)
+Independent synthetic app marker and preferences verified
+Full reboot of disposable x86 virtual device, then verify package and synthetic data
+67909d6a-0ea7-493a-a554-1a691b863519
+Verify stock services.jar and loaded services dex after the full virtual reboot
+/system/framework/services.jar: 1 file pulled, 0 skipped. 198.7 MB/s (1424358 bytes in 0.007s)
+tr: write error: Broken pipe
 Lab failed (1); emulator diagnostics:
 WARNING      | Feature QuickbootFileBacked is disabled due to stability issues, if you really want that, the environment variable ANDROID_EMU_FORCE_QUICKBOOT_FILE_BACKED need to set to 1
 WARNING      | Downloaded protobuf file is corrupt.
 WARNING      | encryption is off
 WARNING      | FeatureControl is requesting a non existing feature.
-INFO         | Storing crashdata in: /tmp/android-signedupdatex86/emu-crash-37.2.13.db, detection is enabled for process: 2802
+INFO         | Storing crashdata in: /tmp/android-signedupdatex86/emu-crash-37.2.13.db, detection is enabled for process: 2801
 INFO         | Initializing gfxstream backend
 INFO         | startOpenglesRendererImpl: gpu info
 INFO         | 
@@ -158,97 +182,95 @@ WARNING      | Failed to process .ini file /home/signedupdatex86/.android/emu-up
 WARNING      | UpdateCheck: Failure: Error
 WARNING      | UpdateCheck: failed to get the latest version, skipping check (current version '37.2.13-16740729')
 List of devices attached
-emulator-5554          device product:sdk_x86 model:Android_SDK_built_for_x86 device:generic_x86 transport_id:1
+emulator-5554          device product:sdk_x86 model:Android_SDK_built_for_x86 device:generic_x86 transport_id:2
 
-I/PackageManager( 2038):   Action: "android.intent.action.SENDTO"
-I/PackageManager( 2038):   Category: "android.intent.category.DEFAULT"
-I/PackageManager( 2038):   Scheme: "mms"
-I/PackageManager( 2038):   Action: "android.intent.action.SENDTO"
-I/PackageManager( 2038):   Category: "android.intent.category.DEFAULT"
-I/PackageManager( 2038):   Scheme: "mmsto"
-I/PackageManager( 2038): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager( 2038): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager( 2038): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager( 2038): Running dexopt on: com.android.email
-I/PackageManager( 2038): Running dexopt on: com.android.exchange
-I/ActivityManager( 2038): Start proc com.navitel for broadcast com.navitel/com.oslib.UpdateReceiver: pid=2924 uid=10052 gids={50052, 1028, 1015, 3003}
-E/AndroidRuntime( 2924): FATAL EXCEPTION: main
-E/AndroidRuntime( 2924): Process: com.navitel, PID: 2924
-I/PackageManager( 2038):   Action: "android.intent.action.SENDTO"
-I/PackageManager( 2038):   Category: "android.intent.category.DEFAULT"
-I/PackageManager( 2038):   Scheme: "sms"
-I/PackageManager( 2038): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager( 2038): Running dexopt on: com.svox.pico
-I/PackageManager( 2038):   Action: "android.intent.action.SENDTO"
-I/PackageManager( 2038):   Category: "android.intent.category.DEFAULT"
-I/PackageManager( 2038):   Scheme: "smsto"
-I/PackageManager( 2038):   Action: "android.intent.action.SENDTO"
-I/PackageManager( 2038):   Category: "android.intent.category.DEFAULT"
-I/PackageManager( 2038):   Scheme: "mms"
-I/PackageManager( 2038):   Action: "android.intent.action.SENDTO"
-I/PackageManager( 2038):   Category: "android.intent.category.DEFAULT"
-I/PackageManager( 2038):   Scheme: "mmsto"
-I/PackageManager( 2038):   Action: "android.intent.action.SENDTO"
-I/PackageManager( 2038):   Category: "android.intent.category.DEFAULT"
-I/PackageManager( 2038):   Scheme: "sms"
-I/PackageManager( 2038): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager( 2038): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager( 2038): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager( 2038): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager( 2038):   Action: "android.intent.action.SENDTO"
-I/PackageManager( 2038):   Category: "android.intent.category.DEFAULT"
-I/PackageManager( 2038):   Scheme: "smsto"
-I/PackageManager( 2038):   Action: "android.intent.action.SENDTO"
-I/PackageManager( 2038):   Category: "android.intent.category.DEFAULT"
-I/PackageManager( 2038):   Scheme: "mms"
-I/PackageManager( 2038): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager( 2038): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager( 2038):   Action: "android.intent.action.SENDTO"
-I/PackageManager( 2038):   Category: "android.intent.category.DEFAULT"
-I/PackageManager( 2038):   Scheme: "mmsto"
-I/PackageManager( 2038): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager( 2038):   Action: "android.intent.action.SENDTO"
-I/PackageManager( 2038):   Category: "android.intent.category.DEFAULT"
-I/PackageManager( 2038):   Scheme: "sms"
-I/PackageManager( 2038): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager( 2038):   Action: "android.intent.action.SENDTO"
-I/PackageManager( 2038):   Category: "android.intent.category.DEFAULT"
-I/PackageManager( 2038):   Scheme: "smsto"
-I/PackageManager( 2038):   Action: "android.intent.action.SENDTO"
-I/PackageManager( 2038):   Category: "android.intent.category.DEFAULT"
-I/PackageManager( 2038):   Scheme: "mms"
-I/PackageManager( 2038):   Action: "android.intent.action.SENDTO"
-I/PackageManager( 2038):   Category: "android.intent.category.DEFAULT"
-I/PackageManager( 2038):   Scheme: "mmsto"
-I/PackageManager( 2038): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager( 2038): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager( 2038): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager( 2038):   Action: "android.intent.action.SENDTO"
-I/PackageManager( 2038):   Category: "android.intent.category.DEFAULT"
-I/PackageManager( 2038):   Scheme: "sms"
-I/PackageManager( 2038):   Action: "android.intent.action.SENDTO"
-I/PackageManager( 2038):   Category: "android.intent.category.DEFAULT"
-I/PackageManager( 2038):   Scheme: "smsto"
-I/PackageManager( 2038): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager( 2038): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager( 2038):   Action: "android.intent.action.SENDTO"
-I/PackageManager( 2038):   Category: "android.intent.category.DEFAULT"
-I/PackageManager( 2038):   Scheme: "mms"
-I/PackageManager( 2038):   Action: "android.intent.action.SENDTO"
-I/PackageManager( 2038):   Category: "android.intent.category.DEFAULT"
-I/PackageManager( 2038):   Scheme: "mmsto"
-I/PackageManager( 2038): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager( 2038): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager( 2038): Running dexopt on: com.android.keychain
-<6>[    0.642406] Write protecting the kernel read-only data: 1868k
-<6>[    0.719453] EXT4-fs (vda): mounted filesystem with ordered data mode. Opts: (null)
-<4>[    0.721704] EXT4-fs (vdb): Ignoring removed nomblk_io_submit option
-<6>[    0.724106] EXT4-fs (vdb): mounted filesystem with ordered data mode. Opts: nomblk_io_submit,errors=panic
-<4>[    0.726706] EXT4-fs (vdc): Ignoring removed nomblk_io_submit option
-<6>[    0.728968] EXT4-fs (vdc): mounted filesystem with ordered data mode. Opts: nomblk_io_submit,errors=remount-ro
-<4>[    0.747625] EXT4-fs (vdc): Ignoring removed nomblk_io_submit option
-<6>[    0.749477] EXT4-fs (vdc): mounted filesystem with ordered data mode. Opts: nomblk_io_submit,errors=panic
-<6>[    6.926931] EXT4-fs (vda): re-mounted. Opts: (null)
-<6>[   16.946733] EXT4-fs (vda): re-mounted. Opts: (null)
+W/PackageManager( 1512): Unknown permission com.android.vending.BILLING in package com.amaze.filemanager
+I/PackageManager( 1512): No secure containers on sdcard
+W/PackageManager( 1512): Not granting permission android.permission.GLOBAL_SEARCH to package com.android.quicksearchbox (protectionLevel=18 flags=0x8be45)
+W/PackageManager( 1512): Unknown permission com.android.smspush.WAPPUSH_MANAGER_BIND in package com.android.phone
+W/PackageManager( 1512): Unknown permission com.google.android.googleapps.permission.GOOGLE_AUTH in package com.android.providers.calendar
+W/PackageManager( 1512): Unknown permission com.google.android.googleapps.permission.GOOGLE_AUTH.cl in package com.android.providers.calendar
+W/PackageManager( 1512): Unknown permission com.google.android.googleapps.permission.GOOGLE_AUTH.mail in package com.android.calendar
+W/PackageManager( 1512): Not granting permission android.permission.ACCESS_DOWNLOAD_MANAGER to package com.android.browser (protectionLevel=18 flags=0x9be45)
+W/PackageManager( 1512): Not granting permission android.permission.SEND_DOWNLOAD_COMPLETED_INTENTS to package com.android.browser (protectionLevel=2 flags=0x9be45)
+W/PackageManager( 1512): Not granting permission android.permission.BIND_APPWIDGET to package com.android.widgetpreview (protectionLevel=18 flags=0x8be44)
+W/PackageManager( 1512): Unknown permission android.permission.INSTALL_DRM in package com.android.mms
+W/PackageManager( 1512): Unknown permission com.google.android.googleapps.permission.GOOGLE_AUTH in package com.android.settings
+W/PackageManager( 1512): Unknown permission android.permission.FOREGROUND_SERVICE in package com.navitel
+W/PackageManager( 1512): Unknown permission android.permission.POST_NOTIFICATIONS in package com.navitel
+W/PackageManager( 1512): Unknown permission com.android.vending.BILLING in package com.navitel
+W/PackageManager( 1512): Unknown permission com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE in package com.navitel
+W/PackageManager( 1512): Unknown permission com.google.android.googleapps.permission.ACCESS_GOOGLE_PASSWORD in package com.android.development
+W/PackageManager( 1512): Unknown permission com.google.android.googleapps.permission.GOOGLE_AUTH in package com.android.development
+W/PackageManager( 1512): Unknown permission com.google.android.googleapps.permission.GOOGLE_AUTH.ALL_SERVICES in package com.android.development
+W/PackageManager( 1512): Unknown permission com.google.android.googleapps.permission.GOOGLE_AUTH.YouTubeUser in package com.android.development
+W/PackageManager( 1512): Not granting permission android.permission.CLEAR_APP_USER_DATA to package com.android.packageinstaller (protectionLevel=2 flags=0x40483e45)
+W/PackageManager( 1512): Not granting permission android.permission.GRANT_REVOKE_PERMISSIONS to package com.android.packageinstaller (protectionLevel=2 flags=0x40483e45)
+W/PackageManager( 1512): Not granting permission android.permission.DELETE_PACKAGES to package com.svox.pico (protectionLevel=18 flags=0x8be45)
+W/PackageManager( 1512): Not granting permission android.permission.DEVICE_POWER to package com.android.deskclock (protectionLevel=2 flags=0x48be45)
+W/PackageManager( 1512): Unknown permission com.amaze.cloud.permission.ACCESS_PROVIDER in package com.amaze.filemanager
+W/PackageManager( 1512): Unknown permission android.permission.USE_FINGERPRINT in package com.amaze.filemanager
+W/PackageManager( 1512): Unknown permission android.permission.REQUEST_INSTALL_PACKAGES in package com.amaze.filemanager
+W/PackageManager( 1512): Unknown permission android.permission.FOREGROUND_SERVICE in package com.amaze.filemanager
+W/PackageManager( 1512): Unknown permission android.permission.REQUEST_DELETE_PACKAGES in package com.amaze.filemanager
+W/PackageManager( 1512): Unknown permission com.android.vending.BILLING in package com.amaze.filemanager
+I/BackupManagerService( 1512): Scheduling backup for new app com.navitel
+D/BackupManagerService( 1512): Now staging backup of com.navitel
+I/BackupManagerService( 1512):   com.navitel
+I/PackageManager( 1512): Updating external media status from unmounted to mounted
+I/PackageManager( 1512): No secure containers on sdcard
+W/PackageManager( 1512): Not granting permission android.permission.GLOBAL_SEARCH to package com.android.quicksearchbox (protectionLevel=18 flags=0x88be45)
+W/PackageManager( 1512): Unknown permission com.android.smspush.WAPPUSH_MANAGER_BIND in package com.android.phone
+W/PackageManager( 1512): Unknown permission com.google.android.googleapps.permission.GOOGLE_AUTH in package com.android.providers.calendar
+W/PackageManager( 1512): Unknown permission com.google.android.googleapps.permission.GOOGLE_AUTH.cl in package com.android.providers.calendar
+W/PackageManager( 1512): Unknown permission com.google.android.googleapps.permission.GOOGLE_AUTH.mail in package com.android.calendar
+W/PackageManager( 1512): Not granting permission android.permission.ACCESS_DOWNLOAD_MANAGER to package com.android.browser (protectionLevel=18 flags=0x89be45)
+W/PackageManager( 1512): Not granting permission android.permission.SEND_DOWNLOAD_COMPLETED_INTENTS to package com.android.browser (protectionLevel=2 flags=0x89be45)
+W/PackageManager( 1512): Not granting permission android.permission.BIND_APPWIDGET to package com.android.widgetpreview (protectionLevel=18 flags=0x8be44)
+W/PackageManager( 1512): Unknown permission android.permission.INSTALL_DRM in package com.android.mms
+W/PackageManager( 1512): Unknown permission com.google.android.googleapps.permission.GOOGLE_AUTH in package com.android.settings
+W/PackageManager( 1512): Unknown permission android.permission.FOREGROUND_SERVICE in package com.navitel
+W/PackageManager( 1512): Unknown permission android.permission.POST_NOTIFICATIONS in package com.navitel
+W/PackageManager( 1512): Unknown permission com.android.vending.BILLING in package com.navitel
+W/PackageManager( 1512): Unknown permission com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE in package com.navitel
+W/PackageManager( 1512): Unknown permission com.google.android.googleapps.permission.ACCESS_GOOGLE_PASSWORD in package com.android.development
+W/PackageManager( 1512): Unknown permission com.google.android.googleapps.permission.GOOGLE_AUTH in package com.android.development
+W/PackageManager( 1512): Unknown permission com.google.android.googleapps.permission.GOOGLE_AUTH.ALL_SERVICES in package com.android.development
+W/PackageManager( 1512): Unknown permission com.google.android.googleapps.permission.GOOGLE_AUTH.YouTubeUser in package com.android.development
+W/PackageManager( 1512): Not granting permission android.permission.CLEAR_APP_USER_DATA to package com.android.packageinstaller (protectionLevel=2 flags=0x40c83e45)
+W/PackageManager( 1512): Not granting permission android.permission.GRANT_REVOKE_PERMISSIONS to package com.android.packageinstaller (protectionLevel=2 flags=0x40c83e45)
+W/PackageManager( 1512): Not granting permission android.permission.DELETE_PACKAGES to package com.svox.pico (protectionLevel=18 flags=0x88be45)
+W/PackageManager( 1512): Not granting permission android.permission.DEVICE_POWER to package com.android.deskclock (protectionLevel=2 flags=0xc8be45)
+W/PackageManager( 1512): Unknown permission com.amaze.cloud.permission.ACCESS_PROVIDER in package com.amaze.filemanager
+W/PackageManager( 1512): Unknown permission android.permission.USE_FINGERPRINT in package com.amaze.filemanager
+W/PackageManager( 1512): Unknown permission android.permission.REQUEST_INSTALL_PACKAGES in package com.amaze.filemanager
+W/PackageManager( 1512): Unknown permission android.permission.FOREGROUND_SERVICE in package com.amaze.filemanager
+W/PackageManager( 1512): Unknown permission android.permission.REQUEST_DELETE_PACKAGES in package com.amaze.filemanager
+W/PackageManager( 1512): Unknown permission com.android.vending.BILLING in package com.amaze.filemanager
+I/PackageManager( 1512): Running dexopt on: com.android.externalstorage
+I/PackageManager( 1512):   Action: "android.intent.action.SENDTO"
+I/PackageManager( 1512):   Category: "android.intent.category.DEFAULT"
+I/PackageManager( 1512):   Scheme: "sms"
+I/PackageManager( 1512): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager( 1512):   Action: "android.intent.action.SENDTO"
+I/PackageManager( 1512):   Category: "android.intent.category.DEFAULT"
+I/PackageManager( 1512):   Scheme: "smsto"
+I/PackageManager( 1512): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager( 1512):   Action: "android.intent.action.SENDTO"
+I/PackageManager( 1512):   Category: "android.intent.category.DEFAULT"
+I/PackageManager( 1512):   Scheme: "mms"
+I/PackageManager( 1512): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager( 1512):   Action: "android.intent.action.SENDTO"
+I/PackageManager( 1512):   Category: "android.intent.category.DEFAULT"
+I/PackageManager( 1512):   Scheme: "mmsto"
+I/PackageManager( 1512): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+<6>[    0.793816] Write protecting the kernel read-only data: 1868k
+<6>[    0.895391] EXT4-fs (vda): mounted filesystem with ordered data mode. Opts: (null)
+<4>[    0.897695] EXT4-fs (vdb): Ignoring removed nomblk_io_submit option
+<6>[    0.901095] EXT4-fs (vdb): mounted filesystem with ordered data mode. Opts: nomblk_io_submit,errors=panic
+<4>[    0.903859] EXT4-fs (vdc): Ignoring removed nomblk_io_submit option
+<6>[    0.906977] EXT4-fs (vdc): mounted filesystem with ordered data mode. Opts: nomblk_io_submit,errors=remount-ro
+<4>[    0.921874] EXT4-fs (vdc): Ignoring removed nomblk_io_submit option
+<6>[    0.925913] EXT4-fs (vdc): mounted filesystem with ordered data mode. Opts: nomblk_io_submit,errors=panic
 Filesystem               Size     Used     Free   Blksize
 /system                532.8M   444.3M    88.5M   4096
