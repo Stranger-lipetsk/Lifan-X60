@@ -1,0 +1,47 @@
+name: Модель повторного tar на той же виртуальной ФС
+on:
+  push:
+    branches: [arena/b12cc9a8-lifan-x60]
+    paths:
+      - '.github/workflows/experiment-hibernate-samefs-tar.yml'
+      - 'tools/experiment_hibernate_samefs_tar.sh'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  test:
+    if: github.ref_name == 'arena/b12cc9a8-lifan-x60'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Проверить сценарий
+        run: bash -n tools/experiment_hibernate_samefs_tar.sh
+      - name: Только временные виртуальные файлы CI
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bash tools/experiment_hibernate_samefs_tar.sh
+      - name: Сохранить диагностику
+        if: failure()
+        run: |
+          set -euo pipefail
+          test -s "$RUNNER_TEMP/hibernate-samefs-tar.log" || exit 0
+          mkdir -p reports
+          cp "$RUNNER_TEMP/hibernate-samefs-tar.log" reports/stock-hibernate-samefs-tar-lab-error.txt
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/stock-hibernate-samefs-tar-lab-error.txt
+          git diff --cached --quiet && exit 0
+          git commit -m 'report: diagnose synthetic same-fs tar model'
+          git pull --rebase origin "${{ github.ref_name }}"
+          git push origin HEAD:"${{ github.ref_name }}"
+      - name: Сохранить текстовый отчёт
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/stock-hibernate-samefs-tar-lab.txt
+          git diff --cached --quiet && exit 0
+          git commit -m 'report: synthetic same-fs tar model'
+          git pull --rebase origin "${{ github.ref_name }}"
+          git push origin HEAD:"${{ github.ref_name }}"
