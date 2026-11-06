@@ -67,6 +67,9 @@ fsck_rc=0
 e2fsck -fy "$work/offline-system.img" || fsck_rc=$?
 [ "$fsck_rc" -le 1 ] || { echo "SDK image fsck failed: $fsck_rc"; exit 1; }
 resize2fs "$work/offline-system.img" 1024M
+fsck_rc=0
+e2fsck -fy "$work/offline-system.img" || fsck_rc=$?
+[ "$fsck_rc" -le 1 ] || { echo "Resized image fsck failed: $fsck_rc"; exit 1; }
 e2fsck -fn "$work/offline-system.img"
 debugfs -R "dump /framework/services.jar $work/stock-services.jar" "$work/system.img" >/dev/null 2>&1
 echo "998f7b8558e55fa4d40ea676414cb4bf35f9c9b6f0eae3c81f037186229c403c  $work/stock-services.jar" | sha256sum -c -
