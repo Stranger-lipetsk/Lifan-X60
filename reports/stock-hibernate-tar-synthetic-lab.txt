@@ -16,6 +16,15 @@ Test user xattr on extracted file: []
 SELinux labels and ACLs were not tested.
 Positive controls passed: same container can lchown a symlink; destination supports user xattrs.
 Symlink archive header numeric UID/GID: 10013 10013 ; target: lab-marker.txt
+## Deliberately undersized synthetic destination
+24 MiB synthetic file, separate 16 MiB ext4 image: create exit 1; extract exit 1; no complete extracted copy.
+Create diagnostics:
+tar: write error: No space left on device
+Extract diagnostics:
+././
+././synthetic-large.bin
+tar: write error: No space left on device
+This models insufficient space, not the actual capacity or free space of the GU partition.
 ## Deliberately scheduled late write
 Source was modified after archive finished and before extraction. Extracted file contained the earlier snapshot; late source change did not appear.
 This illustrates a possible consistency window only. Real script timing and concurrent writes, app descriptors, actual Hibernate, the GU ext4 implementation, ACLs and SELinux were not tested.
