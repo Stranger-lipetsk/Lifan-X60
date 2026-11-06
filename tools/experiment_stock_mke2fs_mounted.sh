@@ -66,7 +66,7 @@ loop=$(timeout -k 5 30 sudo losetup --find --show "$w/target.img")
 backing=$(sudo losetup -n -O BACK-FILE "$loop")
 [ "$(realpath -e "$backing")" = "$(realpath -e "$w/target.img")" ] || { echo 'Loop is not the new synthetic image'; exit 1; }
 run_in_lab() {
-  timeout -k 5 30 docker run --rm --name "$container_name" --network none --read-only --cap-drop ALL --cap-add DAC_OVERRIDE -e QEMU_STRACE=1 \
+  timeout -k 5 30 docker run --rm --name "$container_name" --network none --read-only --cap-drop ALL --cap-add DAC_OVERRIDE \
     --security-opt no-new-privileges --memory 256m --pids-limit 32 \
     --device "$loop:$loop:rwm" \
     --mount "type=bind,source=$w/properties,target=/dev/__properties__,readonly" \
@@ -105,7 +105,7 @@ if sudo mount -t ext4 -o ro "$loop" "$w/mounted"; then
 fi
 {
   echo '# Stock-derived ARM mke2fs against an isolated synthetic mounted loop device'
-  echo 'Offline CI-only Linux/QEMU user-mode restricted container; no actual GU, Android kernel, physical partition, user files, or hibernation script.'
+  echo 'Offline CI-only Linux/QEMU user-mode restricted container with synthetic empty Android property area; no actual GU, Android kernel, physical partition, user files, or hibernation script.'
   echo 'Stock-derived mke2fs SHA-256: 45b4cad925fe740a013f64192f6ba09784038b4b9dca4f5f1a3ed37f1a364c3e.'
   echo 'Positive control: exact binary formatted a blank unmounted 64 MiB file-backed loop, then read-only e2fsck succeeded.'
   echo 'The same image was then mounted read-write in the CI host and exposed as a mounted filesystem and the same loop device inside the restricted container.'
