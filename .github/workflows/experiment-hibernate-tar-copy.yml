@@ -1,0 +1,37 @@
+name: Модель копирования данных штатным tar
+on:
+  push:
+    branches: [arena/b12cc9a8-lifan-x60]
+    paths:
+      - '.github/workflows/experiment-hibernate-tar-copy.yml'
+      - 'tools/experiment_hibernate_tar_copy.sh'
+      - 'tools/hibernate_tar_lab.py'
+      - 'tests/test_hibernate_tar_lab.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  test:
+    if: github.ref_name == 'arena/b12cc9a8-lifan-x60'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Проверить анализатор
+        run: |
+          bash -n tools/experiment_hibernate_tar_copy.sh
+          python3 -m unittest discover -s tests -p 'test_hibernate_tar_lab.py' -v
+      - name: Только искусственные файлы в контейнере CI
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bash tools/experiment_hibernate_tar_copy.sh
+      - name: Сохранить текстовый отчёт
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/stock-hibernate-tar-synthetic-lab.txt
+          git diff --cached --quiet && exit 0
+          git commit -m 'report: synthetic stock hibernate tar copy model'
+          git pull --rebase origin "${{ github.ref_name }}"
+          git push origin HEAD:"${{ github.ref_name }}"
