@@ -1,0 +1,8 @@
+# Synthetic lazy-unmount and open-file-descriptor model
+CI-only private Linux mount namespace; no Android device, actual GU partition, kernel hibernation, or user data.
+Source was a temporary tmpfs; destination an ext4 filesystem on a new temporary regular-file image. Host GNU tar copied a synthetic file before mount switch.
+A helper opened the original file before the snapshot and held its file descriptor through a lazy unmount and remount at the same path.
+Before: READY 51:2; new path device:inode: 1792:13 (different).
+The helper wrote once after the copy and once after the mount switch. Both writes were readable through its old FD, but absent from the new filesystem path.
+A new write opened via the path after remount appeared on the new filesystem.
+This establishes Linux behavior in this host model only: no evidence that a head-unit process retains such an FD, writes at those times, or causes observed app loss.
