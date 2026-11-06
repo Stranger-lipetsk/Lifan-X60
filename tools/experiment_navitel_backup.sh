@@ -82,7 +82,14 @@ boot() {
   "$adb" wait-for-device &
   local waitpid=$! connected=no
   for i in $(seq 1 60); do
-    if ! kill -0 "$pid" 2>/dev/null; then echo 'Emulator exited before adb'; break; fi
+    if ! kill -0 "$pid" 2>/dev/null; then
+      echo 'Emulator exited before adb'
+      local emulator_status=0
+      wait "$pid" || emulator_status=$?
+      echo "Emulator launcher exit: $emulator_status"
+      ps -fu emulatorlab || true
+      break
+    fi
     if ! kill -0 "$waitpid" 2>/dev/null; then wait "$waitpid" && connected=yes; break; fi
     sleep 5
   done
