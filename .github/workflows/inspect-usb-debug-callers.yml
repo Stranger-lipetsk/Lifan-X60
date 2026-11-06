@@ -58,7 +58,7 @@ jobs:
           test -s "$w/root/xbin/su"
           debugfs -R 'stat /xbin/su' "$w/system.img" > reports/su-static.txt 2>&1
           python3 tools/inspect_su_static.py "$w/root/xbin/su" >> reports/su-static.txt
-          for path in /bin/su /bin/bin/su /app/Superuser.apk /app/SuperSU.apk; do
+          for path in /bin/su /bin/bin/su /bin/bin/busybox /app/Superuser.apk /app/SuperSU.apk; do
             echo "## /system$path" >> reports/su-static.txt
             debugfs -R "stat $path" "$w/system.img" >> reports/su-static.txt 2>&1
           done
