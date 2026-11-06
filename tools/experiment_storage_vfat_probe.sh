@@ -127,7 +127,8 @@ for ext in x509.pem pk8; do
 done
 src=tests/fixtures/storage-vfat-probe
 mkdir -p "$work/classes" "$work/dex"
-javac -source 8 -target 8 -bootclasspath "$jar" -d "$work/classes" "$src/src/ru/lifanx60/storagegrouplab/MainActivity.java"
+find "$src/src" -name '*.java' | sort > "$work/sources.txt"
+javac -source 8 -target 8 -bootclasspath "$jar" -d "$work/classes" @"$work/sources.txt"
 find "$work/classes" -name '*.class' > "$work/classes.txt"
 "$bt/d8" --lib "$jar" --min-api 19 --output "$work/dex" @"$work/classes.txt"
 cp "$work/dex/classes.dex" "$work/classes.dex"
@@ -142,9 +143,9 @@ for mode in negative positive; do
   grep -F Success "$work/$mode-install.txt"
 done
 run_probe() {
-  local pkg=$1 name=$2 expected=$3
+  local pkg=$1 name=$2 expected=$3 activity=$4
   timeout -k 5 30 "$adb" logcat -c
-  timeout -k 5 60 "$adb" shell am start -n "$pkg/ru.lifanx60.storagegrouplab.MainActivity" > "$work/$name-start.txt" 2>&1
+  timeout -k 5 60 "$adb" shell am start -n "$pkg/ru.lifanx60.storagegrouplab.$activity" > "$work/$name-start.txt" 2>&1
   for i in $(seq 1 30); do
     timeout -k 5 30 "$adb" logcat -d -v brief > "$work/$name-log.txt" 2>&1 || true
     if grep -Eq 'SYNTHETIC_WRITE_READ_(OK|FAILED)' "$work/$name-log.txt"; then break; fi
@@ -154,25 +155,26 @@ run_probe() {
   grep -F "$expected" "$work/$name-log.txt"
 }
 echo 'Baseline generic emulator parent is mode 0700: record access before changing anything'
-run_probe ru.lifanx60.storagegroupwith positive-initial SYNTHETIC_WRITE_READ_FAILED
+run_probe ru.lifanx60.storagegroupwith positive-initial SYNTHETIC_WRITE_READ_FAILED MainActivity
 grep -F 'EACCES (Permission denied)' "$work/positive-initial-log.txt"
 grep -E 'Groups:.*[[:space:]]1023([[:space:]]|$)' "$work/positive-initial-log.txt"
-# LAB ONLY: model the parent directory mode and ownership in the stock boot
-# init.rc (0751 media_rw:media_rw). Never perform chmod on the actual device.
-timeout -k 5 30 "$adb" shell 'chown 1023:1023 /mnt/media_rw && chmod 0751 /mnt/media_rw && ls -ldn /mnt/media_rw && echo STOCK_PARENT_MODEL_SET' | tr -d '\r' | tee "$work/parent-model.txt"
+# LAB ONLY: bind this disposable emulator's FAT mount below a synthetic
+# parent with the mode and ownership in stock init.rc. No real-device changes.
+timeout -k 5 30 "$adb" shell 'mkdir -p /data/local/tmp/x60-vfat-model/sdcard && chown 1023:1023 /data/local/tmp/x60-vfat-model && chmod 0751 /data/local/tmp/x60-vfat-model && mount -o bind /mnt/media_rw/sdcard /data/local/tmp/x60-vfat-model/sdcard && ls -ldn /data/local/tmp/x60-vfat-model && echo STOCK_PARENT_MODEL_SET' | tr -d '\r' | tee "$work/parent-model.txt"
 grep -Fx STOCK_PARENT_MODEL_SET "$work/parent-model.txt"
 grep -E '^drwxr-x--x[[:space:]]+1023[[:space:]]+1023' "$work/parent-model.txt"
-run_probe ru.lifanx60.storagegroupwithout negative SYNTHETIC_WRITE_READ_FAILED
+timeout -k 5 30 "$adb" shell cat /proc/mounts | tr -d '\r' | grep -E ' /data/local/tmp/x60-vfat-model/sdcard vfat rw[, ]' | tee -a "$work/parent-model.txt"
+run_probe ru.lifanx60.storagegroupwithout negative SYNTHETIC_WRITE_READ_FAILED ModelActivity
 grep -F 'EACCES (Permission denied)' "$work/negative-log.txt"
 if grep -E 'Groups:.*[[:space:]]1023([[:space:]]|$)' "$work/negative-log.txt"; then echo 'Unexpected media_rw group in negative control'; exit 1; fi
 timeout -k 5 30 "$adb" shell 'if [ -e /mnt/media_rw/sdcard/x60-synthetic-probe.txt ]; then echo UNEXPECTED_FILE; else echo SYNTHETIC_PATH_EMPTY; fi' | tr -d '\r' | grep -Fx SYNTHETIC_PATH_EMPTY
-run_probe ru.lifanx60.storagegroupwith positive SYNTHETIC_WRITE_READ_OK
+run_probe ru.lifanx60.storagegroupwith positive SYNTHETIC_WRITE_READ_OK ModelActivity
 grep -E 'Groups:.*[[:space:]]1023([[:space:]]|$)' "$work/positive-log.txt"
 timeout -k 5 60 "$adb" pull /mnt/media_rw/sdcard/x60-synthetic-probe.txt "$work/readback.txt" >/dev/null
 printf 'X60-LAB\n' > "$work/expected.txt"
 cmp "$work/expected.txt" "$work/readback.txt"
 {
-  echo '# Synthetic virtual VFAT storage group probe on disposable Android 4.4.2 x86'
+  echo '# Synthetic virtual VFAT and modeled parent permissions on disposable Android 4.4.2 x86'
   echo 'The target is the disposable emulator virtual SD FAT filesystem, not real USB or the head unit.'
   echo 'Generic platform.xml WRITE_EXTERNAL_STORAGE group mapping replaced with the mapping read from the checked stock image; other framework, kernel and SELinux are emulator only.'
   echo 'Unprivileged app signed with public testkey, no shared UID; ADB only prepared and observed the emulator.'
@@ -181,7 +183,7 @@ cmp "$work/expected.txt" "$work/readback.txt"
   echo 'Generic parent directory and emulator SELinux mode before adjustment:'; cat "$work/mount-parents.txt"
   echo '## Baseline: app has media_rw group but generic parent mode 0700 blocks access'
   grep -E 'Groups:|UID=|SYNTHETIC_WRITE_READ_FAILED|EACCES \(Permission denied\)' "$work/positive-initial-log.txt" | head -8
-  echo '## Emulator-only parent permission model matching stock init.rc'; cat "$work/parent-model.txt"
+  echo '## FAT bind mount below emulator-only parent permission model matching stock init.rc'; cat "$work/parent-model.txt"
   echo '## Negative app without WRITE_EXTERNAL_STORAGE'; grep -F X60StorageGroupLab "$work/negative-log.txt" | head -20
   echo '## Positive app with WRITE_EXTERNAL_STORAGE'; grep -F X60StorageGroupLab "$work/positive-log.txt" | head -20
   echo 'Synthetic bytes fsynced, read by app and compared again by host: yes.'

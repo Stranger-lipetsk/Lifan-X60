@@ -3,5 +3,6 @@
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
   <application android:label="Disposable storage group probe" android:allowBackup="false">
     <activity android:name="ru.lifanx60.storagegrouplab.MainActivity" android:exported="true" />
+    <activity android:name="ru.lifanx60.storagegrouplab.ModelActivity" android:exported="true" />
   </application>
 </manifest>
