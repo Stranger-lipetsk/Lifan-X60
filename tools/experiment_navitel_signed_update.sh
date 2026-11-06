@@ -192,6 +192,14 @@ grep -E 'INSTALL_FAILED_UPDATE_INCOMPATIBLE|INSTALL_FAILED_SHARED_USER_INCOMPATI
 query_package negative
 grep -F 'package:/system/priv-app/Navitel-large.apk' "$work/path-negative.txt"
 check_synthetic negative
+# Locate any read-back anomaly relative to the failed negative control.
+timeout -k 10 300 "$adb" pull /system/priv-app/Navitel-large.apk "$work/stock-after-negative.apk" >/dev/null
+if cmp -s "$work/old.apk" "$work/stock-after-negative.apk"; then
+  echo 'System APK read-back still matched after negative control'
+else
+  echo 'System APK read-back already differs after negative control'
+  sha256sum "$work/old.apk" "$work/stock-after-negative.apk"
+fi
 
 echo 'Install matching-certificate update into emulator data partition (never touch system APK during update)'
 timeout -k 10 300 "$adb" install -r "$work/new-resigned.apk" > "$work/positive.txt" 2>&1 || true
@@ -205,7 +213,22 @@ test "$uid_before" = "$uid_after" || { echo 'Unexpected UID change'; exit 1; }
 check_synthetic after
 # Verify the existing emulator system APK is unchanged rather than assuming it.
 timeout -k 10 300 "$adb" pull /system/priv-app/Navitel-large.apk "$work/stock-after-update.apk" >/dev/null
-cmp "$work/old.apk" "$work/stock-after-update.apk"
+if ! cmp "$work/old.apk" "$work/stock-after-update.apk"; then
+  python3 - "$work/old.apk" "$work/stock-after-update.apk" <<'PY'
+import hashlib, sys
+from pathlib import Path
+old, new = (Path(p).read_bytes() for p in sys.argv[1:])
+print('Initial file bytes/hash:', len(old), hashlib.sha256(old).hexdigest())
+print('Read-back file bytes/hash:', len(new), hashlib.sha256(new).hexdigest())
+first = next((i for i, (a, b) in enumerate(zip(old, new)) if a != b), None)
+print('First differing offset:', first)
+if first is not None:
+    print('Initial bytes:', old[first:first+32].hex())
+    print('Read-back bytes:', new[first:first+32].hex())
+PY
+  echo 'System read-back mismatch; abandoning this experiment, no safety claim.'
+  exit 1
+fi
 
 echo 'Restart Android userspace, not the emulator, and repeat checks'
 restart_android_runtime
