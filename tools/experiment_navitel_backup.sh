@@ -165,7 +165,12 @@ timeout -k 5 15 "$adb" shell input keyevent 82 || true
 # Only this disposable emulator's empty virtual SD holds the temporary archive.
 timeout -k 10 300 "$adb" shell 'bu backup -noapk com.navitel > /sdcard/synthetic.ab' > "$work/backup-command.txt" 2>&1 &
 backup_pid=$!
-confirm_emulator_dialog 'Back up my data' || { kill "$backup_pid" 2>/dev/null || true; cat "$work/backup-command.txt"; exit 1; }
+confirm_emulator_dialog 'Back up my data' || {
+  echo 'Backup command output:'; cat "$work/backup-command.txt"
+  echo 'Device processes:'; timeout -k 5 30 "$adb" shell ps || true
+  echo 'Selected backup logs:'; timeout -k 5 60 "$adb" logcat -d -v brief | grep -iE 'BackupManagerService|AndroidRuntime|commands.bu|Exception|denied' | tail -80 || true
+  kill "$backup_pid" 2>/dev/null || true; exit 1
+}
 wait "$backup_pid" || { echo 'Backup command failed'; cat "$work/backup-command.txt"; exit 1; }
 timeout -k 5 60 "$adb" pull /sdcard/synthetic.ab "$work/synthetic.ab" >/dev/null
 if ! python3 tools/check_synthetic_adb_backup.py "$work/synthetic.ab" | tee "$work/backup-check.txt"; then
