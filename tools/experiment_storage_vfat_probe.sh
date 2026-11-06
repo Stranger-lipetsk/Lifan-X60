@@ -153,6 +153,15 @@ run_probe() {
   grep -F X60StorageGroupLab "$work/$name-log.txt" | head -25 || true
   grep -F "$expected" "$work/$name-log.txt"
 }
+echo 'Baseline generic emulator parent is mode 0700: record access before changing anything'
+run_probe ru.lifanx60.storagegroupwith positive-initial SYNTHETIC_WRITE_READ_FAILED
+grep -F 'EACCES (Permission denied)' "$work/positive-initial-log.txt"
+grep -E 'Groups:.*[[:space:]]1023([[:space:]]|$)' "$work/positive-initial-log.txt"
+# LAB ONLY: model the parent directory mode and ownership in the stock boot
+# init.rc (0751 media_rw:media_rw). Never perform chmod on the actual device.
+timeout -k 5 30 "$adb" shell 'chown 1023:1023 /mnt/media_rw && chmod 0751 /mnt/media_rw && ls -ldn /mnt/media_rw && echo STOCK_PARENT_MODEL_SET' | tr -d '\r' | tee "$work/parent-model.txt"
+grep -Fx STOCK_PARENT_MODEL_SET "$work/parent-model.txt"
+grep -E '^drwxr-x--x[[:space:]]+1023[[:space:]]+1023' "$work/parent-model.txt"
 run_probe ru.lifanx60.storagegroupwithout negative SYNTHETIC_WRITE_READ_FAILED
 grep -F 'EACCES (Permission denied)' "$work/negative-log.txt"
 if grep -E 'Groups:.*[[:space:]]1023([[:space:]]|$)' "$work/negative-log.txt"; then echo 'Unexpected media_rw group in negative control'; exit 1; fi
@@ -169,6 +178,10 @@ cmp "$work/expected.txt" "$work/readback.txt"
   echo 'Unprivileged app signed with public testkey, no shared UID; ADB only prepared and observed the emulator.'
   echo "Fingerprint: $fingerprint; hardware: $hardware"
   echo 'Virtual SD mount options:'; cat "$work/mock-dir.txt"
+  echo 'Generic parent directory and emulator SELinux mode before adjustment:'; cat "$work/mount-parents.txt"
+  echo '## Baseline: app has media_rw group but generic parent mode 0700 blocks access'
+  grep -E 'Groups:|UID=|SYNTHETIC_WRITE_READ_FAILED|EACCES \(Permission denied\)' "$work/positive-initial-log.txt" | head -8
+  echo '## Emulator-only parent permission model matching stock init.rc'; cat "$work/parent-model.txt"
   echo '## Negative app without WRITE_EXTERNAL_STORAGE'; grep -F X60StorageGroupLab "$work/negative-log.txt" | head -20
   echo '## Positive app with WRITE_EXTERNAL_STORAGE'; grep -F X60StorageGroupLab "$work/positive-log.txt" | head -20
   echo 'Synthetic bytes fsynced, read by app and compared again by host: yes.'
