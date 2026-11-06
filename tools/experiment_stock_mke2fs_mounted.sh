@@ -7,9 +7,10 @@ set -euo pipefail
 exec > >(tee "$RUNNER_TEMP/stock-mke2fs-mounted.log") 2>&1
 w=$(mktemp -d "$RUNNER_TEMP/x60-mke2fs-test.XXXXXXXX"); chmod 0755 "$w"
 mkdir -p "$w/root/system/bin" "$w/root/system/etc" "$w/mounted" reports
-loop=''
+loop=''; container_name="x60-mke2fs-${GITHUB_RUN_ID:-0}-${GITHUB_RUN_ATTEMPT:-0}"
 cleanup() {
   status=$?
+  timeout -k 5 20 docker rm -f "$container_name" >/dev/null 2>&1 || true
   if mountpoint -q "$w/mounted"; then sudo umount "$w/mounted" || echo 'Cannot unmount synthetic image'; fi
   if [ -n "$loop" ]; then sudo losetup -d "$loop" || echo 'Cannot detach synthetic loop device'; fi
   if [ "$status" != 0 ]; then
@@ -32,7 +33,8 @@ echo "45b4cad925fe740a013f64192f6ba09784038b4b9dca4f5f1a3ed37f1a364c3e  $w/root/
 debugfs -R "dump /bin/linker $w/root/system/bin/linker" "$w/stock-system.img" >/dev/null 2>&1
 debugfs -R "dump /bin/bin/busybox $w/root/busybox" "$w/stock-system.img" >/dev/null 2>&1
 echo "b40cc88591ddbe851e0d37e41990e7e0a7e19b6ab195dac827e1f952efe51613  $w/root/busybox" | sha256sum -c -
-debugfs -R "rdump /lib $w/root/system" "$w/stock-system.img" > "$w/libs-dump.log" 2>&1
+echo 'Extract stock libraries, without running them on the host'
+timeout -k 5 180 debugfs -R "rdump /lib $w/root/system" "$w/stock-system.img" > "$w/libs-dump.log" 2>&1
 test -s "$w/root/system/lib/libc.so" && test -s "$w/root/system/bin/linker"
 # Configuration may be absent; the exact binary is tested either way.
 debugfs -R "dump /etc/mke2fs.conf $w/root/system/etc/mke2fs.conf" "$w/stock-system.img" >/dev/null 2>&1 || true
@@ -44,15 +46,17 @@ COPY system /system
 COPY qemu-arm-static /qemu-arm-static
 COPY busybox /busybox
 DOCKER
-docker build -q -t x60-disposable-mke2fs "$w/root"
+echo 'Build isolated formatter container'
+timeout -k 5 240 docker build -q -t x60-disposable-mke2fs "$w/root"
 truncate -s 64M "$w/target.img"
 [ -f "$w/target.img" ] && [ ! -L "$w/target.img" ]
-loop=$(sudo losetup --find --show "$w/target.img")
+echo 'Attach dedicated synthetic file as loop device'
+loop=$(timeout -k 5 30 sudo losetup --find --show "$w/target.img")
 [[ "$loop" =~ ^/dev/loop[0-9]+$ ]] || { echo 'Unexpected loop device'; exit 1; }
 backing=$(sudo losetup -n -O BACK-FILE "$loop")
 [ "$(realpath -e "$backing")" = "$(realpath -e "$w/target.img")" ] || { echo 'Loop is not the new synthetic image'; exit 1; }
 run_in_lab() {
-  docker run --rm --network none --read-only --cap-drop ALL --cap-add DAC_OVERRIDE \
+  timeout -k 5 90 docker run --rm --name "$container_name" --network none --read-only --cap-drop ALL --cap-add DAC_OVERRIDE \
     --security-opt no-new-privileges --memory 256m --pids-limit 32 \
     --device "$loop:$loop:rwm" \
     --mount "type=bind,source=$w/mounted,target=/fixture/mounted" \
@@ -60,6 +64,7 @@ run_in_lab() {
 }
 # Positive control: the stock formatter must work on the blank and unmounted
 # synthetic loop device. The device is never used for anything except this lab.
+echo 'Run unmounted positive control'
 control_rc=0
 run_in_lab /system/bin/mke2fs -t ext4 "$loop" > "$w/control.log" 2>&1 || control_rc=$?
 [ "$control_rc" = 0 ] || { echo "Stock formatter control failed: $control_rc"; exit 1; }
@@ -71,9 +76,11 @@ sudo sync
 run_in_lab /busybox cat /proc/mounts > "$w/mount-check.log"
 grep -F "$loop /fixture/mounted " "$w/mount-check.log"
 before=$(sha256sum "$w/target.img" | awk '{print $1}')
+echo 'Run mounted synthetic target control'
 mounted_rc=0
 # No -F and no interactive input, matching the stock script's invocation.
 run_in_lab /system/bin/mke2fs -t ext4 "$loop" > "$w/mounted-run.log" 2>&1 || mounted_rc=$?
+[ "$mounted_rc" -ne 124 ] && [ "$mounted_rc" -ne 137 ] || { echo 'Formatter timed out; no conclusion'; exit 1; }
 sudo sync
 after=$(sha256sum "$w/target.img" | awk '{print $1}')
 sudo umount "$w/mounted"
