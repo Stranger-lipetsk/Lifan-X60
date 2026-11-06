@@ -314,6 +314,16 @@ for attempt in $(seq 1 30); do
   timeout -k 5 40 "$adb" shell uiautomator dump /sdcard/navitel-lab-ui.xml > /dev/null 2>&1 || { sleep 2; continue; }
   timeout -k 5 15 "$adb" shell cat /sdcard/navitel-lab-ui.xml > "$work/installer-ui.xml" 2>/dev/null || continue
   timeout -k 5 20 "$adb" shell dumpsys activity activities > "$work/installer-activities.txt" 2>/dev/null || true
+  # A broadcast-triggered Navitel crash may obscure the installer's result.
+  # Dismiss only the exact crash dialog on this disposable emulator; record it.
+  if grep -Fq 'Unfortunately, Navitel has stopped.' "$work/installer-ui.xml"; then
+    echo 'Navitel crash dialog observed during installation on the emulator'
+    cp "$work/installer-ui.xml" "$work/navitel-crash-dialog.xml"
+    timeout -k 5 30 "$adb" logcat -d -v brief > "$work/navitel-crash-log.txt" 2>&1 || true
+    coords=$(python3 tools/emulator_ui_clickable.py "$work/installer-ui.xml" 'OK' 2>/dev/null || true)
+    [ -n "$coords" ] || { echo 'Cannot uniquely dismiss Navitel crash dialog'; exit 1; }
+    read -r x y <<< "$coords"; timeout -k 5 20 "$adb" shell input tap "$x" "$y"; sleep 2; continue
+  fi
   # Amaze first asks whether to view or install the APK. Only act on its
   # explicit package-installer dialog, never arbitrary Amaze buttons.
   if grep -E 'mResumedActivity.*com.amaze.filemanager' "$work/installer-activities.txt" >/dev/null &&
@@ -424,6 +434,13 @@ cmp "$work/old.apk" "$work/stock-after-fullreboot.apk"
   cat "$work/path-before.txt" "$work/path-after.txt" "$work/path-restart.txt" "$work/path-fullreboot.txt"
   grep -E 'versionCode=|versionName=|codePath=' "$work/package-restart.txt" | head -10
   echo 'Synthetic marker and preferences for Navitel and one independent fixture app survived install, userspace restart, launch attempt, and full emulator reboot: yes.'
+  echo '## Crash dialog during installation'
+  if [ -e "$work/navitel-crash-log.txt" ]; then
+    echo 'Navitel stopped dialog observed; this is not a clean launch result.'
+    grep -A 22 -F 'Process: com.navitel' "$work/navitel-crash-log.txt" | head -46 || true
+  else
+    echo 'No Navitel crash dialog observed during installer UI polling (other failures may still occur).'
+  fi
   echo '## Launch attempt (no activation asserted)'
   tr -d '\r' < "$work/start.txt"
   tr -d '\r' < "$work/activities.txt" | grep -E 'mResumedActivity|mFocusedActivity' | head -5 || true
