@@ -116,6 +116,8 @@ def main():
             if len(parts) >= 3 and parts[-1] in chosen:
                 present.add(parts[-1])
                 print(line)
+            elif len(parts) >= 3 and re.search(r'(?i)(handle|packet|socket|client|protocol|recv|upgrade)', parts[-1]):
+                print(line)
         if not present:
             raise RuntimeError('No expected native symbols found')
         for symbol in chosen:
@@ -150,6 +152,9 @@ def main():
                 '--stop-address=0x9200', str(binary))
         command('arm-linux-gnueabihf-objdump', '-d', '--start-address=0x9900',
                 '--stop-address=0x9d00', str(binary))
+        print('\n## Vendor code leading into opcode handler')
+        command('arm-linux-gnueabihf-objdump', '-d', '--start-address=0x8120',
+                '--stop-address=0xa1f0', str(binary))
         print('\n## Firmware app manifest: binary AXML as decoded by aapt')
         command(str(aapt), 'dump', 'badging', str(apk))
         command(str(aapt), 'dump', 'xmltree', str(apk), 'AndroidManifest.xml')
