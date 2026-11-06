@@ -40,7 +40,7 @@ def metadata(path: Path) -> dict:
 def compare(source: Path, destination: Path) -> None:
     # The source files below remain unchanged during this comparison. No
     # blanket equivalence claim is made about ACLs, SELinux, sparse data etc.
-    for relative in (*FILES, 'data/com.navitel'):
+    for relative in (*FILES, 'data', 'data/com.navitel', 'data/com.navitel/files', 'data/ru.lifanx60.fixture'):
         left, right = metadata(source / relative), metadata(destination / relative)
         if left != right:
             raise AssertionError(f'{relative}: {left} != {right}')
