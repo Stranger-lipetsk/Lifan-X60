@@ -1,0 +1,65 @@
+# Application-initiated Navitel synthetic FAT backup and restore across update with stock services.jar on disposable Android 4.4.2 x86
+Generic x86 emulator with stock-derived services.jar, not the device; host emulator network blocked.
+Stock-derived services.jar was installed only into the disposable emulator and compared byte-for-byte; generic remaining framework and kernel are not the head unit.
+No real maps, license, accounts, user data or SD; no APKs published. Initially empty virtual SD only.
+Stock WRITE_EXTERNAL_STORAGE group mapping modeled on the emulator; the virtual FAT is bind-mounted below a modeled 0751 media_rw parent.
+Virtual FAT options and modeled parent:
+/dev/block/vold/253:48 /mnt/media_rw/sdcard vfat rw,dirsync,nosuid,nodev,noexec,relatime,uid=1023,gid=1023,fmask=0007,dmask=0007,allow_utime=0020,codepage=437,iocharset=iso8859-1,shortname=mixed,utf8,errors=remount-ro 0 0
+drwxr-x--x 1023     1023              2026-11-06 13:57 x60-vfat-model
+VIRTUAL_FAT_READY
+/dev/block/vold/253:48 /data/local/tmp/x60-vfat-model/sdcard vfat rw,dirsync,nosuid,nodev,noexec,relatime,uid=1023,gid=1023,fmask=0007,dmask=0007,allow_utime=0020,codepage=437,iocharset=iso8859-1,shortname=mixed,utf8,errors=remount-ro 0 0
+After full emulator reboot the FAT archive was compared byte-for-byte and modeled bind recreated.
+ADB prepared and observed the emulator and tapped its virtual UI; update was initiated by the stock-derived Amaze app and installed by the stock-derived PackageInstaller; remaining framework and virtual storage are generic emulator components; root ADB set up only the virtual FAT model.
+Initial stock-derived Navitel certificate equals the verified AOSP testkey certificate:
+a40da80a59d170caa950cf15c18c454d47a39b26989d8b640ecd745ba71bf5dc
+Candidate re-signed in disposable CI only; not an installation recommendation.
+Uncompressed payload entries identical, excluding JAR signing records: 5019
+This does not verify ZIP offsets, metadata, V2/V3 signing block or runtime signature checks.
+Negative control: original differently signed candidate rejected; installer result:
+Failure [INSTALL_PARSE_FAILED_INCONSISTENT_CERTIFICATES]
+Matching certificate candidate installed via Amaze and PackageInstaller as data update; original emulator system APK unchanged: yes.
+Emulator system mounted read-only during update:
+/dev/block/vda /system ext4 ro,relatime,data=ordered 0 0
+UID before/after/userspace restart/full emulator reboot: 10052/10052/10052/10052
+Full virtual device reboot confirmed via changed kernel boot ID; original system APK and stock services.jar still matched afterward; system_server mapped services.jar dex.
+Stock-derived PackageInstaller and Amaze paths:
+WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
+package:/system/priv-app/PackageInstaller.apk
+WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
+package:/system/app/AmazeFileManager.apk
+## Package paths and selected version
+WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
+package:/system/priv-app/Navitel-large.apk
+WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
+package:/data/app/com.navitel-1.apk
+WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
+package:/data/app/com.navitel-1.apk
+WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
+package:/data/app/com.navitel-1.apk
+    codePath=/data/app/com.navitel-1.apk
+    versionCode=360622024 targetSdk=33
+    versionName=v11.11.1128
+    codePath=/system/priv-app/Navitel-large.apk
+    versionCode=201103033 targetSdk=28
+    versionName=9.13.73
+Synthetic marker and preferences for Navitel and one independent fixture app survived install, userspace restart, launch attempt, and full emulator reboot: yes.
+Caller signed with generic emulator platform cert c8a2e9bccf597c2fb6dc66bee293fc13f2fc47ec77bc6b2b0d52c11f51192ab8, UID 10055; called backup service itself with virtual confirmation.
+## Synthetic archive created before upgrade
+Lab archive entry: apps/com.navitel/_manifest bytes: 2425
+Lab archive entry: apps/com.navitel/f/lab-marker.txt bytes: 30
+Lab archive entry: apps/com.navitel/sp/x60_lab_probe.xml bytes: 132
+Synthetic test entries: 2
+Path: apps/com.navitel/f/lab-marker.txt matches: True
+Path: apps/com.navitel/sp/x60_lab_probe.xml matches: True
+After upgrade and full reboot, ONLY synthetic Navitel marker and preferences were deliberately deleted; then app-initiated restore was confirmed via emulator UI.
+Both synthetic Navitel files were restored byte-for-byte; independent fixture marker and preferences still match.
+UID after restore: 10052; updated Navitel remains registered.
+Full restore is destructive and can clear app data. This fixture is not for real devices.
+## Crash dialog during installation
+No Navitel crash dialog observed during installer UI polling (other failures may still occur).
+## Launch attempt (no activation asserted)
+WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
+Starting: Intent { cmp=com.navitel/.app.MainActivity }
+    mResumedActivity: ActivityRecord{afd9ff88 u0 com.navitel/.app.MainActivity t2}
+  mFocusedActivity: ActivityRecord{afd9ff88 u0 com.navitel/.app.MainActivity t2}
+Generic emulator full reboot is not real-device hibernate. Real device USB mounts and vendor libraries, app behavior, rollback, settings and all data preservation remain unverified.
