@@ -184,6 +184,9 @@ echo 'Remount disposable emulator system read-only before testing update'
 timeout -k 5 60 "$adb" shell mount -o ro,remount /system
 timeout -k 5 30 "$adb" shell cat /proc/mounts | tr -d '\r' | grep ' /system ' > "$work/mount-system.txt"
 grep -E ' /system [^ ]+ ro[, ]' "$work/mount-system.txt" || { cat "$work/mount-system.txt"; exit 1; }
+echo 'Device-side md5 after read-only remount:'
+md5sum "$work/old.apk"
+timeout -k 5 120 "$adb" shell /system/bin/md5 /system/priv-app/Navitel-large.apk | tr -d '\r'
 
 echo 'Negative control: unmodified candidate must be rejected as a differently signed update'
 timeout -k 10 300 "$adb" install -r "$new" > "$work/negative.txt" 2>&1 || true
@@ -199,6 +202,9 @@ if cmp -s "$work/old.apk" "$work/stock-after-negative.apk"; then
 else
   echo 'System APK read-back already differs after negative control'
   sha256sum "$work/old.apk" "$work/stock-after-negative.apk"
+  echo 'Host and emulator md5 checks (md5 used only to diagnose transport versus source):'
+  md5sum "$work/old.apk" "$work/stock-after-negative.apk"
+  timeout -k 5 120 "$adb" shell /system/bin/md5 /system/priv-app/Navitel-large.apk | tr -d '\r' || true
 fi
 
 echo 'Install matching-certificate update into emulator data partition (never touch system APK during update)'
