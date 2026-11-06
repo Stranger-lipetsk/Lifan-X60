@@ -1,0 +1,61 @@
+name: Лабораторное резервирование приложением без ADB transport
+on:
+  push:
+    branches: [arena/b12cc9a8-lifan-x60]
+    paths:
+      - '.github/workflows/experiment-no-adb-backup.yml'
+      - 'tools/experiment_no_adb_backup.sh'
+      - 'tools/check_no_adb_lab_backup.py'
+      - 'tests/test_check_no_adb_lab_backup.py'
+      - 'tests/test_no_adb_backup_fixtures.py'
+      - 'tests/fixtures/no-adb-backup-caller/**'
+      - 'tests/fixtures/no-adb-backup-target/**'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  test:
+    if: github.ref_name == 'arena/b12cc9a8-lifan-x60'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Проверить ограничения лабораторных файлов
+        run: |
+          bash -n tools/experiment_no_adb_backup.sh
+          python3 -m unittest discover -s tests -p 'test_check_no_adb_lab_backup.py' -v
+          python3 -m unittest discover -s tests -p 'test_no_adb_backup_fixtures.py' -v
+          python3 -m unittest discover -s tests -p 'test_emulator_backup_confirmation.py' -v
+      - name: Запустить только в одноразовом эмуляторе
+        timeout-minutes: 18
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bash tools/experiment_no_adb_backup.sh
+      - name: Сохранить диагностику при ошибке
+        if: failure()
+        run: |
+          set -euo pipefail
+          test -s "$RUNNER_TEMP/no-adb-backup-lab.log" || exit 0
+          mkdir -p reports
+          tr -d '\r' < "$RUNNER_TEMP/no-adb-backup-lab.log" > reports/no-adb-backup-emulator-error.txt
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/no-adb-backup-emulator-error.txt
+          git diff --cached --quiet && exit 0
+          git commit -m 'report: diagnose synthetic application backup'
+          git pull --rebase origin "${{ github.ref_name }}"
+          git push origin HEAD:"${{ github.ref_name }}"
+      - name: Сохранить только текстовый отчёт
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/no-adb-backup-emulator.txt
+          git diff --cached --quiet && exit 0
+          git commit -m 'report: application initiated synthetic backup'
+          git pull --rebase origin "${{ github.ref_name }}"
+          git push origin HEAD:"${{ github.ref_name }}"
