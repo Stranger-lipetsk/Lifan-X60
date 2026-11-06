@@ -1,0 +1,20 @@
+# Synthetic stock-derived BusyBox tar copy; not a hibernation test
+ARM BusyBox b40cc88591ddbe851e0d37e41990e7e0a7e19b6ab195dac827e1f952efe51613, run under QEMU user mode in an offline restricted container.
+Only synthetic files in CI temp. Host filesystem, not GU tmpfs/ext4; no device, stock script, mount, partition formatting or kernel hibernate.
+Exact command options: tar -cf DEST/data.tar ./. and tar -xvf DEST/data.tar.
+## Synthetic content and selected numeric metadata
+MATCH data/com.navitel/files/lab-marker.txt: {'mode': 384, 'uid': 10013, 'gid': 10013, 'kind': 'file', 'sha256': '228b231c38de1b90014fe278b047143e25e327f99b377be65c96ff996a80ed46'}
+MATCH data/com.navitel/shared_prefs/probe.xml: {'mode': 384, 'uid': 10013, 'gid': 10013, 'kind': 'file', 'sha256': 'a6b0011b39066bc22a91467e3679f46d0f6e1e499f78d7931d23e7a03ae8bdc5'}
+MATCH data/ru.lifanx60.fixture/files/marker.txt: {'mode': 384, 'uid': 10055, 'gid': 10055, 'kind': 'file', 'sha256': '0ebcaec33812cf530e9e20d3b2295f3369752fa6010552708678fd21cccf65a4'}
+MATCH system/packages.xml: {'mode': 420, 'uid': 1000, 'gid': 1000, 'kind': 'file', 'sha256': '03ffaa6f6078b9dc291e52ce227ddde723e51ea977d7d912571e72b63b3d748c'}
+MATCH app/com.navitel-1.apk: {'mode': 420, 'uid': 1000, 'gid': 1000, 'kind': 'file', 'sha256': '93c50c006a8803a3fb9c14b364f9a02e70c1b20a7431e8cb672ea957c2a528fc'}
+MATCH data/com.navitel: {'mode': 448, 'uid': 10013, 'gid': 10013, 'kind': 'directory'}
+SYMLINK before: {'mode': 511, 'uid': 10013, 'gid': 10013, 'kind': 'symlink', 'target': 'lab-marker.txt'}; after: {'mode': 511, 'uid': 0, 'gid': 0, 'kind': 'symlink', 'target': 'lab-marker.txt'}; all listed fields match: False
+Hardlink relationship retained: True
+Test user xattr on source: ['user.x60_test']
+Test user xattr on extracted file: []
+SELinux labels and ACLs were not tested.
+Symlink archive header numeric UID/GID: 10013 10013 ; target: lab-marker.txt
+## Deliberately scheduled late write
+Source was modified after archive finished and before extraction. Extracted file contained the earlier snapshot; late source change did not appear.
+This illustrates a possible consistency window only. Real script timing and concurrent writes, app descriptors, actual Hibernate, ext4, ACLs and SELinux were not tested.
