@@ -183,7 +183,25 @@ for name in ordinary shell; do
   grep -F 'X60SuLab' "$work/$name-log.txt" | tr -d '\r' > "$work/$name-result.txt"
   cat "$work/$name-result.txt"
 done
-if grep -Fq 'OWN_UID=' "$work/shell-result.txt"; then grep -F 'OWN_UID=2000' "$work/shell-result.txt"; fi
+if grep -Fq 'OWN_UID=' "$work/shell-result.txt"; then
+  grep -F 'OWN_UID=2000' "$work/shell-result.txt"
+  echo 'Repeat the fixed UID check in permissive mode as an emulator-only diagnostic'
+  timeout -k 5 30 "$adb" shell setenforce 0
+  test "$(timeout -k 5 30 "$adb" shell getenforce | tr -d '\r')" = Permissive
+  timeout -k 5 30 "$adb" logcat -c || true
+  timeout -k 5 60 "$adb" shell am start -n ru.lifanx60.sulabshell/ru.lifanx60.sulab.MainActivity > "$work/permissive-start.txt" 2>&1 || true
+  for i in $(seq 1 40); do
+    timeout -k 5 30 "$adb" logcat -d -v brief > "$work/permissive-log.txt" 2>&1 || true
+    grep -Eq 'X60SuLab.*(EXIT=|FAILED)' "$work/permissive-log.txt" && break
+    sleep 3
+  done
+  timeout -k 5 30 "$adb" shell setenforce 1
+  test "$(timeout -k 5 30 "$adb" shell getenforce | tr -d '\r')" = Enforcing
+  grep -F 'X60SuLab' "$work/permissive-log.txt" | tr -d '\r' > "$work/permissive-result.txt" || true
+  grep -Eq 'EXIT=|FAILED' "$work/permissive-result.txt" || echo 'Diagnostic did not complete' >> "$work/permissive-result.txt"
+else
+  echo 'Not run: shell fixture did not report an application UID.' > "$work/permissive-result.txt"
+fi
 grep -E 'OWN_UID=1[0-9]{4}' "$work/ordinary-result.txt"
 
 echo 'Separate shell-context control from root ADB, dropping to UID 2000 on the disposable emulator'
@@ -209,6 +227,7 @@ cat "$work/adb-su-clean.txt"
     echo 'A diagnostic retry temporarily set the emulator to permissive solely for installation; enforcing was restored immediately afterward and before any fixture launch.'
   fi
   cat "$work/shell-result.txt"
+  echo '## Same fixture with temporarily permissive SELinux, emulator-only diagnostic'; cat "$work/permissive-result.txt"
   echo '## Separate emulator ADB shell-context control, not an app'; cat "$work/shell-context-result.txt"
   echo 'ADB shell and app SELinux contexts may differ. Even a positive result does not prove actual device installation, privileges, storage access or safety.'
 } > reports/su-identity-lab.txt
