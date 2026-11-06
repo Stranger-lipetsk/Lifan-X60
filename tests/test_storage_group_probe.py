@@ -9,7 +9,7 @@ class DisposableStorageGroupProbeTest(unittest.TestCase):
         text = (FIXTURE/'src/ru/lifanx60/storagegrouplab/MainActivity.java').read_text()
         for s in ('Build.FINGERPRINT.startsWith("generic")', 'Build.HARDWARE.contains("ranchu")',
                   'Build.HARDWARE.contains("goldfish")', 'REFUSED_NON_EMULATOR',
-                  '/mnt/media_rw/usb1/x60-synthetic-probe.txt'):
+                  '/data/local/tmp/x60-synthetic-usb/usb1/x60-synthetic-probe.txt'):
             self.assertIn(s, text)
         self.assertNotIn('getStringExtra', text)
         self.assertNotIn('.delete(', text)

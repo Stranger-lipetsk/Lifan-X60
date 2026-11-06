@@ -31,7 +31,7 @@ public final class MainActivity extends Activity {
                 if (line.startsWith("Groups:")) Log.i(TAG, line);
             status.close();
             Log.i(TAG, "UID=" + Process.myUid());
-            File target = new File("/mnt/media_rw/usb1/x60-synthetic-probe.txt");
+            File target = new File("/data/local/tmp/x60-synthetic-usb/usb1/x60-synthetic-probe.txt");
             FileOutputStream out = new FileOutputStream(target);
             out.write(DATA);
             out.getFD().sync();

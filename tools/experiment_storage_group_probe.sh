@@ -107,9 +107,10 @@ timeout -k 10 120 "$adb" pull /system/etc/permissions/platform.xml "$work/platfo
 cmp "$work/emulator-platform.xml" "$work/platform-readback.xml"
 # This is an ordinary directory, NOT a USB, VFAT or real mount. Stop if it is a mount.
 timeout -k 5 30 "$adb" shell cat /proc/mounts | tr -d '\r' > "$work/mounts.txt"
-if grep -Eq ' /mnt/media_rw/usb1 ' "$work/mounts.txt"; then echo 'Unexpected USB mount, abort'; exit 1; fi
-timeout -k 5 30 "$adb" shell 'mkdir -p /mnt/media_rw/usb1; chown 1023:1023 /mnt/media_rw/usb1; chmod 0770 /mnt/media_rw/usb1; ls -ldn /mnt/media_rw/usb1' | tr -d '\r' | tee "$work/mock-dir.txt"
-timeout -k 5 30 "$adb" shell 'if [ -e /mnt/media_rw/usb1/x60-synthetic-probe.txt ]; then echo UNEXPECTED_FILE; else echo SYNTHETIC_PATH_EMPTY; fi' | tr -d '\r' | grep -Fx SYNTHETIC_PATH_EMPTY
+if grep -Eq ' /data/local/tmp/x60-synthetic-usb/usb1 ' "$work/mounts.txt"; then echo 'Unexpected USB mount, abort'; exit 1; fi
+timeout -k 5 30 "$adb" shell 'mkdir -p /data/local/tmp/x60-synthetic-usb/usb1 && chmod 0755 /data/local/tmp/x60-synthetic-usb && chown 1023:1023 /data/local/tmp/x60-synthetic-usb/usb1 && chmod 0770 /data/local/tmp/x60-synthetic-usb/usb1 && ls -ldn /data/local/tmp/x60-synthetic-usb/usb1 && echo MOCK_DIR_READY' | tr -d '\r' | tee "$work/mock-dir.txt"
+grep -Fx MOCK_DIR_READY "$work/mock-dir.txt"
+timeout -k 5 30 "$adb" shell 'if [ -e /data/local/tmp/x60-synthetic-usb/usb1/x60-synthetic-probe.txt ]; then echo UNEXPECTED_FILE; else echo SYNTHETIC_PATH_EMPTY; fi' | tr -d '\r' | grep -Fx SYNTHETIC_PATH_EMPTY
 
 echo 'Build two test-key-signed apps, same code, with/without external storage permission'
 ref=54004d146e0532a5d2ded2bbca55d496e081c08b
@@ -123,7 +124,9 @@ find "$work/classes" -name '*.class' > "$work/classes.txt"
 "$bt/d8" --lib "$jar" --min-api 19 --output "$work/dex" @"$work/classes.txt"
 cp "$work/dex/classes.dex" "$work/classes.dex"
 for mode in negative positive; do
-  "$bt/aapt" package -f -M "$src/$mode.xml" -I "$jar" -F "$work/$mode-unsigned.apk"
+  mkdir -p "$work/$mode-manifest"
+  cp "$src/$mode.xml" "$work/$mode-manifest/AndroidManifest.xml"
+  "$bt/aapt" package -f -M "$work/$mode-manifest/AndroidManifest.xml" -I "$jar" -F "$work/$mode-unsigned.apk"
   (cd "$work" && zip -q -u "$mode-unsigned.apk" classes.dex)
   "$bt/zipalign" -f 4 "$work/$mode-unsigned.apk" "$work/$mode-aligned.apk"
   "$bt/apksigner" sign --key "$work/testkey.pk8" --cert "$work/testkey.x509.pem" --min-sdk-version 19 --v1-signing-enabled true --out "$work/$mode.apk" "$work/$mode-aligned.apk"
@@ -145,10 +148,10 @@ run_probe() {
 run_probe ru.lifanx60.storagegroupwithout negative SYNTHETIC_WRITE_READ_FAILED
 grep -F 'EACCES (Permission denied)' "$work/negative-log.txt"
 if grep -E 'Groups:.*[[:space:]]1023([[:space:]]|$)' "$work/negative-log.txt"; then echo 'Unexpected media_rw group in negative control'; exit 1; fi
-timeout -k 5 30 "$adb" shell 'if [ -e /mnt/media_rw/usb1/x60-synthetic-probe.txt ]; then echo UNEXPECTED_FILE; else echo SYNTHETIC_PATH_EMPTY; fi' | tr -d '\r' | grep -Fx SYNTHETIC_PATH_EMPTY
+timeout -k 5 30 "$adb" shell 'if [ -e /data/local/tmp/x60-synthetic-usb/usb1/x60-synthetic-probe.txt ]; then echo UNEXPECTED_FILE; else echo SYNTHETIC_PATH_EMPTY; fi' | tr -d '\r' | grep -Fx SYNTHETIC_PATH_EMPTY
 run_probe ru.lifanx60.storagegroupwith positive SYNTHETIC_WRITE_READ_OK
 grep -E 'Groups:.*[[:space:]]1023([[:space:]]|$)' "$work/positive-log.txt"
-timeout -k 5 60 "$adb" pull /mnt/media_rw/usb1/x60-synthetic-probe.txt "$work/readback.txt" >/dev/null
+timeout -k 5 60 "$adb" pull /data/local/tmp/x60-synthetic-usb/usb1/x60-synthetic-probe.txt "$work/readback.txt" >/dev/null
 printf 'X60-LAB\n' > "$work/expected.txt"
 cmp "$work/expected.txt" "$work/readback.txt"
 {
