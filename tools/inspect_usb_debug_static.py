@@ -67,9 +67,16 @@ def main():
                 print('\nBeginning of static disassembly (not execution):')
                 obj = subprocess.run(['arm-linux-gnueabihf-objdump', '-d', str(target)],
                                      capture_output=True, text=True, check=False)
-                print('\n'.join(obj.stdout.splitlines()[:800]))
+                print('\n'.join(obj.stdout.splitlines()[:120]))
                 if obj.returncode:
                     print('objdump error:', obj.stderr.strip())
+                print('\nCandidate Thumb code immediately following startup (heuristic):')
+                thumb = subprocess.run(['arm-linux-gnueabihf-objdump', '-d', '-M', 'force-thumb',
+                                        '--start-address=0x3dbc', '--stop-address=0x4180', str(target)],
+                                       capture_output=True, text=True, check=False)
+                print(thumb.stdout)
+                if thumb.returncode:
+                    print('thumb disassembly error:', thumb.stderr.strip())
     print('\nNo conclusion about physical USB connector wiring, runtime properties,')
     print('availability of root, network transport, or access to user data is implied.')
 
