@@ -725,12 +725,21 @@ truncate -s 1073741824 "$work/synthetic-p5.img"
 e2fsck -fn "$work/synthetic-p5.img" > "$work/tarboot-padded-fsck.txt" 2>&1
 dumpe2fs -h "$work/synthetic-p5.img" 2>/dev/null | grep -E '^Filesystem UUID:|^Filesystem features:|^Block count:|^Block size:' > "$work/tarboot-super-padded.txt"
 cmp "$work/tarboot-super-before.txt" "$work/tarboot-super-padded.txt"
-image_size_before=$(stat -c %s "$work/synthetic-p5.img")
-sudo chown emulatorlab:emulatorlab "$work/synthetic-p5.img"
-data_args=(-data "$work/synthetic-p5.img")
+# The emulator creates a sibling lock file, so owning the image alone is not
+# enough: its parent directory must be writable by the emulator account too.
+# Otherwise the legacy emulator may fall back to an empty temporary partition.
+mkdir "$work/emulator-data"
+sudo chown emulatorlab:emulatorlab "$work/emulator-data"
+sudo -u emulatorlab cp --sparse=always "$work/synthetic-p5.img" "$work/emulator-data/synthetic-p5.img"
+data_image="$work/emulator-data/synthetic-p5.img"
+cmp "$work/synthetic-p5.img" "$data_image"
+sudo -u emulatorlab touch "$work/emulator-data/lock-permission-test"
+sudo -u emulatorlab rm "$work/emulator-data/lock-permission-test"
+image_size_before=$(stat -c %s "$data_image")
+data_args=(-data "$data_image")
 start_emulator
 boot
-image_size_after=$(stat -c %s "$work/synthetic-p5.img")
+image_size_after=$(stat -c %s "$data_image")
 echo "Extracted virtual image file bytes before/after emulator start: $image_size_before/$image_size_after"
 bootid_tarboot=$(timeout -k 5 30 "$adb" shell cat /proc/sys/kernel/random/boot_id | tr -d '\r')
 [[ "$bootid_tarboot" =~ ^[0-9a-f-]{36}$ ]] && [ "$bootid_tarboot" != "$newid" ] || { echo 'New kernel boot ID not confirmed'; exit 1; }
@@ -741,7 +750,8 @@ grep -Fx X60_COPIED_IMAGE_ONLY "$work/tarboot-witness-readback.txt" || {
   echo 'Copied-image witness missing; do not claim boot from copy'
   echo 'Host image superblock before and after boot (diagnostic only):'
   cat "$work/tarboot-super-padded.txt"
-  dumpe2fs -h "$work/synthetic-p5.img" 2>/dev/null | grep -E '^Filesystem UUID:|^Filesystem features:|^Block count:|^Block size:' || true
+  dumpe2fs -h "$data_image" 2>/dev/null | grep -E '^Filesystem UUID:|^Filesystem features:|^Block count:|^Block size:' || true
+  grep -iE 'image already in use|changes will not persist|userdata.*partition' "$work/emulator.txt" | tail -30 || true
   echo 'Android mounts:'
   timeout -k 5 30 "$adb" shell cat /proc/mounts || true
   echo 'Android block devices:'
