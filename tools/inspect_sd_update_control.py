@@ -41,6 +41,9 @@ def inspect_smali(root):
     print('\n## App smali files:', len(paths))
     selected = 0
     for path in paths:
+        # Ignore Android support libraries; the target package is under tw/com/elead.
+        if 'tw/com/elead/' not in path.relative_to(root).as_posix():
+            continue
         text = path.read_text(encoding='utf-8', errors='replace')
         for method in METHOD.findall(text):
             if not INTEREST.search(method):
@@ -94,6 +97,15 @@ def main():
         for symbol in chosen:
             if symbol in present:
                 command('arm-linux-gnueabihf-objdump', '-d', '--disassemble=' + symbol, str(binary))
+        print('\n## DWARF function records (when available)')
+        debug = subprocess.run(['readelf', '--debug-dump=info', '--wide', str(binary)],
+                               check=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True).stdout
+        records = re.split(r'(?=^ <\d+><[0-9a-f]+>: Abbrev Number:)', debug, flags=re.M)
+        records = [record for record in records if re.search(
+            r'DW_AT_name\s*:.*(?:exec_fw_upgrade|handle_start_fw_upgrade|fw_upgrade_loop_thread|init_fw_upgrade_obj)', record)]
+        print('Matching debug records:', len(records))
+        for record in records:
+            print(record.rstrip())
         print('\n## Firmware app manifest: binary AXML as decoded by aapt')
         command(str(aapt), 'dump', 'badging', str(apk))
         command(str(aapt), 'dump', 'xmltree', str(apk), 'AndroidManifest.xml')

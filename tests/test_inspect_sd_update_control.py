@@ -17,7 +17,9 @@ class UpdateControlTest(unittest.TestCase):
     def test_extracts_matching_complete_method_not_other(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
-            (root / 'Test.smali').write_text(
+            package = root / 'smali/tw/com/elead/example'
+            package.mkdir(parents=True)
+            (package / 'Test.smali').write_text(
                 '.class LTest;\n.method public onClick()V\n'
                 '    const-string v0, "FW_UPGRADE"\n    return-void\n.end method\n'
                 '.method public other()V\n    return-void\n.end method\n')
