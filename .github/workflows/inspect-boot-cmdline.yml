@@ -1,0 +1,42 @@
+name: Статика загрузочных параметров
+on:
+  push:
+    branches: [arena/b12cc9a8-lifan-x60]
+    paths:
+      - '.github/workflows/inspect-boot-cmdline.yml'
+      - 'tools/inspect_boot_cmdline.py'
+      - 'tests/test_inspect_boot_cmdline.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  inspect:
+    if: github.ref_name == 'arena/b12cc9a8-lifan-x60'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Проверка анализатора
+        run: python3 -m unittest discover -s tests -p 'test_inspect_boot_cmdline.py' -v
+      - name: Прочитать только заголовок проверенного boot.img
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          w="$RUNNER_TEMP/boot-cmdline"
+          mkdir -p "$w" reports
+          gh release download file-manager-test-20261105 -p lifan-file-manager-test.zip -D "$w"
+          echo "4be81211994221e80e401ce712ce484b5320156902fff3707737b73e3945d17f  $w/lifan-file-manager-test.zip" | sha256sum -c -
+          unzip -p "$w/lifan-file-manager-test.zip" boot.img > "$w/boot.img"
+          echo "060d291a523bbe0d40c86537f070ed0feb90e04e0db0efef2a3e4594e9223b4b  $w/boot.img" | sha256sum -c -
+          python3 tools/inspect_boot_cmdline.py "$w/boot.img" > reports/boot-cmdline-static.txt
+      - name: Сохранить только текстовый отчёт
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/boot-cmdline-static.txt
+          git diff --cached --quiet && exit 0
+          git commit -m 'report: inspect stock-derived boot command line'
+          git pull --rebase origin "${{ github.ref_name }}"
+          git push origin HEAD:"${{ github.ref_name }}"
