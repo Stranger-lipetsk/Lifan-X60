@@ -1,0 +1,5 @@
+# Static boot image kernel command line
+SHA-256: 060d291a523bbe0d40c86537f070ed0feb90e04e0db0efef2a3e4594e9223b4b
+Header cmdline: console=ttymxc0,115200 init=/init video=mxcfb0:dev=lcd,HANNSTAR-WVGA,if=RGB24,fbpix=RGB32,bpp=32 video=mxcfb1:off video=mxcfb2:off fbmem=28M vmalloc=400M androidboot.console=ttymxc0 androidboot.hardware=el_imx6_solo_v2 lpj=7905280 resume=179:2 androidboot.selinux=disable panic=3 el_module=LIFAN_LF01
+androidboot.selinux tokens: androidboot.selinux=disable
+Image header only: bootloader, live kernel parameters, policy and real-device enforcement are not tested.
