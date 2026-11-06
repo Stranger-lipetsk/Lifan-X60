@@ -96,10 +96,12 @@ debugfs -w -R "write $work/installer.apk /priv-app/PackageInstaller.apk" "$work/
 debugfs -w -R "write $work/stock-busybox /bin/x60lab-busybox" "$work/offline-system.img" >/dev/null 2>&1
 debugfs -w -R 'set_inode_field /bin/x60lab-busybox mode 0100755' "$work/offline-system.img" >/dev/null 2>&1
 printf 'u:object_r:system_file:s0\0' > "$work/system-context"
-for target in /framework/services.jar /priv-app/Navitel-large.apk /app/AmazeFileManager.apk /priv-app/PackageInstaller.apk /bin/x60lab-busybox; do
+for target in /framework/services.jar /priv-app/Navitel-large.apk /app/AmazeFileManager.apk /priv-app/PackageInstaller.apk; do
   debugfs -w -R "set_inode_field $target mode 0100644" "$work/offline-system.img" >/dev/null 2>&1
   debugfs -w -R "ea_set -f $work/system-context $target security.selinux" "$work/offline-system.img" >/dev/null 2>&1
 done
+debugfs -w -R "ea_set -f $work/system-context /bin/x60lab-busybox security.selinux" "$work/offline-system.img" >/dev/null 2>&1
+debugfs -R 'stat /bin/x60lab-busybox' "$work/offline-system.img" 2>&1 | grep -E 'Mode:[[:space:]]+0755'
 e2fsck -fn "$work/offline-system.img"
 debugfs -R "dump /framework/services.jar $work/services-offline-check.jar" "$work/offline-system.img" >/dev/null 2>&1
 debugfs -R "dump /priv-app/Navitel-large.apk $work/old-offline-check.apk" "$work/offline-system.img" >/dev/null 2>&1
