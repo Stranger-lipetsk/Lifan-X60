@@ -1,0 +1,35 @@
+# Same-signature Navitel data-update on disposable Android 4.4.2 x86
+Generic emulator, not the device or vendor PackageManager; host emulator network blocked.
+No real maps, license, accounts, user data or SD; no APKs published. Empty virtual SD only.
+ADB was used for emulator setup, installation and observation; actual GU file-manager installer not tested.
+Initial stock-derived Navitel certificate equals the verified AOSP testkey certificate:
+a40da80a59d170caa950cf15c18c454d47a39b26989d8b640ecd745ba71bf5dc
+Candidate re-signed in disposable CI only; not an installation recommendation.
+Uncompressed payload entries identical, excluding JAR signing records: 5019
+This does not verify ZIP offsets, metadata, V2/V3 signing block or runtime signature checks.
+Negative control: original differently signed candidate rejected; installer result:
+Failure [INSTALL_PARSE_FAILED_INCONSISTENT_CERTIFICATES]
+Matching certificate candidate installed as data update; original emulator system APK unchanged: yes.
+Emulator system mounted read-only during update:
+/dev/block/vda /system ext4 ro,relatime,data=ordered 0 0
+UID before/after/userspace restart: 10052/10052/10052
+## Package paths and selected version
+WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
+package:/system/priv-app/Navitel-large.apk
+WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
+package:/data/app/com.navitel-1.apk
+WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
+package:/data/app/com.navitel-1.apk
+    codePath=/data/app/com.navitel-1.apk
+    versionCode=360622024 targetSdk=33
+    versionName=v11.11.1128
+    codePath=/system/priv-app/Navitel-large.apk
+    versionCode=201103033 targetSdk=28
+    versionName=9.13.73
+Synthetic marker and preferences survived install, userspace restart, and launch attempt: yes.
+## Launch attempt (no activation asserted)
+WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
+Starting: Intent { cmp=com.navitel/.app.MainActivity }
+    mResumedActivity: ActivityRecord{afdea328 u0 com.navitel/.app.MainActivity t2}
+  mFocusedActivity: ActivityRecord{afdea328 u0 com.navitel/.app.MainActivity t2}
+Userspace restart is not a full reboot or real-device hibernate. App behavior, rollback, settings and all data preservation remain unverified.
