@@ -15,8 +15,9 @@ cleanup() {
       if [ -f "$log" ]; then echo "## $(basename "$log")"; cat "$log"; fi
     done
   fi
-  if mountpoint -q "$w/dest"; then sudo umount "$w/dest" || echo 'Disposable destination unmount failed'; fi
-  if mountpoint -q "$w/source"; then sudo umount "$w/source" || echo 'Disposable source unmount failed'; fi
+  for target in "$w/dest-full" "$w/dest" "$w/source"; do
+    if mountpoint -q "$target"; then sudo umount "$target" || echo "Disposable mount unmount failed: $target"; fi
+  done
 }
 trap cleanup EXIT
 chmod 0755 "$w"
@@ -72,12 +73,13 @@ sudo chown 1000:1000 "$w/source/system/packages.xml"
 sudo chown 1000:1000 "$w/source/app/com.navitel-1.apk"
 sudo chmod 0700 "$w/source/data/com.navitel" "$w/source/data/ru.lifanx60.fixture"
 sudo chmod 0600 "$w/source/data/com.navitel/files/lab-marker.txt" "$w/source/data/com.navitel/shared_prefs/probe.xml" "$w/source/data/ru.lifanx60.fixture/files/marker.txt"
+sandbox_dest="$w/dest"
 run_busybox() {
   docker run --rm --network none --read-only --cap-drop ALL --cap-add CHOWN \
     --cap-add DAC_OVERRIDE --cap-add FOWNER --security-opt no-new-privileges \
     --memory 256m --pids-limit 32 \
     --mount "type=bind,source=$w/source,target=/fixture/source,readonly" \
-    --mount "type=bind,source=$w/dest,target=/fixture/dest" \
+    --mount "type=bind,source=$sandbox_dest,target=/fixture/dest" \
     --workdir "$1" x60-disposable-hibernate-tar /qemu-arm-static /busybox "${@:2}"
 }
 run_tar() { local wd=$1; shift; run_busybox "$wd" tar "$@"; }
@@ -107,6 +109,26 @@ PY
 printf 'before-archive\n' > "$w/race-expected.txt"
 cmp "$w/race-expected.txt" "$w/dest/race/late-write.txt"
 grep -Fx after-archive "$w/source/race/late-write.txt"
+# Independent, intentionally undersized ext4 image: demonstrate failure paths
+# without using a real partition or exhausting the runner's filesystem.
+mkdir -p "$w/dest-full" "$w/source/space-test"
+truncate -s 16M "$w/synthetic-full.img"
+[ -f "$w/synthetic-full.img" ] && [ ! -L "$w/synthetic-full.img" ]
+sudo mkfs.ext4 -q -F "$w/synthetic-full.img"
+sudo mount -t ext4 -o loop "$w/synthetic-full.img" "$w/dest-full"
+[ "$(findmnt -n -o FSTYPE --target "$w/dest-full")" = ext4 ]
+sudo chown "$(id -u):$(id -g)" "$w/dest-full"
+dd if=/dev/zero of="$w/source/space-test/synthetic-large.bin" bs=1M count=24 status=none
+sandbox_dest="$w/dest-full"
+create_rc=0
+run_tar /fixture/source/space-test -cf /fixture/dest/data.tar ./. > "$w/full-create.log" 2>&1 || create_rc=$?
+extract_rc=0
+run_tar /fixture/dest -xvf /fixture/dest/data.tar > "$w/full-extract.log" 2>&1 || extract_rc=$?
+[ "$create_rc" -ne 0 ] || { echo 'Expected low-space create failure not observed'; exit 1; }
+[ "$extract_rc" -ne 0 ] || { echo 'Expected low-space extract failure not observed'; exit 1; }
+if [ -f "$w/dest-full/synthetic-large.bin" ] && cmp -s "$w/source/space-test/synthetic-large.bin" "$w/dest-full/synthetic-large.bin"; then
+  echo 'Unexpected full copy in undersized image'; exit 1
+fi
 {
   echo '# Synthetic stock-derived BusyBox tar copy; not a hibernation test'
   echo 'ARM BusyBox b40cc88591ddbe851e0d37e41990e7e0a7e19b6ab195dac827e1f952efe51613, run under QEMU user mode in an offline restricted container.'
@@ -124,6 +146,11 @@ with tarfile.open(sys.argv[1]) as archive:
     m = matches[0]
     print('Symlink archive header numeric UID/GID:', m.uid, m.gid, '; target:', m.linkname)
 PY
+  echo '## Deliberately undersized synthetic destination'
+  echo "24 MiB synthetic file, separate 16 MiB ext4 image: create exit $create_rc; extract exit $extract_rc; no complete extracted copy."
+  echo 'Create diagnostics:'; tail -5 "$w/full-create.log"
+  echo 'Extract diagnostics:'; tail -5 "$w/full-extract.log"
+  echo 'This models insufficient space, not the actual capacity or free space of the GU partition.'
   echo '## Deliberately scheduled late write'
   echo 'Source was modified after archive finished and before extraction. Extracted file contained the earlier snapshot; late source change did not appear.'
   echo 'This illustrates a possible consistency window only. Real script timing and concurrent writes, app descriptors, actual Hibernate, the GU ext4 implementation, ACLs and SELinux were not tested.'
