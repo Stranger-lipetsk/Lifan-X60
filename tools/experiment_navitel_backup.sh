@@ -145,8 +145,10 @@ confirm_emulator_dialog() {
       coords=$(python3 tools/emulator_backup_confirmation.py "$work/ui.xml" "$expected" 2>/dev/null || true)
       if [ -n "$coords" ]; then
         read -r x y <<< "$coords"
+        echo "Located confirmation UI at $x,$y: $expected"
+        cat "$work/ui.xml"
         timeout 20 "$adb" shell input tap "$x" "$y"
-        echo "Confirmed virtual UI: $expected"
+        echo "Tapped virtual UI: $expected"
         return 0
       fi
     fi
