@@ -1,0 +1,78 @@
+# Static inspection of stock-derived tar utilities, not head-unit runtime
+Read-only ext4 inspection; no executable run and no device accessed.
+## /bin/tar
+debugfs 1.47.0 (5-Feb-2023)
+/bin/tar: File not found by ext2_lookup 
+## /xbin/tar
+debugfs 1.47.0 (5-Feb-2023)
+/xbin/tar: File not found by ext2_lookup 
+## /bin/busybox
+debugfs 1.47.0 (5-Feb-2023)
+/bin/busybox: File not found by ext2_lookup 
+## /xbin/busybox
+debugfs 1.47.0 (5-Feb-2023)
+/xbin/busybox: File not found by ext2_lookup 
+## /bin/toolbox
+debugfs 1.47.0 (5-Feb-2023)
+Inode: 568   Type: regular    Mode:  0755   Flags: 0x80080
+Generation: 0    Version: 0x00000000:00000000
+User:     0   Group:  2000   Size: 139040
+File ACL: 0
+Links: 1   Blockcount: 272
+Fragment:  Address: 0    Number: 0    Size: 0
+ ctime: 0x606068ac:00000000 -- Sun Mar 28 11:29:48 2021
+ atime: 0x606068ac:00000000 -- Sun Mar 28 11:29:48 2021
+ mtime: 0x606068ac:00000000 -- Sun Mar 28 11:29:48 2021
+crtime: 0x00000000:00000000 -- Thu Jan  1 00:00:00 1970
+Size of extra inode fields: 28
+Extended attributes:
+  security.selinux (26) = "u:object_r:system_file:s0\000"
+EXTENTS:
+(0-33):76722-76755
+## /bin/hib_image_v2.sh
+debugfs 1.47.0 (5-Feb-2023)
+Inode: 364   Type: regular    Mode:  0755   Flags: 0x80080
+Generation: 0    Version: 0x00000000:00000000
+User:     0   Group:  2000   Size: 2662
+File ACL: 0
+Links: 1   Blockcount: 8
+Fragment:  Address: 0    Number: 0    Size: 0
+ ctime: 0x606068a3:00000000 -- Sun Mar 28 11:29:39 2021
+ atime: 0x606068a3:00000000 -- Sun Mar 28 11:29:39 2021
+ mtime: 0x606068a3:00000000 -- Sun Mar 28 11:29:39 2021
+crtime: 0x00000000:00000000 -- Thu Jan  1 00:00:00 1970
+Size of extra inode fields: 28
+Extended attributes:
+  security.selinux (26) = "u:object_r:system_file:s0\000"
+EXTENTS:
+(0):75125
+## /bin/sh
+debugfs 1.47.0 (5-Feb-2023)
+Inode: 550   Type: symlink    Mode:  0755   Flags: 0x80
+Generation: 0    Version: 0x00000000:00000000
+User:     0   Group:  2000   Size: 4
+File ACL: 0
+Links: 1   Blockcount: 0
+Fragment:  Address: 0    Number: 0    Size: 0
+ ctime: 0x606068ab:00000000 -- Sun Mar 28 11:29:47 2021
+ atime: 0x606068ab:00000000 -- Sun Mar 28 11:29:47 2021
+ mtime: 0x606068ab:00000000 -- Sun Mar 28 11:29:47 2021
+crtime: 0x00000000:00000000 -- Thu Jan  1 00:00:00 1970
+Size of extra inode fields: 28
+Extended attributes:
+  security.selinux (26) = "u:object_r:system_file:s0\000"
+Fast link dest: "mksh"
+## File /bin/toolbox
+e7d5a0ac1bee227a3a65dfd23451c8ad4427e3e931f7e922e4ad6757fcb817f1
+/home/runner/work/_temp/stock-hibernate-tar/_bin_toolbox: ELF 32-bit LSB shared object, ARM, EABI5 version 1 (SYSV), dynamically linked, interpreter /system/bin/linker, stripped
+  Class:                             ELF32
+  Type:                              DYN (Shared object file)
+  Machine:                           ARM
+ 0x00000001 (NEEDED)                     Shared library: [libcutils.so]
+ 0x00000001 (NEEDED)                     Shared library: [liblog.so]
+ 0x00000001 (NEEDED)                     Shared library: [libc.so]
+ 0x00000001 (NEEDED)                     Shared library: [libusbhost.so]
+ 0x00000001 (NEEDED)                     Shared library: [libselinux.so]
+ 0x00000001 (NEEDED)                     Shared library: [libstdc++.so]
+ 0x00000001 (NEEDED)                     Shared library: [libm.so]
+toolbox
