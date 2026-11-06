@@ -207,12 +207,13 @@ grep -E 'OWN_UID=1[0-9]{4}' "$work/ordinary-result.txt"
 echo 'Separate shell-context control from root ADB, dropping to UID 2000 on the disposable emulator'
 timeout -k 5 60 "$adb" shell /system/xbin/x60-lab-su 2000 /system/bin/id | tr -d '\r' > "$work/drop-id.txt"
 grep -F 'uid=2000' "$work/drop-id.txt" || { echo 'Could not create UID 2000 control'; exit 1; }
+timeout -k 5 60 "$adb" shell /system/xbin/x60-lab-su 2000 /system/bin/cat /proc/self/status | tr -d '\r' | grep -E '^(Uid|Gid|Cap.*|NoNewPrivs):' > "$work/drop-status.txt" || true
 timeout -k 5 60 "$adb" shell /system/xbin/x60-lab-su 2000 /system/xbin/x60-lab-su 0 /system/bin/id > "$work/adb-su-result.txt" 2>&1 || true
 tr -d '\r' < "$work/adb-su-result.txt" > "$work/adb-su-clean.txt"
 cat "$work/adb-su-clean.txt"
 {
   echo 'Root ADB-launched control, separate process after dropping to UID 2000:'
-  cat "$work/drop-id.txt" "$work/adb-su-clean.txt"
+  cat "$work/drop-id.txt" "$work/drop-status.txt" "$work/adb-su-clean.txt"
 } > "$work/shell-context-result.txt"
 {
   echo '# Stock-derived su identity check in disposable ARM Android 4.4.2 emulator'

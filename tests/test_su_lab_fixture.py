@@ -12,6 +12,7 @@ class SuLabTest(unittest.TestCase):
         self.assertIn('generic/sdk/generic:4.4.2/KK/3462041:eng/test-keys', source)
         self.assertIn('Build.HARDWARE.contains("goldfish")', source)
         self.assertIn('new ProcessBuilder("/system/xbin/x60-lab-su", "0", "/system/bin/id")', source)
+        self.assertIn('new FileReader("/proc/self/status")', source)
         self.assertEqual(source.count('new ProcessBuilder('), 1)
         self.assertNotIn('com.navitel', source)
         for name in ('shell', 'ordinary'):
