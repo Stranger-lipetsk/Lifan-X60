@@ -7,7 +7,7 @@ Input: system/app/fw_launcher_2016.08.12.01.apk size: 155787 sha256: 37cac01aeb6
 
 ## ARM ELF header and selected native symbols
 
-$ readelf -h /tmp/tmpbw8a0b42/ramdisk/system/bin/fw_upgrade
+$ readelf -h /tmp/tmpj4o556jr/ramdisk/system/bin/fw_upgrade
 exit: 0
 ELF Header:
   Magic:   7f 45 4c 46 01 01 01 00 00 00 00 00 00 00 00 00 
@@ -31,10 +31,10 @@ ELF Header:
   Section header string table index: 35
 0000a1f0 T main
 
-$ arm-linux-gnueabihf-objdump -d --disassemble=main /tmp/tmpbw8a0b42/ramdisk/system/bin/fw_upgrade
+$ arm-linux-gnueabihf-objdump -d --disassemble=main /tmp/tmpj4o556jr/ramdisk/system/bin/fw_upgrade
 exit: 0
 
-/tmp/tmpbw8a0b42/ramdisk/system/bin/fw_upgrade:     file format elf32-littlearm
+/tmp/tmpj4o556jr/ramdisk/system/bin/fw_upgrade:     file format elf32-littlearm
 
 
 Disassembly of section .init:
@@ -679,10 +679,10 @@ Inline instances referencing <0x14c9>: 1
 
 ## Code around inlined native update handler
 
-$ arm-linux-gnueabihf-objdump -d --start-address=0x8b00 --stop-address=0x9200 /tmp/tmpbw8a0b42/ramdisk/system/bin/fw_upgrade
+$ arm-linux-gnueabihf-objdump -d --start-address=0x8b00 --stop-address=0x9200 /tmp/tmpj4o556jr/ramdisk/system/bin/fw_upgrade
 exit: 0
 
-/tmp/tmpbw8a0b42/ramdisk/system/bin/fw_upgrade:     file format elf32-littlearm
+/tmp/tmpj4o556jr/ramdisk/system/bin/fw_upgrade:     file format elf32-littlearm
 
 
 Disassembly of section .text:
@@ -1139,9 +1139,275 @@ Disassembly of section .text:
     91f8:	e2877002 	add	r7, r7, #2
     91fc:	e1a0e00c 	mov	lr, ip
 
+$ arm-linux-gnueabihf-objdump -d --start-address=0x9900 --stop-address=0x9d00 /tmp/tmpj4o556jr/ramdisk/system/bin/fw_upgrade
+exit: 0
+
+/tmp/tmpj4o556jr/ramdisk/system/bin/fw_upgrade:     file format elf32-littlearm
+
+
+Disassembly of section .text:
+
+00009900 <handle_op_code+0xc70>:
+    9900:	e8890007 	stm	r9, {r0, r1, r2}
+    9904:	e2855002 	add	r5, r5, #2
+    9908:	e1a0000c 	mov	r0, ip
+    990c:	e3550020 	cmp	r5, #32
+    9910:	e4803004 	str	r3, [r0], #4
+    9914:	e58c3004 	str	r3, [ip, #4]
+    9918:	e280c004 	add	ip, r0, #4
+    991c:	1afffff8 	bne	9904 <handle_op_code+0xc74>
+    9920:	e2865048 	add	r5, r6, #72	@ 0x48
+    9924:	e7940105 	ldr	r0, [r4, r5, lsl #2]
+    9928:	e1a06286 	lsl	r6, r6, #5
+    992c:	e1a0c2a0 	lsr	ip, r0, #5
+    9930:	e086200c 	add	r2, r6, ip
+    9934:	e2821b26 	add	r1, r2, #38912	@ 0x9800
+    9938:	e281e04a 	add	lr, r1, #74	@ 0x4a
+    993c:	e794810e 	ldr	r8, [r4, lr, lsl #2]
+    9940:	e200101f 	and	r1, r0, #31
+    9944:	e3a0a001 	mov	sl, #1
+    9948:	e188811a 	orr	r8, r8, sl, lsl r1
+    994c:	e1a0a158 	asr	sl, r8, r1
+    9950:	e31a0001 	tst	sl, #1
+    9954:	e784810e 	str	r8, [r4, lr, lsl #2]
+    9958:	0afffe3c 	beq	9250 <handle_op_code+0x5c0>
+    995c:	e1a01007 	mov	r1, r7
+    9960:	e3a0200d 	mov	r2, #13
+    9964:	eb00187d 	bl	fb60 <__libc_send>
+    9968:	e3700001 	cmn	r0, #1
+    996c:	0a00008d 	beq	9ba8 <handle_op_code+0xf18>
+    9970:	e7943105 	ldr	r3, [r4, r5, lsl #2]
+    9974:	e203101f 	and	r1, r3, #31
+    9978:	e1a0c2a3 	lsr	ip, r3, #5
+    997c:	eafffe33 	b	9250 <handle_op_code+0x5c0>
+    9980:	e2851e11 	add	r1, r5, #272	@ 0x110
+    9984:	e59f22fc 	ldr	r2, [pc, #764]	@ 9c88 <handle_op_code+0xff8>
+    9988:	e59f02fc 	ldr	r0, [pc, #764]	@ 9c8c <handle_op_code+0xffc>
+    998c:	eb004876 	bl	1bb6c <_IO_printf>
+    9990:	e1a01007 	mov	r1, r7
+    9994:	e59f0334 	ldr	r0, [pc, #820]	@ 9cd0 <handle_op_code+0x1040>
+    9998:	eb009838 	bl	2fa80 <execv>
+    999c:	e3500000 	cmp	r0, #0
+    99a0:	ba0000e2 	blt	9d30 <handle_op_code+0x10a0>
+    99a4:	e2851e11 	add	r1, r5, #272	@ 0x110
+    99a8:	e59f22e0 	ldr	r2, [pc, #736]	@ 9c90 <handle_op_code+0x1000>
+    99ac:	e59f02e0 	ldr	r0, [pc, #736]	@ 9c94 <handle_op_code+0x1004>
+    99b0:	eb00486d 	bl	1bb6c <_IO_printf>
+    99b4:	eafffcdc 	b	8d2c <handle_op_code+0x9c>
+    99b8:	e1a01005 	mov	r1, r5
+    99bc:	e3a0200d 	mov	r2, #13
+    99c0:	eb001866 	bl	fb60 <__libc_send>
+    99c4:	e3700001 	cmn	r0, #1
+    99c8:	0a0000c5 	beq	9ce4 <handle_op_code+0x1054>
+    99cc:	e7940107 	ldr	r0, [r4, r7, lsl #2]
+    99d0:	e1a082a0 	lsr	r8, r0, #5
+    99d4:	e086e008 	add	lr, r6, r8
+    99d8:	e28e2b26 	add	r2, lr, #38912	@ 0x9800
+    99dc:	e282304a 	add	r3, r2, #74	@ 0x4a
+    99e0:	e7941103 	ldr	r1, [r4, r3, lsl #2]
+    99e4:	e200c01f 	and	ip, r0, #31
+    99e8:	eaffff91 	b	9834 <handle_op_code+0xba4>
+    99ec:	e2830f8f 	add	r0, r3, #572	@ 0x23c
+    99f0:	e1a0e00f 	mov	lr, pc
+    99f4:	e593f240 	ldr	pc, [r3, #576]	@ 0x240
+    99f8:	e5948000 	ldr	r8, [r4]
+    99fc:	e5982000 	ldr	r2, [r8]
+    9a00:	e1a00002 	mov	r0, r2
+    9a04:	e1a0e00f 	mov	lr, pc
+    9a08:	e592f244 	ldr	pc, [r2, #580]	@ 0x244
+    9a0c:	e5942000 	ldr	r2, [r4]
+    9a10:	eaffff50 	b	9758 <handle_op_code+0xac8>
+    9a14:	e5943000 	ldr	r3, [r4]
+    9a18:	e5931000 	ldr	r1, [r3]
+    9a1c:	e28100dc 	add	r0, r1, #220	@ 0xdc
+    9a20:	eb008bae 	bl	2c8e0 <strlen>
+    9a24:	e1a01005 	mov	r1, r5
+    9a28:	e1a03008 	mov	r3, r8
+    9a2c:	e280200c 	add	r2, r0, #12
+    9a30:	e1a00007 	mov	r0, r7
+    9a34:	eb001849 	bl	fb60 <__libc_send>
+    9a38:	e3700001 	cmn	r0, #1
+    9a3c:	0a000046 	beq	9b5c <handle_op_code+0xecc>
+    9a40:	e794e10a 	ldr	lr, [r4, sl, lsl #2]
+    9a44:	e20e201f 	and	r2, lr, #31
+    9a48:	e1a012ae 	lsr	r1, lr, #5
+    9a4c:	eafffeb3 	b	9520 <handle_op_code+0x890>
+    9a50:	e1a01005 	mov	r1, r5
+    9a54:	e3a0201d 	mov	r2, #29
+    9a58:	eb001840 	bl	fb60 <__libc_send>
+    9a5c:	e3700001 	cmn	r0, #1
+    9a60:	1afffd55 	bne	8fbc <handle_op_code+0x32c>
+    9a64:	eb0019f6 	bl	10244 <__errno_location>
+    9a68:	e1a04000 	mov	r4, r0
+    9a6c:	e5900000 	ldr	r0, [r0]
+    9a70:	eb008b2e 	bl	2c730 <strerror>
+    9a74:	e59f121c 	ldr	r1, [pc, #540]	@ 9c98 <handle_op_code+0x1008>
+    9a78:	e59f221c 	ldr	r2, [pc, #540]	@ 9c9c <handle_op_code+0x100c>
+    9a7c:	e1a03000 	mov	r3, r0
+    9a80:	e59f0240 	ldr	r0, [pc, #576]	@ 9cc8 <handle_op_code+0x1038>
+    9a84:	eb004838 	bl	1bb6c <_IO_printf>
+    9a88:	e3500000 	cmp	r0, #0
+    9a8c:	0afffc94 	beq	8ce4 <handle_op_code+0x54>
+    9a90:	e5940000 	ldr	r0, [r4]
+    9a94:	eb008b25 	bl	2c730 <strerror>
+    9a98:	e59f11f8 	ldr	r1, [pc, #504]	@ 9c98 <handle_op_code+0x1008>
+    9a9c:	e59f21f8 	ldr	r2, [pc, #504]	@ 9c9c <handle_op_code+0x100c>
+    9aa0:	e1a03000 	mov	r3, r0
+    9aa4:	e59f021c 	ldr	r0, [pc, #540]	@ 9cc8 <handle_op_code+0x1038>
+    9aa8:	eb00482f 	bl	1bb6c <_IO_printf>
+    9aac:	eafffc8c 	b	8ce4 <handle_op_code+0x54>
+    9ab0:	e59f01e8 	ldr	r0, [pc, #488]	@ 9ca0 <handle_op_code+0x1010>
+    9ab4:	e59f114c 	ldr	r1, [pc, #332]	@ 9c08 <handle_op_code+0xf78>
+    9ab8:	eb00482b 	bl	1bb6c <_IO_printf>
+    9abc:	e3a03000 	mov	r3, #0
+    9ac0:	eafffd04 	b	8ed8 <handle_op_code+0x248>
+    9ac4:	eb0019de 	bl	10244 <__errno_location>
+    9ac8:	e1a04000 	mov	r4, r0
+    9acc:	e5900000 	ldr	r0, [r0]
+    9ad0:	eb008b16 	bl	2c730 <strerror>
+    9ad4:	e59f11c8 	ldr	r1, [pc, #456]	@ 9ca4 <handle_op_code+0x1014>
+    9ad8:	e59f21c8 	ldr	r2, [pc, #456]	@ 9ca8 <handle_op_code+0x1018>
+    9adc:	e1a03000 	mov	r3, r0
+    9ae0:	e59f01e0 	ldr	r0, [pc, #480]	@ 9cc8 <handle_op_code+0x1038>
+    9ae4:	eb004820 	bl	1bb6c <_IO_printf>
+    9ae8:	e3500000 	cmp	r0, #0
+    9aec:	0afffc7c 	beq	8ce4 <handle_op_code+0x54>
+    9af0:	e5940000 	ldr	r0, [r4]
+    9af4:	eb008b0d 	bl	2c730 <strerror>
+    9af8:	e59f11a4 	ldr	r1, [pc, #420]	@ 9ca4 <handle_op_code+0x1014>
+    9afc:	e59f21a4 	ldr	r2, [pc, #420]	@ 9ca8 <handle_op_code+0x1018>
+    9b00:	e1a03000 	mov	r3, r0
+    9b04:	e59f01bc 	ldr	r0, [pc, #444]	@ 9cc8 <handle_op_code+0x1038>
+    9b08:	eb004817 	bl	1bb6c <_IO_printf>
+    9b0c:	eafffc74 	b	8ce4 <handle_op_code+0x54>
+    9b10:	eb0019cb 	bl	10244 <__errno_location>
+    9b14:	e1a04000 	mov	r4, r0
+    9b18:	e5900000 	ldr	r0, [r0]
+    9b1c:	eb008b03 	bl	2c730 <strerror>
+    9b20:	e59f1184 	ldr	r1, [pc, #388]	@ 9cac <handle_op_code+0x101c>
+    9b24:	e59f2184 	ldr	r2, [pc, #388]	@ 9cb0 <handle_op_code+0x1020>
+    9b28:	e1a03000 	mov	r3, r0
+    9b2c:	e59f0194 	ldr	r0, [pc, #404]	@ 9cc8 <handle_op_code+0x1038>
+    9b30:	eb00480d 	bl	1bb6c <_IO_printf>
+    9b34:	e3500000 	cmp	r0, #0
+    9b38:	0afffc69 	beq	8ce4 <handle_op_code+0x54>
+    9b3c:	e5940000 	ldr	r0, [r4]
+    9b40:	eb008afa 	bl	2c730 <strerror>
+    9b44:	e59f1160 	ldr	r1, [pc, #352]	@ 9cac <handle_op_code+0x101c>
+    9b48:	e59f2160 	ldr	r2, [pc, #352]	@ 9cb0 <handle_op_code+0x1020>
+    9b4c:	e1a03000 	mov	r3, r0
+    9b50:	e59f0170 	ldr	r0, [pc, #368]	@ 9cc8 <handle_op_code+0x1038>
+    9b54:	eb004804 	bl	1bb6c <_IO_printf>
+    9b58:	eafffc61 	b	8ce4 <handle_op_code+0x54>
+    9b5c:	eb0019b8 	bl	10244 <__errno_location>
+    9b60:	e1a04000 	mov	r4, r0
+    9b64:	e5900000 	ldr	r0, [r0]
+    9b68:	eb008af0 	bl	2c730 <strerror>
+    9b6c:	e59f1140 	ldr	r1, [pc, #320]	@ 9cb4 <handle_op_code+0x1024>
+    9b70:	e59f2140 	ldr	r2, [pc, #320]	@ 9cb8 <handle_op_code+0x1028>
+    9b74:	e1a03000 	mov	r3, r0
+    9b78:	e59f0148 	ldr	r0, [pc, #328]	@ 9cc8 <handle_op_code+0x1038>
+    9b7c:	eb0047fa 	bl	1bb6c <_IO_printf>
+    9b80:	e3500000 	cmp	r0, #0
+    9b84:	0afffc56 	beq	8ce4 <handle_op_code+0x54>
+    9b88:	e5940000 	ldr	r0, [r4]
+    9b8c:	eb008ae7 	bl	2c730 <strerror>
+    9b90:	e59f111c 	ldr	r1, [pc, #284]	@ 9cb4 <handle_op_code+0x1024>
+    9b94:	e59f211c 	ldr	r2, [pc, #284]	@ 9cb8 <handle_op_code+0x1028>
+    9b98:	e1a03000 	mov	r3, r0
+    9b9c:	e59f0124 	ldr	r0, [pc, #292]	@ 9cc8 <handle_op_code+0x1038>
+    9ba0:	eb0047f1 	bl	1bb6c <_IO_printf>
+    9ba4:	eafffc4e 	b	8ce4 <handle_op_code+0x54>
+    9ba8:	eb0019a5 	bl	10244 <__errno_location>
+    9bac:	e1a04000 	mov	r4, r0
+    9bb0:	e5900000 	ldr	r0, [r0]
+    9bb4:	eb008add 	bl	2c730 <strerror>
+    9bb8:	e59f10fc 	ldr	r1, [pc, #252]	@ 9cbc <handle_op_code+0x102c>
+    9bbc:	e59f20fc 	ldr	r2, [pc, #252]	@ 9cc0 <handle_op_code+0x1030>
+    9bc0:	e1a03000 	mov	r3, r0
+    9bc4:	e59f00fc 	ldr	r0, [pc, #252]	@ 9cc8 <handle_op_code+0x1038>
+    9bc8:	eb0047e7 	bl	1bb6c <_IO_printf>
+    9bcc:	e3500000 	cmp	r0, #0
+    9bd0:	0afffc43 	beq	8ce4 <handle_op_code+0x54>
+    9bd4:	e5940000 	ldr	r0, [r4]
+    9bd8:	eb008ad4 	bl	2c730 <strerror>
+    9bdc:	e59f10d8 	ldr	r1, [pc, #216]	@ 9cbc <handle_op_code+0x102c>
+    9be0:	e59f20d8 	ldr	r2, [pc, #216]	@ 9cc0 <handle_op_code+0x1030>
+    9be4:	e1a03000 	mov	r3, r0
+    9be8:	e59f00d8 	ldr	r0, [pc, #216]	@ 9cc8 <handle_op_code+0x1038>
+    9bec:	eb0047de 	bl	1bb6c <_IO_printf>
+    9bf0:	eafffc3b 	b	8ce4 <handle_op_code+0x54>
+    9bf4:	0007f96c 	.word	0x0007f96c
+    9bf8:	0007fa3c 	.word	0x0007fa3c
+    9bfc:	000002ca 	.word	0x000002ca
+    9c00:	00080108 	.word	0x00080108
+    9c04:	0007fe2c 	.word	0x0007fe2c
+    9c08:	0007fe54 	.word	0x0007fe54
+    9c0c:	0007faa4 	.word	0x0007faa4
+    9c10:	000004b5 	.word	0x000004b5
+    9c14:	0007ff20 	.word	0x0007ff20
+    9c18:	000004b6 	.word	0x000004b6
+    9c1c:	0007ff4c 	.word	0x0007ff4c
+    9c20:	0007ff7c 	.word	0x0007ff7c
+    9c24:	000802d8 	.word	0x000802d8
+    9c28:	0007ff84 	.word	0x0007ff84
+    9c2c:	0008009c 	.word	0x0008009c
+    9c30:	0000029d 	.word	0x0000029d
+    9c34:	0007fdc8 	.word	0x0007fdc8
+    9c38:	00080078 	.word	0x00080078
+    9c3c:	0007fe0c 	.word	0x0007fe0c
+    9c40:	0007fa68 	.word	0x0007fa68
+    9c44:	0000029a 	.word	0x0000029a
+    9c48:	0007fda0 	.word	0x0007fda0
+    9c4c:	000800e4 	.word	0x000800e4
+    9c50:	000800c0 	.word	0x000800c0
+    9c54:	00080050 	.word	0x00080050
+    9c58:	0007fb04 	.word	0x0007fb04
+    9c5c:	0007ffe0 	.word	0x0007ffe0
+    9c60:	00080000 	.word	0x00080000
+    9c64:	000004ee 	.word	0x000004ee
+    9c68:	00080018 	.word	0x00080018
+    9c6c:	0008002c 	.word	0x0008002c
+    9c70:	0007fde8 	.word	0x0007fde8
+    9c74:	000a17fc 	.word	0x000a17fc
+    9c78:	0007ffa4 	.word	0x0007ffa4
+    9c7c:	0007fd5c 	.word	0x0007fd5c
+    9c80:	00000133 	.word	0x00000133
+    9c84:	0007ffcc 	.word	0x0007ffcc
+    9c88:	000004d7 	.word	0x000004d7
+    9c8c:	0007fe6c 	.word	0x0007fe6c
+    9c90:	000004e1 	.word	0x000004e1
+    9c94:	0007fefc 	.word	0x0007fefc
+    9c98:	0007fb1c 	.word	0x0007fb1c
+    9c9c:	000001db 	.word	0x000001db
+    9ca0:	0007ff98 	.word	0x0007ff98
+    9ca4:	0007fb30 	.word	0x0007fb30
+    9ca8:	0000020d 	.word	0x0000020d
+    9cac:	0007fa8c 	.word	0x0007fa8c
+    9cb0:	000001a2 	.word	0x000001a2
+    9cb4:	0007fb44 	.word	0x0007fb44
+    9cb8:	0000025f 	.word	0x0000025f
+    9cbc:	0007fabc 	.word	0x0007fabc
+    9cc0:	0000014a 	.word	0x0000014a
+    9cc4:	0007fa4c 	.word	0x0007fa4c
+    9cc8:	0007fd88 	.word	0x0007fd88
+    9ccc:	000004dd 	.word	0x000004dd
+    9cd0:	0007fe94 	.word	0x0007fe94
+    9cd4:	0007feb0 	.word	0x0007feb0
+    9cd8:	0000016f 	.word	0x0000016f
+    9cdc:	0007fed8 	.word	0x0007fed8
+    9ce0:	26886086 	.word	0x26886086
+    9ce4:	eb001956 	bl	10244 <__errno_location>
+    9ce8:	e1a04000 	mov	r4, r0
+    9cec:	e5900000 	ldr	r0, [r0]
+    9cf0:	eb008a8e 	bl	2c730 <strerror>
+    9cf4:	e51f1038 	ldr	r1, [pc, #-56]	@ 9cc4 <handle_op_code+0x1034>
+    9cf8:	e3a020f4 	mov	r2, #244	@ 0xf4
+    9cfc:	e1a03000 	mov	r3, r0
+
 ## Firmware app manifest: binary AXML as decoded by aapt
 
-$ /usr/local/lib/android/sdk/build-tools/37.0.0/aapt dump badging /tmp/tmpbw8a0b42/ramdisk/system/app/fw_launcher_2016.08.12.01.apk
+$ /usr/local/lib/android/sdk/build-tools/37.0.0/aapt dump badging /tmp/tmpj4o556jr/ramdisk/system/app/fw_launcher_2016.08.12.01.apk
 exit: 0
 package: name='tw.com.elead.el830.fw_upgrade' versionCode='1' versionName='2016.08.12.01' platformBuildVersionName='4.4.2-1456859' platformBuildVersionCode='19'
 sdkVersion:'9'
@@ -1164,7 +1430,7 @@ supports-any-density: 'true'
 locales: '--_--'
 densities: '120' '160' '240' '320'
 
-$ /usr/local/lib/android/sdk/build-tools/37.0.0/aapt dump xmltree /tmp/tmpbw8a0b42/ramdisk/system/app/fw_launcher_2016.08.12.01.apk AndroidManifest.xml
+$ /usr/local/lib/android/sdk/build-tools/37.0.0/aapt dump xmltree /tmp/tmpj4o556jr/ramdisk/system/app/fw_launcher_2016.08.12.01.apk AndroidManifest.xml
 exit: 0
 N: android=http://schemas.android.com/apk/res/android
   E: manifest (line=1)
@@ -1194,7 +1460,7 @@ N: android=http://schemas.android.com/apk/res/android
           E: category (line=24)
             A: android:name(0x01010003)="android.intent.category.DEFAULT" (Raw: "android.intent.category.DEFAULT")
 
-$ java -jar /home/runner/work/_temp/apktool.jar d -f -r /tmp/tmpbw8a0b42/ramdisk/system/app/fw_launcher_2016.08.12.01.apk -o /tmp/tmpbw8a0b42/decoded
+$ java -jar /home/runner/work/_temp/apktool.jar d -f -r /tmp/tmpj4o556jr/ramdisk/system/app/fw_launcher_2016.08.12.01.apk -o /tmp/tmpj4o556jr/decoded
 exit: 0
 I: Using Apktool 2.9.3 on fw_launcher_2016.08.12.01.apk
 I: Copying raw resources...
