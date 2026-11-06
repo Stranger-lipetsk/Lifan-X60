@@ -135,7 +135,7 @@ cleanup() {
   fi
   [ -z "$pid" ] || kill "$pid" 2>/dev/null || true
   sudo pkill -TERM -u emulatorlab 2>/dev/null || true
-  for m in "$work/copy-dest" "$work/copy-source"; do
+  for m in "$work/copy-extra-dest" "$work/copy-dest" "$work/copy-source"; do
     if mountpoint -q "$m"; then sudo umount "$m" || echo "Cannot unmount isolated lab path: $m"; fi
   done
   [ "$blocked4" != yes ] || sudo iptables -D OUTPUT -m owner --uid-owner "$emu_uid" ! -d 127.0.0.0/8 -j REJECT || true
@@ -646,12 +646,13 @@ cp "$work/stock-busybox" "$work/tar-image/busybox"
 chmod 0755 "$work/tar-image/"{qemu-arm-static,busybox}
 printf 'FROM scratch\nCOPY busybox /busybox\nCOPY qemu-arm-static /qemu-arm-static\n' > "$work/tar-image/Dockerfile"
 docker build -q -t x60-disposable-arm-copy "$work/tar-image"
+lab_source="$work/copy-source"; lab_dest="$work/copy-dest"
 run_lab_tar() {
   docker run --rm --network none --read-only --cap-drop ALL --cap-add CHOWN \
     --cap-add DAC_OVERRIDE --cap-add FOWNER --security-opt no-new-privileges \
     --memory 256m --pids-limit 32 \
-    --mount "type=bind,source=$work/copy-source,target=/fixture/source,readonly" \
-    --mount "type=bind,source=$work/copy-dest,target=/fixture/dest" \
+    --mount "type=bind,source=$lab_source,target=/fixture/source,readonly" \
+    --mount "type=bind,source=$lab_dest,target=/fixture/dest" \
     --workdir "$1" x60-disposable-arm-copy /qemu-arm-static /busybox tar "${@:2}"
 }
 create_rc=0
@@ -670,6 +671,34 @@ done > "$work/copy-checks.txt"
 sudo du -sk "$work/copy-source" "$work/copy-dest" > "$work/copy-sizes.txt"
 sudo du -sk "$work/copy-dest/data.tar" >> "$work/copy-sizes.txt"
 df -k "$work/copy-dest" > "$work/copy-df.txt"
+python3 - "$work/copy-dest" <<'PY2' > "$work/copy-statvfs.txt"
+import os, sys
+s = os.statvfs(sys.argv[1])
+print('Filesystem blocks free including reserved (KiB):', s.f_bfree * s.f_frsize // 1024)
+print('Filesystem blocks available to unprivileged users (KiB):', s.f_bavail * s.f_frsize // 1024)
+PY2
+# Negative control: rebuild an isolated source from the archived synthetic AVD
+# snapshot, add one fixed synthetic 32 MiB file, then repeat on a fresh 512 MiB
+# image. This does not change the original emulator image or the first result.
+mkdir "$work/copy-plus" "$work/copy-extra-dest"
+lab_source="$work/copy-dest"; lab_dest="$work/copy-plus"
+run_lab_tar /fixture/dest -xvf /fixture/source/data.tar > "$work/plus-source.log" 2>&1
+sudo mkdir "$work/copy-plus/x60-synthetic-extra"
+sudo dd if=/dev/zero of="$work/copy-plus/x60-synthetic-extra/extra.bin" bs=1M count=32 status=none
+truncate -s 512M "$work/synthetic-p5-plus.img"
+test -f "$work/synthetic-p5-plus.img" && [ ! -L "$work/synthetic-p5-plus.img" ]
+sudo mkfs.ext4 -q -F "$work/synthetic-p5-plus.img"
+sudo mount -t ext4 -o loop "$work/synthetic-p5-plus.img" "$work/copy-extra-dest"
+[ "$(findmnt -n -o FSTYPE --target "$work/copy-extra-dest")" = ext4 ]
+sudo chown "$(id -u):$(id -g)" "$work/copy-extra-dest"
+lab_source="$work/copy-plus"; lab_dest="$work/copy-extra-dest"
+plus_create_rc=0
+run_lab_tar /fixture/source -cf /fixture/dest/data.tar ./. > "$work/plus-create.log" 2>&1 || plus_create_rc=$?
+[ "$plus_create_rc" = 0 ] || { echo "Unexpected extra-fixture create failure: $plus_create_rc"; tail -15 "$work/plus-create.log"; exit 1; }
+plus_extract_rc=0
+run_lab_tar /fixture/dest -xvf /fixture/dest/data.tar > "$work/plus-extract.log" 2>&1 || plus_extract_rc=$?
+[ "$plus_extract_rc" -ne 0 ] || { echo 'Expected insufficient space with added fixture not observed'; exit 1; }
+grep -F 'No space left on device' "$work/plus-extract.log" > "$work/plus-error.txt"
 {
   echo '# App-initiated multi-package synthetic backup and Navitel update on disposable Android 4.4.2 ARM'
   echo 'Generic ARM emulator with stock-derived services.jar preloaded offline, not the head unit; host emulator network blocked.'
@@ -710,6 +739,9 @@ df -k "$work/copy-dest" > "$work/copy-df.txt"
   echo 'Selected synthetic files checked after extraction:'; cat "$work/copy-checks.txt"
   echo 'Allocated KiB on the CI host (destination includes the archive; source ext4, not GU tmpfs):'; cat "$work/copy-sizes.txt"
   echo 'Destination filesystem usage:'; cat "$work/copy-df.txt"
+  cat "$work/copy-statvfs.txt"
+  echo "Negative control on fresh 512 MiB image: copied baseline snapshot plus one synthetic 32 MiB file, tar create exit $plus_create_rc, extraction exit $plus_extract_rc with No space left on device."
+  echo 'This artificial addition is not a claim about installed apps or capacity on the head unit.'
   echo 'Only listed files and metadata were compared; tar exit 0 is not proof all app data, xattrs, SELinux labels, sparse data, or timestamps were preserved.'
   echo 'The stock updater declares DATA_SIZE=512 with sfdisk -uM for logical p5; actual head-unit size, free space, other apps and runtime sequence remain unknown.'
   echo '## Emulator crash dialog while installing'
