@@ -965,4 +965,167 @@ Disassembly of section .text:
     8522:	60a0      	str	r0, [r4, #8]
 ... output truncated
 
+## Targeted disassembly of known binary: arm-linux-gnueabihf-objdump -d -M force-thumb --start-address=0x82ac --stop-address=0x8400
+
+/home/runner/work/_temp/usb-callers/root/xbin/su:     file format elf32-littlearm
+
+
+Disassembly of section .text:
+
+000082ac <.text+0x1b4>:
+    82ac:	e92d 43f0 	stmdb	sp!, {r4, r5, r6, r7, r8, r9, lr}
+    82b0:	b091      	sub	sp, #68	@ 0x44
+    82b2:	af02      	add	r7, sp, #8
+    82b4:	4606      	mov	r6, r0
+    82b6:	460d      	mov	r5, r1
+    82b8:	f000 eac4 	blx	0x8844
+    82bc:	4c4c      	ldr	r4, [pc, #304]	@ (0x83f0)
+    82be:	4b4d      	ldr	r3, [pc, #308]	@ (0x83f4)
+    82c0:	447c      	add	r4, pc
+    82c2:	58e4      	ldr	r4, [r4, r3]
+    82c4:	4602      	mov	r2, r0
+    82c6:	b148      	cbz	r0, 0x82dc
+    82c8:	f5b0 6ffa 	cmp.w	r0, #2000	@ 0x7d0
+    82cc:	d006      	beq.n	0x82dc
+    82ce:	494a      	ldr	r1, [pc, #296]	@ (0x83f8)
+    82d0:	f104 00a8 	add.w	r0, r4, #168	@ 0xa8
+    82d4:	4479      	add	r1, pc
+    82d6:	f001 fbc3 	bl	0x9a60
+    82da:	e083      	b.n	0x83e4
+    82dc:	2e01      	cmp	r6, #1
+    82de:	dc03      	bgt.n	0x82e8
+    82e0:	2200      	movs	r2, #0
+    82e2:	60ba      	str	r2, [r7, #8]
+    82e4:	607a      	str	r2, [r7, #4]
+    82e6:	e016      	b.n	0x8316
+    82e8:	200a      	movs	r0, #10
+    82ea:	f107 010c 	add.w	r1, r7, #12
+    82ee:	60f8      	str	r0, [r7, #12]
+    82f0:	f107 0208 	add.w	r2, r7, #8
+    82f4:	9100      	str	r1, [sp, #0]
+    82f6:	f107 0310 	add.w	r3, r7, #16
+    82fa:	6868      	ldr	r0, [r5, #4]
+    82fc:	1d39      	adds	r1, r7, #4
+    82fe:	f7ff ff6b 	bl	0x81d8
+    8302:	68f8      	ldr	r0, [r7, #12]
+    8304:	b138      	cbz	r0, 0x8316
+    8306:	f107 0110 	add.w	r1, r7, #16
+    830a:	f000 eabc 	blx	0x8884
+    830e:	b110      	cbz	r0, 0x8316
+    8310:	483a      	ldr	r0, [pc, #232]	@ (0x83fc)
+    8312:	4478      	add	r0, pc
+    8314:	e062      	b.n	0x83dc
+    8316:	68b8      	ldr	r0, [r7, #8]
+    8318:	f000 eaa4 	blx	0x8864
+    831c:	b110      	cbz	r0, 0x8324
+    831e:	4838      	ldr	r0, [pc, #224]	@ (0x8400)
+    8320:	4478      	add	r0, pc
+    8322:	e05b      	b.n	0x83dc
+    8324:	6878      	ldr	r0, [r7, #4]
+    8326:	f005 fac8 	bl	0xd8ba
+    832a:	4602      	mov	r2, r0
+    832c:	2800      	cmp	r0, #0
+    832e:	d1f6      	bne.n	0x831e
+    8330:	2e03      	cmp	r6, #3
+    8332:	d118      	bne.n	0x8366
+    8334:	68a8      	ldr	r0, [r5, #8]
+    8336:	4601      	mov	r1, r0
+    8338:	f001 fa86 	bl	0x9848
+    833c:	2800      	cmp	r0, #0
+    833e:	da44      	bge.n	0x83ca
+    8340:	f000 fa56 	bl	0x87f0
+    8344:	68ad      	ldr	r5, [r5, #8]
+    8346:	6806      	ldr	r6, [r0, #0]
+    8348:	f000 fa52 	bl	0x87f0
+    834c:	6800      	ldr	r0, [r0, #0]
+    834e:	f000 f86f 	bl	0x8430
+    8352:	492c      	ldr	r1, [pc, #176]	@ (0x8404)
+    8354:	462a      	mov	r2, r5
+    8356:	4479      	add	r1, pc
+    8358:	4603      	mov	r3, r0
+    835a:	f104 00a8 	add.w	r0, r4, #168	@ 0xa8
+    835e:	f001 fb7f 	bl	0x9a60
+    8362:	4270      	negs	r0, r6
+    8364:	e03f      	b.n	0x83e6
+    8366:	dd30      	ble.n	0x83ca
+    8368:	3e01      	subs	r6, #1
+    836a:	46e9      	mov	r9, sp
+    836c:	4611      	mov	r1, r2
+    836e:	00b6      	lsls	r6, r6, #2
+    8370:	f106 080a 	add.w	r8, r6, #10
+    8374:	f028 0c07 	bic.w	ip, r8, #7
+    8378:	4632      	mov	r2, r6
+    837a:	ebad 0d0c 	sub.w	sp, sp, ip
+    837e:	f10d 0808 	add.w	r8, sp, #8
+    8382:	4640      	mov	r0, r8
+    8384:	f000 ed0c 	blx	0x8da0
+    8388:	f105 0108 	add.w	r1, r5, #8
+    838c:	4632      	mov	r2, r6
+    838e:	4640      	mov	r0, r8
+    8390:	f000 ea8c 	blx	0x88ac
+    8394:	68a8      	ldr	r0, [r5, #8]
+    8396:	4641      	mov	r1, r8
+    8398:	f001 f94c 	bl	0x9634
+    839c:	2800      	cmp	r0, #0
+    839e:	da13      	bge.n	0x83c8
+    83a0:	f000 fa26 	bl	0x87f0
+    83a4:	68ad      	ldr	r5, [r5, #8]
+    83a6:	6806      	ldr	r6, [r0, #0]
+    83a8:	f000 fa22 	bl	0x87f0
+    83ac:	6800      	ldr	r0, [r0, #0]
+    83ae:	f000 f83f 	bl	0x8430
+    83b2:	4915      	ldr	r1, [pc, #84]	@ (0x8408)
+    83b4:	462a      	mov	r2, r5
+    83b6:	4479      	add	r1, pc
+    83b8:	4603      	mov	r3, r0
+    83ba:	f104 00a8 	add.w	r0, r4, #168	@ 0xa8
+    83be:	f001 fb4f 	bl	0x9a60
+    83c2:	4270      	negs	r0, r6
+    83c4:	46cd      	mov	sp, r9
+    83c6:	e00e      	b.n	0x83e6
+    83c8:	46cd      	mov	sp, r9
+    83ca:	4810      	ldr	r0, [pc, #64]	@ (0x840c)
+    83cc:	2200      	movs	r2, #0
+    83ce:	4910      	ldr	r1, [pc, #64]	@ (0x8410)
+    83d0:	4478      	add	r0, pc
+    83d2:	4479      	add	r1, pc
+    83d4:	f001 fa38 	bl	0x9848
+    83d8:	480e      	ldr	r0, [pc, #56]	@ (0x8414)
+    83da:	4478      	add	r0, pc
+    83dc:	f104 01a8 	add.w	r1, r4, #168	@ 0xa8
+    83e0:	f000 fa0a 	bl	0x87f8
+    83e4:	2001      	movs	r0, #1
+    83e6:	f107 073c 	add.w	r7, r7, #60	@ 0x3c
+    83ea:	46bd      	mov	sp, r7
+    83ec:	e8bd 83f0 	ldmia.w	sp!, {r4, r5, r6, r7, r8, r9, pc}
+    83f0:	1d30      	adds	r0, r6, #4
+    83f2:	0001      	movs	r1, r0
+    83f4:	ff88 ffff 			@ <UNDEFINED> instruction: 0xff88ffff
+    83f8:	de16      	udf	#22
+    83fa:	0000      	movs	r0, r0
+    83fc:	ddf6      	ble.n	0x83ec
+	...
+
+
+## Targeted disassembly of known binary: arm-linux-gnueabihf-objdump -d --start-address=0x8844 --stop-address=0x8870
+
+/home/runner/work/_temp/usb-callers/root/xbin/su:     file format elf32-littlearm
+
+
+Disassembly of section .text:
+
+00008844 <.text+0x74c>:
+    8844:	e1a0c007 	mov	ip, r7
+    8848:	e3a070c7 	mov	r7, #199	@ 0xc7
+    884c:	ef000000 	svc	0x00000000
+    8850:	e1a0700c 	mov	r7, ip
+    8854:	e3700a01 	cmn	r0, #4096	@ 0x1000
+    8858:	912fff1e 	bxls	lr
+    885c:	e2600000 	rsb	r0, r0, #0
+    8860:	ea003439 	b	0x1594c
+    8864:	e1a0c007 	mov	ip, r7
+    8868:	e3a070d6 	mov	r7, #214	@ 0xd6
+    886c:	ef000000 	svc	0x00000000
+
+
 Static evidence does not establish execution rights, SELinux behavior, data access, or a safe backup.
