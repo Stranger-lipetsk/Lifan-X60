@@ -4,22 +4,25 @@ Stock su binary copied to emulator system filesystem with mode 06755; emulator p
 Fingerprint: generic/sdk/generic:4.4.2/KK/3462041:eng/test-keys; hardware: goldfish; emulator certificate: c8a2e9bccf597c2fb6dc66bee293fc13f2fc47ec77bc6b2b0d52c11f51192ab8
 The ADB transport was used to prepare and observe the emulator. No APKs or su binary published.
 ## Ordinary application
-I/X60SuLab( 1068): OWN_UID=10052
-I/X60SuLab( 1068): RESULT=su: uid 10052 not allowed to su
-I/X60SuLab( 1068): EXIT=1
+I/X60SuLab( 1178): OWN_UID=10052
+I/X60SuLab( 1178): RESULT=su: uid 10052 not allowed to su
+I/X60SuLab( 1178): EXIT=1
 ## Shell shared UID application
 Initial shared UID fixture installation failed under enforcing SELinux.
-I/PackageManager(  370): Running dexopt on: com.android.mms
-W/PackageManager(  370): Couldn't get low memory threshold; no free limit imposed
-I/PackageManager(  370): Copying native libraries to /data/app-lib/vmdl-778734868
+W/PackageManager(  372): Couldn't get low memory threshold; no free limit imposed
+I/PackageManager(  372): Copying native libraries to /data/app-lib/vmdl884205945
 E/installd(   57): couldn't symlink directory '/data/data/ru.lifanx60.sulabshell/lib' -> '/data/app-lib/ru.lifanx60.sulabshell-1': Permission denied
-W/PackageManager(  370): Failed linking native library dir (user=0)
-W/PackageManager(  370): Package couldn't be installed in /data/app/ru.lifanx60.sulabshell-1.apk
-<5>type=1400 audit(1793958270.500:11): avc:  denied  { create } for  pid=57 comm="installd" name="lib" scontext=u:r:installd:s0 tcontext=u:object_r:shell_data_file:s0 tclass=lnk_file permissive=0
+W/PackageManager(  372): Failed linking native library dir (user=0)
+W/PackageManager(  372): Package couldn't be installed in /data/app/ru.lifanx60.sulabshell-1.apk
+<5>type=1400 audit(1793958656.860:9): avc:  denied  { create } for  pid=57 comm="installd" name="lib" scontext=u:r:installd:s0 tcontext=u:object_r:shell_data_file:s0 tclass=lnk_file permissive=0
 A diagnostic retry temporarily set the emulator to permissive solely for installation; enforcing was restored immediately afterward and before any fixture launch.
-I/X60SuLab( 1183): OWN_UID=2000
-I/X60SuLab( 1183): RESULT=su: permission denied
-I/X60SuLab( 1183): EXIT=1
+I/X60SuLab( 1263): OWN_UID=2000
+I/X60SuLab( 1263): RESULT=su: permission denied
+I/X60SuLab( 1263): EXIT=1
+## Same fixture with temporarily permissive SELinux, emulator-only diagnostic
+I/X60SuLab( 1263): OWN_UID=2000
+I/X60SuLab( 1263): RESULT=su: permission denied
+I/X60SuLab( 1263): EXIT=1
 ## Separate emulator ADB shell-context control, not an app
 Root ADB-launched control, separate process after dropping to UID 2000:
 uid=2000(shell) gid=2000(shell) context=u:r:shell:s0
