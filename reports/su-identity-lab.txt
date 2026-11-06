@@ -4,27 +4,52 @@ Stock su binary copied to emulator system filesystem with mode 06755; emulator p
 Fingerprint: generic/sdk/generic:4.4.2/KK/3462041:eng/test-keys; hardware: goldfish; emulator certificate: c8a2e9bccf597c2fb6dc66bee293fc13f2fc47ec77bc6b2b0d52c11f51192ab8
 The ADB transport was used to prepare and observe the emulator. No APKs or su binary published.
 ## Ordinary application
-I/X60SuLab( 1178): OWN_UID=10052
-I/X60SuLab( 1178): RESULT=su: uid 10052 not allowed to su
-I/X60SuLab( 1178): EXIT=1
+I/X60SuLab( 1143): OWN_UID=10052
+I/X60SuLab( 1143): SELF_STATUS=Uid:	10052	10052	10052	10052
+I/X60SuLab( 1143): SELF_STATUS=Gid:	10052	10052	10052	10052
+I/X60SuLab( 1143): SELF_STATUS=CapInh:	0000000000000000
+I/X60SuLab( 1143): SELF_STATUS=CapPrm:	0000000000000000
+I/X60SuLab( 1143): SELF_STATUS=CapEff:	0000000000000000
+I/X60SuLab( 1143): SELF_STATUS=CapBnd:	ffffffe000000000
+I/X60SuLab( 1143): RESULT=su: uid 10052 not allowed to su
+I/X60SuLab( 1143): EXIT=1
 ## Shell shared UID application
 Initial shared UID fixture installation failed under enforcing SELinux.
-W/PackageManager(  372): Couldn't get low memory threshold; no free limit imposed
-I/PackageManager(  372): Copying native libraries to /data/app-lib/vmdl884205945
-E/installd(   57): couldn't symlink directory '/data/data/ru.lifanx60.sulabshell/lib' -> '/data/app-lib/ru.lifanx60.sulabshell-1': Permission denied
-W/PackageManager(  372): Failed linking native library dir (user=0)
-W/PackageManager(  372): Package couldn't be installed in /data/app/ru.lifanx60.sulabshell-1.apk
-<5>type=1400 audit(1793958656.860:9): avc:  denied  { create } for  pid=57 comm="installd" name="lib" scontext=u:r:installd:s0 tcontext=u:object_r:shell_data_file:s0 tclass=lnk_file permissive=0
+I/PackageManager(  369): Running dexopt on: com.android.mms
+W/PackageManager(  369): Couldn't get low memory threshold; no free limit imposed
+I/PackageManager(  369): Copying native libraries to /data/app-lib/vmdl-699820909
+E/installd(   56): couldn't symlink directory '/data/data/ru.lifanx60.sulabshell/lib' -> '/data/app-lib/ru.lifanx60.sulabshell-1': Permission denied
+W/PackageManager(  369): Failed linking native library dir (user=0)
+W/PackageManager(  369): Package couldn't be installed in /data/app/ru.lifanx60.sulabshell-1.apk
+<5>type=1400 audit(1793958923.340:11): avc:  denied  { create } for  pid=56 comm="installd" name="lib" scontext=u:r:installd:s0 tcontext=u:object_r:shell_data_file:s0 tclass=lnk_file permissive=0
 A diagnostic retry temporarily set the emulator to permissive solely for installation; enforcing was restored immediately afterward and before any fixture launch.
-I/X60SuLab( 1263): OWN_UID=2000
-I/X60SuLab( 1263): RESULT=su: permission denied
-I/X60SuLab( 1263): EXIT=1
+I/X60SuLab( 1253): OWN_UID=2000
+I/X60SuLab( 1253): SELF_STATUS=Uid:	2000	2000	2000	2000
+I/X60SuLab( 1253): SELF_STATUS=Gid:	2000	2000	2000	2000
+I/X60SuLab( 1253): SELF_STATUS=CapInh:	0000000000000000
+I/X60SuLab( 1253): SELF_STATUS=CapPrm:	0000000000000000
+I/X60SuLab( 1253): SELF_STATUS=CapEff:	0000000000000000
+I/X60SuLab( 1253): SELF_STATUS=CapBnd:	ffffffe000000000
+I/X60SuLab( 1253): RESULT=su: permission denied
+I/X60SuLab( 1253): EXIT=1
 ## Same fixture with temporarily permissive SELinux, emulator-only diagnostic
-I/X60SuLab( 1263): OWN_UID=2000
-I/X60SuLab( 1263): RESULT=su: permission denied
-I/X60SuLab( 1263): EXIT=1
+I/X60SuLab( 1253): OWN_UID=2000
+I/X60SuLab( 1253): SELF_STATUS=Uid:	2000	2000	2000	2000
+I/X60SuLab( 1253): SELF_STATUS=Gid:	2000	2000	2000	2000
+I/X60SuLab( 1253): SELF_STATUS=CapInh:	0000000000000000
+I/X60SuLab( 1253): SELF_STATUS=CapPrm:	0000000000000000
+I/X60SuLab( 1253): SELF_STATUS=CapEff:	0000000000000000
+I/X60SuLab( 1253): SELF_STATUS=CapBnd:	ffffffe000000000
+I/X60SuLab( 1253): RESULT=su: permission denied
+I/X60SuLab( 1253): EXIT=1
 ## Separate emulator ADB shell-context control, not an app
 Root ADB-launched control, separate process after dropping to UID 2000:
 uid=2000(shell) gid=2000(shell) context=u:r:shell:s0
+Uid:	2000	2000	2000	2000
+Gid:	2000	2000	2000	2000
+CapInh:	0000000000000000
+CapPrm:	0000000000000000
+CapEff:	0000000000000000
+CapBnd:	ffffffffffffffff
 uid=0(root) gid=0(root) context=u:r:shell:s0
 ADB shell and app SELinux contexts may differ. Even a positive result does not prove actual device installation, privileges, storage access or safety.
