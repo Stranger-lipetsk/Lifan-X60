@@ -16,16 +16,65 @@ No containers need to be restarted.
 No user sessions are running outdated binaries.
 
 No VM guests are running outdated hypervisor (qemu) binaries on this host.
-/home/runner/work/_temp/x60-mke2fs-test.EFcyBFGU/lifan-file-manager-test.zip: OK
-/home/runner/work/_temp/x60-mke2fs-test.EFcyBFGU/stock-system.img: OK
-/home/runner/work/_temp/x60-mke2fs-test.EFcyBFGU/root/system/bin/mke2fs: OK
-/home/runner/work/_temp/x60-mke2fs-test.EFcyBFGU/root/busybox: OK
+/home/runner/work/_temp/x60-mke2fs-test.dlLoF81i/lifan-file-manager-test.zip: OK
+/home/runner/work/_temp/x60-mke2fs-test.dlLoF81i/stock-system.img: OK
+/home/runner/work/_temp/x60-mke2fs-test.dlLoF81i/root/system/bin/mke2fs: OK
+/home/runner/work/_temp/x60-mke2fs-test.dlLoF81i/root/busybox: OK
 Extract stock libraries, without running them on the host
 Build isolated formatter container
-sha256:3c735bb6fdd0cfa88124be747c6969cf71d5be0552eb6a53ddc62a2a2c893d9f
+sha256:383babe117592f95494832735aa347cc2e31e991bc62c1a0acd4eb678e5a1bcb
 Attach dedicated synthetic file as loop device
 Run unmounted positive control
 Stock formatter control failed: 137
 Experiment failed: 1
 ## control.log
-tools/experiment_stock_mke2fs_mounted.sh: line 58:  2695 Killed                  timeout -k 5 90 docker run --rm --name "$container_name" --network none --read-only --cap-drop ALL --cap-add DAC_OVERRIDE --security-opt no-new-privileges --memory 256m --pids-limit 32 --device "$loop:$loop:rwm" --mount "type=bind,source=$w/mounted,target=/fixture/mounted" x60-disposable-mke2fs /qemu-arm-static "$@"
+1 madvise(0x4109e000,6412,MADV_MERGEABLE) = 0
+1 close(3) = 0
+1 munmap(0x41017000,4096) = 0
+1 mprotect(0x4109e000,4096,PROT_READ) = 0
+1 open("/vendor/lib/libext2_e2p.so",O_RDONLY|O_LARGEFILE|O_CLOEXEC) = -1 errno=2 (No such file or directory)
+1 open("/system/lib/libext2_e2p.so",O_RDONLY|O_LARGEFILE|O_CLOEXEC) = 3
+1 read(3,0x41000b4c,52) = 52
+1 mmap2(NULL,4096,PROT_READ,MAP_PRIVATE,3,0) = 0x41017000
+1 madvise(0x41017000,4096,MADV_MERGEABLE) = 0
+1 mmap2(NULL,24576,PROT_NONE,MAP_PRIVATE|MAP_ANONYMOUS,-1,0) = 0x410a0000
+1 madvise(0x410a0000,24576,MADV_MERGEABLE) = 0
+1 mmap2(0x410a0000,15504,PROT_EXEC|PROT_READ,MAP_PRIVATE|MAP_FIXED,3,0) = 0x410a0000
+1 madvise(0x410a0000,15504,MADV_MERGEABLE) = 0
+1 mmap2(0x410a4000,4788,PROT_READ|PROT_WRITE,MAP_PRIVATE|MAP_FIXED,3,0x3) = 0x410a4000
+1 madvise(0x410a4000,4788,MADV_MERGEABLE) = 0
+1 close(3) = 0
+1 munmap(0x41017000,4096) = 0
+1 mprotect(0x410a4000,4096,PROT_READ) = 0
+1 mprotect(0x4103b000,4096,PROT_READ) = 0
+1 open("/vendor/lib/libext2_profile.so",O_RDONLY|O_LARGEFILE|O_CLOEXEC) = -1 errno=2 (No such file or directory)
+1 open("/system/lib/libext2_profile.so",O_RDONLY|O_LARGEFILE|O_CLOEXEC) = 3
+1 read(3,0x41000c24,52) = 52
+1 mmap2(NULL,4096,PROT_READ,MAP_PRIVATE,3,0) = 0x41017000
+1 madvise(0x41017000,4096,MADV_MERGEABLE) = 0
+1 mmap2(NULL,20480,PROT_NONE,MAP_PRIVATE|MAP_ANONYMOUS,-1,0) = 0x410a6000
+1 madvise(0x410a6000,20480,MADV_MERGEABLE) = 0
+1 mmap2(0x410a6000,9556,PROT_EXEC|PROT_READ,MAP_PRIVATE|MAP_FIXED,3,0) = 0x410a6000
+1 madvise(0x410a6000,9556,MADV_MERGEABLE) = 0
+1 mmap2(0x410a9000,4100,PROT_READ|PROT_WRITE,MAP_PRIVATE|MAP_FIXED,3,0x2) = 0x410a9000
+1 madvise(0x410a9000,4100,MADV_MERGEABLE) = 0
+1 close(3) = 0
+1 munmap(0x41017000,4096) = 0
+1 mprotect(0x410a9000,4096,PROT_READ) = 0
+1 mprotect(0x00409000,4096,PROT_READ) = 0
+1 open("/dev/__properties__",O_RDONLY|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = -1 errno=2 (No such file or directory)
+--- SIGSEGV {si_signo=SIGSEGV, si_code=1, si_addr=0x00000090} ---
+1 sigaction(11,1090608120,1090608104,268435456,1090608120,11) = 0
+1 sigaction(11,1090608104,0,268435456,1090608120,11) = 0
+1 prctl(16,1090608120,0,0,0,0) = 0
+1 gettid() = 1
+1 open("/dev/log/main",O_WRONLY|O_LARGEFILE|O_CLOEXEC) = -1 errno=2 (No such file or directory)
+1 gettid() = 1
+1 socket(PF_UNIX,SOCK_STREAM,IPPROTO_IP) = 3
+1 connect(3,0x41015bf8,20) = -1 errno=111 (Connection refused)
+1 close(3) = 0
+1 open("/dev/log/main",O_WRONLY|O_LARGEFILE|O_CLOEXEC) = -1 errno=2 (No such file or directory)
+1 sigaction(11,1090608048,1090608048,0,1090608120,11) = 0
+1 rt_sigreturn(0x1) = -1 errno=513 (Successful exit from sigreturn)
+--- SIGSEGV {si_signo=SIGSEGV, si_code=1, si_addr=0x00000090} ---
+tools/experiment_stock_mke2fs_mounted.sh: line 58:  2699 Killed                  timeout -k 5 30 docker run --rm --name "$container_name" --network none --read-only --cap-drop ALL --cap-add DAC_OVERRIDE -e QEMU_STRACE=1 --security-opt no-new-privileges --memory 256m --pids-limit 32 --device "$loop:$loop:rwm" --mount "type=bind,source=$w/mounted,target=/fixture/mounted" x60-disposable-mke2fs /qemu-arm-static "$@"
