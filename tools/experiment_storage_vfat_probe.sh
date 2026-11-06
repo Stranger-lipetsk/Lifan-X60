@@ -117,6 +117,7 @@ done
 grep -E 'uid=1023,gid=1023' "$work/mock-dir.txt"
 grep -E 'fmask=0007,dmask=0007' "$work/mock-dir.txt"
 cat "$work/mock-dir.txt"
+timeout -k 5 30 "$adb" shell 'ls -ldn /mnt /mnt/media_rw /mnt/media_rw/sdcard; getenforce' | tr -d '\r' | tee "$work/mount-parents.txt"
 timeout -k 5 30 "$adb" shell 'if [ -e /mnt/media_rw/sdcard/x60-synthetic-probe.txt ]; then echo UNEXPECTED_FILE; else echo SYNTHETIC_PATH_EMPTY; fi' | tr -d '\r' | grep -Fx SYNTHETIC_PATH_EMPTY
 
 echo 'Build two test-key-signed apps, same code, with/without external storage permission'
@@ -146,11 +147,11 @@ run_probe() {
   timeout -k 5 60 "$adb" shell am start -n "$pkg/ru.lifanx60.storagegrouplab.MainActivity" > "$work/$name-start.txt" 2>&1
   for i in $(seq 1 30); do
     timeout -k 5 30 "$adb" logcat -d -v brief > "$work/$name-log.txt" 2>&1 || true
-    if grep -Fq "$expected" "$work/$name-log.txt"; then break; fi
+    if grep -Eq 'SYNTHETIC_WRITE_READ_(OK|FAILED)' "$work/$name-log.txt"; then break; fi
     sleep 2
   done
+  grep -F X60StorageGroupLab "$work/$name-log.txt" | head -25 || true
   grep -F "$expected" "$work/$name-log.txt"
-  grep -F X60StorageGroupLab "$work/$name-log.txt" | head -25
 }
 run_probe ru.lifanx60.storagegroupwithout negative SYNTHETIC_WRITE_READ_FAILED
 grep -F 'EACCES (Permission denied)' "$work/negative-log.txt"
