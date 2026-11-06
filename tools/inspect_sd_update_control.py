@@ -100,12 +100,23 @@ def main():
         print('\n## DWARF function records (when available)')
         debug = subprocess.run(['readelf', '--debug-dump=info', '--wide', str(binary)],
                                check=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True).stdout
-        records = re.split(r'(?=^ <\d+><[0-9a-f]+>: Abbrev Number:)', debug, flags=re.M)
-        records = [record for record in records if re.search(
+        all_records = re.split(r'(?=^ <\d+><[0-9a-f]+>: Abbrev Number:)', debug, flags=re.M)
+        records = [record for record in all_records if re.search(
             r'DW_AT_name\s*:.*(?:exec_fw_upgrade|handle_start_fw_upgrade|fw_upgrade_loop_thread|init_fw_upgrade_obj)', record)]
         print('Matching debug records:', len(records))
         for record in records:
             print(record.rstrip())
+        offsets = []
+        for record in records:
+            match = re.search(r'^ <\d+><([0-9a-f]+)>:.*DW_TAG_subprogram', record, re.M)
+            if match:
+                offsets.append(match.group(1))
+        for offset in offsets:
+            instances = [r for r in all_records if 'DW_TAG_inlined_subroutine' in r.splitlines()[0]
+                         and re.search(r'DW_AT_abstract_origin\s*:.*<0x' + offset + r'>', r)]
+            print(f'\nInline instances referencing <0x{offset}>: {len(instances)}')
+            for record in instances:
+                print(record.rstrip())
         print('\n## Firmware app manifest: binary AXML as decoded by aapt')
         command(str(aapt), 'dump', 'badging', str(apk))
         command(str(aapt), 'dump', 'xmltree', str(apk), 'AndroidManifest.xml')
