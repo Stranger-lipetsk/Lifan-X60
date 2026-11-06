@@ -8,7 +8,7 @@ from pathlib import Path
 METHOD = re.compile(r'(?ms)^\.method [^\n]*\n.*?^\.end method\s*$')
 INTEREST = re.compile(r'(?i)(?:adbBackup|fullBackup|fullRestore|backupOnePackage|'
                       r'BackupManagerService\$PerformAdbBackupTask|BackupManagerService\$PerformAdbRestoreTask|'
-                      r'0x8000|allowBackup)')
+                      r'0x8000|allowBackup|signaturesMatch|access\$1900)')
 
 
 def application_manifest(aapt, apk):
@@ -67,15 +67,29 @@ def scan_framework(decoded):
     print('No Android command or firmware code was run. Static eligibility is not a tested recovery.')
 
 
+def show_agent(decoded):
+    root = Path(decoded)
+    agents = sorted(root.glob('smali*/**/SharedInfoBackupAgent.smali'))
+    print('\n# Declared Navitel backup agent:', root.name)
+    if len(agents) != 1:
+        raise RuntimeError(f'Expected exactly one agent, found {len(agents)}')
+    print('Path:', agents[0].relative_to(root))
+    print(agents[0].read_text(encoding='utf-8', errors='replace'))
+    print('Agent name or implementation alone does not prove backup contents or restoration.')
+
+
 def main():
-    if len(sys.argv) != 6:
-        raise SystemExit('usage: inspect_backup_feasibility.py AAPT DECODED_SERVICES OLD_APK NEW_APK AMAZE_APK')
-    aapt, decoded, *apks = sys.argv[1:]
+    if len(sys.argv) != 8:
+        raise SystemExit('usage: inspect_backup_feasibility.py AAPT DECODED_SERVICES OLD_APK NEW_APK AMAZE_APK OLD_DECODED NEW_DECODED')
+    aapt, decoded, old, new, amaze, old_decoded, new_decoded = sys.argv[1:]
+    apks = [old, new, amaze]
     print('# Stock ADB backup feasibility: static investigation only')
     print('No real device data, Navitel license, SD card or Android command used.')
     for apk in apks:
         application_manifest(aapt, Path(apk))
     scan_framework(decoded)
+    show_agent(old_decoded)
+    show_agent(new_decoded)
 
 
 if __name__ == '__main__':

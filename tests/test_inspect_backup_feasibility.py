@@ -26,6 +26,18 @@ class BackupInspectionTest(unittest.TestCase):
             self.assertIn('0x8000', out.getvalue())
             self.assertNotIn('unrelated', out.getvalue())
 
+    def test_agent_requires_one_declared_class(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            agent = root / 'smali_classes2/com/navitel/SharedInfoBackupAgent.smali'
+            agent.parent.mkdir(parents=True)
+            agent.write_text('.class SharedInfoBackupAgent\n')
+            with contextlib.redirect_stdout(io.StringIO()) as output:
+                module.show_agent(root)
+            self.assertIn('SharedInfoBackupAgent', output.getvalue())
+            with self.assertRaises(RuntimeError):
+                module.show_agent(root / 'missing')
+
     def test_refuses_missing_framework(self):
         with tempfile.TemporaryDirectory() as tmp:
             with self.assertRaises(RuntimeError):

@@ -56,9 +56,23 @@ jobs:
           PY
           curl -fLsS --retry 3 --max-time 120 -o "$w/apktool.jar" https://github.com/iBotPeaches/Apktool/releases/download/v2.9.3/apktool_2.9.3.jar
           java -jar "$w/apktool.jar" d -f -r "$w/wrapper.apk" -o "$w/decoded" >/dev/null
+          # Decode dex only; do not execute either Navitel APK.
+          python3 - "$w" firmware/apks/com.navitel.apk <<'PY'
+          import re, sys, zipfile
+          from pathlib import Path
+          w, new = Path(sys.argv[1]), Path(sys.argv[2])
+          for name, apk in [('old', w / 'old.apk'), ('new', new)]:
+              with zipfile.ZipFile(apk) as src, zipfile.ZipFile(w / 'manifest.apk') as manifest, zipfile.ZipFile(w / (name + '-wrapper.apk'), 'w') as dst:
+                  dst.writestr('AndroidManifest.xml', manifest.read('AndroidManifest.xml'))
+                  names = [n for n in src.namelist() if re.fullmatch(r'classes(?:[0-9]+)?\.dex', n)]
+                  if not names: raise SystemExit('Missing ' + name + ' DEX')
+                  for n in names: dst.writestr(n, src.read(n))
+          PY
+          java -jar "$w/apktool.jar" d -f -r "$w/old-wrapper.apk" -o "$w/old-decoded" >/dev/null
+          java -jar "$w/apktool.jar" d -f -r "$w/new-wrapper.apk" -o "$w/new-decoded" >/dev/null
           aapt=$(find "$ANDROID_HOME/build-tools" -type f -name aapt | sort -V | tail -1)
           test -x "$aapt"
-          python3 tools/inspect_backup_feasibility.py "$aapt" "$w/decoded" "$w/old.apk" firmware/apks/com.navitel.apk "$w/amaze.apk" > reports/backup-feasibility-static.txt
+          python3 tools/inspect_backup_feasibility.py "$aapt" "$w/decoded" "$w/old.apk" firmware/apks/com.navitel.apk "$w/amaze.apk" "$w/old-decoded" "$w/new-decoded" > reports/backup-feasibility-static.txt
       - name: Сохранить только текстовый отчёт
         run: |
           set -euo pipefail
