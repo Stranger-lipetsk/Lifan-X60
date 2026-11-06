@@ -15,7 +15,7 @@ cleanup() {
       if [ -f "$log" ]; then echo "## $(basename "$log")"; cat "$log"; fi
     done
   fi
-  for target in "$w/dest-full" "$w/dest" "$w/source"; do
+  for target in "$w/dest-tight" "$w/dest-full" "$w/dest" "$w/source"; do
     if mountpoint -q "$target"; then sudo umount "$target" || echo "Disposable mount unmount failed: $target"; fi
   done
 }
@@ -129,6 +129,23 @@ run_tar /fixture/dest -xvf /fixture/dest/data.tar > "$w/full-extract.log" 2>&1 |
 if [ -f "$w/dest-full/synthetic-large.bin" ] && cmp -s "$w/source/space-test/synthetic-large.bin" "$w/dest-full/synthetic-large.bin"; then
   echo 'Unexpected full copy in undersized image'; exit 1
 fi
+# Enough capacity for the tar alone, but not for tar plus its extracted payload.
+mkdir "$w/dest-tight"
+truncate -s 40M "$w/synthetic-tight.img"
+[ -f "$w/synthetic-tight.img" ] && [ ! -L "$w/synthetic-tight.img" ]
+sudo mkfs.ext4 -q -F "$w/synthetic-tight.img"
+sudo mount -t ext4 -o loop "$w/synthetic-tight.img" "$w/dest-tight"
+[ "$(findmnt -n -o FSTYPE --target "$w/dest-tight")" = ext4 ]
+sudo chown "$(id -u):$(id -g)" "$w/dest-tight"
+sandbox_dest="$w/dest-tight"
+run_tar /fixture/source/space-test -cf /fixture/dest/data.tar ./. > "$w/tight-create.log" 2>&1
+test -s "$w/dest-tight/data.tar"
+tight_extract_rc=0
+run_tar /fixture/dest -xvf /fixture/dest/data.tar > "$w/tight-extract.log" 2>&1 || tight_extract_rc=$?
+[ "$tight_extract_rc" -ne 0 ] || { echo 'Expected tar-plus-extraction failure not observed'; exit 1; }
+if [ -f "$w/dest-tight/synthetic-large.bin" ] && cmp -s "$w/source/space-test/synthetic-large.bin" "$w/dest-tight/synthetic-large.bin"; then
+  echo 'Unexpected complete copy in tight image'; exit 1
+fi
 {
   echo '# Synthetic stock-derived BusyBox tar copy; not a hibernation test'
   echo 'ARM BusyBox b40cc88591ddbe851e0d37e41990e7e0a7e19b6ab195dac827e1f952efe51613, run under QEMU user mode in an offline restricted container.'
@@ -150,7 +167,9 @@ PY
   echo "24 MiB synthetic file, separate 16 MiB ext4 image: create exit $create_rc; extract exit $extract_rc; no complete extracted copy."
   echo 'Create diagnostics:'; tail -5 "$w/full-create.log"
   echo 'Extract diagnostics:'; tail -5 "$w/full-extract.log"
-  echo 'This models insufficient space, not the actual capacity or free space of the GU partition.'
+  echo "Same 24 MiB file, separate 40 MiB ext4 image: tar creation succeeded; extraction exit $tight_extract_rc; no complete copy."
+  echo 'Tight-image extract diagnostics:'; tail -5 "$w/tight-extract.log"
+  echo 'The archive and extracted files occupy the destination at the same time. This models insufficient space, not the actual capacity or free space of the GU partition.'
   echo '## Deliberately scheduled late write'
   echo 'Source was modified after archive finished and before extraction. Extracted file contained the earlier snapshot; late source change did not appear.'
   echo 'This illustrates a possible consistency window only. Real script timing and concurrent writes, app descriptors, actual Hibernate, the GU ext4 implementation, ACLs and SELinux were not tested.'
