@@ -65,6 +65,8 @@ cleanup() {
   if [ "$status" != 0 ]; then
     echo "Failure ($status): emulator log"; tail -50 "$work/emulator.txt" 2>/dev/null || true
     timeout -k 5 10 "$adb" devices -l || true
+    timeout -k 5 30 "$adb" shell dmesg 2>/dev/null | grep -iE 'ext4|read.only|error|avc:|denied' | tail -60 || true
+    timeout -k 5 30 "$adb" logcat -d -v brief 2>/dev/null | grep -iE 'PackageManager|installd|com.navitel|FATAL EXCEPTION' | tail -80 || true
   fi
   [ -z "$pid" ] || kill "$pid" 2>/dev/null || true
   sudo pkill -TERM -u emulatorlab 2>/dev/null || true
@@ -176,6 +178,12 @@ query_package() {
 }
 check_synthetic before
 query_package before
+# Match a normal read-only Android system mount. This is inside the disposable
+# emulator and does not change how any actual head unit is mounted.
+echo 'Remount disposable emulator system read-only before testing update'
+timeout -k 5 60 "$adb" shell mount -o ro,remount /system
+timeout -k 5 30 "$adb" shell cat /proc/mounts | tr -d '\r' | grep ' /system ' > "$work/mount-system.txt"
+grep -E ' /system [^ ]+ ro[, ]' "$work/mount-system.txt" || { cat "$work/mount-system.txt"; exit 1; }
 
 echo 'Negative control: unmodified candidate must be rejected as a differently signed update'
 timeout -k 10 300 "$adb" install -r "$new" > "$work/negative.txt" 2>&1 || true
@@ -227,6 +235,7 @@ check_synthetic launch
   echo 'Negative control: original differently signed candidate rejected; installer result:'
   grep -E 'Failure \[' "$work/negative.txt" | tr -d '\r'
   echo 'Matching certificate candidate installed as data update; original emulator system APK unchanged: yes.'
+  echo 'Emulator system mounted read-only during update:'; cat "$work/mount-system.txt"
   echo "UID before/after/userspace restart: $uid_before/$uid_after/$uid_restart"
   echo '## Package paths and selected version'
   cat "$work/path-before.txt" "$work/path-after.txt" "$work/path-restart.txt"
