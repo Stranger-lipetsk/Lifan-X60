@@ -1,7 +1,7 @@
 Phase 1: obtain two real Navitel APKs; no user files or license
-/tmp/navitel-installer-ui-lab.IKpND2/lifan-file-manager-test.zip: OK
-/tmp/navitel-installer-ui-lab.IKpND2/system.img: OK
-/tmp/navitel-installer-ui-lab.IKpND2/old.apk: OK
+/tmp/navitel-installer-ui-lab.sCDclu/lifan-file-manager-test.zip: OK
+/tmp/navitel-installer-ui-lab.sCDclu/system.img: OK
+/tmp/navitel-installer-ui-lab.sCDclu/old.apk: OK
 /home/runner/work/Lifan-X60/Lifan-X60/firmware/apks/com.navitel.apk: OK
 V1 Signer: certificate SHA-256 digest: a40da80a59d170caa950cf15c18c454d47a39b26989d8b640ecd745ba71bf5dc
 package: name='com.navitel' versionCode='201103033' versionName='9.13.73' platformBuildVersionName='9' platformBuildVersionCode='28' compileSdkVersion='23' compileSdkVersionCodename='6.0-2438415'
@@ -22,15 +22,15 @@ remount succeeded
 Phase 3: stop disposable emulator userspace before installing fixture system APK
 Filesystem               Size     Used     Free   Blksize
 /system                532.8M   333.7M   199.1M   4096
-/tmp/navitel-installer-ui-lab.IKpND2/old.apk: 1 file pushed, 0 skipped. 280.9 MB/s (111095055 bytes in 0.377s)
+/tmp/navitel-installer-ui-lab.sCDclu/old.apk: 1 file pushed, 0 skipped. 263.5 MB/s (111095055 bytes in 0.402s)
 Could not get context of /system/priv-app/Navitel-large.apk:  No data available
 Phase 3a: start Android userspace with old package
 Phase 3b: verify old system APK is unchanged and query package
-/system/priv-app/Navitel-large.apk: 1 file pulled, 0 skipped. 254.2 MB/s (111095055 bytes in 0.417s)
+/system/priv-app/Navitel-large.apk: 1 file pulled, 0 skipped. 161.5 MB/s (111095055 bytes in 0.656s)
 Initial package path: WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
 package:/system/priv-app/Navitel-large.apk
 package:/system/priv-app/Navitel-large.apk
-/tmp/navitel-installer-ui-lab.IKpND2/lab-pref.xml: 1 file pushed, 0 skipped. 2.6 MB/s (132 bytes in 0.000s)
+/tmp/navitel-installer-ui-lab.sCDclu/lab-pref.xml: 1 file pushed, 0 skipped. 2.0 MB/s (132 bytes in 0.000s)
 Create a second independent synthetic app to check unrelated data
 Success
 /data/data/com.navitel/shared_prefs/x60_lab_probe.xml: 1 file pulled, 0 skipped. 0.0 MB/s (132 bytes in 0.041s)
@@ -40,10 +40,10 @@ Independent synthetic app marker and preferences verified
 Remount disposable emulator system read-only before testing update
 /dev/block/vda /system ext4 ro,relatime,data=ordered 0 0
 Device-side md5 after read-only remount:
-a5a34cf38cf4d58f70ad8e23c934a15b  /tmp/navitel-installer-ui-lab.IKpND2/old.apk
+a5a34cf38cf4d58f70ad8e23c934a15b  /tmp/navitel-installer-ui-lab.sCDclu/old.apk
 a5a34cf38cf4d58f70ad8e23c934a15b  /system/priv-app/Navitel-large.apk
 Negative control: unmodified candidate must be rejected as a differently signed update
-/home/runner/work/Lifan-X60/Lifan-X60/firmware/apks/com.navitel.apk: 1 file pushed, 0 skipped. 293.1 MB/s (99176587 bytes in 0.323s)
+/home/runner/work/Lifan-X60/Lifan-X60/firmware/apks/com.navitel.apk: 1 file pushed, 0 skipped. 190.3 MB/s (99176587 bytes in 0.497s)
 Performing Push Install
 WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
 	pkg: /data/local/tmp/com.navitel.apk
@@ -54,17 +54,17 @@ package:/system/priv-app/Navitel-large.apk
 /data/data/ru.lifanx60.backupfixture/files/lab-marker.txt: 1 file pulled, 0 skipped. 0.0 MB/s (24 bytes in 0.041s)
 /data/data/ru.lifanx60.backupfixture/shared_prefs/lab_probe.xml: 1 file pulled, 0 skipped. 0.0 MB/s (132 bytes in 0.041s)
 Independent synthetic app marker and preferences verified
-/system/priv-app/Navitel-large.apk: 1 file pulled, 0 skipped. 230.7 MB/s (111095055 bytes in 0.459s)
+/system/priv-app/Navitel-large.apk: 1 file pulled, 0 skipped. 170.1 MB/s (111095055 bytes in 0.623s)
 System APK read-back still matched after negative control
 Emulate file-manager ACTION_VIEW and Android PackageInstaller in disposable emulator
 WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
 Unknown sources not enabled on emulator
 Lab failed (1); emulator diagnostics:
+USER_WARNING | AVD 'backup_x86' will run more smoothly with 4 CPU cores (currently using 2).
 WARNING      | Feature QuickbootFileBacked is disabled due to stability issues, if you really want that, the environment variable ANDROID_EMU_FORCE_QUICKBOOT_FILE_BACKED need to set to 1
-WARNING      | Downloaded protobuf file is corrupt.
 WARNING      | encryption is off
 WARNING      | FeatureControl is requesting a non existing feature.
-INFO         | Storing crashdata in: /tmp/android-signedupdatex86/emu-crash-37.2.13.db, detection is enabled for process: 2759
+INFO         | Storing crashdata in: /tmp/android-signedupdatex86/emu-crash-37.2.13.db, detection is enabled for process: 2793
 INFO         | Initializing gfxstream backend
 INFO         | startOpenglesRendererImpl: gpu info
 INFO         | 
@@ -108,19 +108,19 @@ WARNING      | UpdateCheck: failed to get the latest version, skipping check (cu
 List of devices attached
 emulator-5554          device product:sdk_x86 model:Android_SDK_built_for_x86 device:generic_x86 transport_id:1
 
-W/ActivityManager( 2017): No content provider found for permission revoke: file:///data/local/tmp/com.navitel.apk
-W/ActivityManager( 2017): No content provider found for permission revoke: file:///data/local/tmp/com.navitel.apk
-I/PackageManager( 2017): Copying native libraries to /data/app-lib/vmdl1862240542
-W/PackageManager( 2017): New package has a different signature: com.navitel
-<6>[    0.632056] Write protecting the kernel read-only data: 1868k
-<6>[    0.707557] EXT4-fs (vda): mounted filesystem with ordered data mode. Opts: (null)
-<4>[    0.709242] EXT4-fs (vdb): Ignoring removed nomblk_io_submit option
-<6>[    0.711724] EXT4-fs (vdb): mounted filesystem with ordered data mode. Opts: nomblk_io_submit,errors=panic
-<4>[    0.714242] EXT4-fs (vdc): Ignoring removed nomblk_io_submit option
-<6>[    0.716592] EXT4-fs (vdc): mounted filesystem with ordered data mode. Opts: nomblk_io_submit,errors=remount-ro
-<4>[    0.737107] EXT4-fs (vdc): Ignoring removed nomblk_io_submit option
-<6>[    0.739030] EXT4-fs (vdc): mounted filesystem with ordered data mode. Opts: nomblk_io_submit,errors=panic
-<6>[    6.896590] EXT4-fs (vda): re-mounted. Opts: (null)
-<6>[   16.497374] EXT4-fs (vda): re-mounted. Opts: (null)
+W/ActivityManager( 2016): No content provider found for permission revoke: file:///data/local/tmp/com.navitel.apk
+W/ActivityManager( 2016): No content provider found for permission revoke: file:///data/local/tmp/com.navitel.apk
+I/PackageManager( 2016): Copying native libraries to /data/app-lib/vmdl377605253
+W/PackageManager( 2016): New package has a different signature: com.navitel
+<6>[    0.652808] Write protecting the kernel read-only data: 1868k
+<6>[    0.754890] EXT4-fs (vda): mounted filesystem with ordered data mode. Opts: (null)
+<4>[    0.758140] EXT4-fs (vdb): Ignoring removed nomblk_io_submit option
+<6>[    0.760819] EXT4-fs (vdb): mounted filesystem with ordered data mode. Opts: nomblk_io_submit,errors=panic
+<4>[    0.763157] EXT4-fs (vdc): Ignoring removed nomblk_io_submit option
+<6>[    0.765693] EXT4-fs (vdc): mounted filesystem with ordered data mode. Opts: nomblk_io_submit,errors=remount-ro
+<4>[    0.787137] EXT4-fs (vdc): Ignoring removed nomblk_io_submit option
+<6>[    0.789978] EXT4-fs (vdc): mounted filesystem with ordered data mode. Opts: nomblk_io_submit,errors=panic
+<6>[    7.015739] EXT4-fs (vda): re-mounted. Opts: (null)
+<6>[   16.736155] EXT4-fs (vda): re-mounted. Opts: (null)
 Filesystem               Size     Used     Free   Blksize
 /system                532.8M   439.6M    93.1M   4096
