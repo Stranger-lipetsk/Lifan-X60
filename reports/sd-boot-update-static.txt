@@ -218,6 +218,9 @@ Symlinks: 413
 37: persist.service.        u:object_r:system_prop:s0
 38: persist.service.bdroid. u:object_r:bluetooth_prop:s0
 
+## Binary strings: system/app/fw_launcher_2016.08.12.01.apk (1 matches; not proof of execution)
+FW_Upgrade
+
 ## Text: system/bin/am (1 matching lines)
 8: exec app_process $base/bin com.android.commands.am.Am "$@"
 
@@ -234,7 +237,8 @@ Formatting...
 ## Text: system/bin/bmgr (1 matching lines)
 6: exec app_process $base/bin com.android.commands.bmgr.Bmgr "$@"
 
-## Text: system/bin/boot_mode_check.sh (5 matching lines)
+## Text: system/bin/boot_mode_check.sh (6 matching lines)
+3: SWAPIMAGE=/mnt/para_fw/backup_image/swap.img
 4: DATAIMAGE=/mnt/para_fw/backup_image/data.tar
 5: EMMC_NODE=/dev/block/mmcblk0
 24:         /system/bin/mke2fs -t ext4 ${EMMC_NODE}p5 
@@ -244,13 +248,16 @@ Formatting...
 ## Text: system/bin/bu (1 matching lines)
 5: exec app_process $base/bin com.android.commands.bu.Backup "$@"
 
-## Text: system/bin/build_emmc.sh (29 matching lines)
+## Text: system/bin/build_emmc.sh (40 matching lines)
 4: EMMC_NODE=/dev/block/mmcblk0
 7: BOOTIMG_PATH=$BUILD_OUT_PATH/boot.img
 8: UBOOT_BIN=$BUILD_OUT_PATH/u-boot.bin
 9: SYSTEMIMG=$BUILD_OUT_PATH/system.img
 11: DATAIMAGE=$BUILD_OUT_PATH/data.tar
+15: FW_UPGRADE_STATUS="/dev/temp/fw_status.cfg"
 40: UUID_CONFIG=config.ini
+49:     echo "$PROCESS_ERROR $ERRNO" > $FW_UPGRADE_STATUS
+74:         echo "$FLOW $COPIED_FILES_SIZE/$TOTAL_FILES_SIZE" > $FW_UPGRADE_STATUS
 108: #        echo "incorrect u-boot.bin location !"
 113:         echo "incorrect boot.img location !"
 118:         echo "incorrect system.img location !"
@@ -274,6 +281,14 @@ Formatting...
 238:     if mount -t ext4 ${EMMC_NODE}p6 $EMMC_MOUNT_PATH; then
 249:         echo "ERROR!! unable mount partition 6 ."
 258:         if ! mount ${EMMC_NODE}p7 ${EMMC_MOUNT_PATH}; then err_exit 6001; fi
+276:         echo "$PROCESS_UNZIP_MAPS_DONE $COPIED_FILES_SIZE/$TOTAL_FILES_SIZE" > $FW_UPGRADE_STATUS
+282: rm -f $FW_UPGRADE_STATUS
+283: touch $FW_UPGRADE_STATUS
+284: chmod 666 $FW_UPGRADE_STATUS
+290: touch $FW_UPGRADE_STATUS
+291: chmod 666 $FW_UPGRADE_STATUS
+292: echo "$PROCESS_FOMAT 5/0" > $FW_UPGRADE_STATUS
+300: echo "$PROCESS_END $COPIED_FILES_SIZE/$TOTAL_FILES_SIZE" > $FW_UPGRADE_STATUS
 
 ## Text: system/bin/chk_file_install.sh (1 matching lines)
 3: DST_FILE=/data/eGTouchA.ini
@@ -286,11 +301,50 @@ Formatting...
 4: dd if=/dev/zero of=/dev/block/mmcblk0boot0 count=10
 5: echo 1 > /sys/block/mmcblk0boot0/force_ro
 
-## Binary strings: system/bin/fw_upgrade (4 matches; not proof of execution)
+## Binary strings: system/bin/fw_upgrade (40 matches; not proof of execution)
+get_fw_upgrade_time
+exec_fw_upgrade
+handle_start_fw_upgrade
+peek_fw_upgrade_status
+/mnt/para_fw/sys_info.cfg
 /mnt/para_fw/config.ini
+/mnt/para_fw/video.cfg
+/mnt/para_fw/wl1271-nvs.bin
+[F:%s,L:%d]-pThis->fw_upgrade_time:%d
 /fw_data/MCU_FW.hex
+[F:%s,L:%d]-OPCODE_START_FW_UPGRADE
+/system/bin/build_emmc.sh
+[F:%s,L:%d]-exec_fw_upgrade error
+[F:%s,L:%d]-start fw_upgrade app
 /dev/block/mmcblk0p5
+/mnt/para_fw
+[F:%s,L:%d]-stop fw_upgrade app due to failure
 /mnt/extsd/config.ini
+fw_upgrade.c
+fw_upgrade.h
+OPCODE_START_FW_UPGRADE
+FW_UPGRADE_THREAD_INFO
+FW_UPGRADE_OBJ
+peek_fw_upgrade_status
+pFw_upgrade_obj
+err_fw_upgrade
+_fw_upgrade_thread_info
+pg_fw_upgrade_obj
+exec_fw_upgrade
+get_fw_upgrade_time
+/ADATA_SSD_2/alexlee_data_2/el-830-first/android_4_4_2/vendor/e-lead/firmware_upgrade/fw_upgrade_app
+fw_upgrade.c
+fw_upgrade_loop_thread
+handle_start_fw_upgrade
+init_fw_upgrade_obj
+release_fw_upgrade_obj
+fw_upgrade.c
+release_fw_upgrade_obj
+get_fw_upgrade_time
+pg_fw_upgrade_obj
+
+## Text: system/bin/general_conf.sh (1 matching lines)
+6: base_path=/mnt/para_fw
 
 ## Text: system/bin/ime (1 matching lines)
 6: exec app_process $base/bin com.android.commands.ime.Ime "$@"
@@ -331,6 +385,9 @@ mke2fs
 
 ## Text: system/bin/monkey (1 matching lines)
 7: exec app_process $base/bin com.android.commands.monkey.Monkey $*
+
+## Binary strings: system/bin/netd (1 matches; not proof of execution)
+/system/bin/oem-iptables-init.sh
 
 ## Text: system/bin/pm (1 matching lines)
 6: exec app_process $base/bin com.android.commands.pm.Pm "$@"
@@ -380,9 +437,11 @@ mke2fs_default_profile
 ## Text: system/bin/svc (1 matching lines)
 6: exec app_process $base/bin com.android.commands.svc.Svc $*
 
-## Text: system/bin/swap2extsd.sh (4 matching lines)
+## Text: system/bin/swap2extsd.sh (6 matching lines)
 3: cp /data/data.tar /mnt/media_rw/extsd/
 4: dd if=/dev/block/mmcblk0p2 of=/mnt/media_rw/extsd/swap.img
+6: #echo ***Save to /mnt/para_fw***
+7: #mkdir -p /mnt/para_fw/backup_image/
 8: #cp /data/data.tar /mnt/para_fw/backup_image/
 9: #dd if=/dev/block/mmcblk0p2 of=/mnt/para_fw/backup_image/swap.img
 
@@ -436,5 +495,1053 @@ mmcblk1boot
 ## Binary strings: system/usr/icu/icudt51l.dat (1 matches; not proof of execution)
 POP DIRECTIONAL FORMATTING
 
-Text matched lines: 265; binary matched strings: 80
+Text matched lines: 280; binary matched strings: 118
+
+## Full text for control flow: system/bin/build_emmc.sh
+1: #!/system/bin/sh
+2: 
+3: EMMC_MOUNT_PATH=/mnt/inand
+4: EMMC_NODE=/dev/block/mmcblk0
+5: BUILD_OUT_PATH=/fw_data
+6: FILE_BACKUP_PATH=$BUILD_OUT_PATH/backup
+7: BOOTIMG_PATH=$BUILD_OUT_PATH/boot.img
+8: UBOOT_BIN=$BUILD_OUT_PATH/u-boot.bin
+9: SYSTEMIMG=$BUILD_OUT_PATH/system.img
+10: SWAPIMAGE=$BUILD_OUT_PATH/swap.img
+11: DATAIMAGE=$BUILD_OUT_PATH/data.tar
+12: 
+13: 
+14: # Upgrade statement
+15: FW_UPGRADE_STATUS="/dev/temp/fw_status.cfg"
+16: PROCESS_START="proc_start"
+17: PROCESS_UNZIP_ROOTFS="unzip_rootfs"
+18: PROCESS_UNZIP_ROOTFS_DONE="unzip_rootfs_done"
+19: PROCESS_UNZIP_MAPS="unzip_maps"
+20: PROCESS_UNZIP_MAPS_DONE="unzip_maps_done"
+21: PROCESS_END="proc_finished"
+22: PROCESS_ERROR="proc_error"
+23: PROCESS_FOMAT="format_partition"
+24: 
+25: # Total size of files
+26: TOTAL_FILES_SIZE=0
+27: COPIED_FILES_SIZE=0
+28: VARMAP_SIZE=0
+29: 
+30: # partition size in MB
+31: BOOTLOAD_RESERVE=8
+32: BOOT_ROM_SIZE=8
+33: SYSTEM_ROM_SIZE=512
+34: SWAP_SIZE=256
+35: DATA_SIZE=512
+36: EL_DATA=384
+37: SYSTEM_RESERVE=128
+38: 
+39: # Files needs to backup
+40: UUID_CONFIG=config.ini
+41: 
+42: # Files relate  Navi
+43: NAVI_MAP_ARCHIVE=$BUILD_OUT_PATH/Navngo.tgz
+44: 
+45: function err_exit()
+46: {
+47:     ERRNO=$1
+48:     echo "ERROR CODE : $ERRNO, TERMINATE PROCESS!!"
+49:     echo "$PROCESS_ERROR $ERRNO" > $FW_UPGRADE_STATUS
+50:     exit
+51: }
+52: 
+53: 
+54: # Function continue check tar process running in backround
+55: # Pass partition keyword for grep.
+56: check_bg_process()
+57: {
+58:     PARTITION=$1
+59:     FLOW=$2
+60: 
+61:     EMPTY_DISK_USED=$(df $MOUNT_PATH | grep $PARTITION | awk '{ print $3 }')
+62:     tmp=$COPIED_FILES_SIZE
+63: 
+64:     ### echo "debug : EMPTY_DISK_USED = $EMPTY_DISK_USED"
+65:     ### echo "debug : BG_PID = $BG_PID"
+66: 
+67:     while kill -0 $BG_PID
+68:     do
+69:         CUR_DISK_USED=$(df $MOUNT_PATH | grep $PARTITION | awk '{ print $3 }')
+70: 
+71:         ### echo "debug : CUR_DISK_USED = $CUR_DISK_USED"
+72: 
+73:         let "COPIED_FILES_SIZE = tmp + (CUR_DISK_USED - EMPTY_DISK_USED)"
+74:         echo "$FLOW $COPIED_FILES_SIZE/$TOTAL_FILES_SIZE" > $FW_UPGRADE_STATUS
+75:         sleep 1
+76:     done
+77:     
+78:     wait $BG_PID
+79:     BG_STATUS=$?
+80: 
+81:     ### echo "debug : BG_STATUS = $BG_STATUS"
+82: }
+83: 
+84: function fool_proofing_operation
+85: {
+86:     # check whether had root role
+87:     USERID=`id -u`
+88:     if [ "$USERID" -ne "0" ]; then
+89:         echo "need root permission !!"
+90:         err_exit 1001
+91:     fi
+92:     # check whether device node is exist
+93:     if [ ! -e "$EMMC_NODE" ]; then
+94:         echo "$EMMC_NODE not exist !!"
+95:         err_exit 1002
+96:     fi
+97:     # check invalid node
+98:     if [ "$EMMC_NODE" == /dev/ ]; then
+99:         echo "Not specify the emmc device node !"
+100:         err_exit 1003
+101:     fi
+102: 
+103: }
+104: 
+105: function check_essential_files
+106: {
+107: #    if [ ! -e "$UBOOT_BIN" ]; then
+108: #        echo "incorrect u-boot.bin location !"
+109: #        err_exit 1004
+110: #    fi
+111: 
+112:     if [ ! -e "$BOOTIMG_PATH" ]; then
+113:         echo "incorrect boot.img location !"
+114:         err_exit 1005
+115:     fi
+116: 
+117:     if [ ! -e "$SYSTEMIMG" ]; then
+118:         echo "incorrect system.img location !"
+119:         err_exit 1006
+120:     fi
+121:         
+122: }
+123: 
+124: 
+125: total_size=`sfdisk -s ${EMMC_NODE}`
+126: total_size=`expr ${total_size} / 1024`
+127: boot_rom_sizeb=`expr ${BOOT_ROM_SIZE} + ${BOOTLOAD_RESERVE}`
+128: extend_size=`expr ${total_size} - ${boot_rom_sizeb} - ${SWAP_SIZE} - ${SYSTEM_ROM_SIZE} - ${SYSTEM_RESERVE}`
+129: navi_size=`expr ${extend_size} - ${DATA_SIZE} - ${EL_DATA}`
+130: 
+131: function partition_operation
+132: {
+133: 
+134:     # unmount all emmc's partitions
+135:     umount ${EMMC_NODE}*
+136: 
+137: sfdisk --force -uM ${EMMC_NODE} << EOF
+138: ,${boot_rom_sizeb},83
+139: ,${SWAP_SIZE},83
+140: ,${SYSTEM_ROM_SIZE},83
+141: ,${extend_size},5
+142: ,${DATA_SIZE},83
+143: ,${EL_DATA},83
+144: ,${navi_size},0C
+145: EOF
+146: if [ ! $? -eq 0 ]; then err_exit 3001; fi
+147: 
+148: sfdisk --force -uM ${EMMC_NODE} -N1 << EOF
+149: $BOOTLOAD_RESERVE,$BOOT_ROM_SIZE,83
+150: EOF
+151: if [ ! $? -eq 0 ]; then err_exit 3002; fi
+152: }
+153: 
+154: function format_operation
+155: {
+156:     if ! /system/bin/mke2fs -t ext4 ${EMMC_NODE}p2; then err_exit 3003; fi
+157:     if ! /system/bin/mke2fs -t ext4 ${EMMC_NODE}p3; then err_exit 3004; fi
+158:     if ! /system/bin/mke2fs -t ext4 ${EMMC_NODE}p5; then err_exit 3005; fi
+159:     if ! /system/bin/mke2fs -t ext4 ${EMMC_NODE}p6; then err_exit 3006; fi
+160:     if ! /system/bin/newfs_msdos -F 32 ${EMMC_NODE}p7; then err_exit 3007; fi
+161: }
+162: 
+163: function install_operation
+164: {
+165:     # enable inand boot partition 1
+166:     echo 8 > /sys/devices/platform/sdhci-esdhc-imx.2/mmc_host/mmc0/mmc0:0001/boot_config
+167: 
+168:     # install u-boot.bin
+169:     if [ -e "$UBOOT_BIN" ]
+170:     then
+171:         echo 0 > /sys/block/mmcblk0boot0/force_ro
+172:         if ! dd if=$UBOOT_BIN of=/dev/block/mmcblk0boot0; then
+173:             echo "ERROR! write uboot fail!"
+174:             echo 1 > /sys/block/mmcblk0boot0/force_ro
+175:             err_exit 5001
+176:         fi
+177:         echo 1 > /sys/block/mmcblk0boot0/force_ro
+178:     fi
+179: 
+180:     # install boot.img in partition 1
+181:     if ! dd if=$BOOTIMG_PATH of=${EMMC_NODE}p1; then
+182:         echo "ERROR! write boot.img fail!"
+183:         err_exit 5002
+184:     fi
+185:     sync
+186: 
+187:     # install system.img in partition 3
+188:     if ! dd if=$SYSTEMIMG of=${EMMC_NODE}p3; then
+189:         echo "ERROR! write system.img fail!"
+190:         err_exit 5003
+191:     fi
+192:     sync
+193: 	
+194:     if [ -e "$SWAPIMAGE" ] && [ -e "$DATAIMAGE" ] 
+195:     then
+196: 		dd if=$SWAPIMAGE   of=${EMMC_NODE}p2
+197: 		mount -t ext4 ${EMMC_NODE}p5 /mnt/media_rw/usb2/
+198: 		tar -xvf $DATAIMAGE -C /mnt/media_rw/usb2
+199: 		sync
+200: 		umount  /mnt/media_rw/usb2
+201: 		# Backup swap image to el_data partition
+202: 		mount -t ext4 ${EMMC_NODE}p6 /mnt/media_rw/usb2/
+203:         mkdir /mnt/media_rw/usb2/backup_image
+204: 		cp $SWAPIMAGE /mnt/media_rw/usb2/backup_image/
+205: 		cp $DATAIMAGE /mnt/media_rw/usb2/backup_image/
+206: 		sync
+207: 		umount  /mnt/media_rw/usb2
+208:     fi
+209: 	sync
+210: }
+211: 
+212: function backup_operation
+213: {
+214:     rm -rf $FILE_BACKUP_PATH
+215:     mkdir -p $FILE_BACKUP_PATH
+216:     mkdir -p $EMMC_MOUNT_PATH
+217: 
+218:     if mount -t ext4 ${EMMC_NODE}p6 $EMMC_MOUNT_PATH; then
+219: 
+220:         if [ -e "$EMMC_MOUNT_PATH"/"$UUID_CONFIG" ]; then
+221: 
+222:             if ! cp -f $EMMC_MOUNT_PATH/$UUID_CONFIG $FILE_BACKUP_PATH/; then
+223:                 umount $EMMC_MOUNT_PATH
+224:                 err_exit 2001
+225:             fi
+226:         else
+227:             echo "WARNING!! uuid config file not exist."
+228:         fi
+229:         umount $EMMC_MOUNT_PATH
+230:     else
+231:         echo "ERROR!! unable mount partition 6 ."
+232:         err_exit 2002
+233:     fi
+234: }
+235: 
+236: function restore_operation
+237: {
+238:     if mount -t ext4 ${EMMC_NODE}p6 $EMMC_MOUNT_PATH; then
+239: 
+240:         if [ -e "$FILE_BACKUP_PATH"/"$UUID_CONFIG" ]; then
+241: 
+242:             if ! cp -f $FILE_BACKUP_PATH/$UUID_CONFIG $EMMC_MOUNT_PATH/; then
+243:                 umount $EMMC_MOUNT_PATH
+244:                 err_exit 4001
+245:             fi
+246:         fi
+247:         umount $EMMC_MOUNT_PATH
+248:     else
+249:         echo "ERROR!! unable mount partition 6 ."
+250:         err_exit 4002
+251:     fi
+252: }
+253: 
+254: function install_navi_operation
+255: {
+256:     if [ -f "$NAVI_MAP_ARCHIVE"_aa ]; then
+257:         # start to extract navi map archive
+258:         if ! mount ${EMMC_NODE}p7 ${EMMC_MOUNT_PATH}; then err_exit 6001; fi
+259:             
+260:         mkdir -p $EMMC_MOUNT_PATH/Navngo
+261:         for file in "$NAVI_MAP_ARCHIVE"_*
+262:         do
+263:             VARMAP_SIZE=$(du -s $file | awk '{print $1}')
+264:             VARMAP_SIZE=`expr "$VARMAP_SIZE" + "$VARMAP_SIZE" / 2`
+265:             TOTAL_FILES_SIZE=`expr "$TOTAL_FILES_SIZE" + "$VARMAP_SIZE"`
+266:         done
+267: 
+268:         cat "$NAVI_MAP_ARCHIVE"_* | tar -xzf - -C $EMMC_MOUNT_PATH/ &
+269: 
+270:         BG_PID=$!
+271:         check_bg_process p7 $PROCESS_UNZIP_MAPS
+272:         if [ ! "$BG_STATUS" -eq 0 ]; then err_exit 6002; fi
+273: 
+274:         echo "untar map files complete"
+275:         sync
+276:         echo "$PROCESS_UNZIP_MAPS_DONE $COPIED_FILES_SIZE/$TOTAL_FILES_SIZE" > $FW_UPGRADE_STATUS
+277:         
+278:         umount $EMMC_MOUNT_PATH
+279:     fi
+280: }
+281: 
+282: rm -f $FW_UPGRADE_STATUS
+283: touch $FW_UPGRADE_STATUS
+284: chmod 666 $FW_UPGRADE_STATUS
+285: 
+286: # main entry point
+287: fool_proofing_operation
+288: check_essential_files
+289: backup_operation
+290: touch $FW_UPGRADE_STATUS
+291: chmod 666 $FW_UPGRADE_STATUS
+292: echo "$PROCESS_FOMAT 5/0" > $FW_UPGRADE_STATUS
+293: partition_operation
+294: format_operation
+295: restore_operation
+296: install_operation
+297: install_navi_operation
+298: 
+299: sync
+300: echo "$PROCESS_END $COPIED_FILES_SIZE/$TOTAL_FILES_SIZE" > $FW_UPGRADE_STATUS
+301: exit
+302: 
+303: 
+
+## Full text for control flow: system/bin/boot_mode_check.sh
+1: #!/system/bin/sh
+2: 
+3: SWAPIMAGE=/mnt/para_fw/backup_image/swap.img
+4: DATAIMAGE=/mnt/para_fw/backup_image/data.tar
+5: EMMC_NODE=/dev/block/mmcblk0
+6: 
+7: check_boot_mode()
+8: {
+9:         echo "check_boot_mode"
+10:         if [ -f /proc/el_boot_mode ]; then
+11:                 BOOT_MODE=`cat /proc/el_boot_mode`
+12:                 if [ $BOOT_MODE == "0" ]; then
+13:                         echo "Lost SWAP image!!"
+14:                         return 1
+15:                 fi
+16:         fi
+17:         return 0
+18: }
+19: 
+20: recovery_swap()
+21: {
+22:     if [ -e $SWAPIMAGE ] && [ -e $DATAIMAGE ]
+23:     then
+24:         /system/bin/mke2fs -t ext4 ${EMMC_NODE}p5 
+25:         mount -t ext4 ${EMMC_NODE}p5 /mnt/media_rw/usb2/
+26:         cd /mnt/media_rw/usb2
+27:         tar -xvf $DATAIMAGE
+28:         dd if=$SWAPIMAGE   of=${EMMC_NODE}p2
+29:         reboot
+30:     fi
+31:     return 0
+32: }
+33: 
+34: # STEP_1 check boot mode
+35: check_boot_mode
+36: if [ $? == "0" ]; then
+37:     echo "QuickBoot mode or normal boot!!"
+38:     exit
+39: fi
+40: 
+41: #SETP_2 recovery swap image
+42: recovery_swap
+43: 
+44: exit 0
+
+## Full text for control flow: init.rc
+1: # Copyright (C) 2015 The Android Open Source Project
+2: #
+3: # IMPORTANT: Do not create world writable files or directories.
+4: # This is a common source of Android security bugs.
+5: #
+6: 
+7: import /init.environ.rc
+8: import /init.usb.rc
+9: import /init.${ro.hardware}.rc
+10: import /init.trace.rc
+11: 
+12: on early-init
+13:     # Set init and its forked children's oom_adj.
+14:     write /proc/1/oom_adj -16
+15: 
+16:     # Set the security context for the init process.
+17:     # This should occur before anything else (e.g. ueventd) is started.
+18:     setcon u:r:init:s0
+19: 
+20:     start ueventd
+21: 
+22: # create mountpoints
+23:     mkdir /mnt 0775 root system
+24: 
+25: on init
+26: 
+27: sysclktz 0
+28: 
+29: loglevel 3
+30: 
+31: # setup the global environment
+32:     export PRODUCT_MODEL EL-830C-LF01
+33:     export DEFAULT_TIMEZONE Asia/Taipei
+34:     export SHM_MOUNTPOINT /mnt/shm
+35:     export LIGHTSENSOR_PATH /sys/class/i2c-adapter/i2c-1/1-0044
+36:     export VPU_FW_PATH /system/lib/firmware/vpu
+37:     export CODEC_SHM_PATH /mnt/shm
+38:     export CORE_REGISTER_FILE /system/etc/core_register
+39:     export COMPONENT_REGISTER_FILE /system/etc/component_register
+40:     export CONTENTPIPE_REGISTER_FILE /system/etc/contentpipe_register
+41: 
+42: # Backward compatibility
+43:     symlink /system/etc /etc
+44:     symlink /sys/kernel/debug /d
+45: 
+46: # Right now vendor lives on the same filesystem as system,
+47: # but someday that may change.
+48:     symlink /system/vendor /vendor
+49: 
+50: # Create cgroup mount point for cpu accounting
+51:     mkdir /acct
+52:     mount cgroup none /acct cpuacct
+53:     mkdir /acct/uid
+54: 
+55: # Create cgroup mount point for memory
+56:     mount tmpfs none /sys/fs/cgroup mode=0750,uid=0,gid=1000
+57:     mkdir /sys/fs/cgroup/memory 0750 root system
+58:     mount cgroup none /sys/fs/cgroup/memory memory
+59:     write /sys/fs/cgroup/memory/memory.move_charge_at_immigrate 1
+60:     chown root system /sys/fs/cgroup/memory/tasks
+61:     chmod 0660 /sys/fs/cgroup/memory/tasks
+62:     mkdir /sys/fs/cgroup/memory/sw 0750 root system
+63:     write /sys/fs/cgroup/memory/sw/memory.swappiness 100
+64:     write /sys/fs/cgroup/memory/sw/memory.move_charge_at_immigrate 1
+65:     chown root system /sys/fs/cgroup/memory/sw/tasks
+66:     chmod 0660 /sys/fs/cgroup/memory/sw/tasks
+67: 	
+68:     mkdir /fw_data 0777 system system
+69: 
+70:     mkdir /system
+71:     mkdir /data 0771 system system
+72:     mkdir /cache 0770 system cache
+73:     mkdir /config 0500 root root
+74: 
+75:     mkdir /device 0771 system system
+76:     # See storage config details at http://source.android.com/tech/storage/
+77:     mkdir /mnt/shell 0700 shell shell
+78:     mkdir /mnt/media_rw 0751 media_rw media_rw
+79:     mkdir /storage 0751 root sdcard_r
+80: 
+81:     mkdir /mnt/media_rw/extsd 0755 system system
+82:     symlink /mnt/media_rw/extsd /storage/extsd
+83: 
+84:     mkdir /mnt/media_rw/usb1 0755 system system
+85:     symlink /mnt/media_rw/usb1 /storage/usb1
+86:     mkdir /mnt/media_rw/usb2 0755 system system
+87:     symlink /mnt/media_rw/usb2 /storage/usb2
+88:     
+89: 	mkdir /mnt/media_rw/emmc_data 0755 system system
+90:     symlink /mnt/media_rw/emmc_data /storage/emmc_data
+91:     
+92:     # Directory for putting things only root should see.
+93:     mkdir /mnt/secure 0700 root root
+94:     # Create private mountpoint so we can MS_MOVE from staging
+95:     mount tmpfs tmpfs /mnt/secure mode=0700,uid=0,gid=0
+96: 
+97:     # Directory for staging bindmounts
+98:     mkdir /mnt/secure/staging 0700 root root
+99: 
+100:     # Directory-target for where the secure container
+101:     # imagefile directory will be bind-mounted
+102:     mkdir /mnt/secure/asec  0700 root root
+103: 
+104:     # Secure container public mount points.
+105:     mkdir /mnt/asec  0700 root system
+106:     mount tmpfs tmpfs /mnt/asec mode=0755,gid=1000
+107: 
+108:     # Filesystem image public mount points.
+109:     mkdir /mnt/obb 0700 root system
+110:     mount tmpfs tmpfs /mnt/obb mode=0755,gid=1000
+111: 
+112:     # shared memory used by middleware
+113:     mkdir /mnt/shm  0775 system graphics
+114:     mount tmpfs tmpfs /mnt/shm mode=0775,uid=1000,gid=1003,size=1m
+115:     write /proc/sys/kernel/panic_on_oops 1
+116:     write /proc/sys/kernel/hung_task_timeout_secs 0
+117:     write /proc/cpu/alignment 4
+118:     write /proc/sys/kernel/sched_latency_ns 10000000
+119:     write /proc/sys/kernel/sched_wakeup_granularity_ns 2000000
+120:     write /proc/sys/kernel/sched_compat_yield 1
+121:     write /proc/sys/kernel/sched_child_runs_first 0
+122:     write /proc/sys/kernel/randomize_va_space 2
+123:     write /proc/sys/kernel/kptr_restrict 2
+124:     write /proc/sys/kernel/dmesg_restrict 1
+125:     write /proc/sys/vm/mmap_min_addr 32768
+126:     write /proc/sys/net/ipv4/ping_group_range "0 2147483647"
+127:     write /proc/sys/kernel/sched_rt_runtime_us 950000
+128:     write /proc/sys/kernel/sched_rt_period_us 1000000
+129: 
+130: # Create cgroup mount points for process groups
+131:     mkdir /dev/cpuctl
+132:     mount cgroup none /dev/cpuctl cpu
+133:     chown system system /dev/cpuctl
+134:     chown system system /dev/cpuctl/tasks
+135:     chmod 0660 /dev/cpuctl/tasks
+136:     write /dev/cpuctl/cpu.shares 1024
+137:     write /dev/cpuctl/cpu.rt_runtime_us 950000
+138:     write /dev/cpuctl/cpu.rt_period_us 1000000
+139: 
+140:     mkdir /dev/cpuctl/apps
+141:     chown system system /dev/cpuctl/apps/tasks
+142:     chmod 0666 /dev/cpuctl/apps/tasks
+143:     write /dev/cpuctl/apps/cpu.shares 1024
+144:     write /dev/cpuctl/apps/cpu.rt_runtime_us 800000
+145:     write /dev/cpuctl/apps/cpu.rt_period_us 1000000
+146: 
+147:     mkdir /dev/cpuctl/apps/bg_non_interactive
+148:     chown system system /dev/cpuctl/apps/bg_non_interactive/tasks
+149:     chmod 0666 /dev/cpuctl/apps/bg_non_interactive/tasks
+150:     # 5.0 %
+151:     write /dev/cpuctl/apps/bg_non_interactive/cpu.shares 52
+152:     write /dev/cpuctl/apps/bg_non_interactive/cpu.rt_runtime_us 700000
+153:     write /dev/cpuctl/apps/bg_non_interactive/cpu.rt_period_us 1000000
+154: 
+155: # Create directory for upgrade
+156:     mkdir /dev/temp 0777 system system
+157: 
+158: # qtaguid will limit access to specific data based on group memberships.
+159: #   net_bw_acct grants impersonation of socket owners.
+160: #   net_bw_stats grants access to other apps' detailed tagged-socket stats.
+161:     chown root net_bw_acct /proc/net/xt_qtaguid/ctrl
+162:     chown root net_bw_stats /proc/net/xt_qtaguid/stats
+163: 
+164: # Allow everybody to read the xt_qtaguid resource tracking misc dev.
+165: # This is needed by any process that uses socket tagging.
+166:     chmod 0644 /dev/xt_qtaguid
+167: 
+168: # Create location for fs_mgr to store abbreviated output from filesystem
+169: # checker programs.
+170:     mkdir /dev/fscklogs 0770 root system
+171: 
+172: on post-fs
+173:     # once everything is setup, no need to modify /
+174:     # mount rootfs rootfs / ro remount
+175:     # mount shared so changes propagate into child namespaces
+176:     mount rootfs rootfs / shared rec
+177:     mount tmpfs tmpfs /mnt/secure private rec
+178: 
+179:     # We chown/chmod /cache again so because mount is run as root + defaults
+180:     chown system cache /cache
+181:     chmod 0770 /cache
+182:     # We restorecon /cache in case the cache partition has been reset.
+183:     restorecon /cache
+184: 
+185:     # This may have been created by the recovery system with odd permissions
+186:     chown system cache /cache/recovery
+187:     chmod 0770 /cache/recovery
+188:     # This may have been created by the recovery system with the wrong context.
+189:     restorecon /cache/recovery
+190: 
+191:     #change permissions on vmallocinfo so we can grab it from bugreports
+192:     chown root log /proc/vmallocinfo
+193:     chmod 0440 /proc/vmallocinfo
+194: 
+195:     chown root log /proc/slabinfo
+196:     chmod 0440 /proc/slabinfo
+197: 
+198:     #change permissions on kmsg & sysrq-trigger so bugreports can grab kthread stacks
+199:     chown root system /proc/kmsg
+200:     chmod 0440 /proc/kmsg
+201:     chown root system /proc/sysrq-trigger
+202:     chmod 0220 /proc/sysrq-trigger
+203:     chown system log /proc/last_kmsg
+204:     chmod 0440 /proc/last_kmsg
+205: 
+206:     # create the lost+found directories, so as to enforce our permissions
+207:     mkdir /cache/lost+found 0770 root root
+208: 
+209: on post-fs-data
+210:     mount ext4 loop@/fw_data/sd_data.img /data
+211:     # We chown/chmod /data again so because mount is run as root + defaults
+212:     chown system system /data
+213:     chmod 0771 /data
+214:     # We restorecon /data in case the userdata partition has been reset.
+215:     restorecon /data
+216: 
+217:     # Avoid predictable entropy pool. Carry over entropy from previous boot.
+218:     copy /data/system/entropy.dat /dev/urandom
+219: 
+220:     # Create dump dir and collect dumps.
+221:     # Do this before we mount cache so eventually we can use cache for
+222:     # storing dumps on platforms which do not have a dedicated dump partition.
+223:     mkdir /data/dontpanic 0750 root log
+224: 
+225:     # Collect apanic data, free resources and re-arm trigger
+226:     copy /proc/apanic_console /data/dontpanic/apanic_console
+227:     chown root log /data/dontpanic/apanic_console
+228:     chmod 0640 /data/dontpanic/apanic_console
+229: 
+230:     copy /proc/apanic_threads /data/dontpanic/apanic_threads
+231:     chown root log /data/dontpanic/apanic_threads
+232:     chmod 0640 /data/dontpanic/apanic_threads
+233: 
+234:     write /proc/apanic_console 1
+235: 
+236:     mkdir /data/media 0770 media_rw media_rw
+237: 
+238:     # create basic filesystem structure
+239:     mkdir /data/misc 01771 system misc
+240:     mkdir /data/misc/adb 02750 system shell
+241:     mkdir /data/misc/bluedroid 0770 bluetooth net_bt_stack
+242:     mkdir /data/misc/bluetooth 0770 system system
+243:     mkdir /data/misc/keystore 0700 keystore keystore
+244:     mkdir /data/misc/keychain 0771 system system
+245:     mkdir /data/misc/radio 0770 system radio
+246:     mkdir /data/misc/sms 0770 system radio
+247:     mkdir /data/misc/zoneinfo 0775 system system
+248:     mkdir /data/misc/vpn 0770 system vpn
+249:     mkdir /data/misc/systemkeys 0700 system system
+250:     # give system access to wpa_supplicant.conf for backup and restore
+251:     mkdir /data/misc/wifi 0770 wifi wifi
+252:     mkdir /data/misc/wifi/sockets 0770 wifi wifi
+253:     ## broadcom modify  mkdir /data/misc/wifi/wpa_supplicant 0770 wifi wifi
+254:     mkdir /data/misc/dhcp 0770 dhcp dhcp
+255:     chown dhcp system /data/misc/dhcp
+256:     chmod 0660 /data/misc/wifi/wpa_supplicant.conf
+257:     chmod 0775 /data/misc/wifi/ipconfig.txt
+258:     chmod 0775 /system/etc/dhcpcd/dhcpcd-run-hooks
+259:     mkdir /data/local 0751 root root
+260:     mkdir /data/misc/media 0700 media media
+261: 
+262:     # For security reasons, /data/local/tmp should always be empty.
+263:     # Do not place files or directories in /data/local/tmp
+264:     mkdir /data/local/tmp 0771 shell shell
+265:     mkdir /data/data 0771 system system
+266:     mkdir /data/app-private 0771 system system
+267:     mkdir /data/app-asec 0700 root root
+268:     mkdir /data/app-lib 0771 system system
+269:     mkdir /data/app 0771 system system
+270:     mkdir /data/app/ing 0771 root root
+271:     mkdir /data/property 0700 root root
+272:     mkdir /data/ssh 0750 root shell
+273:     mkdir /data/ssh/empty 0700 root root
+274: 
+275:     # create dalvik-cache, so as to enforce our permissions
+276:     mkdir /data/dalvik-cache 0771 system system
+277: 
+278:     # create resource-cache and double-check the perms
+279:     mkdir /data/resource-cache 0771 system system
+280:     chown system system /data/resource-cache
+281:     chmod 0771 /data/resource-cache
+282: 
+283:     # create the lost+found directories, so as to enforce our permissions
+284:     mkdir /data/lost+found 0770 root root
+285: 
+286:     # create directory for DRM plug-ins - give drm the read/write access to
+287:     # the following directory.
+288:     mkdir /data/drm 0770 drm drm
+289: 
+290:     # create directory for MediaDrm plug-ins - give drm the read/write access to
+291:     # the following directory.
+292:     mkdir /data/mediadrm 0770 mediadrm mediadrm
+293: 
+294:     # symlink to bugreport storage location
+295:     symlink /data/data/com.android.shell/files/bugreports /data/bugreports
+296: 
+297:     # Separate location for storing security policy files on data
+298:     mkdir /data/security 0711 system system
+299: 
+300:     # If there is no fs-post-data action in the init.<device>.rc file, you
+301:     # must uncomment this line, otherwise encrypted filesystems
+302:     # won't work.
+303:     # Set indication (checked by vold) that we have finished this action
+304:     setprop vold.post_fs_data_done 1
+305:     
+306: 	# for normal boot, flag set to 1
+307:     setprop rw.hb_boot_finished 1
+308: 	
+309:     insmod /system/lib/modules/elead_gpio.ko
+310:     insmod /system/lib/modules/gt9xx.ko
+311: 
+312: on early-boot
+313:     # set RLIMIT_MEMLOCK to 64MB
+314:     setrlimit 8 67108864 67108864
+315: 
+316: on boot
+317: # basic network init
+318:     ifup lo
+319:     hostname localhost
+320:     domainname localdomain
+321: 
+322: # set RLIMIT_NICE to allow priorities from 19 to -20
+323:     setrlimit 13 40 40
+324: 
+325: # Memory management.  Basic kernel parameters, and allow the high
+326: # level system server to be able to adjust the kernel OOM driver
+327: # parameters to match how it is managing things.
+328: 
+329:     write /proc/sys/vm/overcommit_memory 1
+330:     write /proc/sys/vm/min_free_order_shift 4
+331:     chown root system /sys/module/lowmemorykiller/parameters/adj
+332:     chmod 0664 /sys/module/lowmemorykiller/parameters/adj
+333:     chown root system /sys/module/lowmemorykiller/parameters/minfree
+334:     chmod 0664 /sys/module/lowmemorykiller/parameters/minfree
+335: 
+336:     # Tweak background writeout
+337:     write /proc/sys/vm/dirty_expire_centisecs 50
+338:     write /proc/sys/vm/dirty_writeback_centisecs 100
+339:     write /proc/sys/vm/dirty_background_ratio  5
+340: 
+341:     # Tweak the mmc device read ahead buffer size
+342:     write /sys/block/mmcblk0/queue/read_ahead_kb 2048
+343:     write /sys/block/mmcblk1/queue/read_ahead_kb 2048
+344: 
+345:     # Permissions for System Server and daemons.
+346:     chown radio system /sys/android_power/state
+347:     chown radio system /sys/android_power/request_state
+348:     chown radio system /sys/android_power/acquire_full_wake_lock
+349:     chown radio system /sys/android_power/acquire_partial_wake_lock
+350:     chown radio system /sys/android_power/release_wake_lock
+351:     chown system system /sys/power/autosleep
+352:     chown system system /sys/power/state
+353:     chown system system /sys/power/wakeup_count
+354:     chown radio system /sys/power/wake_lock
+355:     chown radio system /sys/power/wake_unlock
+356:     chmod 0660 /sys/power/state
+357:     chmod 0660 /sys/power/wake_lock
+358:     chmod 0660 /sys/power/wake_unlock
+359: 
+360:     # Assume SMP uses shared cpufreq policy for all CPUs
+361:     chown system system /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+362:     chmod 0660 /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+363: 
+364:     chown system system /sys/class/timed_output/vibrator/enable
+365:     chown system system /sys/class/leds/keyboard-backlight/brightness
+366:     chown system system /sys/class/leds/lcd-backlight/brightness
+367:     chown system system /sys/class/leds/button-backlight/brightness
+368:     chown system system /sys/class/leds/jogball-backlight/brightness
+369:     chown system system /sys/class/leds/red/brightness
+370:     chown system system /sys/class/leds/green/brightness
+371:     chown system system /sys/class/leds/blue/brightness
+372:     chown system system /sys/class/leds/red/device/grpfreq
+373:     chown system system /sys/class/leds/red/device/grppwm
+374:     chown system system /sys/class/leds/red/device/blink
+375:     chown system system /sys/class/timed_output/vibrator/enable
+376:     chown system system /sys/module/sco/parameters/disable_esco
+377:     chown system system /sys/kernel/ipv4/tcp_wmem_min
+378:     chown system system /sys/kernel/ipv4/tcp_wmem_def
+379:     chown system system /sys/kernel/ipv4/tcp_wmem_max
+380:     chown system system /sys/kernel/ipv4/tcp_rmem_min
+381:     chown system system /sys/kernel/ipv4/tcp_rmem_def
+382:     chown system system /sys/kernel/ipv4/tcp_rmem_max
+383:     chown root radio /proc/cmdline
+384: 
+385: # Set these so we can remotely update SELinux policy
+386:     chown system system /sys/fs/selinux/load
+387:     chown system system /sys/fs/selinux/enforce
+388: 
+389: # Define TCP buffer sizes for various networks
+390: #   ReadMin, ReadInitial, ReadMax, WriteMin, WriteInitial, WriteMax,
+391:     setprop net.tcp.buffersize.default  4096,87380,110208,4096,16384,110208
+392:     setprop net.tcp.buffersize.wifi     524288,1048576,2097152,262144,524288,1048576
+393:     setprop net.tcp.buffersize.ethernet 524288,2097152,4194304,524288,2097152,4194304
+394:     setprop net.tcp.buffersize.lte      524288,1048576,2097152,262144,524288,1048576
+395:     setprop net.tcp.buffersize.umts     4094,87380,110208,4096,16384,110208
+396:     setprop net.tcp.buffersize.hspa     4094,87380,262144,4096,16384,262144
+397:     setprop net.tcp.buffersize.hsupa    4094,87380,262144,4096,16384,262144
+398:     setprop net.tcp.buffersize.hsdpa    4094,87380,262144,4096,16384,262144
+399:     setprop net.tcp.buffersize.hspap    4094,87380,1220608,4096,16384,1220608
+400:     setprop net.tcp.buffersize.edge     4093,26280,35040,4096,16384,35040
+401:     setprop net.tcp.buffersize.gprs     4092,8760,11680,4096,8760,11680
+402:     setprop net.tcp.buffersize.evdo    4094,87380,262144,4096,16384,262144
+403: 
+404: # Define fsl avi/aac/asf/mkv/flv/flac format support
+405:     setprop ro.FSL_AVI_PARSER 1
+406:     setprop ro.FSL_AAC_PARSER 1
+407:     setprop ro.FSL_ASF_PARSER 0
+408:     setprop ro.FSL_FLV_PARSER 1
+409:     setprop ro.FSL_MKV_PARSER 1
+410:     setprop ro.FSL_FLAC_PARSER 1
+411:     setprop ro.FSL_MPG2_PARSER 1
+412: 
+413: # don't preload OpenGL in Zygote, the Vivante drivers do not like it
+414:     setprop ro.zygote.disable_gl_preload true
+415: 
+416: # ALSA mixer naming define
+417:     setprop alsa.mixer.playback.master Playback
+418:     setprop alsa.mixer.capture.master Capture
+419:     setprop alsa.mixer.playback.speaker Playback
+420:     setprop alsa.mixer.playback.headset Headphone
+421:     setprop alsa.mixer.capture.headset Capture
+422: 
+423: # Prepare for wifi
+424:     setprop wifi.interface wlan0
+425:     setprop wifi.ap.interface wlan0
+426: # Prepare for bluetooth
+427:     chmod 665 /sys/class/rfkill/rfkill0/state
+428:     chown bluetooth bluetooth /sys/class/rfkill/rfkill0/state
+429:     write /sys/class/rfkill/rfkill0/state 0
+430: 
+431: # Enable USB host1'remote wakeup event wakeup android system
+432:     write /sys/bus/platform/drivers/fsl-ehci/fsl-ehci.1/power/wakeup disabled
+433: 
+434: # Prepare for RIL
+435:     setprop gsm.ril.delay 15
+436:     setprop ro.ril.wake_lock_timeout 300
+437: 
+438: # Set this property so surfaceflinger is not started by system_init
+439:     setprop system_init.startsurfaceflinger 0
+440: 
+441: #  Enable adb security for JB4.2.2
+442:     setprop ro.adb.secure 1
+443: 
+444: #  Set GPU 3D minimum clock to 3/64
+445:    write /sys/module/galcore/parameters/gpu3DMinClock 3
+446: 
+447: # set this to not let jni check crash, just warnning message.
+448:     setprop dalvik.vm.jniopts warnonly
+449: 
+450:     class_start core
+451:     class_start main
+452: 
+453: on property:sys.boot_completed=1
+454: # Set default CPU frequency governor
+455: # Set timer 40ms, min sample 60ms,hispeed at cpufreq MAX freq in freq_table at load 40%
+456:     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor performance
+457:     write /sys/devices/system/cpu/cpufreq/interactive/go_maxspeed_load 80
+458:     write /sys/devices/system/cpu/cpufreq/interactive/timer_rate 40000
+459:     write /sys/devices/system/cpu/cpufreq/interactive/min_sample_time 60000
+460:     write /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load 40
+461:     #write /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq 792000
+462: # change interactive atrrubuties permissions when interactive is actived
+463: on property:sys.interactive="active"
+464:     chown system root /sys/devices/system/cpu/cpufreq/interactive/timer_rate
+465:     chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/timer_rate
+466:     chown system root /sys/devices/system/cpu/cpufreq/interactive/min_sample_time
+467:     chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/min_sample_time
+468:     chown system root /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq
+469:     chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq
+470:     chown system root /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load
+471:     chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load
+472:     chown system root /sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay
+473:     chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay
+474:     chown system root /sys/devices/system/cpu/cpufreq/interactive/boost
+475:     chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/boost
+476:     chown system root /sys/devices/system/cpu/cpufreq/interactive/boostpulse
+477:     chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/boostpulse
+478:     chown system root /sys/devices/system/cpu/cpufreq/interactive/input_boost
+479:     chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/input_boost
+480:     chown system system /sys/devices/system/cpu/cpufreq/interactive/boostpulse_duration
+481:     chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/boostpulse_duration
+482:     chown system system /sys/devices/system/cpu/cpufreq/interactive/io_is_busy
+483:     chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/io_is_busy
+484: 
+485: 
+486: on nonencrypted
+487:     class_start late_start
+488: 
+489: on charger
+490:     class_start charger
+491: 
+492: on property:vold.decrypt=trigger_reset_main
+493:     class_reset main
+494: 
+495: on property:vold.decrypt=trigger_load_persist_props
+496:     load_persist_props
+497: 
+498: on property:vold.decrypt=trigger_post_fs_data
+499:     trigger post-fs-data
+500: 
+501: on property:vold.decrypt=trigger_restart_min_framework
+502:     class_start main
+503: 
+504: on property:vold.decrypt=trigger_restart_framework
+505:     class_start main
+506:     class_start late_start
+507: 
+508: on property:vold.decrypt=trigger_shutdown_framework
+509:     class_reset late_start
+510:     class_reset main
+511: 
+512: on property:sys.powerctl=*
+513:     powerctl ${sys.powerctl}
+514: 
+515: # system server cannot write to /proc/sys files, so proxy it through init
+516: on property:sys.sysctl.extra_free_kbytes=*
+517:     write /proc/sys/vm/extra_free_kbytes ${sys.sysctl.extra_free_kbytes}
+518: 
+519: ## Daemon processes to be run by init.
+520: ##
+521: service video_cam /system/bin/logwrapper /system/bin/video_cam
+522:     class main
+523:     disabled
+524:     oneshot
+525: 
+526: service general_conf /system/bin/general_conf.sh
+527:     class main
+528:     oneshot
+529: 
+530: service ueventd /sbin/ueventd
+531:     class core
+532:     critical
+533:     seclabel u:r:ueventd:s0
+534: 
+535: service healthd /sbin/healthd
+536:     class core
+537:     critical
+538:     seclabel u:r:healthd:s0
+539: 
+540: service healthd-charger /sbin/healthd -n
+541:     class charger
+542:     critical
+543:     seclabel u:r:healthd:s0
+544: 
+545: on property:selinux.reload_policy=1
+546:     restart ueventd
+547:     restart installd
+548: 
+549: service console /system/bin/bin/sh
+550:     class core
+551:     console
+552:     user root
+553:     group root
+554: 
+555: #on property:ro.debuggable=1
+556: #    start console
+557: 
+558: # adbd is controlled via property triggers in init.<platform>.usb.rc
+559: service adbd /sbin/adbd
+560:     class core
+561:     socket adbd stream 660 system system
+562:     disabled
+563:     seclabel u:r:adbd:s0
+564: 
+565: # adbd on at boot in emulator
+566: on property:ro.kernel.qemu=1
+567:     start adbd
+568: 
+569: service servicemanager /system/bin/servicemanager
+570:     class core
+571:     user system
+572:     group system
+573:     critical
+574:     onrestart restart healthd
+575:     onrestart restart zygote
+576:     onrestart restart media
+577:     onrestart restart surfaceflinger
+578:     onrestart restart drm
+579: 
+580: service vold /system/bin/vold
+581:     class core
+582:     socket vold stream 0660 root mount
+583:     ioprio be 2
+584: 
+585: service netd /system/bin/netd
+586:     class main
+587:     socket netd stream 0660 root system
+588:     socket dnsproxyd stream 0660 root inet
+589:     socket mdns stream 0660 root system
+590: 
+591: service debuggerd /system/bin/debuggerd
+592:     class main
+593: 
+594: service surfaceflinger /system/bin/surfaceflinger
+595:     class main
+596:     user system
+597:     group graphics drmrpc
+598:     onrestart restart zygote
+599: 
+600: service zygote /system/bin/app_process -Xzygote /system/bin --zygote --start-system-server
+601:     class main
+602:     socket zygote stream 660 root system
+603:     onrestart write /sys/android_power/request_state wake
+604:     onrestart write /sys/power/state on
+605:     onrestart restart media
+606:     onrestart restart netd
+607: 
+608: service drm /system/bin/drmserver
+609:     class main
+610:     user drm
+611:     group drm system inet drmrpc
+612: 
+613: service media /system/bin/mediaserver
+614:     class main
+615:     user media
+616:     group audio camera inet net_bt net_bt_admin net_bw_acct drmrpc mediadrm
+617:     ioprio rt 4
+618: 
+619: service bootanim /system/bin/bootanimation
+620:     class main
+621:     user graphics
+622:     group graphics
+623:     disabled
+624:     oneshot
+625: 
+626: service installd /system/bin/installd
+627:     class main
+628:     socket installd stream 600 system system
+629: 
+630: service flash_recovery /system/etc/install-recovery.sh
+631:     class main
+632:     oneshot
+633: 
+634: service racoon /system/bin/racoon
+635:     class main
+636:     socket racoon stream 600 system system
+637:     # IKE uses UDP port 500. Racoon will setuid to vpn after binding the port.
+638:     group vpn net_admin inet
+639:     disabled
+640:     oneshot
+641: 
+642: service mtpd /system/bin/mtpd
+643:     class main
+644:     socket mtpd stream 600 system system
+645:     user vpn
+646:     group vpn net_admin inet net_raw
+647:     disabled
+648:     oneshot
+649: 
+650: service keystore /system/bin/keystore /data/misc/keystore
+651:     class main
+652:     user keystore
+653:     group keystore drmrpc
+654: 
+655: service dumpstate /system/bin/dumpstate -s
+656:     class main
+657:     socket dumpstate stream 0660 shell log
+658:     disabled
+659:     oneshot
+660: 
+661: service sshd /system/bin/start-ssh
+662:     class main
+663:     disabled
+664: 
+665: service mdnsd /system/bin/mdnsd
+666:     class main
+667:     user mdnsr
+668:     group inet net_raw
+669:     socket mdnsd stream 0660 mdnsr inet
+670:     disabled
+671:     oneshot
+672: 
+673: service ril-daemon /system/bin/rild
+674:     class main
+675:     socket rild stream 660 root radio
+676:     socket rild-debug stream 660 radio system
+677:     socket rild-ppp stream 660 radio system
+678:     user root
+679:     group radio cache inet misc audio sdcard_rw log
+680: 
+681: service mcusync /system/bin/mcusync
+682: 	class main
+683:     user root
+684:     oneshot
+685: 
+686: service firm_upgrade /system/bin/logwrapper /system/bin/fw_upgrade
+687:     class main
+688:     oneshot
+689: 
+690: # virtual sdcard daemon running as media_rw (1023)
+691: # default 4 threads have better performance to 2 threads.
+692:     service sdcard /system/bin/sdcard -l -t4 /data/media /mnt/shell/emulated 1023 1023
+693:     class late_start
+694: 
+
 Static search only: no guarantee of complete coverage, control flow, runtime device state, or data preservation.
