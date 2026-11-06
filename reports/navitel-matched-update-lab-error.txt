@@ -1,7 +1,7 @@
 Phase 1: obtain two real Navitel APKs; no user files or license
-/tmp/navitel-matched-update-lab.Nu9BOU/lifan-file-manager-test.zip: OK
-/tmp/navitel-matched-update-lab.Nu9BOU/system.img: OK
-/tmp/navitel-matched-update-lab.Nu9BOU/old.apk: OK
+/tmp/navitel-matched-update-lab.XEjnx1/lifan-file-manager-test.zip: OK
+/tmp/navitel-matched-update-lab.XEjnx1/system.img: OK
+/tmp/navitel-matched-update-lab.XEjnx1/old.apk: OK
 /home/runner/work/Lifan-X60/Lifan-X60/firmware/apks/com.navitel.apk: OK
 V1 Signer: certificate SHA-256 digest: a40da80a59d170caa950cf15c18c454d47a39b26989d8b640ecd745ba71bf5dc
 package: name='com.navitel' versionCode='201103033' versionName='9.13.73' platformBuildVersionName='9' platformBuildVersionCode='28' compileSdkVersion='23' compileSdkVersionCodename='6.0-2438415'
@@ -14,7 +14,7 @@ This does not verify ZIP offsets, metadata, V2/V3 signing block or runtime signa
 Phase 2: boot isolated Android 4.4.2 ARMv7
 Loading package information...                                                  Loading local repository...                                                     [                                       ] 3% Loading local repository...        [                                       ] 3% Fetch remote repository...         [=                                      ] 3% Fetch remote repository...         [=                                      ] 4% Fetch remote repository...         [=                                      ] 5% Fetch remote repository...         [==                                     ] 5% Fetch remote repository...         [==                                     ] 6% Fetch remote repository...         [==                                     ] 7% Fetch remote repository...         [==                                     ] 7% Computing updates...               [===                                    ] 8% Computing updates...               [===                                    ] 10% Computing updates...              [===                                    ] 10% Installing ARM EABI v7a System Ima[===                                    ] 10% Downloading armeabi-v7a-19_r05.zip[====                                   ] 10% Downloading armeabi-v7a-19_r05.zip[====                                   ] 11% Downloading armeabi-v7a-19_r05.zip[====                                   ] 12% Downloading armeabi-v7a-19_r05.zip[=====                                  ] 13% Downloading armeabi-v7a-19_r05.zip[=====                                  ] 14% Downloading armeabi-v7a-19_r05.zip[=====                                  ] 15% Downloading armeabi-v7a-19_r05.zip[======                                 ] 15% Downloading armeabi-v7a-19_r05.zip[======                                 ] 16% Downloading armeabi-v7a-19_r05.zip[======                                 ] 17% Downloading armeabi-v7a-19_r05.zip[=======                                ] 18% Downloading armeabi-v7a-19_r05.zip[=======                                ] 19% Downloading armeabi-v7a-19_r05.zip[=======                                ] 20% Downloading armeabi-v7a-19_r05.zip[========                               ] 20% Downloading armeabi-v7a-19_r05.zip[========                               ] 21% Downloading armeabi-v7a-19_r05.zip[========                               ] 21% Unzipping...                      [========                               ] 21% Unzipping... armeabi-v7a/         [========                               ] 21% Unzipping... armeabi-v7a/userdata.[========                               ] 22% Unzipping... armeabi-v7a/userdata.[========                               ] 22% Unzipping... armeabi-v7a/system.im[=========                              ] 23% Unzipping... armeabi-v7a/system.im[=========                              ] 24% Unzipping... armeabi-v7a/system.im[=========                              ] 25% Unzipping... armeabi-v7a/system.im[==========                             ] 25% Unzipping... armeabi-v7a/system.im[==========                             ] 26% Unzipping... armeabi-v7a/system.im[==========                             ] 27% Unzipping... armeabi-v7a/system.im[===========                            ] 28% Unzipping... armeabi-v7a/system.im[===========                            ] 29% Unzipping... armeabi-v7a/system.im[===========                            ] 30% Unzipping... armeabi-v7a/system.im[============                           ] 30% Unzipping... armeabi-v7a/system.im[============                           ] 31% Unzipping... armeabi-v7a/system.im[============                           ] 32% Unzipping... armeabi-v7a/system.im[============                           ] 32% Unzipping... armeabi-v7a/ramdisk.i[============                           ] 32% Unzipping... armeabi-v7a/build.pro[============                           ] 32% Unzipping... armeabi-v7a/NOTICE.tx[============                           ] 32% Unzipping... armeabi-v7a/source.pr[============                           ] 32% Unzipping... armeabi-v7a/kernel-qe[=============                          ] 33% Unzipping... armeabi-v7a/kernel-qe[=====================                  ] 55% Unzipping... armeabi-v7a/kernel-qe[=====================                  ] 55% Installing Android Emulator armeab[=====================                  ] 55% Downloading emulator-linux_x64-167[======================                 ] 55% Downloading emulator-linux_x64-167[======================                 ] 56% Downloading emulator-linux_x64-167[======================                 ] 57% Downloading emulator-linux_x64-167[=======================                ] 58% Downloading emulator-linux_x64-167[=======================                ] 59% Downloading emulator-linux_x64-167[=======================                ] 60% Downloading emulator-linux_x64-167[========================               ] 60% Downloading emulator-linux_x64-167[========================               ] 61% Downloading emulator-linux_x64-167[========================               ] 62% Downloading emulator-linux_x64-167[=========================              ] 63% Downloading emulator-linux_x64-167[=========================              ] 64% Downloading emulator-linux_x64-167[=========================              ] 65% Downloading emulator-linux_x64-167[==========================             ] 65% Downloading emulator-linux_x64-167[==========================             ] 66% Downloading emulator-linux_x64-167[==========================             ] 66% Unzipping... armeabi-v7a/kernel-qe[==========================             ] 66% Unzipping... emulator/            [==========================             ] 66% Unzipping... emulator/resources/  [==========================             ] 66% Unzipping... emulator/qsn         [==========================             ] 66% Unzipping... emulator/emulator    [==========================             ] 66% Unzipping... emulator/netsimd     [==========================             ] 67% Unzipping... emulator/netsimd     [==========================             ] 67% Unzipping... emulator/bin64/      [==========================             ] 67% Unzipping... emulator/qemu/       [==========================             ] 67% Unzipping... emulator/NOTICE.txt  [==========================             ] 67% Unzipping... emulator/crashpad_han[==========================             ] 67% Unzipping... emulator/source.prope[==========================             ] 67% Unzipping... emulator/nimble_bridg[==========================             ] 67% Unzipping... emulator/LICENSE     [==========================             ] 67% Unzipping... emulator/lib/        [==========================             ] 67% Unzipping... emulator/qemu-img    [==========================             ] 67% Unzipping... emulator/include/    [==========================             ] 67% Unzipping... emulator/NOTICE.csv  [==========================             ] 67% Unzipping... emulator/lib64/      [==========================             ] 67% Unzipping... emulator/emulator-che[==========================             ] 67% Unzipping... emulator/crashreport [==========================             ] 67% Unzipping... emulator/mksdcard    [==========================             ] 67% Unzipping... emulator/resources/To[==========================             ] 67% Unzipping... emulator/resources/de[==========================             ] 67% Unzipping... emulator/resources/To[==========================             ] 67% Unzipping... emulator/resources/de[==========================             ] 67% Unzipping... emulator/resources/To[==========================             ] 67% Unzipping... emulator/resources/ma[==========================             ] 67% Unzipping... emulator/resources/de[==========================             ] 67% Unzipping... emulator/resources/sk[==========================             ] 67% Unzipping... emulator/resources/de[==========================             ] 67% Unzipping... emulator/resources/ma[==========================             ] 67% Unzipping... emulator/resources/po[==========================             ] 67% Unzipping... emulator/resources/ma[===========================            ] 68% Unzipping... emulator/resources/ma[===========================            ] 68% Unzipping... emulator/resources/sk[===========================            ] 68% Unzipping... emulator/resources/ma[===========================            ] 68% Unzipping... emulator/bin64/e2fsck[===========================            ] 68% Unzipping... emulator/bin64/fsck.e[===========================            ] 68% Unzipping... emulator/bin64/tune2f[===========================            ] 68% Unzipping... emulator/bin64/resize[===========================            ] 68% Unzipping... emulator/bin64/mkfs.e[===========================            ] 68% Unzipping... emulator/qemu/linux-x[===========================            ] 69% Unzipping... emulator/qemu/linux-x[===========================            ] 70% Unzipping... emulator/qemu/linux-x[============================           ] 70% Unzipping... emulator/qemu/linux-x[============================           ] 70% Unzipping... emulator/lib/emulator[============================           ] 70% Unzipping... emulator/lib/rtc_serv[============================           ] 70% Unzipping... emulator/lib/advanced[============================           ] 70% Unzipping... emulator/lib/cmake/  [============================           ] 70% Unzipping... emulator/lib/emulator[============================           ] 70% Unzipping... emulator/lib/control_[============================           ] 70% Unzipping... emulator/lib/emulated[============================           ] 70% Unzipping... emulator/lib/rtc_serv[============================           ] 70% Unzipping... emulator/lib/emu-orig[============================           ] 70% Unzipping... emulator/lib/hardware[============================           ] 70% Unzipping... emulator/lib/pkgconfi[============================           ] 70% Unzipping... emulator/lib/pc-bios/[============================           ] 70% Unzipping... emulator/lib/snapshot[============================           ] 70% Unzipping... emulator/lib/adb_serv[============================           ] 70% Unzipping... emulator/lib/hostapd.[============================           ] 70% Unzipping... emulator/lib/grpc_end[============================           ] 70% Unzipping... emulator/lib/ca-bundl[============================           ] 70% Unzipping... emulator/lib/ui_contr[============================           ] 70% Unzipping... emulator/lib/snapshot[============================           ] 70% Unzipping... emulator/lib/ice_conf[============================           ] 70% Unzipping... emulator/lib/libflatb[============================           ] 71% Unzipping... emulator/lib/libflatb[============================           ] 71% Unzipping... emulator/lib/emulator[============================           ] 71% Unzipping... emulator/lib/waterfal[============================           ] 71% Unzipping... emulator/lib/emulated[============================           ] 71% Unzipping... emulator/lib/cmake/fl[============================           ] 71% Unzipping... emulator/lib/pkgconfi[============================           ] 71% Unzipping... emulator/lib/pc-bios/[============================           ] 71% Unzipping... emulator/include/flat[============================           ] 71% Unzipping... emulator/lib64/libgli[============================           ] 71% Unzipping... emulator/lib64/libpro[============================           ] 71% Unzipping... emulator/lib64/qt/   [============================           ] 71% Unzipping... emulator/lib64/liband[============================           ] 71% Unzipping... emulator/lib64/libgfx[============================           ] 71% Unzipping... emulator/lib64/gles_l[============================           ] 71% Unzipping... emulator/lib64/liband[============================           ] 71% Unzipping... emulator/lib64/vulkan[============================           ] 71% Unzipping... emulator/lib64/gles_s[============================           ] 71% Unzipping... emulator/lib64/libemu[============================           ] 71% Unzipping... emulator/lib64/libpro[============================           ] 71% Unzipping... emulator/lib64/liband[============================           ] 71% Unzipping... emulator/lib64/libtcm[============================           ] 71% Unzipping... emulator/lib64/libima[============================           ] 71% Unzipping... emulator/lib64/libc++[============================           ] 71% Unzipping... emulator/lib64/liband[============================           ] 71% Unzipping... emulator/lib64/libabs[============================           ] 71% Unzipping... emulator/lib64/gles_a[============================           ] 71% Unzipping... emulator/lib64/libsha[============================           ] 71% Unzipping... emulator/lib64/libc++[============================           ] 71% Unzipping... emulator/lib64/qt/res[============================           ] 71% Unzipping... emulator/lib64/qt/lib[============================           ] 71% Unzipping... emulator/lib64/qt/tra[============================           ] 71% Unzipping... emulator/lib64/qt/plu[============================           ] 71% Unzipping... emulator/lib64/qt/res[============================           ] 72% Unzipping... emulator/lib64/qt/res[============================           ] 72% Unzipping... emulator/lib64/qt/lib[=============================          ] 73% Unzipping... emulator/lib64/qt/lib[=============================          ] 74% Unzipping... emulator/lib64/qt/lib[=============================          ] 75% Unzipping... emulator/lib64/qt/lib[==============================         ] 75% Unzipping... emulator/lib64/qt/lib[==============================         ] 75% Unzipping... emulator/lib64/qt/tra[==============================         ] 75% Unzipping... emulator/lib64/qt/plu[==============================         ] 75% Unzipping... emulator/lib64/gles_l[==============================         ] 76% Unzipping... emulator/lib64/gles_l[==============================         ] 76% Unzipping... emulator/lib64/vulkan[==============================         ] 77% Unzipping... emulator/lib64/vulkan[==============================         ] 77% Unzipping... emulator/lib64/gles_s[==============================         ] 77% Unzipping... emulator/lib64/gles_a[==============================         ] 78% Unzipping... emulator/lib64/gles_a[=======================================] 100% Unzipping... emulator/lib64/gles_
 
-/tmp/navitel-matched-update-lab.Nu9BOU/legacy.zip: OK
+/tmp/navitel-matched-update-lab.XEjnx1/legacy.zip: OK
 Emulator host UID 999: non-loopback IPv4 and IPv6 blocked
 * daemon not running; starting now at tcp:5037
 * daemon started successfully
@@ -24,43 +24,50 @@ remount succeeded
 Filesystem               Size     Used     Free   Blksize
 /system                541.3M   261.1M   280.2M   4096
 Phase 3: push old system APK on disposable emulator
-/tmp/navitel-matched-update-lab.Nu9BOU/old.apk: 1 file pushed, 0 skipped. 8.0 MB/s (111095055 bytes in 13.196s)
+/tmp/navitel-matched-update-lab.XEjnx1/old.apk: 1 file pushed, 0 skipped. 16.8 MB/s (111095055 bytes in 6.317s)
 Phase 3a: restart Android userspace with old package
 Phase 3b: verify old system APK is unchanged and query package
-/system/priv-app/Navitel-large.apk: 1 file pulled, 0 skipped. 6.2 MB/s (111095055 bytes in 17.027s)
+/system/priv-app/Navitel-large.apk: 1 file pulled, 0 skipped. 12.6 MB/s (111095055 bytes in 8.422s)
 Initial package path: package:/system/priv-app/Navitel-large.apk
 package:/system/priv-app/Navitel-large.apk
-/tmp/navitel-matched-update-lab.Nu9BOU/lab-pref.xml: 1 file pushed, 0 skipped. 0.9 MB/s (132 bytes in 0.000s)
+/tmp/navitel-matched-update-lab.XEjnx1/lab-pref.xml: 1 file pushed, 0 skipped. 2.4 MB/s (132 bytes in 0.000s)
 /data/data/com.navitel/shared_prefs/x60_lab_probe.xml: 1 file pulled, 0 skipped. 0.0 MB/s (132 bytes in 0.043s)
 Remount disposable emulator system read-only before testing update
 /dev/block/mtdblock0 /system ext4 ro,seclabel,relatime,data=ordered 0 0
+Device-side md5 after read-only remount:
+a5a34cf38cf4d58f70ad8e23c934a15b  /tmp/navitel-matched-update-lab.XEjnx1/old.apk
+a5a34cf38cf4d58f70ad8e23c934a15b  /system/priv-app/Navitel-large.apk
 Negative control: unmodified candidate must be rejected as a differently signed update
-/home/runner/work/Lifan-X60/Lifan-X60/firmware/apks/com.navitel.apk: 1 file pushed, 0 skipped. 5.5 MB/s (99176587 bytes in 17.280s)
+/home/runner/work/Lifan-X60/Lifan-X60/firmware/apks/com.navitel.apk: 1 file pushed, 0 skipped. 7.3 MB/s (99176587 bytes in 12.947s)
 Performing Push Install
 	pkg: /data/local/tmp/com.navitel.apk
 Failure [INSTALL_PARSE_FAILED_INCONSISTENT_CERTIFICATES]
 Failure [INSTALL_PARSE_FAILED_INCONSISTENT_CERTIFICATES]
 package:/system/priv-app/Navitel-large.apk
-/data/data/com.navitel/shared_prefs/x60_lab_probe.xml: 1 file pulled, 0 skipped. 0.1 MB/s (132 bytes in 0.002s)
-/system/priv-app/Navitel-large.apk: 1 file pulled, 0 skipped. 6.5 MB/s (111095055 bytes in 16.226s)
+/data/data/com.navitel/shared_prefs/x60_lab_probe.xml: 1 file pulled, 0 skipped. 0.0 MB/s (132 bytes in 0.043s)
+/system/priv-app/Navitel-large.apk: 1 file pulled, 0 skipped. 11.6 MB/s (111095055 bytes in 9.163s)
 System APK read-back already differs after negative control
-6e216ab39aacaafacda1ebb09f6edc8726e4d1eb6b4985256ccd18aeb5046c44  /tmp/navitel-matched-update-lab.Nu9BOU/old.apk
-05ec5752fa25fe002253ed08d7f6b6f1a3723870e39eeda0488bcee8d0e958ff  /tmp/navitel-matched-update-lab.Nu9BOU/stock-after-negative.apk
+6e216ab39aacaafacda1ebb09f6edc8726e4d1eb6b4985256ccd18aeb5046c44  /tmp/navitel-matched-update-lab.XEjnx1/old.apk
+42e91ad16f37e0a8872e0140e006b81e5edc1e6b9fe41f305b20af2f2ec51856  /tmp/navitel-matched-update-lab.XEjnx1/stock-after-negative.apk
+Host and emulator md5 checks (md5 used only to diagnose transport versus source):
+a5a34cf38cf4d58f70ad8e23c934a15b  /tmp/navitel-matched-update-lab.XEjnx1/old.apk
+3842bff6a9a5ab8278493d7c4d9c57e8  /tmp/navitel-matched-update-lab.XEjnx1/stock-after-negative.apk
+3842bff6a9a5ab8278493d7c4d9c57e8  /system/priv-app/Navitel-large.apk
 Install matching-certificate update into emulator data partition (never touch system APK during update)
-/tmp/navitel-matched-update-lab.Nu9BOU/new-resigned.apk: 1 file pushed, 0 skipped. 9.3 MB/s (99156773 bytes in 10.130s)
+/tmp/navitel-matched-update-lab.XEjnx1/new-resigned.apk: 1 file pushed, 0 skipped. 14.3 MB/s (99156773 bytes in 6.612s)
 Performing Push Install
 	pkg: /data/local/tmp/new-resigned.apk
 Success
 Success
 package:/data/app/com.navitel-1.apk
     versionCode=360622024 targetSdk=33
-/data/data/com.navitel/shared_prefs/x60_lab_probe.xml: 1 file pulled, 0 skipped. 0.0 MB/s (132 bytes in 0.005s)
-/system/priv-app/Navitel-large.apk: 1 file pulled, 0 skipped. 6.8 MB/s (111095055 bytes in 15.533s)
-/tmp/navitel-matched-update-lab.Nu9BOU/old.apk /tmp/navitel-matched-update-lab.Nu9BOU/stock-after-update.apk differ: byte 4097, line 11
+/data/data/com.navitel/shared_prefs/x60_lab_probe.xml: 1 file pulled, 0 skipped. 0.0 MB/s (132 bytes in 0.043s)
+/system/priv-app/Navitel-large.apk: 1 file pulled, 0 skipped. 12.0 MB/s (111095055 bytes in 8.843s)
+/tmp/navitel-matched-update-lab.XEjnx1/old.apk /tmp/navitel-matched-update-lab.XEjnx1/stock-after-update.apk differ: byte 1, line 1
 Initial file bytes/hash: 111095055 6e216ab39aacaafacda1ebb09f6edc8726e4d1eb6b4985256ccd18aeb5046c44
-Read-back file bytes/hash: 111095055 b5f9b9bcf8cac75b4da849fdb824ee5cfd0989fe49a4f9dfec07b0cbd18cb139
-First differing offset: 4096
-Initial bytes: 97a3c2735474f6ec19d4f5d3ce580e8d65f5b58ebe8952678a3aa5d7678a6cf6
+Read-back file bytes/hash: 111095055 3e8fd1f8ac15ecc78537129f4c241bea2b687889b4a0a4e40a8a43cc04fdc110
+First differing offset: 0
+Initial bytes: 504b0304140008080800b16c6651958201f94d1400003c5d000013000000416e
 Read-back bytes: 0000000000000000000000000000000000000000000000000000000000000000
 System read-back mismatch; abandoning this experiment, no safety claim.
 Failure (1): emulator log
@@ -75,9 +82,9 @@ Failure (1): emulator log
   hw.audioInput = true
   hw.audioOutput = true
   hw.sdCard = true
-  hw.sdCard.path = /tmp/navitel-matched-update-lab.Nu9BOU/avd/migration_arm.avd/sdcard.img
+  hw.sdCard.path = /tmp/navitel-matched-update-lab.XEjnx1/avd/migration_arm.avd/sdcard.img
   disk.cachePartition = true
-  disk.cachePartition.path = /tmp/navitel-matched-update-lab.Nu9BOU/avd/migration_arm.avd/cache.img
+  disk.cachePartition.path = /tmp/navitel-matched-update-lab.XEjnx1/avd/migration_arm.avd/cache.img
   disk.cachePartition.size = 66m
   hw.lcd.width = 320
   hw.lcd.height = 480
@@ -105,20 +112,20 @@ Failure (1): emulator log
   disk.ramdisk.path = /usr/local/lib/android/sdk/system-images/android-19/default/armeabi-v7a//ramdisk.img
   disk.systemPartition.initPath = /usr/local/lib/android/sdk/system-images/android-19/default/armeabi-v7a//system.img
   disk.systemPartition.size = 550m
-  disk.dataPartition.path = /tmp/navitel-matched-update-lab.Nu9BOU/avd/migration_arm.avd/userdata-qemu.img
-  disk.dataPartition.initPath = /tmp/navitel-matched-update-lab.Nu9BOU/avd/migration_arm.avd/userdata.img
+  disk.dataPartition.path = /tmp/navitel-matched-update-lab.XEjnx1/avd/migration_arm.avd/userdata-qemu.img
+  disk.dataPartition.initPath = /tmp/navitel-matched-update-lab.XEjnx1/avd/migration_arm.avd/userdata.img
   disk.dataPartition.size = 800m
   avd.name = migration_arm
 .
 emulator: WARNING: CPU acceleration only works with x86/x86_64 system images.
 QEMU options list:
-emulator: argv[00] = "/tmp/navitel-matched-update-lab.Nu9BOU/legacy/tools/emulator64-arm"
-emulator: argv[[139906930177728]:WARNING:./android/base/files/IniFile.cpp:158:Failed to process .ini file /home/emulatorlab/.android/emu-update-last-check.ini for reading.
+emulator: argv[00] = "/tmp/navitel-matched-update-lab.XEjnx1/legacy/tools/emulator64-arm"
+emulator: argv[[140440170919616]:WARNING:./android/base/files/IniFile.cpp:158:Failed to process .ini file /home/emulatorlab/.android/emu-update-last-check.ini for reading.
 List of devices attached
 emulator-5554          device product:sdk model:sdk device:generic transport_id:1
 
-<5>type=1400 audit(1793960596.930:4): avc:  denied  { associate } for  pid=1 comm="init" name="cache" scontext=u:object_r:cache_file:s0 tcontext=u:object_r:rootfs:s0 tclass=filesystem permissive=0
-<5>type=1400 audit(1793960596.930:5): avc:  denied  { associate } for  pid=1 comm="init" name="asec" scontext=u:object_r:asec_apk_file:s0 tcontext=u:object_r:rootfs:s0 tclass=filesystem permissive=0
+<5>type=1400 audit(1793961149.300:4): avc:  denied  { associate } for  pid=1 comm="init" name="cache" scontext=u:object_r:cache_file:s0 tcontext=u:object_r:rootfs:s0 tclass=filesystem permissive=0
+<5>type=1400 audit(1793961149.300:5): avc:  denied  { associate } for  pid=1 comm="init" name="asec" scontext=u:object_r:asec_apk_file:s0 tcontext=u:object_r:rootfs:s0 tclass=filesystem permissive=0
 <6>EXT4-fs (mtdblock0): mounted filesystem with ordered data mode. Opts: barrier=1
 <7>SELinux: initialized (dev mtdblock0, type ext4), uses xattr
 <6>EXT4-fs (mtdblock1): mounted filesystem with ordered data mode. Opts: nomblk_io_submit,errors=remount-ro
@@ -126,87 +133,87 @@ emulator-5554          device product:sdk model:sdk device:generic transport_id:
 <6>EXT4-fs (mtdblock1): mounted filesystem with ordered data mode. Opts: barrier=1,nomblk_io_submit
 <7>SELinux: initialized (dev mtdblock1, type ext4), uses xattr
 <3>init: fs_mgr_mount_all returned an error
-<5>type=1400 audit(1793960597.180:6): avc:  denied  { entrypoint } for  pid=46 comm="init" path="/sbin/healthd" dev="rootfs" ino=1282 scontext=u:r:healthd:s0 tcontext=u:object_r:rootfs:s0 tclass=file permissive=1
+<5>type=1400 audit(1793961149.490:7): avc:  denied  { entrypoint } for  pid=45 comm="init" path="/sbin/healthd" dev="rootfs" ino=1282 scontext=u:r:healthd:s0 tcontext=u:object_r:rootfs:s0 tclass=file permissive=1
 <6>EXT4-fs (mtdblock0): re-mounted. Opts: (null)
 <4>QEMU Pipe Device:rw, wait_event error
 <6>EXT4-fs (mtdblock0): re-mounted. Opts: (null)
-I/PackageManager(  922):   Scheme: "smsto"
-I/PackageManager(  922): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager(  922):   Action: "android.intent.action.SENDTO"
-I/PackageManager(  922):   Category: "android.intent.category.DEFAULT"
-I/PackageManager(  922):   Scheme: "mms"
-D/BackupManagerService(  922): Received broadcast Intent { act=android.intent.action.PACKAGE_REMOVED dat=package:com.navitel flg=0x4000010 (has extras) }
-I/PackageManager(  922): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager(  922):   Action: "android.intent.action.SENDTO"
-I/PackageManager(  922):   Category: "android.intent.category.DEFAULT"
-I/PackageManager(  922):   Scheme: "mmsto"
-I/PackageManager(  922): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-D/BackupManagerService(  922): Received broadcast Intent { act=android.intent.action.PACKAGE_ADDED dat=package:com.navitel flg=0x4000010 (has extras) }
-I/PackageManager(  922):   Action: "android.intent.action.SENDTO"
-I/PackageManager(  922):   Category: "android.intent.category.DEFAULT"
-I/PackageManager(  922):   Scheme: "sms"
-I/PackageManager(  922): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/BackupManagerService(  922): Scheduling backup for new app com.navitel
-D/BackupManagerService(  922): Now staging backup of com.navitel
-I/PackageManager(  922):   Action: "android.intent.action.SENDTO"
-I/PackageManager(  922):   Category: "android.intent.category.DEFAULT"
-I/PackageManager(  922):   Scheme: "smsto"
-I/PackageManager(  922): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager(  922):   Action: "android.intent.action.SENDTO"
-I/PackageManager(  922):   Category: "android.intent.category.DEFAULT"
-I/PackageManager(  922):   Scheme: "mms"
-I/PackageManager(  922): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager(  922):   Action: "android.intent.action.SENDTO"
-I/PackageManager(  922):   Category: "android.intent.category.DEFAULT"
-I/PackageManager(  922):   Scheme: "mmsto"
-I/PackageManager(  922): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager(  922):   Action: "android.intent.action.SENDTO"
-I/PackageManager(  922):   Category: "android.intent.category.DEFAULT"
-I/PackageManager(  922):   Scheme: "sms"
-I/PackageManager(  922): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager(  922):   Action: "android.intent.action.SENDTO"
-I/PackageManager(  922):   Category: "android.intent.category.DEFAULT"
-I/PackageManager(  922):   Scheme: "smsto"
-I/PackageManager(  922): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager(  922):   Action: "android.intent.action.SENDTO"
-I/PackageManager(  922):   Category: "android.intent.category.DEFAULT"
-I/PackageManager(  922):   Scheme: "mms"
-I/PackageManager(  922): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager(  922):   Action: "android.intent.action.SENDTO"
-I/PackageManager(  922):   Category: "android.intent.category.DEFAULT"
-I/PackageManager(  922):   Scheme: "mmsto"
-I/PackageManager(  922): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager(  922):   Action: "android.intent.action.SENDTO"
-I/PackageManager(  922):   Category: "android.intent.category.DEFAULT"
-I/PackageManager(  922):   Scheme: "sms"
-I/PackageManager(  922): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager(  922):   Action: "android.intent.action.SENDTO"
-I/PackageManager(  922):   Category: "android.intent.category.DEFAULT"
-I/PackageManager(  922):   Scheme: "smsto"
-I/PackageManager(  922): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager(  922):   Action: "android.intent.action.SENDTO"
-I/PackageManager(  922):   Category: "android.intent.category.DEFAULT"
-I/PackageManager(  922):   Scheme: "mms"
-I/PackageManager(  922): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager(  922):   Action: "android.intent.action.SENDTO"
-I/PackageManager(  922):   Category: "android.intent.category.DEFAULT"
-I/PackageManager(  922):   Scheme: "mmsto"
-I/PackageManager(  922): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager(  922):   Action: "android.intent.action.SENDTO"
-I/PackageManager(  922):   Category: "android.intent.category.DEFAULT"
-I/PackageManager(  922):   Scheme: "sms"
-I/PackageManager(  922): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager(  922):   Action: "android.intent.action.SENDTO"
-I/PackageManager(  922):   Category: "android.intent.category.DEFAULT"
-I/PackageManager(  922):   Scheme: "smsto"
-I/PackageManager(  922): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager(  922):   Action: "android.intent.action.SENDTO"
-I/PackageManager(  922):   Category: "android.intent.category.DEFAULT"
-I/PackageManager(  922):   Scheme: "mms"
-I/PackageManager(  922): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager(  922):   Action: "android.intent.action.SENDTO"
-I/PackageManager(  922):   Category: "android.intent.category.DEFAULT"
-I/PackageManager(  922):   Scheme: "mmsto"
-I/PackageManager(  922): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager(  922): Running dexopt on: com.android.keychain
-I/PackageManager(  922): Running dexopt on: com.svox.pico
+I/PackageManager(  905):   Scheme: "sms"
+I/PackageManager(  905): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager(  905): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager(  905):   Action: "android.intent.action.SENDTO"
+I/PackageManager(  905):   Category: "android.intent.category.DEFAULT"
+I/PackageManager(  905):   Scheme: "smsto"
+I/PackageManager(  905):   Action: "android.intent.action.SENDTO"
+I/PackageManager(  905):   Category: "android.intent.category.DEFAULT"
+I/PackageManager(  905):   Scheme: "mms"
+I/PackageManager(  905): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager(  905):   Action: "android.intent.action.SENDTO"
+I/PackageManager(  905):   Category: "android.intent.category.DEFAULT"
+I/PackageManager(  905):   Scheme: "mmsto"
+I/PackageManager(  905): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager(  905):   Action: "android.intent.action.SENDTO"
+I/PackageManager(  905):   Category: "android.intent.category.DEFAULT"
+I/PackageManager(  905):   Scheme: "sms"
+I/PackageManager(  905): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager(  905):   Action: "android.intent.action.SENDTO"
+I/PackageManager(  905):   Category: "android.intent.category.DEFAULT"
+I/PackageManager(  905):   Scheme: "smsto"
+I/PackageManager(  905): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager(  905):   Action: "android.intent.action.SENDTO"
+I/PackageManager(  905):   Category: "android.intent.category.DEFAULT"
+I/PackageManager(  905):   Scheme: "mms"
+I/PackageManager(  905): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager(  905):   Action: "android.intent.action.SENDTO"
+I/PackageManager(  905):   Category: "android.intent.category.DEFAULT"
+I/PackageManager(  905):   Scheme: "mmsto"
+I/PackageManager(  905): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager(  905):   Action: "android.intent.action.SENDTO"
+I/PackageManager(  905):   Category: "android.intent.category.DEFAULT"
+I/PackageManager(  905):   Scheme: "sms"
+I/PackageManager(  905): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager(  905):   Action: "android.intent.action.SENDTO"
+I/PackageManager(  905):   Category: "android.intent.category.DEFAULT"
+I/PackageManager(  905):   Scheme: "smsto"
+I/PackageManager(  905): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager(  905):   Action: "android.intent.action.SENDTO"
+I/PackageManager(  905):   Category: "android.intent.category.DEFAULT"
+I/PackageManager(  905):   Scheme: "mms"
+I/PackageManager(  905): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager(  905):   Action: "android.intent.action.SENDTO"
+I/PackageManager(  905):   Category: "android.intent.category.DEFAULT"
+I/PackageManager(  905):   Scheme: "mmsto"
+I/PackageManager(  905): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager(  905):   Action: "android.intent.action.SENDTO"
+I/PackageManager(  905):   Category: "android.intent.category.DEFAULT"
+I/PackageManager(  905):   Scheme: "sms"
+I/PackageManager(  905): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager(  905):   Action: "android.intent.action.SENDTO"
+I/PackageManager(  905):   Category: "android.intent.category.DEFAULT"
+I/PackageManager(  905):   Scheme: "smsto"
+I/PackageManager(  905): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager(  905):   Action: "android.intent.action.SENDTO"
+I/PackageManager(  905):   Category: "android.intent.category.DEFAULT"
+I/PackageManager(  905):   Scheme: "mms"
+I/PackageManager(  905): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager(  905):   Action: "android.intent.action.SENDTO"
+I/PackageManager(  905):   Category: "android.intent.category.DEFAULT"
+I/PackageManager(  905):   Scheme: "mmsto"
+I/PackageManager(  905): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager(  905):   Action: "android.intent.action.SENDTO"
+I/PackageManager(  905):   Category: "android.intent.category.DEFAULT"
+I/PackageManager(  905):   Scheme: "sms"
+I/PackageManager(  905): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager(  905):   Action: "android.intent.action.SENDTO"
+I/PackageManager(  905):   Category: "android.intent.category.DEFAULT"
+I/PackageManager(  905):   Scheme: "smsto"
+I/PackageManager(  905): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager(  905):   Action: "android.intent.action.SENDTO"
+I/PackageManager(  905):   Category: "android.intent.category.DEFAULT"
+I/PackageManager(  905):   Scheme: "mms"
+I/PackageManager(  905): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager(  905):   Action: "android.intent.action.SENDTO"
+I/PackageManager(  905):   Category: "android.intent.category.DEFAULT"
+I/PackageManager(  905):   Scheme: "mmsto"
+I/PackageManager(  905): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager(  905): Running dexopt on: com.android.keychain
+I/PackageManager(  905): Running dexopt on: com.svox.pico
