@@ -6,7 +6,7 @@ import zipfile
 from pathlib import Path
 
 MAX_ENTRY = 128 * 1024 * 1024
-HINT = re.compile(rb'(?i)navitelcontent|\.nm7\b|\.ns2\b|license\.txt|activation\.key')
+HINT = re.compile(rb'(?i)navitelcontent|\.nm7\b|license\.txt|activation\.key')
 
 
 def inspect(apk):
@@ -18,7 +18,10 @@ def inspect(apk):
             name = item.filename
             is_dex = bool(re.fullmatch(r'classes\d*\.dex', name))
             is_arm = name.startswith(('lib/armeabi/', 'lib/armeabi-v7a/')) and name.endswith('.so')
-            is_resource = name == 'resources.arsc' or name.startswith('assets/')
+            # Localized catalogs often duplicate one English source string.
+            is_resource = (name == 'resources.arsc' or
+                           (name.startswith('assets/') and
+                            (not name.endswith('.mo') or name.endswith(('en_US.mo', 'ru_RU.mo')))))
             if item.is_dir() or not (is_dex or is_arm or is_resource):
                 continue
             if item.file_size > MAX_ENTRY:
@@ -46,7 +49,8 @@ def main():
         raise SystemExit('usage: inspect_navitel_sd_static.py OLD_APK NEW_APK')
     print('# Old and new Navitel APKs: static SD-related strings')
     print('Only APK files were read. No user license, maps, device, or app execution.')
-    print('ASCII evidence only from selected DEX, ARM libraries, assets and resources; absence is not proof.')
+    print('ASCII evidence only from selected DEX, ARM libraries, assets and resources; localized catalogs are limited to en_US/ru_RU.')
+    print('Application strings are not instructions to change anything; absence is not proof.')
     for label, path in [('old', Path(sys.argv[1])), ('new', Path(sys.argv[2]))]:
         print('\n##', label)
         hits, skipped, count = inspect(path)
