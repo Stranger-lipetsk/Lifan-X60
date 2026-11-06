@@ -1,0 +1,440 @@
+# sd_boot update ramdisk: read-only static investigation
+Trusted stock image SHA-256: 734f6b6442108916df89303ec5f52ceaa0ebb927d3b984a1e8a85ef2a6c12597
+Nothing in this image is executed. Never execute its update programs on a device based on this report.
+Android boot image: kernel=3588212 ramdisk=45165047 page=2048
+Files inspected: 460; symlinks are listed but not followed.
+Symlinks: 413
+
+## Text: file_contexts (33 matching lines)
+40: /dev/block(/.*)?	u:object_r:block_device:s0
+41: /dev/block/loop[0-9]*	u:object_r:loop_device:s0
+42: /dev/block/ram[0-9]*	u:object_r:ram_device:s0
+43: /dev/block/mtdblock5	u:object_r:radio_device:s0
+164: /data(/.*)?		u:object_r:system_data_file:s0
+165: /data/backup(/.*)?		u:object_r:backup_data_file:s0
+166: /data/secure/backup(/.*)?	u:object_r:backup_data_file:s0
+167: /data/security(/.*)?	u:object_r:security_file:s0
+168: /data/drm(/.*)?		u:object_r:drm_data_file:s0
+169: /data/gps(/.*)?		u:object_r:gps_data_file:s0
+170: /data/dalvik-cache(/.*)? u:object_r:dalvikcache_data_file:s0
+171: /data/anr(/.*)?		u:object_r:anr_data_file:s0
+172: /data/app(/.*)?		u:object_r:apk_data_file:s0
+173: /data/app/vmdl.*\.tmp	u:object_r:apk_tmp_file:s0
+174: /data/app-private(/.*)?		u:object_r:apk_private_data_file:s0
+175: /data/app-private/vmdl.*\.tmp	u:object_r:apk_private_tmp_file:s0
+176: /data/tombstones(/.*)?	u:object_r:tombstone_data_file:s0
+177: /data/local/tmp(/.*)?	u:object_r:shell_data_file:s0
+178: /data/local/tmp/selinux(/.*)?   u:object_r:tombstone_data_file:s0
+180: /data/misc/bluetoothd(/.*)?	u:object_r:bluetoothd_data_file:s0
+181: /data/misc/bluetooth(/.*)?	u:object_r:bluetooth_data_file:s0
+182: /data/misc/bluedroid(/.*)?	u:object_r:bluetooth_data_file:s0
+183: /data/misc/keystore(/.*)?	u:object_r:keystore_data_file:s0
+184: /data/misc/vpn(/.*)?		u:object_r:vpn_data_file:s0
+185: /data/misc/systemkeys(/.*)?	u:object_r:systemkeys_data_file:s0
+186: /data/misc/wifi(/.*)?		u:object_r:wifi_data_file:s0
+187: /data/misc/camera(/.*)?	u:object_r:camera_calibration_file:s0
+188: /data/misc/dhcp(/.*)?           u:object_r:dhcp_data_file:s0
+190: /data/data/.*		u:object_r:app_data_file:s0
+192: /data/data/com.android.settings/files/wallpaper	u:object_r:wallpaper_file:s0
+194: /data/system/users/[0-9]+/wallpaper		u:object_r:wallpaper_file:s0
+196: /data/data/com.android.providers.downloads/cache u:object_r:download_file:s0
+219: /data/app-asec(/.*)?    u:object_r:asec_image_file:s0
+
+## Text: fstab.el_imx6_solo_v2 (3 matching lines)
+10: #/dev/block/mmcblk1p3    /system      ext4    rw                                                                               wait
+11: #/dev/block/mmcblk1p4    /data        ext4    nosuid,nodev,nodiratime,noatime,nomblk_io_submit,noauto_da_alloc,errors=panic    wait,encryptable=footer
+12: /dev/block/mmcblk1p1    /fw_data     vfat    rw                                                                               wait
+
+## Binary strings: init (6 matches; not proof of execution)
+/dev/block/mtdblock%d
+/dev/block/loop%d
+/dev/block/
+/dev/block/platform/%s
+/dev/block/dm-%u
+/dev/block
+
+## Text: init.el_imx6_solo_v2.rc (32 matching lines)
+1: import init.el_imx6_solo_v2.usb.rc
+76: # change for FSL specific service
+114: 	mkdir /data/gps 771 system system
+115:     chown gps system /data/gps
+117: # mount the debugfs
+118:     mount debugfs none /sys/kernel/debug/
+134: #service wifi_loader /system/bin/wifi/rc.wifi start
+140: service wpa_supplicant /system/bin/wpa_supplicant \
+141:     -iwlan0 -Dnl80211 -c/data/misc/wifi/wpa_supplicant.conf \
+143:     -O/data/misc/wifi/sockets \
+144:     -e/data/misc/wifi/entropy.bin -g@android:wpa_wlan0
+154: service dhcpcd_wlan0 /system/bin/dhcpcd -ABKL
+160: service iprenew_wlan0 /system/bin/dhcpcd -n
+167: service p2p_supplicant /system/bin/wpa_supplicant \
+168:     -iwlan0 -Dnl80211 -iwlan0 -c/data/misc/wifi/wpa_supplicant.conf \
+170:     -ip2p0 -Dnl80211 -c/data/misc/wifi/p2p_supplicant.conf \
+172:     -O/data/misc/wifi/sockets -puse_p2p_group_interface=1 \
+173:     -e/data/misc/wifi/entropy.bin -g@android:wpa_wlan0
+183: service hostapd_bin /system/bin/logwrapper /system/bin/hostapd -dd /data/misc/wifi/hostapd.conf 
+189: service dhcpcd_p2p /system/bin/dhcpcd -aABKL
+194: service iprenew_p2p /system/bin/dhcpcd -n
+200: #service dhcpcd_eth0 /system/bin/dhcpcd -ABKL
+205: #service iprenew_eth0 /system/bin/dhcpcd -n
+212: service magd /system/bin/magd
+218: service sys_poweroff /system/bin/sys_poweroff.sh
+223: service fs_sync /system/bin/fs_sync.sh
+229: service el_wifi_enable /system/bin/el_wifi_enable.sh
+234: service clean_swap /system/bin/sh /system/bin/clean_swap.sh
+241: service usbnet_adb /system/bin/el_debug_tool
+253: #service gpsd /system/bin/glgps -c /system/etc/gpsconfig.xml
+260: # mount ext4 partitions
+261:     mount_all /fstab.el_imx6_solo_v2
+
+## Text: init.environ.rc (1 matching lines)
+8:     export ANDROID_DATA /data
+
+## Text: init.rc (118 matching lines)
+7: import /init.environ.rc
+8: import /init.usb.rc
+9: import /init.${ro.hardware}.rc
+10: import /init.trace.rc
+50: # Create cgroup mount point for cpu accounting
+52:     mount cgroup none /acct cpuacct
+55: # Create cgroup mount point for memory
+56:     mount tmpfs none /sys/fs/cgroup mode=0750,uid=0,gid=1000
+58:     mount cgroup none /sys/fs/cgroup/memory memory
+71:     mkdir /data 0771 system system
+95:     mount tmpfs tmpfs /mnt/secure mode=0700,uid=0,gid=0
+104:     # Secure container public mount points.
+106:     mount tmpfs tmpfs /mnt/asec mode=0755,gid=1000
+108:     # Filesystem image public mount points.
+110:     mount tmpfs tmpfs /mnt/obb mode=0755,gid=1000
+114:     mount tmpfs tmpfs /mnt/shm mode=0775,uid=1000,gid=1003,size=1m
+130: # Create cgroup mount points for process groups
+132:     mount cgroup none /dev/cpuctl cpu
+174:     # mount rootfs rootfs / ro remount
+175:     # mount shared so changes propagate into child namespaces
+176:     mount rootfs rootfs / shared rec
+177:     mount tmpfs tmpfs /mnt/secure private rec
+179:     # We chown/chmod /cache again so because mount is run as root + defaults
+185:     # This may have been created by the recovery system with odd permissions
+186:     chown system cache /cache/recovery
+187:     chmod 0770 /cache/recovery
+188:     # This may have been created by the recovery system with the wrong context.
+189:     restorecon /cache/recovery
+210:     mount ext4 loop@/fw_data/sd_data.img /data
+211:     # We chown/chmod /data again so because mount is run as root + defaults
+212:     chown system system /data
+213:     chmod 0771 /data
+214:     # We restorecon /data in case the userdata partition has been reset.
+215:     restorecon /data
+218:     copy /data/system/entropy.dat /dev/urandom
+221:     # Do this before we mount cache so eventually we can use cache for
+223:     mkdir /data/dontpanic 0750 root log
+226:     copy /proc/apanic_console /data/dontpanic/apanic_console
+227:     chown root log /data/dontpanic/apanic_console
+228:     chmod 0640 /data/dontpanic/apanic_console
+230:     copy /proc/apanic_threads /data/dontpanic/apanic_threads
+231:     chown root log /data/dontpanic/apanic_threads
+232:     chmod 0640 /data/dontpanic/apanic_threads
+236:     mkdir /data/media 0770 media_rw media_rw
+239:     mkdir /data/misc 01771 system misc
+240:     mkdir /data/misc/adb 02750 system shell
+241:     mkdir /data/misc/bluedroid 0770 bluetooth net_bt_stack
+242:     mkdir /data/misc/bluetooth 0770 system system
+243:     mkdir /data/misc/keystore 0700 keystore keystore
+244:     mkdir /data/misc/keychain 0771 system system
+245:     mkdir /data/misc/radio 0770 system radio
+246:     mkdir /data/misc/sms 0770 system radio
+247:     mkdir /data/misc/zoneinfo 0775 system system
+248:     mkdir /data/misc/vpn 0770 system vpn
+249:     mkdir /data/misc/systemkeys 0700 system system
+251:     mkdir /data/misc/wifi 0770 wifi wifi
+252:     mkdir /data/misc/wifi/sockets 0770 wifi wifi
+253:     ## broadcom modify  mkdir /data/misc/wifi/wpa_supplicant 0770 wifi wifi
+254:     mkdir /data/misc/dhcp 0770 dhcp dhcp
+255:     chown dhcp system /data/misc/dhcp
+256:     chmod 0660 /data/misc/wifi/wpa_supplicant.conf
+257:     chmod 0775 /data/misc/wifi/ipconfig.txt
+259:     mkdir /data/local 0751 root root
+260:     mkdir /data/misc/media 0700 media media
+262:     # For security reasons, /data/local/tmp should always be empty.
+263:     # Do not place files or directories in /data/local/tmp
+264:     mkdir /data/local/tmp 0771 shell shell
+265:     mkdir /data/data 0771 system system
+266:     mkdir /data/app-private 0771 system system
+267:     mkdir /data/app-asec 0700 root root
+268:     mkdir /data/app-lib 0771 system system
+269:     mkdir /data/app 0771 system system
+270:     mkdir /data/app/ing 0771 root root
+271:     mkdir /data/property 0700 root root
+272:     mkdir /data/ssh 0750 root shell
+273:     mkdir /data/ssh/empty 0700 root root
+276:     mkdir /data/dalvik-cache 0771 system system
+279:     mkdir /data/resource-cache 0771 system system
+280:     chown system system /data/resource-cache
+281:     chmod 0771 /data/resource-cache
+284:     mkdir /data/lost+found 0770 root root
+288:     mkdir /data/drm 0770 drm drm
+292:     mkdir /data/mediadrm 0770 mediadrm mediadrm
+295:     symlink /data/data/com.android.shell/files/bugreports /data/bugreports
+298:     mkdir /data/security 0711 system system
+342:     write /sys/block/mmcblk0/queue/read_ahead_kb 2048
+343:     write /sys/block/mmcblk1/queue/read_ahead_kb 2048
+385: # Set these so we can remotely update SELinux policy
+404: # Define fsl avi/aac/asf/mkv/flv/flac format support
+521: service video_cam /system/bin/logwrapper /system/bin/video_cam
+526: service general_conf /system/bin/general_conf.sh
+530: service ueventd /sbin/ueventd
+535: service healthd /sbin/healthd
+540: service healthd-charger /sbin/healthd -n
+549: service console /system/bin/bin/sh
+559: service adbd /sbin/adbd
+569: service servicemanager /system/bin/servicemanager
+580: service vold /system/bin/vold
+582:     socket vold stream 0660 root mount
+585: service netd /system/bin/netd
+591: service debuggerd /system/bin/debuggerd
+594: service surfaceflinger /system/bin/surfaceflinger
+600: service zygote /system/bin/app_process -Xzygote /system/bin --zygote --start-system-server
+608: service drm /system/bin/drmserver
+613: service media /system/bin/mediaserver
+619: service bootanim /system/bin/bootanimation
+626: service installd /system/bin/installd
+630: service flash_recovery /system/etc/install-recovery.sh
+634: service racoon /system/bin/racoon
+642: service mtpd /system/bin/mtpd
+650: service keystore /system/bin/keystore /data/misc/keystore
+655: service dumpstate /system/bin/dumpstate -s
+661: service sshd /system/bin/start-ssh
+665: service mdnsd /system/bin/mdnsd
+673: service ril-daemon /system/bin/rild
+681: service mcusync /system/bin/mcusync
+686: service firm_upgrade /system/bin/logwrapper /system/bin/fw_upgrade
+692:     service sdcard /system/bin/sdcard -l -t4 /data/media /mnt/shell/emulated 1023 1023
+
+## Text: property_contexts (6 matching lines)
+3: # property service keys
+25: service.                u:object_r:system_prop:s0
+32: service.adb.root        u:object_r:shell_prop:s0
+33: service.adb.tcp.port    u:object_r:shell_prop:s0
+37: persist.service.        u:object_r:system_prop:s0
+38: persist.service.bdroid. u:object_r:bluetooth_prop:s0
+
+## Text: system/bin/am (1 matching lines)
+8: exec app_process $base/bin com.android.commands.am.Am "$@"
+
+## Binary strings: system/bin/applypatch (1 matches; not proof of execution)
+/dev/block/mtdblock%d
+
+## Binary strings: system/bin/bin/busybox (5 matches; not proof of execution)
+mke2fs
+mkfs.ext2
+mkfs.minix
+mkfs.vfat
+Formatting... 
+
+## Text: system/bin/bmgr (1 matching lines)
+6: exec app_process $base/bin com.android.commands.bmgr.Bmgr "$@"
+
+## Text: system/bin/boot_mode_check.sh (5 matching lines)
+4: DATAIMAGE=/mnt/para_fw/backup_image/data.tar
+5: EMMC_NODE=/dev/block/mmcblk0
+24:         /system/bin/mke2fs -t ext4 ${EMMC_NODE}p5 
+25:         mount -t ext4 ${EMMC_NODE}p5 /mnt/media_rw/usb2/
+41: #SETP_2 recovery swap image
+
+## Text: system/bin/bu (1 matching lines)
+5: exec app_process $base/bin com.android.commands.bu.Backup "$@"
+
+## Text: system/bin/build_emmc.sh (29 matching lines)
+4: EMMC_NODE=/dev/block/mmcblk0
+7: BOOTIMG_PATH=$BUILD_OUT_PATH/boot.img
+8: UBOOT_BIN=$BUILD_OUT_PATH/u-boot.bin
+9: SYSTEMIMG=$BUILD_OUT_PATH/system.img
+11: DATAIMAGE=$BUILD_OUT_PATH/data.tar
+40: UUID_CONFIG=config.ini
+108: #        echo "incorrect u-boot.bin location !"
+113:         echo "incorrect boot.img location !"
+118:         echo "incorrect system.img location !"
+156:     if ! /system/bin/mke2fs -t ext4 ${EMMC_NODE}p2; then err_exit 3003; fi
+157:     if ! /system/bin/mke2fs -t ext4 ${EMMC_NODE}p3; then err_exit 3004; fi
+158:     if ! /system/bin/mke2fs -t ext4 ${EMMC_NODE}p5; then err_exit 3005; fi
+159:     if ! /system/bin/mke2fs -t ext4 ${EMMC_NODE}p6; then err_exit 3006; fi
+168:     # install u-boot.bin
+171:         echo 0 > /sys/block/mmcblk0boot0/force_ro
+172:         if ! dd if=$UBOOT_BIN of=/dev/block/mmcblk0boot0; then
+174:             echo 1 > /sys/block/mmcblk0boot0/force_ro
+177:         echo 1 > /sys/block/mmcblk0boot0/force_ro
+180:     # install boot.img in partition 1
+182:         echo "ERROR! write boot.img fail!"
+187:     # install system.img in partition 3
+189:         echo "ERROR! write system.img fail!"
+197: 		mount -t ext4 ${EMMC_NODE}p5 /mnt/media_rw/usb2/
+202: 		mount -t ext4 ${EMMC_NODE}p6 /mnt/media_rw/usb2/
+218:     if mount -t ext4 ${EMMC_NODE}p6 $EMMC_MOUNT_PATH; then
+231:         echo "ERROR!! unable mount partition 6 ."
+238:     if mount -t ext4 ${EMMC_NODE}p6 $EMMC_MOUNT_PATH; then
+249:         echo "ERROR!! unable mount partition 6 ."
+258:         if ! mount ${EMMC_NODE}p7 ${EMMC_MOUNT_PATH}; then err_exit 6001; fi
+
+## Text: system/bin/chk_file_install.sh (1 matching lines)
+3: DST_FILE=/data/eGTouchA.ini
+
+## Text: system/bin/clean_swap.sh (1 matching lines)
+3: dd if=/dev/zero of=/dev/block/mmcblk0p2 bs=1M count=100
+
+## Text: system/bin/clean_uboot.sh (3 matching lines)
+3: echo 0 > /sys/block/mmcblk0boot0/force_ro
+4: dd if=/dev/zero of=/dev/block/mmcblk0boot0 count=10
+5: echo 1 > /sys/block/mmcblk0boot0/force_ro
+
+## Binary strings: system/bin/fw_upgrade (4 matches; not proof of execution)
+/mnt/para_fw/config.ini
+/fw_data/MCU_FW.hex
+/dev/block/mmcblk0p5
+/mnt/extsd/config.ini
+
+## Text: system/bin/ime (1 matching lines)
+6: exec app_process $base/bin com.android.commands.ime.Ime "$@"
+
+## Text: system/bin/input (1 matching lines)
+6: exec app_process $base/bin com.android.commands.input.Input $*
+
+## Binary strings: system/bin/mdnsd (3 matches; not proof of execution)
+BuildUpdateMessage: Error formatting message for %s
+SendRecordRegistration: Error formatting message for %s, disabling further updates
+SendRecordDeregistration: Error formatting message for %s
+
+## Text: system/bin/media (1 matching lines)
+6: exec app_process $base/bin com.android.commands.media.Media "$@"
+
+## Binary strings: system/bin/mke2fs (21 matches; not proof of execution)
+Syntax error in mke2fs config file (%s, line #%d)
+MKE2FS_SKIP_PROGRESS
+MKE2FS_SYNC
+MKE2FS_CONFIG
+mkfs.ext3
+mke2fs %s (%s)
+mkfs.
+Your mke2fs.conf file does not define the %s filesystem type.
+You probably need to install an updated mke2fs.conf file.
+Warning: the fs_type %s is not defined in mke2fs.conf
+fs_types for mke2fs.conf resolution: 
+MKE2FS_FIRST_META_BG
+MKE2FS_DEVICE_SECTSIZE
+MKE2FS_DEVICE_PHYS_SECTSIZE
+%s/mke2fs-%s.e2undo
+MKE2FS_SKIP_CHECK_MSG
+mke2fs
+/etc/mke2fs.conf
+mke2fs forced anyway.  Hope /etc/mtab is incorrect.
+mke2fs forced anyway.
+mke2fs
+
+## Text: system/bin/monkey (1 matching lines)
+7: exec app_process $base/bin com.android.commands.monkey.Monkey $*
+
+## Text: system/bin/pm (1 matching lines)
+6: exec app_process $base/bin com.android.commands.pm.Pm "$@"
+
+## Text: system/bin/requestsync (1 matching lines)
+5: exec app_process $base/bin com.android.commands.requestsync.RequestSync "$@"
+
+## Text: system/bin/restore_system.sh (4 matching lines)
+68: 	FREE_DATA_SIZE=$(df -m | grep mmcblk0p5 | tr -s ' ' | cut -d ' ' -f4)
+71: 		rm -rf /data/data/com.android.browser/app_webview/*
+93: chmod 666 /mnt/para_fw/config.ini
+101: busybox swapoff /dev/block/mmcblk0p2
+
+## Binary strings: system/bin/sbin/mke2fs (28 matches; not proof of execution)
+Syntax error in mke2fs config file (%s, line #%d)
+MKE2FS_SYNC
+MKE2FS_CONFIG
+mkfs.ext3
+mke2fs %s (%s)
+mkfs.
+Your mke2fs.conf file does not define the %s filesystem type.
+You probably need to install an updated mke2fs.conf file.
+Warning: the fs_type %s is not defined in mke2fs.conf
+fs_types for mke2fs.conf resolution: 
+MKE2FS_FIRST_META_BG
+MKE2FS_DEVICE_SECTSIZE
+MKE2FS_DEVICE_PHYS_SECTSIZE
+%s/mke2fs-%s.e2undo
+MKE2FS_SKIP_CHECK_MSG
+mke2fs
+/usr/local/etc/mke2fs.conf
+mke2fs forced anyway.  Hope /etc/mtab is incorrect.
+mke2fs forced anyway.
+mke2fs_default_profile
+mke2fs.c
+mke2fs_setup_tdb
+mke2fs.c
+mke2fs_discard_device
+mke2fs_default_profile
+abort_mke2fs
+mke2fs.c
+mke2fs_default_profile
+
+## Text: system/bin/settings (1 matching lines)
+5: exec app_process $base/bin com.android.commands.settings.SettingsCmd "$@"
+
+## Text: system/bin/svc (1 matching lines)
+6: exec app_process $base/bin com.android.commands.svc.Svc $*
+
+## Text: system/bin/swap2extsd.sh (4 matching lines)
+3: cp /data/data.tar /mnt/media_rw/extsd/
+4: dd if=/dev/block/mmcblk0p2 of=/mnt/media_rw/extsd/swap.img
+8: #cp /data/data.tar /mnt/para_fw/backup_image/
+9: #dd if=/dev/block/mmcblk0p2 of=/mnt/para_fw/backup_image/swap.img
+
+## Binary strings: system/bin/toolbox (1 matches; not proof of execution)
+/dev/block/loop0
+
+## Text: system/bin/uiautomator (2 matching lines)
+34: export run_base=/data/local/tmp
+123: exec app_process ${base}/bin com.android.commands.uiautomator.Launcher ${args}
+
+## Binary strings: system/bin/vold (8 matches; not proof of execution)
+/dev/block/vold
+/dev/block/vold/%d:%d
+Formatting
+Formatting volume %s (%s)
+mmcblk0boot
+mmcblk1boot
+/dev/block/loop%d
+/dev/block/dm-%u
+
+## Text: system/build.prop (1 matching lines)
+55: dalvik.vm.stack-trace-file=/data/anr/traces.txt
+
+## Text: system/etc/dhcpcd/dhcpcd-run-hooks (2 matching lines)
+10: state_dir="/data/misc/dhcpcd"
+15: # /etc/resolv.conf how they want and stop the system scripts ever updating it.
+
+## Text: system/etc/event-log-tags (4 matching lines)
+31: 2802 watchdog (Service|3)
+94: 30030 am_create_service (User|1|5),(Service Record|1|5),(Name|3),(UID|1|5),(PID|1|5)
+95: 30031 am_destroy_service (User|1|5),(Service Record|1|5),(PID|1|5)
+237: 205010 gls_authenticate (status|1),(service|3)
+
+## Text: system/etc/media_codecs.xml (2 matching lines)
+65:     are not readable, i.e. use a custom format even though abusing one of
+73:     matching surfaceflinger support that can render the custom format to
+
+## Text: system/etc/mkshrc (1 matching lines)
+9: : ${TERM:=vt100} ${HOME:=/data} ${MKSH:=/system/bin/sh} ${HOSTNAME:=$(getprop ro.product.device)}
+
+## Text: system/etc/permissions/required_hardware.xml (2 matching lines)
+17: <!-- XXX: This file is a clone of :frameworks/native/data/etc/tablet_core_hardware.xml file,
+24:     <feature name="android.hardware.camera.flash" />
+
+## Binary strings: system/framework/framework-res.apk (1 matches; not proof of execution)
+((SD card is damaged. Try reformatting it.
+
+## Binary strings: system/lib/libcutils.so (1 matches; not proof of execution)
+/dev/block
+
+## Binary strings: system/usr/icu/icudt51l.dat (1 matches; not proof of execution)
+POP DIRECTIONAL FORMATTING
+
+Text matched lines: 265; binary matched strings: 80
+Static search only: no guarantee of complete coverage, control flow, runtime device state, or data preservation.
