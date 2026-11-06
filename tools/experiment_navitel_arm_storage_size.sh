@@ -93,15 +93,17 @@ debugfs -w -R 'rm /app/PackageInstaller.odex' "$work/offline-system.img" >/dev/n
 debugfs -w -R 'rm /priv-app/PackageInstaller.odex' "$work/offline-system.img" >/dev/null 2>&1 || true
 debugfs -w -R "write $work/amaze.apk /app/AmazeFileManager.apk" "$work/offline-system.img" >/dev/null 2>&1
 debugfs -w -R "write $work/installer.apk /priv-app/PackageInstaller.apk" "$work/offline-system.img" >/dev/null 2>&1
-debugfs -w -R "write $work/stock-busybox /bin/x60lab-busybox" "$work/offline-system.img" >/dev/null 2>&1
-debugfs -w -R 'set_inode_field /bin/x60lab-busybox mode 0100755' "$work/offline-system.img" >/dev/null 2>&1
+# BusyBox selects its applet using argv[0], so use the literal busybox name.
+debugfs -R 'stat /bin/busybox' "$work/offline-system.img" 2>&1 | grep -F 'File not found'
+debugfs -w -R "write $work/stock-busybox /bin/busybox" "$work/offline-system.img" >/dev/null 2>&1
+debugfs -w -R 'set_inode_field /bin/busybox mode 0100755' "$work/offline-system.img" >/dev/null 2>&1
 printf 'u:object_r:system_file:s0\0' > "$work/system-context"
 for target in /framework/services.jar /priv-app/Navitel-large.apk /app/AmazeFileManager.apk /priv-app/PackageInstaller.apk; do
   debugfs -w -R "set_inode_field $target mode 0100644" "$work/offline-system.img" >/dev/null 2>&1
   debugfs -w -R "ea_set -f $work/system-context $target security.selinux" "$work/offline-system.img" >/dev/null 2>&1
 done
-debugfs -w -R "ea_set -f $work/system-context /bin/x60lab-busybox security.selinux" "$work/offline-system.img" >/dev/null 2>&1
-debugfs -R 'stat /bin/x60lab-busybox' "$work/offline-system.img" 2>&1 | grep -E 'Mode:[[:space:]]+0755'
+debugfs -w -R "ea_set -f $work/system-context /bin/busybox security.selinux" "$work/offline-system.img" >/dev/null 2>&1
+debugfs -R 'stat /bin/busybox' "$work/offline-system.img" 2>&1 | grep -E 'Mode:[[:space:]]+0755'
 e2fsck -fn "$work/offline-system.img"
 debugfs -R "dump /framework/services.jar $work/services-offline-check.jar" "$work/offline-system.img" >/dev/null 2>&1
 debugfs -R "dump /priv-app/Navitel-large.apk $work/old-offline-check.apk" "$work/offline-system.img" >/dev/null 2>&1
@@ -111,7 +113,7 @@ debugfs -R "dump /app/AmazeFileManager.apk $work/amaze-offline-check.apk" "$work
 debugfs -R "dump /priv-app/PackageInstaller.apk $work/installer-offline-check.apk" "$work/offline-system.img" >/dev/null 2>&1
 cmp "$work/amaze.apk" "$work/amaze-offline-check.apk"
 cmp "$work/installer.apk" "$work/installer-offline-check.apk"
-debugfs -R "dump /bin/x60lab-busybox $work/busybox-offline-check" "$work/offline-system.img" >/dev/null 2>&1
+debugfs -R "dump /bin/busybox $work/busybox-offline-check" "$work/offline-system.img" >/dev/null 2>&1
 cmp "$work/stock-busybox" "$work/busybox-offline-check"
 chmod a+r "$work/offline-system.img"
 echo 'Offline generic system image fsck clean; stock services and Navitel byte-for-byte verified'
@@ -379,12 +381,12 @@ cat "$work/archive-check.txt"
 measure_storage() {
   local phase=$1
   echo "Synthetic emulator /data allocated sizes: $phase"
-  timeout -k 10 240 "$adb" shell 'BB=/system/bin/x60lab-busybox; for p in /data /data/app /data/app-lib /data/dalvik-cache /data/data/com.navitel /data/app/com.navitel-*.apk /data/app-lib/com.navitel-* /data/dalvik-cache/*com.navitel*; do if [ -e "$p" ]; then "$BB" du -sk "$p" || exit 1; fi; done; echo X60_SIZE_DONE' | tr -d '\r' > "$work/du-$phase.txt"
+  timeout -k 10 240 "$adb" shell 'BB=/system/bin/busybox; for p in /data /data/app /data/app-lib /data/dalvik-cache /data/data/com.navitel /data/app/com.navitel-*.apk /data/app-lib/com.navitel-* /data/dalvik-cache/*com.navitel*; do if [ -e "$p" ]; then "$BB" du -sk "$p" || exit 1; fi; done; echo X60_SIZE_DONE' | tr -d '\r' > "$work/du-$phase.txt"
   cat "$work/du-$phase.txt"
   grep -E '^[0-9]+[[:space:]]+/data$' "$work/du-$phase.txt"
   grep -Fx X60_SIZE_DONE "$work/du-$phase.txt"
 }
-timeout -k 10 120 "$adb" pull /system/bin/x60lab-busybox "$work/busybox-device-check" >/dev/null
+timeout -k 10 120 "$adb" pull /system/bin/busybox "$work/busybox-device-check" >/dev/null
 cmp "$work/stock-busybox" "$work/busybox-device-check"
 measure_storage before
 echo 'Verify original system APK immediately before the negative control'
