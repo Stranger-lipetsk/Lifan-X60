@@ -180,7 +180,7 @@ query_package before
 echo 'Negative control: unmodified candidate must be rejected as a differently signed update'
 timeout -k 10 300 "$adb" install -r "$new" > "$work/negative.txt" 2>&1 || true
 cat "$work/negative.txt"
-grep -E 'INSTALL_FAILED_UPDATE_INCOMPATIBLE|INSTALL_FAILED_SHARED_USER_INCOMPATIBLE' "$work/negative.txt" || { echo 'Unexpected control result'; exit 1; }
+grep -E 'INSTALL_FAILED_UPDATE_INCOMPATIBLE|INSTALL_FAILED_SHARED_USER_INCOMPATIBLE|INSTALL_PARSE_FAILED_INCONSISTENT_CERTIFICATES' "$work/negative.txt" || { echo 'Unexpected control result'; exit 1; }
 query_package negative
 grep -F 'package:/system/priv-app/Navitel-large.apk' "$work/path-negative.txt"
 check_synthetic negative
@@ -224,7 +224,8 @@ check_synthetic launch
   echo "$keycert"
   echo 'Candidate re-signed in disposable CI only; not an installation recommendation.'
   cat "$work/compare.txt"
-  echo 'Negative control: original differently signed candidate rejected as incompatible: yes.'
+  echo 'Negative control: original differently signed candidate rejected; installer result:'
+  grep -E 'Failure \[' "$work/negative.txt" | tr -d '\r'
   echo 'Matching certificate candidate installed as data update; original emulator system APK unchanged: yes.'
   echo "UID before/after/userspace restart: $uid_before/$uid_after/$uid_restart"
   echo '## Package paths and selected version'
