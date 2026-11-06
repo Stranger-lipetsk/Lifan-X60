@@ -571,6 +571,8 @@ confirm_ui 'Restore my data'
 wait_caller_log RESTORE_CALL_RETURNED
 if grep -Fq RESTORE_CALL_FAILED "$work/caller-log.txt"; then echo 'Restore exception'; exit 1; fi
 check_synthetic restored
+cmp "$work/canary-marker-fullreboot.txt" "$work/canary-marker-restored.txt"
+cmp "$work/canary-pref-fullreboot.xml" "$work/canary-pref-restored.xml"
 timeout -k 5 60 "$adb" pull /data/data/ru.lifanx60.backupblocked/files/lab-marker.txt "$work/blocked-after-marker.txt" >/dev/null
 timeout -k 5 60 "$adb" pull /data/data/ru.lifanx60.backupblocked/shared_prefs/lab_probe.xml "$work/blocked-after-pref.xml" >/dev/null
 cmp "$work/blocked-before-marker.txt" "$work/blocked-after-marker.txt"
@@ -607,7 +609,7 @@ test "$uid_before" = "$uid_restored" || { echo 'UID changed after restore'; exit
   echo "Caller signed with generic emulator platform cert $platformcert, UID $caller_uid; called backup service itself with virtual confirmation."
   echo '## Synthetic archive created before upgrade'; cat "$work/archive-check.txt"
   echo 'After upgrade and full reboot, both synthetic Navitel files AND both independent target synthetic files were deliberately deleted in the emulator; then app-initiated restore was confirmed via emulator UI.'
-  echo 'All four deliberately removed synthetic files in the two included packages were restored; excluded synthetic target files also still match, without being deleted.'
+  echo 'All four deliberately removed synthetic files in the two included packages were restored byte-for-byte; excluded synthetic target files also still match, without being deleted.'
   echo "UID after restore: $uid_restored; updated Navitel remains registered."
   echo 'Full restore is destructive and can clear app data. This fixture is not for real devices.'
   echo '## Crash dialog during installation'
