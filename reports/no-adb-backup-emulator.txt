@@ -1,0 +1,13 @@
+# Application-initiated synthetic backup, no ADB backup transport
+Disposable generic Android 4.4.2 x86 emulator; no real device, Navitel, license, maps or real SD.
+ADB was used only for laboratory install, observation, virtual UI and pulling the synthetic result; the app called the backup service itself.
+Emulator-only AOSP platform signature; no shared UID; this is not a device APK or instructions.
+Fingerprint: generic_x86/sdk_x86/generic_x86:4.4.2/KK/4174703:eng/test-keys; hardware: ranchu; caller UID: 10054
+Emulator platform certificate: c8a2e9bccf597c2fb6dc66bee293fc13f2fc47ec77bc6b2b0d52c11f51192ab8
+Negative control: unsigned-to-platform app BACKUP_PERMISSION=false.
+Platform-signed app: BACKUP_PERMISSION=true; confirmation tapped in virtual UI; backup call returned.
+Lab archive entry: apps/ru.lifanx60.backupfixture/_manifest
+Lab archive entry: apps/ru.lifanx60.backupfixture/f/lab-marker.txt
+Lab archive entry: apps/ru.lifanx60.backupfixture/sp/lab_probe.xml
+Both synthetic files verified: yes
+No restore, other applications, real media, full partition image, or real head-unit behavior tested.
