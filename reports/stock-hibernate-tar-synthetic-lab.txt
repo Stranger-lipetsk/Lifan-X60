@@ -14,6 +14,7 @@ Hardlink relationship retained: True
 Test user xattr on source: ['user.x60_test']
 Test user xattr on extracted file: []
 SELinux labels and ACLs were not tested.
+Positive controls passed: same container can lchown a symlink; destination supports user xattrs.
 Symlink archive header numeric UID/GID: 10013 10013 ; target: lab-marker.txt
 ## Deliberately scheduled late write
 Source was modified after archive finished and before extraction. Extracted file contained the earlier snapshot; late source change did not appear.
