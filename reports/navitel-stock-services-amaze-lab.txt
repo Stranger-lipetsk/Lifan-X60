@@ -1,0 +1,44 @@
+# Same-signature Navitel update with stock-derived services.jar, Amaze and installer on disposable Android 4.4.2 x86
+Generic x86 emulator with stock-derived services.jar, not the device; host emulator network blocked.
+Stock-derived services.jar was installed only into the disposable emulator and compared byte-for-byte; generic remaining framework and kernel are not the head unit.
+No real maps, license, accounts, user data or SD; no APKs published. Empty virtual SD only.
+ADB prepared and observed the emulator and tapped its virtual UI; update was initiated by the stock-derived Amaze app and installed by the stock-derived PackageInstaller; generic emulator framework and virtual storage only.
+Initial stock-derived Navitel certificate equals the verified AOSP testkey certificate:
+a40da80a59d170caa950cf15c18c454d47a39b26989d8b640ecd745ba71bf5dc
+Candidate re-signed in disposable CI only; not an installation recommendation.
+Uncompressed payload entries identical, excluding JAR signing records: 5019
+This does not verify ZIP offsets, metadata, V2/V3 signing block or runtime signature checks.
+Negative control: original differently signed candidate rejected; installer result:
+Failure [INSTALL_PARSE_FAILED_INCONSISTENT_CERTIFICATES]
+Matching certificate candidate installed via Amaze and PackageInstaller as data update; original emulator system APK unchanged: yes.
+Emulator system mounted read-only during update:
+/dev/block/vda /system ext4 ro,relatime,data=ordered 0 0
+UID before/after/userspace restart/full emulator reboot: 10052/10052/10052/10052
+Full virtual device reboot confirmed via changed kernel boot ID; system APK still matched afterward.
+Stock-derived PackageInstaller and Amaze paths:
+WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
+package:/system/priv-app/PackageInstaller.apk
+WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
+package:/system/app/AmazeFileManager.apk
+## Package paths and selected version
+WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
+package:/system/priv-app/Navitel-large.apk
+WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
+package:/data/app/com.navitel-1.apk
+WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
+package:/data/app/com.navitel-1.apk
+WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
+package:/data/app/com.navitel-1.apk
+    codePath=/data/app/com.navitel-1.apk
+    versionCode=360622024 targetSdk=33
+    versionName=v11.11.1128
+    codePath=/system/priv-app/Navitel-large.apk
+    versionCode=201103033 targetSdk=28
+    versionName=9.13.73
+Synthetic marker and preferences for Navitel and one independent fixture app survived install, userspace restart, launch attempt, and full emulator reboot: yes.
+## Launch attempt (no activation asserted)
+WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
+Starting: Intent { cmp=com.navitel/.app.MainActivity }
+    mResumedActivity: ActivityRecord{afd94d38 u0 com.navitel/.app.MainActivity t2}
+  mFocusedActivity: ActivityRecord{afd94d38 u0 com.navitel/.app.MainActivity t2}
+Generic emulator full reboot is not real-device hibernate. Real device vendor libraries, app behavior, rollback, settings and all data preservation remain unverified.
