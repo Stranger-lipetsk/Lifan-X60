@@ -61,9 +61,25 @@ blocked6=yes
 sudo iptables -C OUTPUT -m owner --uid-owner "$emu_uid" ! -d 127.0.0.0/8 -j REJECT
 sudo ip6tables -C OUTPUT -m owner --uid-owner "$emu_uid" ! -d ::1/128 -j REJECT
 echo "Emulator host UID $emu_uid: non-loopback IPv4 and IPv6 blocked"
-sudo -u emulatorlab env HOME=/home/emulatorlab ANDROID_HOME="$sdk" ANDROID_AVD_HOME="$ANDROID_AVD_HOME" \
-  "$work/legacy/tools/emulator" -avd migration_arm -no-window -no-audio -no-boot-anim -no-snapshot -gpu swiftshader -engine classic > "$work/emulator.txt" 2>&1 &
-pid=$!
+start_emulator() {
+  sudo -u emulatorlab env HOME=/home/emulatorlab ANDROID_HOME="$sdk" ANDROID_AVD_HOME="$ANDROID_AVD_HOME" \
+    "$work/legacy/tools/emulator" -avd migration_arm -no-window -no-audio -no-boot-anim -no-snapshot -gpu swiftshader -engine classic >> "$work/emulator.txt" 2>&1 &
+  pid=$!
+}
+restart_emulator() {
+  # Use a process restart rather than the legacy emulator's hanging adb reboot.
+  timeout 30 "$adb" shell sync || true
+  sudo pkill -TERM -u emulatorlab 2>/dev/null || true
+  for i in $(seq 1 20); do
+    if ! kill -0 "$pid" 2>/dev/null; then break; fi
+    sleep 1
+  done
+  if kill -0 "$pid" 2>/dev/null; then sudo pkill -KILL -u emulatorlab 2>/dev/null || true; fi
+  wait "$pid" 2>/dev/null || true
+  start_emulator
+  boot
+}
+start_emulator
 boot() {
   "$adb" wait-for-device &
   local waitpid=$! connected=no
@@ -97,11 +113,11 @@ echo 'Phase 3: push old system APK on disposable emulator'
 timeout 300 "$adb" push "$work/old.apk" /system/priv-app/Navitel-large.apk
 timeout 30 "$adb" shell chmod 0644 /system/priv-app/Navitel-large.apk
 timeout 30 "$adb" shell restorecon /system/priv-app/Navitel-large.apk || true
-echo "Phase 3a: reboot emulator with old package"
-timeout 60 "$adb" reboot
-timeout 60 "$adb" wait-for-disconnect || true
-boot
-echo "Phase 3b: query old package"
+echo "Phase 3a: restart emulator with old package"
+restart_emulator
+echo "Phase 3b: verify old system APK persisted and query package"
+timeout 300 "$adb" pull /system/priv-app/Navitel-large.apk "$work/old-after-restart.apk" >/dev/null
+cmp "$work/old.apk" "$work/old-after-restart.apk" || { echo 'Old system file did not persist'; exit 1; }
 path=$(timeout 60 "$adb" shell pm path com.navitel | tr -d '\r')
 echo "Initial package path: $path"
 grep -F 'package:/system/priv-app/Navitel-large.apk' <<< "$path" || { echo 'Old system app not registered'; exit 1; }
@@ -121,11 +137,11 @@ timeout 300 "$adb" push "$new" /system/priv-app/Navitel-large.apk
 timeout 30 "$adb" shell chmod 0644 /system/priv-app/Navitel-large.apk
 timeout 30 "$adb" shell restorecon /system/priv-app/Navitel-large.apk || true
 timeout 30 "$adb" logcat -c
-echo "Phase 4a: reboot emulator with new package"
-timeout 60 "$adb" reboot
-timeout 60 "$adb" wait-for-disconnect || true
-boot
-echo "Phase 4b: query new package and synthetic marker"
+echo "Phase 4a: restart emulator with new package"
+restart_emulator
+echo "Phase 4b: verify new system APK persisted and query marker"
+timeout 300 "$adb" pull /system/priv-app/Navitel-large.apk "$work/new-after-restart.apk" >/dev/null
+cmp "$new" "$work/new-after-restart.apk" || { echo 'New system file did not persist'; exit 1; }
 set +e
 timeout 60 "$adb" shell pm path com.navitel > "$work/new-path.txt" 2>&1; path_status=$?
 timeout 60 "$adb" shell dumpsys package com.navitel > "$work/new-package.txt" 2>&1; dump_status=$?
