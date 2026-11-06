@@ -110,7 +110,7 @@ ELF header: ELF Header:
 
 Beginning of static disassembly (not execution):
 
-/tmp/tmp9rng7n8a/extracted:     file format elf32-littlearm
+/tmp/tmporkpcft6/extracted:     file format elf32-littlearm
 
 
 Disassembly of section .plt:
@@ -232,7 +232,7 @@ Disassembly of section .text:
 
 Candidate Thumb code immediately following startup (heuristic):
 
-/tmp/tmp9rng7n8a/extracted:     file format elf32-littlearm
+/tmp/tmporkpcft6/extracted:     file format elf32-littlearm
 
 
 Disassembly of section .text:
@@ -622,6 +622,26 @@ Disassembly of section .text:
     417c:	b570      	push	{r4, r5, r6, lr}
     417e:	4d10      	ldr	r5, [pc, #64]	@ (41c0 <__libc_fini+0x44>)
 
+
+Candidate argv tables from PC-relative Thumb addresses:
+Table at 0x17044
+  0x13a5a '/system/bin/ifconfig'
+  0x13a00 'eth0'
+  0x13a6f '192.168.88.1'
+  NULL
+Table at 0x1700c
+  0x13a7c '/system/bin/setprop'
+  0x13a90 'service.adb.tcp.port'
+  0x13aa5 '9478'
+  NULL
+Table at 0x1702c
+  0x13aaa '/system/bin/stop'
+  0x13abb 'adbd'
+  NULL
+Table at 0x17038
+  0x13ac0 '/system/bin/start'
+  0x13abb 'adbd'
+  NULL
 
 ## /system/bin/check_usb_iface.sh
 debugfs stat: 0
