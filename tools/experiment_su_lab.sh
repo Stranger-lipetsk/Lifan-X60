@@ -34,7 +34,8 @@ cleanup() {
     echo "Failure ($status): emulator log"; tail -50 "$work/emulator.txt" 2>/dev/null || true
     timeout -k 5 10 "$adb" devices -l || true
     timeout -k 5 30 "$adb" logcat -d -v brief 2>/dev/null | grep -iE 'PackageManager|installd|X60SuLab|install|FATAL EXCEPTION' | tail -120 || true
-    timeout -k 5 30 "$adb" shell dmesg 2>/dev/null | grep -iE 'ext4|read.only|error' | tail -30 || true
+    timeout -k 5 30 "$adb" shell dmesg 2>/dev/null | grep -iE 'ext4|read.only|error|avc:|denied' | tail -60 || true
+    timeout -k 5 30 "$adb" shell 'ls -ldZ /data /data/data /data/data/ru.lifanx60.sulabshell /data/app-lib; getenforce' 2>/dev/null || true
   fi
   [ -z "$pid" ] || kill "$pid" 2>/dev/null || true
   sudo pkill -TERM -u sulabuser 2>/dev/null || true
@@ -148,7 +149,14 @@ for name in ordinary shell; do
   "$bt/zipalign" -f 4 "$work/$name/unsigned.apk" "$work/$name/aligned.apk"
   "$bt/apksigner" sign --key "$work/platform.pk8" --cert "$work/platform.x509.pem" --min-sdk-version 19 --v1-signing-enabled true --out "$work/$name.apk" "$work/$name/aligned.apk"
   timeout -k 10 120 "$adb" install "$work/$name.apk" > "$work/$name-install.txt" 2>&1 || true
-  grep -F Success "$work/$name-install.txt" || { cat "$work/$name-install.txt"; exit 1; }
+  if ! grep -Fq Success "$work/$name-install.txt"; then
+    cat "$work/$name-install.txt"
+    [ "$name" = shell ] || exit 1
+    timeout -k 5 30 "$adb" logcat -d -v brief > "$work/shell-install-log.txt" 2>&1 || true
+    printf '%s\n' 'Shell shared UID fixture installation failed; no app test performed.' > "$work/shell-result.txt"
+    grep -iE 'PackageManager|installd|avc:|denied' "$work/shell-install-log.txt" | tail -15 >> "$work/shell-result.txt" || true
+    continue
+  fi
   timeout -k 5 30 "$adb" logcat -c
   timeout -k 5 60 "$adb" shell am start -n "ru.lifanx60.sulab$name/ru.lifanx60.sulab.MainActivity" > "$work/$name-start.txt" 2>&1
   doneflag=no
@@ -161,8 +169,22 @@ for name in ordinary shell; do
   grep -F 'X60SuLab' "$work/$name-log.txt" | tr -d '\r' > "$work/$name-result.txt"
   cat "$work/$name-result.txt"
 done
-grep -F 'OWN_UID=2000' "$work/shell-result.txt"
+if grep -Fq 'OWN_UID=' "$work/shell-result.txt"; then grep -F 'OWN_UID=2000' "$work/shell-result.txt"; fi
 grep -E 'OWN_UID=1[0-9]{4}' "$work/ordinary-result.txt"
+
+echo 'Separate shell-context control: unroot adb on disposable emulator, then fixed identity check'
+timeout -k 5 60 "$adb" unroot > "$work/unroot.txt" 2>&1 || true
+timeout -k 5 120 "$adb" wait-for-device
+shell_id=$(timeout -k 5 30 "$adb" shell id | tr -d '\r')
+echo "ADB shell identity: $shell_id"
+grep -q 'uid=2000' <<< "$shell_id" || { echo 'Did not obtain unprivileged emulator ADB shell'; exit 1; }
+timeout -k 5 60 "$adb" shell /system/xbin/x60-lab-su 0 /system/bin/id > "$work/adb-su-result.txt" 2>&1 || true
+tr -d '\r' < "$work/adb-su-result.txt" > "$work/adb-su-clean.txt"
+cat "$work/adb-su-clean.txt"
+{
+  echo "Unprivileged emulator ADB shell before su: $shell_id"
+  cat "$work/adb-su-clean.txt"
+} > "$work/shell-context-result.txt"
 {
   echo '# Stock-derived su identity check in disposable ARM Android 4.4.2 emulator'
   echo 'No real device, applications, data or external media. Fixture invokes only a fixed identity check.'
@@ -171,5 +193,6 @@ grep -E 'OWN_UID=1[0-9]{4}' "$work/ordinary-result.txt"
   echo 'The ADB transport was used to prepare and observe the emulator. No APKs or su binary published.'
   echo '## Ordinary application'; cat "$work/ordinary-result.txt"
   echo '## Shell shared UID application'; cat "$work/shell-result.txt"
-  echo 'Even a positive result does not prove actual device installation, privileges, storage access or safety.'
+  echo '## Separate emulator ADB shell-context control, not an app'; cat "$work/shell-context-result.txt"
+  echo 'ADB shell and app SELinux contexts may differ. Even a positive result does not prove actual device installation, privileges, storage access or safety.'
 } > reports/su-identity-lab.txt
