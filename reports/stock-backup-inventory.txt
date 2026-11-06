@@ -1,0 +1,62 @@
+# Static APK backup inventory in stock-derived system image
+Manifest declarations only; no device, user applications, app data or actual backup tested.
+For all-apps backup, system apps require includeSystem; allowBackup=false is excluded.
+Stock framework also filters UID < 10000 without a backup agent; a declared shared UID is not proof of runtime UID.
+Default true is the Android 4.4 manifest default, not proof of backup contents or successful restore.
+APK path | package | allowBackup | sharedUserId | backupAgent
+app/AmazeFileManager.apk | com.amaze.filemanager | true | - | -
+app/BSEDemo.apk | com.ivt.vehiclesystemdemo | true | - | -
+app/BasicDreams.apk | com.android.dreams.basic | default-true | - | -
+app/Bluetooth.apk | com.android.bluetooth | default-true | android.uid.bluetooth | -
+app/Camera2.apk | com.android.camera2 | default-true | - | -
+app/CertInstaller.apk | com.android.certinstaller | false | - | -
+app/CubeLiveWallpapers.apk | com.example.android.livecubes | default-true | - | -
+app/DocumentsUI.apk | com.android.documentsui | default-true | - | -
+app/DownloadProviderUi.apk | com.android.providers.downloads.ui | default-true | android.media | -
+app/EL830TAM1_GPIO_TEST_2015.01.01.01.apk | tw.com.elead.el830.gpio_test | default-true | - | -
+app/EL831CLF01_Avin_2016.06.21.01.apk | tw.com.elead.el830.avin | default-true | - | -
+app/EL831CLF01_MediaPlayer_2017.01.11.01.apk | tw.com.elead.el830.mediaplayer | default-true | - | -
+app/EL831CLF01_MirrorLink_2016.06.13.01.apk | com.fpt.mirrorlink.android | true | - | -
+app/EL831CLF01_Radio_2016.12.16.01.apk | tw.com.elead.el830.radio | default-true | - | -
+app/EL831CLF01_elBTService_2016.09.05.01.apk | tw.com.elead.el830.elbluetooth | default-true | - | -
+app/EL831CLF01_elBluetoothDial_2016.12.13.01.apk | tw.com.elead.el830.elbluetooth.dial | default-true | - | -
+app/EL831CLF01_elBluetoothMusic_2016.12.13.01.apk | tw.com.elead.el830.elbluetooth.music | default-true | com.nforetek.bt | -
+app/EL831CLF01_elBluetoothPhone_2016.12.13.01.apk | tw.com.elead.el830.elbluetooth.phone | default-true | - | -
+app/EL831CLF01_elBluetoothSetup_2016.12.13.01.apk | tw.com.elead.el830.elbluetooth.setup | default-true | - | -
+app/FSLOta.apk | com.fsl.android.ota | default-true | android.uid.system | -
+app/HTMLViewer.apk | com.android.htmlviewer | default-true | - | -
+app/IQQIService-Elead-International-20160105.1.apk | com.iqt.iqqijni.el.international | false | com.iqt.iqqijni.el.international | -
+app/KeyChain.apk | com.android.keychain | false | android.uid.system | -
+app/Music.apk | com.android.music | default-true | - | -
+app/PacProcessor.apk | com.android.pacprocessor | default-true | - | -
+app/PackageInstaller.apk | com.android.packageinstaller | false | - | -
+app/PicoTts.apk | com.svox.pico | default-true | - | -
+app/Provision.apk | com.android.provision | default-true | - | -
+app/TelephonyProvider.apk | com.android.providers.telephony | false | android.uid.phone | -
+app/UserDictionaryProvider.apk | com.android.providers.userdictionary | default-true | android.uid.shared | DictionaryBackupAgent
+app/VisualizationWallpapers.apk | com.android.musicvis | default-true | - | -
+app/WfdSink.apk | com.freescale.wfdsink | true | android.uid.system | -
+priv-app/BackupRestoreConfirmation.apk | com.android.backupconfirm | false | - | -
+priv-app/DefaultContainerService.apk | com.android.defcontainer | false | - | -
+priv-app/DownloadProvider.apk | com.android.providers.downloads | default-true | android.media | -
+priv-app/EL830LF01_Home.apk | tw.com.elead.el830.home | default-true | android.uid.system | -
+priv-app/ElSettings.apk | com.android.settings | default-true | android.uid.system | -
+priv-app/ExternalStorageProvider.apk | com.android.externalstorage | default-true | - | -
+priv-app/FusedLocation.apk | com.android.location.fused | default-true | android.uid.system | -
+priv-app/InputDevices.apk | com.android.inputdevices | default-true | android.uid.system | -
+priv-app/Keyguard.apk | com.android.keyguard | default-true | android.uid.systemui | -
+priv-app/Launcher2.apk | com.android.launcher | default-true | - | -
+priv-app/MediaProvider.apk | com.android.providers.media | default-true | android.media | -
+priv-app/MusicFX.apk | com.android.musicfx | default-true | - | -
+priv-app/Navitel-large.apk | com.navitel | true | - | com.oslib.utils.SharedInfoBackupAgent
+priv-app/OneTimeInitializer.apk | com.android.onetimeinitializer | default-true | - | -
+priv-app/ProxyHandler.apk | com.android.proxyhandler | default-true | - | -
+priv-app/SettingsProvider.apk | com.android.providers.settings | default-true | android.uid.system | SettingsBackupAgent
+priv-app/SharedStorageBackup.apk | com.android.sharedstoragebackup | default-true | - | SharedStorageAgent
+priv-app/Shell.apk | com.android.shell | default-true | android.uid.shell | -
+priv-app/SystemUI.apk | com.android.systemui | false | android.uid.systemui | -
+priv-app/VpnDialogs.apk | com.android.vpndialogs | false | - | -
+priv-app/WallpaperCropper.apk | com.android.wallpapercropper | default-true | - | -
+
+Counts: {'default-true': 39, 'false': 9, 'true': 5} unreadable: 0 total APKs: 53
+No inference about third-party apps or absent packages is possible from this image.
