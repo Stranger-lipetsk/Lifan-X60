@@ -110,7 +110,7 @@ ELF header: ELF Header:
 
 Beginning of static disassembly (not execution):
 
-/tmp/tmporkpcft6/extracted:     file format elf32-littlearm
+/tmp/tmp2b1_u_w1/extracted:     file format elf32-littlearm
 
 
 Disassembly of section .plt:
@@ -232,7 +232,7 @@ Disassembly of section .text:
 
 Candidate Thumb code immediately following startup (heuristic):
 
-/tmp/tmporkpcft6/extracted:     file format elf32-littlearm
+/tmp/tmp2b1_u_w1/extracted:     file format elf32-littlearm
 
 
 Disassembly of section .text:
@@ -624,6 +624,10 @@ Disassembly of section .text:
 
 
 Candidate argv tables from PC-relative Thumb addresses:
+Table at 0x17000
+  0x13a2b '/system/bin/insmod'
+  0x13a3e '/system/lib/modules/asix.ko'
+  NULL
 Table at 0x17044
   0x13a5a '/system/bin/ifconfig'
   0x13a00 'eth0'
