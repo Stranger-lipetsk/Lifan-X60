@@ -30,11 +30,11 @@ jobs:
             echo '# Static inspection of stock-derived tar utilities, not head-unit runtime'
             echo 'Read-only ext4 inspection; no executable run and no device accessed.'
             echo 'Boot ramdisk init.environ.rc exports PATH=/system/bin/bin:/sbin:/vendor/bin:/system/sbin:/system/bin:/system/xbin.'
-            for p in /bin/bin/tar /bin/bin/busybox /bin/tar /xbin/tar /bin/busybox /xbin/busybox /bin/toolbox /bin/hib_image_v2.sh /bin/sh; do
+            for p in /bin/bin/tar /bin/bin/busybox /bin/tar /xbin/tar /bin/busybox /xbin/busybox /bin/toolbox /bin/mke2fs /bin/mkfs.ext4 /bin/hib_image_v2.sh /bin/sh; do
               echo "## $p"
               debugfs -R "stat $p" "$w/system.img" 2>&1
             done
-            for p in /bin/bin/busybox /bin/busybox /xbin/busybox /bin/toolbox; do
+            for p in /bin/bin/busybox /bin/busybox /xbin/busybox /bin/toolbox /bin/mke2fs; do
               out="$w/$(echo "$p" | tr / _)"
               debugfs -R "dump $p $out" "$w/system.img" >/dev/null 2>&1 || true
               if [ -s "$out" ]; then
