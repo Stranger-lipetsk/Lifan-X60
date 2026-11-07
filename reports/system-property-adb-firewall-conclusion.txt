@@ -30,10 +30,13 @@
 
 Эти находки делают интерфейсное ограничение на `eth0` правдоподобным сценарием для vendor USB-Ethernet ADB, но также выявляют custom init/netd путь, который generic emulator не моделирует. Наличие `el_debug_tool` и строки OEM script не подтверждают правила firewall, listener или свойства сервиса при реальном запуске.
 
-## Статические ориентиры
+## Статическая проверка API Android 4.4.2
 
-- AOSP Android 4.4.2 `NetworkManagementService`: `setFirewallEnabled` и `setFirewallInterfaceRule`, проверки системных полномочий: https://github.com/aosp-mirror/platform_frameworks_base/tree/android-4.4.2_r1
-- Исследованный KitKat netd fork формирует цепочки firewall с политиками для входящего/исходящего трафика и interface `RETURN`; это только fork, не исходники прошивки ГУ: https://github.com/Plain-Andy/android_platform_system_netd/tree/kk
+В AOSP `NetworkManagementService.java` Android 4.4.2_r1 firewall-методы `setFirewallEnabled`, `setFirewallInterfaceRule`, `setFirewallEgressSourceRule`, `setFirewallEgressDestRule` и `setFirewallUidRule` вызывают `enforceSystemUid()`: Binder caller должен иметь ровно `Process.SYSTEM_UID` (1000). Interface rule принимает только имя интерфейса и allow/deny; в этом API нет метода для разрешения только входящего локального destination-port на интерфейсе. Egress-адрес/порт и UID-правила существуют, но не эквивалентны точному входящему фильтру ADB-порта. Ручные iptables-правила теоретически дают более точный контроль, однако их внесение, порядок, персистентность и взаимодействие с OEM netd на прошивке ГУ не установлены.
+
+Источник AOSP: https://github.com/aosp-mirror/platform_frameworks_base/blob/android-4.4.2_r1/services/java/com/android/server/NetworkManagementService.java
+
+Исследованный KitKat netd fork создаёт `fw_INPUT`, `fw_OUTPUT` и `fw_FORWARD`; enable добавляет DROP для входящего и REJECT для исходящего/forward, а разрешение интерфейса добавляет `RETURN` для трафика этого интерфейса. В fork доступны также правила источника/адреса/порта и UID, но это не исходники netd прошивки ГУ: https://github.com/Plain-Andy/android_platform_system_netd/blob/kk/FirewallController.cpp
 
 ## Итог
 
