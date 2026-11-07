@@ -14,12 +14,19 @@
 - На обоих generic образах запись service.adb.tcp.port сама по себе не дала guest TCP listener: ADB использовал эмуляторный qemud transport. Поэтому тесты не проверяли сетевой ADB handshake и доступ root через реальный adbd.
 - Правило `setFirewallInterfaceRule` действует на интерфейс целиком в этом сценарии; это не доказательство фильтрации только ADB-порта. Полная блокировка интерфейса lo потенциально затрагивает и прочие локальные IP-соединения.
 
-## Границы применимости
+## Границы применимости и транспортная матрица
 
-1. Android firewall фильтрует IP-трафик. Он не является механизмом отключения USB/debugging transport, Unix-domain socket или локального shell-доступа.
-2. Входящий тест был на синтетическом ServerSocket приложения system UID, не на adbd. QEMU forwarding соединяет host loopback с интерфейсом гостя внутри эмулятора; это не тест через LAN и не эквивалент физического прямого подключения к ГУ.
-3. Generic AOSP-derived Android 4.4.2 и stock-derived services.jar не подтверждают, что vendor framework, netd, init, SELinux и firewall на конкретной прошивке совпадают.
-4. Никакие настройки firewall на ГУ не применялись; сеть ADB, прошивка и форматирование на ГУ не включались и не выполнялись.
+| Путь | Сетевой слой | Что firewall из лаборатории говорит о нём |
+|---|---|---|
+| Стандартный USB ADB gadget | USB bulk transport, не IP | IP firewall сам по себе этот путь не перекрывает. |
+| Vendor `usbnet_adb` с ASIX/`eth0` | TCP/IP по USB-Ethernet | Применимы IP-правила; лаборатория показала только generic interface allow/deny, не vendor runtime. |
+| ADB TCP по Wi-Fi/LAN | TCP/IP | IP firewall потенциально применим, но наличие такого listener на ГУ не подтверждено. |
+| Android Emulator `qemud` transport | Эмуляторный channel | Не эквивалентен IP listener; изменение порта не создало TCP listener в тесте. |
+| Локальные Unix-domain sockets | Unix socket | Не фильтруются iptables/IP firewall. |
+
+1. Входящий тест был на синтетическом ServerSocket приложения system UID, не на adbd. QEMU forwarding соединяет host loopback с интерфейсом гостя внутри эмулятора; это не тест через LAN и не эквивалент физического прямого подключения к ГУ.
+2. Generic AOSP-derived Android 4.4.2 и stock-derived services.jar не подтверждают, что vendor framework, netd, init, SELinux и firewall на конкретной прошивке совпадают.
+3. Никакие настройки firewall на ГУ не применялись; сеть ADB, прошивка и форматирование на ГУ не включались и не выполнялись.
 
 ## Дополнительный статический контекст vendor-образа
 
