@@ -143,15 +143,26 @@ public final class MainActivity extends Activity {
         }
     }
 
-    private boolean loopbackConnects(int port) {
-        java.net.Socket client = new java.net.Socket();
-        try {
-            client.connect(new java.net.InetSocketAddress("127.0.0.1", port), 1200);
-            return true;
-        } catch (java.io.IOException expected) {
-            return false;
-        } finally {
-            try { client.close(); } catch (java.io.IOException ignored) { }
-        }
+    private boolean loopbackConnects(final int port) throws InterruptedException {
+        final boolean[] connected = new boolean[] { false };
+        final boolean[] finished = new boolean[] { false };
+        Thread probe = new Thread(new Runnable() {
+            @Override public void run() {
+                java.net.Socket client = new java.net.Socket();
+                try {
+                    client.connect(new java.net.InetSocketAddress("127.0.0.1", port), 1200);
+                    connected[0] = true;
+                } catch (java.io.IOException expected) {
+                    connected[0] = false;
+                } finally {
+                    try { client.close(); } catch (java.io.IOException ignored) { }
+                    finished[0] = true;
+                }
+            }
+        }, "x60-firewall-loopback-probe");
+        probe.start();
+        probe.join(4000);
+        if (probe.isAlive()) probe.interrupt();
+        return finished[0] && connected[0];
     }
 }
