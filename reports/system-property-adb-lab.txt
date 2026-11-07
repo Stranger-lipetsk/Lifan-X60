@@ -11,19 +11,19 @@ init.svc.adbd=running
 Generic baseline shell:
 uid=0(root) gid=0(root)
 Same-signature ordinary UID negative control: property unchanged:
-I/X60SystemPropLab( 2051): OWN_UID=10052 BEFORE= AFTER=
+I/X60SystemPropLab( 2047): OWN_UID=10052 BEFORE= AFTER=
 System UID fixture:
-I/X60SystemPropLab( 2100): OWN_UID=1000 BEFORE= AFTER=43127
-I/X60SystemPropLab( 2100): SYNTHETIC_ROOT_PROPERTY=1
+I/X60SystemPropLab( 2097): OWN_UID=1000 BEFORE= AFTER=43127
+I/X60SystemPropLab( 2097): SYNTHETIC_ROOT_PROPERTY=1
 System UID firewall probe:
-I/X60SystemPropLab( 2100): FIREWALL_DROP_LOOPBACK_WHILE_eth0_ALLOWED=true
-I/X60SystemPropLab( 2100): FIREWALL_DROP_OWN_INTERFACE_ADDRESS=true address=10.0.2.15
-I/X60SystemPropLab( 2100): FIREWALL_ETH0_HOST_ROUNDTRIP=true interface=eth0
-I/X60SystemPropLab( 2100): FIREWALL_ALLOW_LOOPBACK_CONTROL=true
-I/X60SystemPropLab( 2100): FIREWALL_RESTORED_DISABLED=true
-adbd PID changed in emulator: 1144 -> 2158
+I/X60SystemPropLab( 2097): FIREWALL_DROP_LOOPBACK_WHILE_eth0_ALLOWED=true
+I/X60SystemPropLab( 2097): FIREWALL_DROP_OWN_INTERFACE_ADDRESS=true address=10.0.2.15
+I/X60SystemPropLab( 2097): FIREWALL_ETH0_HOST_ROUNDTRIP=true interface=eth0
+I/X60SystemPropLab( 2097): FIREWALL_ALLOW_LOOPBACK_CONTROL=true
+I/X60SystemPropLab( 2097): FIREWALL_RESTORED_DISABLED=true
+adbd PID changed in emulator: 1144 -> 2155
 Guest TCP listener for requested port: no
-Synthetic baseline properties restored and adbd PID changed again: 2158 -> 2249
+Synthetic baseline properties restored and adbd PID changed again: 2155 -> 2291
 Emulator uses qemud transport; this does not test whether a physical device will listen on TCP.
 Emulator adbd identity and behavior are NOT evidence of stock adbd privileges, network access, authentication or safe data backup on GU.
 No application released; do not enable network ADB or use this test on a real head unit.
