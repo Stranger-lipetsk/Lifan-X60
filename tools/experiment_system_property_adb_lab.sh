@@ -139,8 +139,8 @@ grep -F 'OWN_UID=1000 ' "$work/system-log.txt"; grep -F 'AFTER=43127' "$work/sys
 restarted=no
 for i in $(seq 1 45); do
   timeout -k 3 5 "$adb" shell ps > "$work/ps-after.txt" 2>/dev/null || true
-  before=$(awk '$NF=="/sbin/adbd" {print $2}' "$work/ps-before.txt" | tr -d '\r')
-  after=$(awk '$NF=="/sbin/adbd" {print $2}' "$work/ps-after.txt" | tr -d '\r')
+  before=$(tr -d '\r' < "$work/ps-before.txt" | awk '$NF=="/sbin/adbd" {print $2}')
+  after=$(tr -d '\r' < "$work/ps-after.txt" | awk '$NF=="/sbin/adbd" {print $2}')
   if [ -n "$before" ] && [ -n "$after" ] && [ "$before" != "$after" ]; then restarted=yes; break; fi
   sleep 2
 done
