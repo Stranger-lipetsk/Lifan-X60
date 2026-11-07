@@ -6,6 +6,7 @@ set -euo pipefail
 : "${RUNNER_TEMP:?}" "${GITHUB_RUN_ID:?}"
 exec > >(tee "$RUNNER_TEMP/stock-adbd-container-lab.log") 2>&1
 work=$(mktemp -d /tmp/x60-adbd-ci-lab.XXXXXX)
+chmod 0755 "$work"
 name="x60-adbd-lab-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT:-0}"
 cleanup() { docker rm -f "$name" >/dev/null 2>&1 || true; }
 trap cleanup EXIT
@@ -86,14 +87,19 @@ for line in open(sys.argv[1]):
         print('Listener bind address in isolated namespace:', 'all interfaces' if int(addr, 16) == 0 else 'non-wildcard')
 PYLIST
   if [ "$auth" = 0 ]; then
-    timeout -k 5 30 sudo nsenter -t "$pid" -n -- python3 tools/probe_synthetic_adbd_sync.py "$mode" | tee -a "$work/result.txt"
-    timeout -k 5 30 sudo nsenter -t "$pid" -n -- "$JAVA_HOME/bin/java" -cp "$work/java-classes" ru.lifanx60.adbsynclab.SyntheticSyncClient "$mode" | tee -a "$work/result.txt"
+    # Model an unrelated, unprivileged local process; authentication is disabled
+    # only in this synthetic control. Do not expose this daemon to a real LAN.
+    client_uid=$(sudo nsenter -t "$pid" -n -- setpriv --reuid 12345 --regid 12345 --clear-groups --no-new-privs id -u)
+    [ "$client_uid" = 12345 ]
+    echo "Loopback test client host UID: $client_uid" | tee -a "$work/result.txt"
+    timeout -k 5 30 sudo nsenter -t "$pid" -n -- setpriv --reuid 12345 --regid 12345 --clear-groups --no-new-privs python3 tools/probe_synthetic_adbd_sync.py "$mode" | tee -a "$work/result.txt"
+    timeout -k 5 30 sudo nsenter -t "$pid" -n -- setpriv --reuid 12345 --regid 12345 --clear-groups --no-new-privs "$JAVA_HOME/bin/java" -cp "$work/java-classes" ru.lifanx60.adbsynclab.SyntheticSyncClient "$mode" | tee -a "$work/result.txt"
   fi
   grep -E '^(Name|Uid|Gid|CapEff):' "/proc/$pid/status" | tee -a "$work/result.txt"
   docker rm -f "$name" >/dev/null
  done
 {
-  echo 'Python and Java clients ran in the container network namespace on the CI host; Java was not an Android app.'
+  echo 'Python and Java clients were unprivileged host processes in the container network namespace; Java was not an Android app.'
   echo 'Greeting and fixed synthetic sync read are not a backup or evidence about a real head unit.'
   echo 'UID above is the QEMU host process status, not a complete validation of guest privileges or real-device behavior.'
   echo 'Disabled-auth cases are intentional isolated negative security controls and must not be assumed safe or present on GU.'
