@@ -143,4 +143,12 @@ service.adb.tcp.port
 ro.secure=1
 ro.debuggable=1
 persist.sys.usb.config=adb
+
+## Property-permission-like table entries (prefix, numeric UID, GID)
+service. 1000 0
+service.adb.root 2000 0
+service.adb.tcp.port 2000 0
+persist.sys. 1000 0
+Table entries do not prove active enforcement, system UID access or SELinux policy.
+init.rc on boot line 482 : setprop ro.adb.secure 0
 No inference of runtime authentication, network reachability, root privilege, or backup safety.
