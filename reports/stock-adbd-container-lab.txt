@@ -1,0 +1,20 @@
+# Stock-derived ARM adbd: isolated container and synthetic properties
+Exact boot-derived adbd under QEMU user mode, host kernel; no head unit, real properties, device blocks or LAN.
+Containers use network none, read-only filesystem, no-new-privileges, capped capabilities and no published ports.
+Android properties below are fabricated only; real device values and policy may differ.
+ro.secure=1 ro.debuggable=1 ro.adb.secure=0 ro.kernel.qemu=0 service.adb.tcp.port=43127
+Synthetic service.adb.root=0
+Loopback ADB greeting response: CNXN
+Name:	qemu-arm-static
+Uid:	2000	2000	2000	2000
+Gid:	2000	2000	2000	2000
+CapEff:	0000000000000000
+Synthetic service.adb.root=1
+Loopback ADB greeting response: CNXN
+Name:	qemu-arm-static
+Uid:	0	0	0	0
+Gid:	0	0	0	0
+CapEff:	00000000000001c0
+A TCP ADB greeting is not an authenticated session, backup or evidence about a real head unit.
+UID above is the QEMU host process status, not a complete validation of guest privileges or real-device behavior.
+The synthesized disabled-auth setting is intentional for this isolated test and must not be assumed safe or present on GU.
