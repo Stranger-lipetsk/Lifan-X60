@@ -1,0 +1,52 @@
+name: Штатный adbd в изолированном контейнере
+on:
+  push:
+    branches: [arena/b12cc9a8-lifan-x60]
+    paths:
+      - '.github/workflows/experiment-stock-adbd-container-lab.yml'
+      - 'tools/experiment_stock_adbd_container_lab.sh'
+      - 'tools/android44_synthetic_property_area.py'
+      - 'tools/probe_synthetic_adbd_handshake.py'
+      - 'tests/test_android44_synthetic_property_area.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  test:
+    if: github.ref_name == 'arena/b12cc9a8-lifan-x60'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Проверить синтетические свойства
+        run: |
+          bash -n tools/experiment_stock_adbd_container_lab.sh
+          python3 -m unittest discover -s tests -p 'test_android44_synthetic_property_area.py' -v
+      - name: Только изолированный контейнер QEMU
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bash tools/experiment_stock_adbd_container_lab.sh
+      - name: Сохранить диагностику
+        if: failure()
+        run: |
+          set -euo pipefail
+          test -s "$RUNNER_TEMP/stock-adbd-container-lab.log" || exit 0
+          mkdir -p reports
+          tr -d '\r' < "$RUNNER_TEMP/stock-adbd-container-lab.log" > reports/stock-adbd-container-lab-error.txt
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/stock-adbd-container-lab-error.txt
+          git diff --cached --quiet && exit 0
+          git commit -m 'report: diagnose isolated adbd container'
+          git pull --rebase origin "${{ github.ref_name }}"
+          git push origin HEAD:"${{ github.ref_name }}"
+      - name: Сохранить текстовый отчёт
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/stock-adbd-container-lab.txt
+          git diff --cached --quiet && exit 0
+          git commit -m 'report: isolated stock-derived adbd'
+          git pull --rebase origin "${{ github.ref_name }}"
+          git push origin HEAD:"${{ github.ref_name }}"
