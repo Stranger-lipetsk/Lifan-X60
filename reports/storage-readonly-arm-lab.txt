@@ -2,41 +2,43 @@
 Emulator only; no physical device. Host network blocked for emulator process. APK and signing key remain ephemeral.
 Fixture refuses non-generic hardware, requests no permissions, uses ordinary app UID and does not write app files or enumerate user data.
 Fingerprint: generic/sdk/generic:4.4.2/KK/3462041:eng/test-keys; hardware: goldfish; UID: 10052
-Mount parser unit cases passed; package permissions from aapt:
+Mount and sector parser unit cases passed; package permissions from aapt:
 package: ru.lifanx60.storagelab
+Fixed virtual SD sysfs capacity validation:
+Virtual mmcblk0 size: 536870912 bytes; app, shell sysfs and /proc/partitions agree. Not physical p5. Probe p5: UNKNOWN.
 UI numeric fields and selected /data mount checked against emulator shell df and /proc/mounts:
-UI values: {'TOTAL_KIB': 1034392, 'FREE_KIB': 999032, 'AVAILABLE_KIB': 999032}
+UI values: {'TOTAL_KIB': 1034392, 'FREE_KIB': 995332, 'AVAILABLE_KIB': 995332}
 UI mount matches shell: /dev/block/mtdblock1 /data ext4 rw,seclabel,nosuid,nodev,noatime,nomblk_io_submit,data=ordered
 df total and free agree within rounding/measurement tolerance; available <= free <= total.
 This does not independently validate available blocks or real-device behavior.
 Shell mount and df:
 /dev/block/mtdblock1 /data ext4 rw,seclabel,nosuid,nodev,noatime,nomblk_io_submit,data=ordered 0 0
 Filesystem               Size     Used     Free   Blksize
-/data                 1010.1M    35.9M   974.3M   4096
+/data                 1010.1M    38.4M   971.7M   4096
 Synthetic non-root filler ended in ENOSPC:
 uid=2000(shell) gid=2000(shell) context=u:r:su:s0
 /data/local/tmp/x60-storage-fill-lab: write error: No space left on device
 972+0 records in
 971+1 records out
-1018933248 bytes transferred in 24.620 secs (41386403 bytes/sec)
+1018920960 bytes transferred in 19.148 secs (53212918 bytes/sec)
 stdout: write error: No space left on device
-2+0 records in
-1+0 records out
-4096 bytes transferred in 0.010 secs (409600 bytes/sec)
+1+0 records in
+0+0 records out
+0 bytes transferred in 0.007 secs (0 bytes/sec)
 Probe with the synthetic volume full:
-UI values: {'TOTAL_KIB': 1034392, 'FREE_KIB': 4, 'AVAILABLE_KIB': 4}
+UI values: {'TOTAL_KIB': 1034392, 'FREE_KIB': 12, 'AVAILABLE_KIB': 12}
 UI mount matches shell: /dev/block/mtdblock1 /data ext4 rw,seclabel,nosuid,nodev,noatime,nomblk_io_submit,data=ordered
 df total and free agree within rounding/measurement tolerance; available <= free <= total.
 This does not independently validate available blocks or real-device behavior.
 Filesystem               Size     Used     Free   Blksize
-/data                 1010.1M  1010.1M    28.0K   4096
+/data                 1010.1M  1010.1M     8.0K   4096
 Probe after removing ONLY the synthetic filler on the disposable emulator:
-UI values: {'TOTAL_KIB': 1034392, 'FREE_KIB': 995088, 'AVAILABLE_KIB': 995088}
+UI values: {'TOTAL_KIB': 1034392, 'FREE_KIB': 995052, 'AVAILABLE_KIB': 995052}
 UI mount matches shell: /dev/block/mtdblock1 /data ext4 rw,seclabel,nosuid,nodev,noatime,nomblk_io_submit,data=ordered
 df total and free agree within rounding/measurement tolerance; available <= free <= total.
 This does not independently validate available blocks or real-device behavior.
 Filesystem               Size     Used     Free   Blksize
-/data                 1010.1M    38.4M   971.8M   4096
+/data                 1010.1M    38.4M   971.7M   4096
 Read-only app logic still involves Android installation, activity/runtime and emulator UI automation writes; this is not a proof of zero OS-level writes.
 The app view represents its own mount namespace. A missing literal mmcblk0p5 mount is not evidence that partition is absent or empty.
-Does not query unmounted partitions, actual head-unit size, free space, runtime access or Hibernate. No deployable APK published.
+An optional fixed sysfs attribute gives capacity only, not free space; actual head-unit size, access, device naming and Hibernate are unknown. No deployable APK published.
