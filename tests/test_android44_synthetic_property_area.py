@@ -35,5 +35,7 @@ class PropertyAreaTest(unittest.TestCase):
 
     def test_reject_invalid_mode(self):
         with self.assertRaises(ValueError): build('x')
+        with self.assertRaises(ValueError): build('0', 'x')
+        self.assertEqual(lookup(build('1', '1'), 'ro.adb.secure'), '1')
 
 if __name__ == '__main__': unittest.main()

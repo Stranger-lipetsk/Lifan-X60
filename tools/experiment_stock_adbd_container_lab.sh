@@ -43,30 +43,32 @@ mkdir -p reports
   echo 'Exact boot-derived adbd under QEMU user mode, host kernel; no head unit, real properties, device blocks or LAN.'
   echo 'Containers use network none, read-only filesystem, no-new-privileges, capped capabilities and no published ports.'
   echo 'Android properties below are fabricated only; real device values and policy may differ.'
-  echo 'ro.secure=1 ro.debuggable=1 ro.adb.secure=0 ro.kernel.qemu=0 service.adb.tcp.port=43127'
+  echo 'ro.secure=1 ro.debuggable=1 ro.kernel.qemu=0 service.adb.tcp.port=43127'
 } > "$work/result.txt"
-for mode in 0 1; do
-  python3 tools/android44_synthetic_property_area.py "$mode" "$work/props-$mode"
-  sudo chown 0:0 "$work/props-$mode"; sudo chmod 0444 "$work/props-$mode"
+for case_spec in 0:0 1:0 1:1; do
+  mode=${case_spec%:*}; auth=${case_spec#*:}; label="$mode-$auth"
+  python3 tools/android44_synthetic_property_area.py "$mode" "$auth" "$work/props-$label"
+  sudo chown 0:0 "$work/props-$label"; sudo chmod 0444 "$work/props-$label"
   # Validate the area by running stock Android toolbox linked to stock bionic.
   for prop in ro.secure ro.debuggable ro.adb.secure ro.kernel.qemu service.adb.tcp.port service.adb.root; do
     actual=$(docker run --rm --network none --read-only --cap-drop ALL --security-opt no-new-privileges \
-      --mount "type=bind,source=$work/props-$mode,target=/dev/__properties__,readonly" \
+      --mount "type=bind,source=$work/props-$label,target=/dev/__properties__,readonly" \
       "x60-adbd-synthetic-${GITHUB_RUN_ID}" /qemu-arm-static /system/bin/toolbox getprop "$prop" | tr -d '\r')
-    case "$prop" in ro.secure|ro.debuggable) expected=1;; ro.adb.secure|ro.kernel.qemu) expected=0;; service.adb.tcp.port) expected=43127;; service.adb.root) expected=$mode;; esac
+    case "$prop" in ro.secure|ro.debuggable) expected=1;; ro.kernel.qemu) expected=0;; ro.adb.secure) expected=$auth;; service.adb.tcp.port) expected=43127;; service.adb.root) expected=$mode;; esac
     [ "$actual" = "$expected" ] || { echo "Synthetic property mismatch $prop: $actual"; exit 1; }
   done
-  echo "Validated synthetic properties via stock toolbox: service.adb.root=$mode"
+  echo "Validated synthetic properties via stock toolbox: service.adb.root=$mode ro.adb.secure=$auth"
   docker run -d --name "$name" --network none --read-only --cap-drop ALL --cap-add SETUID --cap-add SETGID --cap-add SETPCAP \
     --security-opt no-new-privileges --memory 128m --pids-limit 32 \
-    --mount "type=bind,source=$work/props-$mode,target=/dev/__properties__,readonly" \
+    --mount "type=bind,source=$work/props-$label,target=/dev/__properties__,readonly" \
     "x60-adbd-synthetic-${GITHUB_RUN_ID}" /qemu-arm-static /sbin/adbd > "$work/container-id"
   network=$(docker inspect -f '{{.HostConfig.NetworkMode}}' "$name")
   [ "$network" = none ] || { echo 'Refusing non-isolated network'; exit 1; }
   pid=$(docker inspect -f '{{.State.Pid}}' "$name")
   [[ "$pid" =~ ^[1-9][0-9]*$ ]] || { docker logs "$name"; exit 1; }
-  echo "Synthetic service.adb.root=$mode" | tee -a "$work/result.txt"
-  if ! timeout -k 5 35 sudo nsenter -t "$pid" -n -- python3 tools/probe_synthetic_adbd_handshake.py | tee -a "$work/result.txt"; then
+  echo "Synthetic service.adb.root=$mode ro.adb.secure=$auth" | tee -a "$work/result.txt"
+  expected_response=CNXN; [ "$auth" != 1 ] || expected_response=AUTH
+  if ! timeout -k 5 35 sudo nsenter -t "$pid" -n -- python3 tools/probe_synthetic_adbd_handshake.py "$expected_response" | tee -a "$work/result.txt"; then
     docker logs "$name" || true; docker inspect "$name" --format '{{.State.Status}} exit={{.State.ExitCode}}' || true; exit 1
   fi
   grep -E '^(Name|Uid|Gid|CapEff):' "/proc/$pid/status" | tee -a "$work/result.txt"
@@ -75,6 +77,6 @@ for mode in 0 1; do
 {
   echo 'A TCP ADB greeting is not an authenticated session, backup or evidence about a real head unit.'
   echo 'UID above is the QEMU host process status, not a complete validation of guest privileges or real-device behavior.'
-  echo 'The synthesized disabled-auth setting is intentional for this isolated test and must not be assumed safe or present on GU.'
+  echo 'Disabled-auth cases are intentional isolated negative security controls and must not be assumed safe or present on GU.'
 } >> "$work/result.txt"
 cp "$work/result.txt" reports/stock-adbd-container-lab.txt

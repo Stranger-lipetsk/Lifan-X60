@@ -4,6 +4,7 @@
 Sends only an ADB connection greeting, never sends shell/file commands. The
 caller must enter a verified --network=none namespace first.
 """
+import sys
 import socket
 import struct
 import time
@@ -21,6 +22,8 @@ def exact(s, count):
 
 
 def main():
+    if len(sys.argv) != 2 or sys.argv[1] not in ('CNXN', 'AUTH'):
+        raise SystemExit('expected response must be CNXN or AUTH')
     last = None
     for _ in range(40):
         try:
@@ -37,6 +40,7 @@ def main():
                 kind = cmd.to_bytes(4, 'little').decode('ascii', 'replace')
                 if kind not in ('CNXN', 'AUTH'): raise ValueError('unexpected ADB response')
                 print('Loopback ADB greeting response:', kind)
+                if kind != sys.argv[1]: raise ValueError('unexpected authentication behavior')
                 return
         except (OSError, ValueError) as exc:
             last = exc

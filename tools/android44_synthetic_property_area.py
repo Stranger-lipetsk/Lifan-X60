@@ -12,10 +12,10 @@ HEADER = 128
 VALUE_MAX = 92
 
 
-def build(root_mode):
-    if root_mode not in ('0', '1'): raise ValueError('synthetic mode must be 0 or 1')
+def build(root_mode, auth_mode='0'):
+    if root_mode not in ('0', '1') or auth_mode not in ('0', '1'): raise ValueError('synthetic modes must be 0 or 1')
     values = {
-        'ro.secure': '1', 'ro.debuggable': '1', 'ro.adb.secure': '0',
+        'ro.secure': '1', 'ro.debuggable': '1', 'ro.adb.secure': auth_mode,
         'ro.kernel.qemu': '0', 'service.adb.tcp.port': '43127',
         'service.adb.root': root_mode,
     }
@@ -66,5 +66,5 @@ def build(root_mode):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) != 3: raise SystemExit('usage: synthetic_property_area.py 0|1 OUTPUT')
-    with open(sys.argv[2], 'wb') as f: f.write(build(sys.argv[1]))
+    if len(sys.argv) != 4: raise SystemExit('usage: synthetic_property_area.py ROOT_MODE AUTH_MODE OUTPUT')
+    with open(sys.argv[3], 'wb') as f: f.write(build(sys.argv[1], sys.argv[2]))
