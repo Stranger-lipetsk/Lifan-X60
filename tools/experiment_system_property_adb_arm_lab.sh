@@ -49,7 +49,7 @@ sudo useradd --system --create-home --user-group systemproparmlab
 emu_uid=$(id -u systemproparmlab)
 sudo chown -R systemproparmlab:systemproparmlab "$ANDROID_AVD_HOME"
 [ ! -e /dev/kvm ] || sudo chmod a+rw /dev/kvm
-pid=''; blocked4=no; blocked6=no; host_server_pid=''
+pid=''; blocked4=no; blocked6=no; host_server_pid=''; redir_port=''
 cleanup() {
   status=$?
   if [ "$status" != 0 ]; then
@@ -60,6 +60,7 @@ cleanup() {
     timeout -k 5 20 "$adb" logcat -d -v brief 2>/dev/null | grep -iE 'X60SystemPropLab|PackageManager|FATAL EXCEPTION' | tail -80 || true
   fi
   [ -z "$host_server_pid" ] || kill "$host_server_pid" 2>/dev/null || true
+  if [ -n "$redir_port" ]; then "$adb" emu redir del "tcp:$redir_port" >/dev/null 2>&1 || true; fi
   sudo pkill -TERM -u systemproparmlab 2>/dev/null || true
   if [ "$blocked4" = yes ]; then
     sudo iptables -D OUTPUT -m owner --uid-owner "$emu_uid" ! -d 127.0.0.0/8 -j REJECT || true
@@ -165,42 +166,50 @@ echo 'Positive control: platform-signed shared system UID in disposable emulator
 "$adb" install "$work/unsigned-signed.apk" | tee "$work/system-install.txt"
 grep -F Success "$work/system-install.txt"
 
-echo 'Disposable ARM system-UID firewall probe; host peer is loopback-only'
-host_port=$(python3 - <<'PYPORT'
+echo 'Disposable ARM firewall probe: incoming peer forwarded only from host loopback'
+"$adb" logcat -c
+"$adb" shell am start -n ru.lifanx60.systempropfixture/.MainActivity --ez firewall_probe true --ez inbound_peer true
+firewall_ready=no
+for i in $(seq 1 45); do
+  timeout -k 3 5 "$adb" logcat -d -s X60SystemPropLab:I '*:S' > "$work/firewall-log.txt" 2>&1 || true
+  grep -q 'FIREWALL_REMOTE_WAITING_PORT=' "$work/firewall-log.txt" && { firewall_ready=yes; break; }
+  grep -q 'FIREWALL_PROBE_ERROR\|FIREWALL_REFUSED' "$work/firewall-log.txt" && break
+  sleep 1
+done
+[ "$firewall_ready" = yes ] || { cat "$work/firewall-log.txt"; echo 'ARM firewall listener did not become ready'; exit 1; }
+guest_port=$(sed -n 's/.*FIREWALL_REMOTE_WAITING_PORT=\([0-9][0-9]*\).*/\1/p' "$work/firewall-log.txt" | tail -1)
+test -n "$guest_port"
+redir_port=$(python3 - <<'PYPORT'
 import socket
 s=socket.socket(); s.bind(('127.0.0.1',0)); print(s.getsockname()[1]); s.close()
 PYPORT
 )
-python3 - "$host_port" "$work/host-peer.ready" <<'PYHOST' > "$work/host-peer.log" 2>&1 &
+"$adb" emu redir add "tcp:$redir_port:$guest_port"
+python3 - "$redir_port" <<'PYCLIENT'
 import socket, sys
-port=int(sys.argv[1]); ready=sys.argv[2]
-s=socket.socket(); s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1); s.bind(('127.0.0.1', port)); s.listen(1)
-open(ready, 'w').close()
-c, _=s.accept(); c.settimeout(8); c.sendall(b'X60_HOST_OK\\n')
-data=c.recv(64); c.close(); s.close()
-if data != b'X60_GUEST_OK\\n': raise SystemExit('unexpected guest response: %r' % data)
-print('Isolated ARM guest round-trip reached host loopback listener')
-PYHOST
-host_server_pid=$!
-for i in $(seq 1 30); do [ -f "$work/host-peer.ready" ] && break; sleep 0.1; done
-test -f "$work/host-peer.ready"
-"$adb" logcat -c
-"$adb" shell am start -n ru.lifanx60.systempropfixture/.MainActivity --ez firewall_probe true --ei host_port "$host_port"
+s=socket.create_connection(('127.0.0.1', int(sys.argv[1])), timeout=5); s.settimeout(5)
+data=b''
+while not data.endswith(b'\n') and len(data)<64:
+    part=s.recv(64-len(data))
+    if not part: break
+    data += part
+s.close()
+if data != b'X60_FW_OK\n': raise SystemExit('Unexpected isolated ARM guest response: %r' % data)
+print('Host-loopback client reached ARM guest over forwarded external interface')
+PYCLIENT
+"$adb" emu redir del "tcp:$redir_port"
+redir_port=''
 firewall_done=no
-for i in $(seq 1 45); do
+for i in $(seq 1 20); do
   timeout -k 3 5 "$adb" logcat -d -s X60SystemPropLab:I '*:S' > "$work/firewall-log.txt" 2>&1 || true
   grep -q 'FIREWALL_RESTORED_DISABLED=true' "$work/firewall-log.txt" && { firewall_done=yes; break; }
-  grep -q 'FIREWALL_PROBE_ERROR\\|FIREWALL_REFUSED' "$work/firewall-log.txt" && break
   sleep 1
 done
 cat "$work/firewall-log.txt"
-[ "$firewall_done" = yes ] || { echo 'ARM firewall probe did not complete and restore'; exit 1; }
-wait "$host_server_pid"
-host_server_pid=''
-cat "$work/host-peer.log"
+[ "$firewall_done" = yes ] || { echo 'ARM firewall probe did not restore'; exit 1; }
 grep -E 'FIREWALL_DROP_LOOPBACK_WHILE_.*_ALLOWED=true' "$work/firewall-log.txt"
 grep -F 'FIREWALL_DROP_OWN_INTERFACE_ADDRESS=true' "$work/firewall-log.txt"
-grep -F 'FIREWALL_ETH0_HOST_ROUNDTRIP=true' "$work/firewall-log.txt"
+grep -F 'FIREWALL_REMOTE_INTERFACE_ACCEPTED=true' "$work/firewall-log.txt"
 grep -F 'FIREWALL_ALLOW_LOOPBACK_CONTROL=true' "$work/firewall-log.txt"
 grep -F 'FIREWALL_RESTORED_DISABLED=true' "$work/firewall-log.txt"
 "$adb" logcat -c
@@ -235,13 +244,13 @@ echo 'Synthetic ARM baseline properties restored; daemon restart was not tested.
 {
   echo '# Platform-signed system UID property experiment: generic Android 4.4.2 ARM with stock-derived services.jar only'
   echo 'Disposable emulator; no head unit, real storage, user data, or user network accessed.'
-  echo 'Host firewall blocks emulator external traffic; only a loopback-bound CI peer over QEMU gateway 10.0.2.2 was used, not a LAN or user device.'
+  echo 'Host firewall blocks emulator external traffic; only a loopback-bound CI client via emulator port forwarding was used, not a LAN or user device.'
   echo "Fingerprint: $fingerprint; hardware: $hardware; qemu: $qemu"
   echo 'Stock-derived services.jar compared byte-for-byte after boot; system_server mapped its generated dex.'
   echo 'Generic baseline properties:'; cat "$work/baseline.txt"; echo 'Generic baseline shell:'; cat "$work/baseline-id.txt"
   echo 'Same-signature ordinary UID negative control: property unchanged:'; grep -F 'OWN_UID=' "$work/negative-log.txt" | tail -1
   echo 'System UID fixture:'; grep -F 'OWN_UID=' "$work/system-log.txt" | tail -1; grep -F 'SYNTHETIC_ROOT_PROPERTY=' "$work/system-log.txt" | tail -1
-  echo 'System UID firewall probe:'; grep -E 'FIREWALL_DROP_LOOPBACK_WHILE_|FIREWALL_DROP_OWN_INTERFACE_ADDRESS=|FIREWALL_ETH0_HOST_ROUNDTRIP=|FIREWALL_ALLOW_LOOPBACK_CONTROL=|FIREWALL_RESTORED_DISABLED=' "$work/firewall-log.txt"
+  echo 'System UID firewall probe:'; grep -E 'FIREWALL_DROP_LOOPBACK_WHILE_|FIREWALL_DROP_OWN_INTERFACE_ADDRESS=|FIREWALL_REMOTE_INTERFACE_ACCEPTED=|FIREWALL_ALLOW_LOOPBACK_CONTROL=|FIREWALL_RESTORED_DISABLED=' "$work/firewall-log.txt"
   echo 'ARM fixture restored both original synthetic property values; it deliberately did not restart adbd.'
   echo 'Emulator uses qemud transport; this does not test whether a physical device will listen on TCP.'
   echo 'Emulator adbd identity and behavior are NOT evidence of stock adbd privileges, network access, authentication or safe data backup on GU.'

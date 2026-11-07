@@ -125,10 +125,19 @@ public final class MainActivity extends Activity {
                 Log.i(TAG, "FIREWALL_DROP_LOOPBACK_WHILE_" + external + "_ALLOWED=" + blockedLoopback);
                 Log.i(TAG, "FIREWALL_DROP_OWN_INTERFACE_ADDRESS=" + blockedOwnAddress + " address=" + externalAddress);
                 if (!blockedLoopback || !blockedOwnAddress) { Log.e(TAG, "FIREWALL_LOCAL_ACCESS_NOT_BLOCKED"); return; }
-                int hostPort = getIntent().getIntExtra("host_port", -1);
-                boolean hostRoundTrip = hostPort > 0 && probeHostPeer(hostPort);
-                Log.i(TAG, "FIREWALL_ETH0_HOST_ROUNDTRIP=" + hostRoundTrip + " interface=" + external);
-                if (!hostRoundTrip) Log.e(TAG, "FIREWALL_ETH0_HOST_PROBE_FAILED");
+                boolean peerOk;
+                if (getIntent().getBooleanExtra("inbound_peer", false)) {
+                    server.setSoTimeout(12000);
+                    Log.i(TAG, "FIREWALL_REMOTE_WAITING_PORT=" + port + " interface=" + external);
+                    peerOk = acceptRemotePeer(server);
+                    Log.i(TAG, "FIREWALL_REMOTE_INTERFACE_ACCEPTED=" + peerOk);
+                    if (!peerOk) Log.e(TAG, "FIREWALL_REMOTE_INTERFACE_PROBE_FAILED");
+                } else {
+                    int hostPort = getIntent().getIntExtra("host_port", -1);
+                    peerOk = hostPort > 0 && probeHostPeer(hostPort);
+                    Log.i(TAG, "FIREWALL_ETH0_HOST_ROUNDTRIP=" + peerOk + " interface=" + external);
+                    if (!peerOk) Log.e(TAG, "FIREWALL_ETH0_HOST_PROBE_FAILED");
+                }
                 setInterface.invoke(service, "lo", true);
                 boolean allowed = loopbackConnects("127.0.0.1", port);
                 Log.i(TAG, "FIREWALL_ALLOW_LOOPBACK_CONTROL=" + allowed);
@@ -156,6 +165,29 @@ public final class MainActivity extends Activity {
                 }
             }
         }
+    }
+
+    private boolean acceptRemotePeer(final java.net.ServerSocket server) throws InterruptedException {
+        final boolean[] accepted = new boolean[] { false };
+        Thread probe = new Thread(new Runnable() {
+            @Override public void run() {
+                try {
+                    java.net.Socket remote = server.accept();
+                    try {
+                        remote.getOutputStream().write("X60_FW_OK\n".getBytes("US-ASCII"));
+                        remote.getOutputStream().flush();
+                        accepted[0] = true;
+                    } finally { remote.close(); }
+                } catch (java.io.IOException error) {
+                    Log.e(TAG, "FIREWALL_REMOTE_ACCEPT_ERROR=" + error.getClass().getSimpleName());
+                    accepted[0] = false;
+                }
+            }
+        }, "x60-firewall-remote-probe");
+        probe.start();
+        probe.join(13000);
+        if (probe.isAlive()) probe.interrupt();
+        return accepted[0];
     }
 
     private boolean probeHostPeer(final int hostPort) throws InterruptedException {
