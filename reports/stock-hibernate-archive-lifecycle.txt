@@ -1,0 +1,131 @@
+# Static inspection of archive lifecycle in stock-derived Hibernate script
+READ ONLY: extracted as text from verified image; script was not executed. Never run it on a device; it contains formatting and other destructive commands.
+This is the full script, not evidence of runtime execution, mount state, sourced commands or conditions on the head unit.
+SHA-256 of extracted script:
+86250723b12e39e289cf560d7a96be8a6f6e25b83728a7dd0ac542c0c4f94c27
+Full script with line numbers:
+     1	#!/system/bin/sh
+     2	
+     3	HIBERAGE_IMAGE_SIZE=120000000
+     4	
+     5	KILL_PROCESS_LIST="avin
+     6	dlna
+     7	eznavircs
+     8	hdmi
+     9	internetradio
+    10	ezservice
+    11	ezlife
+    12	dtv
+    13	ezdealer
+    14	eztts
+    15	"
+    16	
+    17	#
+    18	# umount target partition
+    19	#
+    20	function umount_partition
+    21	{
+    22	    chmod 666 /mnt/para_fw/config.ini
+    23	    ## umount /mnt/para_fw
+    24	    # delete backup swap image
+    25	    rm -rf /mnt/para_fw/backup_image/swap.img
+    26	    rm -rf /mnt/para_fw/backup_image/data.tar
+    27	    sync
+    28	    # It is not being used?
+    29	    U_PID=$(fuser -m /mnt/para_fw | awk '{print $1}')
+    30	    if [ "$U_PID" != "" ] ; then
+    31	        echo "ERROR: the PID" $U_PID "using the /mnt/para_fw,please check!!"
+    32	        exit
+    33	    fi
+    34	    # umount
+    35	    umount /mnt/para_fw
+    36	    
+    37	    # umount other.. TODO .. 
+    38	
+    39	}
+    40	
+    41	#
+    42	# backup /data and un-tar to emmc's mmcblk0p5
+    43	#
+    44	function move_android_data
+    45	{
+    46	    /system/bin/mke2fs -t ext4 /dev/block/mmcblk0p5
+    47	    mkdir /tmpdata
+    48	    mount -t ext4 /dev/block/mmcblk0p5 /tmpdata/
+    49	    rm -rf /data/data/com.android.providers.media/databases/*
+    50	    cd /data
+    51	    tar -cf /tmpdata/data.tar ./.
+    52	    cd /tmpdata
+    53	    tar -xvf /tmpdata/data.tar
+    54	    cd /
+    55	    sync
+    56	    umount /tmpdata/
+    57	}
+    58	
+    59	#
+    60	#   Kill low priority porcess and service before hiberate
+    61	#
+    62	function stop_service
+    63	{
+    64	    setprop sys.usb.config none
+    65	    killall android.process.media
+    66		
+    67	    for PROCESS in $KILL_PROCESS_LIST
+    68	    do
+    69	        PROC=$(ps  | grep $PROCESS | grep -v grep | awk '{print $1}')
+    70	        if [ "$PROC" != "" ] ; then
+    71	        echo $PROC
+    72	            echo "Kill PID:" $PROC		
+    73	            kill $PROC
+    74	        fi
+    75	     done
+    76	
+    77	    /system/bin/adjust_proc_priority.sh&
+    78	    
+    79	    /system/bin/rmmod gt9xx
+    80	    
+    81	}
+    82	
+    83	#
+    84	# resume system
+    85	#
+    86	function leave_hibernation
+    87	{
+    88	    umount -l /data
+    89	    mount -t ext4 -o noauto_da_alloc,commit=100,nodelalloc /dev/block/mmcblk0p5 /data/
+    90	    mount -t ext4 -o noauto_da_alloc,commit=100,nodelalloc /dev/block/mmcblk0p6 /mnt/para_fw
+    91	    mount -t vfat -o fmask=0000,dmask=0000 /dev/block/mmcblk0p7 /mnt/media_rw/emmc_data
+    92	    /system/bin/chown system:system /mnt/para_fw
+    93	    /system/bin/chmod 776 /mnt/para_fw
+    94	    setprop rw.hb_boot_finished 1
+    95	    echo 0 > /proc/sys/vm/drop_caches
+    96	}
+    97	
+    98	#
+    99	#  Enter hibernation
+   100	#
+   101	function enter_hibernation
+   102	{
+   103	    ##echo 7 > /proc/sys/kernel/printk
+   104	    ##sleep 1
+   105	    ##rm -rf /data/*
+   106	    sync
+   107	    mount -o remount,ro /system
+   108	    sync
+   109	    echo "***Start gengerate the hibernation image***"
+   110	    echo 1 > /proc/sys/vm/drop_caches
+   111	    echo 2 > /proc/sys/vm/drop_caches
+   112	    busybox mkswap /dev/block/mmcblk0p2
+   113	    busybox swapon /dev/block/mmcblk0p2
+   114	    echo $HIBERAGE_IMAGE_SIZE > /sys/power/image_size
+   115	    echo disk > /sys/power/state
+   116	}
+   117	
+   118	# main entry point
+   119	umount_partition
+   120	move_android_data
+   121	stop_service
+   122	enter_hibernation
+   123	leave_hibernation
+   124	
+   125	exit
