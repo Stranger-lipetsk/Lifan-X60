@@ -3,7 +3,14 @@
 set -euo pipefail
 [ "${GITHUB_ACTIONS:-}" = true ] || { echo 'CI disposable emulator only'; exit 1; }
 export ANDROID_SERIAL=emulator-5554
-exec > >(tee "$RUNNER_TEMP/navitel-arm-tarboot-lab.log") 2>&1
+strategy=${LAB_COPY_STRATEGY:-archive}
+case "$strategy" in archive|stream) ;; *) echo 'Unknown lab copy strategy'; exit 1;; esac
+if [ "$strategy" = stream ]; then
+  log_name=navitel-arm-stream-lab.log; report_name=navitel-arm-stream-lab.txt
+else
+  log_name=navitel-arm-tarboot-lab.log; report_name=navitel-arm-tarboot-lab.txt
+fi
+exec > >(tee "$RUNNER_TEMP/$log_name") 2>&1
 # Accessible to the dedicated unprivileged emulator account, unlike runner's private temp.
 work=$(mktemp -d /tmp/navitel-arm-tarboot-lab.XXXXXX); chmod 0755 "$work"; mkdir -p reports
 sdk=${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}
@@ -125,6 +132,7 @@ sudo useradd --system --create-home --user-group emulatorlab
 emu_uid=$(id -u emulatorlab)
 sudo chown -R emulatorlab:emulatorlab "$ANDROID_AVD_HOME"
 pid=''; blocked4=no; blocked6=no
+if [ "$strategy" = stream ]; then source tools/stock_mke2fs_stream_lab.sh; fi
 cleanup() {
   status=$?
   if [ "$status" != 0 ]; then
@@ -138,6 +146,7 @@ cleanup() {
   for m in "$work/copy-extra-dest" "$work/copy-dest" "$work/copy-source"; do
     if mountpoint -q "$m"; then sudo umount "$m" || echo "Cannot unmount isolated lab path: $m"; fi
   done
+  if [ "$strategy" = stream ]; then cleanup_stock_formatter; fi
   [ "$blocked4" != yes ] || sudo iptables -D OUTPUT -m owner --uid-owner "$emu_uid" ! -d 127.0.0.0/8 -j REJECT || true
   [ "$blocked6" != yes ] || sudo ip6tables -D OUTPUT -m owner --uid-owner "$emu_uid" ! -d ::1/128 -j REJECT || true
 }
@@ -636,11 +645,16 @@ sudo mount -t ext4 -o loop,ro "$work/userdata-offline.img" "$work/copy-source"
 sudo test -f "$work/copy-source/system/packages.xml"
 sudo test -f "$work/copy-source/app/com.navitel-1.apk"
 # Model the 512 MiB value in the stock updater, not the actual GU p5.
+test ! -e "$work/synthetic-p5.img" && test ! -L "$work/synthetic-p5.img"
 truncate -s 512M "$work/synthetic-p5.img"
 test -f "$work/synthetic-p5.img" && [ ! -L "$work/synthetic-p5.img" ]
-# Android 4.4's older kernel may not support modern host ext4 features. This
-# host-created disposable image is NOT formatted with the head unit's tool.
-sudo mkfs.ext4 -q -F -O ^64bit,^metadata_csum,^metadata_csum_seed,^orphan_file "$work/synthetic-p5.img"
+if [ "$strategy" = stream ]; then
+  prepare_stock_formatter
+  format_stock_image "$work/synthetic-p5.img" primary
+else
+  # Old Android kernels may not support modern host ext4 features.
+  sudo mkfs.ext4 -q -F -O ^64bit,^metadata_csum,^metadata_csum_seed,^orphan_file "$work/synthetic-p5.img"
+fi
 sudo mount -t ext4 -o loop "$work/synthetic-p5.img" "$work/copy-dest"
 [ "$(findmnt -n -o FSTYPE --target "$work/copy-dest")" = ext4 ]
 sudo chown "$(id -u):$(id -g)" "$work/copy-dest"
@@ -651,19 +665,29 @@ printf 'FROM scratch\nCOPY busybox /busybox\nCOPY qemu-arm-static /qemu-arm-stat
 docker build -q -t x60-disposable-arm-copy "$work/tar-image"
 lab_source="$work/copy-source"; lab_dest="$work/copy-dest"
 run_lab_tar() {
-  docker run --rm --network none --read-only --cap-drop ALL --cap-add CHOWN \
+  docker run -i --rm --network none --read-only --cap-drop ALL --cap-add CHOWN \
     --cap-add DAC_OVERRIDE --cap-add FOWNER --security-opt no-new-privileges \
     --memory 256m --pids-limit 32 \
     --mount "type=bind,source=$lab_source,target=/fixture/source,readonly" \
     --mount "type=bind,source=$lab_dest,target=/fixture/dest" \
     --workdir "$1" x60-disposable-arm-copy /qemu-arm-static /busybox tar "${@:2}"
 }
-create_rc=0
-run_lab_tar /fixture/source -cf /fixture/dest/data.tar ./. > "$work/copy-create.log" 2>&1 || create_rc=$?
-[ "$create_rc" = 0 ] || { echo "Archive failed: $create_rc"; tail -50 "$work/copy-create.log"; exit 1; }
-extract_rc=0
-run_lab_tar /fixture/dest -xvf /fixture/dest/data.tar > "$work/copy-extract.log" 2>&1 || extract_rc=$?
-[ "$extract_rc" = 0 ] || { echo "Extraction failed: $extract_rc"; tail -50 "$work/copy-extract.log"; exit 1; }
+create_rc=0; extract_rc=0
+if [ "$strategy" = stream ]; then
+  # Independent QEMU/BusyBox producer and consumer connected by a pipe; no
+  # archive saved on the target. Capture BOTH exits rather than the last only.
+  set +e
+  run_lab_tar /fixture/source -cf - ./. 2> "$work/copy-create.log" | run_lab_tar /fixture/dest -xvf - > "$work/copy-extract.log" 2>&1
+  pipe_rc=("${PIPESTATUS[@]}")
+  set -e
+  create_rc=${pipe_rc[0]}; extract_rc=${pipe_rc[1]}
+  sudo test ! -e "$work/copy-dest/data.tar" || { echo 'Unexpected target archive'; exit 1; }
+else
+  run_lab_tar /fixture/source -cf /fixture/dest/data.tar ./. > "$work/copy-create.log" 2>&1 || create_rc=$?
+  [ "$create_rc" = 0 ] || { echo "Archive failed: $create_rc"; tail -50 "$work/copy-create.log"; exit 1; }
+  run_lab_tar /fixture/dest -xvf /fixture/dest/data.tar > "$work/copy-extract.log" 2>&1 || extract_rc=$?
+fi
+[ "$create_rc" = 0 ] && [ "$extract_rc" = 0 ] || { echo "Copy producer/consumer failed: $create_rc/$extract_rc"; tail -50 "$work/copy-create.log" "$work/copy-extract.log"; exit 1; }
 for p in system/packages.xml app/com.navitel-1.apk data/com.navitel/files/lab-marker.txt data/com.navitel/shared_prefs/x60_lab_probe.xml data/ru.lifanx60.backupfixture/files/lab-marker.txt data/ru.lifanx60.backupfixture/shared_prefs/lab_probe.xml; do
   sudo cmp "$work/copy-source/$p" "$work/copy-dest/$p" || { echo "Selected synthetic file mismatch: $p"; exit 1; }
   source_meta=$(sudo stat -c '%u:%g %a' "$work/copy-source/$p")
@@ -672,7 +696,7 @@ for p in system/packages.xml app/com.navitel-1.apk data/com.navitel/files/lab-ma
   echo "Synthetic $p content, uid, gid and mode match: $source_meta"
 done > "$work/copy-checks.txt"
 sudo du -sk "$work/copy-source" "$work/copy-dest" > "$work/copy-sizes.txt"
-sudo du -sk "$work/copy-dest/data.tar" >> "$work/copy-sizes.txt"
+if [ "$strategy" = archive ]; then sudo du -sk "$work/copy-dest/data.tar" >> "$work/copy-sizes.txt"; fi
 df -k "$work/copy-dest" > "$work/copy-df.txt"
 python3 - "$work/copy-dest" <<'PY2' > "$work/copy-statvfs.txt"
 import os, sys
@@ -684,13 +708,27 @@ PY2
 # snapshot, add one fixed synthetic 32 MiB file, then repeat on a fresh 512 MiB
 # image. This does not change the original emulator image or the first result.
 mkdir "$work/copy-plus" "$work/copy-extra-dest"
-lab_source="$work/copy-dest"; lab_dest="$work/copy-plus"
-run_lab_tar /fixture/dest -xvf /fixture/source/data.tar > "$work/plus-source.log" 2>&1
+if [ "$strategy" = stream ]; then
+  lab_source="$work/copy-source"; lab_dest="$work/copy-plus"
+  set +e
+  run_lab_tar /fixture/source -cf - ./. 2> "$work/plus-source-create.log" | run_lab_tar /fixture/dest -xvf - > "$work/plus-source.log" 2>&1
+  pipe_rc=("${PIPESTATUS[@]}")
+  set -e
+  [ "${pipe_rc[0]}" = 0 ] && [ "${pipe_rc[1]}" = 0 ] || { echo 'Plus-source stream failed'; exit 1; }
+else
+  lab_source="$work/copy-dest"; lab_dest="$work/copy-plus"
+  run_lab_tar /fixture/dest -xvf /fixture/source/data.tar > "$work/plus-source.log" 2>&1
+fi
 sudo mkdir "$work/copy-plus/x60-synthetic-extra"
 sudo dd if=/dev/zero of="$work/copy-plus/x60-synthetic-extra/extra.bin" bs=1M count=32 status=none
+test ! -e "$work/synthetic-p5-plus.img" && test ! -L "$work/synthetic-p5-plus.img"
 truncate -s 512M "$work/synthetic-p5-plus.img"
 test -f "$work/synthetic-p5-plus.img" && [ ! -L "$work/synthetic-p5-plus.img" ]
-sudo mkfs.ext4 -q -F "$work/synthetic-p5-plus.img"
+if [ "$strategy" = stream ]; then
+  format_stock_image "$work/synthetic-p5-plus.img" plus
+else
+  sudo mkfs.ext4 -q -F "$work/synthetic-p5-plus.img"
+fi
 sudo mount -t ext4 -o loop "$work/synthetic-p5-plus.img" "$work/copy-extra-dest"
 [ "$(findmnt -n -o FSTYPE --target "$work/copy-extra-dest")" = ext4 ]
 sudo chown "$(id -u):$(id -g)" "$work/copy-extra-dest"
@@ -706,7 +744,7 @@ grep -F 'No space left on device' "$work/plus-extract.log" > "$work/plus-error.t
 echo 'LAB ONLY: start same disposable ARM AVD from the extracted synthetic image'
 # A fixed synthetic witness exists only on the extracted image. It proves
 # the emulator did not silently fall back to the original AVD userdata.
-sudo sha256sum "$work/copy-dest/data.tar" | awk '{print $1}' > "$work/tarboot-archive-sha256.txt"
+if [ "$strategy" = archive ]; then sudo sha256sum "$work/copy-dest/data.tar" | awk '{print $1}' > "$work/tarboot-archive-sha256.txt"; fi
 witness_rel='data/ru.lifanx60.backupfixture/files/x60-copied-image-witness'
 sudo test ! -e "$work/copy-source/$witness_rel"
 printf 'X60_COPIED_IMAGE_ONLY\n' > "$work/tarboot-witness.txt"
@@ -812,6 +850,10 @@ if [ "$ready" != yes ]; then
   grep -Fq FIXTURE_FAILURE "$work/canary-tarboot-log.txt" || { echo 'Unexpected launch failure'; exit 1; }
   grep -Fq 'ENOSPC (No space left on device)' "$work/canary-tarboot-log.txt" || { echo 'Unexpected launch failure: ENOSPC not observed'; exit 1; }
   initial_fixture_result=ENOSPC
+  if [ "$strategy" = stream ]; then
+    echo 'Streamed model still ran out of space; do not remove anything or call it successful'
+    exit 1
+  fi
   # A failing write may truncate the fixture's existing file. Record its exact
   # post-failure bytes before any retry, rather than calling them preserved.
   timeout -k 5 60 "$adb" pull /data/data/ru.lifanx60.backupfixture/files/lab-marker.txt "$work/canary-marker-after-failure.txt" >/dev/null
@@ -882,9 +924,15 @@ check_synthetic tarbootnav
   echo 'The emulator was synced and stopped; a copy of its 1 GiB userdata image was fsck-checked offline and mounted read-only. No physical device or user data.'
   echo "Offline fsck correction status: $fsck_rc (0 clean, 1 corrected); a subsequent read-only fsck passed."
   echo 'Stock-derived ARM BusyBox tar was run through QEMU in a restricted container against the copy. Destination was a new empty 512 MiB ext4 regular-file image, not the real GU partition.'
-  echo "Archive exit: $create_rc; extraction exit: $extract_rc; archive remains on destination."
+  if [ "$strategy" = stream ]; then
+    echo 'Primary image formatted with exact stock-derived ARM mke2fs against a dedicated unmounted synthetic 512 MiB loop under QEMU; not the stock kernel or script.'
+    cat "$work/formatter-config.txt" "$work/formatter-primary-geometry.txt"
+    echo "Streaming copy: tar producer exit $create_rc; tar consumer exit $extract_rc; no data.tar on destination."
+  else
+    echo "Archive exit: $create_rc; extraction exit: $extract_rc; archive remains on destination."
+  fi
   echo 'Selected synthetic files checked after extraction:'; cat "$work/copy-checks.txt"
-  echo 'Allocated KiB on the CI host (destination includes the archive; source ext4, not GU tmpfs):'; cat "$work/copy-sizes.txt"
+  echo "Allocated KiB on the CI host (strategy=$strategy; source ext4, not GU tmpfs):"; cat "$work/copy-sizes.txt"
   echo 'Destination filesystem usage:'; cat "$work/copy-df.txt"
   cat "$work/copy-statvfs.txt"
   echo "Negative control on fresh 512 MiB image: copied baseline snapshot plus one synthetic 32 MiB file, tar create exit $plus_create_rc, extraction exit $plus_extract_rc with No space left on device."
@@ -892,7 +940,7 @@ check_synthetic tarbootnav
   echo 'Only listed files and metadata were compared; tar exit 0 is not proof all app data, xattrs, SELinux labels, sparse data, or timestamps were preserved.'
   echo 'The stock updater declares DATA_SIZE=512 with sfdisk -uM for logical p5; actual head-unit size, free space, other apps and runtime sequence remain unknown.'
   echo '## Boot from extracted virtual image'
-  echo 'The host-created ext4 image was unmounted and checked before being passed as -data to the same classic ARM AVD; the generic boot ramdisk and kernel remained unchanged.'
+  echo "The $strategy synthetic ext4 image was unmounted and checked before being passed as -data to the same classic ARM AVD; the generic boot ramdisk and kernel remained unchanged."
   echo "The extracted ext4 filesystem started at $image_fs_bytes_before bytes; its regular-file backing was padded to 1 GiB without filesystem resize to satisfy the legacy emulator."
   echo "Padded image file size before/after emulator start: $image_size_before/$image_size_after bytes. New kernel boot ID confirmed."
   echo 'Pre-boot ext4 geometry after padding:'; cat "$work/tarboot-super-padded.txt"
@@ -915,7 +963,8 @@ check_synthetic tarbootnav
   echo 'Navitel launch observation (not activation):'; cat "$work/navitel-tarboot-start.txt"
   tr -d '\r' < "$work/navitel-tarboot-activities.txt" | grep -E 'mResumedActivity|mFocusedActivity' | head -5 || true
   tr -d '\r' < "$work/navitel-tarboot-log.txt" | grep -iE 'FATAL EXCEPTION|Fatal signal|com.navitel.*(crash|died)' | tail -10 || true
-  echo 'Host ext4 creation options differ from the stock formatter. Cold booting a generic emulator is not real-device Hibernate or proof of all-data preservation.'
+  if [ "$strategy" = archive ]; then echo 'Host ext4 creation options differ from the stock formatter.'; else echo 'Streamed copy is an alternative laboratory model, NOT the stock script and NOT ready for a physical device.'; fi
+  echo 'Cold booting a generic emulator is not real-device Hibernate or proof of all-data preservation.'
   echo '## Emulator crash dialog while installing'
   if [ -e "$work/navitel-crash-log.txt" ]; then echo 'Navitel stopped dialog observed'; grep -A 22 -F 'Process: com.navitel' "$work/navitel-crash-log.txt" | head -46 || true; else echo 'No Navitel crash dialog observed during installer polling; other failures may still occur'; fi
   echo '## Launch attempt (no activation asserted)'
@@ -924,4 +973,4 @@ check_synthetic tarbootnav
   tr -d '\r' < "$work/app-log.txt" | grep -iE 'FATAL EXCEPTION|Fatal signal|com.navitel.*(crash|died)' | tail -10 || true
   echo 'Kernel boot ID changed after host stopped and restarted the same disposable emulator. This is a virtual cold start after sync, not real-device hibernate or graceful car shutdown.'
   echo 'Real device app behavior, USB, rollback, settings and all data preservation remain unverified.'
-} > reports/navitel-arm-tarboot-lab.txt
+} > "reports/$report_name"
