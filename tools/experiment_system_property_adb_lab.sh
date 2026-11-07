@@ -119,6 +119,7 @@ grep -q 'OWN_UID=' "$work/negative-log.txt"
 test "$("$adb" shell getprop service.adb.tcp.port | tr -d '\r')" = "$oldport"
 
 echo 'Positive control: platform-signed shared system UID in disposable emulator'
+"$adb" shell ps > "$work/ps-before.txt"
 "$adb" install "$work/unsigned-signed.apk" | tee "$work/system-install.txt"
 grep -F Success "$work/system-install.txt"
 "$adb" logcat -c
@@ -133,40 +134,36 @@ for i in $(seq 1 90); do
 done
 [ "$ready" = yes ] || { cat "$work/system-start.txt" "$work/system-log.txt" 2>/dev/null || true; exit 1; }
 grep -F 'OWN_UID=1000 ' "$work/system-log.txt"; grep -F 'AFTER=43127' "$work/system-log.txt"; grep -F 'RESTART_REQUESTED' "$work/system-log.txt"
-# Poll the actual in-guest listening socket, not just the property value.
-listen=no
+# AOSP 4.4 chooses qemud transport when ro.kernel.qemu=1, even when
+# service.adb.tcp.port is set. Test an actual daemon restart, not TCP reachability.
+restarted=no
 for i in $(seq 1 45); do
-  "$adb" shell 'cat /proc/net/tcp /proc/net/tcp6' > "$work/guest-tcp.txt" 2>/dev/null || true
-  if python3 - "$work/guest-tcp.txt" <<'PYINNER'
-import sys
-lines=open(sys.argv[1]).read().splitlines()
-raise SystemExit(0 if any(len(line.split()) > 3 and line.split()[1].endswith(':A877') and line.split()[3] == '0A' for line in lines[1:]) else 1)
-PYINNER
-  then listen=yes; break; fi
+  timeout -k 3 5 "$adb" shell ps > "$work/ps-after.txt" 2>/dev/null || true
+  before=$(awk '$NF=="/sbin/adbd" {print $2}' "$work/ps-before.txt" | tr -d '\r')
+  after=$(awk '$NF=="/sbin/adbd" {print $2}' "$work/ps-after.txt" | tr -d '\r')
+  if [ -n "$before" ] && [ -n "$after" ] && [ "$before" != "$after" ]; then restarted=yes; break; fi
   sleep 2
 done
-[ "$listen" = yes ] || { echo 'No listener at requested port'; exit 1; }
-echo 'Requested port is listening inside the emulator'
-# Forwarding is bound to host loopback and traverses the existing emulator ADB
-# transport. This tests protocol, not LAN reachability or real Wi-Fi.
-localport=$("$adb" forward tcp:0 tcp:43127 | tr -d '\r')
-[[ "$localport" =~ ^[0-9]+$ ]]
-serial="127.0.0.1:$localport"
-timeout -k 5 30 "$adb" connect "$serial" | tee "$work/connect.txt"
-timeout -k 5 30 "$adb" -s "$serial" shell id | tr -d '\r' | tee "$work/tcp-id.txt"
-grep -q 'uid=' "$work/tcp-id.txt"
-"$adb" disconnect "$serial" >/dev/null || true
-"$adb" -s emulator-5554 forward --remove "tcp:$localport" || true
+[ "$restarted" = yes ] || { echo 'No daemon PID change observed'; cat "$work/ps-before.txt" "$work/ps-after.txt"; "$adb" shell dmesg | grep -iE 'sys_prop|adbd|denied' | tail -50 || true; exit 1; }
+echo "adbd PID changed in emulator: $before -> $after"
+"$adb" shell 'cat /proc/net/tcp /proc/net/tcp6' > "$work/guest-tcp.txt" 2>/dev/null || true
+python3 - "$work/guest-tcp.txt" <<'PYINNER' > "$work/listener.txt"
+import sys
+lines=open(sys.argv[1]).read().splitlines()
+found=any(len(line.split()) > 3 and line.split()[1].endswith(':A877') and line.split()[3] == '0A' for line in lines[1:])
+print('Guest TCP listener for requested port:', 'yes' if found else 'no')
+PYINNER
+cat "$work/listener.txt"
 {
   echo '# Platform-signed system UID property experiment: generic Android 4.4.2 x86 only'
   echo 'Disposable emulator; no head unit, real storage, user data, or user network accessed.'
-  echo 'Host firewall blocks non-loopback emulator traffic; TCP client uses loopback via existing ADB forward, not LAN.'
+  echo 'Host firewall blocks non-loopback emulator traffic. No LAN or TCP client was tested.'
   echo "Fingerprint: $fingerprint; hardware: $hardware; qemu: $qemu"
   echo 'Generic baseline properties:'; cat "$work/baseline.txt"; echo 'Generic baseline shell:'; cat "$work/baseline-id.txt"
   echo 'Same-signature ordinary UID negative control: property unchanged:'; grep -F 'OWN_UID=' "$work/negative-log.txt" | tail -1
   echo 'System UID fixture:'; grep -F 'OWN_UID=' "$work/system-log.txt" | tail -1
-  echo 'Fixture requested adbd restart; requested port observed listening in emulator.'
-  echo 'Second ADB connection through host-loopback forwarding:'; cat "$work/connect.txt" "$work/tcp-id.txt"
+  echo "adbd PID changed in emulator: $before -> $after"; cat "$work/listener.txt"
+  echo 'Emulator uses qemud transport; this does not test whether a physical device will listen on TCP.'
   echo 'Emulator adbd identity and behavior are NOT evidence of stock adbd privileges, network access, authentication or safe data backup on GU.'
   echo 'No application released; do not enable network ADB or use this test on a real head unit.'
 } > reports/system-property-adb-lab.txt

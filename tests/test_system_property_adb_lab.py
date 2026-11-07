@@ -25,7 +25,7 @@ class GuardsTest(unittest.TestCase):
     def test_runner_guards(self):
         s = (ROOT / 'tools/experiment_system_property_adb_lab.sh').read_text()
         for part in ('GITHUB_ACTIONS:-', 'iptables -I OUTPUT', 'ip6tables -I OUTPUT',
-                     '127.0.0.1:$localport', 'forward --remove', 'no head unit'):
+                     'restarted=no', 'Guest TCP listener', 'no head unit'):
             self.assertIn(part, s)
 
 if __name__ == '__main__': unittest.main()
