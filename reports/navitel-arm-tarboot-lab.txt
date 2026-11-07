@@ -43,14 +43,14 @@ Restore can clear data and this fixture must not be used on a real device.
 ## Allocated emulator storage (KiB, BusyBox du -sk)
 Generic ARM image, emulator data/apps/cache and synthetic fixtures, not physical GU sizes; emulator usage changes and overlapping categories must not be added.
 Before update:
-38744	/data
+38732	/data
 6472	/data/app
 44	/data/app-lib
-25652	/data/dalvik-cache
+25632	/data/dalvik-cache
 28	/data/data/com.navitel
 X60_SIZE_DONE
 After update:
-171464	/data
+171476	/data
 103308	/data/app
 19528	/data/app-lib
 41808	/data/dalvik-cache
@@ -60,11 +60,11 @@ After update:
 6800	/data/dalvik-cache/data@app@com.navitel-1.apk@classes.dex
 X60_SIZE_DONE
 After host-triggered cold start:
-239812	/data
+239164	/data
 103308	/data/app
 19528	/data/app-lib
 41808	/data/dalvik-cache
-68336	/data/data/com.navitel
+67680	/data/data/com.navitel
 96836	/data/app/com.navitel-1.apk
 19484	/data/app-lib/com.navitel-1
 6800	/data/dalvik-cache/data@app@com.navitel-1.apk@classes.dex
@@ -83,13 +83,13 @@ Synthetic data/com.navitel/shared_prefs/x60_lab_probe.xml content, uid, gid and 
 Synthetic data/ru.lifanx60.backupfixture/files/lab-marker.txt content, uid, gid and mode match: 10054:10054 600
 Synthetic data/ru.lifanx60.backupfixture/shared_prefs/lab_probe.xml content, uid, gid and mode match: 10054:10054 600
 Allocated KiB on the CI host (strategy=archive; source ext4, not GU tmpfs):
-239820	/tmp/navitel-arm-tarboot-lab.4hhF7Q/copy-source
-477352	/tmp/navitel-arm-tarboot-lab.4hhF7Q/copy-dest
-237520	/tmp/navitel-arm-tarboot-lab.4hhF7Q/copy-dest/data.tar
+239176	/tmp/navitel-arm-tarboot-lab.jh6QYS/copy-source
+476056	/tmp/navitel-arm-tarboot-lab.jh6QYS/copy-dest
+236876	/tmp/navitel-arm-tarboot-lab.jh6QYS/copy-dest/data.tar
 Destination filesystem usage:
 Filesystem     1K-blocks   Used Available Use% Mounted on
-/dev/loop1        499284 477356         0 100% /tmp/navitel-arm-tarboot-lab.4hhF7Q/copy-dest
-Filesystem blocks free including reserved (KiB): 21928
+/dev/loop1        499284 476060         0 100% /tmp/navitel-arm-tarboot-lab.jh6QYS/copy-dest
+Filesystem blocks free including reserved (KiB): 23224
 Filesystem blocks available to unprivileged users (KiB): 0
 Negative control on fresh 512 MiB image: copied baseline snapshot plus one synthetic 32 MiB file, tar create exit 0, extraction exit 1 with No space left on device.
 This artificial addition is not a claim about installed apps or capacity on the head unit.
@@ -100,51 +100,51 @@ The archive synthetic ext4 image was unmounted and checked before being passed a
 The extracted ext4 filesystem started at 536870912 bytes; its regular-file backing was padded to 1 GiB without filesystem resize to satisfy the legacy emulator.
 Padded image file size before/after emulator start: 1073741824/1073741824 bytes. New kernel boot ID confirmed.
 Pre-boot ext4 geometry after padding:
-Filesystem UUID:          2c9bcb9a-f44b-4806-95c1-e401f64011e8
+Filesystem UUID:          efd9aa1b-56ad-452b-a125-10b95d785aa3
 Filesystem features:      has_journal ext_attr resize_inode dir_index filetype extent flex_bg sparse_super large_file huge_file dir_nlink extra_isize
 Block count:              131072
 Block size:               4096
 A synthetic witness added only to the extracted image was readable after boot, excluding silent fallback to original AVD userdata.
 df /data after boot:
 Filesystem               Size     Used     Free   Blksize
-/data                  487.6M   466.1M    21.5M   4096
+/data                  487.6M   464.9M    22.6M   4096
 After boot, Navitel remained registered as the data update, with the same UID; synthetic files and UIDs of Navitel and independent fixture matched before starting the fixture. Blocked fixture files matched too.
 Initial independent-fixture launch result: ENOSPC. Synthetic archive removed in a separate CI-only intervention: yes.
 Fixture first failed with ENOSPC, despite free blocks visible to root. Before retry the synthetic archive was pulled and its SHA-256 matched the pre-boot file; then it was deleted ONLY in the disposable emulator.
 Fixture marker byte counts before first launch and after its failed write:
-24 /tmp/navitel-arm-tarboot-lab.4hhF7Q/canary-marker-before.txt
- 0 /tmp/navitel-arm-tarboot-lab.4hhF7Q/canary-marker-after-failure.txt
+24 /tmp/navitel-arm-tarboot-lab.jh6QYS/canary-marker-before.txt
+ 0 /tmp/navitel-arm-tarboot-lab.jh6QYS/canary-marker-after-failure.txt
 24 total
 The retry emitted FIXTURE_READY and recreated its marker; this does not prove that marker survived the failed write.
 df /data after synthetic-only intervention:
 Filesystem               Size     Used     Free   Blksize
-/data                  487.6M   234.4M   253.2M   4096
+/data                  487.6M   233.9M   253.7M   4096
 This intervention does not model stock Hibernate and is not an instruction for a real device.
 System Navitel APK and services.jar matched originals; system_server mapped the services dex.
 Mounts:
 /dev/block/mtdblock0 /system ext4 ro,seclabel,relatime,data=ordered 0 0
 /dev/block/mtdblock1 /data ext4 rw,seclabel,nosuid,nodev,noatime,nomblk_io_submit,data=ordered 0 0
 Synthetic emulator storage after copied-image boot:
-477392	/data
+476092	/data
 103308	/data/app
 19528	/data/app-lib
 41808	/data/dalvik-cache
-68336	/data/data/com.navitel
+67680	/data/data/com.navitel
 96836	/data/app/com.navitel-1.apk
 19484	/data/app-lib/com.navitel-1
 6800	/data/dalvik-cache/data@app@com.navitel-1.apk@classes.dex
 X60_SIZE_DONE
 Navitel launch observation (not activation):
 Starting: Intent { cmp=com.navitel/.app.MainActivity }
-    mResumedActivity: ActivityRecord{b1f1e780 u0 com.navitel/.app.MainActivity t4}
-  mFocusedActivity: ActivityRecord{b1f1e780 u0 com.navitel/.app.MainActivity t4}
+    mResumedActivity: ActivityRecord{b1ffd598 u0 com.navitel/.app.MainActivity t4}
+  mFocusedActivity: ActivityRecord{b1ffd598 u0 com.navitel/.app.MainActivity t4}
 Host ext4 creation options differ from the stock formatter.
 Cold booting a generic emulator is not real-device Hibernate or proof of all-data preservation.
 ## Emulator crash dialog while installing
 No Navitel crash dialog observed during installer polling; other failures may still occur
 ## Launch attempt (no activation asserted)
 Starting: Intent { cmp=com.navitel/.app.MainActivity }
-    mResumedActivity: ActivityRecord{b1f93198 u0 com.navitel/.app.MainActivity t2}
-  mFocusedActivity: ActivityRecord{b1f93198 u0 com.navitel/.app.MainActivity t2}
+    mResumedActivity: ActivityRecord{b1f8e9a8 u0 com.navitel/.app.MainActivity t2}
+  mFocusedActivity: ActivityRecord{b1f8e9a8 u0 com.navitel/.app.MainActivity t2}
 Kernel boot ID changed after host stopped and restarted the same disposable emulator. This is a virtual cold start after sync, not real-device hibernate or graceful car shutdown.
 Real device app behavior, USB, rollback, settings and all data preservation remain unverified.
