@@ -17,7 +17,7 @@ unzip -p "$work/lifan-file-manager-test.zip" boot.img > "$work/boot.img"
 echo "060d291a523bbe0d40c86537f070ed0feb90e04e0db0efef2a3e4594e9223b4b  $work/boot.img" | sha256sum -c -
 unzip -p "$work/lifan-file-manager-test.zip" system.img > "$work/system.img"
 echo "a660f062716fd42d5a6185faec059f42675b3024304de7b81fac5d705cc88511  $work/system.img" | sha256sum -c -
-mkdir -p "$work/root/sbin" "$work/root/system/bin" "$work/root/system/lib"
+mkdir -p "$work/root/sbin" "$work/root/system/bin"
 python3 - "$work/boot.img" "$work/root" <<'PY'
 import gzip, struct, subprocess, sys
 b=open(sys.argv[1],'rb').read()
@@ -30,7 +30,9 @@ echo "3e6c06ffa3946e2c5ba51e7dd52a522e4c5c83ad2a006115531a9465af6b294a  $work/ro
 debugfs -R "dump /bin/linker $work/root/system/bin/linker" "$work/system.img" >/dev/null 2>&1
 debugfs -R "dump /bin/toolbox $work/root/system/bin/toolbox" "$work/system.img" >/dev/null 2>&1
 debugfs -R "rdump /lib $work/root/system" "$work/system.img" > "$work/lib-extract.log" 2>&1
-test -s "$work/root/system/bin/linker" && test -s "$work/root/system/bin/toolbox" && test -s "$work/root/system/lib/libc.so"
+for f in "$work/root/system/bin/linker" "$work/root/system/bin/toolbox" "$work/root/system/lib/libc.so"; do
+  [ -s "$f" ] || { echo "Missing extracted component: $f"; tail -20 "$work/lib-extract.log"; exit 1; }
+done
 cp /usr/bin/qemu-arm-static "$work/root/qemu-arm-static"
 chmod 0755 "$work/root/qemu-arm-static" "$work/root/sbin/adbd" "$work/root/system/bin/"{linker,toolbox}
 printf 'FROM scratch\nCOPY . /\n' > "$work/root/Dockerfile"
