@@ -5,18 +5,46 @@ Emulator host UID 999: non-loopback IPv4/IPv6 blocked
 * daemon started successfully
 Fingerprint: generic_x86/sdk_x86/generic_x86:4.4.2/KK/4174703:eng/test-keys; hardware: ranchu; qemu: 1
 Obtain AOSP emulator platform key; verify against its framework APK
-/system/framework/framework-res.apk: 1 file pulled, 0 skipped. 118.8 MB/s (15428518 bytes in 0.124s)
+/system/framework/framework-res.apk: 1 file pulled, 0 skipped. 131.7 MB/s (15428518 bytes in 0.112s)
 Emulator platform cert: c8a2e9bccf597c2fb6dc66bee293fc13f2fc47ec77bc6b2b0d52c11f51192ab8
 Check emulator shell package certificate and manifest
-/system/priv-app/Shell.apk: 1 file pulled, 0 skipped. 43.1 MB/s (38062 bytes in 0.001s)
+/system/priv-app/Shell.apk: 1 file pulled, 0 skipped. 34.8 MB/s (38062 bytes in 0.001s)
     A: android:sharedUserId(0x0101000b)="android.uid.shell" (Raw: "android.uid.shell")
 Build guarded generic-emulator fixture; no APK is published
-ERROR: No AndroidManifest.xml file found.
+Baseline adbd and security settings in generic emulator
+ro.secure=0
+ro.debuggable=1
+ro.adb.secure=
+service.adb.tcp.port=
+init.svc.adbd=running
+uid=0(root) gid=0(root)
+/tmp/shell-uid-lab.S1ena5/negative-unsigned-signed.apk: 1 file pushed, 0 skipped. 142.3 MB/s (12655 bytes in 0.000s)
+Performing Push Install
+WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
+	pkg: /data/local/tmp/negative-unsigned-signed.apk
+Success
+Success
+WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
+Starting: Intent { cmp=ru.lifanx60.systempropnegative/ru.lifanx60.systempropfixture.MainActivity }
+--------- beginning of /dev/log/main
+--------- beginning of /dev/log/system
+I/X60SystemPropLab( 2062): OWN_UID=10052 BEFORE= AFTER=
+Positive control: platform-signed shared system UID in disposable emulator
+/tmp/shell-uid-lab.S1ena5/unsigned-signed.apk: 1 file pushed, 0 skipped. 178.1 MB/s (12655 bytes in 0.000s)
+Performing Push Install
+WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
+	pkg: /data/local/tmp/unsigned-signed.apk
+Success
+Success
+I/X60SystemPropLab( 2108): OWN_UID=1000 BEFORE= AFTER=43127
+I/X60SystemPropLab( 2108): OWN_UID=1000 BEFORE= AFTER=43127
+I/X60SystemPropLab( 2108): RESTART_REQUESTED
+No listener at requested port
 Lab failed (1); emulator diagnostics:
-WARNING      | Feature QuickbootFileBacked is disabled due to stability issues, if you really want that, the environment variable ANDROID_EMU_FORCE_QUICKBOOT_FILE_BACKED need to set to 1
+WARNING      | Downloaded protobuf file is corrupt.
 WARNING      | encryption is off
 WARNING      | FeatureControl is requesting a non existing feature.
-INFO         | Storing crashdata in: /tmp/android-systemproplab/emu-crash-37.2.13.db, detection is enabled for process: 2621
+INFO         | Storing crashdata in: /tmp/android-systemproplab/emu-crash-37.2.13.db, detection is enabled for process: 2703
 INFO         | Initializing gfxstream backend
 INFO         | startOpenglesRendererImpl: gpu info
 INFO         | 
@@ -59,85 +87,76 @@ WARNING      | Failed to process .ini file /home/systemproplab/.android/emu-upda
 WARNING      | UpdateCheck: Failure: Error
 WARNING      | UpdateCheck: failed to get the latest version, skipping check (current version '37.2.13-16740729')
 List of devices attached
-emulator-5554          device product:sdk_x86 model:Android_SDK_built_for_x86 device:generic_x86 transport_id:1
+emulator-5554          device product:sdk_x86 model:Android_SDK_built_for_x86 device:generic_x86 transport_id:2
 
-I/PackageManager( 1549): Running dexopt on: com.android.providers.userdictionary
-I/PackageManager( 1549): Running dexopt on: com.android.providers.telephony
-I/PackageManager( 1549): Running dexopt on: com.android.phone
-I/PackageManager( 1549): Running dexopt on: com.android.providers.downloads
-I/PackageManager( 1549): Running dexopt on: com.android.settings
-I/PackageManager( 1549): Running dexopt on: com.android.printspooler
-I/PackageManager( 1549):   Action: "android.intent.action.SENDTO"
-I/PackageManager( 1549):   Category: "android.intent.category.DEFAULT"
-I/PackageManager( 1549):   Scheme: "sms"
-I/PackageManager( 1549): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager( 1549):   Action: "android.intent.action.SENDTO"
-I/PackageManager( 1549):   Category: "android.intent.category.DEFAULT"
-I/PackageManager( 1549):   Scheme: "smsto"
-I/PackageManager( 1549): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager( 1549):   Action: "android.intent.action.SENDTO"
-I/PackageManager( 1549):   Category: "android.intent.category.DEFAULT"
-I/PackageManager( 1549):   Scheme: "mms"
-I/PackageManager( 1549): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager( 1549): Running dexopt on: com.android.sdksetup
-I/PackageManager( 1549):   Action: "android.intent.action.SENDTO"
-I/PackageManager( 1549):   Category: "android.intent.category.DEFAULT"
-I/PackageManager( 1549):   Scheme: "mmsto"
-I/PackageManager( 1549): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager( 1549):   Action: "android.intent.action.SENDTO"
-I/PackageManager( 1549):   Category: "android.intent.category.DEFAULT"
-I/PackageManager( 1549):   Scheme: "sms"
-I/PackageManager( 1549):   Action: "android.intent.action.SENDTO"
-I/PackageManager( 1549):   Category: "android.intent.category.DEFAULT"
-I/PackageManager( 1549):   Scheme: "smsto"
-I/PackageManager( 1549):   Action: "android.intent.action.SENDTO"
-I/PackageManager( 1549):   Category: "android.intent.category.DEFAULT"
-I/PackageManager( 1549):   Scheme: "mms"
-I/PackageManager( 1549): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager( 1549): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager( 1549): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager( 1549):   Action: "android.intent.action.SENDTO"
-I/PackageManager( 1549):   Category: "android.intent.category.DEFAULT"
-I/PackageManager( 1549):   Scheme: "mmsto"
-I/PackageManager( 1549): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager( 1549): Running dexopt on: com.android.exchange
-I/PackageManager( 1549): Running dexopt on: com.android.launcher
-I/PackageManager( 1549): Running dexopt on: com.android.externalstorage
-I/PackageManager( 1549): Running dexopt on: com.android.email
-I/PackageManager( 1549): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager( 1549): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager( 1549): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager( 1549): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager( 1549): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager( 1549): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager( 1549): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager( 1549): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager( 1549): Running dexopt on: com.android.music
-I/PackageManager( 1549):   Action: "android.intent.action.SENDTO"
-I/PackageManager( 1549):   Category: "android.intent.category.DEFAULT"
-I/PackageManager( 1549):   Scheme: "sms"
-I/PackageManager( 1549):   Action: "android.intent.action.SENDTO"
-I/PackageManager( 1549):   Category: "android.intent.category.DEFAULT"
-I/PackageManager( 1549):   Scheme: "smsto"
-I/PackageManager( 1549):   Action: "android.intent.action.SENDTO"
-I/PackageManager( 1549):   Category: "android.intent.category.DEFAULT"
-I/PackageManager( 1549):   Scheme: "mms"
-I/PackageManager( 1549):   Action: "android.intent.action.SENDTO"
-I/PackageManager( 1549):   Category: "android.intent.category.DEFAULT"
-I/PackageManager( 1549):   Scheme: "mmsto"
-I/PackageManager( 1549):   Action: "android.intent.action.SENDTO"
-I/PackageManager( 1549):   Category: "android.intent.category.DEFAULT"
-I/PackageManager( 1549):   Scheme: "sms"
-I/PackageManager( 1549):   Action: "android.intent.action.SENDTO"
-I/PackageManager( 1549):   Category: "android.intent.category.DEFAULT"
-I/PackageManager( 1549):   Scheme: "smsto"
-I/PackageManager( 1549):   Action: "android.intent.action.SENDTO"
-I/PackageManager( 1549):   Category: "android.intent.category.DEFAULT"
-I/PackageManager( 1549):   Scheme: "mms"
-I/PackageManager( 1549):   Action: "android.intent.action.SENDTO"
-I/PackageManager( 1549):   Category: "android.intent.category.DEFAULT"
-I/PackageManager( 1549):   Scheme: "mmsto"
-W/Launcher.LauncherProvider( 1880): android.content.pm.PackageManager$NameNotFoundException: ComponentInfo{com.android.camera2/com.android.camera.CameraLauncher}
-W/Launcher.LauncherProvider( 1880): 	at android.app.ApplicationPackageManager.getActivityInfo(ApplicationPackageManager.java:242)
-W/Launcher.LauncherProvider( 1880): android.content.pm.PackageManager$NameNotFoundException: ComponentInfo{com.android.gallery3d/com.android.gallery3d.app.Gallery}
-W/Launcher.LauncherProvider( 1880): 	at android.app.ApplicationPackageManager.getActivityInfo(ApplicationPackageManager.java:242)
+I/X60SystemPropLab( 2108): OWN_UID=1000 BEFORE= AFTER=43127
+I/X60SystemPropLab( 2108): RESTART_REQUESTED
+I/PackageManager( 1552): Running dexopt on: com.android.calendar
+I/PackageManager( 1552): Running dexopt on: com.android.deskclock
+I/PackageManager( 1552): Running dexopt on: com.android.dialer
+I/PackageManager( 1552): Running dexopt on: com.android.mms
+I/PackageManager( 1552): Running dexopt on: com.svox.pico
+I/PackageManager( 1552):   Action: "android.intent.action.SENDTO"
+I/PackageManager( 1552):   Category: "android.intent.category.DEFAULT"
+I/PackageManager( 1552):   Scheme: "sms"
+I/PackageManager( 1552): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager( 1552):   Action: "android.intent.action.SENDTO"
+I/PackageManager( 1552):   Category: "android.intent.category.DEFAULT"
+I/PackageManager( 1552):   Scheme: "smsto"
+I/PackageManager( 1552):   Action: "android.intent.action.SENDTO"
+I/PackageManager( 1552):   Category: "android.intent.category.DEFAULT"
+I/PackageManager( 1552):   Scheme: "mms"
+I/PackageManager( 1552):   Action: "android.intent.action.SENDTO"
+I/PackageManager( 1552):   Category: "android.intent.category.DEFAULT"
+I/PackageManager( 1552):   Scheme: "mmsto"
+I/PackageManager( 1552): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager( 1552): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager( 1552): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager( 1552):   Action: "android.intent.action.SENDTO"
+I/PackageManager( 1552):   Category: "android.intent.category.DEFAULT"
+I/PackageManager( 1552):   Scheme: "sms"
+I/PackageManager( 1552):   Action: "android.intent.action.SENDTO"
+I/PackageManager( 1552):   Category: "android.intent.category.DEFAULT"
+I/PackageManager( 1552):   Scheme: "smsto"
+I/PackageManager( 1552): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager( 1552): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager( 1552):   Action: "android.intent.action.SENDTO"
+I/PackageManager( 1552):   Category: "android.intent.category.DEFAULT"
+I/PackageManager( 1552):   Scheme: "mms"
+I/PackageManager( 1552): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager( 1552):   Action: "android.intent.action.SENDTO"
+I/PackageManager( 1552):   Category: "android.intent.category.DEFAULT"
+I/PackageManager( 1552):   Scheme: "mmsto"
+I/PackageManager( 1552):   Action: "android.intent.action.SENDTO"
+I/PackageManager( 1552):   Category: "android.intent.category.DEFAULT"
+I/PackageManager( 1552):   Scheme: "sms"
+I/PackageManager( 1552):   Action: "android.intent.action.SENDTO"
+I/PackageManager( 1552):   Category: "android.intent.category.DEFAULT"
+I/PackageManager( 1552):   Scheme: "smsto"
+I/PackageManager( 1552): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager( 1552): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager( 1552): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager( 1552):   Action: "android.intent.action.SENDTO"
+I/PackageManager( 1552):   Category: "android.intent.category.DEFAULT"
+I/PackageManager( 1552):   Scheme: "mms"
+I/PackageManager( 1552):   Action: "android.intent.action.SENDTO"
+I/PackageManager( 1552):   Category: "android.intent.category.DEFAULT"
+I/PackageManager( 1552):   Scheme: "mmsto"
+I/PackageManager( 1552):   Action: "android.intent.action.SENDTO"
+I/PackageManager( 1552):   Category: "android.intent.category.DEFAULT"
+I/PackageManager( 1552):   Scheme: "sms"
+I/PackageManager( 1552):   Action: "android.intent.action.SENDTO"
+I/PackageManager( 1552):   Category: "android.intent.category.DEFAULT"
+I/PackageManager( 1552):   Scheme: "smsto"
+I/PackageManager( 1552): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager( 1552): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager( 1552): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager( 1552): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager( 1552):   Action: "android.intent.action.SENDTO"
+I/PackageManager( 1552):   Category: "android.intent.category.DEFAULT"
+I/PackageManager( 1552):   Scheme: "mms"
+I/PackageManager( 1552): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager( 1552):   Action: "android.intent.action.SENDTO"
+I/PackageManager( 1552):   Category: "android.intent.category.DEFAULT"
+I/PackageManager( 1552):   Scheme: "mmsto"
+I/PackageManager( 1552): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
