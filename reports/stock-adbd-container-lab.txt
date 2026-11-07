@@ -6,6 +6,7 @@ ro.secure=1 ro.debuggable=1 ro.kernel.qemu=0 service.adb.tcp.port=43127
 Synthetic service.adb.root=0 ro.adb.secure=0
 Loopback ADB greeting response: CNXN
 Listener bind address in isolated namespace: all interfaces
+Loopback test client host UID: 12345
 Root-only synthetic fixture: denied for synthetic shell-UID daemon
 Java loopback synthetic sync: denied
 Name:	qemu-arm-static
@@ -15,6 +16,7 @@ CapEff:	0000000000000000
 Synthetic service.adb.root=1 ro.adb.secure=0
 Loopback ADB greeting response: CNXN
 Listener bind address in isolated namespace: all interfaces
+Loopback test client host UID: 12345
 Root-only synthetic fixture: read byte-for-byte by synthetic root-UID daemon
 Java loopback synthetic sync: exact match
 Name:	qemu-arm-static
@@ -28,7 +30,7 @@ Name:	qemu-arm-static
 Uid:	0	0	0	0
 Gid:	0	0	0	0
 CapEff:	00000000000001c0
-Python and Java clients ran in the container network namespace on the CI host; Java was not an Android app.
+Python and Java clients were unprivileged host processes in the container network namespace; Java was not an Android app.
 Greeting and fixed synthetic sync read are not a backup or evidence about a real head unit.
 UID above is the QEMU host process status, not a complete validation of guest privileges or real-device behavior.
 Disabled-auth cases are intentional isolated negative security controls and must not be assumed safe or present on GU.
