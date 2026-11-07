@@ -16,8 +16,17 @@ No containers need to be restarted.
 No user sessions are running outdated binaries.
 
 No VM guests are running outdated hypervisor (qemu) binaries on this host.
-/tmp/x60-adbd-ci-lab.fa9VPe/lifan-file-manager-test.zip: OK
-/tmp/x60-adbd-ci-lab.fa9VPe/boot.img: OK
-/tmp/x60-adbd-ci-lab.fa9VPe/system.img: OK
+/tmp/x60-adbd-ci-lab.JK2tWr/lifan-file-manager-test.zip: OK
+/tmp/x60-adbd-ci-lab.JK2tWr/boot.img: OK
+/tmp/x60-adbd-ci-lab.JK2tWr/system.img: OK
 1208 blocks
-/tmp/x60-adbd-ci-lab.fa9VPe/root/sbin/adbd: OK
+/tmp/x60-adbd-ci-lab.JK2tWr/root/sbin/adbd: OK
+sha256:a73d8c566620e59ba2e1a4ee0cf1aefcc54f9a6066eca6e8f7306543a399b339
+warning: [options] bootstrap class path not set in conjunction with -source 8
+1 warning
+Validated synthetic properties via stock toolbox: service.adb.root=0 ro.adb.secure=0
+Synthetic service.adb.root=0 ro.adb.secure=0
+Loopback ADB greeting response: CNXN
+Listener bind address in isolated namespace: all interfaces
+Loopback test client host UID: 12345
+python3: can't open file '/home/runner/work/Lifan-X60/Lifan-X60/tools/probe_synthetic_adbd_sync.py': [Errno 13] Permission denied
