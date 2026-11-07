@@ -5,10 +5,10 @@ Emulator host UID 999: non-loopback IPv4/IPv6 blocked
 * daemon started successfully
 Fingerprint: generic_x86/sdk_x86/generic_x86:4.4.2/KK/4174703:eng/test-keys; hardware: ranchu; qemu: 1
 Obtain AOSP emulator platform key; verify against its framework APK
-/system/framework/framework-res.apk: 1 file pulled, 0 skipped. 131.7 MB/s (15428518 bytes in 0.112s)
+/system/framework/framework-res.apk: 1 file pulled, 0 skipped. 120.8 MB/s (15428518 bytes in 0.122s)
 Emulator platform cert: c8a2e9bccf597c2fb6dc66bee293fc13f2fc47ec77bc6b2b0d52c11f51192ab8
 Check emulator shell package certificate and manifest
-/system/priv-app/Shell.apk: 1 file pulled, 0 skipped. 34.8 MB/s (38062 bytes in 0.001s)
+/system/priv-app/Shell.apk: 1 file pulled, 0 skipped. 60.5 MB/s (38062 bytes in 0.001s)
     A: android:sharedUserId(0x0101000b)="android.uid.shell" (Raw: "android.uid.shell")
 Build guarded generic-emulator fixture; no APK is published
 Baseline adbd and security settings in generic emulator
@@ -18,7 +18,7 @@ ro.adb.secure=
 service.adb.tcp.port=
 init.svc.adbd=running
 uid=0(root) gid=0(root)
-/tmp/shell-uid-lab.S1ena5/negative-unsigned-signed.apk: 1 file pushed, 0 skipped. 142.3 MB/s (12655 bytes in 0.000s)
+/tmp/shell-uid-lab.TEHTtN/negative-unsigned-signed.apk: 1 file pushed, 0 skipped. 211.4 MB/s (12655 bytes in 0.000s)
 Performing Push Install
 WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
 	pkg: /data/local/tmp/negative-unsigned-signed.apk
@@ -28,23 +28,174 @@ WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a
 Starting: Intent { cmp=ru.lifanx60.systempropnegative/ru.lifanx60.systempropfixture.MainActivity }
 --------- beginning of /dev/log/main
 --------- beginning of /dev/log/system
-I/X60SystemPropLab( 2062): OWN_UID=10052 BEFORE= AFTER=
+I/X60SystemPropLab( 2057): OWN_UID=10052 BEFORE= AFTER=
 Positive control: platform-signed shared system UID in disposable emulator
-/tmp/shell-uid-lab.S1ena5/unsigned-signed.apk: 1 file pushed, 0 skipped. 178.1 MB/s (12655 bytes in 0.000s)
+/tmp/shell-uid-lab.TEHTtN/unsigned-signed.apk: 1 file pushed, 0 skipped. 240.6 MB/s (12655 bytes in 0.000s)
 Performing Push Install
 WARNING: linker: libdvm.so has text relocations. This is wasting memory and is a security risk. Please fix.
 	pkg: /data/local/tmp/unsigned-signed.apk
 Success
 Success
-I/X60SystemPropLab( 2108): OWN_UID=1000 BEFORE= AFTER=43127
-I/X60SystemPropLab( 2108): OWN_UID=1000 BEFORE= AFTER=43127
-I/X60SystemPropLab( 2108): RESTART_REQUESTED
-No listener at requested port
+I/X60SystemPropLab( 2105): OWN_UID=1000 BEFORE= AFTER=43127
+I/X60SystemPropLab( 2105): OWN_UID=1000 BEFORE= AFTER=43127
+I/X60SystemPropLab( 2105): RESTART_REQUESTED
+No daemon PID change observed
+USER     PID   PPID  VSIZE  RSS     WCHAN    PC         NAME
+root      1     0     724    424   c02cb2ef 0805d376 S /init
+root      2     0     0      0     c023edb3 00000000 S kthreadd
+root      3     2     0      0     c0244320 00000000 S ksoftirqd/0
+root      4     2     0      0     c023ae80 00000000 S kworker/0:0
+root      5     2     0      0     c023ae80 00000000 S kworker/0:0H
+root      6     2     0      0     c023ae80 00000000 S kworker/u2:0
+root      7     2     0      0     c0244320 00000000 S migration/0
+root      8     2     0      0     c0270247 00000000 S rcu_preempt
+root      9     2     0      0     c026ffe2 00000000 S rcu_bh
+root      10    2     0      0     c026ffe2 00000000 S rcu_sched
+root      11    2     0      0     c023ac08 00000000 S khelper
+root      12    2     0      0     c023ae80 00000000 S kworker/u2:1
+root      248   2     0      0     c023ac08 00000000 S writeback
+root      250   2     0      0     c023ac08 00000000 S bioset
+root      252   2     0      0     c023ac08 00000000 S kblockd
+root      345   2     0      0     c023ac08 00000000 S ata_sff
+root      356   2     0      0     c04e04b1 00000000 S khubd
+root      364   2     0      0     c023ac08 00000000 S md
+root      372   2     0      0     c023ac08 00000000 S cfg80211
+root      373   2     0      0     c023ae80 00000000 S kworker/0:1
+root      483   2     0      0     c029b2f6 00000000 S kswapd0
+root      550   2     0      0     c02ea9d0 00000000 S fsnotify_mark
+root      569   2     0      0     c023ac08 00000000 S crypto
+root      598   2     0      0     c023ae80 00000000 S kworker/u2:2
+root      691   2     0      0     c023ac08 00000000 S iscsi_eh
+root      705   2     0      0     c0439c73 00000000 S scsi_eh_0
+root      708   2     0      0     c0439c73 00000000 S scsi_eh_1
+root      711   2     0      0     c023ae80 00000000 S kworker/u2:3
+root      753   2     0      0     c023ae80 00000000 S kworker/0:2
+root      782   2     0      0     c023ac08 00000000 S binder
+root      810   2     0      0     c023ac08 00000000 S deferwq
+root      811   1     704    4     c02cb2ef 0805d376 S /sbin/ueventd
+root      1115  2     0      0     c023ae80 00000000 S kworker/0:1H
+root      1116  2     0      0     c0347a36 00000000 S jbd2/vda-8
+root      1117  2     0      0     c023ac08 00000000 S ext4-dio-unwrit
+root      1119  2     0      0     c0347a36 00000000 S jbd2/vdb-8
+root      1120  2     0      0     c023ac08 00000000 S ext4-dio-unwrit
+root      1125  2     0      0     c0347a36 00000000 S jbd2/vdc-8
+root      1126  2     0      0     c023ac08 00000000 S ext4-dio-unwrit
+root      1127  1     1568   4     c02ed451 0805efcb S /sbin/healthd
+system    1128  1     1468   192   c054e725 b7709426 S /system/bin/servicemanager
+root      1129  1     6244   1236  ffffffff b762c1e1 S /system/bin/vold
+root      1131  1     11240  1448  ffffffff b76371e1 S /system/bin/netd
+root      1132  1     1652   508   c0561671 b772a7d3 S /system/bin/debuggerd
+radio     1133  1     6392   852   ffffffff b771c1e1 S /system/bin/rild
+system    1134  1     37016  3372  ffffffff b764ef1b S /system/bin/surfaceflinger
+root      1135  1     287992 45664 ffffffff b7722610 S zygote
+drm       1136  1     10640  2892  ffffffff b75d9426 S /system/bin/drmserver
+media     1137  1     28448  5964  ffffffff b7678426 S /system/bin/mediaserver
+install   1138  1     1552   588   c05d4f03 b766efe6 S /system/bin/installd
+keystore  1139  1     4720   1360  c054e725 b761c426 S /system/bin/keystore
+shell     1143  1     1552   600   c03f0b31 b7661fe6 S /system/bin/sh
+root      1144  1     5012   220   ffffffff 0806bc10 S /sbin/adbd
+root      1151  1     1612   696   c02cb2ef b76a7610 S /system/bin/logcat
+system    1549  1135  367784 45584 ffffffff b7723f1b S system_server
+u0_a7     1623  1135  313708 41008 ffffffff b7723f1b S com.android.systemui
+media_rw  1710  1     4020   448   ffffffff b76c6fe6 S /system/bin/sdcard
+u0_a29    1711  1135  305956 28276 ffffffff b7723f1b S com.android.inputmethod.latin
+u0_a2     1732  1135  300032 26716 ffffffff b7723f1b S android.process.acore
+radio     1751  1135  318536 30276 ffffffff b7723f1b S com.android.phone
+system    1766  1135  304408 23108 ffffffff b7723f1b S com.android.settings
+u0_a5     1781  1135  299460 26820 ffffffff b7723f1b S android.process.media
+u0_a39    1794  1135  297168 20672 ffffffff b7723f1b S com.android.printspooler
+u0_a25    1866  1135  298852 21508 ffffffff b7723f1b S com.android.exchange
+u0_a6     1884  1135  295904 20412 ffffffff b7723f1b S com.android.externalstorage
+u0_a8     1902  1135  314936 40272 ffffffff b7723f1b S com.android.launcher
+u0_a24    1915  1135  306928 26616 ffffffff b7723f1b S com.android.email
+u0_a32    1937  1135  297504 21740 ffffffff b7723f1b S com.android.music
+u0_a3     2023  1135  297016 21056 ffffffff b7723f1b S com.android.defcontainer
+u0_a52    2057  1135  295908 20424 ffffffff b7723f1b S ru.lifanx60.systempropnegative
+root      2074  1144  1868   496   00000000 b7693fe6 R ps
+USER     PID   PPID  VSIZE  RSS     WCHAN    PC         NAME
+root      1     0     724    424   c02cb2ef 0805d376 S /init
+root      2     0     0      0     c023edb3 00000000 S kthreadd
+root      3     2     0      0     c0244320 00000000 S ksoftirqd/0
+root      4     2     0      0     c023ae80 00000000 S kworker/0:0
+root      5     2     0      0     c023ae80 00000000 S kworker/0:0H
+root      6     2     0      0     c023ae80 00000000 S kworker/u2:0
+root      7     2     0      0     c0244320 00000000 S migration/0
+root      8     2     0      0     c0270247 00000000 S rcu_preempt
+root      9     2     0      0     c026ffe2 00000000 S rcu_bh
+root      10    2     0      0     c026ffe2 00000000 S rcu_sched
+root      11    2     0      0     c023ac08 00000000 S khelper
+root      12    2     0      0     c023ae80 00000000 S kworker/u2:1
+root      248   2     0      0     c023ac08 00000000 S writeback
+root      250   2     0      0     c023ac08 00000000 S bioset
+root      252   2     0      0     c023ac08 00000000 S kblockd
+root      345   2     0      0     c023ac08 00000000 S ata_sff
+root      356   2     0      0     c04e04b1 00000000 S khubd
+root      364   2     0      0     c023ac08 00000000 S md
+root      372   2     0      0     c023ac08 00000000 S cfg80211
+root      373   2     0      0     c023ae80 00000000 S kworker/0:1
+root      483   2     0      0     c029b2f6 00000000 S kswapd0
+root      550   2     0      0     c02ea9d0 00000000 S fsnotify_mark
+root      569   2     0      0     c023ac08 00000000 S crypto
+root      598   2     0      0     c023ae80 00000000 S kworker/u2:2
+root      691   2     0      0     c023ac08 00000000 S iscsi_eh
+root      705   2     0      0     c0439c73 00000000 S scsi_eh_0
+root      708   2     0      0     c0439c73 00000000 S scsi_eh_1
+root      711   2     0      0     c023ae80 00000000 S kworker/u2:3
+root      753   2     0      0     c023ae80 00000000 S kworker/0:2
+root      782   2     0      0     c023ac08 00000000 S binder
+root      810   2     0      0     c023ac08 00000000 S deferwq
+root      811   1     704    4     c02cb2ef 0805d376 S /sbin/ueventd
+root      1115  2     0      0     c023ae80 00000000 S kworker/0:1H
+root      1116  2     0      0     c0347a36 00000000 S jbd2/vda-8
+root      1117  2     0      0     c023ac08 00000000 S ext4-dio-unwrit
+root      1119  2     0      0     c0347a36 00000000 S jbd2/vdb-8
+root      1120  2     0      0     c023ac08 00000000 S ext4-dio-unwrit
+root      1125  2     0      0     c0347a36 00000000 S jbd2/vdc-8
+root      1126  2     0      0     c023ac08 00000000 S ext4-dio-unwrit
+root      1127  1     1568   4     c02ed451 0805efcb S /sbin/healthd
+system    1128  1     1468   192   c054e725 b7709426 S /system/bin/servicemanager
+root      1129  1     6244   1236  ffffffff b762c1e1 S /system/bin/vold
+root      1131  1     11240  1452  ffffffff b76371e1 S /system/bin/netd
+root      1132  1     1652   508   c0561671 b772a7d3 S /system/bin/debuggerd
+radio     1133  1     6392   852   ffffffff b771c1e1 S /system/bin/rild
+system    1134  1     37016  3372  ffffffff b764ef1b S /system/bin/surfaceflinger
+root      1135  1     287992 45688 ffffffff b7722610 S zygote
+drm       1136  1     10640  2892  ffffffff b75d9426 S /system/bin/drmserver
+media     1137  1     28472  6184  ffffffff b7678426 S /system/bin/mediaserver
+install   1138  1     1552   592   c05d4f03 b766efe6 S /system/bin/installd
+keystore  1139  1     4720   1360  c054e725 b761c426 S /system/bin/keystore
+shell     1143  1     1552   600   c03f0b31 b7661fe6 S /system/bin/sh
+root      1151  1     1612   696   c02cb2ef b76a7610 S /system/bin/logcat
+system    1549  1135  366992 45040 ffffffff b7723f1b S system_server
+u0_a7     1623  1135  313708 41116 ffffffff b7723f1b S com.android.systemui
+media_rw  1710  1     4020   448   ffffffff b76c6fe6 S /system/bin/sdcard
+u0_a29    1711  1135  306016 28744 ffffffff b7723f1b S com.android.inputmethod.latin
+u0_a2     1732  1135  300152 27296 ffffffff b7723f1b S android.process.acore
+radio     1751  1135  318524 30292 ffffffff b7723f1b S com.android.phone
+system    1766  1135  304524 23624 ffffffff b7723f1b S com.android.settings
+u0_a5     1781  1135  301152 28076 ffffffff b7723f1b S android.process.media
+u0_a39    1794  1135  297168 20672 ffffffff b7723f1b S com.android.printspooler
+u0_a25    1866  1135  299892 21784 ffffffff b7723f1b S com.android.exchange
+u0_a8     1902  1135  319288 41800 ffffffff b7723f1b S com.android.launcher
+u0_a24    1915  1135  306988 27792 ffffffff b7723f1b S com.android.email
+u0_a32    1937  1135  297504 21740 ffffffff b7723f1b S com.android.music
+u0_a3     2023  1135  295976 21184 ffffffff b7723f1b S com.android.defcontainer
+u0_a52    2057  1135  295908 20424 ffffffff b7723f1b S ru.lifanx60.systempropnegative
+system    2105  1135  295908 20444 ffffffff b7723f1b S ru.lifanx60.systempropfixture
+root      2118  1     5016   224   ffffffff 0806bc10 S /sbin/adbd
+u0_a16    2128  1135  305104 24940 ffffffff b7723f1b S com.android.calendar
+u0_a1     2147  1135  297940 25140 ffffffff b7723f1b S com.android.providers.calendar
+u0_a20    2160  1135  299740 25256 ffffffff b7723f1b S com.android.deskclock
+u0_a4     2184  1135  300608 21656 ffffffff b7723f1b S com.android.dialer
+u0_a9     2211  1135  308000 24772 ffffffff b7723f1b S com.android.mms
+u0_a37    2269  1135  295896 20356 ffffffff b7723f1b S com.svox.pico
+root      2368  2118  1868   504   00000000 b7634fe6 R ps
+<11>[   15.526820] init: sys_prop: permission denied uid:10052  name:service.adb.tcp.port
 Lab failed (1); emulator diagnostics:
 WARNING      | Downloaded protobuf file is corrupt.
 WARNING      | encryption is off
 WARNING      | FeatureControl is requesting a non existing feature.
-INFO         | Storing crashdata in: /tmp/android-systemproplab/emu-crash-37.2.13.db, detection is enabled for process: 2703
+INFO         | Storing crashdata in: /tmp/android-systemproplab/emu-crash-37.2.13.db, detection is enabled for process: 2631
 INFO         | Initializing gfxstream backend
 INFO         | startOpenglesRendererImpl: gpu info
 INFO         | 
@@ -89,74 +240,74 @@ WARNING      | UpdateCheck: failed to get the latest version, skipping check (cu
 List of devices attached
 emulator-5554          device product:sdk_x86 model:Android_SDK_built_for_x86 device:generic_x86 transport_id:2
 
-I/X60SystemPropLab( 2108): OWN_UID=1000 BEFORE= AFTER=43127
-I/X60SystemPropLab( 2108): RESTART_REQUESTED
-I/PackageManager( 1552): Running dexopt on: com.android.calendar
-I/PackageManager( 1552): Running dexopt on: com.android.deskclock
-I/PackageManager( 1552): Running dexopt on: com.android.dialer
-I/PackageManager( 1552): Running dexopt on: com.android.mms
-I/PackageManager( 1552): Running dexopt on: com.svox.pico
-I/PackageManager( 1552):   Action: "android.intent.action.SENDTO"
-I/PackageManager( 1552):   Category: "android.intent.category.DEFAULT"
-I/PackageManager( 1552):   Scheme: "sms"
-I/PackageManager( 1552): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager( 1552):   Action: "android.intent.action.SENDTO"
-I/PackageManager( 1552):   Category: "android.intent.category.DEFAULT"
-I/PackageManager( 1552):   Scheme: "smsto"
-I/PackageManager( 1552):   Action: "android.intent.action.SENDTO"
-I/PackageManager( 1552):   Category: "android.intent.category.DEFAULT"
-I/PackageManager( 1552):   Scheme: "mms"
-I/PackageManager( 1552):   Action: "android.intent.action.SENDTO"
-I/PackageManager( 1552):   Category: "android.intent.category.DEFAULT"
-I/PackageManager( 1552):   Scheme: "mmsto"
-I/PackageManager( 1552): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager( 1552): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager( 1552): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager( 1552):   Action: "android.intent.action.SENDTO"
-I/PackageManager( 1552):   Category: "android.intent.category.DEFAULT"
-I/PackageManager( 1552):   Scheme: "sms"
-I/PackageManager( 1552):   Action: "android.intent.action.SENDTO"
-I/PackageManager( 1552):   Category: "android.intent.category.DEFAULT"
-I/PackageManager( 1552):   Scheme: "smsto"
-I/PackageManager( 1552): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager( 1552): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager( 1552):   Action: "android.intent.action.SENDTO"
-I/PackageManager( 1552):   Category: "android.intent.category.DEFAULT"
-I/PackageManager( 1552):   Scheme: "mms"
-I/PackageManager( 1552): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager( 1552):   Action: "android.intent.action.SENDTO"
-I/PackageManager( 1552):   Category: "android.intent.category.DEFAULT"
-I/PackageManager( 1552):   Scheme: "mmsto"
-I/PackageManager( 1552):   Action: "android.intent.action.SENDTO"
-I/PackageManager( 1552):   Category: "android.intent.category.DEFAULT"
-I/PackageManager( 1552):   Scheme: "sms"
-I/PackageManager( 1552):   Action: "android.intent.action.SENDTO"
-I/PackageManager( 1552):   Category: "android.intent.category.DEFAULT"
-I/PackageManager( 1552):   Scheme: "smsto"
-I/PackageManager( 1552): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager( 1552): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager( 1552): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager( 1552):   Action: "android.intent.action.SENDTO"
-I/PackageManager( 1552):   Category: "android.intent.category.DEFAULT"
-I/PackageManager( 1552):   Scheme: "mms"
-I/PackageManager( 1552):   Action: "android.intent.action.SENDTO"
-I/PackageManager( 1552):   Category: "android.intent.category.DEFAULT"
-I/PackageManager( 1552):   Scheme: "mmsto"
-I/PackageManager( 1552):   Action: "android.intent.action.SENDTO"
-I/PackageManager( 1552):   Category: "android.intent.category.DEFAULT"
-I/PackageManager( 1552):   Scheme: "sms"
-I/PackageManager( 1552):   Action: "android.intent.action.SENDTO"
-I/PackageManager( 1552):   Category: "android.intent.category.DEFAULT"
-I/PackageManager( 1552):   Scheme: "smsto"
-I/PackageManager( 1552): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager( 1552): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager( 1552): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager( 1552): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager( 1552):   Action: "android.intent.action.SENDTO"
-I/PackageManager( 1552):   Category: "android.intent.category.DEFAULT"
-I/PackageManager( 1552):   Scheme: "mms"
-I/PackageManager( 1552): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
-I/PackageManager( 1552):   Action: "android.intent.action.SENDTO"
-I/PackageManager( 1552):   Category: "android.intent.category.DEFAULT"
-I/PackageManager( 1552):   Scheme: "mmsto"
-I/PackageManager( 1552): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/X60SystemPropLab( 2105): OWN_UID=1000 BEFORE= AFTER=43127
+I/X60SystemPropLab( 2105): RESTART_REQUESTED
+I/PackageManager( 1549): Running dexopt on: com.android.calendar
+I/PackageManager( 1549): Running dexopt on: com.android.deskclock
+I/PackageManager( 1549): Running dexopt on: com.android.dialer
+I/PackageManager( 1549): Running dexopt on: com.android.mms
+I/PackageManager( 1549): Running dexopt on: com.svox.pico
+I/PackageManager( 1549):   Action: "android.intent.action.SENDTO"
+I/PackageManager( 1549):   Category: "android.intent.category.DEFAULT"
+I/PackageManager( 1549):   Scheme: "sms"
+I/PackageManager( 1549):   Action: "android.intent.action.SENDTO"
+I/PackageManager( 1549):   Category: "android.intent.category.DEFAULT"
+I/PackageManager( 1549):   Scheme: "smsto"
+I/PackageManager( 1549):   Action: "android.intent.action.SENDTO"
+I/PackageManager( 1549):   Category: "android.intent.category.DEFAULT"
+I/PackageManager( 1549):   Scheme: "mms"
+I/PackageManager( 1549): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager( 1549): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager( 1549): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager( 1549):   Action: "android.intent.action.SENDTO"
+I/PackageManager( 1549):   Category: "android.intent.category.DEFAULT"
+I/PackageManager( 1549):   Scheme: "mmsto"
+I/PackageManager( 1549):   Action: "android.intent.action.SENDTO"
+I/PackageManager( 1549):   Category: "android.intent.category.DEFAULT"
+I/PackageManager( 1549):   Scheme: "sms"
+I/PackageManager( 1549): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager( 1549): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager( 1549):   Action: "android.intent.action.SENDTO"
+I/PackageManager( 1549):   Category: "android.intent.category.DEFAULT"
+I/PackageManager( 1549):   Scheme: "smsto"
+I/PackageManager( 1549):   Action: "android.intent.action.SENDTO"
+I/PackageManager( 1549):   Category: "android.intent.category.DEFAULT"
+I/PackageManager( 1549):   Scheme: "mms"
+I/PackageManager( 1549): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager( 1549): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager( 1549):   Action: "android.intent.action.SENDTO"
+I/PackageManager( 1549):   Category: "android.intent.category.DEFAULT"
+I/PackageManager( 1549):   Scheme: "mmsto"
+I/PackageManager( 1549):   Action: "android.intent.action.SENDTO"
+I/PackageManager( 1549):   Category: "android.intent.category.DEFAULT"
+I/PackageManager( 1549):   Scheme: "sms"
+I/PackageManager( 1549):   Action: "android.intent.action.SENDTO"
+I/PackageManager( 1549):   Category: "android.intent.category.DEFAULT"
+I/PackageManager( 1549):   Scheme: "smsto"
+I/PackageManager( 1549): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager( 1549): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager( 1549): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager( 1549):   Action: "android.intent.action.SENDTO"
+I/PackageManager( 1549):   Category: "android.intent.category.DEFAULT"
+I/PackageManager( 1549):   Scheme: "mms"
+I/PackageManager( 1549):   Action: "android.intent.action.SENDTO"
+I/PackageManager( 1549):   Category: "android.intent.category.DEFAULT"
+I/PackageManager( 1549):   Scheme: "mmsto"
+I/PackageManager( 1549):   Action: "android.intent.action.SENDTO"
+I/PackageManager( 1549):   Category: "android.intent.category.DEFAULT"
+I/PackageManager( 1549):   Scheme: "sms"
+I/PackageManager( 1549): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager( 1549): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager( 1549): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager( 1549):   Action: "android.intent.action.SENDTO"
+I/PackageManager( 1549):   Category: "android.intent.category.DEFAULT"
+I/PackageManager( 1549):   Scheme: "smsto"
+I/PackageManager( 1549):   Action: "android.intent.action.SENDTO"
+I/PackageManager( 1549):   Category: "android.intent.category.DEFAULT"
+I/PackageManager( 1549):   Scheme: "mms"
+I/PackageManager( 1549): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager( 1549): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
+I/PackageManager( 1549):   Action: "android.intent.action.SENDTO"
+I/PackageManager( 1549):   Category: "android.intent.category.DEFAULT"
+I/PackageManager( 1549):   Scheme: "mmsto"
+I/PackageManager( 1549): Adding preferred activity ComponentInfo{com.android.mms/com.android.mms.ui.ComposeMessageActivity} for user 0 :
