@@ -133,7 +133,7 @@ for i in $(seq 1 90); do
   sleep 2
 done
 [ "$ready" = yes ] || { cat "$work/system-start.txt" "$work/system-log.txt" 2>/dev/null || true; exit 1; }
-grep -F 'OWN_UID=1000 ' "$work/system-log.txt"; grep -F 'AFTER=43127' "$work/system-log.txt"; grep -F 'RESTART_REQUESTED' "$work/system-log.txt"
+grep -F 'OWN_UID=1000 ' "$work/system-log.txt"; grep -F 'AFTER=43127' "$work/system-log.txt"; grep -F 'SYNTHETIC_ROOT_PROPERTY=1' "$work/system-log.txt"; grep -F 'RESTART_REQUESTED' "$work/system-log.txt"
 # AOSP 4.4 chooses qemud transport when ro.kernel.qemu=1, even when
 # service.adb.tcp.port is set. Test an actual daemon restart, not TCP reachability.
 restarted=no
@@ -161,7 +161,7 @@ cat "$work/listener.txt"
   echo "Fingerprint: $fingerprint; hardware: $hardware; qemu: $qemu"
   echo 'Generic baseline properties:'; cat "$work/baseline.txt"; echo 'Generic baseline shell:'; cat "$work/baseline-id.txt"
   echo 'Same-signature ordinary UID negative control: property unchanged:'; grep -F 'OWN_UID=' "$work/negative-log.txt" | tail -1
-  echo 'System UID fixture:'; grep -F 'OWN_UID=' "$work/system-log.txt" | tail -1
+  echo 'System UID fixture:'; grep -F 'OWN_UID=' "$work/system-log.txt" | tail -1; grep -F 'SYNTHETIC_ROOT_PROPERTY=' "$work/system-log.txt" | tail -1
   echo "adbd PID changed in emulator: $before -> $after"; cat "$work/listener.txt"
   echo 'Emulator uses qemud transport; this does not test whether a physical device will listen on TCP.'
   echo 'Emulator adbd identity and behavior are NOT evidence of stock adbd privileges, network access, authentication or safe data backup on GU.'

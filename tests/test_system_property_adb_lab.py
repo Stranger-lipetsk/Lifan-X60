@@ -17,10 +17,9 @@ class GuardsTest(unittest.TestCase):
         s = (BASE / 'src/ru/lifanx60/systempropfixture/MainActivity.java').read_text()
         for part in ('Build.FINGERPRINT.startsWith("generic")', 'Build.HARDWARE.contains("goldfish")',
                      'Build.HARDWARE.contains("ranchu")', 'ro.kernel.qemu', 'REFUSED_NON_EMULATOR',
-                     'service.adb.tcp.port', 'Process.myUid() == 1000', 'ctl.restart'):
+                     'service.adb.tcp.port', 'service.adb.root', 'Process.myUid() == 1000', 'ctl.restart'):
             self.assertIn(part, s)
         self.assertNotIn('persist.adb.tcp.port', s)
-        self.assertNotIn('service.adb.root', s)
 
     def test_runner_guards(self):
         s = (ROOT / 'tools/experiment_system_property_adb_lab.sh').read_text()

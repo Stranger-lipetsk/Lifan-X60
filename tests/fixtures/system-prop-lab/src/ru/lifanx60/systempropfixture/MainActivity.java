@@ -28,8 +28,13 @@ public final class MainActivity extends Activity {
             String after = (String) get.invoke(null, "service.adb.tcp.port", "");
             Log.i(TAG, "OWN_UID=" + Process.myUid() + " BEFORE=" + before + " AFTER=" + after);
             if (Process.myUid() == 1000 && after.equals("43127")) {
-                Log.i(TAG, "RESTART_REQUESTED");
-                set.invoke(null, "ctl.restart", "adbd");
+                set.invoke(null, "service.adb.root", "1");
+                String root = (String) get.invoke(null, "service.adb.root", "");
+                Log.i(TAG, "SYNTHETIC_ROOT_PROPERTY=" + root);
+                if (root.equals("1")) {
+                    Log.i(TAG, "RESTART_REQUESTED");
+                    set.invoke(null, "ctl.restart", "adbd");
+                }
             }
         } catch (Exception error) { Log.e(TAG, "FIXTURE_ERROR", error); }
         finally { finish(); }
