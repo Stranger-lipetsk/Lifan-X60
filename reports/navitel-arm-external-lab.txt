@@ -43,14 +43,14 @@ Restore can clear data and this fixture must not be used on a real device.
 ## Allocated emulator storage (KiB, BusyBox du -sk)
 Generic ARM image, emulator data/apps/cache and synthetic fixtures, not physical GU sizes; emulator usage changes and overlapping categories must not be added.
 Before update:
-38736	/data
+38728	/data
 6472	/data/app
 44	/data/app-lib
 25632	/data/dalvik-cache
 28	/data/data/com.navitel
 X60_SIZE_DONE
 After update:
-171484	/data
+171472	/data
 103308	/data/app
 19528	/data/app-lib
 41808	/data/dalvik-cache
@@ -60,11 +60,11 @@ After update:
 6800	/data/dalvik-cache/data@app@com.navitel-1.apk@classes.dex
 X60_SIZE_DONE
 After host-triggered cold start:
-237900	/data
+238832	/data
 103308	/data/app
 19528	/data/app-lib
 41808	/data/dalvik-cache
-66412	/data/data/com.navitel
+67356	/data/data/com.navitel
 96836	/data/app/com.navitel-1.apk
 19484	/data/app-lib/com.navitel-1
 6800	/data/dalvik-cache/data@app@com.navitel-1.apk@classes.dex
@@ -81,13 +81,52 @@ Block count:              131072
 Reserved block count:     6553
 Block size:               4096
 External FAT backup tar create exit 0; verified by digest before and after remount. Extraction exit 0; no data.tar on destination.
-Verified all regular files, directories and symlinks: {'files': 719, 'dirs': 323, 'symlinks': 73}
+Verified all regular files, directories and symlinks: {'files': 731, 'dirs': 322, 'symlinks': 73}
 Source special files excluded from this verification: 1
-Source entries with at least one xattr: 1115
+Source entries with at least one xattr: 1126
 No claim that tar preserves xattrs, ACL, SELinux, timestamps, special files or concurrently modified data.
 Synthetic corrupted copy rejected by SHA-256 before any destination image existed.
 Filesystem     1K-blocks   Used Available Use% Mounted on
-/dev/loop1        523244 235636    287608  46% /tmp/navitel-arm-tarboot-lab.N37umQ/external-backup
+/dev/loop1        523244 236556    286688  46% /tmp/navitel-arm-tarboot-lab.FiJhp8/external-backup
+Aggregate comparison of the entire supported offline source tree with extracted target:
+Synthetic directory metadata mismatch 'misc/adb': source=1000:2000 2750, target=1000:2000 0750
+compared_files: 731
+compared_dirs: 322
+compared_symlinks: 73
+missing: 0
+extra: 0
+type_mismatch: 0
+content_mismatch: 0
+metadata_mismatch_files: 0
+metadata_mismatch_dirs: 1
+metadata_mismatch_symlinks: 71
+source_entries_with_xattrs: 1126
+destination_entries_with_xattrs: 0
+xattr_mismatch: 1126
+xattr_read_errors: 0
+Source xattr names (aggregate counts): {'security.selinux': 1126}
+Special files excluded. This does not prove consistency against live writes or real-device SELinux behavior.
+FIDELITY FAIL: metadata/xattrs differ or could not be read; not an exact backup.
+Comparison only: host GNU tar with xattrs/ACL, same source and a separate stock-formatted synthetic target:
+Host GNU tar extract exit: 0
+compared_files: 731
+compared_dirs: 322
+compared_symlinks: 73
+missing: 0
+extra: 0
+type_mismatch: 0
+content_mismatch: 0
+metadata_mismatch_files: 0
+metadata_mismatch_dirs: 0
+metadata_mismatch_symlinks: 0
+source_entries_with_xattrs: 1126
+destination_entries_with_xattrs: 1126
+xattr_mismatch: 0
+xattr_read_errors: 0
+Source xattr names (aggregate counts): {'security.selinux': 1126}
+Special files excluded. This does not prove consistency against live writes or real-device SELinux behavior.
+Compared file/directory/symlink content, uid/gid/mode and readable xattrs match; other metadata and special files remain untested.
+Host GNU tar is not validated or available as a solution on the real head unit.
 Backup creation used root-equivalent isolated container and offline source; ordinary GU app access, FAT behavior and power-loss durability are unknown.
 Selected synthetic files checked after extraction:
 Synthetic system/packages.xml content, uid, gid and mode match: 1000:1000 660
@@ -97,13 +136,13 @@ Synthetic data/com.navitel/shared_prefs/x60_lab_probe.xml content, uid, gid and 
 Synthetic data/ru.lifanx60.backupfixture/files/lab-marker.txt content, uid, gid and mode match: 10054:10054 600
 Synthetic data/ru.lifanx60.backupfixture/shared_prefs/lab_probe.xml content, uid, gid and mode match: 10054:10054 600
 Allocated KiB on the CI host (strategy=external; source ext4, not GU tmpfs):
-237912	/tmp/navitel-arm-tarboot-lab.N37umQ/copy-source
-237916	/tmp/navitel-arm-tarboot-lab.N37umQ/copy-dest
+238844	/tmp/navitel-arm-tarboot-lab.FiJhp8/copy-source
+238852	/tmp/navitel-arm-tarboot-lab.FiJhp8/copy-dest
 Destination filesystem usage:
 Filesystem     1K-blocks   Used Available Use% Mounted on
-/dev/loop2        499284 237920    224668  52% /tmp/navitel-arm-tarboot-lab.N37umQ/copy-dest
-Filesystem blocks free including reserved (KiB): 261364
-Filesystem blocks available to unprivileged users (KiB): 224668
+/dev/loop2        499284 238856    223732  52% /tmp/navitel-arm-tarboot-lab.FiJhp8/copy-dest
+Filesystem blocks free including reserved (KiB): 260428
+Filesystem blocks available to unprivileged users (KiB): 223732
 Negative control on fresh 512 MiB image: copied baseline snapshot plus one synthetic 32 MiB file, tar create exit 0, extraction exit 1 with No space left on device.
 This artificial addition is not a claim about installed apps or capacity on the head unit.
 Only listed files and metadata were compared; tar exit 0 is not proof all app data, xattrs, SELinux labels, sparse data, or timestamps were preserved.
@@ -113,14 +152,14 @@ The external synthetic ext4 image was unmounted and checked before being passed 
 The extracted ext4 filesystem started at 536870912 bytes; its regular-file backing was padded to 1 GiB without filesystem resize to satisfy the legacy emulator.
 Padded image file size before/after emulator start: 1073741824/1073741824 bytes. New kernel boot ID confirmed.
 Pre-boot ext4 geometry after padding:
-Filesystem UUID:          013bfaf7-b510-4d9e-a193-b99b3559bac4
+Filesystem UUID:          7d80f7b8-1c98-404e-b163-af8c6194b57e
 Filesystem features:      has_journal ext_attr resize_inode dir_index filetype extent flex_bg sparse_super large_file huge_file uninit_bg dir_nlink extra_isize
 Block count:              131072
 Block size:               4096
 A synthetic witness added only to the extracted image was readable after boot, excluding silent fallback to original AVD userdata.
 df /data after boot:
 Filesystem               Size     Used     Free   Blksize
-/data                  487.6M   232.4M   255.2M   4096
+/data                  487.6M   233.3M   254.3M   4096
 After boot, Navitel remained registered as the data update, with the same UID; synthetic files and UIDs of Navitel and independent fixture matched before starting the fixture. Blocked fixture files matched too.
 Initial independent-fixture launch result: ready. Synthetic archive removed in a separate CI-only intervention: no.
 Independent fixture emitted FIXTURE_READY without the intervention.
@@ -129,26 +168,26 @@ Mounts:
 /dev/block/mtdblock0 /system ext4 ro,seclabel,relatime,data=ordered 0 0
 /dev/block/mtdblock1 /data ext4 rw,seclabel,nosuid,nodev,noatime,nomblk_io_submit,data=ordered 0 0
 Synthetic emulator storage after copied-image boot:
-237936	/data
+238876	/data
 103308	/data/app
 19528	/data/app-lib
 41808	/data/dalvik-cache
-66412	/data/data/com.navitel
+67356	/data/data/com.navitel
 96836	/data/app/com.navitel-1.apk
 19484	/data/app-lib/com.navitel-1
 6800	/data/dalvik-cache/data@app@com.navitel-1.apk@classes.dex
 X60_SIZE_DONE
 Navitel launch observation (not activation):
 Starting: Intent { cmp=com.navitel/.app.MainActivity }
-    mResumedActivity: ActivityRecord{b1ffcf40 u0 com.navitel/.app.MainActivity t3}
-  mFocusedActivity: ActivityRecord{b1ffcf40 u0 com.navitel/.app.MainActivity t3}
+    mResumedActivity: ActivityRecord{b2001d10 u0 com.navitel/.app.MainActivity t3}
+  mFocusedActivity: ActivityRecord{b2001d10 u0 com.navitel/.app.MainActivity t3}
 Alternative copy is a laboratory model, NOT the stock script and NOT ready for a physical device.
 Cold booting a generic emulator is not real-device Hibernate or proof of all-data preservation.
 ## Emulator crash dialog while installing
 No Navitel crash dialog observed during installer polling; other failures may still occur
 ## Launch attempt (no activation asserted)
 Starting: Intent { cmp=com.navitel/.app.MainActivity }
-    mResumedActivity: ActivityRecord{b1ed6808 u0 com.navitel/.app.MainActivity t2}
-  mFocusedActivity: ActivityRecord{b1ed6808 u0 com.navitel/.app.MainActivity t2}
+    mResumedActivity: ActivityRecord{b1f548d0 u0 com.navitel/.app.MainActivity t2}
+  mFocusedActivity: ActivityRecord{b1f548d0 u0 com.navitel/.app.MainActivity t2}
 Kernel boot ID changed after host stopped and restarted the same disposable emulator. This is a virtual cold start after sync, not real-device hibernate or graceful car shutdown.
 Real device app behavior, USB, rollback, settings and all data preservation remain unverified.
