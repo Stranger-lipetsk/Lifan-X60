@@ -33,7 +33,7 @@ class GuardsTest(unittest.TestCase):
 
     def test_arm_lab_uses_same_guarded_firewall_probe(self):
         s = (ROOT / 'tools/experiment_system_property_adb_arm_lab.sh').read_text()
-        for part in ('GITHUB_ACTIONS:-', '--ez firewall_probe true', '--ei host_port',
+        for part in ('GITHUB_ACTIONS:-', '--ez firewall_probe true', '--ei host_port', '10.0.2.2/32',
                      'FIREWALL_ETH0_HOST_ROUNDTRIP=true', 'FIREWALL_RESTORED_DISABLED=true'):
             self.assertIn(part, s)
 
@@ -41,7 +41,7 @@ class GuardsTest(unittest.TestCase):
         s = (ROOT / 'tools/experiment_system_property_adb_lab.sh').read_text()
         for part in ('GITHUB_ACTIONS:-', 'iptables -I OUTPUT', 'ip6tables -I OUTPUT',
                      'restarted=no', 'Guest TCP listener', 'no head unit',
-                     '--ez firewall_probe true', '--ei host_port',
+                     '--ez firewall_probe true', '--ei host_port', '10.0.2.2/32',
                      'FIREWALL_ETH0_HOST_ROUNDTRIP=true', 'FIREWALL_RESTORED_DISABLED=true'):
             self.assertIn(part, s)
 

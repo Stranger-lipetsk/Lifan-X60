@@ -34,13 +34,18 @@ cleanup() {
   fi
   [ -z "$host_server_pid" ] || kill "$host_server_pid" 2>/dev/null || true
   sudo pkill -TERM -u systemproplab 2>/dev/null || true
-  [ "$blocked4" != yes ] || sudo iptables -D OUTPUT -m owner --uid-owner "$emu_uid" ! -d 127.0.0.0/8 ! -d 10.0.2.2/32 -j REJECT || true
+  if [ "$blocked4" = yes ]; then
+    sudo iptables -D OUTPUT -m owner --uid-owner "$emu_uid" ! -d 127.0.0.0/8 -j REJECT || true
+    sudo iptables -D OUTPUT -m owner --uid-owner "$emu_uid" -d 10.0.2.2/32 -j ACCEPT || true
+  fi
   [ "$blocked6" != yes ] || sudo ip6tables -D OUTPUT -m owner --uid-owner "$emu_uid" ! -d ::1/128 -j REJECT || true
 }
 trap cleanup EXIT
-sudo iptables -I OUTPUT 1 -m owner --uid-owner "$emu_uid" ! -d 127.0.0.0/8 ! -d 10.0.2.2/32 -j REJECT; blocked4=yes
+sudo iptables -I OUTPUT 1 -m owner --uid-owner "$emu_uid" -d 10.0.2.2/32 -j ACCEPT; blocked4=yes
+sudo iptables -I OUTPUT 2 -m owner --uid-owner "$emu_uid" ! -d 127.0.0.0/8 -j REJECT
 sudo ip6tables -I OUTPUT 1 -m owner --uid-owner "$emu_uid" ! -d ::1/128 -j REJECT; blocked6=yes
-sudo iptables -C OUTPUT -m owner --uid-owner "$emu_uid" ! -d 127.0.0.0/8 ! -d 10.0.2.2/32 -j REJECT
+sudo iptables -C OUTPUT -m owner --uid-owner "$emu_uid" -d 10.0.2.2/32 -j ACCEPT
+sudo iptables -C OUTPUT -m owner --uid-owner "$emu_uid" ! -d 127.0.0.0/8 -j REJECT
 sudo ip6tables -C OUTPUT -m owner --uid-owner "$emu_uid" ! -d ::1/128 -j REJECT
 echo "Emulator host UID $emu_uid: only loopback and QEMU gateway 10.0.2.2 permitted; other external IPv4/IPv6 blocked"
 sudo -u systemproplab env HOME=/home/systemproplab ANDROID_HOME="$sdk" ANDROID_AVD_HOME="$ANDROID_AVD_HOME" \
