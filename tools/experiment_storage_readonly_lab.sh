@@ -88,6 +88,54 @@ done
 timeout -k 5 30 "$adb" shell cat /proc/mounts | tr -d '\r' | grep ' /data ' > "$work/mount.txt"
 timeout -k 5 30 "$adb" shell df /data | tr -d '\r' > "$work/df.txt"
 python3 tools/validate_storage_probe_ui.py "$work/ui.xml" "$work/mount.txt" "$work/df.txt" | tee "$work/validation.txt"
+# Fill only a fixed synthetic file on this verified disposable emulator, as
+# Android shell UID 2000. No real partition or user files are involved.
+# A non-root writer must stop at ext4's reserve, not consume root's blocks.
+echo 'LAB ONLY: fill a synthetic file as non-root shell until ENOSPC'
+timeout -k 5 30 "$adb" shell 'su 2000 id' | tr -d '\r' | tee "$work/fill-id.txt"
+grep -Fq 'uid=2000' "$work/fill-id.txt"
+timeout -k 10 240 "$adb" shell 'su 2000 sh -c "dd if=/dev/zero of=/data/local/tmp/x60-storage-fill-lab bs=1048576 count=2048"' > "$work/fill.txt" 2>&1 || true
+cat "$work/fill.txt"
+grep -iEq 'No space left on device|ENOSPC' "$work/fill.txt" || { echo 'Synthetic fill did not reach expected ENOSPC'; exit 1; }
+capture_probe() {
+  local phase=$1 ready=no
+  timeout -k 5 30 "$adb" shell am force-stop ru.lifanx60.storagelab
+  timeout -k 5 60 "$adb" shell am start -n ru.lifanx60.storagelab/.MainActivity > "$work/start-$phase.txt" 2>&1
+  for i in $(seq 1 30); do
+    if timeout -k 5 50 "$adb" shell uiautomator dump /sdcard/storage-lab-ui.xml >/dev/null 2>&1 &&
+       timeout -k 5 20 "$adb" shell cat /sdcard/storage-lab-ui.xml > "$work/ui-$phase.xml" &&
+       grep -q TOTAL_KIB "$work/ui-$phase.xml"; then ready=yes; break; fi
+    sleep 2
+  done
+  [ "$ready" = yes ] || { echo "Probe UI missing at $phase"; return 1; }
+  timeout -k 5 30 "$adb" shell cat /proc/mounts | tr -d '\r' | grep ' /data ' > "$work/mount-$phase.txt"
+  timeout -k 5 30 "$adb" shell df /data | tr -d '\r' > "$work/df-$phase.txt"
+  python3 tools/validate_storage_probe_ui.py "$work/ui-$phase.xml" "$work/mount-$phase.txt" "$work/df-$phase.txt" > "$work/validation-$phase.txt"
+  cat "$work/validation-$phase.txt"
+}
+capture_probe full
+# Assert BOTH reserve and no unprivileged availability directly in the UI.
+python3 - "$work/ui-full.xml" "$work/mount-full.txt" "$work/df-full.txt" <<'PY2'
+from pathlib import Path
+import sys
+from tools.validate_storage_probe_ui import validate
+values, _ = validate(*(Path(p).read_text(encoding='utf-8') for p in sys.argv[1:]))
+assert values['AVAILABLE_KIB'] == 0, values
+assert values['FREE_KIB'] > 0, values
+print('Confirmed zero app-available blocks while free reserve remains:', values)
+PY2
+# Separate positive recovery control: remove only the fixed synthetic file in
+# the disposable emulator. This is never an instruction to delete real data.
+timeout -k 5 30 "$adb" shell 'test -f /data/local/tmp/x60-storage-fill-lab && test ! -L /data/local/tmp/x60-storage-fill-lab && rm /data/local/tmp/x60-storage-fill-lab && echo SYNTHETIC_FILL_REMOVED' | tr -d '\r' | grep -Fx SYNTHETIC_FILL_REMOVED
+capture_probe freed
+python3 - "$work/ui-freed.xml" "$work/mount-freed.txt" "$work/df-freed.txt" <<'PY2'
+from pathlib import Path
+import sys
+from tools.validate_storage_probe_ui import validate
+values, _ = validate(*(Path(p).read_text(encoding='utf-8') for p in sys.argv[1:]))
+assert values['AVAILABLE_KIB'] > 100000, values
+print('Confirmed positive app-available space after synthetic-only removal:', values)
+PY2
 {
   echo '# Storage probe fixture, disposable Android 4.4.2 x86 emulator'
   echo 'Emulator only; no physical device. Host network blocked for emulator process. APK and signing key remain ephemeral.'
@@ -96,6 +144,9 @@ python3 tools/validate_storage_probe_ui.py "$work/ui.xml" "$work/mount.txt" "$wo
   echo 'Mount parser unit cases passed; package permissions from aapt:'; cat "$work/permissions.txt"
   echo 'UI numeric fields and selected /data mount checked against emulator shell df and /proc/mounts:'; cat "$work/validation.txt"
   echo 'Shell mount and df:'; cat "$work/mount.txt" "$work/df.txt"
+  echo 'Synthetic non-root filler ended in ENOSPC:'; cat "$work/fill-id.txt" "$work/fill.txt"
+  echo 'Probe with the synthetic volume full:'; cat "$work/validation-full.txt" "$work/df-full.txt"
+  echo 'Probe after removing ONLY the synthetic filler on the disposable emulator:'; cat "$work/validation-freed.txt" "$work/df-freed.txt"
   echo 'Read-only app logic still involves Android installation, activity/runtime and emulator UI automation writes; this is not a proof of zero OS-level writes.'
   echo 'The app view represents its own mount namespace. A missing literal mmcblk0p5 mount is not evidence that partition is absent or empty.'
   echo 'Does not query unmounted partitions, actual head-unit size, free space, runtime access or Hibernate. No deployable APK published.'
