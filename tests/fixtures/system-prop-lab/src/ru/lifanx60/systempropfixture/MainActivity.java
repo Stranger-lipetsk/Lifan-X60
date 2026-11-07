@@ -163,19 +163,24 @@ public final class MainActivity extends Activity {
         Thread probe = new Thread(new Runnable() {
             @Override public void run() {
                 java.net.Socket client = new java.net.Socket();
+                String phase = "connect";
                 try {
                     client.connect(new java.net.InetSocketAddress("10.0.2.2", hostPort), 4000);
+                    Log.i(TAG, "FIREWALL_HOST_PEER_CONNECTED");
                     client.setSoTimeout(4000);
+                    phase = "read";
                     java.io.BufferedReader reader = new java.io.BufferedReader(
                         new java.io.InputStreamReader(client.getInputStream(), "US-ASCII"));
                     String reply = reader.readLine();
+                    Log.i(TAG, "FIREWALL_HOST_PEER_REPLY=" + reply);
                     if ("X60_HOST_OK".equals(reply)) {
+                        phase = "write";
                         client.getOutputStream().write("X60_GUEST_OK\n".getBytes("US-ASCII"));
                         client.getOutputStream().flush();
                         succeeded[0] = true;
                     }
                 } catch (java.io.IOException error) {
-                    Log.e(TAG, "FIREWALL_HOST_PEER_IO=" + error.getClass().getSimpleName() + ":" + error.getMessage());
+                    Log.e(TAG, "FIREWALL_HOST_PEER_IO_PHASE=" + phase + " ERROR=" + error.getClass().getSimpleName() + ":" + error.getMessage());
                     succeeded[0] = false;
                 } finally {
                     try { client.close(); } catch (java.io.IOException ignored) { }
