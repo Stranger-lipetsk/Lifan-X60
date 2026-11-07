@@ -162,32 +162,16 @@ grep -F Success "$work/system-install.txt"
 ready=no
 for i in $(seq 1 90); do
   if timeout -k 3 5 "$adb" shell getprop service.adb.tcp.port 2>/dev/null | tr -d '\r' | grep -qx 43127; then
-    if timeout -k 3 5 "$adb" logcat -d -s X60SystemPropLab:I '*:S' > "$work/system-log.txt" 2>&1 && grep -q 'RESTART_REQUESTED' "$work/system-log.txt"; then ready=yes; break; fi
+    if timeout -k 3 5 "$adb" logcat -d -s X60SystemPropLab:I '*:S' > "$work/system-log.txt" 2>&1 && grep -q 'NO_RESTART_REQUESTED' "$work/system-log.txt"; then ready=yes; break; fi
   fi
   sleep 2
 done
 [ "$ready" = yes ] || { cat "$work/system-start.txt" "$work/system-log.txt" 2>/dev/null || true; exit 1; }
-grep -F 'OWN_UID=1000 ' "$work/system-log.txt"; grep -F 'AFTER=43127' "$work/system-log.txt"; grep -F 'SYNTHETIC_ROOT_PROPERTY=1' "$work/system-log.txt"; grep -F 'RESTART_REQUESTED' "$work/system-log.txt"
-# AOSP 4.4 chooses qemud transport when ro.kernel.qemu=1, even when
-# service.adb.tcp.port is set. Test an actual daemon restart, not TCP reachability.
-restarted=no
-for i in $(seq 1 45); do
-  timeout -k 3 5 "$adb" shell ps > "$work/ps-after.txt" 2>/dev/null || true
-  before=$(tr -d '\r' < "$work/ps-before.txt" | awk '$NF=="/sbin/adbd" {print $2}')
-  after=$(tr -d '\r' < "$work/ps-after.txt" | awk '$NF=="/sbin/adbd" {print $2}')
-  if [ -n "$before" ] && [ -n "$after" ] && [ "$before" != "$after" ]; then restarted=yes; break; fi
-  sleep 2
-done
-[ "$restarted" = yes ] || { echo 'No daemon PID change observed'; cat "$work/ps-before.txt" "$work/ps-after.txt"; "$adb" shell dmesg | grep -iE 'sys_prop|adbd|denied' | tail -50 || true; exit 1; }
-echo "adbd PID changed in emulator: $before -> $after"
-"$adb" shell 'cat /proc/net/tcp /proc/net/tcp6' > "$work/guest-tcp.txt" 2>/dev/null || true
-python3 - "$work/guest-tcp.txt" <<'PYINNER' > "$work/listener.txt"
-import sys
-lines=open(sys.argv[1]).read().splitlines()
-found=any(len(line.split()) > 3 and line.split()[1].endswith(':A877') and line.split()[3] == '0A' for line in lines[1:])
-print('Guest TCP listener for requested port:', 'yes' if found else 'no')
-PYINNER
-cat "$work/listener.txt"
+grep -F 'OWN_UID=1000 ' "$work/system-log.txt"; grep -F 'AFTER=43127' "$work/system-log.txt"; grep -F 'SYNTHETIC_ROOT_PROPERTY=1' "$work/system-log.txt"; grep -F 'NO_RESTART_REQUESTED' "$work/system-log.txt"
+# Classic ARM qemud loses the host ADB transport when adbd is restarted.
+# This separate ARM experiment intentionally does not restart it, so that
+# both property writes can be observed. Restart was tested separately on x86.
+echo 'ARM fixture intentionally did not restart adbd; no TCP test.'
 {
   echo '# Platform-signed system UID property experiment: generic Android 4.4.2 ARM with stock-derived services.jar only'
   echo 'Disposable emulator; no head unit, real storage, user data, or user network accessed.'
@@ -197,7 +181,7 @@ cat "$work/listener.txt"
   echo 'Generic baseline properties:'; cat "$work/baseline.txt"; echo 'Generic baseline shell:'; cat "$work/baseline-id.txt"
   echo 'Same-signature ordinary UID negative control: property unchanged:'; grep -F 'OWN_UID=' "$work/negative-log.txt" | tail -1
   echo 'System UID fixture:'; grep -F 'OWN_UID=' "$work/system-log.txt" | tail -1; grep -F 'SYNTHETIC_ROOT_PROPERTY=' "$work/system-log.txt" | tail -1
-  echo "adbd PID changed in emulator: $before -> $after"; cat "$work/listener.txt"
+  echo 'ARM fixture deliberately did not restart adbd; no TCP or restart behavior tested in ARM.'
   echo 'Emulator uses qemud transport; this does not test whether a physical device will listen on TCP.'
   echo 'Emulator adbd identity and behavior are NOT evidence of stock adbd privileges, network access, authentication or safe data backup on GU.'
   echo 'No application released; do not enable network ADB or use this test on a real head unit.'

@@ -124,7 +124,7 @@ echo 'Positive control: platform-signed shared system UID in disposable emulator
 grep -F Success "$work/system-install.txt"
 "$adb" logcat -c
 # Restart can disconnect this command; only the guarded app controls the property.
-"$adb" shell am start -n ru.lifanx60.systempropfixture/.MainActivity > "$work/system-start.txt" 2>&1 || true
+"$adb" shell am start -n ru.lifanx60.systempropfixture/.MainActivity --ez restart_daemon true > "$work/system-start.txt" 2>&1 || true
 ready=no
 for i in $(seq 1 90); do
   if timeout -k 3 5 "$adb" shell getprop service.adb.tcp.port 2>/dev/null | tr -d '\r' | grep -qx 43127; then

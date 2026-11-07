@@ -31,9 +31,11 @@ public final class MainActivity extends Activity {
                 set.invoke(null, "service.adb.root", "1");
                 String root = (String) get.invoke(null, "service.adb.root", "");
                 Log.i(TAG, "SYNTHETIC_ROOT_PROPERTY=" + root);
-                if (root.equals("1")) {
+                if (root.equals("1") && getIntent().getBooleanExtra("restart_daemon", false)) {
                     Log.i(TAG, "RESTART_REQUESTED");
                     set.invoke(null, "ctl.restart", "adbd");
+                } else {
+                    Log.i(TAG, "NO_RESTART_REQUESTED");
                 }
             }
         } catch (Exception error) { Log.e(TAG, "FIXTURE_ERROR", error); }
