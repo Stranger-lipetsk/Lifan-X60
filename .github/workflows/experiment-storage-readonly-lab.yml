@@ -6,6 +6,8 @@ on:
       - '.github/workflows/experiment-storage-readonly-lab.yml'
       - 'tools/experiment_storage_readonly_lab.sh'
       - 'tools/validate_storage_probe_ui.py'
+      - 'tools/validate_storage_sysfs_lab.py'
+      - 'tests/test_validate_storage_sysfs_lab.py'
       - 'tests/test_validate_storage_probe_ui.py'
       - 'tests/test_storage_readonly_lab_fixture.py'
       - 'tests/fixtures/storage-readonly-lab/**'
@@ -27,6 +29,7 @@ jobs:
         run: |
           bash -n tools/experiment_storage_readonly_lab.sh
           python3 -m unittest discover -s tests -p 'test_validate_storage_probe_ui.py' -v
+          python3 -m unittest discover -s tests -p 'test_validate_storage_sysfs_lab.py' -v
           python3 -m unittest discover -s tests -p 'test_storage_readonly_lab_fixture.py' -v
       - name: Проверить в одноразовом эмуляторе
         timeout-minutes: 22

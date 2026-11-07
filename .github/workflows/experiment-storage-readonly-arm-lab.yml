@@ -21,6 +21,7 @@ jobs:
         run: |
           bash -n tools/experiment_storage_readonly_lab.sh
           python3 -m unittest discover -s tests -p 'test_validate_storage_probe_ui.py' -v
+          python3 -m unittest discover -s tests -p 'test_validate_storage_sysfs_lab.py' -v
           python3 -m unittest discover -s tests -p 'test_storage_readonly_lab_fixture.py' -v
       - name: Проверить в одноразовом эмуляторе
         timeout-minutes: 35

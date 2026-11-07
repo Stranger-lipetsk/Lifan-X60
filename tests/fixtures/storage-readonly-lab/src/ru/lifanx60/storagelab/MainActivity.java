@@ -37,6 +37,10 @@ public final class MainActivity extends Activity {
         } catch (RuntimeException e) {
             report.append("STATFS_UNAVAILABLE\n");
         }
+        // Fixed sysfs attributes only. Capacity is not free space; an absent,
+        // inaccessible or differently named partition remains unknown.
+        report.append("P5_CAPACITY_BYTES=").append(readCapacity("/sys/class/block/mmcblk0p5/size")).append('\n');
+        report.append("LAB_SD_CAPACITY_BYTES=").append(readCapacity("/sys/class/block/mmcblk0/size")).append('\n');
         report.append("PROBE_MOUNTS_BEGIN\n");
         try (BufferedReader reader = new BufferedReader(new FileReader("/proc/mounts"))) {
             String line;
@@ -55,5 +59,13 @@ public final class MainActivity extends Activity {
         report.append("PROBE_MOUNTS_END\n");
         report.append("Net stroki p5 ne dokazyvaet chto ego net.\n");
         text.setText(report.toString());
+    }
+
+    private static String readCapacity(String path) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
+            return Long.toString(SectorParser.toBytes(reader.readLine()));
+        } catch (IOException | SecurityException | IllegalArgumentException e) {
+            return "UNKNOWN";
+        }
     }
 }

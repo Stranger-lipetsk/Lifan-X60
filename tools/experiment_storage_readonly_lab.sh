@@ -73,8 +73,9 @@ case "$hardware" in *goldfish*|*ranchu*) ;; *) echo "Unexpected hardware: $hardw
 timeout -k 5 30 "$adb" shell 'mkdir /dev/x60-storage-lab-ui && chmod 0777 /dev/x60-storage-lab-ui'
 src=tests/fixtures/storage-readonly-lab
 mkdir -p "$work/classes" "$work/dex" "$work/mount-test"
-javac -d "$work/mount-test" "$src/src/ru/lifanx60/storagelab/MountFilter.java" "$src/test/MountFilterTest.java"
+javac -d "$work/mount-test" "$src/src/ru/lifanx60/storagelab/MountFilter.java" "$src/src/ru/lifanx60/storagelab/SectorParser.java" "$src/test/MountFilterTest.java" "$src/test/SectorParserTest.java"
 java -cp "$work/mount-test" MountFilterTest
+java -cp "$work/mount-test" SectorParserTest
 "$bt/aapt" package -f -M "$src/AndroidManifest.xml" -I "$jar" -F "$work/unsigned.apk"
 find "$src/src" -name '*.java' | sort > "$work/sources.txt"
 javac -source 8 -target 8 -bootclasspath "$jar" -d "$work/classes" @"$work/sources.txt"
@@ -107,6 +108,11 @@ done
 timeout -k 5 30 "$adb" shell cat /proc/mounts | tr -d '\r' | grep ' /data ' > "$work/mount.txt"
 timeout -k 5 30 "$adb" shell df /data | tr -d '\r' > "$work/df.txt"
 python3 tools/validate_storage_probe_ui.py "$work/ui.xml" "$work/mount.txt" "$work/df.txt" | tee "$work/validation.txt"
+# Compare the ordinary app's fixed virtual SD sysfs reading with shell and
+# /proc/partitions. This is not a test of the physical head unit's p5.
+timeout -k 5 30 "$adb" shell cat /sys/class/block/mmcblk0/size | tr -d '\r' > "$work/sd-sectors.txt" || true
+timeout -k 5 30 "$adb" shell cat /proc/partitions | tr -d '\r' > "$work/partitions.txt"
+python3 tools/validate_storage_sysfs_lab.py "$work/ui.xml" "$work/sd-sectors.txt" "$work/partitions.txt" | tee "$work/sysfs-validation.txt"
 # Fill only a fixed synthetic file on this verified disposable emulator, as
 # Android shell UID 2000. No real partition or user files are involved.
 # A non-root writer must stop at ext4's reserve, not consume root's blocks.
@@ -168,7 +174,8 @@ PY2
   echo 'Emulator only; no physical device. Host network blocked for emulator process. APK and signing key remain ephemeral.'
   echo 'Fixture refuses non-generic hardware, requests no permissions, uses ordinary app UID and does not write app files or enumerate user data.'
   echo "Fingerprint: $fingerprint; hardware: $hardware; UID: $uid"
-  echo 'Mount parser unit cases passed; package permissions from aapt:'; cat "$work/permissions.txt"
+  echo 'Mount and sector parser unit cases passed; package permissions from aapt:'; cat "$work/permissions.txt"
+  echo 'Fixed virtual SD sysfs capacity validation:'; cat "$work/sysfs-validation.txt"
   echo 'UI numeric fields and selected /data mount checked against emulator shell df and /proc/mounts:'; cat "$work/validation.txt"
   echo 'Shell mount and df:'; cat "$work/mount.txt" "$work/df.txt"
   echo 'Synthetic non-root filler ended in ENOSPC:'; cat "$work/fill-id.txt" "$work/fill.txt" "$work/fill-tail.txt"
@@ -176,5 +183,5 @@ PY2
   echo 'Probe after removing ONLY the synthetic filler on the disposable emulator:'; cat "$work/validation-freed.txt" "$work/df-freed.txt"
   echo 'Read-only app logic still involves Android installation, activity/runtime and emulator UI automation writes; this is not a proof of zero OS-level writes.'
   echo 'The app view represents its own mount namespace. A missing literal mmcblk0p5 mount is not evidence that partition is absent or empty.'
-  echo 'Does not query unmounted partitions, actual head-unit size, free space, runtime access or Hibernate. No deployable APK published.'
+  echo 'An optional fixed sysfs attribute gives capacity only, not free space; actual head-unit size, access, device naming and Hibernate are unknown. No deployable APK published.'
 } > "reports/storage-readonly-${arch}-lab.txt"
