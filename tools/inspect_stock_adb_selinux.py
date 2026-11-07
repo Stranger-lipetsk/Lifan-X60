@@ -19,6 +19,8 @@ def query(policy, source, target, klass, perm):
          '--class', klass, '--perm', perm, str(policy)],
         text=True, capture_output=True,
     )
+    if result.returncode == 1 and not result.stderr:
+        return ''  # SETools uses status 1 for a valid query with no matching rules.
     if result.returncode:
         raise RuntimeError(result.stderr.strip() or f'sesearch returned {result.returncode}')
     return result.stdout.strip()
