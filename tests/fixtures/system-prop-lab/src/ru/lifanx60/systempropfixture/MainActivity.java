@@ -98,11 +98,20 @@ public final class MainActivity extends Activity {
             if (wasEnabled) { Log.e(TAG, "FIREWALL_REFUSED_ALREADY_ENABLED"); return; }
             java.util.Enumeration<java.net.NetworkInterface> interfaces = java.net.NetworkInterface.getNetworkInterfaces();
             String external = null;
+            String externalAddress = null;
             while (interfaces != null && interfaces.hasMoreElements()) {
                 java.net.NetworkInterface iface = interfaces.nextElement();
-                if (!iface.isLoopback() && iface.isUp()) { external = iface.getName(); break; }
+                if (iface.isLoopback() || !iface.isUp()) continue;
+                java.util.Enumeration<java.net.InetAddress> addresses = iface.getInetAddresses();
+                while (addresses.hasMoreElements()) {
+                    java.net.InetAddress address = addresses.nextElement();
+                    if (address instanceof java.net.Inet4Address && !address.isLoopbackAddress()) {
+                        external = iface.getName(); externalAddress = address.getHostAddress(); break;
+                    }
+                }
+                if (external != null) break;
             }
-            if (external == null) { Log.e(TAG, "FIREWALL_NO_EXTERNAL_INTERFACE"); return; }
+            if (external == null) { Log.e(TAG, "FIREWALL_NO_EXTERNAL_IPV4_INTERFACE"); return; }
             java.net.ServerSocket server = new java.net.ServerSocket();
             try {
                 server.setReuseAddress(true);
@@ -111,11 +120,13 @@ public final class MainActivity extends Activity {
                 enabled = true;
                 setEnabled.invoke(service, true);
                 setInterface.invoke(service, external, true);
-                boolean blocked = !loopbackConnects(port);
-                Log.i(TAG, "FIREWALL_DROP_LOOPBACK_WHILE_" + external + "_ALLOWED=" + blocked);
-                if (!blocked) { Log.e(TAG, "FIREWALL_LOOPBACK_NOT_BLOCKED"); return; }
+                boolean blockedLoopback = !loopbackConnects("127.0.0.1", port);
+                boolean blockedOwnAddress = !loopbackConnects(externalAddress, port);
+                Log.i(TAG, "FIREWALL_DROP_LOOPBACK_WHILE_" + external + "_ALLOWED=" + blockedLoopback);
+                Log.i(TAG, "FIREWALL_DROP_OWN_INTERFACE_ADDRESS=" + blockedOwnAddress + " address=" + externalAddress);
+                if (!blockedLoopback || !blockedOwnAddress) { Log.e(TAG, "FIREWALL_LOCAL_ACCESS_NOT_BLOCKED"); return; }
                 setInterface.invoke(service, "lo", true);
-                boolean allowed = loopbackConnects(port);
+                boolean allowed = loopbackConnects("127.0.0.1", port);
                 Log.i(TAG, "FIREWALL_ALLOW_LOOPBACK_CONTROL=" + allowed);
                 if (!allowed) Log.e(TAG, "FIREWALL_ALLOW_RULE_FAILED");
             } finally {
@@ -143,14 +154,14 @@ public final class MainActivity extends Activity {
         }
     }
 
-    private boolean loopbackConnects(final int port) throws InterruptedException {
+    private boolean loopbackConnects(final String host, final int port) throws InterruptedException {
         final boolean[] connected = new boolean[] { false };
         final boolean[] finished = new boolean[] { false };
         Thread probe = new Thread(new Runnable() {
             @Override public void run() {
                 java.net.Socket client = new java.net.Socket();
                 try {
-                    client.connect(new java.net.InetSocketAddress("127.0.0.1", port), 1200);
+                    client.connect(new java.net.InetSocketAddress(host, port), 1200);
                     connected[0] = true;
                 } catch (java.io.IOException expected) {
                     connected[0] = false;

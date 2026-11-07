@@ -27,7 +27,7 @@ class GuardsTest(unittest.TestCase):
         s = (BASE / 'src/ru/lifanx60/systempropfixture/MainActivity.java').read_text()
         for part in ('firewall_probe', 'Process.myUid() != 1000', 'setFirewallEnabled',
                      'setFirewallInterfaceRule', 'FIREWALL_DROP_LOOPBACK_WHILE_',
-                     'FIREWALL_CLEANUP_DISABLED', '127.0.0.1'):
+                     'FIREWALL_DROP_OWN_INTERFACE_ADDRESS=', 'FIREWALL_CLEANUP_DISABLED', '127.0.0.1'):
             self.assertIn(part, s)
         self.assertIn('setEnabled.invoke(service, false)', s)
 

@@ -200,7 +200,7 @@ echo "Synthetic baseline properties restored and adbd restarted: $after -> $fina
   echo 'Generic baseline properties:'; cat "$work/baseline.txt"; echo 'Generic baseline shell:'; cat "$work/baseline-id.txt"
   echo 'Same-signature ordinary UID negative control: property unchanged:'; grep -F 'OWN_UID=' "$work/negative-log.txt" | tail -1
   echo 'System UID fixture:'; grep -F 'OWN_UID=' "$work/system-log.txt" | tail -1; grep -F 'SYNTHETIC_ROOT_PROPERTY=' "$work/system-log.txt" | tail -1
-  echo 'System UID firewall probe:'; grep -E 'FIREWALL_DROP_LOOPBACK_WHILE_|FIREWALL_ALLOW_LOOPBACK_CONTROL=|FIREWALL_RESTORED_DISABLED=' "$work/firewall-log.txt"
+  echo 'System UID firewall probe:'; grep -E 'FIREWALL_DROP_LOOPBACK_WHILE_|FIREWALL_DROP_OWN_INTERFACE_ADDRESS=|FIREWALL_ALLOW_LOOPBACK_CONTROL=|FIREWALL_RESTORED_DISABLED=' "$work/firewall-log.txt"
   echo "adbd PID changed in emulator: $before -> $after"; cat "$work/listener.txt"
   echo "Synthetic baseline properties restored and adbd PID changed again: $after -> $final"
   echo 'Emulator uses qemud transport; this does not test whether a physical device will listen on TCP.'
