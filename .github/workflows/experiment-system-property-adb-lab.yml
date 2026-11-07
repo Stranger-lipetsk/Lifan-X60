@@ -41,8 +41,13 @@ jobs:
           git add reports/system-property-adb-lab-error.txt
           git diff --cached --quiet && exit 0
           git commit -m 'report: diagnose isolated property lab'
-          git pull --rebase origin "${{ github.ref_name }}"
-          git push origin HEAD:"${{ github.ref_name }}"
+          for attempt in 1 2 3 4 5; do
+            git fetch origin "${{ github.ref_name }}"
+            git rebase "origin/${{ github.ref_name }}" || { git rebase --abort || true; sleep 2; continue; }
+            git push origin HEAD:"${{ github.ref_name }}" && exit 0
+            sleep 2
+          done
+          exit 1
       - name: Сохранить текстовый отчёт
         run: |
           set -euo pipefail
