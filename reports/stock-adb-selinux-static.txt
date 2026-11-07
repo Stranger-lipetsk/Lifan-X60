@@ -8,19 +8,19 @@ Suggested packages:
   python3-pygraphviz python3-scipy python3-pytest setools-gui
 The following NEW packages will be installed:
   libblas3 liblapack3 python3-networkx python3-numpy python3-setools setools
-0 upgraded, 6 newly installed, 0 to remove and 26 not upgraded.
+0 upgraded, 6 newly installed, 0 to remove and 27 not upgraded.
 Need to get 9350 kB of archives.
 After this operation, 44.2 MB of additional disk space will be used.
-Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [152 B]
-Get:2 http://us-east-2.ec2.archive.ubuntu.com/ubuntu noble-updates/main amd64 libblas3 amd64 3.12.0-3build1.1 [238 kB]
-Get:3 http://us-east-2.ec2.archive.ubuntu.com/ubuntu noble-updates/main amd64 liblapack3 amd64 3.12.0-3build1.1 [2646 kB]
-Get:4 http://us-east-2.ec2.archive.ubuntu.com/ubuntu noble/main amd64 python3-networkx all 2.8.8-1ubuntu1 [1468 kB]
-Get:5 http://us-east-2.ec2.archive.ubuntu.com/ubuntu noble/main amd64 python3-numpy amd64 1:1.26.4+ds-6ubuntu1 [4437 kB]
-Get:6 http://us-east-2.ec2.archive.ubuntu.com/ubuntu noble/universe amd64 python3-setools amd64 4.4.4-1build1 [521 kB]
-Get:7 http://us-east-2.ec2.archive.ubuntu.com/ubuntu noble/universe amd64 setools amd64 4.4.4-1build1 [40.1 kB]
-Fetched 9350 kB in 1s (7125 kB/s)
+Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+Get:2 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libblas3 amd64 3.12.0-3build1.1 [238 kB]
+Get:3 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 liblapack3 amd64 3.12.0-3build1.1 [2646 kB]
+Get:4 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 python3-networkx all 2.8.8-1ubuntu1 [1468 kB]
+Get:5 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 python3-numpy amd64 1:1.26.4+ds-6ubuntu1 [4437 kB]
+Get:6 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 python3-setools amd64 4.4.4-1build1 [521 kB]
+Get:7 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 setools amd64 4.4.4-1build1 [40.1 kB]
+Fetched 9350 kB in 0s (36.8 MB/s)
 Selecting previously unselected package libblas3:amd64.
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 215588 files and directories currently installed.)
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 215960 files and directories currently installed.)
 Preparing to unpack .../0-libblas3_3.12.0-3build1.1_amd64.deb ...
 Unpacking libblas3:amd64 (3.12.0-3build1.1) ...
 Selecting previously unselected package liblapack3:amd64.
@@ -69,21 +69,16 @@ Pinned seapp_contexts maps user=system apps to system_app; ADB property labels a
 No policy was loaded on a device; these are static allow-rule queries only.
 
 ## system-UID app -> adb service properties: system_app -> shell_prop:property_service set
-Traceback (most recent call last):
-  File "/home/runner/work/Lifan-X60/Lifan-X60/tools/inspect_stock_adb_selinux.py", line 67, in <module>
-    main()
-  File "/home/runner/work/Lifan-X60/Lifan-X60/tools/inspect_stock_adb_selinux.py", line 62, in main
-    output = query(policy, source, target, klass, perm)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/Lifan-X60/Lifan-X60/tools/inspect_stock_adb_selinux.py", line 28, in query
-    raise RuntimeError(result.stderr.strip() or f'sesearch returned {result.returncode}')
-RuntimeError: usage: sesearch [-h] [--version] [-v] [--debug] [-A] [--allow] [--allowxperm]
-                [--auditallow] [--auditallowxperm] [--dontaudit]
-                [--dontauditxperm] [-T] [--type_change] [--type_member]
-                [--role_allow] [--role_trans] [--range_trans] [-s SOURCE]
-                [-t TARGET] [-c TCLASS] [-p PERMS] [-x XPERMS] [-D DEFAULT]
-                [-b BOOL] [-eb] [-ep] [-ex] [-Sp] [-ds] [-dt] [-rs] [-rt]
-                [-rc] [-rd] [-rb]
-                [policy]
-sesearch: error: unrecognized arguments: --expand
-exit_code=1
+allow unconfineddomain property_type:property_service set;
+
+## system-UID app -> generic init control properties: system_app -> ctl_default_prop:property_service set
+allow unconfineddomain property_type:property_service set;
+
+## framework system domain -> adb service properties: system -> shell_prop:property_service set
+allow unconfineddomain property_type:property_service set;
+
+## framework system domain -> generic init control properties: system -> ctl_default_prop:property_service set
+allow unconfineddomain property_type:property_service set;
+
+A missing allow rule suggests this SELinux path is denied; it does not prove the runtime policy matches this file or exclude other mechanisms.
+exit_code=0
