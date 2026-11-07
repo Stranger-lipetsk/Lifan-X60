@@ -21,6 +21,15 @@
 3. Generic AOSP-derived Android 4.4.2 и stock-derived services.jar не подтверждают, что vendor framework, netd, init, SELinux и firewall на конкретной прошивке совпадают.
 4. Никакие настройки firewall на ГУ не применялись; сеть ADB, прошивка и форматирование на ГУ не включались и не выполнялись.
 
+## Дополнительный статический контекст vendor-образа
+
+- В извлечённом `init.rc` property-gated сервис `usbnet_adb` запускает `/system/bin/el_debug_tool` от root только при `persist.sys.usbnet_adb_support=1`; по умолчанию сервис помечен `disabled`. В отдельном `enable_adb.sh` меняется USB config на `mtp,adb`, но это не то же самое, что включение `usbnet_adb`.
+- Офлайн-анализ `el_debug_tool` (SHA-256 и дизассемблирование описаны в `reports/usb-debug-static.txt`) обнаружил операции с ASIX-модулем, настройкой `eth0` на `192.168.88.1`, свойством `service.adb.tcp.port=9478` и остановкой `adbd`. Это показывает предусмотренный vendor-путь USB-Ethernet ADB, но не факт, что он включён или безопасно доступен на текущем ГУ.
+- В `system/bin/netd` статически найдена строка `/system/bin/oem-iptables-init.sh` (`reports/sd-boot-update-static.txt`). Сам скрипт в сохранённом извлечении не найден, поэтому нельзя установить, какие vendor-правила он добавляет и перезаписывает ли он правила Android firewall.
+- Из ramdisk извлечены `ro.secure=1`, `ro.debuggable=1`, `persist.sys.usb.config=adb`; там же `ro.adb.secure=0` и выключенный по умолчанию root console. Это статические значения образа, не проверка runtime-состояния конкретного ГУ.
+
+Эти находки делают интерфейсное ограничение на `eth0` правдоподобным сценарием для vendor USB-Ethernet ADB, но также выявляют custom init/netd путь, который generic emulator не моделирует. Наличие `el_debug_tool` и строки OEM script не подтверждают правила firewall, listener или свойства сервиса при реальном запуске.
+
 ## Статические ориентиры
 
 - AOSP Android 4.4.2 `NetworkManagementService`: `setFirewallEnabled` и `setFirewallInterfaceRule`, проверки системных полномочий: https://github.com/aosp-mirror/platform_frameworks_base/tree/android-4.4.2_r1
