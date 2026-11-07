@@ -82,10 +82,11 @@ echo 'Build guarded generic-emulator fixture; no APK is published'
 src=tests/fixtures/system-prop-lab
 mkdir -p "$work/classes" "$work/dex"
 "$bt/aapt" package -f -M "$src/AndroidManifest.xml" -I "$jar" -F "$work/unsigned.apk"
-sed -e 's/ru.lifanx60.systempropfixture/ru.lifanx60.systempropnegative/' -e 's/ android:sharedUserId="android.uid.system"//' "$src/AndroidManifest.xml" > "$work/negative-manifest.xml"
+mkdir -p "$work/negative"
+sed -e 's/ru.lifanx60.systempropfixture/ru.lifanx60.systempropnegative/' -e 's/ android:sharedUserId="android.uid.system"//' "$src/AndroidManifest.xml" > "$work/negative/AndroidManifest.xml"
 # The negative uses the same Java activity class but an ordinary application UID.
-sed -i 's/android:name=".MainActivity"/android:name="ru.lifanx60.systempropfixture.MainActivity"/' "$work/negative-manifest.xml"
-"$bt/aapt" package -f -M "$work/negative-manifest.xml" -I "$jar" -F "$work/negative-unsigned.apk"
+sed -i 's/android:name=".MainActivity"/android:name="ru.lifanx60.systempropfixture.MainActivity"/' "$work/negative/AndroidManifest.xml"
+"$bt/aapt" package -f -M "$work/negative/AndroidManifest.xml" -I "$jar" -F "$work/negative-unsigned.apk"
 find "$src/src" -name '*.java' | sort > "$work/sources.txt"
 javac -source 8 -target 8 -bootclasspath "$jar" -d "$work/classes" @"$work/sources.txt"
 find "$work/classes" -name '*.class' > "$work/classes.txt"
