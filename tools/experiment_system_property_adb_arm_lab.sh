@@ -137,6 +137,7 @@ for prop in ro.secure ro.debuggable ro.adb.secure service.adb.tcp.port init.svc.
   printf '%s=' "$prop"; "$adb" shell getprop "$prop" | tr -d '\r'; done | tee "$work/baseline.txt"
 "$adb" shell id | tr -d '\r' | tee "$work/baseline-id.txt"
 oldport=$("$adb" shell getprop service.adb.tcp.port | tr -d '\r')
+oldroot=$("$adb" shell getprop service.adb.root | tr -d '\r')
 test "$oldport" != 43127
 "$adb" install "$work/negative-unsigned-signed.apk" | tee "$work/negative-install.txt"
 grep -F Success "$work/negative-install.txt"
@@ -173,6 +174,18 @@ grep -F 'OWN_UID=1000 ' "$work/system-log.txt"; grep -F 'AFTER=43127' "$work/sys
 # This separate ARM experiment intentionally does not restart it, so that
 # both property writes can be observed. Restart was tested separately on x86.
 echo 'ARM fixture intentionally did not restart adbd; no TCP test.'
+"$adb" logcat -c
+"$adb" shell am start -n ru.lifanx60.systempropfixture/.MainActivity --ez restore true > "$work/restore-start.txt" 2>&1
+restored=no
+for i in $(seq 1 45); do
+  "$adb" logcat -d -s X60SystemPropLab:I '*:S' > "$work/restore-log.txt" 2>&1 || true
+  if grep -q SYNTHETIC_PROPERTIES_RESTORED "$work/restore-log.txt"; then restored=yes; break; fi
+  sleep 2
+done
+[ "$restored" = yes ] || { cat "$work/restore-start.txt" "$work/restore-log.txt"; exit 1; }
+test "$("$adb" shell getprop service.adb.tcp.port | tr -d '\r')" = "$oldport"
+test "$("$adb" shell getprop service.adb.root | tr -d '\r')" = "$oldroot"
+echo 'Synthetic ARM baseline properties restored; daemon restart was not tested.'
 {
   echo '# Platform-signed system UID property experiment: generic Android 4.4.2 ARM with stock-derived services.jar only'
   echo 'Disposable emulator; no head unit, real storage, user data, or user network accessed.'
@@ -182,7 +195,7 @@ echo 'ARM fixture intentionally did not restart adbd; no TCP test.'
   echo 'Generic baseline properties:'; cat "$work/baseline.txt"; echo 'Generic baseline shell:'; cat "$work/baseline-id.txt"
   echo 'Same-signature ordinary UID negative control: property unchanged:'; grep -F 'OWN_UID=' "$work/negative-log.txt" | tail -1
   echo 'System UID fixture:'; grep -F 'OWN_UID=' "$work/system-log.txt" | tail -1; grep -F 'SYNTHETIC_ROOT_PROPERTY=' "$work/system-log.txt" | tail -1
-  echo 'ARM fixture deliberately did not restart adbd; no TCP or restart behavior tested in ARM.'
+  echo 'ARM fixture restored both original synthetic property values; it deliberately did not restart adbd.'
   echo 'Emulator uses qemud transport; this does not test whether a physical device will listen on TCP.'
   echo 'Emulator adbd identity and behavior are NOT evidence of stock adbd privileges, network access, authentication or safe data backup on GU.'
   echo 'No application released; do not enable network ADB or use this test on a real head unit.'

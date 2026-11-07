@@ -103,6 +103,7 @@ for prop in ro.secure ro.debuggable ro.adb.secure service.adb.tcp.port init.svc.
   printf '%s=' "$prop"; "$adb" shell getprop "$prop" | tr -d '\r'; done | tee "$work/baseline.txt"
 "$adb" shell id | tr -d '\r' | tee "$work/baseline-id.txt"
 oldport=$("$adb" shell getprop service.adb.tcp.port | tr -d '\r')
+oldroot=$("$adb" shell getprop service.adb.root | tr -d '\r')
 test "$oldport" != 43127
 "$adb" install "$work/negative-unsigned-signed.apk" | tee "$work/negative-install.txt"
 grep -F Success "$work/negative-install.txt"
@@ -154,6 +155,27 @@ found=any(len(line.split()) > 3 and line.split()[1].endswith(':A877') and line.s
 print('Guest TCP listener for requested port:', 'yes' if found else 'no')
 PYINNER
 cat "$work/listener.txt"
+"$adb" logcat -c
+"$adb" shell am start -n ru.lifanx60.systempropfixture/.MainActivity --ez restore true --ez restart_daemon true > "$work/restore-start.txt" 2>&1 || true
+restored=no
+for i in $(seq 1 90); do
+  if timeout -k 3 5 "$adb" logcat -d -s X60SystemPropLab:I '*:S' > "$work/restore-log.txt" 2>&1 && grep -q RESTORE_RESTART_REQUESTED "$work/restore-log.txt"; then
+    currentport=$(timeout -k 3 5 "$adb" shell getprop service.adb.tcp.port 2>/dev/null | tr -d '\r')
+    currentroot=$(timeout -k 3 5 "$adb" shell getprop service.adb.root 2>/dev/null | tr -d '\r')
+    if [ "$currentport" = "$oldport" ] && [ "$currentroot" = "$oldroot" ]; then restored=yes; break; fi
+  fi
+  sleep 2
+done
+[ "$restored" = yes ] || { cat "$work/restore-start.txt" "$work/restore-log.txt" 2>/dev/null || true; exit 1; }
+restore_restart=no
+for i in $(seq 1 45); do
+  timeout -k 3 5 "$adb" shell ps > "$work/ps-restored.txt" 2>/dev/null || true
+  final=$(tr -d '\r' < "$work/ps-restored.txt" | awk '$NF=="/sbin/adbd" {print $2}')
+  if [ -n "$final" ] && [ "$final" != "$after" ]; then restore_restart=yes; break; fi
+  sleep 2
+done
+[ "$restore_restart" = yes ] || { echo 'Restore restart PID change not observed'; exit 1; }
+echo "Synthetic baseline properties restored and adbd restarted: $after -> $final"
 {
   echo '# Platform-signed system UID property experiment: generic Android 4.4.2 x86 only'
   echo 'Disposable emulator; no head unit, real storage, user data, or user network accessed.'
@@ -163,6 +185,28 @@ cat "$work/listener.txt"
   echo 'Same-signature ordinary UID negative control: property unchanged:'; grep -F 'OWN_UID=' "$work/negative-log.txt" | tail -1
   echo 'System UID fixture:'; grep -F 'OWN_UID=' "$work/system-log.txt" | tail -1; grep -F 'SYNTHETIC_ROOT_PROPERTY=' "$work/system-log.txt" | tail -1
   echo "adbd PID changed in emulator: $before -> $after"; cat "$work/listener.txt"
+"$adb" logcat -c
+"$adb" shell am start -n ru.lifanx60.systempropfixture/.MainActivity --ez restore true --ez restart_daemon true > "$work/restore-start.txt" 2>&1 || true
+restored=no
+for i in $(seq 1 90); do
+  if timeout -k 3 5 "$adb" logcat -d -s X60SystemPropLab:I '*:S' > "$work/restore-log.txt" 2>&1 && grep -q RESTORE_RESTART_REQUESTED "$work/restore-log.txt"; then
+    currentport=$(timeout -k 3 5 "$adb" shell getprop service.adb.tcp.port 2>/dev/null | tr -d '\r')
+    currentroot=$(timeout -k 3 5 "$adb" shell getprop service.adb.root 2>/dev/null | tr -d '\r')
+    if [ "$currentport" = "$oldport" ] && [ "$currentroot" = "$oldroot" ]; then restored=yes; break; fi
+  fi
+  sleep 2
+done
+[ "$restored" = yes ] || { cat "$work/restore-start.txt" "$work/restore-log.txt" 2>/dev/null || true; exit 1; }
+restore_restart=no
+for i in $(seq 1 45); do
+  timeout -k 3 5 "$adb" shell ps > "$work/ps-restored.txt" 2>/dev/null || true
+  final=$(tr -d '\r' < "$work/ps-restored.txt" | awk '$NF=="/sbin/adbd" {print $2}')
+  if [ -n "$final" ] && [ "$final" != "$after" ]; then restore_restart=yes; break; fi
+  sleep 2
+done
+[ "$restore_restart" = yes ] || { echo 'Restore restart PID change not observed'; exit 1; }
+echo "Synthetic baseline properties restored and adbd restarted: $after -> $final"
+  echo "Synthetic baseline properties restored and adbd PID changed again: $after -> $final"
   echo 'Emulator uses qemud transport; this does not test whether a physical device will listen on TCP.'
   echo 'Emulator adbd identity and behavior are NOT evidence of stock adbd privileges, network access, authentication or safe data backup on GU.'
   echo 'No application released; do not enable network ADB or use this test on a real head unit.'
