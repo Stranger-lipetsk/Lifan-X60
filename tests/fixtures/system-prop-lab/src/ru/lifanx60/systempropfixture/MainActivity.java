@@ -166,10 +166,10 @@ public final class MainActivity extends Activity {
                 try {
                     client.connect(new java.net.InetSocketAddress("10.0.2.2", hostPort), 4000);
                     client.setSoTimeout(4000);
-                    byte[] response = new byte[64];
-                    int size = client.getInputStream().read(response);
-                    String reply = new String(response, 0, size, "US-ASCII");
-                    if ("X60_HOST_OK\n".equals(reply)) {
+                    java.io.BufferedReader reader = new java.io.BufferedReader(
+                        new java.io.InputStreamReader(client.getInputStream(), "US-ASCII"));
+                    String reply = reader.readLine();
+                    if ("X60_HOST_OK".equals(reply)) {
                         client.getOutputStream().write("X60_GUEST_OK\n".getBytes("US-ASCII"));
                         client.getOutputStream().flush();
                         succeeded[0] = true;
