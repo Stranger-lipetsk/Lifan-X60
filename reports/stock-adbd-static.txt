@@ -1,0 +1,146 @@
+# Stock-derived boot adbd and init, static only
+No binary was executed; a configured image does not prove actual device state.
+Boot image SHA-256: 060d291a523bbe0d40c86537f070ed0feb90e04e0db0efef2a3e4594e9223b4b
+
+## sbin/adbd bytes 170284 SHA-256: 3e6c06ffa3946e2c5ba51e7dd52a522e4c5c83ad2a006115531a9465af6b294a
+readelf -h exit 0
+ELF Header:
+  Magic:   7f 45 4c 46 01 01 01 00 00 00 00 00 00 00 00 00 
+  Class:                             ELF32
+  Data:                              2's complement, little endian
+  Version:                           1 (current)
+  OS/ABI:                            UNIX - System V
+  ABI Version:                       0
+  Type:                              EXEC (Executable file)
+  Machine:                           ARM
+  Version:                           0x1
+  Entry point address:               0x80f8
+  Start of program headers:          52 (bytes into file)
+  Start of section headers:          169444 (bytes into file)
+  Flags:                             0x5000000, Version5 EABI
+  Size of this header:               52 (bytes)
+  Size of program headers:           32 (bytes)
+  Number of program headers:         6
+  Size of section headers:           40 (bytes)
+  Number of section headers:         21
+  Section header string table index: 20
+readelf -lW exit 0
+
+Elf file type is EXEC (Executable file)
+Entry point 0x80f8
+There are 6 program headers, starting at offset 52
+
+Program Headers:
+  Type           Offset   VirtAddr   PhysAddr   FileSiz MemSiz  Flg Align
+  LOAD           0x000000 0x00008000 0x00008000 0x26a3c 0x26a3c R E 0x1000
+  LOAD           0x0279a0 0x000309a0 0x000309a0 0x01ae4 0x09108 RW  0x1000
+  GNU_EH_FRAME   0x0269c0 0x0002e9c0 0x0002e9c0 0x0007c 0x0007c R   0x4
+  GNU_STACK      0x000000 0x00000000 0x00000000 0x00000 0x00000 RW  0
+  EXIDX          0x01fa58 0x00027a58 0x00027a58 0x00fa0 0x00fa0 R   0x4
+  GNU_RELRO      0x0279a0 0x000309a0 0x000309a0 0x00660 0x00660 RW  0x20
+
+ Section to Segment mapping:
+  Segment Sections...
+   00     .text .note.android.ident .ARM.exidx .ARM.extab .rodata .eh_frame .eh_frame_hdr 
+   01     .data.rel.ro.local .preinit_array .init_array .fini_array .data.rel.ro .got .data .bss 
+   02     .eh_frame_hdr 
+   03     
+   04     .ARM.exidx 
+   05     .data.rel.ro.local .preinit_array .init_array .fini_array .data.rel.ro .got 
+readelf -sW exit 0
+
+Selected strings:
+/dev/socket/property_service
+ANDROID_PROPERTY_WORKSPACE
+persist.adb.tcp.port
+qemud:adb-debug
+qemud:adb:%d
+ro.adb.secure
+ro.debuggable
+ro.kernel.qemu
+ro.secure
+service.adb.root
+service.adb.tcp.port
+
+## init bytes 179532 SHA-256: cfb65bc70fb72c0a813c9e7171025abb9a95bfcd9014aa47e6a66e07b17efbd8
+readelf -h exit 0
+ELF Header:
+  Magic:   7f 45 4c 46 01 01 01 00 00 00 00 00 00 00 00 00 
+  Class:                             ELF32
+  Data:                              2's complement, little endian
+  Version:                           1 (current)
+  OS/ABI:                            UNIX - System V
+  ABI Version:                       0
+  Type:                              EXEC (Executable file)
+  Machine:                           ARM
+  Version:                           0x1
+  Entry point address:               0x80f8
+  Start of program headers:          52 (bytes into file)
+  Start of section headers:          178652 (bytes into file)
+  Flags:                             0x5000000, Version5 EABI
+  Size of this header:               52 (bytes)
+  Size of program headers:           32 (bytes)
+  Number of program headers:         6
+  Size of section headers:           40 (bytes)
+  Number of section headers:         22
+  Section header string table index: 21
+readelf -lW exit 0
+
+Elf file type is EXEC (Executable file)
+Entry point 0x80f8
+There are 6 program headers, starting at offset 52
+
+Program Headers:
+  Type           Offset   VirtAddr   PhysAddr   FileSiz MemSiz  Flg Align
+  LOAD           0x000000 0x00008000 0x00008000 0x28c48 0x28c48 R E 0x1000
+  LOAD           0x0291e0 0x000321e0 0x000321e0 0x02668 0x04588 RW  0x1000
+  GNU_EH_FRAME   0x028bcc 0x00030bcc 0x00030bcc 0x0007c 0x0007c R   0x4
+  GNU_STACK      0x000000 0x00000000 0x00000000 0x00000 0x00000 RW  0
+  EXIDX          0x02088c 0x0002888c 0x0002888c 0x01338 0x01338 R   0x4
+  GNU_RELRO      0x0291e0 0x000321e0 0x000321e0 0x00e20 0x00e20 RW  0x20
+
+ Section to Segment mapping:
+  Segment Sections...
+   00     .text .note.android.ident .ARM.exidx .ARM.extab .rodata .eh_frame .eh_frame_hdr 
+   01     .data.rel.ro.local .preinit_array .init_array .fini_array .data.rel.ro .got .data .bss 
+   02     .eh_frame_hdr 
+   03     
+   04     .ARM.exidx 
+   05     .data.rel.ro.local .preinit_array .init_array .fini_array .data.rel.ro .got 
+readelf -sW exit 0
+
+Selected strings:
+/data/property
+/data/security/property_contexts
+/property_contexts
+<3>init: SELinux:  Could not load property_contexts:  %s
+<3>init: Unable to open persistent property directory %s errno: %d
+<3>init: Unable to open persistent property file "%s" errno: %d
+<3>init: Unable to read persistent property file %s errno: %d
+<3>init: Unable to rename persistent property file %s to %s
+<3>init: Unable to write persistent property to temp file %s errno: %d
+<3>init: fstat on property file "%s" failed errno: %d
+<3>init: property '%s' doesn't exist while expanding '%s'
+<3>init: property name too long in trigger %s
+<3>init: skipping insecure property file %s (uid=%lu gid=%lu nlink=%d mode=%o)
+<3>init: sys_prop: illegal property name. Got: "%s"
+<3>init: using deprecated syntax for specifying property '%s', use ${name} instead
+<6>init: SELinux: Loaded property contexts from %s
+<6>init: property init
+ANDROID_PROPERTY_WORKSPACE
+ctl.
+ctl.%s
+property:
+property=%s
+property_service
+property_service_init
+queue_property_triggers
+ro.debuggable
+service.adb.root
+service.adb.tcp.port
+
+## Selected configured boot properties
+ro.secure=1
+ro.debuggable=1
+persist.sys.usb.config=adb
+No inference of runtime authentication, network reachability, root privilege, or backup safety.
