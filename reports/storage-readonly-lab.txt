@@ -1,0 +1,18 @@
+# Storage probe fixture, disposable Android 4.4.2 x86 emulator
+Emulator only; no physical device. Host network blocked for emulator process. APK and signing key remain ephemeral.
+Fixture refuses non-generic hardware, requests no permissions, uses ordinary app UID and does not write app files or enumerate user data.
+Fingerprint: generic_x86/sdk_x86/generic_x86:4.4.2/KK/4174703:eng/test-keys; hardware: ranchu; UID: 10052
+Mount parser unit cases passed; package permissions from aapt:
+package: ru.lifanx60.storagelab
+UI numeric fields and selected /data mount checked against emulator shell df and /proc/mounts:
+UI values: {'TOTAL_KIB': 772008, 'FREE_KIB': 745576, 'AVAILABLE_KIB': 729192}
+UI mount matches shell: /dev/block/vdc /data ext4 rw,nosuid,nodev,noatime,errors=panic,data=ordered
+df total and free agree within rounding/measurement tolerance; available <= free <= total.
+This does not independently validate available blocks or real-device behavior.
+Shell mount and df:
+/dev/block/vdc /data ext4 rw,nosuid,nodev,noatime,errors=panic,data=ordered 0 0
+Filesystem               Size     Used     Free   Blksize
+/data                  753.9M    25.8M   728.1M   4096
+Read-only app logic still involves Android installation, activity/runtime and emulator UI automation writes; this is not a proof of zero OS-level writes.
+The app view represents its own mount namespace. A missing literal mmcblk0p5 mount is not evidence that partition is absent or empty.
+Does not query unmounted partitions, actual head-unit size, free space, runtime access or Hibernate. No deployable APK published.
