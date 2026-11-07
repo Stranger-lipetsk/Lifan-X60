@@ -31,6 +31,12 @@ class GuardsTest(unittest.TestCase):
             self.assertIn(part, s)
         self.assertIn('setEnabled.invoke(service, false)', s)
 
+    def test_arm_lab_uses_same_guarded_firewall_probe(self):
+        s = (ROOT / 'tools/experiment_system_property_adb_arm_lab.sh').read_text()
+        for part in ('GITHUB_ACTIONS:-', '--ez firewall_probe true', '--ei host_port',
+                     'FIREWALL_ETH0_HOST_ROUNDTRIP=true', 'FIREWALL_RESTORED_DISABLED=true'):
+            self.assertIn(part, s)
+
     def test_runner_guards(self):
         s = (ROOT / 'tools/experiment_system_property_adb_lab.sh').read_text()
         for part in ('GITHUB_ACTIONS:-', 'iptables -I OUTPUT', 'ip6tables -I OUTPUT',

@@ -219,7 +219,7 @@ echo "Synthetic baseline properties restored and adbd restarted: $after -> $fina
 {
   echo '# Platform-signed system UID property experiment: generic Android 4.4.2 x86 only'
   echo 'Disposable emulator; no head unit, real storage, user data, or user network accessed.'
-  echo 'Host firewall blocks non-loopback emulator traffic. No LAN or TCP client was tested.'
+  echo 'Host firewall blocks emulator external traffic; only a loopback-bound CI peer over QEMU gateway 10.0.2.2 was used, not a LAN or user device.'
   echo "Fingerprint: $fingerprint; hardware: $hardware; qemu: $qemu"
   echo 'Generic baseline properties:'; cat "$work/baseline.txt"; echo 'Generic baseline shell:'; cat "$work/baseline-id.txt"
   echo 'Same-signature ordinary UID negative control: property unchanged:'; grep -F 'OWN_UID=' "$work/negative-log.txt" | tail -1
