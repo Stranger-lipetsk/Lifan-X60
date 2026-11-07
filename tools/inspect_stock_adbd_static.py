@@ -8,6 +8,7 @@ import subprocess
 import sys
 import tempfile
 from pathlib import Path
+from inspect_init_property_table import table_entries, EXPECTED_SHA as INIT_SHA
 
 
 def main():
@@ -42,6 +43,20 @@ def main():
         print('\n## Selected configured boot properties')
         for line in (root / 'default.prop').read_text().splitlines():
             if re.match(r'(ro\.(secure|debuggable|adb\.secure)|persist\.sys\.usb\.config)=', line): print(line)
+        init = (root / 'init').read_bytes()
+        if hashlib.sha256(init).hexdigest() != INIT_SHA: raise SystemExit('Unexpected stock init SHA')
+        entries = table_entries(init)
+        print('\n## Property-permission-like table entries (prefix, numeric UID, GID)')
+        for name, found in entries.items():
+            if len(found) != 1: raise SystemExit('Ambiguous property table: ' + name)
+            print(name, *found[0])
+        print('Table entries do not prove active enforcement, system UID access or SELinux policy.')
+        rc = (root / 'init.rc').read_text(errors='replace').splitlines()
+        context = ''
+        for num, line in enumerate(rc, 1):
+            if line.startswith('on '): context = line.strip()
+            if re.match(r'\s*setprop\s+ro\.adb\.secure\s+', line):
+                print('init.rc', context, 'line', num, ':', line.strip())
         print('No inference of runtime authentication, network reachability, root privilege, or backup safety.')
 
 if __name__ == '__main__': main()

@@ -2,7 +2,7 @@ name: Статика штатного adbd
 on:
   push:
     branches: [arena/b12cc9a8-lifan-x60]
-    paths: ['.github/workflows/inspect-stock-adbd-static.yml', 'tools/inspect_stock_adbd_static.py']
+    paths: ['.github/workflows/inspect-stock-adbd-static.yml', 'tools/inspect_stock_adbd_static.py', 'tools/inspect_init_property_table.py', 'tests/test_inspect_init_property_table.py']
   workflow_dispatch:
 permissions:
   contents: write
@@ -13,6 +13,8 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
+      - name: Проверить анализатор таблицы
+        run: python3 -m unittest discover -s tests -p 'test_inspect_init_property_table.py' -v
       - name: Прочитать проверенный boot.img без исполнения
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
