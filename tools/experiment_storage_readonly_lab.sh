@@ -3,17 +3,26 @@
 set -euo pipefail
 [ "${GITHUB_ACTIONS:-}" = true ] || { echo 'CI disposable emulator only'; exit 1; }
 export ANDROID_SERIAL=emulator-5554
-exec > >(tee "$RUNNER_TEMP/storage-readonly-lab.log") 2>&1
+arch=${LAB_ARCH:-x86}
+case "$arch" in x86|arm) ;; *) echo 'Unsupported lab architecture'; exit 1;; esac
+exec > >(tee "$RUNNER_TEMP/storage-readonly-${arch}-lab.log") 2>&1
 work=$(mktemp -d /tmp/storage-readonly-lab.XXXXXX); chmod 0755 "$work"
 sdk=${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}
 adb="$sdk/platform-tools/adb"
 export ANDROID_AVD_HOME="$work/avd"; mkdir -p "$ANDROID_AVD_HOME" reports
 sudo apt-get update -qq
 sudo apt-get install -y -qq iptables zip unzip
-"$sdk/cmdline-tools/latest/bin/sdkmanager" --install 'emulator' 'platform-tools' 'platforms;android-19' 'system-images;android-19;default;x86'
+if [ "$arch" = arm ]; then image='system-images;android-19;default;armeabi-v7a'; else image='system-images;android-19;default;x86'; fi
+"$sdk/cmdline-tools/latest/bin/sdkmanager" --install 'emulator' 'platform-tools' 'platforms;android-19' "$image"
 bt=$(find "$sdk/build-tools" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -1)
 jar="$sdk/platforms/android-19/android.jar"
-echo no | "$sdk/cmdline-tools/latest/bin/avdmanager" create avd -f -n storage_lab -k 'system-images;android-19;default;x86' -c 512M >/dev/null
+echo no | "$sdk/cmdline-tools/latest/bin/avdmanager" create avd -f -n storage_lab -k "$image" -c 512M >/dev/null
+if [ "$arch" = arm ]; then
+  curl -fLsS --retry 3 --max-time 120 https://dl.google.com/android/repository/tools_r25.2.5-linux.zip -o "$work/legacy.zip"
+  echo "577516819c8b5fae680f049d39014ff1ba4af870b687cab10595783e6f22d33e  $work/legacy.zip" | sha256sum -c -
+  mkdir -p "$work/legacy"; unzip -q "$work/legacy.zip" -d "$work/legacy"
+  chmod -R a+rX "$work/legacy"
+fi
 sudo useradd --system --create-home --user-group storagelab
 emu_uid=$(id -u storagelab)
 sudo chown -R storagelab:storagelab "$ANDROID_AVD_HOME"
@@ -28,7 +37,9 @@ cleanup() {
     cat "$work/ui.xml" 2>/dev/null || true
     cat "$work/df.txt" 2>/dev/null || true
   fi
-  sudo pkill -TERM -u storagelab 2>/dev/null || true
+  # Classic ARM emulator may not terminate on SIGTERM; this user belongs only
+  # to this CI runner and its throwaway emulator.
+  sudo pkill -KILL -u storagelab 2>/dev/null || true
   [ "$blocked4" != yes ] || sudo iptables -D OUTPUT -m owner --uid-owner "$emu_uid" ! -d 127.0.0.0/8 -j REJECT || true
   [ "$blocked6" != yes ] || sudo ip6tables -D OUTPUT -m owner --uid-owner "$emu_uid" ! -d ::1/128 -j REJECT || true
 }
@@ -37,8 +48,13 @@ sudo iptables -I OUTPUT 1 -m owner --uid-owner "$emu_uid" ! -d 127.0.0.0/8 -j RE
 sudo ip6tables -I OUTPUT 1 -m owner --uid-owner "$emu_uid" ! -d ::1/128 -j REJECT; blocked6=yes
 sudo iptables -C OUTPUT -m owner --uid-owner "$emu_uid" ! -d 127.0.0.0/8 -j REJECT
 sudo ip6tables -C OUTPUT -m owner --uid-owner "$emu_uid" ! -d ::1/128 -j REJECT
-sudo -u storagelab env HOME=/home/storagelab ANDROID_HOME="$sdk" ANDROID_AVD_HOME="$ANDROID_AVD_HOME" \
-  "$sdk/emulator/emulator" -avd storage_lab -port 5554 -no-window -no-audio -no-boot-anim -no-snapshot -gpu swiftshader_indirect -no-metrics > "$work/emulator.log" 2>&1 &
+if [ "$arch" = arm ]; then
+  sudo -u storagelab env HOME=/home/storagelab ANDROID_HOME="$sdk" ANDROID_AVD_HOME="$ANDROID_AVD_HOME" \
+    "$work/legacy/tools/emulator" -avd storage_lab -port 5554 -no-window -no-audio -no-boot-anim -no-snapshot -gpu swiftshader -engine classic -partition-size 1024 > "$work/emulator.log" 2>&1 &
+else
+  sudo -u storagelab env HOME=/home/storagelab ANDROID_HOME="$sdk" ANDROID_AVD_HOME="$ANDROID_AVD_HOME" \
+    "$sdk/emulator/emulator" -avd storage_lab -port 5554 -no-window -no-audio -no-boot-anim -no-snapshot -gpu swiftshader_indirect -no-metrics > "$work/emulator.log" 2>&1 &
+fi
 timeout -k 5 180 "$adb" wait-for-device
 booted=no
 for i in $(seq 1 100); do
@@ -137,7 +153,7 @@ assert values['AVAILABLE_KIB'] > 100000, values
 print('Confirmed positive app-available space after synthetic-only removal:', values)
 PY2
 {
-  echo '# Storage probe fixture, disposable Android 4.4.2 x86 emulator'
+  echo "# Storage probe fixture, disposable Android 4.4.2 $arch emulator"
   echo 'Emulator only; no physical device. Host network blocked for emulator process. APK and signing key remain ephemeral.'
   echo 'Fixture refuses non-generic hardware, requests no permissions, uses ordinary app UID and does not write app files or enumerate user data.'
   echo "Fingerprint: $fingerprint; hardware: $hardware; UID: $uid"
@@ -150,4 +166,4 @@ PY2
   echo 'Read-only app logic still involves Android installation, activity/runtime and emulator UI automation writes; this is not a proof of zero OS-level writes.'
   echo 'The app view represents its own mount namespace. A missing literal mmcblk0p5 mount is not evidence that partition is absent or empty.'
   echo 'Does not query unmounted partitions, actual head-unit size, free space, runtime access or Hibernate. No deployable APK published.'
-} > reports/storage-readonly-lab.txt
+} > "reports/storage-readonly-${arch}-lab.txt"
