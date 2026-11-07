@@ -168,7 +168,8 @@ for i in $(seq 1 90); do
 done
 [ "$ready" = yes ] || { cat "$work/system-start.txt" "$work/system-log.txt" 2>/dev/null || true; exit 1; }
 grep -F 'OWN_UID=1000 ' "$work/system-log.txt"; grep -F 'AFTER=43127' "$work/system-log.txt"; grep -F 'SYNTHETIC_ROOT_PROPERTY=1' "$work/system-log.txt"; grep -F 'NO_RESTART_REQUESTED' "$work/system-log.txt"
-# Classic ARM qemud loses the host ADB transport when adbd is restarted.
+# In a previous classic ARM run ADB became unavailable after the request;
+# whether the request caused it is unproven.
 # This separate ARM experiment intentionally does not restart it, so that
 # both property writes can be observed. Restart was tested separately on x86.
 echo 'ARM fixture intentionally did not restart adbd; no TCP test.'
