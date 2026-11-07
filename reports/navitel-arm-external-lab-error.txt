@@ -1,0 +1,332 @@
+Selecting previously unselected package android-liblog:amd64.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 215960 files and directories currently installed.)
+Preparing to unpack .../android-liblog_1%3a34.0.4-1build3_amd64.deb ...
+Unpacking android-liblog:amd64 (1:34.0.4-1build3) ...
+Selecting previously unselected package android-libbase:amd64.
+Preparing to unpack .../android-libbase_1%3a34.0.4-1build3_amd64.deb ...
+Unpacking android-libbase:amd64 (1:34.0.4-1build3) ...
+Selecting previously unselected package android-libsparse:amd64.
+Preparing to unpack .../android-libsparse_1%3a34.0.4-1build3_amd64.deb ...
+Unpacking android-libsparse:amd64 (1:34.0.4-1build3) ...
+Selecting previously unselected package android-sdk-libsparse-utils.
+Preparing to unpack .../android-sdk-libsparse-utils_1%3a34.0.4-1build3_amd64.deb ...
+Unpacking android-sdk-libsparse-utils (1:34.0.4-1build3) ...
+Selecting previously unselected package qemu-user-static.
+Preparing to unpack .../qemu-user-static_1%3a8.2.2+ds-0ubuntu1.18_amd64.deb ...
+Unpacking qemu-user-static (1:8.2.2+ds-0ubuntu1.18) ...
+Setting up android-liblog:amd64 (1:34.0.4-1build3) ...
+Setting up qemu-user-static (1:8.2.2+ds-0ubuntu1.18) ...
+Setting up android-libbase:amd64 (1:34.0.4-1build3) ...
+Setting up android-libsparse:amd64 (1:34.0.4-1build3) ...
+Setting up android-sdk-libsparse-utils (1:34.0.4-1build3) ...
+Processing triggers for systemd (255.4-1ubuntu8.18) ...
+Processing triggers for man-db (2.12.0-4build2) ...
+Not building database; man-db/auto-update is not 'true'.
+Processing triggers for libc-bin (2.39-0ubuntu8.9) ...
+
+Running kernel seems to be up-to-date.
+
+No services need to be restarted.
+
+No containers need to be restarted.
+
+No user sessions are running outdated binaries.
+
+No VM guests are running outdated hypervisor (qemu) binaries on this host.
+Phase 1: obtain two real Navitel APKs; no user files or license
+/tmp/navitel-arm-tarboot-lab.SRsMFh/lifan-file-manager-test.zip: OK
+/tmp/navitel-arm-tarboot-lab.SRsMFh/system.img: OK
+/tmp/navitel-arm-tarboot-lab.SRsMFh/old.apk: OK
+/home/runner/work/Lifan-X60/Lifan-X60/firmware/apks/com.navitel.apk: OK
+V1 Signer: certificate SHA-256 digest: a40da80a59d170caa950cf15c18c454d47a39b26989d8b640ecd745ba71bf5dc
+package: name='com.navitel' versionCode='201103033' versionName='9.13.73' platformBuildVersionName='9' platformBuildVersionCode='28' compileSdkVersion='23' compileSdkVersionCodename='6.0-2438415'
+V1 Signer: certificate SHA-256 digest: 5358662d39856446c7391c699878e0509f7ed0657d7634c0083e07b08ad2f035
+package: name='com.navitel' versionCode='360622024' versionName='v11.11.1128' platformBuildVersionName='13' platformBuildVersionCode='33' compileSdkVersion='33' compileSdkVersionCodename='13'
+Verify public AOSP test key matches the stock Navitel certificate
+V1 Signer: certificate SHA-256 digest: a40da80a59d170caa950cf15c18c454d47a39b26989d8b640ecd745ba71bf5dc
+Uncompressed payload entries identical, excluding JAR signing records: 5019
+This does not verify ZIP offsets, metadata, V2/V3 signing block or runtime signature checks.
+Phase 2: boot isolated Android 4.4.2 ARMv7
+Loading package information...                                                  Loading local repository...                                                     [                                       ] 3% Loading local repository...        [                                       ] 3% Fetch remote repository...         [=                                      ] 3% Fetch remote repository...         [=                                      ] 4% Fetch remote repository...         [=                                      ] 5% Fetch remote repository...         [==                                     ] 5% Fetch remote repository...         [==                                     ] 6% Fetch remote repository...         [==                                     ] 7% Fetch remote repository...         [==                                     ] 7% Computing updates...               [===                                    ] 8% Computing updates...               [===                                    ] 10% Computing updates...              [===                                    ] 10% Installing ARM EABI v7a System Ima[===                                    ] 10% Downloading armeabi-v7a-19_r05.zip[====                                   ] 10% Downloading armeabi-v7a-19_r05.zip[====                                   ] 11% Downloading armeabi-v7a-19_r05.zip[====                                   ] 12% Downloading armeabi-v7a-19_r05.zip[=====                                  ] 13% Downloading armeabi-v7a-19_r05.zip[=====                                  ] 14% Downloading armeabi-v7a-19_r05.zip[=====                                  ] 15% Downloading armeabi-v7a-19_r05.zip[======                                 ] 15% Downloading armeabi-v7a-19_r05.zip[======                                 ] 16% Downloading armeabi-v7a-19_r05.zip[======                                 ] 17% Downloading armeabi-v7a-19_r05.zip[=======                                ] 18% Downloading armeabi-v7a-19_r05.zip[=======                                ] 18% Unzipping...                      [=======                                ] 18% Unzipping... armeabi-v7a/         [=======                                ] 18% Unzipping... armeabi-v7a/userdata.[=======                                ] 18% Unzipping... armeabi-v7a/system.im[=======                                ] 19% Unzipping... armeabi-v7a/system.im[=======                                ] 20% Unzipping... armeabi-v7a/system.im[========                               ] 20% Unzipping... armeabi-v7a/system.im[========                               ] 21% Unzipping... armeabi-v7a/system.im[========                               ] 22% Unzipping... armeabi-v7a/system.im[=========                              ] 23% Unzipping... armeabi-v7a/system.im[=========                              ] 24% Unzipping... armeabi-v7a/system.im[=========                              ] 25% Unzipping... armeabi-v7a/system.im[=========                              ] 25% Unzipping... armeabi-v7a/ramdisk.i[=========                              ] 25% Unzipping... armeabi-v7a/build.pro[=========                              ] 25% Unzipping... armeabi-v7a/NOTICE.tx[=========                              ] 25% Unzipping... armeabi-v7a/source.pr[=========                              ] 25% Unzipping... armeabi-v7a/kernel-qe[===============                        ] 40% Unzipping... armeabi-v7a/kernel-qe[===============                        ] 40% Installing Android SDK Platform 19[===============                        ] 40% Downloading android-19_r04.zip... [================                       ] 40% Downloading android-19_r04.zip... [================                       ] 41% Downloading android-19_r04.zip... [================                       ] 42% Downloading android-19_r04.zip... [=================                      ] 43% Downloading android-19_r04.zip... [=================                      ] 44% Downloading android-19_r04.zip... [=================                      ] 45% Downloading android-19_r04.zip... [==================                     ] 45% Downloading android-19_r04.zip... [==================                     ] 46% Downloading android-19_r04.zip... [==================                     ] 47% Downloading android-19_r04.zip... [==================                     ] 48% Downloading android-19_r04.zip... [==================                     ] 48% Unzipping... armeabi-v7a/kernel-qe[==================                     ] 48% Unzipping... android-4.4.2/       [==================                     ] 48% Unzipping... android-4.4.2/templat[===================                    ] 48% Unzipping... android-4.4.2/templat[===================                    ] 48% Unzipping... android-4.4.2/build.p[===================                    ] 48% Unzipping... android-4.4.2/sdk.pro[===================                    ] 48% Unzipping... android-4.4.2/android[===================                    ] 49% Unzipping... android-4.4.2/android[===================                    ] 49% Unzipping... android-4.4.2/uiautom[===================                    ] 49% Unzipping... android-4.4.2/skins/ [===================                    ] 49% Unzipping... android-4.4.2/skins/Q[===================                    ] 49% Unzipping... android-4.4.2/skins/W[===================                    ] 49% Unzipping... android-4.4.2/skins/N[===================                    ] 49% Unzipping... android-4.4.2/skins/W[===================                    ] 49% Unzipping... android-4.4.2/skins/H[===================                    ] 49% Unzipping... android-4.4.2/skins/W[===================                    ] 49% Unzipping... android-4.4.2/source.[===================                    ] 49% Unzipping... android-4.4.2/data/  [===================                    ] 49% Unzipping... android-4.4.2/data/fe[===================                    ] 49% Unzipping... android-4.4.2/data/ic[===================                    ] 50% Unzipping... android-4.4.2/data/ic[====================                   ] 50% Unzipping... android-4.4.2/data/ic[====================                   ] 50% Unzipping... android-4.4.2/data/br[====================                   ] 50% Unzipping... android-4.4.2/data/re[====================                   ] 51% Unzipping... android-4.4.2/data/re[====================                   ] 52% Unzipping... android-4.4.2/data/re[====================                   ] 52% Unzipping... android-4.4.2/data/NO[====================                   ] 52% Unzipping... android-4.4.2/data/la[=====================                  ] 53% Unzipping... android-4.4.2/data/la[=====================                  ] 53% Unzipping... android-4.4.2/data/wi[=====================                  ] 53% Unzipping... android-4.4.2/data/ca[=====================                  ] 53% Unzipping... android-4.4.2/data/ac[=====================                  ] 53% Unzipping... android-4.4.2/data/fo[=====================                  ] 54% Unzipping... android-4.4.2/data/fo[=====================                  ] 55% Unzipping... android-4.4.2/data/fo[=====================                  ] 55% Unzipping... android-4.4.2/data/se[=====================                  ] 55% Unzipping... android-4.4.2/framewo[===========================            ] 70% Unzipping... android-4.4.2/framewo[===========================            ] 70% Installing Android Emulator androi[===========================            ] 70% Downloading emulator-linux_x64-167[============================           ] 70% Downloading emulator-linux_x64-167[============================           ] 71% Downloading emulator-linux_x64-167[============================           ] 72% Downloading emulator-linux_x64-167[=============================          ] 73% Downloading emulator-linux_x64-167[=============================          ] 74% Downloading emulator-linux_x64-167[=============================          ] 75% Downloading emulator-linux_x64-167[==============================         ] 75% Downloading emulator-linux_x64-167[==============================         ] 76% Downloading emulator-linux_x64-167[==============================         ] 77% Downloading emulator-linux_x64-167[==============================         ] 77% Unzipping... android-4.4.2/framewo[==============================         ] 77% Unzipping... emulator/            [==============================         ] 77% Unzipping... emulator/resources/  [==============================         ] 77% Unzipping... emulator/qsn         [===============================        ] 78% Unzipping... emulator/qsn         [===============================        ] 78% Unzipping... emulator/emulator    [===============================        ] 78% Unzipping... emulator/netsimd     [===============================        ] 78% Unzipping... emulator/bin64/      [===============================        ] 78% Unzipping... emulator/qemu/       [===============================        ] 78% Unzipping... emulator/NOTICE.txt  [===============================        ] 78% Unzipping... emulator/crashpad_han[===============================        ] 78% Unzipping... emulator/source.prope[===============================        ] 78% Unzipping... emulator/nimble_bridg[===============================        ] 78% Unzipping... emulator/LICENSE     [===============================        ] 78% Unzipping... emulator/lib/        [===============================        ] 78% Unzipping... emulator/qemu-img    [===============================        ] 78% Unzipping... emulator/include/    [===============================        ] 78% Unzipping... emulator/NOTICE.csv  [===============================        ] 78% Unzipping... emulator/lib64/      [===============================        ] 78% Unzipping... emulator/emulator-che[===============================        ] 78% Unzipping... emulator/crashreport [===============================        ] 78% Unzipping... emulator/mksdcard    [===============================        ] 78% Unzipping... emulator/resources/To[===============================        ] 78% Unzipping... emulator/resources/de[===============================        ] 78% Unzipping... emulator/resources/To[===============================        ] 78% Unzipping... emulator/resources/de[===============================        ] 78% Unzipping... emulator/resources/To[===============================        ] 78% Unzipping... emulator/resources/ma[===============================        ] 78% Unzipping... emulator/resources/de[===============================        ] 78% Unzipping... emulator/resources/sk[===============================        ] 78% Unzipping... emulator/resources/de[===============================        ] 78% Unzipping... emulator/resources/ma[===============================        ] 78% Unzipping... emulator/resources/po[===============================        ] 78% Unzipping... emulator/resources/ma[===============================        ] 78% Unzipping... emulator/resources/sk[===============================        ] 78% Unzipping... emulator/resources/ma[===============================        ] 78% Unzipping... emulator/bin64/e2fsck[===============================        ] 78% Unzipping... emulator/bin64/fsck.e[===============================        ] 78% Unzipping... emulator/bin64/tune2f[===============================        ] 78% Unzipping... emulator/bin64/resize[===============================        ] 78% Unzipping... emulator/bin64/mkfs.e[===============================        ] 78% Unzipping... emulator/qemu/linux-x[===============================        ] 79% Unzipping... emulator/qemu/linux-x[===============================        ] 80% Unzipping... emulator/qemu/linux-x[================================       ] 80% Unzipping... emulator/qemu/linux-x[================================       ] 80% Unzipping... emulator/lib/emulator[================================       ] 80% Unzipping... emulator/lib/rtc_serv[================================       ] 80% Unzipping... emulator/lib/advanced[================================       ] 80% Unzipping... emulator/lib/cmake/  [================================       ] 80% Unzipping... emulator/lib/emulator[================================       ] 80% Unzipping... emulator/lib/control_[================================       ] 80% Unzipping... emulator/lib/emulated[================================       ] 80% Unzipping... emulator/lib/rtc_serv[================================       ] 80% Unzipping... emulator/lib/emu-orig[================================       ] 80% Unzipping... emulator/lib/hardware[================================       ] 80% Unzipping... emulator/lib/pkgconfi[================================       ] 80% Unzipping... emulator/lib/pc-bios/[================================       ] 80% Unzipping... emulator/lib/snapshot[================================       ] 80% Unzipping... emulator/lib/adb_serv[================================       ] 80% Unzipping... emulator/lib/hostapd.[================================       ] 80% Unzipping... emulator/lib/grpc_end[================================       ] 80% Unzipping... emulator/lib/ca-bundl[================================       ] 80% Unzipping... emulator/lib/ui_contr[================================       ] 80% Unzipping... emulator/lib/snapshot[================================       ] 80% Unzipping... emulator/lib/ice_conf[================================       ] 80% Unzipping... emulator/lib/libflatb[================================       ] 80% Unzipping... emulator/lib/emulator[================================       ] 80% Unzipping... emulator/lib/waterfal[================================       ] 80% Unzipping... emulator/lib/emulated[================================       ] 80% Unzipping... emulator/lib/cmake/fl[================================       ] 80% Unzipping... emulator/lib/pkgconfi[================================       ] 80% Unzipping... emulator/lib/pc-bios/[================================       ] 80% Unzipping... emulator/include/flat[================================       ] 80% Unzipping... emulator/lib64/libgli[================================       ] 80% Unzipping... emulator/lib64/libpro[================================       ] 80% Unzipping... emulator/lib64/qt/   [================================       ] 80% Unzipping... emulator/lib64/liband[================================       ] 80% Unzipping... emulator/lib64/libgfx[================================       ] 81% Unzipping... emulator/lib64/libgfx[================================       ] 81% Unzipping... emulator/lib64/gles_l[================================       ] 81% Unzipping... emulator/lib64/liband[================================       ] 81% Unzipping... emulator/lib64/vulkan[================================       ] 81% Unzipping... emulator/lib64/gles_s[================================       ] 81% Unzipping... emulator/lib64/libemu[================================       ] 81% Unzipping... emulator/lib64/libpro[================================       ] 81% Unzipping... emulator/lib64/liband[================================       ] 81% Unzipping... emulator/lib64/libtcm[================================       ] 81% Unzipping... emulator/lib64/libima[================================       ] 81% Unzipping... emulator/lib64/libc++[================================       ] 81% Unzipping... emulator/lib64/liband[================================       ] 81% Unzipping... emulator/lib64/libabs[================================       ] 81% Unzipping... emulator/lib64/gles_a[================================       ] 81% Unzipping... emulator/lib64/libsha[================================       ] 81% Unzipping... emulator/lib64/libc++[================================       ] 81% Unzipping... emulator/lib64/qt/res[================================       ] 81% Unzipping... emulator/lib64/qt/lib[================================       ] 81% Unzipping... emulator/lib64/qt/tra[================================       ] 81% Unzipping... emulator/lib64/qt/plu[================================       ] 81% Unzipping... emulator/lib64/qt/res[================================       ] 81% Unzipping... emulator/lib64/qt/lib[================================       ] 82% Unzipping... emulator/lib64/qt/lib[=================================      ] 83% Unzipping... emulator/lib64/qt/lib[=================================      ] 83% Unzipping... emulator/lib64/qt/tra[=================================      ] 84% Unzipping... emulator/lib64/qt/tra[=================================      ] 84% Unzipping... emulator/lib64/qt/plu[=================================      ] 84% Unzipping... emulator/lib64/gles_l[=================================      ] 84% Unzipping... emulator/lib64/vulkan[=================================      ] 85% Unzipping... emulator/lib64/vulkan[=================================      ] 85% Unzipping... emulator/lib64/gles_s[=================================      ] 85% Unzipping... emulator/lib64/gles_a[=======================================] 100% Unzipping... emulator/lib64/gles_
+
+/tmp/navitel-arm-tarboot-lab.SRsMFh/legacy.zip: OK
+Build disposable generic ARM system image OFFLINE to avoid emulator system writes
+/usr/local/lib/android/sdk/system-images/android-19/default/armeabi-v7a/system.img: Linux rev 1.0 ext4 filesystem data, UUID=57f8f4bc-abf4-655f-bf67-946fc0f9f25b (extents) (large files)
+/tmp/navitel-arm-tarboot-lab.SRsMFh/offline-system.img: Linux rev 1.0 ext4 filesystem data, UUID=57f8f4bc-abf4-655f-bf67-946fc0f9f25b (extents) (large files)
+e2fsck 1.47.0 (5-Feb-2023)
+Pass 1: Checking inodes, blocks, and sizes
+Pass 2: Checking directory structure
+Pass 3: Checking directory connectivity
+Pass 4: Checking reference counts
+Pass 5: Checking group summary information
+Padding at end of inode bitmap is not set. Fix? yes
+
+
+/tmp/navitel-arm-tarboot-lab.SRsMFh/offline-system.img: ***** FILE SYSTEM WAS MODIFIED *****
+/tmp/navitel-arm-tarboot-lab.SRsMFh/offline-system.img: 958/35200 files (0.0% non-contiguous), 69068/140800 blocks
+resize2fs 1.47.0 (5-Feb-2023)
+Resizing the filesystem on /tmp/navitel-arm-tarboot-lab.SRsMFh/offline-system.img to 262144 (4k) blocks.
+The filesystem on /tmp/navitel-arm-tarboot-lab.SRsMFh/offline-system.img is now 262144 (4k) blocks long.
+
+e2fsck 1.47.0 (5-Feb-2023)
+Pass 1: Checking inodes, blocks, and sizes
+Inode 7, i_size is 163631104, should be 167837696.  Fix? yes
+
+Pass 2: Checking directory structure
+Pass 3: Checking directory connectivity
+Pass 4: Checking reference counts
+Pass 5: Checking group summary information
+
+/tmp/navitel-arm-tarboot-lab.SRsMFh/offline-system.img: ***** FILE SYSTEM WAS MODIFIED *****
+/tmp/navitel-arm-tarboot-lab.SRsMFh/offline-system.img: 958/56320 files (0.0% non-contiguous), 70476/262144 blocks
+e2fsck 1.47.0 (5-Feb-2023)
+Pass 1: Checking inodes, blocks, and sizes
+Pass 2: Checking directory structure
+Pass 3: Checking directory connectivity
+Pass 4: Checking reference counts
+Pass 5: Checking group summary information
+/tmp/navitel-arm-tarboot-lab.SRsMFh/offline-system.img: 958/56320 files (0.0% non-contiguous), 70476/262144 blocks
+/tmp/navitel-arm-tarboot-lab.SRsMFh/stock-busybox: OK
+/tmp/navitel-arm-tarboot-lab.SRsMFh/amaze.apk: OK
+/tmp/navitel-arm-tarboot-lab.SRsMFh/installer.apk: OK
+/tmp/navitel-arm-tarboot-lab.SRsMFh/stock-services.jar: OK
+/bin/busybox: File not found by ext2_lookup 
+Inode: 959   Type: regular    Mode:  0755   Flags: 0x80000
+e2fsck 1.47.0 (5-Feb-2023)
+Pass 1: Checking inodes, blocks, and sizes
+Pass 2: Checking directory structure
+Pass 3: Checking directory connectivity
+Pass 4: Checking reference counts
+Pass 5: Checking group summary information
+/tmp/navitel-arm-tarboot-lab.SRsMFh/offline-system.img: 959/56320 files (0.2% non-contiguous), 99166/262144 blocks
+Offline generic system image fsck clean; stock services and Navitel byte-for-byte verified
+Emulator host UID 999: non-loopback IPv4 and IPv6 blocked
+* daemon not running; starting now at tcp:5037
+* daemon started successfully
+Shell identity: uid=0(root) gid=0(root) context=u:r:shell:s0
+Verify loaded stock services from the OFFLINE generic system image
+/system/framework/services.jar: 1 file pulled, 0 skipped. 14.8 MB/s (1424358 bytes in 0.091s)
+/dev/block/mtdblock0 /system ext4 ro,seclabel,relatime,data=ordered 0 0
+package:/system/priv-app/PackageInstaller.apk
+package:/system/app/AmazeFileManager.apk
+/system/priv-app/PackageInstaller.apk: 1 file pulled, 0 skipped. 10.9 MB/s (124968 bytes in 0.011s)
+/system/app/AmazeFileManager.apk: 1 file pulled, 0 skipped. 13.1 MB/s (8296416 bytes in 0.604s)
+Phase 3b: verify old system APK is unchanged and query package
+/system/priv-app/Navitel-large.apk: 1 file pulled, 0 skipped. 14.3 MB/s (111095055 bytes in 7.430s)
+Initial package path: package:/system/priv-app/Navitel-large.apk
+package:/system/priv-app/Navitel-large.apk
+/tmp/navitel-arm-tarboot-lab.SRsMFh/lab-pref.xml: 1 file pushed, 0 skipped. 2.7 MB/s (132 bytes in 0.000s)
+Create unrelated synthetic application in disposable ARM emulator
+Success
+/data/data/com.navitel/shared_prefs/x60_lab_probe.xml: 1 file pulled, 0 skipped. 0.0 MB/s (132 bytes in 0.044s)
+/data/data/ru.lifanx60.backupfixture/files/lab-marker.txt: 1 file pulled, 0 skipped. 0.0 MB/s (24 bytes in 0.043s)
+/data/data/ru.lifanx60.backupfixture/shared_prefs/lab_probe.xml: 1 file pulled, 0 skipped. 0.0 MB/s (132 bytes in 0.043s)
+/data/data/com.navitel/files/lab-marker.txt: 1 file pulled, 0 skipped. 0.0 MB/s (30 bytes in 0.043s)
+Install and initialize an additional allowBackup=false synthetic app
+Success
+/data/data/ru.lifanx60.backupblocked/files/lab-marker.txt: 1 file pulled, 0 skipped. 0.0 MB/s (24 bytes in 0.042s)
+/data/data/ru.lifanx60.backupblocked/shared_prefs/lab_probe.xml: 1 file pulled, 0 skipped. 0.0 MB/s (132 bytes in 0.042s)
+Excluded synthetic app data present before backup
+Build and install emulator-only caller with the generic emulator platform key
+/system/framework/framework-res.apk: 1 file pulled, 0 skipped. 13.9 MB/s (15428520 bytes in 1.060s)
+V1 Signer: certificate SHA-256 digest: c8a2e9bccf597c2fb6dc66bee293fc13f2fc47ec77bc6b2b0d52c11f51192ab8
+Success
+App-initiated backup of Navitel, one independent target and one allowBackup=false control
+I/X60BackupCaller( 1328): BACKUP_PERMISSION=true
+I/X60BackupCaller( 1328): STARTING_SYNTHETIC_BACKUP
+Emulator confirmation 'Back up my data' tapped at 240,456
+I/X60BackupCaller( 1328): BACKUP_CALL_RETURNED
+/sdcard/Android/data/ru.lifanx60.backupcallerfixture/files/synthetic.ab: 1 file pulled, 0 skipped. 0.0 MB/s (1605 bytes in 0.043s)
+Lab archive entry: apps/com.navitel/_manifest
+Lab archive entry: apps/com.navitel/r/monitor.ini
+Lab archive entry: apps/com.navitel/f/lab-marker.txt
+Lab archive entry: apps/com.navitel/sp/x60_lab_probe.xml
+Lab archive entry: apps/ru.lifanx60.backupfixture/_manifest
+Lab archive entry: apps/ru.lifanx60.backupfixture/f/lab-marker.txt
+Lab archive entry: apps/ru.lifanx60.backupfixture/sp/lab_probe.xml
+Navitel and independent synthetic files matched; allowBackup=false target absent: yes
+/system/bin/busybox: 1 file pulled, 0 skipped. 14.0 MB/s (1953008 bytes in 0.133s)
+Synthetic emulator /data allocated sizes: before
+38720	/data
+6472	/data/app
+44	/data/app-lib
+25632	/data/dalvik-cache
+28	/data/data/com.navitel
+X60_SIZE_DONE
+38720	/data
+X60_SIZE_DONE
+Verify original system APK immediately before the negative control
+/system/priv-app/Navitel-large.apk: 1 file pulled, 0 skipped. 12.1 MB/s (111095055 bytes in 8.770s)
+Negative control: unmodified candidate must be rejected as a differently signed update
+/home/runner/work/Lifan-X60/Lifan-X60/firmware/apks/com.navitel.apk: 1 file pushed, 0 skipped. 10.4 MB/s (99176587 bytes in 9.090s)
+Performing Push Install
+	pkg: /data/local/tmp/com.navitel.apk
+Failure [INSTALL_PARSE_FAILED_INCONSISTENT_CERTIFICATES]
+Failure [INSTALL_PARSE_FAILED_INCONSISTENT_CERTIFICATES]
+package:/system/priv-app/Navitel-large.apk
+/data/data/com.navitel/shared_prefs/x60_lab_probe.xml: 1 file pulled, 0 skipped. 0.0 MB/s (132 bytes in 0.042s)
+/data/data/ru.lifanx60.backupfixture/files/lab-marker.txt: 1 file pulled, 0 skipped. 0.0 MB/s (24 bytes in 0.042s)
+/data/data/ru.lifanx60.backupfixture/shared_prefs/lab_probe.xml: 1 file pulled, 0 skipped. 0.0 MB/s (132 bytes in 0.042s)
+/system/priv-app/Navitel-large.apk: 1 file pulled, 0 skipped. 14.6 MB/s (111095055 bytes in 7.237s)
+System APK read-back still matched after negative control
+Emulate file-manager ACTION_VIEW and Android PackageInstaller in disposable emulator
+1
+/tmp/navitel-arm-tarboot-lab.SRsMFh/new-resigned.apk: 1 file pushed, 0 skipped. 14.3 MB/s (99156773 bytes in 6.591s)
+Starting: Intent { cmp=com.amaze.filemanager/.ui.activities.MainActivity (has extras) }
+Open virtual Download folder at 160,450
+Tap exact APK filename in virtual Amaze at 160,238
+Tap virtual Amaze Install at 240,328
+Tap virtual Install at 240,456
+Virtual installer confirmed App installed
+package:/data/app/com.navitel-1.apk
+    versionCode=360622024 targetSdk=33
+/data/data/com.navitel/shared_prefs/x60_lab_probe.xml: 1 file pulled, 0 skipped. 0.1 MB/s (132 bytes in 0.002s)
+/data/data/ru.lifanx60.backupfixture/files/lab-marker.txt: 1 file pulled, 0 skipped. 0.0 MB/s (24 bytes in 0.042s)
+/data/data/ru.lifanx60.backupfixture/shared_prefs/lab_probe.xml: 1 file pulled, 0 skipped. 0.0 MB/s (132 bytes in 0.043s)
+Synthetic emulator /data allocated sizes: after
+171468	/data
+103308	/data/app
+19528	/data/app-lib
+41808	/data/dalvik-cache
+28	/data/data/com.navitel
+96836	/data/app/com.navitel-1.apk
+19484	/data/app-lib/com.navitel-1
+6800	/data/dalvik-cache/data@app@com.navitel-1.apk@classes.dex
+X60_SIZE_DONE
+171468	/data
+X60_SIZE_DONE
+/system/priv-app/Navitel-large.apk: 1 file pulled, 0 skipped. 13.4 MB/s (111095055 bytes in 7.899s)
+Restart Android userspace, not the emulator, and repeat checks
+package:/data/app/com.navitel-1.apk
+    versionCode=360622024 targetSdk=33
+/data/data/com.navitel/shared_prefs/x60_lab_probe.xml: 1 file pulled, 0 skipped. 0.0 MB/s (132 bytes in 0.042s)
+/data/data/ru.lifanx60.backupfixture/files/lab-marker.txt: 1 file pulled, 0 skipped. 0.0 MB/s (24 bytes in 0.044s)
+/data/data/ru.lifanx60.backupfixture/shared_prefs/lab_probe.xml: 1 file pulled, 0 skipped. 0.0 MB/s (132 bytes in 0.042s)
+/system/priv-app/Navitel-large.apk: 1 file pulled, 0 skipped. 14.0 MB/s (111095055 bytes in 7.560s)
+/system/framework/services.jar: 1 file pulled, 0 skipped. 13.7 MB/s (1424358 bytes in 0.099s)
+Launch new activity with empty virtual SD and isolated network; no license or account
+/data/data/com.navitel/shared_prefs/x60_lab_probe.xml: 1 file pulled, 0 skipped. 0.0 MB/s (132 bytes in 0.042s)
+/data/data/ru.lifanx60.backupfixture/files/lab-marker.txt: 1 file pulled, 0 skipped. 0.0 MB/s (24 bytes in 0.042s)
+/data/data/ru.lifanx60.backupfixture/shared_prefs/lab_probe.xml: 1 file pulled, 0 skipped. 0.0 MB/s (132 bytes in 0.042s)
+LAB ONLY: sync, terminate the disposable ARM VM and start the SAME AVD again
+ab1697ba-f8eb-4815-a66e-854410855530
+tools/experiment_navitel_arm_tarboot.sh: line 571:  3060 Killed                  sudo -u emulatorlab env HOME=/home/emulatorlab ANDROID_HOME="$sdk" ANDROID_AVD_HOME="$ANDROID_AVD_HOME" "$work/legacy/tools/emulator" -avd migration_arm -no-window -no-audio -no-boot-anim -no-snapshot -gpu swiftshader -engine classic -partition-size 1024 -system "$work/offline-system.img" "${data_args[@]}" -verbose >> "$work/emulator.txt" 2>&1
+New boot ID: fd752a4f-58c6-4745-b8a4-8fa6bb1b40a8
+generic/sdk/generic:4.4.2/KK/3462041:eng/test-keys
+/dev/block/mtdblock0 /system ext4 ro,seclabel,relatime,data=ordered 0 0
+package:/data/app/com.navitel-1.apk
+    versionCode=360622024 targetSdk=33
+/data/data/com.navitel/shared_prefs/x60_lab_probe.xml: 1 file pulled, 0 skipped. 0.0 MB/s (132 bytes in 0.042s)
+/data/data/ru.lifanx60.backupfixture/files/lab-marker.txt: 1 file pulled, 0 skipped. 0.0 MB/s (24 bytes in 0.041s)
+/data/data/ru.lifanx60.backupfixture/shared_prefs/lab_probe.xml: 1 file pulled, 0 skipped. 0.0 MB/s (132 bytes in 0.042s)
+Synthetic emulator /data allocated sizes: coldboot
+239812	/data
+103308	/data/app
+19528	/data/app-lib
+41808	/data/dalvik-cache
+68336	/data/data/com.navitel
+96836	/data/app/com.navitel-1.apk
+19484	/data/app-lib/com.navitel-1
+6800	/data/dalvik-cache/data@app@com.navitel-1.apk@classes.dex
+X60_SIZE_DONE
+239812	/data
+X60_SIZE_DONE
+/system/priv-app/Navitel-large.apk: 1 file pulled, 0 skipped. 14.0 MB/s (111095055 bytes in 7.558s)
+/system/framework/services.jar: 1 file pulled, 0 skipped. 9.7 MB/s (1424358 bytes in 0.140s)
+/sdcard/Android/data/ru.lifanx60.backupcallerfixture/files/synthetic.ab: 1 file pulled, 0 skipped. 0.0 MB/s (1605 bytes in 0.044s)
+Synthetic archive survived emulator cold start byte-for-byte
+Destructive restore test in DISPOSABLE EMULATOR only, after update and full reboot
+SYNTHETIC_ABSENT
+I/X60RestoreCaller(  778): STARTING_SYNTHETIC_RESTORE
+Emulator confirmation 'Restore my data' tapped at 240,456
+I/X60RestoreCaller(  778): RESTORE_CALL_RETURNED
+/data/data/com.navitel/shared_prefs/x60_lab_probe.xml: 1 file pulled, 0 skipped. 0.0 MB/s (132 bytes in 0.043s)
+/data/data/ru.lifanx60.backupfixture/files/lab-marker.txt: 1 file pulled, 0 skipped. 0.0 MB/s (24 bytes in 0.001s)
+/data/data/ru.lifanx60.backupfixture/shared_prefs/lab_probe.xml: 1 file pulled, 0 skipped. 0.0 MB/s (132 bytes in 0.042s)
+/data/data/com.navitel/files/lab-marker.txt: 1 file pulled, 0 skipped. 0.0 MB/s (30 bytes in 0.002s)
+/data/data/ru.lifanx60.backupblocked/files/lab-marker.txt: 1 file pulled, 0 skipped. 0.0 MB/s (24 bytes in 0.042s)
+/data/data/ru.lifanx60.backupblocked/shared_prefs/lab_probe.xml: 1 file pulled, 0 skipped. 0.0 MB/s (132 bytes in 0.042s)
+package:/data/app/com.navitel-1.apk
+    versionCode=360622024 targetSdk=33
+LAB ONLY: stop ARM emulator and inspect a copy of its synthetic userdata image
+tools/experiment_navitel_arm_tarboot.sh: line 631:  4227 Killed                  sudo -u emulatorlab env HOME=/home/emulatorlab ANDROID_HOME="$sdk" ANDROID_AVD_HOME="$ANDROID_AVD_HOME" "$work/legacy/tools/emulator" -avd migration_arm -no-window -no-audio -no-boot-anim -no-snapshot -gpu swiftshader -engine classic -partition-size 1024 -system "$work/offline-system.img" "${data_args[@]}" -verbose >> "$work/emulator.txt" 2>&1
+/tmp/navitel-arm-tarboot-lab.SRsMFh/avd/migration_arm.avd/userdata-qemu.img: Linux rev 1.0 ext4 filesystem data, UUID=57f8f4bc-abf4-655f-bf67-946fc0f9f25b (needs journal recovery) (extents) (large files)
+LAB ONLY: make and verify external backup before any target image exists
+sha256:3aaff13b46a41bdff4ca76cfd60e029b02e24dd0928c23cda1452ded43ea24e1
+Verified all regular files, directories and symlinks: {'files': 745, 'dirs': 322, 'symlinks': 73}
+Source special files excluded from this verification: 1
+Source entries with at least one xattr: 1140
+No claim that tar preserves xattrs, ACL, SELinux, timestamps, special files or concurrently modified data.
+/tmp/navitel-arm-tarboot-lab.SRsMFh/formatter/system/bin/mke2fs: OK
+sha256:24e2ab939a413718fad1f6f2421b726102be1006acb019f36e8b39f298dc1a61
+sha256:3aaff13b46a41bdff4ca76cfd60e029b02e24dd0928c23cda1452ded43ea24e1
+Regular files/directories did not match after extraction
+compared_files: 745
+compared_dirs: 322
+compared_symlinks: 73
+missing: 0
+extra: 0
+type_mismatch: 0
+content_mismatch: 0
+metadata_mismatch_files: 0
+metadata_mismatch_dirs: 1
+metadata_mismatch_symlinks: 71
+source_entries_with_xattrs: 1140
+destination_entries_with_xattrs: 0
+xattr_mismatch: 1140
+xattr_read_errors: 0
+Source xattr names (aggregate counts): {'security.selinux': 1140}
+Special files excluded. This does not prove consistency against live writes or real-device SELinux behavior.
+Failure (1): emulator log
+  hw.keyboard.charmap = qwerty2
+  hw.dPad = true
+  hw.gsmModem = true
+  hw.gps = true
+  hw.battery = true
+  hw.accelerometer = true
+  hw.audioInput = true
+  hw.audioOutput = true
+  hw.sdCard = true
+  hw.sdCard.path = /tmp/navitel-arm-tarboot-lab.SRsMFh/avd/migration_arm.avd/sdcard.img
+  disk.cachePartition = true
+  disk.cachePartition.path = /tmp/navitel-arm-tarboot-lab.SRsMFh/avd/migration_arm.avd/cache.img
+  disk.cachePartition.size = 66m
+  hw.lcd.width = 320
+  hw.lcd.height = 480
+  hw.lcd.depth = 32
+  hw.lcd.density = 160
+  hw.lcd.backlight = true
+  hw.gpu.enabled = true
+  hw.gpu.mode = swiftshader
+  hw.gpu.blacklisted = no
+  hw.initialOrientation = portrait
+  hw.camera.back = emulated
+  hw.camera.front = none
+  vm.heapSize = 64
+  hw.sensors.light = true
+  hw.sensors.pressure = true
+  hw.sensors.humidity = true
+  hw.sensors.proximity = true
+  hw.sensors.magnetic_field = true
+  hw.sensors.orientation = true
+  hw.sensors.temperature = true
+  hw.useext4 = true
+  kernel.path = /usr/local/lib/android/sdk/system-images/android-19/default/armeabi-v7a//kernel-qemu
+  kernel.newDeviceNaming = no
+  kernel.supportsYaffs2 = yes
+  disk.ramdisk.path = /usr/local/lib/android/sdk/system-images/android-19/default/armeabi-v7a//ramdisk.img
+  disk.systemPartition.initPath = /tmp/navitel-arm-tarboot-lab.SRsMFh/offline-system.img
+  disk.systemPartition.size = 1g
+  disk.dataPartition.path = /tmp/navitel-arm-tarboot-lab.SRsMFh/avd/migration_arm.avd/userdata-qemu.img
+  disk.dataPartition.size = 1g
+  avd.name = migration_arm
+.
+emulator: WARNING: CPU acceleration only works with x86/x86_64 system images.
+QEMU options list:
+emulator: argv[00] = "/tmp/navitel-arm-tarboot-lab.SRsMFh/legacy/tools/emulator64-arm"
+emulator: argv[01] = "-audio"
+emulator: argv[02] = "none"
+emulator: argv[03] = "-dns-server"
+emulator: argv[04] [140654436939456]:WARNING:./android/base/files/IniFile.cpp:158:Failed to process .ini file /home/emulatorlab/.android/emu-update-last-check.ini for reading.
+List of devices attached
+
