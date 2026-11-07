@@ -33,6 +33,9 @@ debugfs -R "rdump /lib $work/root/system" "$work/system.img" > "$work/lib-extrac
 for f in "$work/root/system/bin/linker" "$work/root/system/bin/toolbox" "$work/root/system/lib/libc.so"; do
   [ -s "$f" ] || { echo "Missing extracted component: $f"; tail -20 "$work/lib-extract.log"; exit 1; }
 done
+mkdir -p "$work/root/lab"
+printf 'X60 isolated synthetic root-only fixture\n' > "$work/root/lab/root-only-synthetic.txt"
+chmod 0400 "$work/root/lab/root-only-synthetic.txt"
 cp /usr/bin/qemu-arm-static "$work/root/qemu-arm-static"
 chmod 0755 "$work/root/qemu-arm-static" "$work/root/sbin/adbd" "$work/root/system/bin/"{linker,toolbox}
 printf 'FROM scratch\nCOPY . /\n' > "$work/root/Dockerfile"
@@ -71,11 +74,14 @@ for case_spec in 0:0 1:0 1:1; do
   if ! timeout -k 5 35 sudo nsenter -t "$pid" -n -- python3 tools/probe_synthetic_adbd_handshake.py "$expected_response" | tee -a "$work/result.txt"; then
     docker logs "$name" || true; docker inspect "$name" --format '{{.State.Status}} exit={{.State.ExitCode}}' || true; exit 1
   fi
+  if [ "$auth" = 0 ]; then
+    timeout -k 5 30 sudo nsenter -t "$pid" -n -- python3 tools/probe_synthetic_adbd_sync.py "$mode" | tee -a "$work/result.txt"
+  fi
   grep -E '^(Name|Uid|Gid|CapEff):' "/proc/$pid/status" | tee -a "$work/result.txt"
   docker rm -f "$name" >/dev/null
  done
 {
-  echo 'A TCP ADB greeting is not an authenticated session, backup or evidence about a real head unit.'
+  echo 'Greeting and fixed synthetic sync read are not a backup or evidence about a real head unit.'
   echo 'UID above is the QEMU host process status, not a complete validation of guest privileges or real-device behavior.'
   echo 'Disabled-auth cases are intentional isolated negative security controls and must not be assumed safe or present on GU.'
 } >> "$work/result.txt"

@@ -7,6 +7,7 @@ on:
       - 'tools/experiment_stock_adbd_container_lab.sh'
       - 'tools/android44_synthetic_property_area.py'
       - 'tools/probe_synthetic_adbd_handshake.py'
+      - 'tools/probe_synthetic_adbd_sync.py'
       - 'tests/test_android44_synthetic_property_area.py'
   workflow_dispatch:
 permissions:
