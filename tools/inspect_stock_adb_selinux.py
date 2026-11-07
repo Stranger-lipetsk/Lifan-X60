@@ -18,8 +18,8 @@ QUERIES = (
 
 def query(policy, source, target, klass, perm):
     result = subprocess.run(
-        ['sesearch', '--allow', '--expand', '--source', source, '--target', target,
-         '--class', klass, '--perm', perm, str(policy)],
+        ['sesearch', '--allow', '-rs', '-rt', '-s', source, '-t', target,
+         '-c', klass, '-p', perm, str(policy)],
         text=True, capture_output=True,
     )
     if result.returncode == 1 and not result.stderr:
