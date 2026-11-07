@@ -16,6 +16,16 @@ QUERIES = (
 )
 
 
+def attribute_types(policy, attribute):
+    result = subprocess.run(
+        ['seinfo', '--attribute', attribute, '--expand', str(policy)],
+        text=True, capture_output=True,
+    )
+    if result.returncode:
+        raise RuntimeError(result.stderr.strip() or f'seinfo returned {result.returncode}')
+    return result.stdout
+
+
 def query(policy, source, target, klass, perm):
     result = subprocess.run(
         ['sesearch', '--allow', '-rs', '-rt', '-s', source, '-t', target,
@@ -57,6 +67,18 @@ def main():
     print(f'Policy SHA-256: {digest}; bytes: {len(blob)}')
     print('Pinned seapp_contexts maps user=system apps to system_app; ADB property labels are shell_prop and generic ctl.* is ctl_default_prop.')
     print('No policy was loaded on a device; these are static allow-rule queries only.')
+    unconfined = attribute_types(policy, 'unconfineddomain')
+    prop_types = attribute_types(policy, 'property_type')
+    for typ, members, purpose in (
+        ('system_app', unconfined, 'system-UID app domain'),
+        ('system', unconfined, 'framework system domain'),
+        ('shell_prop', prop_types, 'ADB service property label'),
+        ('ctl_default_prop', prop_types, 'init control property label'),
+    ):
+        found = bool(re.search(r'\\b' + re.escape(typ) + r'\\b', members))
+        print(f'SELinux attribute membership: {typ} in ' + ('unconfineddomain' if members is unconfined else 'property_type') + f' = {found} ({purpose})')
+        if not found:
+            raise SystemExit(f'Expected attribute membership not found: {typ}')
     for source, target, klass, perm, purpose in QUERIES:
         print(f'\n## {purpose}: {source} -> {target}:{klass} {perm}')
         output = query(policy, source, target, klass, perm)
