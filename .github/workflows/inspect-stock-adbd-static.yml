@@ -2,7 +2,7 @@ name: Статика штатного adbd
 on:
   push:
     branches: [arena/b12cc9a8-lifan-x60]
-    paths: ['.github/workflows/inspect-stock-adbd-static.yml', 'tools/inspect_stock_adbd_static.py', 'tools/inspect_init_property_table.py', 'tests/test_inspect_init_property_table.py']
+    paths: ['.github/workflows/inspect-stock-adbd-static.yml', 'tools/inspect_stock_adbd_static.py', 'tools/inspect_init_property_table.py', 'tests/test_inspect_init_property_table.py', 'tools/inspect_stock_adb_selinux.py', 'reports/deep2/update/sepolicy']
   workflow_dispatch:
 permissions:
   contents: write
@@ -21,13 +21,14 @@ jobs:
         run: |
           set -euo pipefail
           sudo apt-get update -qq
-          sudo apt-get install -y -qq cpio binutils
+          sudo apt-get install -y -qq cpio binutils setools
           w="$RUNNER_TEMP/adbd-static"
           mkdir -p "$w" reports
           gh release download file-manager-test-20261105 -p lifan-file-manager-test.zip -D "$w"
           echo "4be81211994221e80e401ce712ce484b5320156902fff3707737b73e3945d17f  $w/lifan-file-manager-test.zip" | sha256sum -c -
           unzip -p "$w/lifan-file-manager-test.zip" boot.img > "$w/boot.img"
           python3 tools/inspect_stock_adbd_static.py "$w/boot.img" > reports/stock-adbd-static.txt
+          python3 tools/inspect_stock_adb_selinux.py > reports/stock-adb-selinux-static.txt
       - name: Сохранить текстовый отчёт
         run: |
           set -euo pipefail
