@@ -5,12 +5,14 @@ Android properties below are fabricated only; real device values and policy may 
 ro.secure=1 ro.debuggable=1 ro.kernel.qemu=0 service.adb.tcp.port=43127
 Synthetic service.adb.root=0 ro.adb.secure=0
 Loopback ADB greeting response: CNXN
+Root-only synthetic fixture: denied for synthetic shell-UID daemon
 Name:	qemu-arm-static
 Uid:	2000	2000	2000	2000
 Gid:	2000	2000	2000	2000
 CapEff:	0000000000000000
 Synthetic service.adb.root=1 ro.adb.secure=0
 Loopback ADB greeting response: CNXN
+Root-only synthetic fixture: read byte-for-byte by synthetic root-UID daemon
 Name:	qemu-arm-static
 Uid:	0	0	0	0
 Gid:	0	0	0	0
@@ -21,6 +23,6 @@ Name:	qemu-arm-static
 Uid:	0	0	0	0
 Gid:	0	0	0	0
 CapEff:	00000000000001c0
-A TCP ADB greeting is not an authenticated session, backup or evidence about a real head unit.
+Greeting and fixed synthetic sync read are not a backup or evidence about a real head unit.
 UID above is the QEMU host process status, not a complete validation of guest privileges or real-device behavior.
 Disabled-auth cases are intentional isolated negative security controls and must not be assumed safe or present on GU.
