@@ -18,7 +18,7 @@ Get:4 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 python3-networkx a
 Get:5 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 python3-numpy amd64 1:1.26.4+ds-6ubuntu1 [4437 kB]
 Get:6 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 python3-setools amd64 4.4.4-1build1 [521 kB]
 Get:7 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 setools amd64 4.4.4-1build1 [40.1 kB]
-Fetched 9350 kB in 0s (32.3 MB/s)
+Fetched 9350 kB in 1s (16.6 MB/s)
 Selecting previously unselected package libblas3:amd64.
 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 215960 files and directories currently installed.)
 Preparing to unpack .../0-libblas3_3.12.0-3build1.1_amd64.deb ...
@@ -65,16 +65,20 @@ No user sessions are running outdated binaries.
 No VM guests are running outdated hypervisor (qemu) binaries on this host.
 # Read-only queries against pinned compiled head-unit SELinux policy
 Policy SHA-256: 3122f20c153352becde492e88409c719325c8db3d594bdcc8c7021ed4987a500; bytes: 74997
+Pinned seapp_contexts maps user=system apps to system_app; ADB property labels are shell_prop and generic ctl.* is ctl_default_prop.
 No policy was loaded on a device; these are static allow-rule queries only.
 
-## adb service properties: system_server -> shell_prop:property_service set
-NO matching allow rule found
+## system-UID app -> adb service properties: system_app -> shell_prop:property_service set
+allow unconfineddomain property_type:property_service set;
 
-## generic init control properties: system_server -> ctl_default_prop:property_service set
-NO matching allow rule found
+## system-UID app -> generic init control properties: system_app -> ctl_default_prop:property_service set
+allow unconfineddomain property_type:property_service set;
 
-## specific init control properties: system_server -> ctl_rildaemon_prop:property_service set
-NO matching allow rule found
+## framework system domain -> adb service properties: system -> shell_prop:property_service set
+allow unconfineddomain property_type:property_service set;
+
+## framework system domain -> generic init control properties: system -> ctl_default_prop:property_service set
+allow unconfineddomain property_type:property_service set;
 
 A missing allow rule suggests this SELinux path is denied; it does not prove the runtime policy matches this file or exclude other mechanisms.
 exit_code=0
