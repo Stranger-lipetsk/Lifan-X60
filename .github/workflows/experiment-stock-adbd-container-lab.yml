@@ -9,6 +9,7 @@ on:
       - 'tools/probe_synthetic_adbd_handshake.py'
       - 'tools/probe_synthetic_adbd_sync.py'
       - 'tests/test_android44_synthetic_property_area.py'
+      - 'tests/fixtures/adbd-sync-client/**'
   workflow_dispatch:
 permissions:
   contents: write
@@ -19,6 +20,10 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
       - name: Проверить синтетические свойства
         run: |
           bash -n tools/experiment_stock_adbd_container_lab.sh

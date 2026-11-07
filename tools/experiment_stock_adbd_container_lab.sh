@@ -40,7 +40,8 @@ cp /usr/bin/qemu-arm-static "$work/root/qemu-arm-static"
 chmod 0755 "$work/root/qemu-arm-static" "$work/root/sbin/adbd" "$work/root/system/bin/"{linker,toolbox}
 printf 'FROM scratch\nCOPY . /\n' > "$work/root/Dockerfile"
 docker build -q -t "x60-adbd-synthetic-${GITHUB_RUN_ID}" "$work/root"
-mkdir -p reports
+mkdir -p reports "$work/java-classes"
+"${JAVA_HOME:?}/bin/javac" -source 8 -target 8 -d "$work/java-classes" tests/fixtures/adbd-sync-client/src/ru/lifanx60/adbsynclab/SyntheticSyncClient.java
 {
   echo '# Stock-derived ARM adbd: isolated container and synthetic properties'
   echo 'Exact boot-derived adbd under QEMU user mode, host kernel; no head unit, real properties, device blocks or LAN.'
@@ -86,11 +87,13 @@ for line in open(sys.argv[1]):
 PYLIST
   if [ "$auth" = 0 ]; then
     timeout -k 5 30 sudo nsenter -t "$pid" -n -- python3 tools/probe_synthetic_adbd_sync.py "$mode" | tee -a "$work/result.txt"
+    timeout -k 5 30 sudo nsenter -t "$pid" -n -- "$JAVA_HOME/bin/java" -cp "$work/java-classes" ru.lifanx60.adbsynclab.SyntheticSyncClient "$mode" | tee -a "$work/result.txt"
   fi
   grep -E '^(Name|Uid|Gid|CapEff):' "/proc/$pid/status" | tee -a "$work/result.txt"
   docker rm -f "$name" >/dev/null
  done
 {
+  echo 'Python and Java clients ran in the container network namespace on the CI host; Java was not an Android app.'
   echo 'Greeting and fixed synthetic sync read are not a backup or evidence about a real head unit.'
   echo 'UID above is the QEMU host process status, not a complete validation of guest privileges or real-device behavior.'
   echo 'Disabled-auth cases are intentional isolated negative security controls and must not be assumed safe or present on GU.'
