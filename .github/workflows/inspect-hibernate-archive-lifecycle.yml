@@ -1,0 +1,47 @@
+name: Статическая проверка жизненного цикла архива Hibernate
+on:
+  push:
+    branches: [arena/b12cc9a8-lifan-x60]
+    paths: ['.github/workflows/inspect-hibernate-archive-lifecycle.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  inspect:
+    if: github.ref_name == 'arena/b12cc9a8-lifan-x60'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Только статически прочитать штатный скрипт из проверенного образа
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq e2fsprogs unzip
+          w="$RUNNER_TEMP/hibernate-lifecycle"; mkdir -p "$w" reports
+          gh release download file-manager-test-20261105 -p lifan-file-manager-test.zip -D "$w"
+          echo "4be81211994221e80e401ce712ce484b5320156902fff3707737b73e3945d17f  $w/lifan-file-manager-test.zip" | sha256sum -c -
+          unzip -p "$w/lifan-file-manager-test.zip" system.img > "$w/system.img"
+          echo "a660f062716fd42d5a6185faec059f42675b3024304de7b81fac5d705cc88511  $w/system.img" | sha256sum -c -
+          debugfs -R "dump /bin/hib_image_v2.sh $w/hib_image_v2.sh" "$w/system.img" 2> "$w/debugfs.txt"
+          test -s "$w/hib_image_v2.sh"
+          grep -q 'data.tar' "$w/hib_image_v2.sh"
+          {
+            echo '# Static inspection of archive lifecycle in stock-derived Hibernate script'
+            echo 'READ ONLY: extracted as text from verified image; script was not executed. Never run it on a device; it contains formatting and other destructive commands.'
+            echo 'This is the full script, not evidence of runtime execution, mount state, sourced commands or conditions on the head unit.'
+            echo 'SHA-256 of extracted script:'; sha256sum "$w/hib_image_v2.sh" | cut -d' ' -f1
+            echo 'Full script with line numbers:'; nl -ba "$w/hib_image_v2.sh"
+          } > reports/stock-hibernate-archive-lifecycle.txt
+      - name: Сохранить статический отчёт
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/stock-hibernate-archive-lifecycle.txt
+          git diff --cached --quiet && exit 0
+          git commit -m 'report: inspect hibernate archive lifecycle statically'
+          git pull --rebase origin "${{ github.ref_name }}"
+          git push origin HEAD:"${{ github.ref_name }}"
