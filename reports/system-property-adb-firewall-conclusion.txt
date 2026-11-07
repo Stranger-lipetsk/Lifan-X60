@@ -1,0 +1,31 @@
+# Вывод: ограничения штатного Android firewall и сетевого ADB
+
+## Короткий ответ
+
+На generic Android 4.4.2 ARM/x86 в одноразовых эмуляторах platform-signed приложение с UID 1000 смогло включить штатный firewall через NetworkManagementService и задать правила для интерфейсов: loopback и собственный адрес гостя блокировались, тогда как входящее TCP-соединение от изолированного host-loopback peer через интерфейс eth0 принималось. Это подтверждает принципиальную возможность разделить IP-доступ по интерфейсам в данном лабораторном образе.
+
+Это НЕ подтверждает, что на головном устройстве это будет работать так же, и НЕ означает, что firewall отключит локальный USB ADB, локальные Unix-domain sockets или другие не-IP transports. Эмуляторный adbd использует qemud; в проведённом тесте его TCP listener не был доступен. Подменять проверку на произвольный TCP listener доказательством реального поведения adbd нельзя.
+
+## Наблюдения
+
+- ARM run `42377911082` завершился успешно: loopback и собственный адрес `10.0.2.15` заблокированы; listener на eth0 принял соединение через одноразовое QEMU host-forward, ограниченный host INPUT firewall для источников loopback; клиент проверил ответ `X60_FW_OK`.
+- В том же ARM запуске разрешение loopback было проверено отдельным контрольным шагом, затем firewall отключён и восстановление подтверждено (`FIREWALL_RESTORED_DISABLED=true`).
+- Предыдущий x86 run `42375649510` подтвердил loopback/own-address блокировку и host peer roundtrip через QEMU gateway, но не прямой unsolicited входящий TCP.
+- На обоих generic образах запись service.adb.tcp.port сама по себе не дала guest TCP listener: ADB использовал эмуляторный qemud transport. Поэтому тесты не проверяли сетевой ADB handshake и доступ root через реальный adbd.
+- Правило `setFirewallInterfaceRule` действует на интерфейс целиком в этом сценарии; это не доказательство фильтрации только ADB-порта. Полная блокировка интерфейса lo потенциально затрагивает и прочие локальные IP-соединения.
+
+## Границы применимости
+
+1. Android firewall фильтрует IP-трафик. Он не является механизмом отключения USB/debugging transport, Unix-domain socket или локального shell-доступа.
+2. Входящий тест был на синтетическом ServerSocket приложения system UID, не на adbd. QEMU forwarding соединяет host loopback с интерфейсом гостя внутри эмулятора; это не тест через LAN и не эквивалент физического прямого подключения к ГУ.
+3. Generic AOSP-derived Android 4.4.2 и stock-derived services.jar не подтверждают, что vendor framework, netd, init, SELinux и firewall на конкретной прошивке совпадают.
+4. Никакие настройки firewall на ГУ не применялись; сеть ADB, прошивка и форматирование на ГУ не включались и не выполнялись.
+
+## Статические ориентиры
+
+- AOSP Android 4.4.2 `NetworkManagementService`: `setFirewallEnabled` и `setFirewallInterfaceRule`, проверки системных полномочий: https://github.com/aosp-mirror/platform_frameworks_base/tree/android-4.4.2_r1
+- Исследованный KitKat netd fork формирует цепочки firewall с политиками для входящего/исходящего трафика и interface `RETURN`; это только fork, не исходники прошивки ГУ: https://github.com/Plain-Andy/android_platform_system_netd/tree/kk
+
+## Итог
+
+Ограничить сетевой IP-доступ loopback/интерфейсными правилами в исследованном generic Android возможно, оставив host-путь через внешний интерфейс. Утверждение «локальный root ADB полностью заблокирован, а прямой ADB с хоста остаётся доступен» остаётся недоказанным: для него нужны сведения о транспорте и политике именно ГУ, а текущий ARM-эмулятор не предоставил реальный TCP adbd endpoint.
