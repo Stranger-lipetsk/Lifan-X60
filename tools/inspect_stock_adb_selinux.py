@@ -18,7 +18,7 @@ QUERIES = (
 
 def query(policy, source, target, klass, perm):
     result = subprocess.run(
-        ['sesearch', '--allow', '--source', source, '--target', target,
+        ['sesearch', '--allow', '--expand', '--source', source, '--target', target,
          '--class', klass, '--perm', perm, str(policy)],
         text=True, capture_output=True,
     )
