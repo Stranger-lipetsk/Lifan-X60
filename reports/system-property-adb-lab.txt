@@ -11,12 +11,13 @@ init.svc.adbd=running
 Generic baseline shell:
 uid=0(root) gid=0(root)
 Same-signature ordinary UID negative control: property unchanged:
-I/X60SystemPropLab( 2045): OWN_UID=10052 BEFORE= AFTER=
+I/X60SystemPropLab( 2051): OWN_UID=10052 BEFORE= AFTER=
 System UID fixture:
-I/X60SystemPropLab( 2093): OWN_UID=1000 BEFORE= AFTER=43127
-I/X60SystemPropLab( 2093): SYNTHETIC_ROOT_PROPERTY=1
-adbd PID changed in emulator: 1144 -> 2106
+I/X60SystemPropLab( 2100): OWN_UID=1000 BEFORE= AFTER=43127
+I/X60SystemPropLab( 2100): SYNTHETIC_ROOT_PROPERTY=1
+adbd PID changed in emulator: 1146 -> 2114
 Guest TCP listener for requested port: no
+Synthetic baseline properties restored and adbd PID changed again: 2114 -> 2205
 Emulator uses qemud transport; this does not test whether a physical device will listen on TCP.
 Emulator adbd identity and behavior are NOT evidence of stock adbd privileges, network access, authentication or safe data backup on GU.
 No application released; do not enable network ADB or use this test on a real head unit.
