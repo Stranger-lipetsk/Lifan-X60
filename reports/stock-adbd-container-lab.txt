@@ -5,6 +5,7 @@ Android properties below are fabricated only; real device values and policy may 
 ro.secure=1 ro.debuggable=1 ro.kernel.qemu=0 service.adb.tcp.port=43127
 Synthetic service.adb.root=0 ro.adb.secure=0
 Loopback ADB greeting response: CNXN
+Listener bind address in isolated namespace: all interfaces
 Root-only synthetic fixture: denied for synthetic shell-UID daemon
 Name:	qemu-arm-static
 Uid:	2000	2000	2000	2000
@@ -12,6 +13,7 @@ Gid:	2000	2000	2000	2000
 CapEff:	0000000000000000
 Synthetic service.adb.root=1 ro.adb.secure=0
 Loopback ADB greeting response: CNXN
+Listener bind address in isolated namespace: all interfaces
 Root-only synthetic fixture: read byte-for-byte by synthetic root-UID daemon
 Name:	qemu-arm-static
 Uid:	0	0	0	0
@@ -19,6 +21,7 @@ Gid:	0	0	0	0
 CapEff:	00000000000001c0
 Synthetic service.adb.root=1 ro.adb.secure=1
 Loopback ADB greeting response: AUTH
+Listener bind address in isolated namespace: all interfaces
 Name:	qemu-arm-static
 Uid:	0	0	0	0
 Gid:	0	0	0	0
