@@ -667,7 +667,7 @@ lab_source="$work/copy-source"; lab_dest="$work/copy-dest"
 run_lab_tar() {
   docker run -i --rm --network none --read-only --cap-drop ALL --cap-add CHOWN \
     --cap-add DAC_OVERRIDE --cap-add FOWNER --security-opt no-new-privileges \
-    --memory 256m --pids-limit 32 \
+    --memory 512m --pids-limit 32 \
     --mount "type=bind,source=$lab_source,target=/fixture/source,readonly" \
     --mount "type=bind,source=$lab_dest,target=/fixture/dest" \
     --workdir "$1" x60-disposable-arm-copy /qemu-arm-static /busybox tar "${@:2}"
