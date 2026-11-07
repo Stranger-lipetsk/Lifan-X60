@@ -49,7 +49,7 @@ sudo useradd --system --create-home --user-group systemproparmlab
 emu_uid=$(id -u systemproparmlab)
 sudo chown -R systemproparmlab:systemproparmlab "$ANDROID_AVD_HOME"
 [ ! -e /dev/kvm ] || sudo chmod a+rw /dev/kvm
-pid=''; blocked4=no; blocked6=no; host_server_pid=''; redir_port=''
+pid=''; blocked4=no; blocked6=no; blocked_in4=no; blocked_in6=no; redir_port=''; guest_port=43128
 cleanup() {
   status=$?
   if [ "$status" != 0 ]; then
@@ -59,8 +59,8 @@ cleanup() {
     timeout -k 5 10 "$adb" devices -l || true
     timeout -k 5 20 "$adb" logcat -d -v brief 2>/dev/null | grep -iE 'X60SystemPropLab|PackageManager|FATAL EXCEPTION' | tail -80 || true
   fi
-  [ -z "$host_server_pid" ] || kill "$host_server_pid" 2>/dev/null || true
-  if [ -n "$redir_port" ]; then "$adb" emu redir del "tcp:$redir_port" >/dev/null 2>&1 || true; fi
+  if [ "$blocked_in4" = yes ]; then sudo iptables -D INPUT -p tcp --dport "$redir_port" ! -s 127.0.0.0/8 -j REJECT || true; fi
+  if [ "$blocked_in6" = yes ]; then sudo ip6tables -D INPUT -p tcp --dport "$redir_port" ! -s ::1/128 -j REJECT || true; fi
   sudo pkill -TERM -u systemproparmlab 2>/dev/null || true
   if [ "$blocked4" = yes ]; then
     sudo iptables -D OUTPUT -m owner --uid-owner "$emu_uid" ! -d 127.0.0.0/8 -j REJECT || true
@@ -75,9 +75,17 @@ sudo ip6tables -I OUTPUT 1 -m owner --uid-owner "$emu_uid" ! -d ::1/128 -j REJEC
 sudo iptables -C OUTPUT -m owner --uid-owner "$emu_uid" -d 10.0.2.2/32 -j ACCEPT
 sudo iptables -C OUTPUT -m owner --uid-owner "$emu_uid" ! -d 127.0.0.0/8 -j REJECT
 sudo ip6tables -C OUTPUT -m owner --uid-owner "$emu_uid" ! -d ::1/128 -j REJECT
+redir_port=$(python3 - <<'PYPORT'
+import socket
+s=socket.socket(); s.bind(('127.0.0.1',0)); print(s.getsockname()[1]); s.close()
+PYPORT
+)
+sudo iptables -I INPUT 1 -p tcp --dport "$redir_port" ! -s 127.0.0.0/8 -j REJECT; blocked_in4=yes
+sudo ip6tables -I INPUT 1 -p tcp --dport "$redir_port" ! -s ::1/128 -j REJECT; blocked_in6=yes
+echo "Host forwarding port $redir_port restricted to loopback; guest port $guest_port"
 echo "Emulator host UID $emu_uid: only loopback and QEMU gateway 10.0.2.2 permitted; other external IPv4/IPv6 blocked"
 sudo -u systemproparmlab env HOME=/home/systemproparmlab ANDROID_HOME="$sdk" ANDROID_AVD_HOME="$ANDROID_AVD_HOME" \
-  "$work/legacy/tools/emulator" -avd backup_arm -port 5554 -no-window -no-audio -no-boot-anim -no-snapshot -gpu swiftshader -engine classic -partition-size 1024 -system "$work/offline-system.img" > "$work/emulator.log" 2>&1 &
+  "$work/legacy/tools/emulator" -avd backup_arm -port 5554 -no-window -no-audio -no-boot-anim -no-snapshot -gpu swiftshader -engine classic -partition-size 1024 -system "$work/offline-system.img" -redir "tcp:$redir_port:$guest_port" > "$work/emulator.log" 2>&1 &
 pid=$!
 timeout -k 5 300 "$adb" wait-for-device
 booted=no
@@ -168,23 +176,15 @@ grep -F Success "$work/system-install.txt"
 
 echo 'Disposable ARM firewall probe: incoming peer forwarded only from host loopback'
 "$adb" logcat -c
-"$adb" shell am start -n ru.lifanx60.systempropfixture/.MainActivity --ez firewall_probe true --ez inbound_peer true
+"$adb" shell am start -n ru.lifanx60.systempropfixture/.MainActivity --ez firewall_probe true --ez inbound_peer true --ei inbound_port "$guest_port"
 firewall_ready=no
 for i in $(seq 1 45); do
   timeout -k 3 5 "$adb" logcat -d -s X60SystemPropLab:I '*:S' > "$work/firewall-log.txt" 2>&1 || true
-  grep -q 'FIREWALL_REMOTE_WAITING_PORT=' "$work/firewall-log.txt" && { firewall_ready=yes; break; }
+  grep -q "FIREWALL_REMOTE_WAITING_PORT=$guest_port" "$work/firewall-log.txt" && { firewall_ready=yes; break; }
   grep -q 'FIREWALL_PROBE_ERROR\|FIREWALL_REFUSED' "$work/firewall-log.txt" && break
   sleep 1
 done
 [ "$firewall_ready" = yes ] || { cat "$work/firewall-log.txt"; echo 'ARM firewall listener did not become ready'; exit 1; }
-guest_port=$(sed -n 's/.*FIREWALL_REMOTE_WAITING_PORT=\([0-9][0-9]*\).*/\1/p' "$work/firewall-log.txt" | tail -1)
-test -n "$guest_port"
-redir_port=$(python3 - <<'PYPORT'
-import socket
-s=socket.socket(); s.bind(('127.0.0.1',0)); print(s.getsockname()[1]); s.close()
-PYPORT
-)
-"$adb" emu redir add "tcp:$redir_port:$guest_port"
 python3 - "$redir_port" <<'PYCLIENT'
 import socket, sys
 s=socket.create_connection(('127.0.0.1', int(sys.argv[1])), timeout=5); s.settimeout(5)
@@ -195,10 +195,8 @@ while not data.endswith(b'\n') and len(data)<64:
     data += part
 s.close()
 if data != b'X60_FW_OK\n': raise SystemExit('Unexpected isolated ARM guest response: %r' % data)
-print('Host-loopback client reached ARM guest over forwarded external interface')
+print('Host-loopback client reached ARM guest over startup port forwarding')
 PYCLIENT
-"$adb" emu redir del "tcp:$redir_port"
-redir_port=''
 firewall_done=no
 for i in $(seq 1 20); do
   timeout -k 3 5 "$adb" logcat -d -s X60SystemPropLab:I '*:S' > "$work/firewall-log.txt" 2>&1 || true

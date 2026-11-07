@@ -1,12 +1,5 @@
 name: Свойства системного UID — только эмулятор
 on:
-  push:
-    branches: [arena/b12cc9a8-lifan-x60]
-    paths:
-      - '.github/workflows/experiment-system-property-adb-lab.yml'
-      - 'tools/experiment_system_property_adb_lab.sh'
-      - 'tests/test_system_property_adb_lab.py'
-      - 'tests/fixtures/system-prop-lab/**'
   workflow_dispatch:
 permissions:
   contents: write

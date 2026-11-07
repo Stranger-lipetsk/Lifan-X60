@@ -1,11 +1,5 @@
 name: Системный UID и штатные службы на ARM-эмуляторе
 on:
-  push:
-    branches: [arena/b12cc9a8-lifan-x60]
-    paths:
-      - '.github/workflows/experiment-system-property-adb-arm-lab.yml'
-      - 'tools/experiment_system_property_adb_arm_lab.sh'
-      - 'tests/fixtures/system-prop-lab/**'
   workflow_dispatch:
 permissions:
   contents: write

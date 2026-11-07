@@ -115,7 +115,8 @@ public final class MainActivity extends Activity {
             java.net.ServerSocket server = new java.net.ServerSocket();
             try {
                 server.setReuseAddress(true);
-                server.bind(new java.net.InetSocketAddress(java.net.InetAddress.getByName("0.0.0.0"), 0));
+                int requestedPort = getIntent().getIntExtra("inbound_port", 0);
+                server.bind(new java.net.InetSocketAddress(java.net.InetAddress.getByName("0.0.0.0"), requestedPort));
                 int port = server.getLocalPort();
                 enabled = true;
                 setEnabled.invoke(service, true);
