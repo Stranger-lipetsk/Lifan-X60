@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Query exact stock Android SELinux allow rules without executing the policy."""
 import hashlib
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -75,7 +76,7 @@ def main():
         ('shell_prop', prop_types, 'ADB service property label'),
         ('ctl_default_prop', prop_types, 'init control property label'),
     ):
-        found = bool(re.search(r'\\b' + re.escape(typ) + r'\\b', members))
+        found = bool(re.search(r'\b' + re.escape(typ) + r'\b', members))
         print(f'SELinux attribute membership: {typ} in ' + ('unconfineddomain' if members is unconfined else 'property_type') + f' = {found} ({purpose})')
         if not found:
             raise SystemExit(f'Expected attribute membership not found: {typ}')
