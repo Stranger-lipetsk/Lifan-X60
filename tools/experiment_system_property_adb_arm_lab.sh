@@ -85,7 +85,7 @@ sudo ip6tables -I INPUT 1 -p tcp --dport "$redir_port" ! -s ::1/128 -j REJECT; b
 echo "Host forwarding port $redir_port restricted to loopback; guest port $guest_port"
 echo "Emulator host UID $emu_uid: only loopback and QEMU gateway 10.0.2.2 permitted; other external IPv4/IPv6 blocked"
 sudo -u systemproparmlab env HOME=/home/systemproparmlab ANDROID_HOME="$sdk" ANDROID_AVD_HOME="$ANDROID_AVD_HOME" \
-  "$work/legacy/tools/emulator" -avd backup_arm -port 5554 -no-window -no-audio -no-boot-anim -no-snapshot -gpu swiftshader -engine classic -partition-size 1024 -system "$work/offline-system.img" -redir "tcp:$redir_port:$guest_port" > "$work/emulator.log" 2>&1 &
+  "$work/legacy/tools/emulator" -avd backup_arm -port 5554 -no-window -no-audio -no-boot-anim -no-snapshot -gpu swiftshader -engine classic -partition-size 1024 -system "$work/offline-system.img" -qemu -redir "tcp:$redir_port:$guest_port" > "$work/emulator.log" 2>&1 &
 pid=$!
 timeout -k 5 300 "$adb" wait-for-device
 booted=no
