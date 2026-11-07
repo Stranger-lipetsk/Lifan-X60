@@ -74,6 +74,16 @@ for case_spec in 0:0 1:0 1:1; do
   if ! timeout -k 5 35 sudo nsenter -t "$pid" -n -- python3 tools/probe_synthetic_adbd_handshake.py "$expected_response" | tee -a "$work/result.txt"; then
     docker logs "$name" || true; docker inspect "$name" --format '{{.State.Status}} exit={{.State.ExitCode}}' || true; exit 1
   fi
+  # Read the listener address within this isolated net namespace only.
+  sudo nsenter -t "$pid" -n -- cat /proc/net/tcp /proc/net/tcp6 > "$work/listeners-$label.txt"
+  python3 - "$work/listeners-$label.txt" <<'PYLIST' | tee -a "$work/result.txt"
+import sys
+for line in open(sys.argv[1]):
+    cols = line.split()
+    if len(cols) > 3 and cols[1].endswith(':A877') and cols[3] == '0A':
+        addr = cols[1].split(':')[0]
+        print('Listener bind address in isolated namespace:', 'all interfaces' if int(addr, 16) == 0 else 'non-wildcard')
+PYLIST
   if [ "$auth" = 0 ]; then
     timeout -k 5 30 sudo nsenter -t "$pid" -n -- python3 tools/probe_synthetic_adbd_sync.py "$mode" | tee -a "$work/result.txt"
   fi
