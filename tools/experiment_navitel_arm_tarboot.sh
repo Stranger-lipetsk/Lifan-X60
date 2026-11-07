@@ -709,6 +709,9 @@ for p in system/packages.xml app/com.navitel-1.apk data/com.navitel/files/lab-ma
   [ "$source_meta" = "$dest_meta" ] || { echo "Selected file metadata mismatch: $p"; exit 1; }
   echo "Synthetic $p content, uid, gid and mode match: $source_meta"
 done > "$work/copy-checks.txt"
+if [ "$strategy" = external ]; then
+  sudo python3 tools/compare_offline_snapshot_trees.py "$work/copy-source" "$work/copy-dest" | tee "$work/extracted-tree-compare.txt"
+fi
 sudo du -sk "$work/copy-source" "$work/copy-dest" > "$work/copy-sizes.txt"
 if [ "$strategy" = archive ]; then sudo du -sk "$work/copy-dest/data.tar" >> "$work/copy-sizes.txt"; fi
 df -k "$work/copy-dest" > "$work/copy-df.txt"
@@ -995,6 +998,7 @@ check_synthetic tarbootnav
     if [ "$strategy" = external ]; then
       echo "External FAT backup tar create exit $create_rc; verified by digest before and after remount. Extraction exit $extract_rc; no data.tar on destination."
       cat "$work/external-verify.txt" "$work/external-corruption-gate.txt" "$work/external-df.txt"
+      echo 'Aggregate comparison of the entire supported offline source tree with extracted target:'; cat "$work/extracted-tree-compare.txt"
       echo 'Backup creation used root-equivalent isolated container and offline source; ordinary GU app access, FAT behavior and power-loss durability are unknown.'
     else
       echo "Streaming copy: tar producer exit $create_rc; tar consumer exit $extract_rc; no data.tar on destination."
