@@ -43,14 +43,14 @@ Restore can clear data and this fixture must not be used on a real device.
 ## Allocated emulator storage (KiB, BusyBox du -sk)
 Generic ARM image, emulator data/apps/cache and synthetic fixtures, not physical GU sizes; emulator usage changes and overlapping categories must not be added.
 Before update:
-38764	/data
+38736	/data
 6472	/data/app
 44	/data/app-lib
-25652	/data/dalvik-cache
+25632	/data/dalvik-cache
 28	/data/data/com.navitel
 X60_SIZE_DONE
 After update:
-171484	/data
+171476	/data
 103308	/data/app
 19528	/data/app-lib
 41808	/data/dalvik-cache
@@ -60,11 +60,11 @@ After update:
 6800	/data/dalvik-cache/data@app@com.navitel-1.apk@classes.dex
 X60_SIZE_DONE
 After host-triggered cold start:
-239832	/data
+239592	/data
 103308	/data/app
 19528	/data/app-lib
 41808	/data/dalvik-cache
-68336	/data/data/com.navitel
+68112	/data/data/com.navitel
 96836	/data/app/com.navitel-1.apk
 19484	/data/app-lib/com.navitel-1
 6800	/data/dalvik-cache/data@app@com.navitel-1.apk@classes.dex
@@ -89,15 +89,27 @@ Synthetic data/com.navitel/shared_prefs/x60_lab_probe.xml content, uid, gid and 
 Synthetic data/ru.lifanx60.backupfixture/files/lab-marker.txt content, uid, gid and mode match: 10054:10054 600
 Synthetic data/ru.lifanx60.backupfixture/shared_prefs/lab_probe.xml content, uid, gid and mode match: 10054:10054 600
 Allocated KiB on the CI host (strategy=stream; source ext4, not GU tmpfs):
-239844	/tmp/navitel-arm-tarboot-lab.cNZqd1/copy-source
-239848	/tmp/navitel-arm-tarboot-lab.cNZqd1/copy-dest
+239604	/tmp/navitel-arm-tarboot-lab.9CmDlR/copy-source
+239608	/tmp/navitel-arm-tarboot-lab.9CmDlR/copy-dest
 Destination filesystem usage:
 Filesystem     1K-blocks   Used Available Use% Mounted on
-/dev/loop1        499284 239852    222736  52% /tmp/navitel-arm-tarboot-lab.cNZqd1/copy-dest
-Filesystem blocks free including reserved (KiB): 259432
-Filesystem blocks available to unprivileged users (KiB): 222736
+/dev/loop1        499284 239612    222976  52% /tmp/navitel-arm-tarboot-lab.9CmDlR/copy-dest
+Filesystem blocks free including reserved (KiB): 259672
+Filesystem blocks available to unprivileged users (KiB): 222976
 Negative control on fresh 512 MiB image: copied baseline snapshot plus one synthetic 32 MiB file, tar create exit 0, extraction exit 1 with No space left on device.
 This artificial addition is not a claim about installed apps or capacity on the head unit.
+Contrast: the identical +32 MiB synthetic source streamed to a stock-formatted 512 MiB image; producer/consumer exits 0/0, no target archive.
+MATCH system/packages.xml content uid gid mode
+MATCH app/com.navitel-1.apk content uid gid mode
+MATCH data/com.navitel/files/lab-marker.txt content uid gid mode
+MATCH data/com.navitel/shared_prefs/x60_lab_probe.xml content uid gid mode
+MATCH data/ru.lifanx60.backupfixture/files/lab-marker.txt content uid gid mode
+MATCH data/ru.lifanx60.backupfixture/shared_prefs/lab_probe.xml content uid gid mode
+MATCH x60-synthetic-extra/extra.bin content uid gid mode
+Blocks free including reserved (KiB): 226896
+Blocks available to unprivileged users (KiB): 190200
+Negative control: streaming that source to a fresh stock-formatted 64 MiB image failed with ENOSPC; producer/consumer exits 1/1.
+A failed stream leaves a partial destination; no recovery or safe physical-device procedure is established.
 Only listed files and metadata were compared; tar exit 0 is not proof all app data, xattrs, SELinux labels, sparse data, or timestamps were preserved.
 The stock updater declares DATA_SIZE=512 with sfdisk -uM for logical p5; actual head-unit size, free space, other apps and runtime sequence remain unknown.
 ## Boot from extracted virtual image
@@ -105,14 +117,14 @@ The stream synthetic ext4 image was unmounted and checked before being passed as
 The extracted ext4 filesystem started at 536870912 bytes; its regular-file backing was padded to 1 GiB without filesystem resize to satisfy the legacy emulator.
 Padded image file size before/after emulator start: 1073741824/1073741824 bytes. New kernel boot ID confirmed.
 Pre-boot ext4 geometry after padding:
-Filesystem UUID:          31f6857e-7638-4216-be8e-f3a084f93e30
+Filesystem UUID:          2e73b69e-dab8-4b30-a04b-5ea2274f6b9d
 Filesystem features:      has_journal ext_attr resize_inode dir_index filetype extent flex_bg sparse_super large_file huge_file uninit_bg dir_nlink extra_isize
 Block count:              131072
 Block size:               4096
 A synthetic witness added only to the extracted image was readable after boot, excluding silent fallback to original AVD userdata.
 df /data after boot:
 Filesystem               Size     Used     Free   Blksize
-/data                  487.6M   234.2M   253.3M   4096
+/data                  487.6M   234.0M   253.6M   4096
 After boot, Navitel remained registered as the data update, with the same UID; synthetic files and UIDs of Navitel and independent fixture matched before starting the fixture. Blocked fixture files matched too.
 Initial independent-fixture launch result: ready. Synthetic archive removed in a separate CI-only intervention: no.
 Independent fixture emitted FIXTURE_READY without the intervention.
@@ -121,26 +133,26 @@ Mounts:
 /dev/block/mtdblock0 /system ext4 ro,seclabel,relatime,data=ordered 0 0
 /dev/block/mtdblock1 /data ext4 rw,seclabel,nosuid,nodev,noatime,nomblk_io_submit,data=ordered 0 0
 Synthetic emulator storage after copied-image boot:
-239860	/data
+239628	/data
 103308	/data/app
 19528	/data/app-lib
 41808	/data/dalvik-cache
-68336	/data/data/com.navitel
+68112	/data/data/com.navitel
 96836	/data/app/com.navitel-1.apk
 19484	/data/app-lib/com.navitel-1
 6800	/data/dalvik-cache/data@app@com.navitel-1.apk@classes.dex
 X60_SIZE_DONE
 Navitel launch observation (not activation):
 Starting: Intent { cmp=com.navitel/.app.MainActivity }
-    mResumedActivity: ActivityRecord{b2051838 u0 com.navitel/.app.MainActivity t3}
-  mFocusedActivity: ActivityRecord{b2051838 u0 com.navitel/.app.MainActivity t3}
+    mResumedActivity: ActivityRecord{b1ef57a0 u0 com.navitel/.app.MainActivity t3}
+  mFocusedActivity: ActivityRecord{b1ef57a0 u0 com.navitel/.app.MainActivity t3}
 Streamed copy is an alternative laboratory model, NOT the stock script and NOT ready for a physical device.
 Cold booting a generic emulator is not real-device Hibernate or proof of all-data preservation.
 ## Emulator crash dialog while installing
 No Navitel crash dialog observed during installer polling; other failures may still occur
 ## Launch attempt (no activation asserted)
 Starting: Intent { cmp=com.navitel/.app.MainActivity }
-    mResumedActivity: ActivityRecord{b209fd80 u0 com.navitel/.app.MainActivity t2}
-  mFocusedActivity: ActivityRecord{b209fd80 u0 com.navitel/.app.MainActivity t2}
+    mResumedActivity: ActivityRecord{b205ff00 u0 com.navitel/.app.MainActivity t2}
+  mFocusedActivity: ActivityRecord{b205ff00 u0 com.navitel/.app.MainActivity t2}
 Kernel boot ID changed after host stopped and restarted the same disposable emulator. This is a virtual cold start after sync, not real-device hibernate or graceful car shutdown.
 Real device app behavior, USB, rollback, settings and all data preservation remain unverified.
