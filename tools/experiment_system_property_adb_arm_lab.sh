@@ -55,20 +55,21 @@ cleanup() {
   if [ "$status" != 0 ]; then
     echo "Lab failed ($status); emulator diagnostics:"
     tail -45 "$work/emulator.log" 2>/dev/null || true
+    cat "$work/host-peer.log" 2>/dev/null || true
     timeout -k 5 10 "$adb" devices -l || true
     timeout -k 5 20 "$adb" logcat -d -v brief 2>/dev/null | grep -iE 'X60SystemPropLab|PackageManager|FATAL EXCEPTION' | tail -80 || true
   fi
   [ -z "$host_server_pid" ] || kill "$host_server_pid" 2>/dev/null || true
   sudo pkill -TERM -u systemproparmlab 2>/dev/null || true
-  [ "$blocked4" != yes ] || sudo iptables -D OUTPUT -m owner --uid-owner "$emu_uid" ! -d 127.0.0.0/8 -j REJECT || true
+  [ "$blocked4" != yes ] || sudo iptables -D OUTPUT -m owner --uid-owner "$emu_uid" ! -d 127.0.0.0/8 ! -d 10.0.2.2/32 -j REJECT || true
   [ "$blocked6" != yes ] || sudo ip6tables -D OUTPUT -m owner --uid-owner "$emu_uid" ! -d ::1/128 -j REJECT || true
 }
 trap cleanup EXIT
-sudo iptables -I OUTPUT 1 -m owner --uid-owner "$emu_uid" ! -d 127.0.0.0/8 -j REJECT; blocked4=yes
+sudo iptables -I OUTPUT 1 -m owner --uid-owner "$emu_uid" ! -d 127.0.0.0/8 ! -d 10.0.2.2/32 -j REJECT; blocked4=yes
 sudo ip6tables -I OUTPUT 1 -m owner --uid-owner "$emu_uid" ! -d ::1/128 -j REJECT; blocked6=yes
-sudo iptables -C OUTPUT -m owner --uid-owner "$emu_uid" ! -d 127.0.0.0/8 -j REJECT
+sudo iptables -C OUTPUT -m owner --uid-owner "$emu_uid" ! -d 127.0.0.0/8 ! -d 10.0.2.2/32 -j REJECT
 sudo ip6tables -C OUTPUT -m owner --uid-owner "$emu_uid" ! -d ::1/128 -j REJECT
-echo "Emulator host UID $emu_uid: non-loopback IPv4/IPv6 blocked"
+echo "Emulator host UID $emu_uid: only loopback and QEMU gateway 10.0.2.2 permitted; other external IPv4/IPv6 blocked"
 sudo -u systemproparmlab env HOME=/home/systemproparmlab ANDROID_HOME="$sdk" ANDROID_AVD_HOME="$ANDROID_AVD_HOME" \
   "$work/legacy/tools/emulator" -avd backup_arm -port 5554 -no-window -no-audio -no-boot-anim -no-snapshot -gpu swiftshader -engine classic -partition-size 1024 -system "$work/offline-system.img" > "$work/emulator.log" 2>&1 &
 pid=$!

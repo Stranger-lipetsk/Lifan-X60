@@ -174,7 +174,8 @@ public final class MainActivity extends Activity {
                         client.getOutputStream().flush();
                         succeeded[0] = true;
                     }
-                } catch (java.io.IOException ignored) {
+                } catch (java.io.IOException error) {
+                    Log.e(TAG, "FIREWALL_HOST_PEER_IO=" + error.getClass().getSimpleName() + ":" + error.getMessage());
                     succeeded[0] = false;
                 } finally {
                     try { client.close(); } catch (java.io.IOException ignored) { }
