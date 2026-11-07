@@ -1,0 +1,22 @@
+# Platform-signed system UID property experiment: generic Android 4.4.2 ARM with stock-derived services.jar only
+Disposable emulator; no head unit, real storage, user data, or user network accessed.
+Host firewall blocks non-loopback emulator traffic. No LAN or TCP client was tested.
+Fingerprint: generic/sdk/generic:4.4.2/KK/3462041:eng/test-keys; hardware: goldfish; qemu: 1
+Stock-derived services.jar compared byte-for-byte after boot; system_server mapped its generated dex.
+Generic baseline properties:
+ro.secure=0
+ro.debuggable=1
+ro.adb.secure=
+service.adb.tcp.port=
+init.svc.adbd=running
+Generic baseline shell:
+uid=0(root) gid=0(root) context=u:r:shell:s0
+Same-signature ordinary UID negative control: property unchanged:
+I/X60SystemPropLab(  959): OWN_UID=10052 BEFORE= AFTER=
+System UID fixture:
+I/X60SystemPropLab( 1011): OWN_UID=1000 BEFORE= AFTER=43127
+I/X60SystemPropLab( 1011): SYNTHETIC_ROOT_PROPERTY=1
+ARM fixture deliberately did not restart adbd; no TCP or restart behavior tested in ARM.
+Emulator uses qemud transport; this does not test whether a physical device will listen on TCP.
+Emulator adbd identity and behavior are NOT evidence of stock adbd privileges, network access, authentication or safe data backup on GU.
+No application released; do not enable network ADB or use this test on a real head unit.
