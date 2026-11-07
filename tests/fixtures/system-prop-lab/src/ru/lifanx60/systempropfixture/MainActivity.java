@@ -23,6 +23,10 @@ public final class MainActivity extends Activity {
                 Log.e(TAG, "REFUSED_NON_EMULATOR");
                 return;
             }
+            if (getIntent().getBooleanExtra("firewall_probe", false)) {
+                probeFirewall();
+                return;
+            }
             SharedPreferences saved = getSharedPreferences("synthetic-props", MODE_PRIVATE);
             if (getIntent().getBooleanExtra("restore", false)) {
                 if (Process.myUid() != 1000 || !saved.getBoolean("saved", false)) {
@@ -70,5 +74,84 @@ public final class MainActivity extends Activity {
             }
         } catch (Exception error) { Log.e(TAG, "FIXTURE_ERROR", error); }
         finally { finish(); }
+    }
+
+    private void probeFirewall() {
+        boolean enabled = false;
+        try {
+            if (Process.myUid() != 1000 ||
+                checkCallingOrSelfPermission("android.permission.CONNECTIVITY_INTERNAL") !=
+                    android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                Log.e(TAG, "FIREWALL_REFUSED_UID_OR_PERMISSION"); return;
+            }
+            Class<?> serviceManager = Class.forName("android.os.ServiceManager");
+            Object binder = serviceManager.getMethod("getService", String.class)
+                .invoke(null, "network_management");
+            if (binder == null) { Log.e(TAG, "FIREWALL_NO_NETWORK_MANAGEMENT_SERVICE"); return; }
+            Class<?> stub = Class.forName("android.os.INetworkManagementService$Stub");
+            Class<?> binderClass = Class.forName("android.os.IBinder");
+            Object service = stub.getMethod("asInterface", binderClass).invoke(null, binder);
+            Method isEnabled = service.getClass().getMethod("isFirewallEnabled");
+            Method setEnabled = service.getClass().getMethod("setFirewallEnabled", boolean.class);
+            Method setInterface = service.getClass().getMethod("setFirewallInterfaceRule", String.class, boolean.class);
+            boolean wasEnabled = (Boolean) isEnabled.invoke(service);
+            if (wasEnabled) { Log.e(TAG, "FIREWALL_REFUSED_ALREADY_ENABLED"); return; }
+            java.util.Enumeration<java.net.NetworkInterface> interfaces = java.net.NetworkInterface.getNetworkInterfaces();
+            String external = null;
+            while (interfaces != null && interfaces.hasMoreElements()) {
+                java.net.NetworkInterface iface = interfaces.nextElement();
+                if (!iface.isLoopback() && iface.isUp()) { external = iface.getName(); break; }
+            }
+            if (external == null) { Log.e(TAG, "FIREWALL_NO_EXTERNAL_INTERFACE"); return; }
+            java.net.ServerSocket server = new java.net.ServerSocket();
+            try {
+                server.setReuseAddress(true);
+                server.bind(new java.net.InetSocketAddress(java.net.InetAddress.getByName("0.0.0.0"), 0));
+                int port = server.getLocalPort();
+                enabled = true;
+                setEnabled.invoke(service, true);
+                setInterface.invoke(service, external, true);
+                boolean blocked = !loopbackConnects(port);
+                Log.i(TAG, "FIREWALL_DROP_LOOPBACK_WHILE_" + external + "_ALLOWED=" + blocked);
+                if (!blocked) { Log.e(TAG, "FIREWALL_LOOPBACK_NOT_BLOCKED"); return; }
+                setInterface.invoke(service, "lo", true);
+                boolean allowed = loopbackConnects(port);
+                Log.i(TAG, "FIREWALL_ALLOW_LOOPBACK_CONTROL=" + allowed);
+                if (!allowed) Log.e(TAG, "FIREWALL_ALLOW_RULE_FAILED");
+            } finally {
+                server.close();
+            }
+            setEnabled.invoke(service, false); enabled = false;
+            Log.i(TAG, "FIREWALL_RESTORED_DISABLED=" + !(Boolean) isEnabled.invoke(service));
+        } catch (Exception error) {
+            Log.e(TAG, "FIREWALL_PROBE_ERROR", error);
+        } finally {
+            if (enabled) {
+                try {
+                    Class<?> serviceManager = Class.forName("android.os.ServiceManager");
+                    Object binder = serviceManager.getMethod("getService", String.class)
+                        .invoke(null, "network_management");
+                    Class<?> stub = Class.forName("android.os.INetworkManagementService$Stub");
+                    Class<?> binderClass = Class.forName("android.os.IBinder");
+                    Object service = stub.getMethod("asInterface", binderClass).invoke(null, binder);
+                    service.getClass().getMethod("setFirewallEnabled", boolean.class).invoke(service, false);
+                    Log.i(TAG, "FIREWALL_CLEANUP_DISABLED");
+                } catch (Exception cleanupError) {
+                    Log.e(TAG, "FIREWALL_CLEANUP_FAILED", cleanupError);
+                }
+            }
+        }
+    }
+
+    private boolean loopbackConnects(int port) {
+        java.net.Socket client = new java.net.Socket();
+        try {
+            client.connect(new java.net.InetSocketAddress("127.0.0.1", port), 1200);
+            return true;
+        } catch (java.io.IOException expected) {
+            return false;
+        } finally {
+            try { client.close(); } catch (java.io.IOException ignored) { }
+        }
     }
 }

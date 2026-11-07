@@ -123,6 +123,22 @@ echo 'Positive control: platform-signed shared system UID in disposable emulator
 "$adb" shell ps > "$work/ps-before.txt"
 "$adb" install "$work/unsigned-signed.apk" | tee "$work/system-install.txt"
 grep -F Success "$work/system-install.txt"
+
+echo 'Disposable system-UID-only firewall probe: default-deny, external interface allow, loopback blocked'
+"$adb" logcat -c
+"$adb" shell am start -n ru.lifanx60.systempropfixture/.MainActivity --ez firewall_probe true
+firewall_ready=no
+for i in $(seq 1 45); do
+  timeout -k 3 5 "$adb" logcat -d -s X60SystemPropLab:I '*:S' > "$work/firewall-log.txt" 2>&1 || true
+  grep -q 'FIREWALL_RESTORED_DISABLED=true' "$work/firewall-log.txt" && { firewall_ready=yes; break; }
+  grep -q 'FIREWALL_PROBE_ERROR\|FIREWALL_REFUSED' "$work/firewall-log.txt" && break
+  sleep 1
+done
+cat "$work/firewall-log.txt"
+[ "$firewall_ready" = yes ] || { echo 'Firewall probe did not complete and restore'; exit 1; }
+grep -E 'FIREWALL_DROP_LOOPBACK_WHILE_.*_ALLOWED=true' "$work/firewall-log.txt"
+grep -F 'FIREWALL_ALLOW_LOOPBACK_CONTROL=true' "$work/firewall-log.txt"
+grep -F 'FIREWALL_RESTORED_DISABLED=true' "$work/firewall-log.txt"
 "$adb" logcat -c
 # Restart can disconnect this command; only the guarded app controls the property.
 "$adb" shell am start -n ru.lifanx60.systempropfixture/.MainActivity --ez restart_daemon true > "$work/system-start.txt" 2>&1 || true
@@ -184,6 +200,7 @@ echo "Synthetic baseline properties restored and adbd restarted: $after -> $fina
   echo 'Generic baseline properties:'; cat "$work/baseline.txt"; echo 'Generic baseline shell:'; cat "$work/baseline-id.txt"
   echo 'Same-signature ordinary UID negative control: property unchanged:'; grep -F 'OWN_UID=' "$work/negative-log.txt" | tail -1
   echo 'System UID fixture:'; grep -F 'OWN_UID=' "$work/system-log.txt" | tail -1; grep -F 'SYNTHETIC_ROOT_PROPERTY=' "$work/system-log.txt" | tail -1
+  echo 'System UID firewall probe:'; grep -E 'FIREWALL_DROP_LOOPBACK_WHILE_|FIREWALL_ALLOW_LOOPBACK_CONTROL=|FIREWALL_RESTORED_DISABLED=' "$work/firewall-log.txt"
   echo "adbd PID changed in emulator: $before -> $after"; cat "$work/listener.txt"
   echo "Synthetic baseline properties restored and adbd PID changed again: $after -> $final"
   echo 'Emulator uses qemud transport; this does not test whether a physical device will listen on TCP.'
