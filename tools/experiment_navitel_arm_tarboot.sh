@@ -143,7 +143,7 @@ cleanup() {
   fi
   [ -z "$pid" ] || kill "$pid" 2>/dev/null || true
   sudo pkill -TERM -u emulatorlab 2>/dev/null || true
-  for m in "$work/copy-extra-dest" "$work/copy-dest" "$work/copy-source"; do
+  for m in "$work/copy-stream-small" "$work/copy-stream-plus" "$work/copy-extra-dest" "$work/copy-dest" "$work/copy-source"; do
     if mountpoint -q "$m"; then sudo umount "$m" || echo "Cannot unmount isolated lab path: $m"; fi
   done
   if [ "$strategy" = stream ]; then cleanup_stock_formatter; fi
@@ -741,6 +741,57 @@ run_lab_tar /fixture/dest -xvf /fixture/dest/data.tar > "$work/plus-extract.log"
 [ "$plus_extract_rc" -ne 0 ] || { echo 'Expected insufficient space with added fixture not observed'; exit 1; }
 grep -F 'No space left on device' "$work/plus-extract.log" > "$work/plus-error.txt"
 
+if [ "$strategy" = stream ]; then
+  # Positive contrast: stream the exact same +32 MiB source to a fresh 512 MiB
+  # target. Both targets use the same stock-derived formatter; no archive is
+  # saved on the target. This does not change the baseline image to be booted.
+  mkdir "$work/copy-stream-plus" "$work/copy-stream-small"
+  test ! -e "$work/synthetic-p5-stream-plus.img" && test ! -L "$work/synthetic-p5-stream-plus.img"
+  truncate -s 512M "$work/synthetic-p5-stream-plus.img"
+  format_stock_image "$work/synthetic-p5-stream-plus.img" stream-plus
+  sudo mount -t ext4 -o loop "$work/synthetic-p5-stream-plus.img" "$work/copy-stream-plus"
+  [ "$(findmnt -n -o FSTYPE --target "$work/copy-stream-plus")" = ext4 ]
+  sudo chown "$(id -u):$(id -g)" "$work/copy-stream-plus"
+  lab_source="$work/copy-plus"; lab_dest="$work/copy-stream-plus"
+  set +e
+  run_lab_tar /fixture/source -cf - ./. 2> "$work/stream-plus-create.log" | run_lab_tar /fixture/dest -xvf - > "$work/stream-plus-extract.log" 2>&1
+  plus_stream_rc=("${PIPESTATUS[@]}")
+  set -e
+  [ "${plus_stream_rc[0]}" = 0 ] && [ "${plus_stream_rc[1]}" = 0 ] || { echo 'Stream +32 MiB copy failed'; tail -30 "$work/stream-plus-create.log" "$work/stream-plus-extract.log"; exit 1; }
+  sudo test ! -e "$work/copy-stream-plus/data.tar"
+  for p in system/packages.xml app/com.navitel-1.apk data/com.navitel/files/lab-marker.txt data/com.navitel/shared_prefs/x60_lab_probe.xml data/ru.lifanx60.backupfixture/files/lab-marker.txt data/ru.lifanx60.backupfixture/shared_prefs/lab_probe.xml x60-synthetic-extra/extra.bin; do
+    sudo cmp "$work/copy-plus/$p" "$work/copy-stream-plus/$p" || { echo "Stream +32 MiB mismatch: $p"; exit 1; }
+    [ "$(sudo stat -c '%u:%g %a' "$work/copy-plus/$p")" = "$(sudo stat -c '%u:%g %a' "$work/copy-stream-plus/$p")" ] || { echo "Stream +32 MiB metadata mismatch: $p"; exit 1; }
+    echo "MATCH $p content uid gid mode"
+  done > "$work/stream-plus-checks.txt"
+  python3 - "$work/copy-stream-plus" <<'PY2' > "$work/stream-plus-statvfs.txt"
+import os, sys
+s = os.statvfs(sys.argv[1])
+print('Blocks free including reserved (KiB):', s.f_bfree * s.f_frsize // 1024)
+print('Blocks available to unprivileged users (KiB):', s.f_bavail * s.f_frsize // 1024)
+PY2
+  sudo umount "$work/copy-stream-plus"
+  e2fsck -fn "$work/synthetic-p5-stream-plus.img" > "$work/stream-plus-fsck.txt" 2>&1
+
+  # Explicit failure control: a fresh, stock-formatted 64 MiB target is too
+  # small. Capture both pipeline exits, and require a real write-space error.
+  test ! -e "$work/synthetic-p5-stream-small.img" && test ! -L "$work/synthetic-p5-stream-small.img"
+  truncate -s 64M "$work/synthetic-p5-stream-small.img"
+  format_stock_image "$work/synthetic-p5-stream-small.img" stream-small
+  sudo mount -t ext4 -o loop "$work/synthetic-p5-stream-small.img" "$work/copy-stream-small"
+  [ "$(findmnt -n -o FSTYPE --target "$work/copy-stream-small")" = ext4 ]
+  sudo chown "$(id -u):$(id -g)" "$work/copy-stream-small"
+  lab_dest="$work/copy-stream-small"
+  set +e
+  run_lab_tar /fixture/source -cf - ./. 2> "$work/stream-small-create.log" | run_lab_tar /fixture/dest -xvf - > "$work/stream-small-extract.log" 2>&1
+  small_stream_rc=("${PIPESTATUS[@]}")
+  set -e
+  [ "${small_stream_rc[1]}" != 0 ] || { echo 'Small-target stream was not rejected'; exit 1; }
+  grep -Fq 'No space left on device' "$work/stream-small-extract.log" || { echo 'Small-target failure is not ENOSPC'; exit 1; }
+  sudo umount "$work/copy-stream-small"
+  e2fsck -fn "$work/synthetic-p5-stream-small.img" > "$work/stream-small-fsck.txt" 2>&1
+fi
+
 echo 'LAB ONLY: start same disposable ARM AVD from the extracted synthetic image'
 # A fixed synthetic witness exists only on the extracted image. It proves
 # the emulator did not silently fall back to the original AVD userdata.
@@ -937,6 +988,12 @@ check_synthetic tarbootnav
   cat "$work/copy-statvfs.txt"
   echo "Negative control on fresh 512 MiB image: copied baseline snapshot plus one synthetic 32 MiB file, tar create exit $plus_create_rc, extraction exit $plus_extract_rc with No space left on device."
   echo 'This artificial addition is not a claim about installed apps or capacity on the head unit.'
+  if [ "$strategy" = stream ]; then
+    echo "Contrast: the identical +32 MiB synthetic source streamed to a stock-formatted 512 MiB image; producer/consumer exits ${plus_stream_rc[0]}/${plus_stream_rc[1]}, no target archive."
+    cat "$work/stream-plus-checks.txt" "$work/stream-plus-statvfs.txt"
+    echo "Negative control: streaming that source to a fresh stock-formatted 64 MiB image failed with ENOSPC; producer/consumer exits ${small_stream_rc[0]}/${small_stream_rc[1]}."
+    echo 'A failed stream leaves a partial destination; no recovery or safe physical-device procedure is established.'
+  fi
   echo 'Only listed files and metadata were compared; tar exit 0 is not proof all app data, xattrs, SELinux labels, sparse data, or timestamps were preserved.'
   echo 'The stock updater declares DATA_SIZE=512 with sfdisk -uM for logical p5; actual head-unit size, free space, other apps and runtime sequence remain unknown.'
   echo '## Boot from extracted virtual image'

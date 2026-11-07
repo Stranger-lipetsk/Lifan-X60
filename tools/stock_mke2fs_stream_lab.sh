@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Source only from the guarded disposable CI experiment. This formats ONLY a
-# validated newly-created 512 MiB regular-file loop, never a device image.
+# validated newly-created fixed-size regular-file loop, never a device image.
 [ "${GITHUB_ACTIONS:-}" = true ] || { echo 'CI disposable image only'; exit 1; }
 : "${work:?}" "${GITHUB_RUN_ID:?}"
 stock_loop=''
@@ -28,9 +28,13 @@ PY
   sudo chown 0:0 "$work/formatter-properties"; sudo chmod 0444 "$work/formatter-properties"
 }
 format_stock_image() {
-  local target=$1 label=$2 backing rc=0
-  case "$target" in "$work/synthetic-p5.img"|"$work/synthetic-p5-plus.img") ;; *) echo 'Unexpected image path'; return 1;; esac
-  [ -f "$target" ] && [ ! -L "$target" ] && [ "$(stat -c %s "$target")" = 536870912 ] || return 1
+  local target=$1 label=$2 backing size rc=0
+  case "$target" in
+    "$work/synthetic-p5.img"|"$work/synthetic-p5-plus.img"|"$work/synthetic-p5-stream-plus.img") size=536870912 ;;
+    "$work/synthetic-p5-stream-small.img") size=67108864 ;;
+    *) echo 'Unexpected image path'; return 1;;
+  esac
+  [ -f "$target" ] && [ ! -L "$target" ] && [ "$(stat -c %s "$target")" = "$size" ] || return 1
   # Only a freshly created, still-blank regular file is allowed.
   [ "$(od -An -tx1 -N16 "$target" | tr -d ' 0\n')" = '' ] || { echo 'Synthetic image is not blank'; return 1; }
   stock_loop=$(timeout -k 5 30 sudo losetup --find --show "$target")
