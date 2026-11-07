@@ -35,7 +35,8 @@ class GuardsTest(unittest.TestCase):
         s = (ROOT / 'tools/experiment_system_property_adb_lab.sh').read_text()
         for part in ('GITHUB_ACTIONS:-', 'iptables -I OUTPUT', 'ip6tables -I OUTPUT',
                      'restarted=no', 'Guest TCP listener', 'no head unit',
-                     '--ez firewall_probe true', 'FIREWALL_RESTORED_DISABLED=true'):
+                     '--ez firewall_probe true', 'emu redir add',
+                     'FIREWALL_REMOTE_INTERFACE_ACCEPTED=true', 'FIREWALL_RESTORED_DISABLED=true'):
             self.assertIn(part, s)
 
 if __name__ == '__main__': unittest.main()

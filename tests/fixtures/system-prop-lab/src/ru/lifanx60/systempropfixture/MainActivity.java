@@ -117,6 +117,7 @@ public final class MainActivity extends Activity {
                 server.setReuseAddress(true);
                 server.bind(new java.net.InetSocketAddress(java.net.InetAddress.getByName("0.0.0.0"), 0));
                 int port = server.getLocalPort();
+                server.setSoTimeout(12000);
                 enabled = true;
                 setEnabled.invoke(service, true);
                 setInterface.invoke(service, external, true);
@@ -125,6 +126,10 @@ public final class MainActivity extends Activity {
                 Log.i(TAG, "FIREWALL_DROP_LOOPBACK_WHILE_" + external + "_ALLOWED=" + blockedLoopback);
                 Log.i(TAG, "FIREWALL_DROP_OWN_INTERFACE_ADDRESS=" + blockedOwnAddress + " address=" + externalAddress);
                 if (!blockedLoopback || !blockedOwnAddress) { Log.e(TAG, "FIREWALL_LOCAL_ACCESS_NOT_BLOCKED"); return; }
+                Log.i(TAG, "FIREWALL_REMOTE_WAITING_PORT=" + port + " interface=" + external);
+                boolean remoteAccepted = acceptRemotePeer(server);
+                Log.i(TAG, "FIREWALL_REMOTE_INTERFACE_ACCEPTED=" + remoteAccepted);
+                if (!remoteAccepted) Log.e(TAG, "FIREWALL_REMOTE_INTERFACE_PROBE_FAILED");
                 setInterface.invoke(service, "lo", true);
                 boolean allowed = loopbackConnects("127.0.0.1", port);
                 Log.i(TAG, "FIREWALL_ALLOW_LOOPBACK_CONTROL=" + allowed);
@@ -152,6 +157,26 @@ public final class MainActivity extends Activity {
                 }
             }
         }
+    }
+
+    private boolean acceptRemotePeer(final java.net.ServerSocket server) throws InterruptedException {
+        final boolean[] accepted = new boolean[] { false };
+        Thread probe = new Thread(new Runnable() {
+            @Override public void run() {
+                try {
+                    java.net.Socket remote = server.accept();
+                    try {
+                        remote.getOutputStream().write("X60_FW_OK\n".getBytes("US-ASCII"));
+                        remote.getOutputStream().flush();
+                        accepted[0] = true;
+                    } finally { remote.close(); }
+                } catch (java.io.IOException ignored) { accepted[0] = false; }
+            }
+        }, "x60-firewall-remote-probe");
+        probe.start();
+        probe.join(13000);
+        if (probe.isAlive()) probe.interrupt();
+        return accepted[0];
     }
 
     private boolean loopbackConnects(final String host, final int port) throws InterruptedException {

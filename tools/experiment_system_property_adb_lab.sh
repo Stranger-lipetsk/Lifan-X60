@@ -22,7 +22,7 @@ sudo useradd --system --create-home --user-group systemproplab
 emu_uid=$(id -u systemproplab)
 sudo chown -R systemproplab:systemproplab "$ANDROID_AVD_HOME"
 [ ! -e /dev/kvm ] || sudo chmod a+rw /dev/kvm
-pid=''; blocked4=no; blocked6=no
+pid=''; blocked4=no; blocked6=no; redir_port=''
 cleanup() {
   status=$?
   if [ "$status" != 0 ]; then
@@ -31,6 +31,7 @@ cleanup() {
     timeout -k 5 10 "$adb" devices -l || true
     timeout -k 5 20 "$adb" logcat -d -v brief 2>/dev/null | grep -iE 'X60SystemPropLab|PackageManager|FATAL EXCEPTION' | tail -80 || true
   fi
+  if [ -n "$redir_port" ]; then "$adb" emu redir del "tcp:$redir_port" >/dev/null 2>&1 || true; fi
   sudo pkill -TERM -u systemproplab 2>/dev/null || true
   [ "$blocked4" != yes ] || sudo iptables -D OUTPUT -m owner --uid-owner "$emu_uid" ! -d 127.0.0.0/8 -j REJECT || true
   [ "$blocked6" != yes ] || sudo ip6tables -D OUTPUT -m owner --uid-owner "$emu_uid" ! -d ::1/128 -j REJECT || true
@@ -130,13 +131,39 @@ echo 'Disposable system-UID-only firewall probe: default-deny, external interfac
 firewall_ready=no
 for i in $(seq 1 45); do
   timeout -k 3 5 "$adb" logcat -d -s X60SystemPropLab:I '*:S' > "$work/firewall-log.txt" 2>&1 || true
-  grep -q 'FIREWALL_RESTORED_DISABLED=true' "$work/firewall-log.txt" && { firewall_ready=yes; break; }
+  grep -q 'FIREWALL_REMOTE_WAITING_PORT=' "$work/firewall-log.txt" && { firewall_ready=yes; break; }
   grep -q 'FIREWALL_PROBE_ERROR\|FIREWALL_REFUSED' "$work/firewall-log.txt" && break
   sleep 1
 done
+[ "$firewall_ready" = yes ] || { cat "$work/firewall-log.txt"; echo 'Firewall probe did not become ready'; exit 1; }
+guest_port=$(sed -n 's/.*FIREWALL_REMOTE_WAITING_PORT=\([0-9][0-9]*\).*/\1/p' "$work/firewall-log.txt" | tail -1)
+test -n "$guest_port"
+redir_port=$(python3 - <<'PYPORT'
+import socket
+s=socket.socket(); s.bind(('127.0.0.1',0)); print(s.getsockname()[1]); s.close()
+PYPORT
+)
+"$adb" emu redir add "tcp:$redir_port:$guest_port"
+python3 - "$redir_port" <<'PYCLIENT'
+import socket, sys
+s=socket.create_connection(('127.0.0.1', int(sys.argv[1])), timeout=5)
+data=s.recv(64); s.close()
+if data != b'X60_FW_OK\n': raise SystemExit('Unexpected isolated emulator response: %r' % data)
+print('Host-loopback forwarded peer received the guest socket response')
+PYCLIENT
+"$adb" emu redir del "tcp:$redir_port"
+redir_port=''
+firewall_done=no
+for i in $(seq 1 20); do
+  timeout -k 3 5 "$adb" logcat -d -s X60SystemPropLab:I '*:S' > "$work/firewall-log.txt" 2>&1 || true
+  grep -q 'FIREWALL_RESTORED_DISABLED=true' "$work/firewall-log.txt" && { firewall_done=yes; break; }
+  sleep 1
+done
 cat "$work/firewall-log.txt"
-[ "$firewall_ready" = yes ] || { echo 'Firewall probe did not complete and restore'; exit 1; }
+[ "$firewall_done" = yes ] || { echo 'Firewall probe did not complete and restore'; exit 1; }
 grep -E 'FIREWALL_DROP_LOOPBACK_WHILE_.*_ALLOWED=true' "$work/firewall-log.txt"
+grep -F 'FIREWALL_DROP_OWN_INTERFACE_ADDRESS=true' "$work/firewall-log.txt"
+grep -F 'FIREWALL_REMOTE_INTERFACE_ACCEPTED=true' "$work/firewall-log.txt"
 grep -F 'FIREWALL_ALLOW_LOOPBACK_CONTROL=true' "$work/firewall-log.txt"
 grep -F 'FIREWALL_RESTORED_DISABLED=true' "$work/firewall-log.txt"
 "$adb" logcat -c
@@ -200,7 +227,7 @@ echo "Synthetic baseline properties restored and adbd restarted: $after -> $fina
   echo 'Generic baseline properties:'; cat "$work/baseline.txt"; echo 'Generic baseline shell:'; cat "$work/baseline-id.txt"
   echo 'Same-signature ordinary UID negative control: property unchanged:'; grep -F 'OWN_UID=' "$work/negative-log.txt" | tail -1
   echo 'System UID fixture:'; grep -F 'OWN_UID=' "$work/system-log.txt" | tail -1; grep -F 'SYNTHETIC_ROOT_PROPERTY=' "$work/system-log.txt" | tail -1
-  echo 'System UID firewall probe:'; grep -E 'FIREWALL_DROP_LOOPBACK_WHILE_|FIREWALL_DROP_OWN_INTERFACE_ADDRESS=|FIREWALL_ALLOW_LOOPBACK_CONTROL=|FIREWALL_RESTORED_DISABLED=' "$work/firewall-log.txt"
+  echo 'System UID firewall probe:'; grep -E 'FIREWALL_DROP_LOOPBACK_WHILE_|FIREWALL_DROP_OWN_INTERFACE_ADDRESS=|FIREWALL_REMOTE_INTERFACE_ACCEPTED=|FIREWALL_ALLOW_LOOPBACK_CONTROL=|FIREWALL_RESTORED_DISABLED=' "$work/firewall-log.txt"
   echo "adbd PID changed in emulator: $before -> $after"; cat "$work/listener.txt"
   echo "Synthetic baseline properties restored and adbd PID changed again: $after -> $final"
   echo 'Emulator uses qemud transport; this does not test whether a physical device will listen on TCP.'
