@@ -41,7 +41,9 @@ cp /usr/bin/qemu-arm-static "$work/root/qemu-arm-static"
 chmod 0755 "$work/root/qemu-arm-static" "$work/root/sbin/adbd" "$work/root/system/bin/"{linker,toolbox}
 printf 'FROM scratch\nCOPY . /\n' > "$work/root/Dockerfile"
 docker build -q -t "x60-adbd-synthetic-${GITHUB_RUN_ID}" "$work/root"
-mkdir -p reports "$work/java-classes"
+mkdir -p reports "$work/java-classes" "$work/public"
+cp tools/probe_synthetic_adbd_sync.py "$work/public/probe_synthetic_adbd_sync.py"
+chmod 0755 "$work/public"; chmod 0444 "$work/public/probe_synthetic_adbd_sync.py"
 "${JAVA_HOME:?}/bin/javac" -source 8 -target 8 -d "$work/java-classes" tests/fixtures/adbd-sync-client/src/ru/lifanx60/adbsynclab/SyntheticSyncClient.java
 {
   echo '# Stock-derived ARM adbd: isolated container and synthetic properties'
@@ -92,7 +94,7 @@ PYLIST
     client_uid=$(sudo nsenter -t "$pid" -n -- setpriv --reuid 12345 --regid 12345 --clear-groups --no-new-privs id -u)
     [ "$client_uid" = 12345 ]
     echo "Loopback test client host UID: $client_uid" | tee -a "$work/result.txt"
-    timeout -k 5 30 sudo nsenter -t "$pid" -n -- setpriv --reuid 12345 --regid 12345 --clear-groups --no-new-privs python3 tools/probe_synthetic_adbd_sync.py "$mode" | tee -a "$work/result.txt"
+    timeout -k 5 30 sudo nsenter -t "$pid" -n -- setpriv --reuid 12345 --regid 12345 --clear-groups --no-new-privs python3 "$work/public/probe_synthetic_adbd_sync.py" "$mode" | tee -a "$work/result.txt"
     timeout -k 5 30 sudo nsenter -t "$pid" -n -- setpriv --reuid 12345 --regid 12345 --clear-groups --no-new-privs "$JAVA_HOME/bin/java" -cp "$work/java-classes" ru.lifanx60.adbsynclab.SyntheticSyncClient "$mode" | tee -a "$work/result.txt"
   fi
   grep -E '^(Name|Uid|Gid|CapEff):' "/proc/$pid/status" | tee -a "$work/result.txt"
