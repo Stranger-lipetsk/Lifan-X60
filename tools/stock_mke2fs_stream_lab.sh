@@ -30,7 +30,7 @@ PY
 format_stock_image() {
   local target=$1 label=$2 backing size rc=0
   case "$target" in
-    "$work/synthetic-p5.img"|"$work/synthetic-p5-plus.img"|"$work/synthetic-p5-stream-plus.img") size=536870912 ;;
+    "$work/synthetic-p5.img"|"$work/synthetic-p5-plus.img"|"$work/synthetic-p5-stream-plus.img"|"$work/gnu-dest.img") size=536870912 ;;
     "$work/synthetic-p5-stream-small.img") size=67108864 ;;
     *) echo 'Unexpected image path'; return 1;;
   esac

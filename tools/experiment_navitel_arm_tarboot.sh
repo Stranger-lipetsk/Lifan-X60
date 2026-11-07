@@ -146,7 +146,7 @@ cleanup() {
   fi
   [ -z "$pid" ] || kill "$pid" 2>/dev/null || true
   sudo pkill -TERM -u emulatorlab 2>/dev/null || true
-  for m in "$work/copy-stream-small" "$work/copy-stream-plus" "$work/copy-extra-dest" "$work/copy-dest" "$work/external-backup" "$work/copy-source"; do
+  for m in "$work/gnu-dest" "$work/copy-stream-small" "$work/copy-stream-plus" "$work/copy-extra-dest" "$work/copy-dest" "$work/external-backup" "$work/copy-source"; do
     if mountpoint -q "$m"; then sudo umount "$m" || echo "Cannot unmount isolated lab path: $m"; fi
   done
   if [ "$strategy" != archive ]; then cleanup_stock_formatter; fi
@@ -711,6 +711,23 @@ for p in system/packages.xml app/com.navitel-1.apk data/com.navitel/files/lab-ma
 done > "$work/copy-checks.txt"
 if [ "$strategy" = external ]; then
   sudo python3 tools/compare_offline_snapshot_trees.py "$work/copy-source" "$work/copy-dest" | tee "$work/extracted-tree-compare.txt"
+  # Comparison only: host GNU tar is NOT a binary or procedure for the GU.
+  # Both archive and destination are disposable synthetic files made above.
+  echo 'LAB ONLY: host GNU tar xattr/ACL preservation comparison'
+  sudo tar --xattrs --xattrs-include='*' --acls --numeric-owner -cpf "$work/external-backup/gnu.tar" -C "$work/copy-source" . 2> "$work/gnu-create.txt"
+  truncate -s 512M "$work/gnu-dest.img"
+  format_stock_image "$work/gnu-dest.img" gnu-dest
+  sudo mkdir -p "$work/gnu-dest"
+  sudo mount -o loop "$work/gnu-dest.img" "$work/gnu-dest"
+  set +e
+  sudo tar --xattrs --xattrs-include='*' --acls --numeric-owner -xpf "$work/external-backup/gnu.tar" -C "$work/gnu-dest" > "$work/gnu-extract.txt" 2>&1
+  gnu_status=$?
+  set -e
+  { echo "Host GNU tar extract exit: $gnu_status"; tail -n 20 "$work/gnu-extract.txt"; } > "$work/gnu-result.txt"
+  sudo python3 tools/compare_offline_snapshot_trees.py "$work/copy-source" "$work/gnu-dest" | tee "$work/gnu-compare.txt"
+  sudo umount "$work/gnu-dest"
+  rm -f "$work/gnu-dest.img"
+  sudo rm -f "$work/external-backup/gnu.tar"
 fi
 sudo du -sk "$work/copy-source" "$work/copy-dest" > "$work/copy-sizes.txt"
 if [ "$strategy" = archive ]; then sudo du -sk "$work/copy-dest/data.tar" >> "$work/copy-sizes.txt"; fi
@@ -999,6 +1016,9 @@ check_synthetic tarbootnav
       echo "External FAT backup tar create exit $create_rc; verified by digest before and after remount. Extraction exit $extract_rc; no data.tar on destination."
       cat "$work/external-verify.txt" "$work/external-corruption-gate.txt" "$work/external-df.txt"
       echo 'Aggregate comparison of the entire supported offline source tree with extracted target:'; cat "$work/extracted-tree-compare.txt"
+      echo 'Comparison only: host GNU tar with xattrs/ACL, same source and a separate stock-formatted synthetic target:'
+      cat "$work/gnu-result.txt" "$work/gnu-compare.txt"
+      echo 'Host GNU tar is not validated or available as a solution on the real head unit.'
       echo 'Backup creation used root-equivalent isolated container and offline source; ordinary GU app access, FAT behavior and power-loss durability are unknown.'
     else
       echo "Streaming copy: tar producer exit $create_rc; tar consumer exit $extract_rc; no data.tar on destination."

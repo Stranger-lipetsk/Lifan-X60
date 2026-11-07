@@ -57,6 +57,8 @@ def compare(source, dest):
             counts['content_mismatch'] += 1
         if (ast.st_uid, ast.st_gid, stat.S_IMODE(ast.st_mode)) != (bst.st_uid, bst.st_gid, stat.S_IMODE(bst.st_mode)):
             counts['metadata_mismatch_' + kind] += 1
+            if kind == 'dirs':
+                print(f'Synthetic directory metadata mismatch {key!r}: source={ast.st_uid}:{ast.st_gid} {stat.S_IMODE(ast.st_mode):04o}, target={bst.st_uid}:{bst.st_gid} {stat.S_IMODE(bst.st_mode):04o}')
         try:
             ax, bx = attrs(a), attrs(b)
         except OSError:
@@ -80,8 +82,12 @@ def main():
         print(f'{key}: {counts[key]}')
     print('Source xattr names (aggregate counts):', dict(sorted(names.items())))
     print('Special files excluded. This does not prove consistency against live writes or real-device SELinux behavior.')
-    if any(counts[k] for k in ('missing', 'extra', 'type_mismatch', 'content_mismatch', 'metadata_mismatch_files', 'metadata_mismatch_dirs')):
-        raise SystemExit('Regular files/directories did not match after extraction')
+    if any(counts[k] for k in ('missing', 'extra', 'type_mismatch', 'content_mismatch')):
+        raise SystemExit('FAIL: source tree paths or contents did not match')
+    if any(counts[k] for k in ('metadata_mismatch_files', 'metadata_mismatch_dirs', 'metadata_mismatch_symlinks', 'xattr_mismatch', 'xattr_read_errors')):
+        print('FIDELITY FAIL: metadata/xattrs differ or could not be read; not an exact backup.')
+    else:
+        print('Compared file/directory/symlink content, uid/gid/mode and readable xattrs match; other metadata and special files remain untested.')
 
 
 if __name__ == '__main__': main()

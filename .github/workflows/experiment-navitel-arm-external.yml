@@ -22,6 +22,7 @@ jobs:
           bash -n tools/experiment_navitel_arm_tarboot.sh
           bash -n tools/stock_mke2fs_stream_lab.sh
           bash -n tools/external_backup_ci_lab.sh
+          tar --version | head -1
           python3 -m unittest discover -s tests -p 'test_check_offline_tar_snapshot.py' -v
           python3 -m unittest discover -s tests -p 'test_compare_offline_snapshot_trees.py' -v
           python3 -m unittest discover -s tests -p 'test_compare_resigned_apk.py' -v
