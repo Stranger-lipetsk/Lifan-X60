@@ -1,0 +1,1 @@
+Run the static Bluetooth audit against the published file-manager-test release asset. Do not upload binary artifacts; commit only the text report.

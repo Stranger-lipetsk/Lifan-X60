@@ -1,0 +1,65 @@
+name: Static Bluetooth audit of published release
+
+on:
+  push:
+    paths:
+      - '.github/workflows/audit-bt-release.yml'
+      - 'tools/audit_bt_release_asset.sh'
+      - 'autoanalysis/probe-release-bt.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Install extraction tools
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq e2fsprogs unzip binutils
+
+      - name: Download the selected release asset on the GitHub runner
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/bt-audit"
+          gh release download file-manager-test-20261105 \
+            --repo "$GITHUB_REPOSITORY" \
+            --pattern lifan-file-manager-test.zip \
+            --dir "$RUNNER_TEMP/bt-audit"
+
+      - name: Extract and inspect BT components; do not upload binaries
+        run: |
+          bash tools/audit_bt_release_asset.sh \
+            "$RUNNER_TEMP/bt-audit/lifan-file-manager-test.zip" \
+            reports/bt-release-static-audit.txt
+
+      - name: Commit text report to this branch only
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [[ ! -s reports/bt-release-static-audit.txt ]]; then
+            echo 'No report was produced; no commit.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/bt-release-static-audit.txt
+          git diff --cached --quiet && exit 0
+          git commit -m 'report: inspect Bluetooth components in published firmware'
+          for attempt in 1 2 3 4 5; do
+            if git pull --rebase --autostash origin "$GITHUB_REF_NAME" >/dev/null 2>&1 && \
+               git push origin "HEAD:refs/heads/$GITHUB_REF_NAME"; then
+              exit 0
+            fi
+            sleep 10
+            git rebase --abort >/dev/null 2>&1 || true
+          done
+          echo 'Unable to push text report to the triggering branch.' >&2
+          exit 1
