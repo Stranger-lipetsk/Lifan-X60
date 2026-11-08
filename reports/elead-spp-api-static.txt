@@ -1,0 +1,23 @@
+# Elead SPP API static inspection
+Scope: manifest and DEX only; no APK is installed or executed.
+This is reconnaissance for a removable, non-system bridge; not proof of runtime behavior.
+Archive: lifan-file-manager-test.zip
+Archive SHA-256: 4be81211994221e80e401ce712ce484b5320156902fff3707737b73e3945d17f
+Expected archive SHA-256: 4be81211994221e80e401ce712ce484b5320156902fff3707737b73e3945d17f
+system.img SHA-256: a660f062716fd42d5a6185faec059f42675b3024304de7b81fac5d705cc88511
+Expected system.img SHA-256: a660f062716fd42d5a6185faec059f42675b3024304de7b81fac5d705cc88511
+
+## /app/EL831CLF01_elBTService_2016.09.05.01.apk
+bytes=753892 sha256=18b7059115ff43e4bae5ec6322ca2ca6919b9c848b2c25433037d3bcad023a53
+ERROR parsing APK: KeyError: 'Name'
+
+## /app/EL831CLF01_elBluetoothSetup_2016.12.13.01.apk
+bytes=912852 sha256=1910a568508d8c255bddaea83ea7bfaedf4ea56a57c1c52f0b3536f3b94f6a95
+ERROR parsing APK: KeyError: 'Name'
+
+## /app/EL831CLF01_elBluetoothPhone_2016.12.13.01.apk
+bytes=1139049 sha256=36c2c3a2185b10c3c7685b2842749a1a6565b2015a862631c86ae52ef2277417
+ERROR parsing APK: KeyError: 'Name'
+
+## Safety boundary
+Do not bind to this vendor service or transmit pairing/OBD requests until service export, permission, transaction signatures, and lifecycle behavior are verified. A later bridge should be a normal removable app, must not replace Bluetooth/framework files, and must not auto-start or interfere with HFP/A2DP calls.
