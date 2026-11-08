@@ -81,6 +81,7 @@ def dex_inventory(apk: APK) -> list[str]:
         "com/nforetek/bt/aidl/infcommandspp",
         "com/nforetek/bt/aidl/infcallbackspp",
         "com/nforetek/bt/aidl/ielbluetoothservice",
+        "com/nforetek/bt/aidl/ielbluetoothservicecallback",
         "tw/com/elead/el830/elbluetooth/elbluetoothservice",
     )
     code_markers = (
@@ -88,13 +89,16 @@ def dex_inventory(apk: APK) -> list[str]:
         "infcommandspp$stub$proxy",
         "infcallbackspp$stub",
         "ielbluetoothservice$stub",
+        "ielbluetoothservicecallback$stub",
+        "elbluetoothservice$2",
         "elbluetoothservice$3",
         "elbluetoothservice$11",
         "tw/com/elead/el830/elbluetooth/elbluetoothservice;",
     )
     method_markers = (
         "spp", "btpair", "btpaired", "ontransact", "asinterface",
-        "asbinder", "ondestroy", "oncreate", "onbind",
+        "asbinder", "ondestroy", "oncreate", "onbind", "onreceive",
+        "registerelbtcallback", "createbond",
     )
     for raw in apk.get_all_dex():
         dex = DEX(raw)
