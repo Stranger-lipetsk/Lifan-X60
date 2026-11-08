@@ -10,7 +10,7 @@ Torque's APK uses `java.net.Socket(host, port)` for its Wi-Fi OBD transport. The
 
 ## Build and install
 
-The `Build OBD Bluetooth Bridge` GitHub Actions workflow builds a v1-signed API 19-compatible APK and publishes it as a short-lived workflow artifact. It does not add the APK to Git or alter a firmware image. Copy the artifact to a USB drive and install it using the head unit's file manager.
+The `Build OBD Bluetooth Bridge` GitHub Actions workflow builds a v1-signed API 19-compatible APK. GitHub Actions artifact storage for this repository is currently at quota, so the workflow places the small installable APK and its SHA-256 sidecar directly on the active work branch as a delivery fallback. It does not alter a firmware image. Download `bt-bridge/obd-bt-bridge.apk` from the branch, copy it to a USB drive, and install it using the head unit's file manager. The build signing key is temporary; for a future prototype update, uninstall the old bridge app before installing a newly built APK (saved Bluetooth pairing is unaffected).
 
 ## First test
 

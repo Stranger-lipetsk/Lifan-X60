@@ -8,10 +8,11 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build:
+    if: github.ref == 'refs/heads/arena/b12cc9a8-lifan-x60'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -36,12 +37,28 @@ jobs:
           export ANDROID_HOME=${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}
           bash bt-bridge/build.sh
 
-      - name: Upload installable prototype (not committed to Git)
-        uses: actions/upload-artifact@v4
-        with:
-          name: obd-bt-bridge-api19-prototype
-          path: |
-            bt-bridge/build/obd-bt-bridge.apk
-            bt-bridge/build/sha256.txt
-            bt-bridge/build/badging.txt
-          retention-days: 30
+      - name: Publish the small installable APK to this branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          cp bt-bridge/build/obd-bt-bridge.apk bt-bridge/obd-bt-bridge.apk
+          sha256sum bt-bridge/obd-bt-bridge.apk | awk '{print $1 "  obd-bt-bridge.apk"}' > bt-bridge/obd-bt-bridge.apk.sha256
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f -- bt-bridge/obd-bt-bridge.apk bt-bridge/obd-bt-bridge.apk.sha256
+          if git diff --cached --quiet; then
+            echo 'Installable APK is already current.'
+            exit 0
+          fi
+          git commit -m 'build: publish removable OBD Bluetooth bridge APK'
+          for attempt in 1 2 3 4 5; do
+            if git pull --rebase --autostash origin "$GITHUB_REF_NAME" >/dev/null 2>&1 && \
+               git push origin "HEAD:refs/heads/$GITHUB_REF_NAME"; then
+              exit 0
+            fi
+            sleep 10
+            git rebase --abort >/dev/null 2>&1 || true
+          done
+          echo 'Unable to publish the installable APK on the triggering branch.' >&2
+          exit 1
