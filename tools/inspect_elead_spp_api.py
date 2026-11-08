@@ -77,31 +77,49 @@ def format_manifest(apk: APK) -> list[str]:
 def dex_inventory(apk: APK) -> list[str]:
     out: list[str] = []
     total_code_lines = 0
-    for dex_no, raw in enumerate(apk.get_all_dex(), 1):
+    class_markers = (
+        "com/nforetek/bt/aidl/infcommandspp",
+        "com/nforetek/bt/aidl/infcallbackspp",
+        "com/nforetek/bt/aidl/ielbluetoothservice",
+        "tw/com/elead/el830/elbluetooth/elbluetoothservice",
+    )
+    code_markers = (
+        "infcommandspp$stub",
+        "infcommandspp$stub$proxy",
+        "infcallbackspp$stub",
+        "ielbluetoothservice$stub",
+        "elbluetoothservice$3",
+        "elbluetoothservice$11",
+        "tw/com/elead/el830/elbluetooth/elbluetoothservice;",
+    )
+    method_markers = (
+        "spp", "btpair", "btpaired", "ontransact", "asinterface",
+        "asbinder", "ondestroy", "oncreate", "onbind",
+    )
+    for raw in apk.get_all_dex():
         dex = DEX(raw)
         for cls in dex.get_classes():
             name = cls.get_name()
             low = name.lower()
-            if not any(token in low for token in ("com/nforetek/bt/aidl", "com/nforetek/bt/service", "elbluetooth", "/spp")):
+            if not any(token in low for token in class_markers):
                 continue
             methods = list(cls.get_methods())
-            # Skip unrelated classes accidentally matching a broad name unless they
-            # contain a useful command/callback/service identifier.
-            if not methods and "aidl" not in low and "service" not in low:
-                continue
             out.append(f"CLASS {name} extends {cls.get_superclassname()}")
             for method in methods:
+                method_name = method.get_name()
+                if not any(token in method_name.lower() for token in method_markers):
+                    continue
                 descriptor = method.get_descriptor()
                 flags = method.get_access_flags_string()
-                out.append(f"  METHOD {method.get_name()}{descriptor} [{flags}]")
+                out.append(f"  METHOD {method_name}{descriptor} [{flags}]")
                 code = method.get_code()
-                if code is None or not any(mark in name.lower() for mark in ("aidl", "nfservice", "spp")):
+                disassemble = any(token in low for token in code_markers)
+                if code is None or not disassemble:
                     continue
                 try:
-                    instructions = code.get_bc().get_instructions()
                     count = 0
-                    for ins in instructions:
-                        if total_code_lines >= 1200 or count >= 100:
+                    for ins in code.get_bc().get_instructions():
+                        if total_code_lines >= 4000 or count >= 240:
                             out.append("    ... bytecode truncated ...")
                             break
                         output = ins.get_output()
@@ -110,7 +128,7 @@ def dex_inventory(apk: APK) -> list[str]:
                         count += 1
                 except Exception as exc:
                     out.append(f"    (disassembly unavailable: {type(exc).__name__})")
-    return out or ["No matching DEX classes found"]
+    return out or ["No matching SPP/service DEX classes found"]
 
 
 def main() -> int:
