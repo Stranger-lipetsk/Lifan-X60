@@ -160,9 +160,18 @@ def main() -> int:
                 continue
             lines.append(f"bytes={apk_path.stat().st_size} sha256={sha256(apk_path)}")
             try:
-                apk = APK(str(apk_path), skip_analysis=True)
-                lines.append(f"package={apk.get_package()} version={apk.get_androidversion_name()} minSdk={apk.get_min_sdk_version()} targetSdk={apk.get_target_sdk_version()}")
-                lines.append("Bluetooth-related permissions: " + ", ".join(p for p in apk.get_permissions() if "BLUETOOTH" in p or "NFORETEK" in p) )
+                apk = APK(str(apk_path))
+                def safe_value(method_name: str) -> str:
+                    try:
+                        value = getattr(apk, method_name)()
+                        return str(value) if value not in (None, "") else "(unset)"
+                    except Exception:
+                        return "(unset)"
+                lines.append(
+                    f"package={apk.get_package()} version={safe_value('get_androidversion_name')} "
+                    f"minSdk={safe_value('get_min_sdk_version')} targetSdk={safe_value('get_target_sdk_version')}"
+                )
+                lines.append("Bluetooth-related permissions: " + ", ".join(p for p in apk.get_permissions() if "BLUETOOTH" in p or "NFORETEK" in p))
                 lines.extend(format_manifest(apk))
                 lines.append("Relevant DEX classes, method signatures, and selected bytecode:")
                 lines.extend(dex_inventory(apk))
