@@ -1,0 +1,47 @@
+name: Build OBD Bluetooth Bridge
+
+on:
+  push:
+    paths:
+      - 'bt-bridge/**'
+      - '.github/workflows/build-bt-bridge.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Install Android SDK platform and build tools
+        run: |
+          export ANDROID_HOME=${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}
+          yes | sudo "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" \
+            --licenses >/dev/null 2>&1 || true
+          sudo "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --install \
+            'build-tools;34.0.0' 'platforms;android-34'
+
+      - name: Compile and verify API 19 APK
+        run: |
+          export ANDROID_HOME=${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}
+          bash bt-bridge/build.sh
+
+      - name: Upload installable prototype (not committed to Git)
+        uses: actions/upload-artifact@v4
+        with:
+          name: obd-bt-bridge-api19-prototype
+          path: |
+            bt-bridge/build/obd-bt-bridge.apk
+            bt-bridge/build/sha256.txt
+            bt-bridge/build/badging.txt
+          retention-days: 30
