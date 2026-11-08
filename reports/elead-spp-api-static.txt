@@ -40,6 +40,8 @@ CLASS Lcom/nforetek/bt/aidl/IelBluetoothService; extends Ljava/lang/Object;
   METHOD elBTreqSppConnectedDeviceAddressList()V [public abstract]
   METHOD elBTreqSppDisconnect(Ljava/lang/String;)Z [public abstract]
   METHOD elBTreqSppSendData(Ljava/lang/String; [B)V [public abstract]
+  METHOD registerelBTCallback(Ljava/lang/String; Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback;)V [public abstract]
+  METHOD unregisterelBTCallback(Ljava/lang/String; Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback;)V [public abstract]
 CLASS Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback; extends Ljava/lang/Object;
   METHOD onSppAppleIapAuthenticationRequest(Ljava/lang/String;)V [public abstract]
   METHOD onSppDataReceived(Ljava/lang/String; [B)V [public abstract]
@@ -66,6 +68,36 @@ CLASS Ltw/com/elead/el830/elbluetooth/elBluetoothService$24; extends Ljava/lang/
 CLASS Ltw/com/elead/el830/elbluetooth/elBluetoothService$25; extends Ljava/lang/Object;
 CLASS Ltw/com/elead/el830/elbluetooth/elBluetoothService$26; extends Ljava/util/TimerTask;
 CLASS Ltw/com/elead/el830/elbluetooth/elBluetoothService$2; extends Landroid/content/BroadcastReceiver;
+  METHOD onReceive(Landroid/content/Context; Landroid/content/Intent;)V [public]
+    iget-object v1, v3, Ltw/com/elead/el830/elbluetooth/elBluetoothService$2;->this$0 Ltw/com/elead/el830/elbluetooth/elBluetoothService;
+    invoke-static v1, Ltw/com/elead/el830/elbluetooth/elBluetoothService;->access$1(Ltw/com/elead/el830/elbluetooth/elBluetoothService;)Ljava/lang/String;
+    move-result-object v1
+    const-string v2, "+++ Begin of onReceive() +++"
+    invoke-static v1, v2, Landroid/util/Log;->d(Ljava/lang/String; Ljava/lang/String;)I
+    invoke-virtual v5, Landroid/content/Intent;->getAction()Ljava/lang/String;
+    move-result-object v0
+    const-string v1, "android.bluetooth.device.action.PAIRING_REQUEST"
+    invoke-virtual v0, v1, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+    move-result v1
+    if-eqz v1, +00eh
+    iget-object v1, v3, Ltw/com/elead/el830/elbluetooth/elBluetoothService$2;->this$0 Ltw/com/elead/el830/elbluetooth/elBluetoothService;
+    invoke-static v1, Ltw/com/elead/el830/elbluetooth/elBluetoothService;->access$1(Ltw/com/elead/el830/elbluetooth/elBluetoothService;)Ljava/lang/String;
+    move-result-object v1
+    const-string v2, "[BluetoothDevice.ACTION_PAIRING_REQUEST]"
+    invoke-static v1, v2, Landroid/util/Log;->d(Ljava/lang/String; Ljava/lang/String;)I
+    return-void
+    const-string v1, "android.intent.action.SCREEN_ON"
+    invoke-virtual v0, v1, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+    move-result v1
+    if-eqz v1, -007h
+    iget-object v1, v3, Ltw/com/elead/el830/elbluetooth/elBluetoothService$2;->this$0 Ltw/com/elead/el830/elbluetooth/elBluetoothService;
+    invoke-static v1, Ltw/com/elead/el830/elbluetooth/elBluetoothService;->access$1(Ltw/com/elead/el830/elbluetooth/elBluetoothService;)Ljava/lang/String;
+    move-result-object v1
+    const-string v2, "Intent.ACTION_SCREEN_ON"
+    invoke-static v1, v2, Landroid/util/Log;->d(Ljava/lang/String; Ljava/lang/String;)I
+    iget-object v1, v3, Ltw/com/elead/el830/elbluetooth/elBluetoothService$2;->this$0 Ltw/com/elead/el830/elbluetooth/elBluetoothService;
+    invoke-virtual v1, Ltw/com/elead/el830/elbluetooth/elBluetoothService;->loadPreferences()V
+    goto -19h
 CLASS Ltw/com/elead/el830/elbluetooth/elBluetoothService$DeviceInformation; extends Ljava/lang/Object;
 CLASS Ltw/com/elead/el830/elbluetooth/elBluetoothService$processHfpCommand$1; extends Ljava/util/TimerTask;
 CLASS Ltw/com/elead/el830/elbluetooth/elBluetoothService$processHfpCommand; extends Ljava/lang/Object;
@@ -845,6 +877,58 @@ CLASS Lcom/nforetek/bt/aidl/IelBluetoothService$Stub$Proxy; extends Ljava/lang/O
     invoke-virtual v1, Landroid/os/Parcel;->recycle()V
     invoke-virtual v0, Landroid/os/Parcel;->recycle()V
     throw v2
+  METHOD registerelBTCallback(Ljava/lang/String; Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback;)V [public]
+    invoke-static Landroid/os/Parcel;->obtain()Landroid/os/Parcel;
+    move-result-object v0
+    invoke-static Landroid/os/Parcel;->obtain()Landroid/os/Parcel;
+    move-result-object v1
+    const-string v2, "com.nforetek.bt.aidl.IelBluetoothService"
+    invoke-virtual v0, v2, Landroid/os/Parcel;->writeInterfaceToken(Ljava/lang/String;)V
+    invoke-virtual v0, v6, Landroid/os/Parcel;->writeString(Ljava/lang/String;)V
+    if-eqz v7, +01ah
+    invoke-interface v7, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback;->asBinder()Landroid/os/IBinder;
+    move-result-object v2
+    invoke-virtual v0, v2, Landroid/os/Parcel;->writeStrongBinder(Landroid/os/IBinder;)V
+    iget-object v2, v5, Lcom/nforetek/bt/aidl/IelBluetoothService$Stub$Proxy;->mRemote Landroid/os/IBinder;
+    const/4 v3, 1
+    const/4 v4, 0
+    invoke-interface v2, v3, v0, v1, v4, Landroid/os/IBinder;->transact(I Landroid/os/Parcel; Landroid/os/Parcel; I)Z
+    invoke-virtual v1, Landroid/os/Parcel;->readException()V
+    invoke-virtual v1, Landroid/os/Parcel;->recycle()V
+    invoke-virtual v0, Landroid/os/Parcel;->recycle()V
+    return-void
+    const/4 v2, 0
+    goto -15h
+    move-exception v2
+    invoke-virtual v1, Landroid/os/Parcel;->recycle()V
+    invoke-virtual v0, Landroid/os/Parcel;->recycle()V
+    throw v2
+  METHOD unregisterelBTCallback(Ljava/lang/String; Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback;)V [public]
+    invoke-static Landroid/os/Parcel;->obtain()Landroid/os/Parcel;
+    move-result-object v0
+    invoke-static Landroid/os/Parcel;->obtain()Landroid/os/Parcel;
+    move-result-object v1
+    const-string v2, "com.nforetek.bt.aidl.IelBluetoothService"
+    invoke-virtual v0, v2, Landroid/os/Parcel;->writeInterfaceToken(Ljava/lang/String;)V
+    invoke-virtual v0, v6, Landroid/os/Parcel;->writeString(Ljava/lang/String;)V
+    if-eqz v7, +01ah
+    invoke-interface v7, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback;->asBinder()Landroid/os/IBinder;
+    move-result-object v2
+    invoke-virtual v0, v2, Landroid/os/Parcel;->writeStrongBinder(Landroid/os/IBinder;)V
+    iget-object v2, v5, Lcom/nforetek/bt/aidl/IelBluetoothService$Stub$Proxy;->mRemote Landroid/os/IBinder;
+    const/4 v3, 2
+    const/4 v4, 0
+    invoke-interface v2, v3, v0, v1, v4, Landroid/os/IBinder;->transact(I Landroid/os/Parcel; Landroid/os/Parcel; I)Z
+    invoke-virtual v1, Landroid/os/Parcel;->readException()V
+    invoke-virtual v1, Landroid/os/Parcel;->recycle()V
+    invoke-virtual v0, Landroid/os/Parcel;->recycle()V
+    return-void
+    const/4 v2, 0
+    goto -15h
+    move-exception v2
+    invoke-virtual v1, Landroid/os/Parcel;->recycle()V
+    invoke-virtual v0, Landroid/os/Parcel;->recycle()V
+    throw v2
 CLASS Lcom/nforetek/bt/aidl/IelBluetoothService$Stub; extends Landroid/os/Binder;
   METHOD asInterface(Landroid/os/IBinder;)Lcom/nforetek/bt/aidl/IelBluetoothService; [public static]
     if-nez v2, +004h
@@ -1107,17 +1191,419 @@ CLASS Lcom/nforetek/bt/aidl/IelBluetoothService$Stub; extends Landroid/os/Binder
     ... bytecode truncated ...
 CLASS Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub$Proxy; extends Ljava/lang/Object;
   METHOD asBinder()Landroid/os/IBinder; [public]
+    iget-object v0, v1, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub$Proxy;->mRemote Landroid/os/IBinder;
+    return-object v0
   METHOD onSppAppleIapAuthenticationRequest(Ljava/lang/String;)V [public]
+    invoke-static Landroid/os/Parcel;->obtain()Landroid/os/Parcel;
+    move-result-object v0
+    invoke-static Landroid/os/Parcel;->obtain()Landroid/os/Parcel;
+    move-result-object v1
+    const-string v2, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    invoke-virtual v0, v2, Landroid/os/Parcel;->writeInterfaceToken(Ljava/lang/String;)V
+    invoke-virtual v0, v6, Landroid/os/Parcel;->writeString(Ljava/lang/String;)V
+    iget-object v2, v5, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub$Proxy;->mRemote Landroid/os/IBinder;
+    const/16 v3, 91
+    const/4 v4, 0
+    invoke-interface v2, v3, v0, v1, v4, Landroid/os/IBinder;->transact(I Landroid/os/Parcel; Landroid/os/Parcel; I)Z
+    invoke-virtual v1, Landroid/os/Parcel;->readException()V
+    invoke-virtual v1, Landroid/os/Parcel;->recycle()V
+    invoke-virtual v0, Landroid/os/Parcel;->recycle()V
+    return-void
+    move-exception v2
+    invoke-virtual v1, Landroid/os/Parcel;->recycle()V
+    invoke-virtual v0, Landroid/os/Parcel;->recycle()V
+    throw v2
   METHOD onSppDataReceived(Ljava/lang/String; [B)V [public]
+    invoke-static Landroid/os/Parcel;->obtain()Landroid/os/Parcel;
+    move-result-object v0
+    invoke-static Landroid/os/Parcel;->obtain()Landroid/os/Parcel;
+    move-result-object v1
+    const-string v2, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    invoke-virtual v0, v2, Landroid/os/Parcel;->writeInterfaceToken(Ljava/lang/String;)V
+    invoke-virtual v0, v6, Landroid/os/Parcel;->writeString(Ljava/lang/String;)V
+    invoke-virtual v0, v7, Landroid/os/Parcel;->writeByteArray([B)V
+    iget-object v2, v5, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub$Proxy;->mRemote Landroid/os/IBinder;
+    const/16 v3, 89
+    const/4 v4, 0
+    invoke-interface v2, v3, v0, v1, v4, Landroid/os/IBinder;->transact(I Landroid/os/Parcel; Landroid/os/Parcel; I)Z
+    invoke-virtual v1, Landroid/os/Parcel;->readException()V
+    invoke-virtual v1, v7, Landroid/os/Parcel;->readByteArray([B)V
+    invoke-virtual v1, Landroid/os/Parcel;->recycle()V
+    invoke-virtual v0, Landroid/os/Parcel;->recycle()V
+    return-void
+    move-exception v2
+    invoke-virtual v1, Landroid/os/Parcel;->recycle()V
+    invoke-virtual v0, Landroid/os/Parcel;->recycle()V
+    throw v2
   METHOD onSppErrorResponse(Ljava/lang/String; I)V [public]
+    invoke-static Landroid/os/Parcel;->obtain()Landroid/os/Parcel;
+    move-result-object v0
+    invoke-static Landroid/os/Parcel;->obtain()Landroid/os/Parcel;
+    move-result-object v1
+    const-string v2, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    invoke-virtual v0, v2, Landroid/os/Parcel;->writeInterfaceToken(Ljava/lang/String;)V
+    invoke-virtual v0, v6, Landroid/os/Parcel;->writeString(Ljava/lang/String;)V
+    invoke-virtual v0, v7, Landroid/os/Parcel;->writeInt(I)V
+    iget-object v2, v5, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub$Proxy;->mRemote Landroid/os/IBinder;
+    const/16 v3, 87
+    const/4 v4, 0
+    invoke-interface v2, v3, v0, v1, v4, Landroid/os/IBinder;->transact(I Landroid/os/Parcel; Landroid/os/Parcel; I)Z
+    invoke-virtual v1, Landroid/os/Parcel;->readException()V
+    invoke-virtual v1, Landroid/os/Parcel;->recycle()V
+    invoke-virtual v0, Landroid/os/Parcel;->recycle()V
+    return-void
+    move-exception v2
+    invoke-virtual v1, Landroid/os/Parcel;->recycle()V
+    invoke-virtual v0, Landroid/os/Parcel;->recycle()V
+    throw v2
   METHOD onSppSendData(Ljava/lang/String; I)V [public]
+    invoke-static Landroid/os/Parcel;->obtain()Landroid/os/Parcel;
+    move-result-object v0
+    invoke-static Landroid/os/Parcel;->obtain()Landroid/os/Parcel;
+    move-result-object v1
+    const-string v2, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    invoke-virtual v0, v2, Landroid/os/Parcel;->writeInterfaceToken(Ljava/lang/String;)V
+    invoke-virtual v0, v6, Landroid/os/Parcel;->writeString(Ljava/lang/String;)V
+    invoke-virtual v0, v7, Landroid/os/Parcel;->writeInt(I)V
+    iget-object v2, v5, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub$Proxy;->mRemote Landroid/os/IBinder;
+    const/16 v3, 90
+    const/4 v4, 0
+    invoke-interface v2, v3, v0, v1, v4, Landroid/os/IBinder;->transact(I Landroid/os/Parcel; Landroid/os/Parcel; I)Z
+    invoke-virtual v1, Landroid/os/Parcel;->readException()V
+    invoke-virtual v1, Landroid/os/Parcel;->recycle()V
+    invoke-virtual v0, Landroid/os/Parcel;->recycle()V
+    return-void
+    move-exception v2
+    invoke-virtual v1, Landroid/os/Parcel;->recycle()V
+    invoke-virtual v0, Landroid/os/Parcel;->recycle()V
+    throw v2
   METHOD onSppStateChanged(Ljava/lang/String; Ljava/lang/String; I I)V [public]
+    invoke-static Landroid/os/Parcel;->obtain()Landroid/os/Parcel;
+    move-result-object v0
+    invoke-static Landroid/os/Parcel;->obtain()Landroid/os/Parcel;
+    move-result-object v1
+    const-string v2, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    invoke-virtual v0, v2, Landroid/os/Parcel;->writeInterfaceToken(Ljava/lang/String;)V
+    invoke-virtual v0, v6, Landroid/os/Parcel;->writeString(Ljava/lang/String;)V
+    invoke-virtual v0, v7, Landroid/os/Parcel;->writeString(Ljava/lang/String;)V
+    invoke-virtual v0, v8, Landroid/os/Parcel;->writeInt(I)V
+    invoke-virtual v0, v9, Landroid/os/Parcel;->writeInt(I)V
+    iget-object v2, v5, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub$Proxy;->mRemote Landroid/os/IBinder;
+    const/16 v3, 86
+    const/4 v4, 0
+    invoke-interface v2, v3, v0, v1, v4, Landroid/os/IBinder;->transact(I Landroid/os/Parcel; Landroid/os/Parcel; I)Z
+    invoke-virtual v1, Landroid/os/Parcel;->readException()V
+    invoke-virtual v1, Landroid/os/Parcel;->recycle()V
+    invoke-virtual v0, Landroid/os/Parcel;->recycle()V
+    return-void
+    move-exception v2
+    invoke-virtual v1, Landroid/os/Parcel;->recycle()V
+    invoke-virtual v0, Landroid/os/Parcel;->recycle()V
+    throw v2
   METHOD retSppConnectedDeviceAddressList(I [Ljava/lang/String; [Ljava/lang/String;)V [public]
+    invoke-static Landroid/os/Parcel;->obtain()Landroid/os/Parcel;
+    move-result-object v0
+    invoke-static Landroid/os/Parcel;->obtain()Landroid/os/Parcel;
+    move-result-object v1
+    const-string v2, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    invoke-virtual v0, v2, Landroid/os/Parcel;->writeInterfaceToken(Ljava/lang/String;)V
+    invoke-virtual v0, v6, Landroid/os/Parcel;->writeInt(I)V
+    invoke-virtual v0, v7, Landroid/os/Parcel;->writeStringArray([Ljava/lang/String;)V
+    invoke-virtual v0, v8, Landroid/os/Parcel;->writeStringArray([Ljava/lang/String;)V
+    iget-object v2, v5, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub$Proxy;->mRemote Landroid/os/IBinder;
+    const/16 v3, 88
+    const/4 v4, 0
+    invoke-interface v2, v3, v0, v1, v4, Landroid/os/IBinder;->transact(I Landroid/os/Parcel; Landroid/os/Parcel; I)Z
+    invoke-virtual v1, Landroid/os/Parcel;->readException()V
+    invoke-virtual v1, v7, Landroid/os/Parcel;->readStringArray([Ljava/lang/String;)V
+    invoke-virtual v1, v8, Landroid/os/Parcel;->readStringArray([Ljava/lang/String;)V
+    invoke-virtual v1, Landroid/os/Parcel;->recycle()V
+    invoke-virtual v0, Landroid/os/Parcel;->recycle()V
+    return-void
+    move-exception v2
+    invoke-virtual v1, Landroid/os/Parcel;->recycle()V
+    invoke-virtual v0, Landroid/os/Parcel;->recycle()V
+    throw v2
 CLASS Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub; extends Landroid/os/Binder;
   METHOD asInterface(Landroid/os/IBinder;)Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback; [public static]
+    if-nez v2, +004h
+    const/4 v0, 0
+    return-object v0
+    const-string v1, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    invoke-interface v2, v1, Landroid/os/IBinder;->queryLocalInterface(Ljava/lang/String;)Landroid/os/IInterface;
+    move-result-object v0
+    if-eqz v0, +009h
+    instance-of v1, v0, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback;
+    if-eqz v1, +005h
+    check-cast v0, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback;
+    goto -fh
+    new-instance v0, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub$Proxy;
+    invoke-direct v0, v2, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub$Proxy;-><init>(Landroid/os/IBinder;)V
+    goto -15h
   METHOD asBinder()Landroid/os/IBinder; [public]
+    return-object v0
   METHOD onTransact(I Landroid/os/Parcel; Landroid/os/Parcel; I)Z [public]
+    sparse-switch v29, +0000bach
+    invoke-super/range v28 ... v32, Landroid/os/Binder;->onTransact(I Landroid/os/Parcel; Landroid/os/Parcel; I)Z
+    move-result v4
+    return v4
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v31
+    invoke-virtual v0, v4, Landroid/os/Parcel;->writeString(Ljava/lang/String;)V
+    const/4 v4, 1
+    goto -9h
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v30, Landroid/os/Parcel;->readInt()I
+    move-result v5
+    move-object/from16 v0, v28
+    invoke-virtual v0, v5, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onServiceReady(I)V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    goto -1eh
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v30, Landroid/os/Parcel;->readInt()I
+    move-result v5
+    move-object/from16 v0, v28
+    invoke-virtual v0, v5, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onAdapterStateChanged(I)V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    goto -33h
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v30, Landroid/os/Parcel;->readInt()I
+    move-result v5
+    invoke-virtual/range v30, Landroid/os/Parcel;->readInt()I
+    move-result v6
+    move-object/from16 v0, v28
+    invoke-virtual v0, v5, v6, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onAdapterDiscoverableModeChanged(I I)V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    goto -4ch
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v28, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onAdapterDiscoveryStarted()V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    goto -5bh
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v28, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onAdapterDiscoveryFinished()V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    goto -6ah
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v30, Landroid/os/Parcel;->readInt()I
+    move-result v5
+    invoke-virtual/range v30, Landroid/os/Parcel;->createStringArray()[Ljava/lang/String;
+    move-result-object v6
+    invoke-virtual/range v30, Landroid/os/Parcel;->createStringArray()[Ljava/lang/String;
+    move-result-object v7
+    invoke-virtual/range v30, Landroid/os/Parcel;->createIntArray()[I
+    move-result-object v8
+    invoke-virtual/range v30, Landroid/os/Parcel;->createByteArray()[B
+    move-result-object v9
+    move-object/from16 v4, v28
+    invoke-virtual/range v4 ... v9, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->retPairedDevices(I [Ljava/lang/String; [Ljava/lang/String; [I [B)V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    move-object/from16 v0, v31
+    invoke-virtual v0, v6, Landroid/os/Parcel;->writeStringArray([Ljava/lang/String;)V
+    move-object/from16 v0, v31
+    invoke-virtual v0, v7, Landroid/os/Parcel;->writeStringArray([Ljava/lang/String;)V
+    move-object/from16 v0, v31
+    invoke-virtual v0, v8, Landroid/os/Parcel;->writeIntArray([I)V
+    move-object/from16 v0, v31
+    invoke-virtual v0, v9, Landroid/os/Parcel;->writeByteArray([B)V
+    const/4 v4, 1
+    goto/16 -0a3h
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v30, Landroid/os/Parcel;->readString()Ljava/lang/String;
+    move-result-object v5
+    invoke-virtual/range v30, Landroid/os/Parcel;->readString()Ljava/lang/String;
+    move-result-object v6
+    invoke-virtual/range v30, Landroid/os/Parcel;->readByte()B
+    move-result v7
+    move-object/from16 v0, v28
+    invoke-virtual v0, v5, v6, v7, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onDeviceFound(Ljava/lang/String; Ljava/lang/String; B)V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    goto/16 -0c1h
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v30, Landroid/os/Parcel;->readString()Ljava/lang/String;
+    move-result-object v5
+    invoke-virtual/range v30, Landroid/os/Parcel;->readString()Ljava/lang/String;
+    move-result-object v6
+    move-object/from16 v0, v28
+    invoke-virtual v0, v5, v6, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onDevicePaired(Ljava/lang/String; Ljava/lang/String;)V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    goto/16 -0dbh
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v30, Landroid/os/Parcel;->readString()Ljava/lang/String;
+    move-result-object v5
+    invoke-virtual/range v30, Landroid/os/Parcel;->readString()Ljava/lang/String;
+    move-result-object v6
+    move-object/from16 v0, v28
+    invoke-virtual v0, v5, v6, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onDeviceUnpaired(Ljava/lang/String; Ljava/lang/String;)V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    goto/16 -0f5h
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v30, Landroid/os/Parcel;->readString()Ljava/lang/String;
+    move-result-object v5
+    invoke-virtual/range v30, Landroid/os/Parcel;->readString()Ljava/lang/String;
+    move-result-object v6
+    move-object/from16 v0, v28
+    invoke-virtual v0, v5, v6, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onDevicePairFailed(Ljava/lang/String; Ljava/lang/String;)V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    goto/16 -10fh
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v30, Landroid/os/Parcel;->readString()Ljava/lang/String;
+    move-result-object v5
+    invoke-virtual/range v30, Landroid/os/Parcel;->readString()Ljava/lang/String;
+    move-result-object v6
+    invoke-virtual/range v30, Landroid/os/Parcel;->readInt()I
+    move-result v7
+    move-object/from16 v0, v28
+    invoke-virtual v0, v5, v6, v7, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onDeviceUuidsUpdated(Ljava/lang/String; Ljava/lang/String; I)V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    goto/16 -12dh
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v30, Landroid/os/Parcel;->readString()Ljava/lang/String;
+    move-result-object v5
+    move-object/from16 v0, v28
+    invoke-virtual v0, v5, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onLocalAdapterNameChanged(Ljava/lang/String;)V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    goto/16 -143h
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v30, Landroid/os/Parcel;->readString()Ljava/lang/String;
+    move-result-object v5
+    move-object/from16 v0, v28
+    invoke-virtual v0, v5, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onDeviceOutOfRange(Ljava/lang/String;)V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    goto/16 -159h
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v30, Landroid/os/Parcel;->readString()Ljava/lang/String;
+    move-result-object v5
+    invoke-virtual/range v30, Landroid/os/Parcel;->readInt()I
+    move-result v6
+    invoke-virtual/range v30, Landroid/os/Parcel;->readInt()I
+    move-result v7
+    move-object/from16 v0, v28
+    invoke-virtual v0, v5, v6, v7, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onHfpStateChanged(Ljava/lang/String; I I)V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    goto/16 -177h
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v30, Landroid/os/Parcel;->readInt()I
+    move-result v5
+    invoke-virtual/range v30, Landroid/os/Parcel;->readInt()I
+    move-result v6
+    move-object/from16 v0, v28
+    invoke-virtual v0, v5, v6, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onHfpAudioStateChanged(I I)V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    goto/16 -191h
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v30, Landroid/os/Parcel;->readInt()I
+    move-result v4
+    if-eqz v4, +00eh
+    const/4 v5, 1
+    move-object/from16 v0, v28
+    invoke-virtual v0, v5, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onHfpVoiceDial(Z)V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    goto/16 -1aah
+    const/4 v5, 0
+    goto -ch
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v30, Landroid/os/Parcel;->readInt()I
+    move-result v5
+    move-object/from16 v0, v28
+    invoke-virtual v0, v5, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onHfpErrorResponse(I)V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    goto/16 -1c2h
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v30, Landroid/os/Parcel;->readInt()I
+    move-result v4
+    if-eqz v4, +00eh
+    const/4 v5, 1
+    move-object/from16 v0, v28
+    invoke-virtual v0, v5, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onHfpRemoteTelecomService(Z)V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    goto/16 -1dbh
+    const/4 v5, 0
+    goto -ch
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v30, Landroid/os/Parcel;->readInt()I
+    move-result v4
+    if-eqz v4, +00eh
+    const/4 v5, 1
+    move-object/from16 v0, v28
+    invoke-virtual v0, v5, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onHfpRemoteRoamingStatus(Z)V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    ... bytecode truncated ...
 CLASS Ltw/com/elead/el830/elbluetooth/elBluetoothService; extends Landroid/app/Service;
+  METHOD createBond(Landroid/bluetooth/BluetoothDevice;)Z [public]
+    const/4 v5, 0
+    const-string v3, "android.bluetooth.BluetoothDevice"
+    invoke-static v3, Ljava/lang/Class;->forName(Ljava/lang/String;)Ljava/lang/Class;
+    move-result-object v0
+    const-string v3, "createBond"
+    new-array v4, v5, [Ljava/lang/Class;
+    invoke-virtual v0, v3, v4, Ljava/lang/Class;->getMethod(Ljava/lang/String; [Ljava/lang/Class;)Ljava/lang/reflect/Method;
+    move-result-object v1
+    new-array v3, v5, [Ljava/lang/Object;
+    invoke-virtual v1, v7, v3, Ljava/lang/reflect/Method;->invoke(Ljava/lang/Object; [Ljava/lang/Object;)Ljava/lang/Object;
+    move-result-object v2
+    check-cast v2, Ljava/lang/Boolean;
+    iget-object v3, v6, Ltw/com/elead/el830/elbluetooth/elBluetoothService;->TAG Ljava/lang/String;
+    const-string v4, "createBond"
+    invoke-static v3, v4, Landroid/util/Log;->i(Ljava/lang/String; Ljava/lang/String;)I
+    invoke-virtual v2, Ljava/lang/Boolean;->booleanValue()Z
+    move-result v3
+    return v3
   METHOD onBind(Landroid/content/Intent;)Landroid/os/IBinder; [public]
     iget-object v0, v2, Ltw/com/elead/el830/elbluetooth/elBluetoothService;->TAG Ljava/lang/String;
     const-string v1, "onBind() ...... return stub"
@@ -1890,6 +2376,60 @@ CLASS Ltw/com/elead/el830/elbluetooth/elBluetoothService$3; extends Lcom/nforete
     move-exception v0
     invoke-virtual v0, Landroid/os/RemoteException;->printStackTrace()V
     goto -5h
+  METHOD registerelBTCallback(Ljava/lang/String; Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback;)V [public]
+    if-eqz v4, +008h
+    invoke-virtual v4, Ljava/lang/String;->isEmpty()Z
+    move-result v0
+    if-eqz v0, +017h
+    iget-object v0, v3, Ltw/com/elead/el830/elbluetooth/elBluetoothService$3;->this$0 Ltw/com/elead/el830/elbluetooth/elBluetoothService;
+    invoke-static v0, Ltw/com/elead/el830/elbluetooth/elBluetoothService;->access$1(Ltw/com/elead/el830/elbluetooth/elBluetoothService;)Ljava/lang/String;
+    move-result-object v0
+    const-string v1, "registerelBTCallback()..........mPackName: null or empty"
+    invoke-static v0, v1, Landroid/util/Log;->d(Ljava/lang/String; Ljava/lang/String;)I
+    if-eqz v5, +009h
+    iget-object v0, v3, Ltw/com/elead/el830/elbluetooth/elBluetoothService$3;->this$0 Ltw/com/elead/el830/elbluetooth/elBluetoothService;
+    iget-object v0, v0, Ltw/com/elead/el830/elbluetooth/elBluetoothService;->mBTCallbacks Landroid/os/RemoteCallbackList;
+    invoke-virtual v0, v5, Landroid/os/RemoteCallbackList;->register(Landroid/os/IInterface;)Z
+    return-void
+    iget-object v0, v3, Ltw/com/elead/el830/elbluetooth/elBluetoothService$3;->this$0 Ltw/com/elead/el830/elbluetooth/elBluetoothService;
+    invoke-static v0, Ltw/com/elead/el830/elbluetooth/elBluetoothService;->access$1(Ltw/com/elead/el830/elbluetooth/elBluetoothService;)Ljava/lang/String;
+    move-result-object v0
+    new-instance v1, Ljava/lang/StringBuilder;
+    const-string v2, "registerelBTCallback()..........mPackName: "
+    invoke-direct v1, v2, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+    invoke-virtual v1, v4, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    move-result-object v1
+    invoke-virtual v1, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+    move-result-object v1
+    invoke-static v0, v1, Landroid/util/Log;->d(Ljava/lang/String; Ljava/lang/String;)I
+    goto -22h
+  METHOD unregisterelBTCallback(Ljava/lang/String; Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback;)V [public]
+    if-eqz v4, +008h
+    invoke-virtual v4, Ljava/lang/String;->isEmpty()Z
+    move-result v0
+    if-eqz v0, +017h
+    iget-object v0, v3, Ltw/com/elead/el830/elbluetooth/elBluetoothService$3;->this$0 Ltw/com/elead/el830/elbluetooth/elBluetoothService;
+    invoke-static v0, Ltw/com/elead/el830/elbluetooth/elBluetoothService;->access$1(Ltw/com/elead/el830/elbluetooth/elBluetoothService;)Ljava/lang/String;
+    move-result-object v0
+    const-string v1, "unregisterelBTCallback()..........mPackName: null or empty"
+    invoke-static v0, v1, Landroid/util/Log;->d(Ljava/lang/String; Ljava/lang/String;)I
+    if-eqz v5, +009h
+    iget-object v0, v3, Ltw/com/elead/el830/elbluetooth/elBluetoothService$3;->this$0 Ltw/com/elead/el830/elbluetooth/elBluetoothService;
+    iget-object v0, v0, Ltw/com/elead/el830/elbluetooth/elBluetoothService;->mBTCallbacks Landroid/os/RemoteCallbackList;
+    invoke-virtual v0, v5, Landroid/os/RemoteCallbackList;->unregister(Landroid/os/IInterface;)Z
+    return-void
+    iget-object v0, v3, Ltw/com/elead/el830/elbluetooth/elBluetoothService$3;->this$0 Ltw/com/elead/el830/elbluetooth/elBluetoothService;
+    invoke-static v0, Ltw/com/elead/el830/elbluetooth/elBluetoothService;->access$1(Ltw/com/elead/el830/elbluetooth/elBluetoothService;)Ljava/lang/String;
+    move-result-object v0
+    new-instance v1, Ljava/lang/StringBuilder;
+    const-string v2, "unregisterelBTCallback()..........mPackName: "
+    invoke-direct v1, v2, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+    invoke-virtual v1, v4, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    move-result-object v1
+    invoke-virtual v1, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+    move-result-object v1
+    invoke-static v0, v1, Landroid/util/Log;->d(Ljava/lang/String; Ljava/lang/String;)I
+    goto -22h
 CLASS Ltw/com/elead/el830/elbluetooth/elBluetoothService$4; extends Lcom/nforetek/bt/aidl/INfCallbackBluetooth$Stub;
 CLASS Ltw/com/elead/el830/elbluetooth/elBluetoothService$5; extends Lcom/nforetek/bt/aidl/INfCallbackHfp$Stub;
 CLASS Ltw/com/elead/el830/elbluetooth/elBluetoothService$6; extends Lcom/nforetek/bt/aidl/INfCallbackA2dp$Stub;
@@ -1913,6 +2453,8 @@ CLASS Lcom/nforetek/bt/aidl/IelBluetoothService; extends Ljava/lang/Object;
   METHOD elBTreqSppConnectedDeviceAddressList()V [public abstract]
   METHOD elBTreqSppDisconnect(Ljava/lang/String;)Z [public abstract]
   METHOD elBTreqSppSendData(Ljava/lang/String; [B)V [public abstract]
+  METHOD registerelBTCallback(Ljava/lang/String; Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback;)V [public abstract]
+  METHOD unregisterelBTCallback(Ljava/lang/String; Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback;)V [public abstract]
 CLASS Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback; extends Ljava/lang/Object;
   METHOD onSppAppleIapAuthenticationRequest(Ljava/lang/String;)V [public abstract]
   METHOD onSppDataReceived(Ljava/lang/String; [B)V [public abstract]
@@ -2132,6 +2674,58 @@ CLASS Lcom/nforetek/bt/aidl/IelBluetoothService$Stub$Proxy; extends Ljava/lang/O
     invoke-virtual v1, Landroid/os/Parcel;->recycle()V
     invoke-virtual v0, Landroid/os/Parcel;->recycle()V
     return-void
+    move-exception v2
+    invoke-virtual v1, Landroid/os/Parcel;->recycle()V
+    invoke-virtual v0, Landroid/os/Parcel;->recycle()V
+    throw v2
+  METHOD registerelBTCallback(Ljava/lang/String; Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback;)V [public]
+    invoke-static Landroid/os/Parcel;->obtain()Landroid/os/Parcel;
+    move-result-object v0
+    invoke-static Landroid/os/Parcel;->obtain()Landroid/os/Parcel;
+    move-result-object v1
+    const-string v2, "com.nforetek.bt.aidl.IelBluetoothService"
+    invoke-virtual v0, v2, Landroid/os/Parcel;->writeInterfaceToken(Ljava/lang/String;)V
+    invoke-virtual v0, v6, Landroid/os/Parcel;->writeString(Ljava/lang/String;)V
+    if-eqz v7, +01ah
+    invoke-interface v7, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback;->asBinder()Landroid/os/IBinder;
+    move-result-object v2
+    invoke-virtual v0, v2, Landroid/os/Parcel;->writeStrongBinder(Landroid/os/IBinder;)V
+    iget-object v2, v5, Lcom/nforetek/bt/aidl/IelBluetoothService$Stub$Proxy;->mRemote Landroid/os/IBinder;
+    const/4 v3, 1
+    const/4 v4, 0
+    invoke-interface v2, v3, v0, v1, v4, Landroid/os/IBinder;->transact(I Landroid/os/Parcel; Landroid/os/Parcel; I)Z
+    invoke-virtual v1, Landroid/os/Parcel;->readException()V
+    invoke-virtual v1, Landroid/os/Parcel;->recycle()V
+    invoke-virtual v0, Landroid/os/Parcel;->recycle()V
+    return-void
+    const/4 v2, 0
+    goto -15h
+    move-exception v2
+    invoke-virtual v1, Landroid/os/Parcel;->recycle()V
+    invoke-virtual v0, Landroid/os/Parcel;->recycle()V
+    throw v2
+  METHOD unregisterelBTCallback(Ljava/lang/String; Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback;)V [public]
+    invoke-static Landroid/os/Parcel;->obtain()Landroid/os/Parcel;
+    move-result-object v0
+    invoke-static Landroid/os/Parcel;->obtain()Landroid/os/Parcel;
+    move-result-object v1
+    const-string v2, "com.nforetek.bt.aidl.IelBluetoothService"
+    invoke-virtual v0, v2, Landroid/os/Parcel;->writeInterfaceToken(Ljava/lang/String;)V
+    invoke-virtual v0, v6, Landroid/os/Parcel;->writeString(Ljava/lang/String;)V
+    if-eqz v7, +01ah
+    invoke-interface v7, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback;->asBinder()Landroid/os/IBinder;
+    move-result-object v2
+    invoke-virtual v0, v2, Landroid/os/Parcel;->writeStrongBinder(Landroid/os/IBinder;)V
+    iget-object v2, v5, Lcom/nforetek/bt/aidl/IelBluetoothService$Stub$Proxy;->mRemote Landroid/os/IBinder;
+    const/4 v3, 2
+    const/4 v4, 0
+    invoke-interface v2, v3, v0, v1, v4, Landroid/os/IBinder;->transact(I Landroid/os/Parcel; Landroid/os/Parcel; I)Z
+    invoke-virtual v1, Landroid/os/Parcel;->readException()V
+    invoke-virtual v1, Landroid/os/Parcel;->recycle()V
+    invoke-virtual v0, Landroid/os/Parcel;->recycle()V
+    return-void
+    const/4 v2, 0
+    goto -15h
     move-exception v2
     invoke-virtual v1, Landroid/os/Parcel;->recycle()V
     invoke-virtual v0, Landroid/os/Parcel;->recycle()V
@@ -2398,16 +2992,399 @@ CLASS Lcom/nforetek/bt/aidl/IelBluetoothService$Stub; extends Landroid/os/Binder
     ... bytecode truncated ...
 CLASS Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub$Proxy; extends Ljava/lang/Object;
   METHOD asBinder()Landroid/os/IBinder; [public]
+    iget-object v0, v1, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub$Proxy;->mRemote Landroid/os/IBinder;
+    return-object v0
   METHOD onSppAppleIapAuthenticationRequest(Ljava/lang/String;)V [public]
+    invoke-static Landroid/os/Parcel;->obtain()Landroid/os/Parcel;
+    move-result-object v0
+    invoke-static Landroid/os/Parcel;->obtain()Landroid/os/Parcel;
+    move-result-object v1
+    const-string v2, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    invoke-virtual v0, v2, Landroid/os/Parcel;->writeInterfaceToken(Ljava/lang/String;)V
+    invoke-virtual v0, v6, Landroid/os/Parcel;->writeString(Ljava/lang/String;)V
+    iget-object v2, v5, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub$Proxy;->mRemote Landroid/os/IBinder;
+    const/16 v3, 91
+    const/4 v4, 0
+    invoke-interface v2, v3, v0, v1, v4, Landroid/os/IBinder;->transact(I Landroid/os/Parcel; Landroid/os/Parcel; I)Z
+    invoke-virtual v1, Landroid/os/Parcel;->readException()V
+    invoke-virtual v1, Landroid/os/Parcel;->recycle()V
+    invoke-virtual v0, Landroid/os/Parcel;->recycle()V
+    return-void
+    move-exception v2
+    invoke-virtual v1, Landroid/os/Parcel;->recycle()V
+    invoke-virtual v0, Landroid/os/Parcel;->recycle()V
+    throw v2
   METHOD onSppDataReceived(Ljava/lang/String; [B)V [public]
+    invoke-static Landroid/os/Parcel;->obtain()Landroid/os/Parcel;
+    move-result-object v0
+    invoke-static Landroid/os/Parcel;->obtain()Landroid/os/Parcel;
+    move-result-object v1
+    const-string v2, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    invoke-virtual v0, v2, Landroid/os/Parcel;->writeInterfaceToken(Ljava/lang/String;)V
+    invoke-virtual v0, v6, Landroid/os/Parcel;->writeString(Ljava/lang/String;)V
+    invoke-virtual v0, v7, Landroid/os/Parcel;->writeByteArray([B)V
+    iget-object v2, v5, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub$Proxy;->mRemote Landroid/os/IBinder;
+    const/16 v3, 89
+    const/4 v4, 0
+    invoke-interface v2, v3, v0, v1, v4, Landroid/os/IBinder;->transact(I Landroid/os/Parcel; Landroid/os/Parcel; I)Z
+    invoke-virtual v1, Landroid/os/Parcel;->readException()V
+    invoke-virtual v1, v7, Landroid/os/Parcel;->readByteArray([B)V
+    invoke-virtual v1, Landroid/os/Parcel;->recycle()V
+    invoke-virtual v0, Landroid/os/Parcel;->recycle()V
+    return-void
+    move-exception v2
+    invoke-virtual v1, Landroid/os/Parcel;->recycle()V
+    invoke-virtual v0, Landroid/os/Parcel;->recycle()V
+    throw v2
   METHOD onSppErrorResponse(Ljava/lang/String; I)V [public]
+    invoke-static Landroid/os/Parcel;->obtain()Landroid/os/Parcel;
+    move-result-object v0
+    invoke-static Landroid/os/Parcel;->obtain()Landroid/os/Parcel;
+    move-result-object v1
+    const-string v2, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    invoke-virtual v0, v2, Landroid/os/Parcel;->writeInterfaceToken(Ljava/lang/String;)V
+    invoke-virtual v0, v6, Landroid/os/Parcel;->writeString(Ljava/lang/String;)V
+    invoke-virtual v0, v7, Landroid/os/Parcel;->writeInt(I)V
+    iget-object v2, v5, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub$Proxy;->mRemote Landroid/os/IBinder;
+    const/16 v3, 87
+    const/4 v4, 0
+    invoke-interface v2, v3, v0, v1, v4, Landroid/os/IBinder;->transact(I Landroid/os/Parcel; Landroid/os/Parcel; I)Z
+    invoke-virtual v1, Landroid/os/Parcel;->readException()V
+    invoke-virtual v1, Landroid/os/Parcel;->recycle()V
+    invoke-virtual v0, Landroid/os/Parcel;->recycle()V
+    return-void
+    move-exception v2
+    invoke-virtual v1, Landroid/os/Parcel;->recycle()V
+    invoke-virtual v0, Landroid/os/Parcel;->recycle()V
+    throw v2
   METHOD onSppSendData(Ljava/lang/String; I)V [public]
+    invoke-static Landroid/os/Parcel;->obtain()Landroid/os/Parcel;
+    move-result-object v0
+    invoke-static Landroid/os/Parcel;->obtain()Landroid/os/Parcel;
+    move-result-object v1
+    const-string v2, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    invoke-virtual v0, v2, Landroid/os/Parcel;->writeInterfaceToken(Ljava/lang/String;)V
+    invoke-virtual v0, v6, Landroid/os/Parcel;->writeString(Ljava/lang/String;)V
+    invoke-virtual v0, v7, Landroid/os/Parcel;->writeInt(I)V
+    iget-object v2, v5, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub$Proxy;->mRemote Landroid/os/IBinder;
+    const/16 v3, 90
+    const/4 v4, 0
+    invoke-interface v2, v3, v0, v1, v4, Landroid/os/IBinder;->transact(I Landroid/os/Parcel; Landroid/os/Parcel; I)Z
+    invoke-virtual v1, Landroid/os/Parcel;->readException()V
+    invoke-virtual v1, Landroid/os/Parcel;->recycle()V
+    invoke-virtual v0, Landroid/os/Parcel;->recycle()V
+    return-void
+    move-exception v2
+    invoke-virtual v1, Landroid/os/Parcel;->recycle()V
+    invoke-virtual v0, Landroid/os/Parcel;->recycle()V
+    throw v2
   METHOD onSppStateChanged(Ljava/lang/String; Ljava/lang/String; I I)V [public]
+    invoke-static Landroid/os/Parcel;->obtain()Landroid/os/Parcel;
+    move-result-object v0
+    invoke-static Landroid/os/Parcel;->obtain()Landroid/os/Parcel;
+    move-result-object v1
+    const-string v2, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    invoke-virtual v0, v2, Landroid/os/Parcel;->writeInterfaceToken(Ljava/lang/String;)V
+    invoke-virtual v0, v6, Landroid/os/Parcel;->writeString(Ljava/lang/String;)V
+    invoke-virtual v0, v7, Landroid/os/Parcel;->writeString(Ljava/lang/String;)V
+    invoke-virtual v0, v8, Landroid/os/Parcel;->writeInt(I)V
+    invoke-virtual v0, v9, Landroid/os/Parcel;->writeInt(I)V
+    iget-object v2, v5, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub$Proxy;->mRemote Landroid/os/IBinder;
+    const/16 v3, 86
+    const/4 v4, 0
+    invoke-interface v2, v3, v0, v1, v4, Landroid/os/IBinder;->transact(I Landroid/os/Parcel; Landroid/os/Parcel; I)Z
+    invoke-virtual v1, Landroid/os/Parcel;->readException()V
+    invoke-virtual v1, Landroid/os/Parcel;->recycle()V
+    invoke-virtual v0, Landroid/os/Parcel;->recycle()V
+    return-void
+    move-exception v2
+    invoke-virtual v1, Landroid/os/Parcel;->recycle()V
+    invoke-virtual v0, Landroid/os/Parcel;->recycle()V
+    throw v2
   METHOD retSppConnectedDeviceAddressList(I [Ljava/lang/String; [Ljava/lang/String;)V [public]
+    invoke-static Landroid/os/Parcel;->obtain()Landroid/os/Parcel;
+    move-result-object v0
+    invoke-static Landroid/os/Parcel;->obtain()Landroid/os/Parcel;
+    move-result-object v1
+    const-string v2, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    invoke-virtual v0, v2, Landroid/os/Parcel;->writeInterfaceToken(Ljava/lang/String;)V
+    invoke-virtual v0, v6, Landroid/os/Parcel;->writeInt(I)V
+    invoke-virtual v0, v7, Landroid/os/Parcel;->writeStringArray([Ljava/lang/String;)V
+    invoke-virtual v0, v8, Landroid/os/Parcel;->writeStringArray([Ljava/lang/String;)V
+    iget-object v2, v5, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub$Proxy;->mRemote Landroid/os/IBinder;
+    const/16 v3, 88
+    const/4 v4, 0
+    invoke-interface v2, v3, v0, v1, v4, Landroid/os/IBinder;->transact(I Landroid/os/Parcel; Landroid/os/Parcel; I)Z
+    invoke-virtual v1, Landroid/os/Parcel;->readException()V
+    invoke-virtual v1, v7, Landroid/os/Parcel;->readStringArray([Ljava/lang/String;)V
+    invoke-virtual v1, v8, Landroid/os/Parcel;->readStringArray([Ljava/lang/String;)V
+    invoke-virtual v1, Landroid/os/Parcel;->recycle()V
+    invoke-virtual v0, Landroid/os/Parcel;->recycle()V
+    return-void
+    move-exception v2
+    invoke-virtual v1, Landroid/os/Parcel;->recycle()V
+    invoke-virtual v0, Landroid/os/Parcel;->recycle()V
+    throw v2
 CLASS Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub; extends Landroid/os/Binder;
   METHOD asInterface(Landroid/os/IBinder;)Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback; [public static]
+    if-nez v2, +004h
+    const/4 v0, 0
+    return-object v0
+    const-string v1, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    invoke-interface v2, v1, Landroid/os/IBinder;->queryLocalInterface(Ljava/lang/String;)Landroid/os/IInterface;
+    move-result-object v0
+    if-eqz v0, +009h
+    instance-of v1, v0, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback;
+    if-eqz v1, +005h
+    check-cast v0, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback;
+    goto -fh
+    new-instance v0, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub$Proxy;
+    invoke-direct v0, v2, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub$Proxy;-><init>(Landroid/os/IBinder;)V
+    goto -15h
   METHOD asBinder()Landroid/os/IBinder; [public]
+    return-object v0
   METHOD onTransact(I Landroid/os/Parcel; Landroid/os/Parcel; I)Z [public]
+    sparse-switch v29, +0000bach
+    invoke-super/range v28 ... v32, Landroid/os/Binder;->onTransact(I Landroid/os/Parcel; Landroid/os/Parcel; I)Z
+    move-result v4
+    return v4
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v31
+    invoke-virtual v0, v4, Landroid/os/Parcel;->writeString(Ljava/lang/String;)V
+    const/4 v4, 1
+    goto -9h
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v30, Landroid/os/Parcel;->readInt()I
+    move-result v5
+    move-object/from16 v0, v28
+    invoke-virtual v0, v5, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onServiceReady(I)V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    goto -1eh
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v30, Landroid/os/Parcel;->readInt()I
+    move-result v5
+    move-object/from16 v0, v28
+    invoke-virtual v0, v5, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onAdapterStateChanged(I)V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    goto -33h
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v30, Landroid/os/Parcel;->readInt()I
+    move-result v5
+    invoke-virtual/range v30, Landroid/os/Parcel;->readInt()I
+    move-result v6
+    move-object/from16 v0, v28
+    invoke-virtual v0, v5, v6, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onAdapterDiscoverableModeChanged(I I)V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    goto -4ch
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v28, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onAdapterDiscoveryStarted()V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    goto -5bh
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v28, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onAdapterDiscoveryFinished()V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    goto -6ah
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v30, Landroid/os/Parcel;->readInt()I
+    move-result v5
+    invoke-virtual/range v30, Landroid/os/Parcel;->createStringArray()[Ljava/lang/String;
+    move-result-object v6
+    invoke-virtual/range v30, Landroid/os/Parcel;->createStringArray()[Ljava/lang/String;
+    move-result-object v7
+    invoke-virtual/range v30, Landroid/os/Parcel;->createIntArray()[I
+    move-result-object v8
+    invoke-virtual/range v30, Landroid/os/Parcel;->createByteArray()[B
+    move-result-object v9
+    move-object/from16 v4, v28
+    invoke-virtual/range v4 ... v9, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->retPairedDevices(I [Ljava/lang/String; [Ljava/lang/String; [I [B)V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    move-object/from16 v0, v31
+    invoke-virtual v0, v6, Landroid/os/Parcel;->writeStringArray([Ljava/lang/String;)V
+    move-object/from16 v0, v31
+    invoke-virtual v0, v7, Landroid/os/Parcel;->writeStringArray([Ljava/lang/String;)V
+    move-object/from16 v0, v31
+    invoke-virtual v0, v8, Landroid/os/Parcel;->writeIntArray([I)V
+    move-object/from16 v0, v31
+    invoke-virtual v0, v9, Landroid/os/Parcel;->writeByteArray([B)V
+    const/4 v4, 1
+    goto/16 -0a3h
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v30, Landroid/os/Parcel;->readString()Ljava/lang/String;
+    move-result-object v5
+    invoke-virtual/range v30, Landroid/os/Parcel;->readString()Ljava/lang/String;
+    move-result-object v6
+    invoke-virtual/range v30, Landroid/os/Parcel;->readByte()B
+    move-result v7
+    move-object/from16 v0, v28
+    invoke-virtual v0, v5, v6, v7, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onDeviceFound(Ljava/lang/String; Ljava/lang/String; B)V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    goto/16 -0c1h
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v30, Landroid/os/Parcel;->readString()Ljava/lang/String;
+    move-result-object v5
+    invoke-virtual/range v30, Landroid/os/Parcel;->readString()Ljava/lang/String;
+    move-result-object v6
+    move-object/from16 v0, v28
+    invoke-virtual v0, v5, v6, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onDevicePaired(Ljava/lang/String; Ljava/lang/String;)V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    goto/16 -0dbh
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v30, Landroid/os/Parcel;->readString()Ljava/lang/String;
+    move-result-object v5
+    invoke-virtual/range v30, Landroid/os/Parcel;->readString()Ljava/lang/String;
+    move-result-object v6
+    move-object/from16 v0, v28
+    invoke-virtual v0, v5, v6, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onDeviceUnpaired(Ljava/lang/String; Ljava/lang/String;)V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    goto/16 -0f5h
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v30, Landroid/os/Parcel;->readString()Ljava/lang/String;
+    move-result-object v5
+    invoke-virtual/range v30, Landroid/os/Parcel;->readString()Ljava/lang/String;
+    move-result-object v6
+    move-object/from16 v0, v28
+    invoke-virtual v0, v5, v6, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onDevicePairFailed(Ljava/lang/String; Ljava/lang/String;)V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    goto/16 -10fh
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v30, Landroid/os/Parcel;->readString()Ljava/lang/String;
+    move-result-object v5
+    invoke-virtual/range v30, Landroid/os/Parcel;->readString()Ljava/lang/String;
+    move-result-object v6
+    invoke-virtual/range v30, Landroid/os/Parcel;->readInt()I
+    move-result v7
+    move-object/from16 v0, v28
+    invoke-virtual v0, v5, v6, v7, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onDeviceUuidsUpdated(Ljava/lang/String; Ljava/lang/String; I)V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    goto/16 -12dh
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v30, Landroid/os/Parcel;->readString()Ljava/lang/String;
+    move-result-object v5
+    move-object/from16 v0, v28
+    invoke-virtual v0, v5, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onLocalAdapterNameChanged(Ljava/lang/String;)V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    goto/16 -143h
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v30, Landroid/os/Parcel;->readString()Ljava/lang/String;
+    move-result-object v5
+    move-object/from16 v0, v28
+    invoke-virtual v0, v5, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onDeviceOutOfRange(Ljava/lang/String;)V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    goto/16 -159h
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v30, Landroid/os/Parcel;->readString()Ljava/lang/String;
+    move-result-object v5
+    invoke-virtual/range v30, Landroid/os/Parcel;->readInt()I
+    move-result v6
+    invoke-virtual/range v30, Landroid/os/Parcel;->readInt()I
+    move-result v7
+    move-object/from16 v0, v28
+    invoke-virtual v0, v5, v6, v7, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onHfpStateChanged(Ljava/lang/String; I I)V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    goto/16 -177h
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v30, Landroid/os/Parcel;->readInt()I
+    move-result v5
+    invoke-virtual/range v30, Landroid/os/Parcel;->readInt()I
+    move-result v6
+    move-object/from16 v0, v28
+    invoke-virtual v0, v5, v6, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onHfpAudioStateChanged(I I)V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    goto/16 -191h
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v30, Landroid/os/Parcel;->readInt()I
+    move-result v4
+    if-eqz v4, +00eh
+    const/4 v5, 1
+    move-object/from16 v0, v28
+    invoke-virtual v0, v5, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onHfpVoiceDial(Z)V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    goto/16 -1aah
+    const/4 v5, 0
+    goto -ch
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v30, Landroid/os/Parcel;->readInt()I
+    move-result v5
+    move-object/from16 v0, v28
+    invoke-virtual v0, v5, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onHfpErrorResponse(I)V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    goto/16 -1c2h
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v30, Landroid/os/Parcel;->readInt()I
+    move-result v4
+    if-eqz v4, +00eh
+    const/4 v5, 1
+    move-object/from16 v0, v28
+    invoke-virtual v0, v5, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onHfpRemoteTelecomService(Z)V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    goto/16 -1dbh
+    const/4 v5, 0
+    goto -ch
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v30, Landroid/os/Parcel;->readInt()I
+    move-result v4
+    if-eqz v4, +00eh
+    const/4 v5, 1
+    move-object/from16 v0, v28
+    invoke-virtual v0, v5, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onHfpRemoteRoamingStatus(Z)V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    ... bytecode truncated ...
 
 ## /app/EL831CLF01_elBluetoothPhone_2016.12.13.01.apk
 bytes=1139049 sha256=36c2c3a2185b10c3c7685b2842749a1a6565b2015a862631c86ae52ef2277417
@@ -2425,6 +3402,8 @@ CLASS Lcom/nforetek/bt/aidl/IelBluetoothService; extends Ljava/lang/Object;
   METHOD elBTreqSppConnectedDeviceAddressList()V [public abstract]
   METHOD elBTreqSppDisconnect(Ljava/lang/String;)Z [public abstract]
   METHOD elBTreqSppSendData(Ljava/lang/String; [B)V [public abstract]
+  METHOD registerelBTCallback(Ljava/lang/String; Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback;)V [public abstract]
+  METHOD unregisterelBTCallback(Ljava/lang/String; Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback;)V [public abstract]
 CLASS Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback; extends Ljava/lang/Object;
   METHOD onSppAppleIapAuthenticationRequest(Ljava/lang/String;)V [public abstract]
   METHOD onSppDataReceived(Ljava/lang/String; [B)V [public abstract]
@@ -2644,6 +3623,58 @@ CLASS Lcom/nforetek/bt/aidl/IelBluetoothService$Stub$Proxy; extends Ljava/lang/O
     invoke-virtual v1, Landroid/os/Parcel;->recycle()V
     invoke-virtual v0, Landroid/os/Parcel;->recycle()V
     return-void
+    move-exception v2
+    invoke-virtual v1, Landroid/os/Parcel;->recycle()V
+    invoke-virtual v0, Landroid/os/Parcel;->recycle()V
+    throw v2
+  METHOD registerelBTCallback(Ljava/lang/String; Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback;)V [public]
+    invoke-static Landroid/os/Parcel;->obtain()Landroid/os/Parcel;
+    move-result-object v0
+    invoke-static Landroid/os/Parcel;->obtain()Landroid/os/Parcel;
+    move-result-object v1
+    const-string v2, "com.nforetek.bt.aidl.IelBluetoothService"
+    invoke-virtual v0, v2, Landroid/os/Parcel;->writeInterfaceToken(Ljava/lang/String;)V
+    invoke-virtual v0, v6, Landroid/os/Parcel;->writeString(Ljava/lang/String;)V
+    if-eqz v7, +01ah
+    invoke-interface v7, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback;->asBinder()Landroid/os/IBinder;
+    move-result-object v2
+    invoke-virtual v0, v2, Landroid/os/Parcel;->writeStrongBinder(Landroid/os/IBinder;)V
+    iget-object v2, v5, Lcom/nforetek/bt/aidl/IelBluetoothService$Stub$Proxy;->mRemote Landroid/os/IBinder;
+    const/4 v3, 1
+    const/4 v4, 0
+    invoke-interface v2, v3, v0, v1, v4, Landroid/os/IBinder;->transact(I Landroid/os/Parcel; Landroid/os/Parcel; I)Z
+    invoke-virtual v1, Landroid/os/Parcel;->readException()V
+    invoke-virtual v1, Landroid/os/Parcel;->recycle()V
+    invoke-virtual v0, Landroid/os/Parcel;->recycle()V
+    return-void
+    const/4 v2, 0
+    goto -15h
+    move-exception v2
+    invoke-virtual v1, Landroid/os/Parcel;->recycle()V
+    invoke-virtual v0, Landroid/os/Parcel;->recycle()V
+    throw v2
+  METHOD unregisterelBTCallback(Ljava/lang/String; Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback;)V [public]
+    invoke-static Landroid/os/Parcel;->obtain()Landroid/os/Parcel;
+    move-result-object v0
+    invoke-static Landroid/os/Parcel;->obtain()Landroid/os/Parcel;
+    move-result-object v1
+    const-string v2, "com.nforetek.bt.aidl.IelBluetoothService"
+    invoke-virtual v0, v2, Landroid/os/Parcel;->writeInterfaceToken(Ljava/lang/String;)V
+    invoke-virtual v0, v6, Landroid/os/Parcel;->writeString(Ljava/lang/String;)V
+    if-eqz v7, +01ah
+    invoke-interface v7, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback;->asBinder()Landroid/os/IBinder;
+    move-result-object v2
+    invoke-virtual v0, v2, Landroid/os/Parcel;->writeStrongBinder(Landroid/os/IBinder;)V
+    iget-object v2, v5, Lcom/nforetek/bt/aidl/IelBluetoothService$Stub$Proxy;->mRemote Landroid/os/IBinder;
+    const/4 v3, 2
+    const/4 v4, 0
+    invoke-interface v2, v3, v0, v1, v4, Landroid/os/IBinder;->transact(I Landroid/os/Parcel; Landroid/os/Parcel; I)Z
+    invoke-virtual v1, Landroid/os/Parcel;->readException()V
+    invoke-virtual v1, Landroid/os/Parcel;->recycle()V
+    invoke-virtual v0, Landroid/os/Parcel;->recycle()V
+    return-void
+    const/4 v2, 0
+    goto -15h
     move-exception v2
     invoke-virtual v1, Landroid/os/Parcel;->recycle()V
     invoke-virtual v0, Landroid/os/Parcel;->recycle()V
@@ -2910,16 +3941,399 @@ CLASS Lcom/nforetek/bt/aidl/IelBluetoothService$Stub; extends Landroid/os/Binder
     ... bytecode truncated ...
 CLASS Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub$Proxy; extends Ljava/lang/Object;
   METHOD asBinder()Landroid/os/IBinder; [public]
+    iget-object v0, v1, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub$Proxy;->mRemote Landroid/os/IBinder;
+    return-object v0
   METHOD onSppAppleIapAuthenticationRequest(Ljava/lang/String;)V [public]
+    invoke-static Landroid/os/Parcel;->obtain()Landroid/os/Parcel;
+    move-result-object v0
+    invoke-static Landroid/os/Parcel;->obtain()Landroid/os/Parcel;
+    move-result-object v1
+    const-string v2, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    invoke-virtual v0, v2, Landroid/os/Parcel;->writeInterfaceToken(Ljava/lang/String;)V
+    invoke-virtual v0, v6, Landroid/os/Parcel;->writeString(Ljava/lang/String;)V
+    iget-object v2, v5, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub$Proxy;->mRemote Landroid/os/IBinder;
+    const/16 v3, 91
+    const/4 v4, 0
+    invoke-interface v2, v3, v0, v1, v4, Landroid/os/IBinder;->transact(I Landroid/os/Parcel; Landroid/os/Parcel; I)Z
+    invoke-virtual v1, Landroid/os/Parcel;->readException()V
+    invoke-virtual v1, Landroid/os/Parcel;->recycle()V
+    invoke-virtual v0, Landroid/os/Parcel;->recycle()V
+    return-void
+    move-exception v2
+    invoke-virtual v1, Landroid/os/Parcel;->recycle()V
+    invoke-virtual v0, Landroid/os/Parcel;->recycle()V
+    throw v2
   METHOD onSppDataReceived(Ljava/lang/String; [B)V [public]
+    invoke-static Landroid/os/Parcel;->obtain()Landroid/os/Parcel;
+    move-result-object v0
+    invoke-static Landroid/os/Parcel;->obtain()Landroid/os/Parcel;
+    move-result-object v1
+    const-string v2, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    invoke-virtual v0, v2, Landroid/os/Parcel;->writeInterfaceToken(Ljava/lang/String;)V
+    invoke-virtual v0, v6, Landroid/os/Parcel;->writeString(Ljava/lang/String;)V
+    invoke-virtual v0, v7, Landroid/os/Parcel;->writeByteArray([B)V
+    iget-object v2, v5, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub$Proxy;->mRemote Landroid/os/IBinder;
+    const/16 v3, 89
+    const/4 v4, 0
+    invoke-interface v2, v3, v0, v1, v4, Landroid/os/IBinder;->transact(I Landroid/os/Parcel; Landroid/os/Parcel; I)Z
+    invoke-virtual v1, Landroid/os/Parcel;->readException()V
+    invoke-virtual v1, v7, Landroid/os/Parcel;->readByteArray([B)V
+    invoke-virtual v1, Landroid/os/Parcel;->recycle()V
+    invoke-virtual v0, Landroid/os/Parcel;->recycle()V
+    return-void
+    move-exception v2
+    invoke-virtual v1, Landroid/os/Parcel;->recycle()V
+    invoke-virtual v0, Landroid/os/Parcel;->recycle()V
+    throw v2
   METHOD onSppErrorResponse(Ljava/lang/String; I)V [public]
+    invoke-static Landroid/os/Parcel;->obtain()Landroid/os/Parcel;
+    move-result-object v0
+    invoke-static Landroid/os/Parcel;->obtain()Landroid/os/Parcel;
+    move-result-object v1
+    const-string v2, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    invoke-virtual v0, v2, Landroid/os/Parcel;->writeInterfaceToken(Ljava/lang/String;)V
+    invoke-virtual v0, v6, Landroid/os/Parcel;->writeString(Ljava/lang/String;)V
+    invoke-virtual v0, v7, Landroid/os/Parcel;->writeInt(I)V
+    iget-object v2, v5, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub$Proxy;->mRemote Landroid/os/IBinder;
+    const/16 v3, 87
+    const/4 v4, 0
+    invoke-interface v2, v3, v0, v1, v4, Landroid/os/IBinder;->transact(I Landroid/os/Parcel; Landroid/os/Parcel; I)Z
+    invoke-virtual v1, Landroid/os/Parcel;->readException()V
+    invoke-virtual v1, Landroid/os/Parcel;->recycle()V
+    invoke-virtual v0, Landroid/os/Parcel;->recycle()V
+    return-void
+    move-exception v2
+    invoke-virtual v1, Landroid/os/Parcel;->recycle()V
+    invoke-virtual v0, Landroid/os/Parcel;->recycle()V
+    throw v2
   METHOD onSppSendData(Ljava/lang/String; I)V [public]
+    invoke-static Landroid/os/Parcel;->obtain()Landroid/os/Parcel;
+    move-result-object v0
+    invoke-static Landroid/os/Parcel;->obtain()Landroid/os/Parcel;
+    move-result-object v1
+    const-string v2, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    invoke-virtual v0, v2, Landroid/os/Parcel;->writeInterfaceToken(Ljava/lang/String;)V
+    invoke-virtual v0, v6, Landroid/os/Parcel;->writeString(Ljava/lang/String;)V
+    invoke-virtual v0, v7, Landroid/os/Parcel;->writeInt(I)V
+    iget-object v2, v5, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub$Proxy;->mRemote Landroid/os/IBinder;
+    const/16 v3, 90
+    const/4 v4, 0
+    invoke-interface v2, v3, v0, v1, v4, Landroid/os/IBinder;->transact(I Landroid/os/Parcel; Landroid/os/Parcel; I)Z
+    invoke-virtual v1, Landroid/os/Parcel;->readException()V
+    invoke-virtual v1, Landroid/os/Parcel;->recycle()V
+    invoke-virtual v0, Landroid/os/Parcel;->recycle()V
+    return-void
+    move-exception v2
+    invoke-virtual v1, Landroid/os/Parcel;->recycle()V
+    invoke-virtual v0, Landroid/os/Parcel;->recycle()V
+    throw v2
   METHOD onSppStateChanged(Ljava/lang/String; Ljava/lang/String; I I)V [public]
+    invoke-static Landroid/os/Parcel;->obtain()Landroid/os/Parcel;
+    move-result-object v0
+    invoke-static Landroid/os/Parcel;->obtain()Landroid/os/Parcel;
+    move-result-object v1
+    const-string v2, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    invoke-virtual v0, v2, Landroid/os/Parcel;->writeInterfaceToken(Ljava/lang/String;)V
+    invoke-virtual v0, v6, Landroid/os/Parcel;->writeString(Ljava/lang/String;)V
+    invoke-virtual v0, v7, Landroid/os/Parcel;->writeString(Ljava/lang/String;)V
+    invoke-virtual v0, v8, Landroid/os/Parcel;->writeInt(I)V
+    invoke-virtual v0, v9, Landroid/os/Parcel;->writeInt(I)V
+    iget-object v2, v5, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub$Proxy;->mRemote Landroid/os/IBinder;
+    const/16 v3, 86
+    const/4 v4, 0
+    invoke-interface v2, v3, v0, v1, v4, Landroid/os/IBinder;->transact(I Landroid/os/Parcel; Landroid/os/Parcel; I)Z
+    invoke-virtual v1, Landroid/os/Parcel;->readException()V
+    invoke-virtual v1, Landroid/os/Parcel;->recycle()V
+    invoke-virtual v0, Landroid/os/Parcel;->recycle()V
+    return-void
+    move-exception v2
+    invoke-virtual v1, Landroid/os/Parcel;->recycle()V
+    invoke-virtual v0, Landroid/os/Parcel;->recycle()V
+    throw v2
   METHOD retSppConnectedDeviceAddressList(I [Ljava/lang/String; [Ljava/lang/String;)V [public]
+    invoke-static Landroid/os/Parcel;->obtain()Landroid/os/Parcel;
+    move-result-object v0
+    invoke-static Landroid/os/Parcel;->obtain()Landroid/os/Parcel;
+    move-result-object v1
+    const-string v2, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    invoke-virtual v0, v2, Landroid/os/Parcel;->writeInterfaceToken(Ljava/lang/String;)V
+    invoke-virtual v0, v6, Landroid/os/Parcel;->writeInt(I)V
+    invoke-virtual v0, v7, Landroid/os/Parcel;->writeStringArray([Ljava/lang/String;)V
+    invoke-virtual v0, v8, Landroid/os/Parcel;->writeStringArray([Ljava/lang/String;)V
+    iget-object v2, v5, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub$Proxy;->mRemote Landroid/os/IBinder;
+    const/16 v3, 88
+    const/4 v4, 0
+    invoke-interface v2, v3, v0, v1, v4, Landroid/os/IBinder;->transact(I Landroid/os/Parcel; Landroid/os/Parcel; I)Z
+    invoke-virtual v1, Landroid/os/Parcel;->readException()V
+    invoke-virtual v1, v7, Landroid/os/Parcel;->readStringArray([Ljava/lang/String;)V
+    invoke-virtual v1, v8, Landroid/os/Parcel;->readStringArray([Ljava/lang/String;)V
+    invoke-virtual v1, Landroid/os/Parcel;->recycle()V
+    invoke-virtual v0, Landroid/os/Parcel;->recycle()V
+    return-void
+    move-exception v2
+    invoke-virtual v1, Landroid/os/Parcel;->recycle()V
+    invoke-virtual v0, Landroid/os/Parcel;->recycle()V
+    throw v2
 CLASS Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub; extends Landroid/os/Binder;
   METHOD asInterface(Landroid/os/IBinder;)Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback; [public static]
+    if-nez v2, +004h
+    const/4 v0, 0
+    return-object v0
+    const-string v1, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    invoke-interface v2, v1, Landroid/os/IBinder;->queryLocalInterface(Ljava/lang/String;)Landroid/os/IInterface;
+    move-result-object v0
+    if-eqz v0, +009h
+    instance-of v1, v0, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback;
+    if-eqz v1, +005h
+    check-cast v0, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback;
+    goto -fh
+    new-instance v0, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub$Proxy;
+    invoke-direct v0, v2, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub$Proxy;-><init>(Landroid/os/IBinder;)V
+    goto -15h
   METHOD asBinder()Landroid/os/IBinder; [public]
+    return-object v0
   METHOD onTransact(I Landroid/os/Parcel; Landroid/os/Parcel; I)Z [public]
+    sparse-switch v29, +0000bach
+    invoke-super/range v28 ... v32, Landroid/os/Binder;->onTransact(I Landroid/os/Parcel; Landroid/os/Parcel; I)Z
+    move-result v4
+    return v4
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v31
+    invoke-virtual v0, v4, Landroid/os/Parcel;->writeString(Ljava/lang/String;)V
+    const/4 v4, 1
+    goto -9h
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v30, Landroid/os/Parcel;->readInt()I
+    move-result v5
+    move-object/from16 v0, v28
+    invoke-virtual v0, v5, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onServiceReady(I)V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    goto -1eh
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v30, Landroid/os/Parcel;->readInt()I
+    move-result v5
+    move-object/from16 v0, v28
+    invoke-virtual v0, v5, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onAdapterStateChanged(I)V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    goto -33h
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v30, Landroid/os/Parcel;->readInt()I
+    move-result v5
+    invoke-virtual/range v30, Landroid/os/Parcel;->readInt()I
+    move-result v6
+    move-object/from16 v0, v28
+    invoke-virtual v0, v5, v6, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onAdapterDiscoverableModeChanged(I I)V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    goto -4ch
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v28, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onAdapterDiscoveryStarted()V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    goto -5bh
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v28, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onAdapterDiscoveryFinished()V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    goto -6ah
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v30, Landroid/os/Parcel;->readInt()I
+    move-result v5
+    invoke-virtual/range v30, Landroid/os/Parcel;->createStringArray()[Ljava/lang/String;
+    move-result-object v6
+    invoke-virtual/range v30, Landroid/os/Parcel;->createStringArray()[Ljava/lang/String;
+    move-result-object v7
+    invoke-virtual/range v30, Landroid/os/Parcel;->createIntArray()[I
+    move-result-object v8
+    invoke-virtual/range v30, Landroid/os/Parcel;->createByteArray()[B
+    move-result-object v9
+    move-object/from16 v4, v28
+    invoke-virtual/range v4 ... v9, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->retPairedDevices(I [Ljava/lang/String; [Ljava/lang/String; [I [B)V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    move-object/from16 v0, v31
+    invoke-virtual v0, v6, Landroid/os/Parcel;->writeStringArray([Ljava/lang/String;)V
+    move-object/from16 v0, v31
+    invoke-virtual v0, v7, Landroid/os/Parcel;->writeStringArray([Ljava/lang/String;)V
+    move-object/from16 v0, v31
+    invoke-virtual v0, v8, Landroid/os/Parcel;->writeIntArray([I)V
+    move-object/from16 v0, v31
+    invoke-virtual v0, v9, Landroid/os/Parcel;->writeByteArray([B)V
+    const/4 v4, 1
+    goto/16 -0a3h
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v30, Landroid/os/Parcel;->readString()Ljava/lang/String;
+    move-result-object v5
+    invoke-virtual/range v30, Landroid/os/Parcel;->readString()Ljava/lang/String;
+    move-result-object v6
+    invoke-virtual/range v30, Landroid/os/Parcel;->readByte()B
+    move-result v7
+    move-object/from16 v0, v28
+    invoke-virtual v0, v5, v6, v7, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onDeviceFound(Ljava/lang/String; Ljava/lang/String; B)V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    goto/16 -0c1h
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v30, Landroid/os/Parcel;->readString()Ljava/lang/String;
+    move-result-object v5
+    invoke-virtual/range v30, Landroid/os/Parcel;->readString()Ljava/lang/String;
+    move-result-object v6
+    move-object/from16 v0, v28
+    invoke-virtual v0, v5, v6, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onDevicePaired(Ljava/lang/String; Ljava/lang/String;)V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    goto/16 -0dbh
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v30, Landroid/os/Parcel;->readString()Ljava/lang/String;
+    move-result-object v5
+    invoke-virtual/range v30, Landroid/os/Parcel;->readString()Ljava/lang/String;
+    move-result-object v6
+    move-object/from16 v0, v28
+    invoke-virtual v0, v5, v6, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onDeviceUnpaired(Ljava/lang/String; Ljava/lang/String;)V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    goto/16 -0f5h
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v30, Landroid/os/Parcel;->readString()Ljava/lang/String;
+    move-result-object v5
+    invoke-virtual/range v30, Landroid/os/Parcel;->readString()Ljava/lang/String;
+    move-result-object v6
+    move-object/from16 v0, v28
+    invoke-virtual v0, v5, v6, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onDevicePairFailed(Ljava/lang/String; Ljava/lang/String;)V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    goto/16 -10fh
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v30, Landroid/os/Parcel;->readString()Ljava/lang/String;
+    move-result-object v5
+    invoke-virtual/range v30, Landroid/os/Parcel;->readString()Ljava/lang/String;
+    move-result-object v6
+    invoke-virtual/range v30, Landroid/os/Parcel;->readInt()I
+    move-result v7
+    move-object/from16 v0, v28
+    invoke-virtual v0, v5, v6, v7, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onDeviceUuidsUpdated(Ljava/lang/String; Ljava/lang/String; I)V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    goto/16 -12dh
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v30, Landroid/os/Parcel;->readString()Ljava/lang/String;
+    move-result-object v5
+    move-object/from16 v0, v28
+    invoke-virtual v0, v5, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onLocalAdapterNameChanged(Ljava/lang/String;)V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    goto/16 -143h
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v30, Landroid/os/Parcel;->readString()Ljava/lang/String;
+    move-result-object v5
+    move-object/from16 v0, v28
+    invoke-virtual v0, v5, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onDeviceOutOfRange(Ljava/lang/String;)V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    goto/16 -159h
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v30, Landroid/os/Parcel;->readString()Ljava/lang/String;
+    move-result-object v5
+    invoke-virtual/range v30, Landroid/os/Parcel;->readInt()I
+    move-result v6
+    invoke-virtual/range v30, Landroid/os/Parcel;->readInt()I
+    move-result v7
+    move-object/from16 v0, v28
+    invoke-virtual v0, v5, v6, v7, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onHfpStateChanged(Ljava/lang/String; I I)V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    goto/16 -177h
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v30, Landroid/os/Parcel;->readInt()I
+    move-result v5
+    invoke-virtual/range v30, Landroid/os/Parcel;->readInt()I
+    move-result v6
+    move-object/from16 v0, v28
+    invoke-virtual v0, v5, v6, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onHfpAudioStateChanged(I I)V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    goto/16 -191h
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v30, Landroid/os/Parcel;->readInt()I
+    move-result v4
+    if-eqz v4, +00eh
+    const/4 v5, 1
+    move-object/from16 v0, v28
+    invoke-virtual v0, v5, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onHfpVoiceDial(Z)V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    goto/16 -1aah
+    const/4 v5, 0
+    goto -ch
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v30, Landroid/os/Parcel;->readInt()I
+    move-result v5
+    move-object/from16 v0, v28
+    invoke-virtual v0, v5, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onHfpErrorResponse(I)V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    goto/16 -1c2h
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v30, Landroid/os/Parcel;->readInt()I
+    move-result v4
+    if-eqz v4, +00eh
+    const/4 v5, 1
+    move-object/from16 v0, v28
+    invoke-virtual v0, v5, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onHfpRemoteTelecomService(Z)V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    goto/16 -1dbh
+    const/4 v5, 0
+    goto -ch
+    const-string v4, "com.nforetek.bt.aidl.IelBluetoothServiceCallback"
+    move-object/from16 v0, v30
+    invoke-virtual v0, v4, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+    invoke-virtual/range v30, Landroid/os/Parcel;->readInt()I
+    move-result v4
+    if-eqz v4, +00eh
+    const/4 v5, 1
+    move-object/from16 v0, v28
+    invoke-virtual v0, v5, Lcom/nforetek/bt/aidl/IelBluetoothServiceCallback$Stub;->onHfpRemoteRoamingStatus(Z)V
+    invoke-virtual/range v31, Landroid/os/Parcel;->writeNoException()V
+    const/4 v4, 1
+    ... bytecode truncated ...
 
 ## Safety boundary
 Do not bind to this vendor service or transmit pairing/OBD requests until service export, permission, transaction signatures, and lifecycle behavior are verified. A later bridge should be a normal removable app, must not replace Bluetooth/framework files, and must not auto-start or interfere with HFP/A2DP calls.
