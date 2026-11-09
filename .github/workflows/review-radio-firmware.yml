@@ -1,0 +1,75 @@
+name: Review Wi-Fi and Bluetooth firmware
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+      - name: Install image tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq p7zip-full e2fsprogs file cpio binutils
+      - name: Download source firmware from GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/radio-review/source" "$RUNNER_TEMP/radio-review/unpacked"
+          gh release download stock --repo "$GITHUB_REPOSITORY" \
+            --pattern 'x60_2021.7z' --dir "$RUNNER_TEMP/radio-review/source"
+          archive="$RUNNER_TEMP/radio-review/source/x60_2021.7z"
+          echo '75e7d6cd900fac971b55fec9f59913153bf7a1096bd761f7229c9a1d6d57b540  '"$archive" | sha256sum -c -
+          7z x -y "$archive" -o"$RUNNER_TEMP/radio-review/unpacked" >/dev/null
+          find "$RUNNER_TEMP/radio-review/unpacked" -type f -printf '%s %p\n' | sort -nr | head -200
+      - name: Analyze boot, init, drivers, firmware and NVS references
+        run: |
+          set -euo pipefail
+          python3 tools/fw_analyze.py "$RUNNER_TEMP/radio-review/unpacked" reports/radio-firmware-review
+          mkdir -p reports/radio-firmware-review
+          {
+            echo '# Radio firmware source-image review'
+            echo
+            echo "Source release: stock / x60_2021.7z"
+            echo "Archive SHA-256: $(sha256sum "$RUNNER_TEMP/radio-review/source/x60_2021.7z" | cut -d' ' -f1)"
+            echo
+            echo '## Radio-related files found in extracted source archive'
+            find "$RUNNER_TEMP/radio-review/unpacked" -type f | grep -Ei '(^|/)(init[^/]*\.rc|.*wifi.*|.*wlan.*|.*bluetooth.*|.*bluelet.*|.*bt_vendor.*|.*wl12.*|.*wl18.*|.*wl127.*|.*\.hcd|.*nvs.*|.*ti-connectivity.*|.*\.ko$)' | sort || true
+            echo
+            echo '## Firmware analyzer output inventory'
+            find reports/radio-firmware-review -maxdepth 2 -type f -printf '%p (%s bytes)\n' | sort
+            echo
+            echo '## Exact init and driver configuration excerpts'
+            find "$RUNNER_TEMP/radio-review/unpacked" -type f \( -name '*.rc' -o -name '*.conf' -o -name '*.sh' -o -name 'modules.*' -o -name 'ueventd*.rc' \) -print0 |
+            while IFS= read -r -d '' f; do
+              if grep -qiE 'wifi|wlan|wl12|wl18|wl127|bluetooth|bluelet|hci_tty|ttymxc1|ttyO1|nvs|firmware|insmod|modprobe' "$f"; then
+                echo "### $f"
+                grep -inE 'wifi|wlan|wl12|wl18|wl127|bluetooth|bluelet|hci_tty|ttymxc1|ttyO1|nvs|firmware|insmod|modprobe' "$f" || true
+              fi
+            done
+          } > reports/radio-firmware-review/summary.md
+          cat reports/radio-firmware-review/summary.md
+      - name: Save text reports to this branch
+        if: always()
+        run: |
+          set -euo pipefail
+          if [ ! -d reports/radio-firmware-review ]; then exit 0; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/radio-firmware-review
+          git diff --cached --quiet && exit 0
+          git commit -m 'report: inspect source firmware radio drivers'
+          for attempt in 1 2 3 4 5; do
+            if git pull --rebase --autostash origin "$GITHUB_REF_NAME" >/dev/null 2>&1 && git push origin "HEAD:refs/heads/$GITHUB_REF_NAME"; then exit 0; fi
+            git rebase --abort >/dev/null 2>&1 || true
+            sleep 8
+          done
+          exit 1
