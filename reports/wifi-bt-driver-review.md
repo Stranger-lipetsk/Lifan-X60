@@ -28,7 +28,7 @@ Date of review: 2026-11-01. Scope: existing repository reports and extracted fir
 
 GitHub Actions downloaded `stock/x60_2021.7z` (SHA-256 `75e7d6cd900fac971b55fec9f59913153bf7a1096bd761f7229c9a1d6d57b540`), unpacked `system.img` and both boot images, and ran read-only inspections. Full reports are in `reports/radio-firmware-review/`.
 
-- The stock `/etc/wifi/nvram.txt` identifies itself as `AP6251_NVRAM_V1.0`, with Broadcom vendor/device IDs (`0x14e4` / `0x4343`) and calibration board parameters. This is direct evidence that the intended Wi-Fi hardware/configuration is Broadcom-based (AP6251/BCM4343 family), not TI WL18xx. The NVRAM contents are calibration data and must be preserved.
+- The stock `/etc/wifi/nvram.txt` identifies itself as `AP6251_NVRAM_V1.0`, with Broadcom vendor/device IDs (`0x14e4` / `0x4343`) and calibration board parameters. This is evidence of a Broadcom board/config variant, but it does not prove that this NVRAM is used at runtime. Stronger active-path clues in this repository point to TI WiLink: `wl12xx_get_platform_data` is in the kernel, `fw_upgrade` references `set_wl12xx_wifi_calibration` and `/mnt/para_fw/wl1271-nvs.bin`, and init labels the TI Bluetooth `uim` service. Treat actual fitted chip and active path as unresolved until runtime or PCB confirmation; preserve all NVRAM.
 - The stock system image contains Broadcom Wi-Fi firmware files `fw_bcm40181a2.bin`, `_apsta.bin`, `_p2p.bin`, and separate TI files `wl18xx-fw-4.bin` / `wl18xx-conf.bin` plus `wl18xx-conf-default.bin`. It also contains Broadcom `bt_vendor.conf` firmware patch `bcm20710a1.hcd`. The coexistence of these assets is not proof that both chips/drivers are active; the TI payloads may be stale or belong to another board variant.
 - The stock `/lib/modules` directory has `cfg80211.ko` but no separate Broadcom Wi-Fi `.ko` or `wl12xx.ko`; the kernel image has `wl12xx` platform-data strings. Therefore the active Wi-Fi driver path remains unresolved (built-in driver, board-variant mismatch, or stale firmware assets); strings alone cannot identify which driver probed.
 - The stock init's Wi-Fi loader and module-load stanza are commented out, and it declares `/system/bin/el_wifi_enable.sh` without that script being present in the stock system image. The init setup also configures GPIO 45 for “AP6251” power control; its polarity/effect cannot be inferred safely from static lines alone.
@@ -52,6 +52,19 @@ A follow-up GitHub Action run to expand that DEX inspection was blocked before a
 The owner confirms that Wi-Fi is nonfunctional in every firmware version tried, while Bluetooth exposes only headset behavior. This rules out treating an unmodified stock flash as a presumed fix. These are runtime observations and take precedence over static file presence. The stock image remains only a controlled baseline/rollback, not a recommended repair.
 
 This points to two distinct unresolved faults: Wi-Fi requires a working kernel driver plus board power/reset/SDIO initialization and matching calibration; Bluetooth requires the active Elead/Android stack and available profiles/services to be reconciled with the headset-only UI. Replacing radio firmware blobs alone will not establish either fix. Do not replace the system image or modify NVRAM until a compatible driver path and reversible test are available.
+
+## Review of the proposed generic patch recipe
+
+Do not apply the pasted property/service recipe verbatim:
+
+- This is Freescale/NXP i.MX6 Android 4.4, not Qualcomm. `ro.qualcomm.bluetooth.*`, `ro.bluetooth.request.master`, `ro.bluetooth.remote.autoconnect`, and `wlan.chip.*` are not evidence-based controls for this vendor stack; adding them to `build.prop` will not load a driver or register SPP.
+- No `ti_wifi_fw_loader` or `uim-sysfs` executable is present in the extracted system inventory. The init file contains a *commented* TI `uim` stanza, but enabling a service whose executable is absent only gives an exec failure; it does not magically supply the TI shared-transport driver. Do not start it alongside the active Bluelet/Broadcom UART path without proving the board uses TI BT.
+- The firmware files found under `/vendor/firmware/ti-connectivity/` are `wl18xx-fw-4.bin` and `wl18xx-conf.bin`; this is not proof they match the `wl12xx` code or board. `/etc/wifi/wlconf/` has TI config blobs. Do not copy or rename those as a replacement for `/mnt/para_fw/wl1271-nvs.bin`.
+- The suggested `wlan_fw` service is not in the vendor image, and `group credits` is not validated against this image's Android group definitions. The original loader stanza is already commented; the actual script body and correct power sequence are missing.
+- `android.hardware.bluetooth.xml` only advertises a package-manager feature; it does not enable HCI, pairing, or SPP. `tools/inplace_patch.py` edits `system.img` only; it cannot modify init in `boot.img`.
+- There is no `startDiscovery()`/`ACTION_FOUND` source in `switcher/` or the launcher sources to remove a DeviceClass filter. The filtering/feature decision is inside proprietary Elead APK/service code, and the existing DEX report shows the BT service initializes HFP/A2DP/PBAP/MAP but not an SPP init call.
+
+A safe binary-only next step is to inspect the Elead `applicationProfiles` DEX for an existing SPP init method and its profile-mask source, then patch only that existing code path if it is present, preserving HFP/A2DP. Wi-Fi is a separate boot/kernel problem; a `system.img`-only edit cannot add a missing compatible kernel driver.
 
 ## Assessment and safe next work
 
