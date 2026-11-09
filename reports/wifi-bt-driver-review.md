@@ -66,6 +66,12 @@ Do not apply the pasted property/service recipe verbatim:
 
 A safe binary-only next step is to inspect the Elead `applicationProfiles` DEX for an existing SPP init method and its profile-mask source, then patch only that existing code path if it is present, preserving HFP/A2DP. Wi-Fi is a separate boot/kernel problem; a `system.img`-only edit cannot add a missing compatible kernel driver.
 
+## Exact firmware paths and SPP forwarding from the available image reports
+
+- Stock `system.img` contains `/vendor/firmware/ti-connectivity/wl18xx-fw-4.bin` (681,704 bytes) and `wl18xx-conf.bin` (1,226 bytes). `/etc/wifi/wlconf/` contains `struct.bin` (9,251 bytes) and `wl18xx-conf-default.bin` (1,226 bytes); `/etc/wifi/nvram.txt` is also present. These are **WL18xx-named** assets, not proof of compatibility with the kernel's `wl12xx` driver. The queried `/system/etc/firmware/ti-connectivity/` path is not the path listed in this image. The updater separately references `/mnt/para_fw/wl1271-nvs.bin`; do not overwrite or recreate that calibration file.
+- The Elead service's `elBTreqSppConnect()` and `elBTreqSppSendData()` forward to an `INfCommandSpp` Binder interface held by the service (`access$62`), not directly to `EleadManager`. `INfCommandSpp` declares `reqSppConnect`, `reqSppSendData`, callback registration and state queries. `com.nforetek.bt.service.NfServiceSpp` appears as a DEX string, but the implementation endpoint/package and its live registration were not resolved by this static report.
+- `elBluetoothService.onCreate()` obtains `EleadManager` using `getSystemService("elead_service")` for status/listener operations, then sets up profile classes. The inspected DEX has no direct JNI `native` declaration or `System.loadLibrary` call in this service. Native Bluelet components exist separately; a direct Java-to-`.so` call path is not established.
+
 ## Assessment and safe next work
 
 1. Do not rewrite/replace either driver yet. The Wi-Fi image already contains `wl12xx`; the immediate unknown is whether the runtime enable/power/firmware/NVS path completes. The UI state alone cannot distinguish those causes.
