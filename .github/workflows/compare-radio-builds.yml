@@ -1,0 +1,127 @@
+name: Compare radio components across firmware builds
+
+on:
+  push:
+    paths:
+      - '.github/workflows/compare-radio-builds.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+      - name: Install image tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq p7zip-full unar e2fsprogs cpio file
+      - name: Download archived firmware variants
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          root="$RUNNER_TEMP/radio-compare"
+          mkdir -p "$root/downloads" "$root/images"
+          gh release download 'прошивка_от_дилера' --repo "$GITHUB_REPOSITORY" -p lifan.rar -D "$root/downloads"
+          mv "$root/downloads/lifan.rar" "$root/downloads/dealer.rar"
+          gh release download 'прошивка_от_дилера_с_исправленным_часовым_поясом' --repo "$GITHUB_REPOSITORY" -p 831_lf01_20170309_time_russia.rar -D "$root/downloads"
+          mv "$root/downloads/831_lf01_20170309_time_russia.rar" "$root/downloads/dealer-time.rar"
+          gh release download stock --repo "$GITHUB_REPOSITORY" -p x60_2021.7z -D "$root/downloads"
+          mv "$root/downloads/x60_2021.7z" "$root/downloads/stock-2021.7z"
+          gh release download 'рабочая-с-лаунчером' --repo "$GITHUB_REPOSITORY" -p system.img -D "$root/downloads"
+          mv "$root/downloads/system.img" "$root/downloads/launcher-system.img"
+          gh release download lite-apps --repo "$GITHUB_REPOSITORY" -p system.img -D "$root/downloads"
+          mv "$root/downloads/system.img" "$root/downloads/lite-apps-system.img"
+          sha256sum "$root"/downloads/* | tee reports/radio-build-archive-hashes.txt
+          for name in dealer dealer-time stock-2021; do
+            file=$(find "$root/downloads" -maxdepth 1 -type f -name "$name.*" -print -quit)
+            out="$root/images/$name"
+            mkdir -p "$out"
+            7z x -y "$file" -o"$out" >/dev/null
+            img=$(find "$out" -type f -name system.img -print -quit)
+            test -s "$img"
+            cp "$img" "$root/images/$name-system.img"
+          done
+          cp "$root/downloads/launcher-system.img" "$root/images/launcher-system.img"
+          cp "$root/downloads/lite-apps-system.img" "$root/images/lite-apps-system.img"
+      - name: Compare Wi-Fi, Bluetooth and init payloads
+        run: |
+          set -euo pipefail
+          root="$RUNNER_TEMP/radio-compare"
+          report=reports/radio-build-component-comparison.txt
+          mkdir -p "$root/extract"
+          {
+            echo '# Radio component comparison across released firmware builds'
+            echo 'All contents are static image inspection; no device runtime test is implied.'
+            echo
+            for image in "$root"/images/*-system.img; do
+              name=$(basename "$image" .img)
+              dest="$root/extract/$name"
+              mkdir -p "$dest/files"
+              echo "## $name"
+              echo "system SHA-256: $(sha256sum "$image" | cut -d' ' -f1)"
+              for path in /etc/wifi /etc/wifi/wlconf /etc/bluetooth /etc/firmware /vendor/firmware /vendor/firmware/ti-connectivity /lib/modules /lib/hw /vendor/lib; do
+                echo "### $path"
+                debugfs -R "ls -l $path" "$image" 2>&1 || true
+              done
+              for path in /etc/wifi/nvram.txt /etc/bluetooth/bt_vendor.conf /etc/firmware/bcm20710a1.hcd /vendor/firmware/fw_bcm40181a2.bin /vendor/firmware/fw_bcm40181a2_apsta.bin /vendor/firmware/fw_bcm40181a2_p2p.bin /vendor/firmware/ti-connectivity/wl18xx-fw-4.bin /vendor/firmware/ti-connectivity/wl18xx-conf.bin /system/bin/el_wifi_enable.sh /system/bin/wifi/rc.wifi /lib/libbluelet.so /bin/blueletd /lib/hw/bluetooth.default.so /vendor/lib/libbt-vendor.so; do
+                target="$dest/files/$(echo "$path" | tr '/' '_')"
+                if debugfs -R "dump $path $target" "$image" >/dev/null 2>&1 && [ -s "$target" ]; then
+                  printf '%s ' "$path"
+                  sha256sum "$target" | cut -d' ' -f1
+                else
+                  rm -f "$target"
+                  printf '%s MISSING\n' "$path"
+                fi
+              done
+              echo
+            done
+          } > "$report"
+          cat "$report"
+      - name: Compare boot init configuration
+        run: |
+          set -euo pipefail
+          root="$RUNNER_TEMP/radio-compare"
+          for name in dealer dealer-time stock-2021; do
+            archive=$(find "$root/downloads" -maxdepth 1 -type f -name "$name.*" -print -quit)
+            dir="$root/boot-$name"
+            mkdir -p "$dir"
+            7z x -y "$archive" 'boot.img' -o"$dir" >/dev/null
+            boot=$(find "$dir" -name boot.img -print -quit)
+            python3 - "$boot" "$dir/ramdisk.cpio.gz" <<'PY'
+          import struct, sys
+          b=open(sys.argv[1],'rb').read()
+          if b[:8]!=b'ANDROID!': raise SystemExit('bad boot image')
+          ks,=struct.unpack_from('<I',b,8); rs,=struct.unpack_from('<I',b,16); page,=struct.unpack_from('<I',b,36)
+          start=page+((ks+page-1)//page)*page
+          open(sys.argv[2],'wb').write(b[start:start+rs])
+          PY
+            gzip -dc "$dir/ramdisk.cpio.gz" > "$dir/ramdisk.cpio"
+            mkdir "$dir/root"
+            (cd "$dir/root" && cpio -id --no-absolute-filenames < "$dir/ramdisk.cpio" 2>/dev/null)
+            {
+              echo "## $name boot/init radio references"
+              grep -RinE 'wifi|wlan|wl12|wl18|wl127|bcmdhd|AP6251|bluetooth|bluelet|rfkill|hci_tty|ttymxc1|ttyO1|el_wifi_enable|wifi_loader|insmod|modprobe' "$dir/root" 2>/dev/null || true
+            } >> reports/radio-build-component-comparison.txt
+          done
+      - name: Save text comparison to this branch
+        if: always()
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/radio-build-archive-hashes.txt reports/radio-build-component-comparison.txt
+          git diff --cached --quiet && exit 0
+          git commit -m 'report: compare Wi-Fi and Bluetooth components in released builds'
+          for attempt in 1 2 3 4 5; do
+            if git pull --rebase --autostash origin "$GITHUB_REF_NAME" >/dev/null 2>&1 && git push origin "HEAD:refs/heads/$GITHUB_REF_NAME"; then exit 0; fi
+            git rebase --abort >/dev/null 2>&1 || true
+            sleep 10
+          done
+          exit 1
