@@ -9,11 +9,11 @@ uboot: {'head_hex': '860100ea000000000000000000000000000000000000000000000000000
 
 mcu: {'first_lines': [':100000000202CE1040020D00B11003026210000087', ':0A001000F07B007A00790022222222', ':07001B00025DAD75B755222F', ':10002300020814004633344F4241002D4F769EBEE2', ':100033002D4E759DBEDF004F384B56485533344225', ':1000430041010204081020313241427F05B195D2AB', ':1000530008C2162274022573F582E43400F5832264', ':0700630012484FE4F5B6223C', ':10006B00025FAD9174EF70FB120D51E1CDB1957F35', ':06007B0017B1957D04227F', ':10008300026012017500017400017300C11DC11EDD', ':10009300016F00017000C11F410001004105FF0312', ':1000A300015800016400015F0001650008A910A167', ':1000B3000200000010030163000160000261000000', ':1000C30041056400C19341056D00C197C112C11878', ':1000D30041056C0041056100C115410577004105EB', ':1000E3006200C11641056F00C11041058000410542', ':1000F3007000C11441057801410563004105810089', ':10010300011A000216000002180000024600000156', ':100113004300023C0002023E000002410000014095'], 'size': 75083, 'record_types': ['00', '01']}
 
-system: {'files': 1342, 'apks': 52, 'libs': 279, 'root_dir': '/tmp/fw_2laex4pi/sysroot', 'props': ['build.prop', 'etc/recovery-resource.dat']}
+system: {'files': 1342, 'apks': 52, 'libs': 279, 'root_dir': '/tmp/fw_vig91q_w/sysroot', 'props': ['build.prop', 'etc/recovery-resource.dat']}
 
 
 ЛОГ:
-Рабочая папка: /tmp/fw_2laex4pi
+Рабочая папка: /tmp/fw_vig91q_w
 Исходники: /home/runner/work/_temp/radio-review/unpacked
 
 === Найденные образы ===
@@ -44,8 +44,8 @@ system: {'files': 1342, 'apks': 52, 'libs': 279, 'root_dir': '/tmp/fw_2laex4pi/s
   file: /home/runner/work/_temp/radio-review/unpacked/system.img: Linux rev 1.0 ext4 filesystem data, UUID=57f8f4bc-abf4-655f-bf67-946fc0f9f25b (extents) (large files)
   debugfs rc=0
   rdump rc=0: debugfs 1.47.0 (5-Feb-2023)
-rdump: Operation not permitted while changing ownership of /tmp/fw_2laex4pi/sysroot//lost+found
-dump_file: Operation not permitted while changing ownership of /tmp/fw_2laex4pi/sysroot//app/BSEDemo.apk
+rdump: Operation not permitted while changing ownership of /tmp/fw_vig91q_w/sysroot//lost+found
+dump_file: Operation not permitted while changing ownership of /tmp/fw_vig91q_w/sysroot//app/BSEDemo.apk
 dump_file: Operation not permitted while changing ownership of /tmp/fw_
   найдено .prop/rc файлов: 2
 
