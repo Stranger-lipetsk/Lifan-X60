@@ -83,6 +83,7 @@ def dex_inventory(apk: APK) -> list[str]:
         "com/nforetek/bt/aidl/ielbluetoothservice",
         "com/nforetek/bt/aidl/ielbluetoothservicecallback",
         "tw/com/elead/el830/elbluetooth/elbluetoothservice",
+        "com/elead/bt/applicationprofiles/applicationprofiles",
     )
     code_markers = (
         "infcommandspp$stub",
@@ -94,6 +95,7 @@ def dex_inventory(apk: APK) -> list[str]:
         "elbluetoothservice$3",
         "elbluetoothservice$11",
         "tw/com/elead/el830/elbluetooth/elbluetoothservice;",
+        "com/elead/bt/applicationprofiles/applicationprofiles;",
     )
     method_markers = (
         "spp", "btpair", "btpaired", "ontransact", "asinterface",
