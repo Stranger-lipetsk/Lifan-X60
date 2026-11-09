@@ -1,0 +1,329 @@
+# Точные radio-компоненты в исходных системных образах
+Все чтения через debugfs; бинарные калибровочные данные в отчёт не копируются.
+## dealer — system SHA-256 f70a5e42f9cc9f819486b2af2ee26f8c9567eb4f9ec8056ef9e0676684b79592
+### /etc/wifi
+debugfs 1.47.0 (5-Feb-2023)
+    803   40755 (2)      0      0    4096  9-Mar-2017 07:30 .
+    586   40755 (2)      0      0    4096  9-Mar-2017 07:30 ..
+    804  100644 (1)      0      0    1203  9-Mar-2017 07:30 nvram.txt
+    805  100644 (1)      0      0      24  9-Mar-2017 07:30 p2p_supplicant_overlay.conf
+    806   40755 (2)      0      0    4096  9-Mar-2017 07:30 wlconf
+    809  100644 (1)      0      0     271  9-Mar-2017 07:30 wpa_supplicant.conf
+    810  100644 (1)      0      0      31  9-Mar-2017 07:30 wpa_supplicant_overlay.conf
+
+### /etc/wifi/wlconf
+debugfs 1.47.0 (5-Feb-2023)
+    806   40755 (2)      0      0    4096  9-Mar-2017 07:30 .
+    803   40755 (2)      0      0    4096  9-Mar-2017 07:30 ..
+    807  100644 (1)      0      0    9251  9-Mar-2017 07:30 struct.bin
+    808  100644 (1)      0      0    1226  9-Mar-2017 07:30 wl18xx-conf-default.bin
+
+### /etc/bluetooth
+debugfs 1.47.0 (5-Feb-2023)
+    594   40755 (2)      0      0    4096  9-Mar-2017 07:30 .
+    586   40755 (2)      0      0    4096  9-Mar-2017 07:30 ..
+    595  100644 (1)      0      0      91  9-Mar-2017 07:30 bt_vendor.conf
+
+### /etc/firmware
+debugfs 1.47.0 (5-Feb-2023)
+    612   40755 (2)      0      0    4096  9-Mar-2017 07:30 .
+    586   40755 (2)      0      0    4096  9-Mar-2017 07:30 ..
+    613  100644 (1)      0      0   26621  9-Mar-2017 07:30 bcm20710a1.hcd
+
+### /vendor/firmware
+debugfs 1.47.0 (5-Feb-2023)
+   1365   40755 (2)      0   2000    4096  9-Mar-2017 07:30 .
+   1362   40755 (2)      0   2000    4096  9-Mar-2017 07:30 ..
+   1366  100644 (1)      0      0   210282  9-Mar-2017 07:30 fw_bcm40181a2.bin
+   1367  100644 (1)      0      0   204070  9-Mar-2017 07:30 fw_bcm40181a2_apsta.bin
+   1368  100644 (1)      0      0   210282  9-Mar-2017 07:30 fw_bcm40181a2_p2p.bin
+   1369   40755 (2)      0   2000    4096  9-Mar-2017 07:30 ti-connectivity
+
+### /vendor/firmware/ti-connectivity
+debugfs 1.47.0 (5-Feb-2023)
+   1369   40755 (2)      0   2000    4096  9-Mar-2017 07:30 .
+   1365   40755 (2)      0   2000    4096  9-Mar-2017 07:30 ..
+   1370  100644 (1)      0      0    1226  9-Mar-2017 07:30 wl18xx-conf.bin
+   1371  100644 (1)      0      0   681704  9-Mar-2017 07:30 wl18xx-fw-4.bin
+
+### /lib/modules
+debugfs 1.47.0 (5-Feb-2023)
+   1263   40755 (2)      0      0    4096  9-Mar-2017 07:30 .
+    978   40755 (2)      0      0    8192  9-Mar-2017 07:30 ..
+   1264  100644 (1)      0      0   244646  9-Mar-2017 07:30 asix.ko
+   1265  100644 (1)      0      0   3232186  9-Mar-2017 07:30 cfg80211.ko
+   1266  100644 (1)      0      0   354594  9-Mar-2017 07:30 elead_gpio.ko
+   1267  100644 (1)      0      0   166452  9-Mar-2017 07:30 gt9xx.ko
+   1268  100644 (1)      0      0   1439307  9-Mar-2017 07:30 ipod_dev.ko
+   1269  100644 (1)      0      0   159050  9-Mar-2017 07:30 max9768.ko
+   1270  100644 (1)      0      0   2189690  9-Mar-2017 07:30 scsi_mod.ko
+   1271  100644 (1)      0      0   39855  9-Mar-2017 07:30 scsi_wait_scan.ko
+   1272  100644 (1)      0      0   286684  9-Mar-2017 07:30 sd_mod.ko
+   1273  100644 (1)      0      0   1126913  9-Mar-2017 07:30 usb-storage.ko
+   1274  100644 (1)      0      0   262446  9-Mar-2017 07:30 usbhid.ko
+
+### /lib/hw
+debugfs 1.47.0 (5-Feb-2023)
+    993   40755 (2)      0      0    4096  9-Mar-2017 07:30 .
+    978   40755 (2)      0      0    8192  9-Mar-2017 07:30 ..
+    994  100644 (1)      0      0    5436  9-Mar-2017 07:30 a2dp_sink.default.so
+    995  100644 (1)      0      0    9532  9-Mar-2017 07:30 audio.a2dp.default.so
+    996  100644 (1)      0      0    5392  9-Mar-2017 07:30 audio.primary.default.so
+    997  100644 (1)      0      0   37024  9-Mar-2017 07:30 audio.primary.imx6.so
+    998  100644 (1)      0      0   17796  9-Mar-2017 07:30 audio.r_submix.default.so
+    999  100644 (1)      0      0   26268  9-Mar-2017 07:30 audio.spdif.imx6.so
+   1000  100644 (1)      0      0    5424  9-Mar-2017 07:30 audio.usb.default.so
+   1001  100644 (1)      0      0   75336  9-Mar-2017 07:30 audio_policy.default.so
+   1002  100644 (1)      0      0   104020  9-Mar-2017 07:30 camera.imx6.so
+   1003  100644 (1)      0      0    9532  9-Mar-2017 07:30 elead_gpio.default.so
+   1004  100644 (1)      0      0    9588  9-Mar-2017 07:30 elead_video.default.so
+   1005  100644 (1)      0      0    9580  9-Mar-2017 07:30 gps.default.so
+   1006  100644 (1)      0      0    9812  9-Mar-2017 07:30 gralloc.default.so
+   1007  100644 (1)      0      0   13976  9-Mar-2017 07:30 gralloc.imx6.so
+   1008  100644 (1)      0      0   18040  9-Mar-2017 07:30 gralloc_viv.imx6.so
+   1009  100644 (1)      0      0   17728  9-Mar-2017 07:30 hwcomposer.imx6.so
+   1010  100644 (1)      0      0   13576  9-Mar-2017 07:30 hwcomposer_fsl.imx6.so
+   1011  100644 (1)      0      0   30012  9-Mar-2017 07:30 hwcomposer_viv.imx6.so
+   1012  100644 (1)      0      0    5388  9-Mar-2017 07:30 keystore.default.so
+   1013  100644 (1)      0      0    5428  9-Mar-2017 07:30 lights.imx6.so
+   1014  100644 (1)      0      0    5388  9-Mar-2017 07:30 local_time.default.so
+   1015  100644 (1)      0      0    5388  9-Mar-2017 07:30 power.default.so
+   1016  100644 (1)      0      0   13732  9-Mar-2017 07:30 power.imx6.so
+
+### /vendor/lib
+debugfs 1.47.0 (5-Feb-2023)
+   1372   40755 (2)      0   2000    4096  9-Mar-2017 07:30 .
+   1362   40755 (2)      0   2000    4096  9-Mar-2017 07:30 ..
+   1373  100644 (1)      0      0   13876  9-Mar-2017 07:30 libbt-vendor.so
+
+/etc/bluetooth/bt_vendor.conf 77d13c01de38fca6b7150991d2bb52f001fac7671c883a5e4006a61c53d7f540
+/etc/firmware/bcm20710a1.hcd d08f7a30b9412e2336d3de4be2bf73b680c561f095632eef897c04626e1d35c1
+/vendor/firmware/fw_bcm40181a2.bin 27f93a7884ca7a8ff4a7536e76d6cde02bbab7e5a271810ea24f907be9b386e9
+/vendor/firmware/fw_bcm40181a2_apsta.bin 38bb15aca036009d5d98930d617bd81142a157d2f516003e332d6396f223f982
+/vendor/firmware/fw_bcm40181a2_p2p.bin 27f93a7884ca7a8ff4a7536e76d6cde02bbab7e5a271810ea24f907be9b386e9
+/vendor/firmware/ti-connectivity/wl18xx-fw-4.bin 0be8f1e3df438e4ea2abfe0f73cf4d3a4fb659f714c9c95224216cb3747c1d5d
+/vendor/firmware/ti-connectivity/wl18xx-conf.bin 2d3c7785db6ba4b0fd79e37e210a5dc7585fd45136cd7c2a36c590ecc4150aa3
+/system/bin/el_wifi_enable.sh MISSING
+/system/bin/wifi/rc.wifi MISSING
+/lib/libbluelet.so 40549e6dded8b3793c8187c5d137fbd01a9f2cff900636c9b4ad407b5ba014e0
+/bin/blueletd dbc463afdd690a25d163ae7b9fd7041ae3489197118d248d5f02558aaad77b52
+/lib/hw/bluetooth.default.so MISSING
+/vendor/lib/libbt-vendor.so d27d353999f6a5ecd590162d20086aaf1800364d7c6ed79ef49e389d6637aeaf
+## dealer-time — system SHA-256 f70a5e42f9cc9f819486b2af2ee26f8c9567eb4f9ec8056ef9e0676684b79592
+### /etc/wifi
+debugfs 1.47.0 (5-Feb-2023)
+    803   40755 (2)      0      0    4096  9-Mar-2017 07:30 .
+    586   40755 (2)      0      0    4096  9-Mar-2017 07:30 ..
+    804  100644 (1)      0      0    1203  9-Mar-2017 07:30 nvram.txt
+    805  100644 (1)      0      0      24  9-Mar-2017 07:30 p2p_supplicant_overlay.conf
+    806   40755 (2)      0      0    4096  9-Mar-2017 07:30 wlconf
+    809  100644 (1)      0      0     271  9-Mar-2017 07:30 wpa_supplicant.conf
+    810  100644 (1)      0      0      31  9-Mar-2017 07:30 wpa_supplicant_overlay.conf
+
+### /etc/wifi/wlconf
+debugfs 1.47.0 (5-Feb-2023)
+    806   40755 (2)      0      0    4096  9-Mar-2017 07:30 .
+    803   40755 (2)      0      0    4096  9-Mar-2017 07:30 ..
+    807  100644 (1)      0      0    9251  9-Mar-2017 07:30 struct.bin
+    808  100644 (1)      0      0    1226  9-Mar-2017 07:30 wl18xx-conf-default.bin
+
+### /etc/bluetooth
+debugfs 1.47.0 (5-Feb-2023)
+    594   40755 (2)      0      0    4096  9-Mar-2017 07:30 .
+    586   40755 (2)      0      0    4096  9-Mar-2017 07:30 ..
+    595  100644 (1)      0      0      91  9-Mar-2017 07:30 bt_vendor.conf
+
+### /etc/firmware
+debugfs 1.47.0 (5-Feb-2023)
+    612   40755 (2)      0      0    4096  9-Mar-2017 07:30 .
+    586   40755 (2)      0      0    4096  9-Mar-2017 07:30 ..
+    613  100644 (1)      0      0   26621  9-Mar-2017 07:30 bcm20710a1.hcd
+
+### /vendor/firmware
+debugfs 1.47.0 (5-Feb-2023)
+   1365   40755 (2)      0   2000    4096  9-Mar-2017 07:30 .
+   1362   40755 (2)      0   2000    4096  9-Mar-2017 07:30 ..
+   1366  100644 (1)      0      0   210282  9-Mar-2017 07:30 fw_bcm40181a2.bin
+   1367  100644 (1)      0      0   204070  9-Mar-2017 07:30 fw_bcm40181a2_apsta.bin
+   1368  100644 (1)      0      0   210282  9-Mar-2017 07:30 fw_bcm40181a2_p2p.bin
+   1369   40755 (2)      0   2000    4096  9-Mar-2017 07:30 ti-connectivity
+
+### /vendor/firmware/ti-connectivity
+debugfs 1.47.0 (5-Feb-2023)
+   1369   40755 (2)      0   2000    4096  9-Mar-2017 07:30 .
+   1365   40755 (2)      0   2000    4096  9-Mar-2017 07:30 ..
+   1370  100644 (1)      0      0    1226  9-Mar-2017 07:30 wl18xx-conf.bin
+   1371  100644 (1)      0      0   681704  9-Mar-2017 07:30 wl18xx-fw-4.bin
+
+### /lib/modules
+debugfs 1.47.0 (5-Feb-2023)
+   1263   40755 (2)      0      0    4096  9-Mar-2017 07:30 .
+    978   40755 (2)      0      0    8192  9-Mar-2017 07:30 ..
+   1264  100644 (1)      0      0   244646  9-Mar-2017 07:30 asix.ko
+   1265  100644 (1)      0      0   3232186  9-Mar-2017 07:30 cfg80211.ko
+   1266  100644 (1)      0      0   354594  9-Mar-2017 07:30 elead_gpio.ko
+   1267  100644 (1)      0      0   166452  9-Mar-2017 07:30 gt9xx.ko
+   1268  100644 (1)      0      0   1439307  9-Mar-2017 07:30 ipod_dev.ko
+   1269  100644 (1)      0      0   159050  9-Mar-2017 07:30 max9768.ko
+   1270  100644 (1)      0      0   2189690  9-Mar-2017 07:30 scsi_mod.ko
+   1271  100644 (1)      0      0   39855  9-Mar-2017 07:30 scsi_wait_scan.ko
+   1272  100644 (1)      0      0   286684  9-Mar-2017 07:30 sd_mod.ko
+   1273  100644 (1)      0      0   1126913  9-Mar-2017 07:30 usb-storage.ko
+   1274  100644 (1)      0      0   262446  9-Mar-2017 07:30 usbhid.ko
+
+### /lib/hw
+debugfs 1.47.0 (5-Feb-2023)
+    993   40755 (2)      0      0    4096  9-Mar-2017 07:30 .
+    978   40755 (2)      0      0    8192  9-Mar-2017 07:30 ..
+    994  100644 (1)      0      0    5436  9-Mar-2017 07:30 a2dp_sink.default.so
+    995  100644 (1)      0      0    9532  9-Mar-2017 07:30 audio.a2dp.default.so
+    996  100644 (1)      0      0    5392  9-Mar-2017 07:30 audio.primary.default.so
+    997  100644 (1)      0      0   37024  9-Mar-2017 07:30 audio.primary.imx6.so
+    998  100644 (1)      0      0   17796  9-Mar-2017 07:30 audio.r_submix.default.so
+    999  100644 (1)      0      0   26268  9-Mar-2017 07:30 audio.spdif.imx6.so
+   1000  100644 (1)      0      0    5424  9-Mar-2017 07:30 audio.usb.default.so
+   1001  100644 (1)      0      0   75336  9-Mar-2017 07:30 audio_policy.default.so
+   1002  100644 (1)      0      0   104020  9-Mar-2017 07:30 camera.imx6.so
+   1003  100644 (1)      0      0    9532  9-Mar-2017 07:30 elead_gpio.default.so
+   1004  100644 (1)      0      0    9588  9-Mar-2017 07:30 elead_video.default.so
+   1005  100644 (1)      0      0    9580  9-Mar-2017 07:30 gps.default.so
+   1006  100644 (1)      0      0    9812  9-Mar-2017 07:30 gralloc.default.so
+   1007  100644 (1)      0      0   13976  9-Mar-2017 07:30 gralloc.imx6.so
+   1008  100644 (1)      0      0   18040  9-Mar-2017 07:30 gralloc_viv.imx6.so
+   1009  100644 (1)      0      0   17728  9-Mar-2017 07:30 hwcomposer.imx6.so
+   1010  100644 (1)      0      0   13576  9-Mar-2017 07:30 hwcomposer_fsl.imx6.so
+   1011  100644 (1)      0      0   30012  9-Mar-2017 07:30 hwcomposer_viv.imx6.so
+   1012  100644 (1)      0      0    5388  9-Mar-2017 07:30 keystore.default.so
+   1013  100644 (1)      0      0    5428  9-Mar-2017 07:30 lights.imx6.so
+   1014  100644 (1)      0      0    5388  9-Mar-2017 07:30 local_time.default.so
+   1015  100644 (1)      0      0    5388  9-Mar-2017 07:30 power.default.so
+   1016  100644 (1)      0      0   13732  9-Mar-2017 07:30 power.imx6.so
+
+### /vendor/lib
+debugfs 1.47.0 (5-Feb-2023)
+   1372   40755 (2)      0   2000    4096  9-Mar-2017 07:30 .
+   1362   40755 (2)      0   2000    4096  9-Mar-2017 07:30 ..
+   1373  100644 (1)      0      0   13876  9-Mar-2017 07:30 libbt-vendor.so
+
+/etc/bluetooth/bt_vendor.conf 77d13c01de38fca6b7150991d2bb52f001fac7671c883a5e4006a61c53d7f540
+/etc/firmware/bcm20710a1.hcd d08f7a30b9412e2336d3de4be2bf73b680c561f095632eef897c04626e1d35c1
+/vendor/firmware/fw_bcm40181a2.bin 27f93a7884ca7a8ff4a7536e76d6cde02bbab7e5a271810ea24f907be9b386e9
+/vendor/firmware/fw_bcm40181a2_apsta.bin 38bb15aca036009d5d98930d617bd81142a157d2f516003e332d6396f223f982
+/vendor/firmware/fw_bcm40181a2_p2p.bin 27f93a7884ca7a8ff4a7536e76d6cde02bbab7e5a271810ea24f907be9b386e9
+/vendor/firmware/ti-connectivity/wl18xx-fw-4.bin 0be8f1e3df438e4ea2abfe0f73cf4d3a4fb659f714c9c95224216cb3747c1d5d
+/vendor/firmware/ti-connectivity/wl18xx-conf.bin 2d3c7785db6ba4b0fd79e37e210a5dc7585fd45136cd7c2a36c590ecc4150aa3
+/system/bin/el_wifi_enable.sh MISSING
+/system/bin/wifi/rc.wifi MISSING
+/lib/libbluelet.so 40549e6dded8b3793c8187c5d137fbd01a9f2cff900636c9b4ad407b5ba014e0
+/bin/blueletd dbc463afdd690a25d163ae7b9fd7041ae3489197118d248d5f02558aaad77b52
+/lib/hw/bluetooth.default.so MISSING
+/vendor/lib/libbt-vendor.so d27d353999f6a5ecd590162d20086aaf1800364d7c6ed79ef49e389d6637aeaf
+## enthusiast — system SHA-256 b6bbbe529942ffec250cad993ae9cbb808721c27cf2536fb3fb11120130e8545
+### /etc/wifi
+debugfs 1.47.0 (5-Feb-2023)
+    803   40755 (2)      0      0    4096 28-Mar-2021 11:29 .
+    586   40755 (2)      0      0    4096 28-Mar-2021 11:29 ..
+    804  100644 (1)      0      0    1203 28-Mar-2021 11:29 nvram.txt
+    805  100644 (1)      0      0      24 28-Mar-2021 11:29 p2p_supplicant_overlay.conf
+    806   40755 (2)      0      0    4096 28-Mar-2021 11:29 wlconf
+    809  100644 (1)      0      0     271 28-Mar-2021 11:29 wpa_supplicant.conf
+    810  100644 (1)      0      0      31 28-Mar-2021 11:29 wpa_supplicant_overlay.conf
+
+### /etc/wifi/wlconf
+debugfs 1.47.0 (5-Feb-2023)
+    806   40755 (2)      0      0    4096 28-Mar-2021 11:29 .
+    803   40755 (2)      0      0    4096 28-Mar-2021 11:29 ..
+    807  100644 (1)      0      0    9251 28-Mar-2021 11:29 struct.bin
+    808  100644 (1)      0      0    1226 28-Mar-2021 11:29 wl18xx-conf-default.bin
+
+### /etc/bluetooth
+debugfs 1.47.0 (5-Feb-2023)
+    594   40755 (2)      0      0    4096 28-Mar-2021 11:29 .
+    586   40755 (2)      0      0    4096 28-Mar-2021 11:29 ..
+    595  100644 (1)      0      0      91 28-Mar-2021 11:29 bt_vendor.conf
+
+### /etc/firmware
+debugfs 1.47.0 (5-Feb-2023)
+    612   40755 (2)      0      0    4096 28-Mar-2021 11:29 .
+    586   40755 (2)      0      0    4096 28-Mar-2021 11:29 ..
+    613  100644 (1)      0      0   26621 28-Mar-2021 11:29 bcm20710a1.hcd
+
+### /vendor/firmware
+debugfs 1.47.0 (5-Feb-2023)
+   1365   40755 (2)      0   2000    4096 28-Mar-2021 11:29 .
+   1362   40755 (2)      0   2000    4096 28-Mar-2021 11:29 ..
+   1366  100644 (1)      0      0   210282 28-Mar-2021 11:29 fw_bcm40181a2.bin
+   1367  100644 (1)      0      0   204070 28-Mar-2021 11:29 fw_bcm40181a2_apsta.bin
+   1368  100644 (1)      0      0   210282 28-Mar-2021 11:29 fw_bcm40181a2_p2p.bin
+   1369   40755 (2)      0   2000    4096 28-Mar-2021 11:29 ti-connectivity
+
+### /vendor/firmware/ti-connectivity
+debugfs 1.47.0 (5-Feb-2023)
+   1369   40755 (2)      0   2000    4096 28-Mar-2021 11:29 .
+   1365   40755 (2)      0   2000    4096 28-Mar-2021 11:29 ..
+   1370  100644 (1)      0      0    1226 28-Mar-2021 11:29 wl18xx-conf.bin
+   1371  100644 (1)      0      0   681704 28-Mar-2021 11:29 wl18xx-fw-4.bin
+
+### /lib/modules
+debugfs 1.47.0 (5-Feb-2023)
+   1263   40755 (2)      0      0    4096 28-Mar-2021 11:29 .
+    978   40755 (2)      0      0    8192 28-Mar-2021 11:58 ..
+   1264  100644 (1)      0      0   244646 28-Mar-2021 11:29 asix.ko
+   1265  100644 (1)      0      0   3232186 28-Mar-2021 11:29 cfg80211.ko
+   1266  100644 (1)      0      0   354594 28-Mar-2021 11:29 elead_gpio.ko
+   1267  100644 (1)      0      0   166452 28-Mar-2021 11:29 gt9xx.ko
+   1268  100644 (1)      0      0   1439307 28-Mar-2021 11:29 ipod_dev.ko
+   1269  100644 (1)      0      0   159050 28-Mar-2021 11:29 max9768.ko
+   1270  100644 (1)      0      0   2189690 28-Mar-2021 11:29 scsi_mod.ko
+   1271  100644 (1)      0      0   39855 28-Mar-2021 11:29 scsi_wait_scan.ko
+   1272  100644 (1)      0      0   286684 28-Mar-2021 11:29 sd_mod.ko
+   1273  100644 (1)      0      0   1126913 28-Mar-2021 11:29 usb-storage.ko
+   1274  100644 (1)      0      0   262446 28-Mar-2021 11:29 usbhid.ko
+
+### /lib/hw
+debugfs 1.47.0 (5-Feb-2023)
+    993   40755 (2)      0      0    4096 28-Mar-2021 11:29 .
+    978   40755 (2)      0      0    8192 28-Mar-2021 11:58 ..
+    994  100644 (1)      0      0    5436 28-Mar-2021 11:29 a2dp_sink.default.so
+    995  100644 (1)      0      0    9532 28-Mar-2021 11:29 audio.a2dp.default.so
+    996  100644 (1)      0      0    5392 28-Mar-2021 11:29 audio.primary.default.so
+    997  100644 (1)      0      0   37024 28-Mar-2021 11:29 audio.primary.imx6.so
+    998  100644 (1)      0      0   17796 28-Mar-2021 11:29 audio.r_submix.default.so
+    999  100644 (1)      0      0   26268 28-Mar-2021 11:29 audio.spdif.imx6.so
+   1000  100644 (1)      0      0    5424 28-Mar-2021 11:29 audio.usb.default.so
+   1001  100644 (1)      0      0   75336 28-Mar-2021 11:29 audio_policy.default.so
+   1002  100644 (1)      0      0   104020 28-Mar-2021 11:29 camera.imx6.so
+   1003  100644 (1)      0      0    9532 28-Mar-2021 11:29 elead_gpio.default.so
+   1004  100644 (1)      0      0    9588 28-Mar-2021 11:29 elead_video.default.so
+   1005  100644 (1)      0      0    9580 28-Mar-2021 11:29 gps.default.so
+   1006  100644 (1)      0      0    9812 28-Mar-2021 11:29 gralloc.default.so
+   1007  100644 (1)      0      0   13976 28-Mar-2021 11:29 gralloc.imx6.so
+   1008  100644 (1)      0      0   18040 28-Mar-2021 11:29 gralloc_viv.imx6.so
+   1009  100644 (1)      0      0   17728 28-Mar-2021 11:29 hwcomposer.imx6.so
+   1010  100644 (1)      0      0   13576 28-Mar-2021 11:29 hwcomposer_fsl.imx6.so
+   1011  100644 (1)      0      0   30012 28-Mar-2021 11:29 hwcomposer_viv.imx6.so
+   1012  100644 (1)      0      0    5388 28-Mar-2021 11:29 keystore.default.so
+   1013  100644 (1)      0      0    5428 28-Mar-2021 11:29 lights.imx6.so
+   1014  100644 (1)      0      0    5388 28-Mar-2021 11:29 local_time.default.so
+   1015  100644 (1)      0      0    5388 28-Mar-2021 11:29 power.default.so
+   1016  100644 (1)      0      0   13732 28-Mar-2021 11:29 power.imx6.so
+
+### /vendor/lib
+debugfs 1.47.0 (5-Feb-2023)
+   1372   40755 (2)      0   2000    4096 28-Mar-2021 11:29 .
+   1362   40755 (2)      0   2000    4096 28-Mar-2021 11:29 ..
+   1373  100644 (1)      0      0   13876 28-Mar-2021 11:29 libbt-vendor.so
+
+/etc/bluetooth/bt_vendor.conf 77d13c01de38fca6b7150991d2bb52f001fac7671c883a5e4006a61c53d7f540
+/etc/firmware/bcm20710a1.hcd d08f7a30b9412e2336d3de4be2bf73b680c561f095632eef897c04626e1d35c1
+/vendor/firmware/fw_bcm40181a2.bin 27f93a7884ca7a8ff4a7536e76d6cde02bbab7e5a271810ea24f907be9b386e9
+/vendor/firmware/fw_bcm40181a2_apsta.bin 38bb15aca036009d5d98930d617bd81142a157d2f516003e332d6396f223f982
+/vendor/firmware/fw_bcm40181a2_p2p.bin 27f93a7884ca7a8ff4a7536e76d6cde02bbab7e5a271810ea24f907be9b386e9
+/vendor/firmware/ti-connectivity/wl18xx-fw-4.bin 0be8f1e3df438e4ea2abfe0f73cf4d3a4fb659f714c9c95224216cb3747c1d5d
+/vendor/firmware/ti-connectivity/wl18xx-conf.bin 2d3c7785db6ba4b0fd79e37e210a5dc7585fd45136cd7c2a36c590ecc4150aa3
+/system/bin/el_wifi_enable.sh MISSING
+/system/bin/wifi/rc.wifi MISSING
+/lib/libbluelet.so 40549e6dded8b3793c8187c5d137fbd01a9f2cff900636c9b4ad407b5ba014e0
+/bin/blueletd dbc463afdd690a25d163ae7b9fd7041ae3489197118d248d5f02558aaad77b52
+/lib/hw/bluetooth.default.so MISSING
+/vendor/lib/libbt-vendor.so d27d353999f6a5ecd590162d20086aaf1800364d7c6ed79ef49e389d6637aeaf
