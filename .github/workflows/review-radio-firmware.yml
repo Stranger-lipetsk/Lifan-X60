@@ -106,7 +106,10 @@ jobs:
           open(sys.argv[3], 'w').write('\n'.join(x for x in strings if rx.search(x)) + '\n')
           PYCODE
           fi
-          cat "$report" "$out/kernel-radio-strings.txt" 2>/dev/null | grep -inE 'wifi|wlan|wl12|wl18|wl127|bcm|ap6251|bluetooth|bluelet|hci_tty|ttymxc1|ttyO1|nvs|firmware|cfg80211|\.ko|rfkill' | head -300 || true
+          {
+            echo '## Extracted boot-kernel radio-related strings (static markers only)'
+            cat "$out/kernel-radio-strings.txt" 2>/dev/null || true
+          } >> "$report"
       - name: Inspect the full SD boot ramdisk without executing its programs
         run: |
           set -euo pipefail
