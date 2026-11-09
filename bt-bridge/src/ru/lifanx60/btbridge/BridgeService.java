@@ -33,6 +33,7 @@ public final class BridgeService extends Service {
     public static final String ACTION_STOP = "ru.lifanx60.btbridge.STOP";
     public static final String ACTION_STATUS = "ru.lifanx60.btbridge.STATUS";
     public static final String EXTRA_ADDRESS = "address";
+    public static final String EXTRA_PIN = "pin";
     public static final String EXTRA_STATUS = "status";
 
     private static final String ELEAD_PACKAGE = "tw.com.elead.el830.elbluetooth";
@@ -44,6 +45,7 @@ public final class BridgeService extends Service {
     private final Handler handler = new Handler();
     private final ArrayBlockingQueue<byte[]> toTorque = new ArrayBlockingQueue<byte[]>(128);
     private String address;
+    private String pairingPin;
     private String status = "Мост остановлен.";
     private EleadRemote remote;
     private boolean bound;
@@ -108,6 +110,45 @@ public final class BridgeService extends Service {
         }
     };
 
+    private boolean pairingReceiverRegistered;
+    private final BroadcastReceiver pairingReceiver = new BroadcastReceiver() {
+        @Override public void onReceive(Context context, Intent intent) {
+            if (!BluetoothDevice.ACTION_PAIRING_REQUEST.equals(intent.getAction())) return;
+            BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+            if (device == null || address == null || !address.equalsIgnoreCase(device.getAddress())) return;
+            int variant = intent.getIntExtra(BluetoothDevice.EXTRA_PAIRING_VARIANT, -1);
+            String pin = pairingPin;
+            if (pin == null || pin.length() == 0) {
+                publish("Запрос сопряжения ELM получен, но PIN не задан. Введите известный PIN в поле моста и повторите попытку.");
+                return;
+            }
+            // Android 4.4 BluetoothDevice.PAIRING_VARIANT_PIN is 0. Never auto-confirm
+            // passkey/consent modes; only send a user-entered PIN for this selected MAC.
+            if (variant != 0) {
+                publish("Для выбранного устройства запрошен другой тип подтверждения (" + variant + "); PIN автоматически не отправлял.");
+                return;
+            }
+            try {
+                byte[] pinBytes = pin.getBytes("UTF-8");
+                java.lang.reflect.Method setPin = BluetoothDevice.class.getMethod("setPin", byte[].class);
+                Object accepted = setPin.invoke(device, new Object[] { pinBytes });
+                if (!Boolean.TRUE.equals(accepted)) {
+                    publish("Android не принял PIN для ELM327.");
+                    return;
+                }
+                try {
+                    java.lang.reflect.Method confirm = BluetoothDevice.class.getMethod("setPairingConfirmation", Boolean.TYPE);
+                    confirm.invoke(device, Boolean.TRUE);
+                } catch (Exception ignored) { }
+                pairingPin = null;
+                if (isOrderedBroadcast()) abortBroadcast();
+                publish("Введённый PIN передан только выбранному ELM327; ожидаю результат сопряжения.");
+            } catch (Exception e) {
+                publish("Android не позволил передать PIN через Bluetooth API: " + safeMessage(e));
+            }
+        }
+    };
+
     private final Runnable pairTimeout = new Runnable() {
         @Override public void run() {
             if (!isBonded()) failAndStop("Сопряжение не завершилось за 45 секунд. Проверьте системный запрос PIN/подтверждения; Torque пока не подключался.");
@@ -119,6 +160,10 @@ public final class BridgeService extends Service {
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
         registerReceiver(bondReceiver, filter);
         bondReceiverRegistered = true;
+        IntentFilter pairingFilter = new IntentFilter(BluetoothDevice.ACTION_PAIRING_REQUEST);
+        pairingFilter.setPriority(1000);
+        registerReceiver(pairingReceiver, pairingFilter);
+        pairingReceiverRegistered = true;
     }
 
     @Override public int onStartCommand(Intent intent, int flags, int startId) {
@@ -143,6 +188,8 @@ public final class BridgeService extends Service {
         if (active) stopBridge(true);
 
         address = requestedAddress.toUpperCase();
+        pairingPin = intent.getStringExtra(EXTRA_PIN);
+        if (pairingPin != null && pairingPin.length() == 0) pairingPin = null;
         active = true;
         startForeground(NOTIFICATION_ID, makeNotification("Подключаю Elead SPP к " + address));
         publish("Подключаюсь к штатному Elead SPP-сервису…");
@@ -345,6 +392,7 @@ public final class BridgeService extends Service {
             }
         }
         callbackRegistered = false;
+        pairingPin = null;
         remote = null;
         eleadBinder = null;
         if (bound) {
@@ -397,6 +445,11 @@ public final class BridgeService extends Service {
             try { unregisterReceiver(bondReceiver); } catch (Exception ignored) { }
             bondReceiverRegistered = false;
         }
+        if (pairingReceiverRegistered) {
+            try { unregisterReceiver(pairingReceiver); } catch (Exception ignored) { }
+            pairingReceiverRegistered = false;
+        }
+        pairingPin = null;
         super.onDestroy();
     }
 

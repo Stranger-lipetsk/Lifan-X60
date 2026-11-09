@@ -30,6 +30,7 @@ public final class MainActivity extends Activity {
     private final ArrayList<String> rows = new ArrayList<String>();
     private ArrayAdapter<String> listAdapter;
     private EditText addressInput;
+    private EditText pinInput;
     private TextView statusView;
     private boolean receiversRegistered;
 
@@ -116,12 +117,23 @@ public final class MainActivity extends Activity {
         addressInput.setTextSize(17);
         root.addView(addressInput, new LinearLayout.LayoutParams(-1, dp(52)));
 
+        TextView pinLabel = new TextView(this);
+        pinLabel.setText("PIN адаптера (необязательно; укажите только известный код):");
+        pinLabel.setTextSize(15);
+        root.addView(pinLabel, new LinearLayout.LayoutParams(-1, dp(32)));
+        pinInput = new EditText(this);
+        pinInput.setSingleLine(true);
+        pinInput.setInputType(android.text.InputType.TYPE_CLASS_NUMBER | android.text.InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+        pinInput.setHint("код, использованный при подключении телефона");
+        pinInput.setTextSize(17);
+        root.addView(pinInput, new LinearLayout.LayoutParams(-1, dp(52)));
+
         Button start = new Button(this);
         start.setText("Сопрячь и запустить SPP-мост");
         root.addView(start, new LinearLayout.LayoutParams(-1, dp(56)));
 
         TextView instructions = new TextView(this);
-        instructions.setText("После статуса «SPP подключён; TCP 127.0.0.1:35000 готов» в Torque задайте тип WiFi, IP 127.0.0.1 и порт 35000. Остановка моста не удаляет сопряжение.\n\nПриложение обращается только к штатному Elead SPP-сервису и не меняет системные файлы.");
+        instructions.setText("PIN указывайте только если знаете точный код адаптера; он используется в памяти для этого запроса и не сохраняется. После статуса «SPP подключён; TCP 127.0.0.1:35000 готов» в Torque задайте тип WiFi, IP 127.0.0.1 и порт 35000 — включать Wi-Fi не нужно. Остановка моста не удаляет сопряжение.\n\nПриложение обращается только к штатному Elead SPP-сервису и не меняет системные файлы.");
         instructions.setTextSize(14);
         instructions.setPadding(0, dp(8), 0, dp(6));
         root.addView(instructions, new LinearLayout.LayoutParams(-1, -2));
@@ -186,10 +198,17 @@ public final class MainActivity extends Activity {
         }
         if (bluetooth.isDiscovering()) bluetooth.cancelDiscovery();
         Intent intent = new Intent(this, BridgeService.class);
+        String pin = pinInput.getText().toString().trim();
+        if (pin.length() > 16) {
+            setStatus("PIN слишком длинный. Введите только известный код длиной до 16 цифр.");
+            return;
+        }
         intent.setAction(BridgeService.ACTION_START);
         intent.putExtra(BridgeService.EXTRA_ADDRESS, address);
+        if (pin.length() > 0) intent.putExtra(BridgeService.EXTRA_PIN, pin);
         startService(intent);
-        setStatus("Запрошен запуск моста для " + address + ". Подтвердите сопряжение на экране, если появится запрос.");
+        pinInput.setText("");
+        setStatus("Запрошен запуск моста для " + address + ". PIN не сохраняется; подтвердите сопряжение, если появится запрос.");
     }
 
     private void stopBridge() {

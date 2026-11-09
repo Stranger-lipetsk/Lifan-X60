@@ -16,7 +16,7 @@ The `Build OBD Bluetooth Bridge` GitHub Actions workflow builds a v1-signed API 
 
 1. Park the vehicle. Keep existing phone-to-head-unit pairings; this app does not remove them.
 2. Plug the ELM327 into the OBD socket and enable Bluetooth on the head unit.
-3. Open **OBD Bluetooth Bridge**, scan, select the ELM327, and press **Pair and start SPP bridge**. Confirm a system pairing prompt only if one appears and the code is expected. The bridge does not invent or silently enter a PIN.
+3. Open **OBD Bluetooth Bridge**, scan, select the ELM327, and press **Pair and start SPP bridge**. If you know the exact PIN already used to pair this ELM with the phone, enter it in the optional PIN field before starting. It remains in memory only and is submitted only for a PIN pairing request from the selected Bluetooth address; it is neither logged nor stored. Leave blank if unknown. Confirm any visible system pairing prompt only when its code is expected. The bridge never guesses a PIN and never auto-accepts passkey/consent pairing modes.
 4. Wait for `SPP connected; TCP 127.0.0.1:35000 ready`.
 5. In Torque set **Connection Type = WiFi**, adapter IP `127.0.0.1`, port `35000`, then connect.
 6. To stop, return to the bridge and press **Stop bridge**. The app requests only SPP disconnect; saved pairing stays in place.
