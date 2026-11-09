@@ -35,6 +35,12 @@ GitHub Actions downloaded `stock/x60_2021.7z` (SHA-256 `75e7d6cd900fac971b55fec9
 - The stock `init.rc` writes `0` to `/sys/class/rfkill/rfkill0/state` during Bluetooth preparation. This is an init-time write in the extracted image, not evidence of the later runtime state; Bluetooth discovery on the actual head unit shows the stack/radio can at least reach inquiry.
 - Reports `reports/radio-firmware-review/system-radio-inventory.txt` and `reports/radio-firmware-review/sd-boot-ramdisk-radio-audit.txt` contain exact inventories and init evidence. Raw binary firmware and NVRAM payloads are kept out of the report output; only hashes are recorded.
 
+## Cross-version comparison added after the owner's clarification
+
+The action `Сравнение дилерских прошивок и версии энтузиаста` compared the 2017 dealer package, its timezone-corrected repack, and the 2021 stock package. All three have the same boot image hash (`060d291a523bbe0d40c86537f070ed0feb90e04e0db0efef2a3e4594e9223b4b`). Their system images are not byte-identical, but the compared radio files have the same hashes: Broadcom Wi-Fi payloads, TI WL18xx payloads, Bluetooth config/patch, `libbluelet.so`, `blueletd`, and `libbt-vendor.so`. All three lack `/system/bin/el_wifi_enable.sh`, `/system/bin/wifi/rc.wifi`, and `/lib/hw/bluetooth.default.so`; the system module list has no dedicated Wi-Fi module. Details: `reports/compare-radio-components.txt`.
+
+Thus the user's report that all versions fail is consistent with the images reusing the same radio boot and radio components; simply choosing or reflashing one of those versions will not address the root cause.
+
 ## Updated runtime symptoms from the owner
 
 The owner confirms that Wi-Fi is nonfunctional in every firmware version tried, while Bluetooth exposes only headset behavior. This rules out treating an unmodified stock flash as a presumed fix. These are runtime observations and take precedence over static file presence. The stock image remains only a controlled baseline/rollback, not a recommended repair.
