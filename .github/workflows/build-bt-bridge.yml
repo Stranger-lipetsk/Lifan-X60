@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'bt-bridge/**'
+      - 'bt-diagnostics/**'
       - '.github/workflows/build-bt-bridge.yml'
   workflow_dispatch:
 
@@ -32,26 +33,29 @@ jobs:
           sudo "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --install \
             'build-tools;34.0.0' 'platforms;android-34'
 
-      - name: Compile and verify API 19 APK
+      - name: Compile and verify API 19 APKs
         run: |
           export ANDROID_HOME=${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}
           bash bt-bridge/build.sh
+          bash bt-diagnostics/build.sh
 
-      - name: Publish the small installable APK to this branch
+      - name: Publish the small installable APKs to this branch
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           cp bt-bridge/build/obd-bt-bridge.apk bt-bridge/obd-bt-bridge.apk
           sha256sum bt-bridge/obd-bt-bridge.apk | awk '{print $1 "  obd-bt-bridge.apk"}' > bt-bridge/obd-bt-bridge.apk.sha256
+          cp bt-diagnostics/build/wifi-radio-check.apk bt-diagnostics/wifi-radio-check.apk
+          sha256sum bt-diagnostics/wifi-radio-check.apk | awk '{print $1 "  wifi-radio-check.apk"}' > bt-diagnostics/wifi-radio-check.apk.sha256
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add -f -- bt-bridge/obd-bt-bridge.apk bt-bridge/obd-bt-bridge.apk.sha256
+          git add -f -- bt-bridge/obd-bt-bridge.apk bt-bridge/obd-bt-bridge.apk.sha256 bt-diagnostics/wifi-radio-check.apk bt-diagnostics/wifi-radio-check.apk.sha256
           if git diff --cached --quiet; then
             echo 'Installable APK is already current.'
             exit 0
           fi
-          git commit -m 'build: publish removable OBD Bluetooth bridge APK'
+          git commit -m 'build: publish OBD bridge and Wi-Fi diagnostics APKs'
           for attempt in 1 2 3 4 5; do
             if git pull --rebase --autostash origin "$GITHUB_REF_NAME" >/dev/null 2>&1 && \
                git push origin "HEAD:refs/heads/$GITHUB_REF_NAME"; then
