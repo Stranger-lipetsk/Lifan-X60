@@ -41,6 +41,12 @@ The action `Сравнение дилерских прошивок и верси
 
 Thus the user's report that all versions fail is consistent with the images reusing the same radio boot and radio components; simply choosing or reflashing one of those versions will not address the root cause.
 
+## Binary-only Bluetooth lead (no vendor source required for the next inspection)
+
+The Elead Bluetooth service's DEX shows its `onCreate()` registering HFP, A2DP/AVRCP, PBAP, and MAP; there is no visible SPP-profile initialization call in that sequence. The same service exposes `elBTreqHasSPPProfile`, `elBTreqSppConnect`, and `elBTreqSppSendData`; the `hasSPP` method checks a capability bit (`profileMask & 8`). This is a concrete software-stack lead consistent with the owner seeing headset-only behavior. It is not yet a confirmed patch: the `applicationProfiles` class and the source of that mask must be inspected before changing the privileged vendor APK, and no patch should disturb HFP/A2DP.
+
+A follow-up GitHub Action run to expand that DEX inspection was blocked before a job started because GitHub Actions reports an account billing/spending-limit hold. The earlier successful reports remain available; no workflow failure altered firmware or device state.
+
 ## Updated runtime symptoms from the owner
 
 The owner confirms that Wi-Fi is nonfunctional in every firmware version tried, while Bluetooth exposes only headset behavior. This rules out treating an unmodified stock flash as a presumed fix. These are runtime observations and take precedence over static file presence. The stock image remains only a controlled baseline/rollback, not a recommended repair.
