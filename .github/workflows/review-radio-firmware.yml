@@ -1,6 +1,9 @@
 name: Review Wi-Fi and Bluetooth firmware
 
 on:
+  push:
+    paths:
+      - '.github/workflows/review-radio-firmware.yml'
   workflow_dispatch:
 
 permissions:
