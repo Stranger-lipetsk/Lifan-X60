@@ -24,6 +24,11 @@ DEFAULT_MARKERS = (
     "RFCOMM",
     "/dev/rfcomm",
     "/dev/tty",
+    "wl18xx",
+    "wl12xx",
+    "ti-connectivity",
+    "cfg80211",
+    "wlan0",
 )
 PRINTABLE = re.compile(rb"[\x20-\x7e]{4,}")
 
