@@ -24,7 +24,7 @@ The `Build OBD Bluetooth Bridge` GitHub Actions workflow builds a v1-signed API 
 ## Safety and limits
 
 - The app is opt-in; no boot receiver or auto-start is present.
-- The Binder transaction map is statically recovered from the published test firmware. CI can compile and sign the APK but cannot prove the running head unit accepts the call.
+- The Binder transaction map is statically recovered from the published test firmware. The service's `elBTreqHasSPPProfile()` may report `false`; that advisory flag is logged but does not block the explicitly requested bond/SPP attempt. A rejected pair or SPP request is reported directly. CI can compile and sign the APK but cannot prove the running head unit accepts the call.
 - Pairing still goes through the head unit's existing Bluetooth bond flow. If that flow produces no PIN/confirmation UI and fails to bond, this prototype cannot bypass the Bluetooth framework; it will report the failure and stop without touching calls or system files.
 - Do not install it into `/system`, replace Elead APKs, or flash a new image for this test.
 - Runtime validation on the physical head unit is still required before treating the bridge as working.

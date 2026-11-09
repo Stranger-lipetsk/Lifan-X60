@@ -64,9 +64,14 @@ public final class BridgeService extends Service {
             try {
                 remote.registerCallback(getPackageName(), callback);
                 callbackRegistered = true;
-                if (!remote.hasSppProfile()) {
-                    failAndStop("Штатный Elead-сервис не объявил локальную поддержку SPP; соединение не запускал.");
-                    return;
+                boolean sppAdvertised = false;
+                try {
+                    sppAdvertised = remote.hasSppProfile();
+                } catch (RemoteException ignored) {
+                    // The capability query is advisory; the explicit SPP request below is authoritative.
+                }
+                if (!sppAdvertised) {
+                    publish("Elead сообщил SPP-флаг=false. Не блокирую явный тест: запрашиваю сопряжение, затем попробую SPP (без HFP/A2DP)…");
                 }
                 beginPairOrSpp();
             } catch (RemoteException e) {
