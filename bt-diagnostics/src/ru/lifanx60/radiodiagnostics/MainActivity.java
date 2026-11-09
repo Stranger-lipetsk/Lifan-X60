@@ -25,23 +25,34 @@ public final class MainActivity extends Activity {
     private Button runButton;
     private final Handler handler = new Handler();
     private boolean diagnosticRunning;
+    private boolean diagnosticStarted;
     private boolean scanRequested;
     private boolean scanResultReceived;
     private boolean receiverRegistered;
+    private boolean enableCallThrew;
+    private boolean scanCallThrew;
     private long deadline;
+    private int initialState = WifiManager.WIFI_STATE_UNKNOWN;
+    private Boolean enableRequestAccepted;
+    private Boolean scanRequestAccepted;
+    private int scanResultCount = -1;
+    private String lastEvent = "Проверка ещё не запускалась.";
 
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override public void onReceive(Context context, Intent intent) {
             String action = intent == null ? null : intent.getAction();
             if (WifiManager.WIFI_STATE_CHANGED_ACTION.equals(action)) {
-                render("Получено системное событие о состоянии Wi-Fi.");
+                lastEvent = "Android прислал событие изменения состояния Wi-Fi.";
                 if (diagnosticRunning && wifi != null
                         && wifi.getWifiState() == WifiManager.WIFI_STATE_ENABLED) {
                     requestScan();
                 }
+                render();
             } else if (WifiManager.SCAN_RESULTS_AVAILABLE_ACTION.equals(action)) {
                 scanResultReceived = true;
-                render("Получено событие о завершении поиска сетей.");
+                readScanCount();
+                lastEvent = "Android прислал событие завершения поиска сетей.";
+                render();
             }
         }
     };
@@ -51,13 +62,14 @@ public final class MainActivity extends Activity {
             if (!diagnosticRunning) return;
             int state = wifi == null ? WifiManager.WIFI_STATE_UNKNOWN : wifi.getWifiState();
             if (state == WifiManager.WIFI_STATE_ENABLED) requestScan();
-            render(null);
             if (System.currentTimeMillis() >= deadline) {
                 diagnosticRunning = false;
                 runButton.setEnabled(true);
-                render("Проверка завершена (20 секунд). Сети не подключались.");
+                lastEvent = "Проверка завершена (20 секунд). Сети не подключались.";
+                render();
                 return;
             }
+            render();
             handler.postDelayed(this, 1000L);
         }
     };
@@ -73,9 +85,9 @@ public final class MainActivity extends Activity {
             registerReceiver(receiver, filter);
             receiverRegistered = true;
         } catch (Exception e) {
-            append("Не удалось подписаться на события Wi-Fi: " + safeMessage(e));
+            lastEvent = "Не удалось подписаться на события Wi-Fi: " + safeMessage(e);
         }
-        render("Ничего не включалось. Нажмите кнопку, чтобы отправить один запрос на включение и выполнить поиск; к сетям приложение не подключается.");
+        render();
     }
 
     private void buildUi() {
@@ -92,9 +104,9 @@ public final class MainActivity extends Activity {
         root.addView(title, new LinearLayout.LayoutParams(-1, dp(42)));
 
         TextView note = new TextView(this);
-        note.setText("Съёмная диагностика. Не меняет драйверы или системные файлы, не подключается к сети и не требует интернета. Кнопка только запрашивает включение Wi-Fi на время проверки и просит Android начать сканирование.");
+        note.setText("Съёмная диагностика. Не меняет драйверы или системные файлы, не подключается к сети и не требует интернета. Кнопка запрашивает включение Wi-Fi и сканирование; видимые сети и пароли не сохраняются.");
         note.setTextSize(15);
-        root.addView(note, new LinearLayout.LayoutParams(-1, dp(84)));
+        root.addView(note, new LinearLayout.LayoutParams(-1, dp(76)));
 
         runButton = new Button(this);
         runButton.setText("Проверить включение и поиск сетей");
@@ -109,7 +121,10 @@ public final class MainActivity extends Activity {
         refresh.setTextSize(16);
         root.addView(refresh, new LinearLayout.LayoutParams(-1, dp(50)));
         refresh.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) { render("Состояние обновлено без запроса включения."); }
+            @Override public void onClick(View v) {
+                lastEvent = "Состояние обновлено без запроса включения.";
+                render();
+            }
         });
 
         report = new TextView(this);
@@ -122,84 +137,103 @@ public final class MainActivity extends Activity {
 
     private void startDiagnostic() {
         if (wifi == null) {
-            append("Android не предоставил системную службу Wi-Fi (WifiManager=null). Никаких изменений не сделано.");
+            lastEvent = "Android не предоставил системную службу Wi-Fi (WifiManager=null).";
+            render();
             return;
         }
         diagnosticRunning = true;
+        diagnosticStarted = true;
         scanRequested = false;
         scanResultReceived = false;
+        scanRequestAccepted = null;
+        scanResultCount = -1;
+        enableRequestAccepted = null;
+        enableCallThrew = false;
+        scanCallThrew = false;
+        initialState = wifi.getWifiState();
         deadline = System.currentTimeMillis() + 20000L;
         runButton.setEnabled(false);
-        String before = describeState(wifi.getWifiState());
-        boolean accepted;
         try {
-            accepted = wifi.setWifiEnabled(true);
-            append("Запрос setWifiEnabled(true) отправлен. Ответ Android: " + accepted + ". Состояние до запроса: " + before + ".");
+            enableRequestAccepted = Boolean.valueOf(wifi.setWifiEnabled(true));
+            lastEvent = "Запрос setWifiEnabled(true) выполнен; ответ Android: " + enableRequestAccepted + ".";
         } catch (SecurityException e) {
-            append("Android запретил запрос включения Wi-Fi: " + safeMessage(e) + ".");
+            enableCallThrew = true;
+            lastEvent = "Android запретил setWifiEnabled(true): " + safeMessage(e) + ".";
             diagnosticRunning = false;
             runButton.setEnabled(true);
-            return;
         } catch (Exception e) {
-            append("Ошибка запроса включения Wi-Fi: " + safeMessage(e) + ".");
+            enableCallThrew = true;
+            lastEvent = "Ошибка setWifiEnabled(true): " + safeMessage(e) + ".";
             diagnosticRunning = false;
             runButton.setEnabled(true);
-            return;
         }
         if (wifi.getWifiState() == WifiManager.WIFI_STATE_ENABLED) requestScan();
-        render(null);
+        render();
         handler.removeCallbacks(poll);
-        handler.post(poll);
+        if (diagnosticRunning) handler.post(poll);
     }
 
     private void requestScan() {
         if (scanRequested || wifi == null) return;
         scanRequested = true;
         try {
-            boolean accepted = wifi.startScan();
-            append("Wi-Fi включён по данным Android. Запрос startScan(): " + accepted + ".");
+            scanRequestAccepted = Boolean.valueOf(wifi.startScan());
+            lastEvent = "Wi-Fi отмечен Android как включённый; startScan() ответил " + scanRequestAccepted + ".";
         } catch (SecurityException e) {
-            append("Android запретил поиск сетей: " + safeMessage(e) + ".");
+            scanCallThrew = true;
+            lastEvent = "Android запретил startScan(): " + safeMessage(e) + ".";
         } catch (Exception e) {
-            append("Ошибка запроса поиска сетей: " + safeMessage(e) + ".");
+            scanCallThrew = true;
+            lastEvent = "Ошибка startScan(): " + safeMessage(e) + ".";
         }
     }
 
-    private void render(String event) {
+    private void readScanCount() {
+        try {
+            List<ScanResult> results = wifi == null ? null : wifi.getScanResults();
+            scanResultCount = results == null ? -1 : results.size();
+        } catch (Exception e) {
+            scanResultCount = -1;
+        }
+    }
+
+    private void render() {
         if (report == null) return;
-        if (event != null) lastEvent = event;
         StringBuilder b = new StringBuilder();
-        b.append("Состояние Android: ");
         if (wifi == null) {
-            b.append("служба Wi-Fi отсутствует (null)\n");
+            b.append("Служба Android Wi-Fi: отсутствует (WifiManager=null).\n");
         } else {
             try {
-                b.append(describeState(wifi.getWifiState())).append("\n");
+                int currentState = wifi.getWifiState();
+                b.append("Состояние Android: ").append(describeState(currentState)).append("\n");
                 b.append("isWifiEnabled(): ").append(wifi.isWifiEnabled()).append("\n");
-                if (wifi.getWifiState() == WifiManager.WIFI_STATE_ENABLED) {
+                if (diagnosticStarted) {
+                    b.append("До проверки: ").append(describeState(initialState)).append("\n");
+                    b.append("setWifiEnabled(true): ")
+                     .append(enableCallThrew ? "ИСКЛЮЧЕНИЕ" : String.valueOf(enableRequestAccepted)).append("\n");
+                    if (currentState == WifiManager.WIFI_STATE_ENABLED) {
+                        b.append("startScan(): ")
+                         .append(scanCallThrew ? "ИСКЛЮЧЕНИЕ" : String.valueOf(scanRequestAccepted)).append("\n");
+                        b.append("Событие результатов поиска: ").append(scanResultReceived ? "получено" : "не получено").append("\n");
+                        if (scanResultCount >= 0) b.append("Число видимых сетей: ").append(scanResultCount).append("\n");
+                    } else {
+                        b.append("startScan(): не отправлялся — Android не сообщил о включённом радио.\n");
+                    }
+                } else if (currentState == WifiManager.WIFI_STATE_ENABLED) {
                     List<ScanResult> results = wifi.getScanResults();
-                    b.append("Число видимых сетей: ").append(results == null ? "нет данных" : String.valueOf(results.size())).append("\n");
+                    b.append("Число сетей в последнем списке: ").append(results == null ? "нет данных" : String.valueOf(results.size())).append("\n");
                 } else {
-                    b.append("Список сетей не запрашивался: радио не включено.\n");
+                    b.append("Сканирование не выполнялось.\n");
                 }
             } catch (SecurityException e) {
-                b.append("ошибка доступа: ").append(safeMessage(e)).append("\n");
+                b.append("Ошибка доступа к состоянию: ").append(safeMessage(e)).append("\n");
             } catch (Exception e) {
-                b.append("ошибка чтения состояния: ").append(safeMessage(e)).append("\n");
+                b.append("Ошибка чтения состояния: ").append(safeMessage(e)).append("\n");
             }
         }
-        b.append("\nСобытие поиска: ").append(scanResultReceived ? "получено" : "не получено").append("\n");
-        if (lastEvent != null) b.append("Последнее событие: ").append(lastEvent).append("\n");
-        b.append("\nПриложение не подключает сеть и не читает/не меняет калибровочные файлы.");
+        b.append("\nПоследнее событие: ").append(lastEvent).append("\n");
+        b.append("\nПриложение не подключается к сетям и не читает/не меняет калибровочные файлы.");
         report.setText(b.toString());
-    }
-
-    private String lastEvent;
-
-    private void append(String line) {
-        if (report == null) { lastEvent = line; return; }
-        lastEvent = line;
-        render(null);
     }
 
     private static String describeState(int state) {
