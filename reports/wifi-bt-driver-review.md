@@ -24,6 +24,17 @@ Date of review: 2026-11-01. Scope: existing repository reports and extracted fir
 - `init.el_imx6_solo_v2.rc` contains a `# No bluetooth hardware present` comment despite `hw.bluetooth=1`; `blueletd` is separately started after the Bluetooth MAC setup property. The `ueventd` file labels `/dev/hci_tty` and `/dev/ttymxc1` for Bluetooth. These conflicting clues mean the active HCI transport/stack has not yet been proved.
 - `docs/02-железо.md` groups Wi-Fi and BT as TI WiLink, while the more specific Wi-Fi report identifies TI for Wi-Fi and the BT vendor config names a Broadcom patch. Hardware identity/configuration must be reconciled before attempting a driver replacement.
 
+## Findings confirmed from the complete stock release archive
+
+GitHub Actions downloaded `stock/x60_2021.7z` (SHA-256 `75e7d6cd900fac971b55fec9f59913153bf7a1096bd761f7229c9a1d6d57b540`), unpacked `system.img` and both boot images, and ran read-only inspections. Full reports are in `reports/radio-firmware-review/`.
+
+- The stock `/etc/wifi/nvram.txt` identifies itself as `AP6251_NVRAM_V1.0`, with Broadcom vendor/device IDs (`0x14e4` / `0x4343`) and calibration board parameters. This is direct evidence that the intended Wi-Fi hardware/configuration is Broadcom-based (AP6251/BCM4343 family), not TI WL18xx. The NVRAM contents are calibration data and must be preserved.
+- The stock system image contains Broadcom Wi-Fi firmware files `fw_bcm40181a2.bin`, `_apsta.bin`, `_p2p.bin`, and separate TI files `wl18xx-fw-4.bin` / `wl18xx-conf.bin` plus `wl18xx-conf-default.bin`. It also contains Broadcom `bt_vendor.conf` firmware patch `bcm20710a1.hcd`. The coexistence of these assets is not proof that both chips/drivers are active; the TI payloads may be stale or belong to another board variant.
+- The stock `/lib/modules` directory has `cfg80211.ko` but no separate Broadcom Wi-Fi `.ko` or `wl12xx.ko`; the kernel image has `wl12xx` platform-data strings. Therefore the active Wi-Fi driver path remains unresolved (built-in driver, board-variant mismatch, or stale firmware assets); strings alone cannot identify which driver probed.
+- The stock init's Wi-Fi loader and module-load stanza are commented out, and it declares `/system/bin/el_wifi_enable.sh` without that script being present in the stock system image. The init setup also configures GPIO 45 for “AP6251” power control; its polarity/effect cannot be inferred safely from static lines alone.
+- The stock `init.rc` writes `0` to `/sys/class/rfkill/rfkill0/state` during Bluetooth preparation. This is an init-time write in the extracted image, not evidence of the later runtime state; Bluetooth discovery on the actual head unit shows the stack/radio can at least reach inquiry.
+- Reports `reports/radio-firmware-review/system-radio-inventory.txt` and `reports/radio-firmware-review/sd-boot-ramdisk-radio-audit.txt` contain exact inventories and init evidence. Raw binary firmware and NVRAM payloads are kept out of the report output; only hashes are recorded.
+
 ## Assessment and safe next work
 
 1. Do not rewrite/replace either driver yet. The Wi-Fi image already contains `wl12xx`; the immediate unknown is whether the runtime enable/power/firmware/NVS path completes. The UI state alone cannot distinguish those causes.

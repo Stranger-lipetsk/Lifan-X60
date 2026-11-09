@@ -66,8 +66,11 @@ jobs:
           system_image=$(find "$RUNNER_TEMP/radio-review/unpacked" -name system.img -print -quit)
           boot_image=$(find "$RUNNER_TEMP/radio-review/unpacked" -name boot.img -print -quit)
           test -s "$system_image"
-          mkdir -p reports/radio-firmware-review/system-radio
-          out=reports/radio-firmware-review/system-radio
+          mkdir -p reports/radio-firmware-review
+          rm -f reports/radio-firmware-review/system-radio/*
+          out="$RUNNER_TEMP/radio-review/system-radio"
+          mkdir -p "$out"
+          report=reports/radio-firmware-review/system-radio-inventory.txt
           {
             echo '# Exact stock system radio payload inventory'
             echo 'Source: x60_2021.7z; read-only debugfs extraction; no target execution.'
@@ -75,29 +78,35 @@ jobs:
               echo "## $path"
               debugfs -R "ls -l $path" "$system_image" 2>&1 || true
             done
-          } > "$out/inventory.txt"
+          } > "$report"
           for p in /etc/wifi/nvram.txt /etc/wifi/wpa_supplicant.conf /etc/bluetooth/bt_vendor.conf /etc/firmware/bcm20710a1.hcd /vendor/firmware/fw_bcm40181a2.bin /vendor/firmware/fw_bcm40181a2_apsta.bin /vendor/firmware/fw_bcm40181a2_p2p.bin /etc/wifi/wlconf/wl18xx-conf-default.bin /etc/wifi/wlconf/struct.bin; do
             name=$(echo "$p" | tr '/' '_')
             dest="$out/${name#/}.bin"
             debugfs -R "dump $p $dest" "$system_image" >/dev/null 2>&1 || rm -f "$dest"
           done
           {
-            echo '## Extracted payload hashes'
-            find "$out" -maxdepth 1 -type f ! -name inventory.txt -print0 | sort -z | xargs -0 -r sha256sum
-            echo '## NVRAM text (calibration values are not modified)'
-            if [ -f "$out/_etc_wifi_nvram.txt.bin" ]; then cat "$out/_etc_wifi_nvram.txt.bin"; fi
+            echo '## Extracted payload hashes (raw payload files remain in runner temp)'
+            find "$out" -maxdepth 1 -type f -print0 | sort -z | xargs -0 -r sha256sum
+            echo '## NVRAM calibration file'
+            echo 'Present at /etc/wifi/nvram.txt; contents are deliberately not copied into the report.'
             echo '## Driver modules present in system image'
-            grep -Ei '\.ko([[:space:]]|$)|wl12|wl18|wl127|bcmdhd|cfg80211|bluelet|bt-vendor' "$out/inventory.txt" || true
-          } > "$out/payload-details.txt"
+            grep -Ei '\.ko([[:space:]]|$)|wl12|wl18|wl127|bcmdhd|cfg80211|bluelet|bt-vendor' "$report" || true
+          } >> "$report"
           if [ -s "$boot_image" ]; then
-            python3 - "$boot_image" "$out/kernel-radio-strings.txt" <<'PY'
-          import re, subprocess, sys
-          strings = subprocess.run(['strings', '-a', '-n', '5', sys.argv[1]], capture_output=True, text=True, check=True).stdout.splitlines()
+            python3 - "$boot_image" "$out/kernel" "$out/kernel-radio-strings.txt" <<'PYCODE'
+          import re, struct, subprocess, sys
+          image = open(sys.argv[1], 'rb').read()
+          if image[:8] != b'ANDROID!': raise SystemExit('Invalid Android boot image')
+          kernel_size, = struct.unpack_from('<I', image, 8)
+          page_size, = struct.unpack_from('<I', image, 36)
+          kernel = image[page_size:page_size + kernel_size]
+          open(sys.argv[2], 'wb').write(kernel)
+          strings = subprocess.run(['strings', '-a', '-n', '5', sys.argv[2]], capture_output=True, text=True, check=True).stdout.splitlines()
           rx = re.compile(r'(?i)(wl12|wl18|wl127|bcmdhd|brcm|bcm43|ap6251|firmware|nvs|cfg80211|hci_uart|bluetooth|bluelet|rfkill)')
-          open(sys.argv[2], 'w').write('\\n'.join(x for x in strings if rx.search(x)) + '\\n')
-          PY
+          open(sys.argv[3], 'w').write('\n'.join(x for x in strings if rx.search(x)) + '\n')
+          PYCODE
           fi
-          cat "$out/inventory.txt" "$out/payload-details.txt" "$out/kernel-radio-strings.txt" 2>/dev/null | grep -inE 'wifi|wlan|wl12|wl18|wl127|bcm|ap6251|bluetooth|bluelet|hci_tty|ttymxc1|ttyO1|nvs|firmware|cfg80211|\.ko|rfkill' | head -300 || true
+          cat "$report" "$out/kernel-radio-strings.txt" 2>/dev/null | grep -inE 'wifi|wlan|wl12|wl18|wl127|bcm|ap6251|bluetooth|bluelet|hci_tty|ttymxc1|ttyO1|nvs|firmware|cfg80211|\.ko|rfkill' | head -300 || true
       - name: Inspect the full SD boot ramdisk without executing its programs
         run: |
           set -euo pipefail
