@@ -1,0 +1,52 @@
+ИТОГ разбора прошивки
+=====================
+
+boot: {'page_size': 2048, 'kernel_size': 3588212, 'ramdisk_size': 332703, 'cmdline': 'console=ttymxc0,115200 init=/init video=mxcfb0:dev=lcd,HANNSTAR-WVGA,if=RGB24,fbpix=RGB32,bpp=32 video=mxcfb1:off video=mxcfb2:off fbmem=28M vmalloc=400M androidboot.console=ttymxc0 androidboot.hardware=el_imx6_solo_v2 lpj=7905280 resume=179:2 androidboot.selinux=disable panic=3 el_module=LIFAN_LF01', 'name': '', 'os_version': '0.0.0', 'header_version': 0, 'soc_marks': []}
+
+ramdisk_files: 25
+
+uboot: {'head_hex': '860100ea00000000000000000000000000000000000000000000000000000000', 'head_u32': '0x860100ea', 'strings': ['/ADATA_SSD_4/chian_data_4/el830_LF01_20160315_QB_Russia/android_4_4_2/bootable/bootloader/uboot-imx/cpu/arm_cortexa8', 'i2c_addr', 'U-Boot 2009.08 (Mar 09 2017 - 15:30:40) el_ver :1.4', 'Board: %s-ELEAD  0x%x [', 'ONE NAND', 'DRAM:  ', '### ERROR ### Please RESET the board ###', 'loadaddr', 'scr addr is 0x%p, switch_status addr is 0x%p ', 'ddr clock     : %dHz', 'DDR Clock: %dHz', 'DDR clock should be less than%d MHz, assuming max value', 'U-Boot', '%s:chip address cycle fail(%x)', '%s:device address cycle fail(%x)', 'i2c_addr failed', '%s:Send 2th chip address fail(%x)', 'ERROR: invalid address.', "start application at address 'addr'", 'addr [arg ...]', "    - start application at address 'addr'", "ck_ug_img: cannot find '%d' mmc device", "ck_ug_img: device don't have such partition boot", 'ck_ug_img: bad boot image magic', '%s uboot_ver=%s board_type=%s ldo_active=on %c', '## Transferring control to RTEMS (at address %08lx) ...', '## Transferring control to NetBSD stage-2 loader (at address %08lx) ...', 'GUNZIP: uncompress, out-of-mem or overwrite error - must RESET board to recover', 'ERROR: new format image overwritten - must RESET the board to recover', 'sd_bootimg: bad boot image magic', 'sd_bootimg: bad board name', 'sd_bootimg: bad cmdline', 'ck_ug_img', 'ck_ug_img - check SD image', 'booti   - boot android bootimg from memory', '[<addr> | mmc0 | mmc1 | mmc2 | mmcX] [<partition>] ', "\t'addr' should be the address of boot image which is zImage+ramdisk.img", "\t'mmcX' is the mmc device you store your boot.img, which will read the boot.img from 1M offset('/boot' partition)", '[addr [arg ...]]', "\t'arg' can be the address of an initrd image", '\tstart [addr [arg ...]]', 'Setup/Display clock', 'clk - Display all clocks', 'clk core <core clock in MHz> - Setup/Display core clock', 'clk periph <peripheral clock in MHz> -Setup/Display peripheral clock', 'clk ddr <DDR clock in MHz> - Setup/Display DDR clock', 'clk nfc <NFC clk in MHz> - Setup/Display NFC clock', 'clk ddr 166 - Set DDR clock to 166MHz', 'usage: fatload <interface> <dev[:part]> <addr> <filename> [bytes]', '<interface> <dev[:part]>  <addr> <filename> [bytes]', "      to address 'addr' from dos filesystem", 'Valid chip addresses:', 'i2c md chip address[.0, .1, .2] [# of objects] - read from I2C device', 'i2c mm chip address[.0, .1, .2] - write to I2C device (auto-incrementing)', 'i2c mw chip address[.0, .1, .2] value [count] - write to I2C device (fill)', 'i2c nm chip address[.0, .1, .2] - write to I2C device (constant address)', 'i2c crc32 chip address[.0, .1, .2] count - compute CRC32 checksum', 'i2c loop chip address[.0, .1, .2] [# of objects] - looping read of device', "'addr' to 'index':", "convert 'index' from 'address'", 'index = (addr - otp_base) / 0x10', 'eg, addr is 0x021bc410, otp_base is 0x021bc400, the index = 1', 'read addr blk# cnt', 'mmc write addr blk# cnt', 'display MMC info', 'ethaddr', 'ipaddr', "regul show all - Display all regulators' voltage", 'ELEAD_BOARD SOLO U-Boot > ', '%sLoad Address: %08x', 'u-boot', 'ck_ug_img %s%c', 'fatload mmc 3 0x20000000 sd_boot.img', 'uboot', 'loadaddr=0x10800000', 'rd_loadaddr=(0x10800000 + 0x300000)', 'bootcmd=booti mmc2']}
+
+mcu: {'first_lines': [':100000000202CE1040020D00B11003026210000087', ':0A001000F07B007A00790022222222', ':07001B00025DAD75B755222F', ':10002300020814004633344F4241002D4F769EBEE2', ':100033002D4E759DBEDF004F384B56485533344225', ':1000430041010204081020313241427F05B195D2AB', ':1000530008C2162274022573F582E43400F5832264', ':0700630012484FE4F5B6223C', ':10006B00025FAD9174EF70FB120D51E1CDB1957F35', ':06007B0017B1957D04227F', ':10008300026012017500017400017300C11DC11EDD', ':10009300016F00017000C11F410001004105FF0312', ':1000A300015800016400015F0001650008A910A167', ':1000B3000200000010030163000160000261000000', ':1000C30041056400C19341056D00C197C112C11878', ':1000D30041056C0041056100C115410577004105EB', ':1000E3006200C11641056F00C11041058000410542', ':1000F3007000C11441057801410563004105810089', ':10010300011A000216000002180000024600000156', ':100113004300023C0002023E000002410000014095'], 'size': 75083, 'record_types': ['00', '01']}
+
+system: {'files': 1342, 'apks': 52, 'libs': 279, 'root_dir': '/tmp/fw_55bm3dpo/sysroot', 'props': ['build.prop', 'etc/recovery-resource.dat']}
+
+
+ЛОГ:
+Рабочая папка: /tmp/fw_55bm3dpo
+Исходники: /home/runner/work/_temp/radio-review/unpacked
+
+=== Найденные образы ===
+  /home/runner/work/_temp/radio-review/unpacked/boot.img  3926016 байт
+  /home/runner/work/_temp/radio-review/unpacked/MCU_FW.hex  75083 байт
+  /home/runner/work/_temp/radio-review/unpacked/sd_boot.img  48758784 байт
+  /home/runner/work/_temp/radio-review/unpacked/system.img  377487360 байт
+  /home/runner/work/_temp/radio-review/unpacked/u-boot.bin  110448 байт
+
+=== boot.img ===
+  page_size=2048 kernel=3588212 ramdisk=332703 second=0 header_ver=0 os=0.0.0 name=""
+  ramdisk распакован: 332703 -> 618240 байт
+  в ramdisk 25 записей
+
+=== sd_boot.img ===
+  первые байты: 414e44524f49442174c0360000808010f729b102000080110000000000007011
+  file: /home/runner/work/_temp/radio-review/unpacked/sd_boot.img: Android bootimg, kernel (0x10808000), ramdisk (0x11800000), page size: 2048, cmdline (boot.dev=sd console=ttymxc0,115200 init=/init fbmem=28M vmalloc=400M androidboot.console=ttymxc0 lpj=7905280 androidboot.selinu)
+  page_size=2048 kernel=3588212 ramdisk=45165047 second=0 header_ver=0 os=0.0.0 name="el830_solo"
+
+=== u-boot.bin ===
+  file: /home/runner/work/_temp/radio-review/unpacked/u-boot.bin: data
+  интересных строк: 77
+
+=== MCU_FW.hex ===
+  Intel HEX, типы записей: ['00', '01']
+
+=== system.img ===
+  file: /home/runner/work/_temp/radio-review/unpacked/system.img: Linux rev 1.0 ext4 filesystem data, UUID=57f8f4bc-abf4-655f-bf67-946fc0f9f25b (extents) (large files)
+  debugfs rc=0
+  rdump rc=0: debugfs 1.47.0 (5-Feb-2023)
+rdump: Operation not permitted while changing ownership of /tmp/fw_55bm3dpo/sysroot//lost+found
+dump_file: Operation not permitted while changing ownership of /tmp/fw_55bm3dpo/sysroot//app/BSEDemo.apk
+dump_file: Operation not permitted while changing ownership of /tmp/fw_
+  найдено .prop/rc файлов: 2
+
+=== ИТОГ ===
