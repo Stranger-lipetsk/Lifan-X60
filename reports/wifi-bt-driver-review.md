@@ -35,6 +35,12 @@ GitHub Actions downloaded `stock/x60_2021.7z` (SHA-256 `75e7d6cd900fac971b55fec9
 - The stock `init.rc` writes `0` to `/sys/class/rfkill/rfkill0/state` during Bluetooth preparation. This is an init-time write in the extracted image, not evidence of the later runtime state; Bluetooth discovery on the actual head unit shows the stack/radio can at least reach inquiry.
 - Reports `reports/radio-firmware-review/system-radio-inventory.txt` and `reports/radio-firmware-review/sd-boot-ramdisk-radio-audit.txt` contain exact inventories and init evidence. Raw binary firmware and NVRAM payloads are kept out of the report output; only hashes are recorded.
 
+## Updated runtime symptoms from the owner
+
+The owner confirms that Wi-Fi is nonfunctional in every firmware version tried, while Bluetooth exposes only headset behavior. This rules out treating an unmodified stock flash as a presumed fix. These are runtime observations and take precedence over static file presence. The stock image remains only a controlled baseline/rollback, not a recommended repair.
+
+This points to two distinct unresolved faults: Wi-Fi requires a working kernel driver plus board power/reset/SDIO initialization and matching calibration; Bluetooth requires the active Elead/Android stack and available profiles/services to be reconciled with the headset-only UI. Replacing radio firmware blobs alone will not establish either fix. Do not replace the system image or modify NVRAM until a compatible driver path and reversible test are available.
+
 ## Assessment and safe next work
 
 1. Do not rewrite/replace either driver yet. The Wi-Fi image already contains `wl12xx`; the immediate unknown is whether the runtime enable/power/firmware/NVS path completes. The UI state alone cannot distinguish those causes.
