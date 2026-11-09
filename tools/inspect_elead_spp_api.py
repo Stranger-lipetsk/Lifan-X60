@@ -98,7 +98,8 @@ def dex_inventory(apk: APK) -> list[str]:
     method_markers = (
         "spp", "btpair", "btpaired", "ontransact", "asinterface",
         "asbinder", "ondestroy", "oncreate", "onbind", "onreceive",
-        "registerelbtcallback", "createbond",
+        "registerelbtcallback", "createbond", "profile", "access$7",
+        "<init>", "initialize", "init",
     )
     for raw in apk.get_all_dex():
         dex = DEX(raw)
@@ -109,6 +110,9 @@ def dex_inventory(apk: APK) -> list[str]:
                 continue
             methods = list(cls.get_methods())
             out.append(f"CLASS {name} extends {cls.get_superclassname()}")
+            for field in cls.get_fields():
+                if any(token in field.get_name().lower() for token in ("profile", "spp", "bluetooth")):
+                    out.append(f"  FIELD {field.get_name()} {field.get_descriptor()} [{field.get_access_flags_string()}]")
             for method in methods:
                 method_name = method.get_name()
                 if not any(token in method_name.lower() for token in method_markers):
