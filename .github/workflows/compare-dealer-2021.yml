@@ -70,6 +70,31 @@ jobs:
             find "$root/$label-system" -type d -exec chmod u+rwx {} +
             find "$root/$label-system" -type f -exec chmod u+r {} +
           done
+      - name: Сопоставить именно радио-драйверы и запуск
+        run: |
+          set -euo pipefail
+          root="$RUNNER_TEMP/compare"
+          {
+            echo '# Точные radio-компоненты в исходных системных образах'
+            echo 'Все чтения через debugfs; бинарные калибровочные данные в отчёт не копируются.'
+            for label in dealer dealer-time enthusiast; do
+              img=$(find "$root/$label" -type f -name system.img -print -quit)
+              echo "## $label — system SHA-256 $(sha256sum "$img" | cut -d' ' -f1)"
+              for path in /etc/wifi /etc/wifi/wlconf /etc/bluetooth /etc/firmware /vendor/firmware /vendor/firmware/ti-connectivity /lib/modules /lib/hw /vendor/lib; do
+                echo "### $path"
+                debugfs -R "ls -l $path" "$img" 2>&1 || true
+              done
+              for path in /etc/bluetooth/bt_vendor.conf /etc/firmware/bcm20710a1.hcd /vendor/firmware/fw_bcm40181a2.bin /vendor/firmware/fw_bcm40181a2_apsta.bin /vendor/firmware/fw_bcm40181a2_p2p.bin /vendor/firmware/ti-connectivity/wl18xx-fw-4.bin /vendor/firmware/ti-connectivity/wl18xx-conf.bin /system/bin/el_wifi_enable.sh /system/bin/wifi/rc.wifi /lib/libbluelet.so /bin/blueletd /lib/hw/bluetooth.default.so /vendor/lib/libbt-vendor.so; do
+                target="$root/$label-radio-$(echo "$path" | tr '/' '_')"
+                if debugfs -R "dump $path $target" "$img" >/dev/null 2>&1 && [ -s "$target" ]; then
+                  printf '%s ' "$path"; sha256sum "$target" | cut -d' ' -f1
+                else
+                  rm -f "$target"; printf '%s MISSING\n' "$path"
+                fi
+              done
+            done
+          } > reports/compare-radio-components.txt
+          cat reports/compare-radio-components.txt
       - name: Сравнить содержимое и приложения
         run: |
           set -euo pipefail
@@ -91,7 +116,7 @@ jobs:
             printf '\n## %s\n' "$(basename "$log")" >> reports/compare-dealer-downloads.txt
             tail -35 "$log" >> reports/compare-dealer-downloads.txt
           done
-          for f in reports/compare-dealer-downloads.txt reports/compare-dealer-2021.txt; do
+          for f in reports/compare-dealer-downloads.txt reports/compare-dealer-2021.txt reports/compare-radio-components.txt; do
             if [ -f "$f" ]; then git add "$f"; fi
           done
           git diff --cached --quiet && exit 0
