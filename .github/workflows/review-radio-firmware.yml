@@ -60,6 +60,14 @@ jobs:
             done
           } > reports/radio-firmware-review/summary.md
           cat reports/radio-firmware-review/summary.md
+      - name: Inspect the full SD boot ramdisk without executing its programs
+        run: |
+          set -euo pipefail
+          image="$RUNNER_TEMP/radio-review/unpacked/sd_boot.img"
+          test -s "$image"
+          mkdir -p reports/radio-firmware-review
+          python3 tools/inspect_sd_boot_update.py "$image" > reports/radio-firmware-review/sd-boot-ramdisk-radio-audit.txt
+          grep -inE 'wifi|wlan|wl12|wl18|wl127|bluetooth|bluelet|hci_tty|ttymxc1|ttyO1|nvs|firmware|insmod|modprobe|uim|ti-connectivity' reports/radio-firmware-review/sd-boot-ramdisk-radio-audit.txt | head -250 || true
       - name: Save text reports to this branch
         if: always()
         run: |
